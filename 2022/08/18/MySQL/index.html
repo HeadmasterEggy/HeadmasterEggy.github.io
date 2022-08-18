@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/bear32.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/bear16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Eggy" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="MySQL 启动myslq 1service mysql start 初始化MySQL 1mysql_secure_installation 往下一直Y 直到人家谢谢你 初始化完成 1Thanks for using MariaDB!   登录MySQL 1mysql -u root -p 这里密码为空，直接回车就可登入  创建数据库 这里是root用户，可以使用mysqladmin来创建data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql">
+<meta property="og:url" content="https://headmastereggy.github.io/2022/08/18/MySQL/index.html">
+<meta property="og:site_name" content="Eggy">
+<meta property="og:description" content="MySQL 启动myslq 1service mysql start 初始化MySQL 1mysql_secure_installation 往下一直Y 直到人家谢谢你 初始化完成 1Thanks for using MariaDB!   登录MySQL 1mysql -u root -p 这里密码为空，直接回车就可登入  创建数据库 这里是root用户，可以使用mysqladmin来创建data">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818102929782.png">
+<meta property="og:image" content="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103005479.png">
+<meta property="og:image" content="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103015407.png">
+<meta property="article:published_time" content="2022-08-18T02:26:00.000Z">
+<meta property="article:modified_time" content="2022-08-18T02:30:20.379Z">
+<meta property="article:author" content="~Avocado">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818102929782.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://headmastereggy.github.io/2022/08/18/MySQL/"/>
+
+
+
+
+
+  <title>Mysql | Eggy</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Eggy</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://headmastereggy.github.io/2022/08/18/MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/goose.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eggy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mysql</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-08-18T10:26:00+08:00">
+                2022-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1>MySQL</h1>
+<p>启动myslq</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql start</span><br></pre></td></tr></table></figure>
+<h2 id="初始化MySQL">初始化MySQL</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<p>往下一直Y 直到人家谢谢你 初始化完成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thanks for using MariaDB!</span><br></pre></td></tr></table></figure>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818102929782.png" alt="image-20220818102929782" style="zoom:67%;" />
+<hr>
+<h3 id="登录MySQL">登录MySQL</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>这里密码为空，直接回车就可登入</p>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103005479.png" alt="image-20220818103005479" style="zoom:67%;" />
+<h4 id="创建数据库">创建数据库</h4>
+<p>这里是root用户，可以使用mysqladmin来创建database</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin -u root -p create tutorials</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database tutorials</span><br></pre></td></tr></table></figure>
+<p>创建完成后show databases</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| joeychamber        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">6 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>使用root登录后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS SPACE DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br></pre></td></tr></table></figure>
+<p>该命令的作用</p>
+<ul>
+<li>
+<ol>
+<li>如果数据库不存在则创建，存在则不创建</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>创建SPACE数据库，并设定编码集为utf8</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4 id="删除数据库">删除数据库</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin -u root -p drop joeychamber</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop databse joeychamber</span><br></pre></td></tr></table></figure>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103015407.png" alt="image-20220818103015407" style="zoom:67%;" />
+<p>再来show一遍</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1>FLOAT和DOUBLE差异</h1>
+<p>（单精度与双精度有什么区别）</p>
+<p><strong>最本质的区别：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单精度(float)在 32 位机器上用4个字节来存储的</span><br><span class="line">双精度(double)是用8个字节来存储的，由于存储位不同，他们能表示的数值的范围就不同，也就是能准确表示的数的位数就不同</span><br></pre></td></tr></table></figure>
+<p><strong>1、所占的内存不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单精度浮点数占用4个字节（32位）存储空间来存储一个浮点数，包括符号位1位，阶码8位，尾数23位</span><br><span class="line">而双精度浮点数使用 8个字节（64位）存储空间来存储一个浮点数，包括符号位1位，阶码11位，尾数52位</span><br></pre></td></tr></table></figure>
+<p><strong>2、所存的数值范围不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单精度浮点数的数值范围为-3.4E38～3.4E38，而双精度浮点数可以表示的数字的绝对值范围大约是：-2.23E308 ~ 1.79E308</span><br><span class="line">E表示10的多少次方，如3.4E38指的是3.4乘以10的38次方</span><br></pre></td></tr></table></figure>
+<p><strong>3、十进制下的位数不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">单精度浮点数最多有7位十进制有效数字，如果某个数的有效数字位数超过7位，当把它定义为单精度变量时，超出的部分会自动四舍五入</span><br><span class="line">双精度浮点数可以表示十进制的15或16位有效数字，超出的部分也会自动四舍五入</span><br></pre></td></tr></table></figure>
+<h1>创建/删除表</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create/drop table table_name</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; create table joey_tbl(</span><br><span class="line">    -&gt; joey_id int not null auto_increment,</span><br><span class="line">    -&gt; joey_title varchar(100) not null,</span><br><span class="line">    -&gt; joey_author varchar(40) not null,</span><br><span class="line">    -&gt; submission_date date,</span><br><span class="line">    -&gt; primary key(joey_id)</span><br><span class="line">    -&gt; );</span><br><span class="line">Query OK, 0 rows affected (0.023 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1>插入数据</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">insert into table_name(field1,f2,f3...)</span><br><span class="line">					values</span><br><span class="line">					(values1,v2,v3...);</span><br></pre></td></tr></table></figure>
+<p>如果数据是字符型，必须使用单引号( ’ )或者双引号( &quot; )</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; insert into joey_tbl</span><br><span class="line">    -&gt; (joey_title,joey_author,submission_date)</span><br><span class="line">    -&gt; values</span><br><span class="line">    -&gt; (&quot;joey&quot;,&quot;Eggy&quot;,&quot;3/28&quot;);</span><br><span class="line"></span><br><span class="line">Query OK, 1 row affected (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>查询语句SELECT</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select _column,_column from _table [where Clause] [limit N][offset M]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>select *</strong> : 返回所有记录</li>
+<li><strong>limit N</strong> : 返回 N 条记录</li>
+<li><strong>offset M</strong> : 跳过 M 条记录, 默认 M=0, 单独使用似乎不起作用</li>
+<li><strong>limit N,M</strong> : 相当于 <strong>limit M offset N</strong> , 从第 N 条记录开始, 返回 M 条记录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl; #读取数据表</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="limit-应用">limit 应用</h2>
+<p>LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量，第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1)： 为了与 PostgreSQL 兼容，MySQL 也支持句法： LIMIT # OFFSET #。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM table LIMIT 5,10; // 检索记录行 6-15   </span><br><span class="line">  </span><br><span class="line">//如果只给定一个参数，它表示返回最大的记录行数目：    </span><br><span class="line">mysql&gt; SELECT * FROM table LIMIT 5; //检索前 5 个记录行   </span><br><span class="line">  </span><br><span class="line">//换句话说，LIMIT n 等价于 LIMIT 0,n。</span><br></pre></td></tr></table></figure>
+<h1>WHERE子句</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name1,table_name2... [WHERE condition1 [AND [OR]] condition2.....</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询语句中你可以使用一个或者多个表，表之间使用逗号**,** 分割，并使用WHERE语句来设定查询条件。</li>
+<li>你可以在 WHERE 子句中指定任何条件。</li>
+<li>你可以使用 AND 或者 OR 指定&gt;=1个条件。</li>
+<li>WHERE 可运用于 SQL 的 DELETE 或者 UPDATE 命令。</li>
+<li>WHERE 类似于 if 条件，根据 MySQL 表中的字段值来读取指定的数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_title=&quot;JOEY&quot;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2000-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="特殊条件">特殊条件</h2>
+<p>空值判断：<strong>is null</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from joey_tbl where country is null;</span><br><span class="line">#查询joey_tbl表country列中的空值</span><br></pre></td></tr></table></figure>
+<p><strong>between and</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from joey_tbl where id between 1 and 5;</span><br><span class="line">#查询joey_tbl表中id列1到5的值</span><br></pre></td></tr></table></figure>
+<p><strong>in</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from joey_tbl where id in (1,3,5)</span><br><span class="line">#查询joey_tbl表id列等于1,3,5的值</span><br></pre></td></tr></table></figure>
+<h1>更新/删除</h1>
+<h2 id="UPDATE">UPDATE</h2>
+<p>用来修改或更新 MySQL 中的数据，我们可以使用 SQL UPDATE 命令来操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#update 表名称 set 列名称=新值 where 更新条件;</span><br><span class="line">UPDATE table_name SET field1=new-value1, field2=new-value2 [WHERE clause]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; update joey_tbl set submission_date=&quot;2020-03-28&quot; where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.005 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="DELETE">DELETE</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#DELETE FROM 表名称 where 删除条件;</span><br><span class="line">DELETE FROM table_name [WHERE Clause]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; DELETE from joey_tbl where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.001 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">Empty set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>LIKE子句</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name WHERE field1 LIKE condition1 [AND [OR]] filed2 = &#x27;somevalue&#x27;</span><br></pre></td></tr></table></figure>
+<p><strong>%</strong>：多个字符</p>
+<p><strong>_</strong> ：1个字符</p>
+<p><strong>M%</strong>：模糊查询信息为M开头的</p>
+<p><strong>%M%</strong>：查询包含M的所有内容</p>
+<p><strong>%M_</strong>:查询</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       2 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       3 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       4 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br><span class="line"></span><br><span class="line">#SQL LIKE 子句中使用百分号 % 字符来表示任意字符</span><br><span class="line">#如果没有使用百分号 %, LIKE 子句与等号 = 的效果是一样的</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_author like &#x27;%com&#x27;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>UNION</h1>
+<p><strong>UNION 语句</strong>：查询不同表中相同列中的数据（不包括重复数据）</p>
+<p><strong>ALL</strong>:返回所有结果(包括重复数据)</p>
+<p><strong>DISTINCT</strong>:删除重复数据(默认UNION已经删除了重复数据)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#这是&quot;joey_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from joey_game;</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">| id | name              | value | country |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">|  1 | Apex Legend       | free  | USA     |</span><br><span class="line">|  2 | League of Legend  | free  | USA     |</span><br><span class="line">|  3 | Rainbow six Siege | $30   | USA     |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">#这是&quot;Eggy_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from Eggy_game;</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">| id | name                | value | country |</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">|  1 | Dying light         | $40   | USA     |</span><br><span class="line">|  2 | Oxygen Not Included | $30   | USA     |</span><br><span class="line">|  3 | Elden Ring          | free  | USA     |</span><br><span class="line">+----+---------------------+-------+---------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#union</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line"></span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br><span class="line"></span><br><span class="line">#union all</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line">    </span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br></pre></td></tr></table></figure>
+<h1>ORDER BY</h1>
+<p><strong>order by</strong>就是对结果排序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from joey_game order by id asc,game desc </span><br><span class="line">#默认升序，asc可省，desc降序，不写明ASC DESC的时候，默认是ASC</span><br></pre></td></tr></table></figure>
+<p>ORDER BY 多列的时候，先按照第一个column name排序，在按照第二个column name排序</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag"># Database</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/08/18/C++%E9%A2%98%E8%A7%A3%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0~%EF%BC%89/" rel="next" title="刷题记录">
+                <i class="fa fa-chevron-left"></i> 刷题记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/08/18/%E5%AF%86%E7%A0%81/" rel="prev" title="Crypto">
+                Crypto <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/goose.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/HeadmasterEggy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/HeadmasterEggy" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/Eggy" target="_blank" title="cnblogs">
+                      
+                        <i class="fa fa-fw fa-cnblogs"></i>cnblogs</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96MySQL"><span class="nav-number">1.1.</span> <span class="nav-text">初始化MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E5%BD%95MySQL"><span class="nav-number">1.1.1.</span> <span class="nav-text">登录MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">删除数据库</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">FLOAT和DOUBLE差异</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">创建&#x2F;删除表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">查询语句SELECT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#limit-%E5%BA%94%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">limit 应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">WHERE子句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E6%9D%A1%E4%BB%B6"><span class="nav-number">6.1.</span> <span class="nav-text">特殊条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">更新&#x2F;删除</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UPDATE"><span class="nav-number">7.1.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DELETE"><span class="nav-number">7.2.</span> <span class="nav-text">DELETE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">8.</span> <span class="nav-text">LIKE子句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">9.</span> <span class="nav-text">UNION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">10.</span> <span class="nav-text">ORDER BY</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">~Avocado</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">51k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
