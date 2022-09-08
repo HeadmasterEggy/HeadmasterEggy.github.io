@@ -1,6 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>RSA</title>
+    <url>/2022/08/18/RSA/</url>
+    <content><![CDATA[<h1>RSA介绍</h1>
+<p>RSA 加密算法是一种非对称加密算法。在公开密钥加密和电子商业中 RSA 被广泛使用。RSA 是 1977 年由罗纳德 · 李维斯特（Ron Rivest）、阿迪 · 萨莫尔（Adi Shamir）和伦纳德 · 阿德曼（Leonard Adleman）一起提出的。RSA 就是他们三人姓氏开头字母拼在一起组成的。</p>
+<p>RSA 算法的可靠性由极大整数因数分解的难度决定。换言之，对一极大整数做因数分解愈困难，RSA 算法愈可靠。假如有人找到一种快速因数分解的算法的话，那么用 RSA 加密的信息的可靠性就肯定会极度下降。但找到这样的算法的可能性是非常小的。如今，只有短的 RSA 密钥才可能被强力方式解破。到 2017 年为止，还没有任何可靠的攻击 RSA 算法的方式。</p>
+<h1>基本原理</h1>
+<h3 id="公钥与私钥的产生-¶">公钥与私钥的产生 <a href="https://ctf-wiki.org/crypto/asymmetric/rsa/rsa_theory/#_2">¶</a></h3>
+<ol>
+<li>
+<p>随机选择两个不同大质数 <code>p</code> 和 <code>q</code>,计算 <code>N = pq</code></p>
+</li>
+<li>
+<p>根据欧拉函数，求得 <code>φ(N) = φ(p)φ(q) = (p−1)(q−1)</code></p>
+</li>
+<li>
+<p>选择一个小于 <code>φ(N)</code> 的整数 <code>e</code>，使 <code>e</code> 和 <code>φ(N)</code> 互质</p>
+<p>并求得 <code>e</code> 关于 <code>φ(N)</code>的模反元素，命名为 <code>d</code>，有 <code>ed ≡ 1 (mod φ(N))</code></p>
+</li>
+</ol>
+<p><strong>加密</strong></p>
+<p>c（密文）</p>
+<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220523200904527.png" alt="image-20220523200904527"></p>
+<p><strong>解密</strong></p>
+<p>m（明文）</p>
+<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220523200947293.png" alt="image-20220523200947293"></p>
+]]></content>
+      <categories>
+        <category>Crypto</category>
+      </categories>
+      <tags>
+        <tag>Crypto</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql</title>
+    <url>/2022/08/18/MySQL/</url>
+    <content><![CDATA[<h1>MySQL</h1>
+<p>启动myslq</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service mysql start</span><br></pre></td></tr></table></figure>
+<h2 id="初始化MySQL">初始化MySQL</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<p>往下一直Y 直到人家谢谢你 初始化完成</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thanks for using MariaDB!</span><br></pre></td></tr></table></figure>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818102929782.png" alt="image-20220818102929782" style="zoom:67%;" />
+<hr>
+<h3 id="登录MySQL">登录MySQL</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>这里密码为空，直接回车就可登入</p>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103005479.png" alt="image-20220818103005479" style="zoom:67%;" />
+<h4 id="创建数据库">创建数据库</h4>
+<p>这里是root用户，可以使用mysqladmin来创建database</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p create tutorials</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">create database tutorials</span><br></pre></td></tr></table></figure>
+<p>创建完成后show databases</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| joeychamber        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">6 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>使用root登录后</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS SPACE DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br></pre></td></tr></table></figure>
+<p>该命令的作用</p>
+<ul>
+<li>
+<ol>
+<li>如果数据库不存在则创建，存在则不创建</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>创建SPACE数据库，并设定编码集为utf8</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4 id="删除数据库">删除数据库</h4>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p drop joeychamber</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">drop databse joeychamber</span><br></pre></td></tr></table></figure>
+<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103015407.png" alt="image-20220818103015407" style="zoom:67%;" />
+<p>再来show一遍</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1>FLOAT和DOUBLE差异</h1>
+<p>（单精度与双精度有什么区别）</p>
+<p><strong>最本质的区别：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度(float)在 32 位机器上用4个字节来存储的</span><br><span class="line">双精度(double)是用8个字节来存储的，由于存储位不同，他们能表示的数值的范围就不同，也就是能准确表示的数的位数就不同</span><br></pre></td></tr></table></figure>
+<p><strong>1、所占的内存不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数占用4个字节（32位）存储空间来存储一个浮点数，包括符号位1位，阶码8位，尾数23位</span><br><span class="line">而双精度浮点数使用 8个字节（64位）存储空间来存储一个浮点数，包括符号位1位，阶码11位，尾数52位</span><br></pre></td></tr></table></figure>
+<p><strong>2、所存的数值范围不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数的数值范围为-3.4E38～3.4E38，而双精度浮点数可以表示的数字的绝对值范围大约是：-2.23E308 ~ 1.79E308</span><br><span class="line">E表示10的多少次方，如3.4E38指的是3.4乘以10的38次方</span><br></pre></td></tr></table></figure>
+<p><strong>3、十进制下的位数不同</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数最多有7位十进制有效数字，如果某个数的有效数字位数超过7位，当把它定义为单精度变量时，超出的部分会自动四舍五入</span><br><span class="line">双精度浮点数可以表示十进制的15或16位有效数字，超出的部分也会自动四舍五入</span><br></pre></td></tr></table></figure>
+<h1>创建/删除表</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">create/drop table table_name</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; create table joey_tbl(</span><br><span class="line">    -&gt; joey_id int not null auto_increment,</span><br><span class="line">    -&gt; joey_title varchar(100) not null,</span><br><span class="line">    -&gt; joey_author varchar(40) not null,</span><br><span class="line">    -&gt; submission_date date,</span><br><span class="line">    -&gt; primary key(joey_id)</span><br><span class="line">    -&gt; );</span><br><span class="line">Query OK, 0 rows affected (0.023 sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1>插入数据</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">insert into table_name(field1,f2,f3...)</span><br><span class="line">					values</span><br><span class="line">					(values1,v2,v3...);</span><br></pre></td></tr></table></figure>
+<p>如果数据是字符型，必须使用单引号( ’ )或者双引号( &quot; )</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; insert into joey_tbl</span><br><span class="line">    -&gt; (joey_title,joey_author,submission_date)</span><br><span class="line">    -&gt; values</span><br><span class="line">    -&gt; (&quot;joey&quot;,&quot;Eggy&quot;,&quot;3/28&quot;);</span><br><span class="line"></span><br><span class="line">Query OK, 1 row affected (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>查询语句SELECT</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select _column,_column from _table [where Clause] [limit N][offset M]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>select *</strong> : 返回所有记录</li>
+<li><strong>limit N</strong> : 返回 N 条记录</li>
+<li><strong>offset M</strong> : 跳过 M 条记录, 默认 M=0, 单独使用似乎不起作用</li>
+<li><strong>limit N,M</strong> : 相当于 <strong>limit M offset N</strong> , 从第 N 条记录开始, 返回 M 条记录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl; #读取数据表</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="limit-应用">limit 应用</h2>
+<p>LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量，第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1)： 为了与 PostgreSQL 兼容，MySQL 也支持句法： LIMIT # OFFSET #。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM table LIMIT 5,10; // 检索记录行 6-15   </span><br><span class="line">  </span><br><span class="line">//如果只给定一个参数，它表示返回最大的记录行数目：    </span><br><span class="line">mysql&gt; SELECT * FROM table LIMIT 5; //检索前 5 个记录行   </span><br><span class="line">  </span><br><span class="line">//换句话说，LIMIT n 等价于 LIMIT 0,n。</span><br></pre></td></tr></table></figure>
+<h1>WHERE子句</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name1,table_name2... [WHERE condition1 [AND [OR]] condition2.....</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询语句中你可以使用一个或者多个表，表之间使用逗号**,** 分割，并使用WHERE语句来设定查询条件。</li>
+<li>你可以在 WHERE 子句中指定任何条件。</li>
+<li>你可以使用 AND 或者 OR 指定&gt;=1个条件。</li>
+<li>WHERE 可运用于 SQL 的 DELETE 或者 UPDATE 命令。</li>
+<li>WHERE 类似于 if 条件，根据 MySQL 表中的字段值来读取指定的数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_title=&quot;JOEY&quot;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2000-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="特殊条件">特殊条件</h2>
+<p>空值判断：<strong>is null</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where country is null;</span><br><span class="line">#查询joey_tbl表country列中的空值</span><br></pre></td></tr></table></figure>
+<p><strong>between and</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id between 1 and 5;</span><br><span class="line">#查询joey_tbl表中id列1到5的值</span><br></pre></td></tr></table></figure>
+<p><strong>in</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id in (1,3,5)</span><br><span class="line">#查询joey_tbl表id列等于1,3,5的值</span><br></pre></td></tr></table></figure>
+<h1>更新/删除</h1>
+<h2 id="UPDATE">UPDATE</h2>
+<p>用来修改或更新 MySQL 中的数据，我们可以使用 SQL UPDATE 命令来操作</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#update 表名称 set 列名称=新值 where 更新条件;</span><br><span class="line">UPDATE table_name SET field1=new-value1, field2=new-value2 [WHERE clause]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; update joey_tbl set submission_date=&quot;2020-03-28&quot; where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.005 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="DELETE">DELETE</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#DELETE FROM 表名称 where 删除条件;</span><br><span class="line">DELETE FROM table_name [WHERE Clause]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; DELETE from joey_tbl where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.001 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">Empty set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>LIKE子句</h1>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name WHERE field1 LIKE condition1 [AND [OR]] filed2 = &#x27;somevalue&#x27;</span><br></pre></td></tr></table></figure>
+<p><strong>%</strong>：多个字符</p>
+<p><strong>_</strong> ：1个字符</p>
+<p><strong>M%</strong>：模糊查询信息为M开头的</p>
+<p><strong>%M%</strong>：查询包含M的所有内容</p>
+<p><strong>%M_</strong>:查询</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       2 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       3 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       4 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br><span class="line"></span><br><span class="line">#SQL LIKE 子句中使用百分号 % 字符来表示任意字符</span><br><span class="line">#如果没有使用百分号 %, LIKE 子句与等号 = 的效果是一样的</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_author like &#x27;%com&#x27;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<h1>UNION</h1>
+<p><strong>UNION 语句</strong>：查询不同表中相同列中的数据（不包括重复数据）</p>
+<p><strong>ALL</strong>:返回所有结果(包括重复数据)</p>
+<p><strong>DISTINCT</strong>:删除重复数据(默认UNION已经删除了重复数据)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#这是&quot;joey_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from joey_game;</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">| id | name              | value | country |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">|  1 | Apex Legend       | free  | USA     |</span><br><span class="line">|  2 | League of Legend  | free  | USA     |</span><br><span class="line">|  3 | Rainbow six Siege | $30   | USA     |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">#这是&quot;Eggy_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from Eggy_game;</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">| id | name                | value | country |</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">|  1 | Dying light         | $40   | USA     |</span><br><span class="line">|  2 | Oxygen Not Included | $30   | USA     |</span><br><span class="line">|  3 | Elden Ring          | free  | USA     |</span><br><span class="line">+----+---------------------+-------+---------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#union</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line"></span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br><span class="line"></span><br><span class="line">#union all</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line">    </span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br></pre></td></tr></table></figure>
+<h1>ORDER BY</h1>
+<p><strong>order by</strong>就是对结果排序</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_game order by id asc,game desc </span><br><span class="line">#默认升序，asc可省，desc降序，不写明ASC DESC的时候，默认是ASC</span><br></pre></td></tr></table></figure>
+<p>ORDER BY 多列的时候，先按照第一个column name排序，在按照第二个column name排序</p>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>Database</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/07/21/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>2022暑假ACM集训周记</title>
     <url>/2022/07/30/2022%E6%9A%91%E5%81%87ACM%E9%9B%86%E8%AE%AD%E5%91%A8%E8%AE%B0/</url>
     <content><![CDATA[<h1>Week1</h1>
@@ -196,164 +376,136 @@
       </tags>
   </entry>
   <entry>
-    <title>RSA</title>
-    <url>/2022/08/18/RSA/</url>
-    <content><![CDATA[<h1>RSA介绍</h1>
-<p>RSA 加密算法是一种非对称加密算法。在公开密钥加密和电子商业中 RSA 被广泛使用。RSA 是 1977 年由罗纳德 · 李维斯特（Ron Rivest）、阿迪 · 萨莫尔（Adi Shamir）和伦纳德 · 阿德曼（Leonard Adleman）一起提出的。RSA 就是他们三人姓氏开头字母拼在一起组成的。</p>
-<p>RSA 算法的可靠性由极大整数因数分解的难度决定。换言之，对一极大整数做因数分解愈困难，RSA 算法愈可靠。假如有人找到一种快速因数分解的算法的话，那么用 RSA 加密的信息的可靠性就肯定会极度下降。但找到这样的算法的可能性是非常小的。如今，只有短的 RSA 密钥才可能被强力方式解破。到 2017 年为止，还没有任何可靠的攻击 RSA 算法的方式。</p>
-<h1>基本原理</h1>
-<h3 id="公钥与私钥的产生-¶">公钥与私钥的产生 <a href="https://ctf-wiki.org/crypto/asymmetric/rsa/rsa_theory/#_2">¶</a></h3>
+    <title>Binary search</title>
+    <url>/2022/07/30/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h1>二分模板</h1>
+<p>算法思路：假设目标值在闭区间<code>[l, r]</code>中， 每次将区间长度缩小一半，当<code>l = r</code>时，我们就找到了目标值。</p>
+<h2 id="版本1"><strong>版本1</strong></h2>
+<p>当我们将区间<code>[l, r]</code>划分成<code>[l, mid]</code>和<code>[mid + 1, r]</code>时，其更新操作是<code>r = mid</code>或者<code>l = mid + 1</code>;计算<code>mid</code>时不需要加<code>1</code></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(mid)) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="版本2"><strong>版本2</strong></h2>
+<p>当我们将区间<code>[l, r]</code>划分成<code>[l, mid - 1]</code>和<code>[mid, r]</code>时，其更新操作是<code>r = mid - 1</code>或者<code>l = mid</code>;此时为了防止死循环，计算<code>mid</code>时需要加1。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(mid)) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：<a href="https://www.acwing.com/blog/content/31/">https://www.acwing.com/blog/content/31/</a></p>
+<h2 id="版本3">版本3</h2>
+<p>循环条件：l &lt; r - 1，l = mid, r = mid</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">searchInsert</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r - <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(nums[r] &lt; target)</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(arr[l] &gt; k)</span><br><span class="line">            <span class="keyword">return</span> l;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> target - nums[l] &lt; nums[r] - k ? l : r;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>为什么不用<code>mid = (left+right)/2</code> 而用<code>mid = left + (right-left)/2</code></p>
+<p>因为<code>left</code>和<code>right</code>都是<code>signed int</code>类型，最多表示到<code>2^31 - 1</code>, 如果<code>left=1, right = 2^31-1</code>. 那么<code>left+right</code>就等于<code>2^31</code>, 超出<code>signed int</code>的上界<code>2^31-1</code>的限制, 发生数据溢出。<code> left+(right-left)</code> 实际上限制了相加的两个数字的大小，不会造成溢出</p>
+<h1>Leetcode704 <a href="https://leetcode.cn/problems/binary-search/description/">二分查找</a></h1>
+<p>给定一个 <code>n</code> 个元素有序的（升序）整型数组 <code>nums</code> 和一个目标值 <code>target</code> ，写一个函数搜索 <code>nums</code> 中的 <code>target</code>，如果目标值存在返回下标，否则返回 <code>-1</code>。<br>
+<strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 9</span><br><span class="line">输出: 4</span><br><span class="line">解释: 9 出现在 nums 中并且下标为 4</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 2</span><br><span class="line">输出: -1</span><br><span class="line">解释: 2 不存在 nums 中因此返回 -1</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
 <ol>
-<li>
-<p>随机选择两个不同大质数 <code>p</code> 和 <code>q</code>,计算 <code>N = pq</code></p>
-</li>
-<li>
-<p>根据欧拉函数，求得 <code>φ(N) = φ(p)φ(q) = (p−1)(q−1)</code></p>
-</li>
-<li>
-<p>选择一个小于 <code>φ(N)</code> 的整数 <code>e</code>，使 <code>e</code> 和 <code>φ(N)</code> 互质</p>
-<p>并求得 <code>e</code> 关于 <code>φ(N)</code>的模反元素，命名为 <code>d</code>，有 <code>ed ≡ 1 (mod φ(N))</code></p>
-</li>
+<li>你可以假设 <code>nums</code> 中的所有元素是不重复的。</li>
+<li><code>n</code> 将在 <code>[1, 10000]</code>之间。</li>
+<li><code>nums</code> 的每个元素都将在 <code>[-9999, 9999]</code>之间。</li>
 </ol>
-<p><strong>加密</strong></p>
-<p>c（密文）</p>
-<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220523200904527.png" alt="image-20220523200904527"></p>
-<p><strong>解密</strong></p>
-<p>m（明文）</p>
-<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220523200947293.png" alt="image-20220523200947293"></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=704 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [704] 二分查找</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">search</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(l &lt; r)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid] == target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &gt; target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums[l] == target ? l : <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818083404303.png" alt=""></p>
+<p>看YouTube上评论区一兄弟的方法，还是挺好用的</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=35 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [35] 搜索插入位置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">searchInsert</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt;= r)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
+<h1>Leetcode34 <a href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">在排序数组中查找元素的第一个和最后一个位置</a></h1>
+<p>给你一个按照非递减顺序排列的整数数组 <code>nums</code>，和一个目标值 <code>target</code>。请你找出给定目标值在数组中的开始位置和结束位置。</p>
+<p>如果数组中不存在目标值 <code>target</code>，返回 <code>[-1, -1]</code>。</p>
+<p>你必须设计并实现时间复杂度为 <code>O(log n)</code> 的算法解决此问题。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 8</span><br><span class="line">输出：[3,4]</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 6</span><br><span class="line">输出：[-1,-1]</span><br></pre></td></tr></table></figure>
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [], target = 0</span><br><span class="line">输出：[-1,-1]</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= nums.length &lt;= 105</code></li>
+<li><code>-109 &lt;= nums[i] &lt;= 109</code></li>
+<li><code>nums</code> 是一个非递减数组</li>
+<li><code>-109 &lt;= target &lt;= 109</code></li>
+</ul>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=34 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [34] 在排序数组中查找元素的第一个和最后一个位置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">searchRange</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> start = r;</span><br><span class="line">        <span class="keyword">if</span>(nums[r]!=target)</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid]&lt;=target)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> end = r;</span><br><span class="line">        <span class="keyword">return</span> &#123;start,end&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1>Leetcode69 <a href="https://leetcode.cn/problems/sqrtx/description/">x 的平方根</a></h1>
+<p>给你一个非负整数 <code>x</code> ，计算并返回 <code>x</code> 的 <strong>算术平方根</strong> 。</p>
+<p>由于返回类型是整数，结果只保留 <strong>整数部分</strong> ，小数部分将被 <strong>舍去 。</strong></p>
+<p>**注意：**不允许使用任何内置指数函数和算符，例如 <code>pow(x, 0.5)</code> 或者 <code>x ** 0.5</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：x = 4</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：x = 8</span><br><span class="line">输出：2</span><br><span class="line">解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= x &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=69 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [69] x 的平方根 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">0</span>, r = x;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (mid &gt; x / mid)</span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1>Leetcode278 <a href="https://leetcode.cn/problems/first-bad-version/description/">第一个错误的版本</a></h1>
+<p>你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。</p>
+<p>假设你有 <code>n</code> 个版本 <code>[1, 2, ..., n]</code>，你想找出导致之后所有版本出错的第一个错误的版本。</p>
+<p>你可以通过调用 <code>bool isBadVersion(version)</code> 接口来判断版本号 <code>version</code> 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 5, bad = 4</span><br><span class="line">输出：4</span><br><span class="line">解释：</span><br><span class="line">调用 isBadVersion(3) -&gt; false </span><br><span class="line">调用 isBadVersion(5) -&gt; true </span><br><span class="line">调用 isBadVersion(4) -&gt; true</span><br><span class="line">所以，4 是第一个错误的版本。</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1, bad = 1</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= bad &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=278 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [278] 第一个错误的版本</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="comment">// The API isBadVersion is defined for you.</span></span><br><span class="line"><span class="comment">// bool isBadVersion(int version);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">firstBadVersion</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">isBadVersion</span>(mid))</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1>Leetcode441 <a href="https://leetcode.cn/problems/arranging-coins/description/">排列硬币</a></h1>
+<p>你总共有 <code>n</code> 枚硬币，并计划将它们按阶梯状排列。对于一个由 <code>k</code> 行组成的阶梯，其第 <code>i</code> 行必须正好有 <code>i</code> 枚硬币。阶梯的最后一行 <strong>可能</strong> 是不完整的。</p>
+<p>给你一个数字 <code>n</code> ，计算并返回可形成 <strong>完整阶梯行</strong> 的总行数。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 5</span><br><span class="line">输出：2</span><br><span class="line">解释：因为第三行不完整，所以返回 2 。</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 8</span><br><span class="line">输出：3</span><br><span class="line">解释：因为第四行不完整，所以返回 3 。</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=441 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [441] 排列硬币</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">arrangeCoins</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> mid = l + (r - l+<span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">long</span> <span class="type">long</span>)mid * (mid + <span class="number">1</span>) &lt;= (<span class="type">long</span> <span class="type">long</span>)<span class="number">2</span> * n)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1><a href="https://www.acwing.com/problem/content/63/">ACwing67</a> 数字在排序数组中出现的次数</h1>
+<p>统计一个数字在排序数组中出现的次数。</p>
+<p>例如输入排序数组 [1,2,3,3,3,3,4,5] 和数字 33，由于 33 在这个数组中出现了 44 次，因此输出 44。</p>
+<p><strong>数据范围</strong></p>
+<p>数组长度 [0,1000]</p>
+<p><strong>样例</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：[1, 2, 3, 3, 3, 3, 4, 5] ,  3</span><br><span class="line"></span><br><span class="line">输出：4</span><br></pre></td></tr></table></figure>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getNumberOfK</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nums.<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= k)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (nums[l] != k)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> start = l;</span><br><span class="line">        l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &lt;= k)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> end = r;</span><br><span class="line">        <span class="keyword">if</span> (start == end)</span><br><span class="line">            <span class="keyword">return</span> end;</span><br><span class="line">        <span class="keyword">return</span> start - end + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1><a href="https://leetcode.cn/problems/search-a-2d-matrix/">Leetcode74</a> 搜索二维矩阵</h1>
+<p>编写一个高效的算法来判断 <code>m x n</code> 矩阵中，是否存在一个目标值。该矩阵具有如下特性：</p>
+<ul>
+<li>每行中的整数从左到右按升序排列。</li>
+<li>每行的第一个整数大于前一行的最后一个整数。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/05/mat.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>m == matrix.length</code></li>
+<li><code>n == matrix[i].length</code></li>
+<li><code>1 &lt;= m, n &lt;= 100</code></li>
+<li><code>-104 &lt;= matrix[i][j], target &lt;= 104</code></li>
+</ul>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=74 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [74] 搜索二维矩阵</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">searchMatrix</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; &amp;matrix, <span class="type">int</span> target)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = matrix.<span class="built_in">size</span>(), m = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (matrix.<span class="built_in">empty</span>() || matrix[<span class="number">0</span>].<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">                a.<span class="built_in">push_back</span>(matrix[i][j]);		<span class="comment">//把二维matrix存到一维数组</span></span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = a.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//二分</span></span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (a[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[r]!=target)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Crypto</category>
+        <category>C/C++</category>
       </categories>
       <tags>
-        <tag>Crypto</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql</title>
-    <url>/2022/08/18/MySQL/</url>
-    <content><![CDATA[<h1>MySQL</h1>
-<p>启动myslq</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service mysql start</span><br></pre></td></tr></table></figure>
-<h2 id="初始化MySQL">初始化MySQL</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
-<p>往下一直Y 直到人家谢谢你 初始化完成</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thanks for using MariaDB!</span><br></pre></td></tr></table></figure>
-<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818102929782.png" alt="image-20220818102929782" style="zoom:67%;" />
-<hr>
-<h3 id="登录MySQL">登录MySQL</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
-<p>这里密码为空，直接回车就可登入</p>
-<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103005479.png" alt="image-20220818103005479" style="zoom:67%;" />
-<h4 id="创建数据库">创建数据库</h4>
-<p>这里是root用户，可以使用mysqladmin来创建database</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p create tutorials</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">create database tutorials</span><br></pre></td></tr></table></figure>
-<p>创建完成后show databases</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| joeychamber        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">6 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<hr>
-<p>使用root登录后</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE DATABASE IF NOT EXISTS SPACE DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br></pre></td></tr></table></figure>
-<p>该命令的作用</p>
-<ul>
-<li>
-<ol>
-<li>如果数据库不存在则创建，存在则不创建</li>
-</ol>
-</li>
-<li>
-<ol start="2">
-<li>创建SPACE数据库，并设定编码集为utf8</li>
-</ol>
-</li>
-</ul>
-<hr>
-<h4 id="删除数据库">删除数据库</h4>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p drop joeychamber</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">drop databse joeychamber</span><br></pre></td></tr></table></figure>
-<img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818103015407.png" alt="image-20220818103015407" style="zoom:67%;" />
-<p>再来show一遍</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<hr>
-<h1>FLOAT和DOUBLE差异</h1>
-<p>（单精度与双精度有什么区别）</p>
-<p><strong>最本质的区别：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度(float)在 32 位机器上用4个字节来存储的</span><br><span class="line">双精度(double)是用8个字节来存储的，由于存储位不同，他们能表示的数值的范围就不同，也就是能准确表示的数的位数就不同</span><br></pre></td></tr></table></figure>
-<p><strong>1、所占的内存不同</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数占用4个字节（32位）存储空间来存储一个浮点数，包括符号位1位，阶码8位，尾数23位</span><br><span class="line">而双精度浮点数使用 8个字节（64位）存储空间来存储一个浮点数，包括符号位1位，阶码11位，尾数52位</span><br></pre></td></tr></table></figure>
-<p><strong>2、所存的数值范围不同</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数的数值范围为-3.4E38～3.4E38，而双精度浮点数可以表示的数字的绝对值范围大约是：-2.23E308 ~ 1.79E308</span><br><span class="line">E表示10的多少次方，如3.4E38指的是3.4乘以10的38次方</span><br></pre></td></tr></table></figure>
-<p><strong>3、十进制下的位数不同</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">单精度浮点数最多有7位十进制有效数字，如果某个数的有效数字位数超过7位，当把它定义为单精度变量时，超出的部分会自动四舍五入</span><br><span class="line">双精度浮点数可以表示十进制的15或16位有效数字，超出的部分也会自动四舍五入</span><br></pre></td></tr></table></figure>
-<h1>创建/删除表</h1>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">create/drop table table_name</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; create table joey_tbl(</span><br><span class="line">    -&gt; joey_id int not null auto_increment,</span><br><span class="line">    -&gt; joey_title varchar(100) not null,</span><br><span class="line">    -&gt; joey_author varchar(40) not null,</span><br><span class="line">    -&gt; submission_date date,</span><br><span class="line">    -&gt; primary key(joey_id)</span><br><span class="line">    -&gt; );</span><br><span class="line">Query OK, 0 rows affected (0.023 sec)</span><br></pre></td></tr></table></figure>
-<hr>
-<h1>插入数据</h1>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">insert into table_name(field1,f2,f3...)</span><br><span class="line">					values</span><br><span class="line">					(values1,v2,v3...);</span><br></pre></td></tr></table></figure>
-<p>如果数据是字符型，必须使用单引号( ’ )或者双引号( &quot; )</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; insert into joey_tbl</span><br><span class="line">    -&gt; (joey_title,joey_author,submission_date)</span><br><span class="line">    -&gt; values</span><br><span class="line">    -&gt; (&quot;joey&quot;,&quot;Eggy&quot;,&quot;3/28&quot;);</span><br><span class="line"></span><br><span class="line">Query OK, 1 row affected (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h1>查询语句SELECT</h1>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select _column,_column from _table [where Clause] [limit N][offset M]</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>select *</strong> : 返回所有记录</li>
-<li><strong>limit N</strong> : 返回 N 条记录</li>
-<li><strong>offset M</strong> : 跳过 M 条记录, 默认 M=0, 单独使用似乎不起作用</li>
-<li><strong>limit N,M</strong> : 相当于 <strong>limit M offset N</strong> , 从第 N 条记录开始, 返回 M 条记录</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl; #读取数据表</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h2 id="limit-应用">limit 应用</h2>
-<p>LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量，第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1)： 为了与 PostgreSQL 兼容，MySQL 也支持句法： LIMIT # OFFSET #。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM table LIMIT 5,10; // 检索记录行 6-15   </span><br><span class="line">  </span><br><span class="line">//如果只给定一个参数，它表示返回最大的记录行数目：    </span><br><span class="line">mysql&gt; SELECT * FROM table LIMIT 5; //检索前 5 个记录行   </span><br><span class="line">  </span><br><span class="line">//换句话说，LIMIT n 等价于 LIMIT 0,n。</span><br></pre></td></tr></table></figure>
-<h1>WHERE子句</h1>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name1,table_name2... [WHERE condition1 [AND [OR]] condition2.....</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查询语句中你可以使用一个或者多个表，表之间使用逗号**,** 分割，并使用WHERE语句来设定查询条件。</li>
-<li>你可以在 WHERE 子句中指定任何条件。</li>
-<li>你可以使用 AND 或者 OR 指定&gt;=1个条件。</li>
-<li>WHERE 可运用于 SQL 的 DELETE 或者 UPDATE 命令。</li>
-<li>WHERE 类似于 if 条件，根据 MySQL 表中的字段值来读取指定的数据</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_title=&quot;JOEY&quot;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2000-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h2 id="特殊条件">特殊条件</h2>
-<p>空值判断：<strong>is null</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where country is null;</span><br><span class="line">#查询joey_tbl表country列中的空值</span><br></pre></td></tr></table></figure>
-<p><strong>between and</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id between 1 and 5;</span><br><span class="line">#查询joey_tbl表中id列1到5的值</span><br></pre></td></tr></table></figure>
-<p><strong>in</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id in (1,3,5)</span><br><span class="line">#查询joey_tbl表id列等于1,3,5的值</span><br></pre></td></tr></table></figure>
-<h1>更新/删除</h1>
-<h2 id="UPDATE">UPDATE</h2>
-<p>用来修改或更新 MySQL 中的数据，我们可以使用 SQL UPDATE 命令来操作</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#update 表名称 set 列名称=新值 where 更新条件;</span><br><span class="line">UPDATE table_name SET field1=new-value1, field2=new-value2 [WHERE clause]</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; update joey_tbl set submission_date=&quot;2020-03-28&quot; where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.005 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h2 id="DELETE">DELETE</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#DELETE FROM 表名称 where 删除条件;</span><br><span class="line">DELETE FROM table_name [WHERE Clause]</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; DELETE from joey_tbl where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.001 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">Empty set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h1>LIKE子句</h1>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name WHERE field1 LIKE condition1 [AND [OR]] filed2 = &#x27;somevalue&#x27;</span><br></pre></td></tr></table></figure>
-<p><strong>%</strong>：多个字符</p>
-<p><strong>_</strong> ：1个字符</p>
-<p><strong>M%</strong>：模糊查询信息为M开头的</p>
-<p><strong>%M%</strong>：查询包含M的所有内容</p>
-<p><strong>%M_</strong>:查询</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       2 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       3 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       4 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br><span class="line"></span><br><span class="line">#SQL LIKE 子句中使用百分号 % 字符来表示任意字符</span><br><span class="line">#如果没有使用百分号 %, LIKE 子句与等号 = 的效果是一样的</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_author like &#x27;%com&#x27;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
-<h1>UNION</h1>
-<p><strong>UNION 语句</strong>：查询不同表中相同列中的数据（不包括重复数据）</p>
-<p><strong>ALL</strong>:返回所有结果(包括重复数据)</p>
-<p><strong>DISTINCT</strong>:删除重复数据(默认UNION已经删除了重复数据)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#这是&quot;joey_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from joey_game;</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">| id | name              | value | country |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">|  1 | Apex Legend       | free  | USA     |</span><br><span class="line">|  2 | League of Legend  | free  | USA     |</span><br><span class="line">|  3 | Rainbow six Siege | $30   | USA     |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">#这是&quot;Eggy_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from Eggy_game;</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">| id | name                | value | country |</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">|  1 | Dying light         | $40   | USA     |</span><br><span class="line">|  2 | Oxygen Not Included | $30   | USA     |</span><br><span class="line">|  3 | Elden Ring          | free  | USA     |</span><br><span class="line">+----+---------------------+-------+---------+</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#union</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line"></span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br><span class="line"></span><br><span class="line">#union all</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line">    </span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br></pre></td></tr></table></figure>
-<h1>ORDER BY</h1>
-<p><strong>order by</strong>就是对结果排序</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_game order by id asc,game desc </span><br><span class="line">#默认升序，asc可省，desc降序，不写明ASC DESC的时候，默认是ASC</span><br></pre></td></tr></table></figure>
-<p>ORDER BY 多列的时候，先按照第一个column name排序，在按照第二个column name排序</p>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>Database</tag>
+        <tag>algorithm</tag>
       </tags>
   </entry>
   <entry>
@@ -405,23 +557,97 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/07/21/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>排序</title>
+    <url>/2022/07/30/%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<h1>冒泡排序</h1>
+<p><img src="https://www.runoob.com/wp-content/uploads/2019/03/bubbleSort.gif" alt="img"></p>
+<p><strong>算法步骤</strong></p>
+<ul>
+<li>从开始第一对到结尾的最后一对，比较相邻的元素，如果第一个&gt;第二个则交换。</li>
+<li>一轮结束后最大的数会排到最后，然后排除最大/最后的数接着冒泡前面的数，例二轮会把最大（第二大）的数排到最后</li>
+</ul>
+<p>e.g.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 3 5 7 9 2 4 6 8 10</span><br></pre></td></tr></table></figure>
+<p>第一轮</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(1)1 3 5 7 2 9 4 6 8 10  #9&gt;2</span><br><span class="line">(2)1 3 5 7 2 4 9 6 8 10  #9&gt;4</span><br><span class="line">(3)1 3 5 7 2 4 6 9 8 10  #9&gt;6</span><br><span class="line">(4)1 3 5 7 2 4 6 8 9 10  #9&gt;8</span><br><span class="line">(5)1 3 5 7 2 4 6 8 9 10  #9&lt;10  第二轮以此类推知道排成1 2 3 4 5 6 7 8 9 10为止</span><br></pre></td></tr></table></figure>
+<h2 id="基本代码">基本代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span><span class="comment">//基本代码</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="type">int</span> n,a[<span class="number">1000</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;a[i]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;n-i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j]&gt;a[j+<span class="number">1</span>])&#123;</span><br><span class="line">				<span class="type">int</span> t=a[j];</span><br><span class="line">				a[j]=a[j+<span class="number">1</span>];</span><br><span class="line">				a[j+<span class="number">1</span>]=t;</span><br><span class="line">            &#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,a[i]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h2 id="优化代码">优化代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span><span class="comment">//优化代码</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> nums[<span class="number">10</span>] = &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">9</span>&#125;;</span><br><span class="line">    <span class="type">int</span> i, j, temp, isSorted;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//优化算法：最多进行 n-1 轮比较</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">10</span><span class="number">-1</span>; i++)&#123;</span><br><span class="line">        isSorted = <span class="number">1</span>;  <span class="comment">//假设剩下的元素已经排序好了</span></span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">0</span>; j&lt;<span class="number">10</span><span class="number">-1</span>-i; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j] &gt; nums[j+<span class="number">1</span>])&#123;</span><br><span class="line">                temp = nums[j];</span><br><span class="line">                nums[j] = nums[j+<span class="number">1</span>];</span><br><span class="line">                nums[j+<span class="number">1</span>] = temp;</span><br><span class="line">                isSorted = <span class="number">0</span>;  <span class="comment">//一旦需要交换数组元素，就说明剩下的元素没有排序好</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(isSorted) <span class="keyword">break</span>; <span class="comment">//如果没有发生交换，说明剩下的元素已经排序好了</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, nums[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串冒泡">字符串冒泡</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">0</span>,i=<span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> a[<span class="number">100</span>][<span class="number">100</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,&amp;a[i])!=EOF)i++;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;i-j<span class="number">-1</span>;k++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="built_in">strcmp</span>(a[k],a[k+<span class="number">1</span>])&gt;<span class="number">0</span>)&#123;</span><br><span class="line">				<span class="type">char</span> t[<span class="number">100</span>];</span><br><span class="line">				<span class="built_in">strcpy</span>(t,a[k]);</span><br><span class="line">				<span class="built_in">strcpy</span>(a[k],a[k+<span class="number">1</span>]);</span><br><span class="line">				<span class="built_in">strcpy</span>(a[k+<span class="number">1</span>],t);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;i;j++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,a[j]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>快速排序</h1>
+<p><strong>步骤</strong></p>
+<ul>
+<li>从数组中选一个元素作为基准数</li>
+<li>分区，比基准数大的放右边，小的放左边</li>
+<li>再对两边重复分区</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span> *a,<span class="type">int</span> low,<span class="type">int</span> high)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> arr[<span class="number">12</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;<span class="number">10</span>;k++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;arr[k]);</span><br><span class="line"></span><br><span class="line">	quicksort(arr,<span class="number">0</span>,<span class="number">9</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;<span class="number">10</span>;k++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,arr[k]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span> *a,<span class="type">int</span> low,<span class="type">int</span> high)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(low&lt;high)&#123;</span><br><span class="line">		<span class="type">int</span> i=low;</span><br><span class="line">		<span class="type">int</span> j=high;</span><br><span class="line">		<span class="type">int</span> num=a[i];</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">while</span>(i&lt;j)&#123;</span><br><span class="line">			<span class="keyword">while</span>(i&lt;j&amp;&amp;a[j]&gt;=num)j--;</span><br><span class="line">			<span class="keyword">if</span>(i&lt;j)</span><br><span class="line">				a[i++]=a[j];</span><br><span class="line">		</span><br><span class="line">			<span class="keyword">while</span>(i&lt;j&amp;&amp;a[i]&lt;num)i++;</span><br><span class="line">			<span class="keyword">if</span>(i&lt;j)</span><br><span class="line">				a[j--]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">		a[i]=num;<span class="comment">//i==j</span></span><br><span class="line">	</span><br><span class="line">		<span class="comment">//递归</span></span><br><span class="line">		quicksort(a,low,i<span class="number">-1</span>);<span class="comment">//排左边</span></span><br><span class="line">		quicksort(a,i+<span class="number">1</span>,high);<span class="comment">//排右边</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>参考：</strong><a href="https://www.runoob.com/w3cnote/quick-sort.html">快速排序 | 菜鸟教程 (runoob.com)</a></p>
+<h1>选择排序</h1>
+<h1>归并排序</h1>
+<h1>插入排序</h1>
 ]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>栈和队列</title>
+    <url>/2022/07/30/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h1>表达式括号匹配</h1>
+<p><strong>题目描述</strong></p>
+<p>假设一个表达式有英文字母（小写）、运算符（+，—，*，/）和左右小（圆）括号构成，以“@”作为表达式的结束符。请编写一个程序检查表达式中的左右圆括号是否匹配，若匹配，则返回&quot;YES&quot;；否则返回&quot;NO&quot;。表达式长度小于255，左圆括号少于20个。</p>
+<p><strong>输入</strong></p>
+<p>输入表达式(只有1行，长度小于255)</p>
+<p><strong>输出</strong></p>
+<p>输出包括一行，即&quot;YES&quot;或&quot;NO&quot;</p>
+<p><strong>样例输入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">【样例输入1】</span><br><span class="line">2*(x+y)/(1-x)@</span><br><span class="line">【样例输入2】 </span><br><span class="line">(25+x)*(a*(a+b+b)@</span><br></pre></td></tr></table></figure>
+<p><strong>样例输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">【样例输出1】</span><br><span class="line">YES</span><br><span class="line">【样例输出2】 </span><br><span class="line">NO</span><br></pre></td></tr></table></figure>
+<p><strong>source code</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> s;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;s;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="type">char</span>&gt;p;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;s[i]!=<span class="string">&#x27;@&#x27;</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">            p.push(s[i]);                   <span class="comment">//把&#x27;(&#x27;放到栈顶</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!p.empty())                 <span class="comment">//如果栈顶有元素</span></span><br><span class="line">                p.pop();                    <span class="comment">//则删除栈顶的元素，不返回</span></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;NO&quot;</span>&lt;&lt;<span class="built_in">endl</span>;           <span class="comment">//栈顶无元素 输出NO</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(p.empty())                           <span class="comment">//栈空即&#x27;(&#x27;和&#x27;)&#x27;抵消 返回TRUE</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;YES&quot;</span>&lt;&lt;<span class="built_in">endl</span>;                  <span class="comment">//输出YES</span></span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;NO&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>括弧匹配检验</h1>
+<p><strong>题目描述</strong></p>
+<p>​    假设表达式中允许包含两种括号：圆括号和方括号，其嵌套的顺序随意，如<code>([]())</code>或<code>[([][])]</code>等为正确的匹配，<code>[(])</code>或<code>([]()</code>或<code>(()))</code>均为错误的匹配。</p>
+<p>现在的问题是，要求检验一个给定表达式中的括弧是否正确匹配？</p>
+<p>输入一个只包含圆括号和方括号的字符串，判断字符串中的括号是否匹配，匹配就输出 “OK” ，不匹配就输出“Wrong”。</p>
+<p>输入一个字符串：<code>[([][])]</code>，输出：OK</p>
+<p><strong>输入</strong></p>
+<p>​    输入仅一行字符（字符个数小于255）</p>
+<p><strong>输出</strong></p>
+<p>匹配就输出 “OK” ，不匹配就输出“Wrong”。</p>
+<p><strong>样例输入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[(])</span><br></pre></td></tr></table></figure>
+<p><strong>样例输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Wrong</span><br></pre></td></tr></table></figure>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string s;</span><br><span class="line">    cin&gt;&gt;s;</span><br><span class="line">    stack&lt;<span class="type">char</span>&gt;p;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s.<span class="built_in">length</span>();i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;[&#x27;</span>)                           <span class="comment">//放到栈顶</span></span><br><span class="line">            p.<span class="built_in">push</span>(s[i]);</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">            p.<span class="built_in">push</span>(s[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;]&#x27;</span>||s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;               </span><br><span class="line">            <span class="keyword">if</span>(!p.<span class="built_in">empty</span>())&#123;                    <span class="comment">//如果栈非空即对应 [] OR ()</span></span><br><span class="line">                <span class="keyword">if</span>(s[i]==<span class="string">&#x27;]&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(p.<span class="built_in">top</span>()!=<span class="string">&#x27;[&#x27;</span>)&#123;          <span class="comment">//如果栈顶不对应</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span> p.<span class="built_in">pop</span>();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(p.<span class="built_in">top</span>()!=<span class="string">&#x27;(&#x27;</span>)&#123;          <span class="comment">//如果栈顶不对应</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span> p.<span class="built_in">pop</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;                               <span class="comment">//栈空即不对应</span></span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(p.<span class="built_in">empty</span>())</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;OK&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><a href="(https://ac.nowcoder.com/acm/contest/37344/J)">签到</a></h1>
+<p>给定一个序列，你可以在序列中任取 4 个数 a,b,c,d （可以重复选取），问是否有一种选择满足：<code>a+b+c=d</code></p>
+<p><strong>输入描述</strong></p>
+<p>第一行，一个正整数 n<br>
+第二行，n 个正整数，a1,a2,a3,…,an (1≤ai≤10^9)</p>
+<p><strong>输出描述</strong></p>
+<p>如果存在一种情况满足，则输出&quot;Yes&quot;（不加引号），否则输出&quot;No&quot;（不加引号）。</p>
+<p><strong>输入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1 8 20 90</span><br></pre></td></tr></table></figure>
+<p><strong>输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">No</span><br></pre></td></tr></table></figure>
+<p><strong>source code</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//3重for循环会超时</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a[<span class="number">1005</span>],n;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		cin &gt;&gt; a[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//枚举a和b，存入set</span></span><br><span class="line">	set&lt;<span class="type">int</span>&gt; s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; n;j++)&#123;</span><br><span class="line">			s.<span class="built_in">insert</span>(a[i] + a[j]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="comment">//枚举c和d</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; n;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j] &lt; a[i])&#123;</span><br><span class="line">				<span class="keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="type">int</span> t = a[j] - a[i];	<span class="comment">//d-c</span></span><br><span class="line">			<span class="keyword">if</span>(s.<span class="built_in">find</span>(t) != s.<span class="built_in">end</span>())&#123;</span><br><span class="line">				cout &lt;&lt; <span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;No&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
   </entry>
   <entry>
     <title>python</title>
@@ -601,136 +827,25 @@
       </tags>
   </entry>
   <entry>
-    <title>Binary search</title>
-    <url>/2022/07/30/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<h1>二分模板</h1>
-<p>算法思路：假设目标值在闭区间<code>[l, r]</code>中， 每次将区间长度缩小一半，当<code>l = r</code>时，我们就找到了目标值。</p>
-<h2 id="版本1"><strong>版本1</strong></h2>
-<p>当我们将区间<code>[l, r]</code>划分成<code>[l, mid]</code>和<code>[mid + 1, r]</code>时，其更新操作是<code>r = mid</code>或者<code>l = mid + 1</code>;计算<code>mid</code>时不需要加<code>1</code></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(mid)) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="版本2"><strong>版本2</strong></h2>
-<p>当我们将区间<code>[l, r]</code>划分成<code>[l, mid - 1]</code>和<code>[mid, r]</code>时，其更新操作是<code>r = mid - 1</code>或者<code>l = mid</code>;此时为了防止死循环，计算<code>mid</code>时需要加1。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(mid)) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://www.acwing.com/blog/content/31/">https://www.acwing.com/blog/content/31/</a></p>
-<h2 id="版本3">版本3</h2>
-<p>循环条件：l &lt; r - 1，l = mid, r = mid</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">searchInsert</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r - <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(nums[r] &lt; target)</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(arr[l] &gt; k)</span><br><span class="line">            <span class="keyword">return</span> l;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> target - nums[l] &lt; nums[r] - k ? l : r;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>为什么不用<code>mid = (left+right)/2</code> 而用<code>mid = left + (right-left)/2</code></p>
-<p>因为<code>left</code>和<code>right</code>都是<code>signed int</code>类型，最多表示到<code>2^31 - 1</code>, 如果<code>left=1, right = 2^31-1</code>. 那么<code>left+right</code>就等于<code>2^31</code>, 超出<code>signed int</code>的上界<code>2^31-1</code>的限制, 发生数据溢出。<code> left+(right-left)</code> 实际上限制了相加的两个数字的大小，不会造成溢出</p>
-<h1>Leetcode704 <a href="https://leetcode.cn/problems/binary-search/description/">二分查找</a></h1>
-<p>给定一个 <code>n</code> 个元素有序的（升序）整型数组 <code>nums</code> 和一个目标值 <code>target</code> ，写一个函数搜索 <code>nums</code> 中的 <code>target</code>，如果目标值存在返回下标，否则返回 <code>-1</code>。<br>
-<strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 9</span><br><span class="line">输出: 4</span><br><span class="line">解释: 9 出现在 nums 中并且下标为 4</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 2</span><br><span class="line">输出: -1</span><br><span class="line">解释: 2 不存在 nums 中因此返回 -1</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ol>
-<li>你可以假设 <code>nums</code> 中的所有元素是不重复的。</li>
-<li><code>n</code> 将在 <code>[1, 10000]</code>之间。</li>
-<li><code>nums</code> 的每个元素都将在 <code>[-9999, 9999]</code>之间。</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=704 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [704] 二分查找</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">search</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(l &lt; r)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid] == target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &gt; target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums[l] == target ? l : <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/11814/image-20220818083404303.png" alt=""></p>
-<p>看YouTube上评论区一兄弟的方法，还是挺好用的</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=35 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [35] 搜索插入位置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">searchInsert</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt;= r)&#123;</span><br><span class="line">            <span class="type">int</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<h1>Leetcode34 <a href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">在排序数组中查找元素的第一个和最后一个位置</a></h1>
-<p>给你一个按照非递减顺序排列的整数数组 <code>nums</code>，和一个目标值 <code>target</code>。请你找出给定目标值在数组中的开始位置和结束位置。</p>
-<p>如果数组中不存在目标值 <code>target</code>，返回 <code>[-1, -1]</code>。</p>
-<p>你必须设计并实现时间复杂度为 <code>O(log n)</code> 的算法解决此问题。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 8</span><br><span class="line">输出：[3,4]</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 6</span><br><span class="line">输出：[-1,-1]</span><br></pre></td></tr></table></figure>
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [], target = 0</span><br><span class="line">输出：[-1,-1]</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
+    <title>The Economist script for FREE</title>
+    <url>/2022/09/08/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BA%BA%E7%99%BD%E5%AB%96%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<p><strong>Download Greasy Fork</strong></p>
 <ul>
-<li><code>0 &lt;= nums.length &lt;= 105</code></li>
-<li><code>-109 &lt;= nums[i] &lt;= 109</code></li>
-<li><code>nums</code> 是一个非递减数组</li>
-<li><code>-109 &lt;= target &lt;= 109</code></li>
+<li><strong>Chrome：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag">Violentmonkey</a></li>
+<li><strong>Firefox：</strong><a href="https://addons.mozilla.org/firefox/addon/greasemonkey/">Greasemonkey</a>, <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag">Violentmonkey</a></li>
+<li><strong>Safari：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://apps.apple.com/app/userscripts/id1463298887">Userscripts</a></li>
+<li><strong>Microsoft Edge：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a></li>
 </ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=34 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [34] 在排序数组中查找元素的第一个和最后一个位置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">searchRange</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> start = r;</span><br><span class="line">        <span class="keyword">if</span>(nums[r]!=target)</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid]&lt;=target)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> end = r;</span><br><span class="line">        <span class="keyword">return</span> &#123;start,end&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1>Leetcode69 <a href="https://leetcode.cn/problems/sqrtx/description/">x 的平方根</a></h1>
-<p>给你一个非负整数 <code>x</code> ，计算并返回 <code>x</code> 的 <strong>算术平方根</strong> 。</p>
-<p>由于返回类型是整数，结果只保留 <strong>整数部分</strong> ，小数部分将被 <strong>舍去 。</strong></p>
-<p>**注意：**不允许使用任何内置指数函数和算符，例如 <code>pow(x, 0.5)</code> 或者 <code>x ** 0.5</code> 。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：x = 4</span><br><span class="line">输出：2</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：x = 8</span><br><span class="line">输出：2</span><br><span class="line">解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>0 &lt;= x &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=69 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [69] x 的平方根 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">0</span>, r = x;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (mid &gt; x / mid)</span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1>Leetcode278 <a href="https://leetcode.cn/problems/first-bad-version/description/">第一个错误的版本</a></h1>
-<p>你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。</p>
-<p>假设你有 <code>n</code> 个版本 <code>[1, 2, ..., n]</code>，你想找出导致之后所有版本出错的第一个错误的版本。</p>
-<p>你可以通过调用 <code>bool isBadVersion(version)</code> 接口来判断版本号 <code>version</code> 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 5, bad = 4</span><br><span class="line">输出：4</span><br><span class="line">解释：</span><br><span class="line">调用 isBadVersion(3) -&gt; false </span><br><span class="line">调用 isBadVersion(5) -&gt; true </span><br><span class="line">调用 isBadVersion(4) -&gt; true</span><br><span class="line">所以，4 是第一个错误的版本。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1, bad = 1</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= bad &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=278 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [278] 第一个错误的版本</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="comment">// The API isBadVersion is defined for you.</span></span><br><span class="line"><span class="comment">// bool isBadVersion(int version);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">firstBadVersion</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">isBadVersion</span>(mid))</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1>Leetcode441 <a href="https://leetcode.cn/problems/arranging-coins/description/">排列硬币</a></h1>
-<p>你总共有 <code>n</code> 枚硬币，并计划将它们按阶梯状排列。对于一个由 <code>k</code> 行组成的阶梯，其第 <code>i</code> 行必须正好有 <code>i</code> 枚硬币。阶梯的最后一行 <strong>可能</strong> 是不完整的。</p>
-<p>给你一个数字 <code>n</code> ，计算并返回可形成 <strong>完整阶梯行</strong> 的总行数。</p>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg" alt="img"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 5</span><br><span class="line">输出：2</span><br><span class="line">解释：因为第三行不完整，所以返回 2 。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg" alt="img"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 8</span><br><span class="line">输出：3</span><br><span class="line">解释：因为第四行不完整，所以返回 3 。</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=441 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [441] 排列硬币</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">arrangeCoins</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> mid = l + (r - l+<span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">long</span> <span class="type">long</span>)mid * (mid + <span class="number">1</span>) &lt;= (<span class="type">long</span> <span class="type">long</span>)<span class="number">2</span> * n)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1><a href="https://www.acwing.com/problem/content/63/">ACwing67</a> 数字在排序数组中出现的次数</h1>
-<p>统计一个数字在排序数组中出现的次数。</p>
-<p>例如输入排序数组 [1,2,3,3,3,3,4,5] 和数字 33，由于 33 在这个数组中出现了 44 次，因此输出 44。</p>
-<p><strong>数据范围</strong></p>
-<p>数组长度 [0,1000]</p>
-<p><strong>样例</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：[1, 2, 3, 3, 3, 3, 4, 5] ,  3</span><br><span class="line"></span><br><span class="line">输出：4</span><br></pre></td></tr></table></figure>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getNumberOfK</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nums.<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= k)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (nums[l] != k)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> start = l;</span><br><span class="line">        l = <span class="number">0</span>, r = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &lt;= k)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> end = r;</span><br><span class="line">        <span class="keyword">if</span> (start == end)</span><br><span class="line">            <span class="keyword">return</span> end;</span><br><span class="line">        <span class="keyword">return</span> start - end + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h1><a href="https://leetcode.cn/problems/search-a-2d-matrix/">Leetcode74</a> 搜索二维矩阵</h1>
-<p>编写一个高效的算法来判断 <code>m x n</code> 矩阵中，是否存在一个目标值。该矩阵具有如下特性：</p>
-<ul>
-<li>每行中的整数从左到右按升序排列。</li>
-<li>每行的第一个整数大于前一行的最后一个整数。</li>
-</ul>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/10/05/mat.jpg" alt="img"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg" alt="img"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>m == matrix.length</code></li>
-<li><code>n == matrix[i].length</code></li>
-<li><code>1 &lt;= m, n &lt;= 100</code></li>
-<li><code>-104 &lt;= matrix[i][j], target &lt;= 104</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=74 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [74] 搜索二维矩阵</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">searchMatrix</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; &amp;matrix, <span class="type">int</span> target)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = matrix.<span class="built_in">size</span>(), m = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (matrix.<span class="built_in">empty</span>() || matrix[<span class="number">0</span>].<span class="built_in">empty</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">                a.<span class="built_in">push_back</span>(matrix[i][j]);		<span class="comment">//把二维matrix存到一维数组</span></span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = a.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//二分</span></span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (a[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[r]!=target)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
+<p><strong>Download script</strong></p>
+<p><a href="https://greasyfork.org/zh-CN/scripts/449408-%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BA%BA%E5%85%8D%E8%B4%B9%E7%9C%8B-%E5%B9%B6%E7%A7%BB%E5%87%BA%E4%BA%86%E5%B9%BF%E5%91%8A">The Economist script</a></p>
+<p><strong>Open the official website</strong></p>
+<p><a href="https://www.economist.com/">The Economist</a></p>
 ]]></content>
       <categories>
-        <category>C/C++</category>
+        <category>scripts</category>
       </categories>
       <tags>
-        <tag>algorithm</tag>
+        <tag>scripts</tag>
       </tags>
   </entry>
   <entry>
@@ -806,46 +921,6 @@
 </ul>
 <p><strong>source code</strong></p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">swapNumbers</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; numbers)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> a=numbers[<span class="number">0</span>],b=numbers[<span class="number">1</span>];</span><br><span class="line">        a=a^b;</span><br><span class="line">        b=a^b;</span><br><span class="line">        a=a^b;</span><br><span class="line">        <span class="keyword">return</span> &#123;a,b&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>排序</title>
-    <url>/2022/07/30/%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1>冒泡排序</h1>
-<p><img src="https://www.runoob.com/wp-content/uploads/2019/03/bubbleSort.gif" alt="img"></p>
-<p><strong>算法步骤</strong></p>
-<ul>
-<li>从开始第一对到结尾的最后一对，比较相邻的元素，如果第一个&gt;第二个则交换。</li>
-<li>一轮结束后最大的数会排到最后，然后排除最大/最后的数接着冒泡前面的数，例二轮会把最大（第二大）的数排到最后</li>
-</ul>
-<p>e.g.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 3 5 7 9 2 4 6 8 10</span><br></pre></td></tr></table></figure>
-<p>第一轮</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(1)1 3 5 7 2 9 4 6 8 10  #9&gt;2</span><br><span class="line">(2)1 3 5 7 2 4 9 6 8 10  #9&gt;4</span><br><span class="line">(3)1 3 5 7 2 4 6 9 8 10  #9&gt;6</span><br><span class="line">(4)1 3 5 7 2 4 6 8 9 10  #9&gt;8</span><br><span class="line">(5)1 3 5 7 2 4 6 8 9 10  #9&lt;10  第二轮以此类推知道排成1 2 3 4 5 6 7 8 9 10为止</span><br></pre></td></tr></table></figure>
-<h2 id="基本代码">基本代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span><span class="comment">//基本代码</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="type">int</span> n,a[<span class="number">1000</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;a[i]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;n-i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j]&gt;a[j+<span class="number">1</span>])&#123;</span><br><span class="line">				<span class="type">int</span> t=a[j];</span><br><span class="line">				a[j]=a[j+<span class="number">1</span>];</span><br><span class="line">				a[j+<span class="number">1</span>]=t;</span><br><span class="line">            &#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,a[i]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<h2 id="优化代码">优化代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span><span class="comment">//优化代码</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> nums[<span class="number">10</span>] = &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">9</span>&#125;;</span><br><span class="line">    <span class="type">int</span> i, j, temp, isSorted;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//优化算法：最多进行 n-1 轮比较</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">10</span><span class="number">-1</span>; i++)&#123;</span><br><span class="line">        isSorted = <span class="number">1</span>;  <span class="comment">//假设剩下的元素已经排序好了</span></span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">0</span>; j&lt;<span class="number">10</span><span class="number">-1</span>-i; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j] &gt; nums[j+<span class="number">1</span>])&#123;</span><br><span class="line">                temp = nums[j];</span><br><span class="line">                nums[j] = nums[j+<span class="number">1</span>];</span><br><span class="line">                nums[j+<span class="number">1</span>] = temp;</span><br><span class="line">                isSorted = <span class="number">0</span>;  <span class="comment">//一旦需要交换数组元素，就说明剩下的元素没有排序好</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(isSorted) <span class="keyword">break</span>; <span class="comment">//如果没有发生交换，说明剩下的元素已经排序好了</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, nums[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="字符串冒泡">字符串冒泡</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">0</span>,i=<span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> a[<span class="number">100</span>][<span class="number">100</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,&amp;a[i])!=EOF)i++;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;i-j<span class="number">-1</span>;k++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="built_in">strcmp</span>(a[k],a[k+<span class="number">1</span>])&gt;<span class="number">0</span>)&#123;</span><br><span class="line">				<span class="type">char</span> t[<span class="number">100</span>];</span><br><span class="line">				<span class="built_in">strcpy</span>(t,a[k]);</span><br><span class="line">				<span class="built_in">strcpy</span>(a[k],a[k+<span class="number">1</span>]);</span><br><span class="line">				<span class="built_in">strcpy</span>(a[k+<span class="number">1</span>],t);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;i;j++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,a[j]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>快速排序</h1>
-<p><strong>步骤</strong></p>
-<ul>
-<li>从数组中选一个元素作为基准数</li>
-<li>分区，比基准数大的放右边，小的放左边</li>
-<li>再对两边重复分区</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span> *a,<span class="type">int</span> low,<span class="type">int</span> high)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> arr[<span class="number">12</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;<span class="number">10</span>;k++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;arr[k]);</span><br><span class="line"></span><br><span class="line">	quicksort(arr,<span class="number">0</span>,<span class="number">9</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>;k&lt;<span class="number">10</span>;k++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,arr[k]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span> *a,<span class="type">int</span> low,<span class="type">int</span> high)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(low&lt;high)&#123;</span><br><span class="line">		<span class="type">int</span> i=low;</span><br><span class="line">		<span class="type">int</span> j=high;</span><br><span class="line">		<span class="type">int</span> num=a[i];</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">while</span>(i&lt;j)&#123;</span><br><span class="line">			<span class="keyword">while</span>(i&lt;j&amp;&amp;a[j]&gt;=num)j--;</span><br><span class="line">			<span class="keyword">if</span>(i&lt;j)</span><br><span class="line">				a[i++]=a[j];</span><br><span class="line">		</span><br><span class="line">			<span class="keyword">while</span>(i&lt;j&amp;&amp;a[i]&lt;num)i++;</span><br><span class="line">			<span class="keyword">if</span>(i&lt;j)</span><br><span class="line">				a[j--]=a[i];</span><br><span class="line">		&#125;</span><br><span class="line">		a[i]=num;<span class="comment">//i==j</span></span><br><span class="line">	</span><br><span class="line">		<span class="comment">//递归</span></span><br><span class="line">		quicksort(a,low,i<span class="number">-1</span>);<span class="comment">//排左边</span></span><br><span class="line">		quicksort(a,i+<span class="number">1</span>,high);<span class="comment">//排右边</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>参考：</strong><a href="https://www.runoob.com/w3cnote/quick-sort.html">快速排序 | 菜鸟教程 (runoob.com)</a></p>
-<h1>选择排序</h1>
-<h1>归并排序</h1>
-<h1>插入排序</h1>
 ]]></content>
       <categories>
         <category>C/C++</category>
@@ -3339,81 +3414,6 @@ $$−1000≤数列中元素的值≤1000$$</p>
       </categories>
       <tags>
         <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>栈和队列</title>
-    <url>/2022/07/30/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<h1>表达式括号匹配</h1>
-<p><strong>题目描述</strong></p>
-<p>假设一个表达式有英文字母（小写）、运算符（+，—，*，/）和左右小（圆）括号构成，以“@”作为表达式的结束符。请编写一个程序检查表达式中的左右圆括号是否匹配，若匹配，则返回&quot;YES&quot;；否则返回&quot;NO&quot;。表达式长度小于255，左圆括号少于20个。</p>
-<p><strong>输入</strong></p>
-<p>输入表达式(只有1行，长度小于255)</p>
-<p><strong>输出</strong></p>
-<p>输出包括一行，即&quot;YES&quot;或&quot;NO&quot;</p>
-<p><strong>样例输入</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">【样例输入1】</span><br><span class="line">2*(x+y)/(1-x)@</span><br><span class="line">【样例输入2】 </span><br><span class="line">(25+x)*(a*(a+b+b)@</span><br></pre></td></tr></table></figure>
-<p><strong>样例输出</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">【样例输出1】</span><br><span class="line">YES</span><br><span class="line">【样例输出2】 </span><br><span class="line">NO</span><br></pre></td></tr></table></figure>
-<p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> s;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;s;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="type">char</span>&gt;p;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;s[i]!=<span class="string">&#x27;@&#x27;</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">            p.push(s[i]);                   <span class="comment">//把&#x27;(&#x27;放到栈顶</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!p.empty())                 <span class="comment">//如果栈顶有元素</span></span><br><span class="line">                p.pop();                    <span class="comment">//则删除栈顶的元素，不返回</span></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;NO&quot;</span>&lt;&lt;<span class="built_in">endl</span>;           <span class="comment">//栈顶无元素 输出NO</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(p.empty())                           <span class="comment">//栈空即&#x27;(&#x27;和&#x27;)&#x27;抵消 返回TRUE</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;YES&quot;</span>&lt;&lt;<span class="built_in">endl</span>;                  <span class="comment">//输出YES</span></span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;NO&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>括弧匹配检验</h1>
-<p><strong>题目描述</strong></p>
-<p>​    假设表达式中允许包含两种括号：圆括号和方括号，其嵌套的顺序随意，如<code>([]())</code>或<code>[([][])]</code>等为正确的匹配，<code>[(])</code>或<code>([]()</code>或<code>(()))</code>均为错误的匹配。</p>
-<p>现在的问题是，要求检验一个给定表达式中的括弧是否正确匹配？</p>
-<p>输入一个只包含圆括号和方括号的字符串，判断字符串中的括号是否匹配，匹配就输出 “OK” ，不匹配就输出“Wrong”。</p>
-<p>输入一个字符串：<code>[([][])]</code>，输出：OK</p>
-<p><strong>输入</strong></p>
-<p>​    输入仅一行字符（字符个数小于255）</p>
-<p><strong>输出</strong></p>
-<p>匹配就输出 “OK” ，不匹配就输出“Wrong”。</p>
-<p><strong>样例输入</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[(])</span><br></pre></td></tr></table></figure>
-<p><strong>样例输出</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Wrong</span><br></pre></td></tr></table></figure>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string s;</span><br><span class="line">    cin&gt;&gt;s;</span><br><span class="line">    stack&lt;<span class="type">char</span>&gt;p;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s.<span class="built_in">length</span>();i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;[&#x27;</span>)                           <span class="comment">//放到栈顶</span></span><br><span class="line">            p.<span class="built_in">push</span>(s[i]);</span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">            p.<span class="built_in">push</span>(s[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(s[i]==<span class="string">&#x27;]&#x27;</span>||s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;               </span><br><span class="line">            <span class="keyword">if</span>(!p.<span class="built_in">empty</span>())&#123;                    <span class="comment">//如果栈非空即对应 [] OR ()</span></span><br><span class="line">                <span class="keyword">if</span>(s[i]==<span class="string">&#x27;]&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(p.<span class="built_in">top</span>()!=<span class="string">&#x27;[&#x27;</span>)&#123;          <span class="comment">//如果栈顶不对应</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span> p.<span class="built_in">pop</span>();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(s[i]==<span class="string">&#x27;)&#x27;</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(p.<span class="built_in">top</span>()!=<span class="string">&#x27;(&#x27;</span>)&#123;          <span class="comment">//如果栈顶不对应</span></span><br><span class="line">                        cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span> p.<span class="built_in">pop</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;                               <span class="comment">//栈空即不对应</span></span><br><span class="line">                cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(p.<span class="built_in">empty</span>())</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;OK&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">else</span> cout&lt;&lt;<span class="string">&quot;Wrong&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1><a href="(https://ac.nowcoder.com/acm/contest/37344/J)">签到</a></h1>
-<p>给定一个序列，你可以在序列中任取 4 个数 a,b,c,d （可以重复选取），问是否有一种选择满足：<code>a+b+c=d</code></p>
-<p><strong>输入描述</strong></p>
-<p>第一行，一个正整数 n<br>
-第二行，n 个正整数，a1,a2,a3,…,an (1≤ai≤10^9)</p>
-<p><strong>输出描述</strong></p>
-<p>如果存在一种情况满足，则输出&quot;Yes&quot;（不加引号），否则输出&quot;No&quot;（不加引号）。</p>
-<p><strong>输入</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1 8 20 90</span><br></pre></td></tr></table></figure>
-<p><strong>输出</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">No</span><br></pre></td></tr></table></figure>
-<p><strong>source code</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//3重for循环会超时</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a[<span class="number">1005</span>],n;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		cin &gt;&gt; a[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//枚举a和b，存入set</span></span><br><span class="line">	set&lt;<span class="type">int</span>&gt; s;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; n;j++)&#123;</span><br><span class="line">			s.<span class="built_in">insert</span>(a[i] + a[j]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="comment">//枚举c和d</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; n;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; n;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j] &lt; a[i])&#123;</span><br><span class="line">				<span class="keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="type">int</span> t = a[j] - a[i];	<span class="comment">//d-c</span></span><br><span class="line">			<span class="keyword">if</span>(s.<span class="built_in">find</span>(t) != s.<span class="built_in">end</span>())&#123;</span><br><span class="line">				cout &lt;&lt; <span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;No&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The Economist script for FREE</title>
-    <url>/2022/09/08/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BA%BA%E7%99%BD%E5%AB%96%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<p><strong>Download Greasy Fork</strong></p>
-<ul>
-<li><strong>Chrome：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag">Violentmonkey</a></li>
-<li><strong>Firefox：</strong><a href="https://addons.mozilla.org/firefox/addon/greasemonkey/">Greasemonkey</a>, <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag">Violentmonkey</a></li>
-<li><strong>Safari：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> or <a href="https://apps.apple.com/app/userscripts/id1463298887">Userscripts</a></li>
-<li><strong>Microsoft Edge：</strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a></li>
-</ul>
-<p><strong>Download script</strong></p>
-<p><a href="https://greasyfork.org/zh-CN/scripts/449408-%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BA%BA%E5%85%8D%E8%B4%B9%E7%9C%8B-%E5%B9%B6%E7%A7%BB%E5%87%BA%E4%BA%86%E5%B9%BF%E5%91%8A">The Economist script</a></p>
-<p><strong>Open the official website</strong></p>
-<p><a href="https://www.economist.com/">The Economist</a></p>
-]]></content>
-      <categories>
-        <category>scripts</category>
-      </categories>
-      <tags>
-        <tag>scripts</tag>
       </tags>
   </entry>
   <entry>
