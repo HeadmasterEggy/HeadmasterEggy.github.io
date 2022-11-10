@@ -6,7 +6,7 @@
   <link href="https://headmastereggy.github.io/atom.xml" rel="self"/>
   
   <link href="https://headmastereggy.github.io/"/>
-  <updated>2022-11-03T14:40:47.626Z</updated>
+  <updated>2022-11-10T17:09:37.914Z</updated>
   <id>https://headmastereggy.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>剑指 Offer II 027. 回文链表</title>
+    <link href="https://headmastereggy.github.io/2022/11/10/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/"/>
+    <id>https://headmastereggy.github.io/2022/11/10/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/</id>
+    <published>2022-11-10T15:06:15.906Z</published>
+    <updated>2022-11-10T17:09:37.914Z</updated>
+    
+    <content type="html"><![CDATA[<p>给定一个链表的 <strong>头节点</strong> <code>head</code> **，**请判断其是否为回文链表。</p><p>如果一个链表是回文，那么链表节点序列从前往后看和从后往前看是相同的。</p><p><strong>示例 1：</strong></p><img src="https://pic.leetcode-cn.com/1626421737-LjXceN-image.png" alt="images"  /><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: head = [1,2,3,3,2,1]</span><br><span class="line">输出: true</span><br></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><p><img src="https://pic.leetcode-cn.com/1626422231-wgvnWh-image.png" alt="images"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: head = [1,2]</span><br><span class="line">输出: false</span><br></pre></td></tr></table></figure><p><strong>基本思路</strong></p><p><strong>快慢指针找到链表的中点，如果fast没指向NULL，说明链表长度是奇数，再next一步</strong></p><p><strong>这时slow在中点，然后把slow反转就可以compare了</strong></p><p><strong>source code</strong></p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode() : val(0), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">isPalindrome</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        ListNode *cur = head, *fast = head, *slow = head, *temp = head;</span><br><span class="line">        <span class="keyword">while</span>(fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next)&#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(fast)slow = slow-&gt;next;</span><br><span class="line">        ListNode *left = head;</span><br><span class="line">        ListNode *right = <span class="built_in">reverse</span>(slow);</span><br><span class="line">        <span class="keyword">while</span>(right)&#123;</span><br><span class="line">            <span class="keyword">if</span>(left-&gt;val != right-&gt;val)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            left = left-&gt;next;</span><br><span class="line">            right = right-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode *<span class="title">reverse</span><span class="params">(ListNode *head)</span></span>&#123;</span><br><span class="line">        ListNode *cur = head, *prev = <span class="literal">NULL</span>, *next;</span><br><span class="line">        <span class="keyword">while</span>(cur)&#123;</span><br><span class="line">            next = cur-&gt;next;</span><br><span class="line">            cur-&gt;next = prev;</span><br><span class="line">            prev = cur;</span><br><span class="line">            cur = next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;给定一个链表的 &lt;strong&gt;头节点&lt;/strong&gt; &lt;code&gt;head&lt;/code&gt; **，**请判断其是否为回文链表。&lt;/p&gt;
+&lt;p&gt;如果一个链表是回文，那么链表节点序列从前往后看和从后往前看是相同的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;示例 1：&lt;/strong&gt;&lt;</summary>
+      
+    
+    
+    
+    
+    <category term="algorithm" scheme="https://headmastereggy.github.io/tags/algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title>in_array() 函数缺陷</title>
