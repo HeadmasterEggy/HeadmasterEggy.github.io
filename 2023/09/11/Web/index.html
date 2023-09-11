@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,700,700italic%7CGrand+Hotel:300,300italic,400,400italic,700,700italic%7CUbuntu:300,300italic,400,400italic,700,700italic%7CJetBrains+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.20/fancybox/fancybox.css" integrity="sha256-RvRHGSuWAxZpXKV9lLDt2e+rZ+btzn48Wp4ueS3NZKs=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="git泄露">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web Security">
+<meta property="og:url" content="http://example.com/2023/09/11/Web/index.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="git泄露">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038144557-a1406192-6a85-4c14-8eb9-5ac829e1183c.png#averageHue=%23f4f4f4&clientId=ud68174ae-9c37-4&from=paste&height=290&id=u41eb8dfe&originHeight=580&originWidth=2570&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85650&status=done&style=none&taskId=ue5603dcb-d34c-4e99-826a-6040e35c281&title=&width=1285">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038911744-f46386fc-7dd0-475a-9153-46e113142c69.png#averageHue=%23fdfdfd&clientId=ud68174ae-9c37-4&from=paste&height=629&id=ub9c24e96&originHeight=1258&originWidth=1528&originalType=binary&ratio=2&rotation=0&showTitle=false&size=295783&status=done&style=none&taskId=u5717c0b9-72ac-4f46-8c69-8c20f09e1a1&title=&width=764">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040349550-b0ccaca2-aa7d-4800-889b-872ff71b6f63.png#averageHue=%23f1f1f1&clientId=ud68174ae-9c37-4&from=paste&height=325&id=uc4a611d5&originHeight=650&originWidth=2138&originalType=binary&ratio=2&rotation=0&showTitle=false&size=126216&status=done&style=none&taskId=u74ec95fd-12e3-4833-befd-3d36ec49397&title=&width=1069">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040411116-e1adbe04-19e8-45bd-8303-1f02694c3402.png#averageHue=%231f1f1f&clientId=ud68174ae-9c37-4&from=paste&height=181&id=uac2972c3&originHeight=362&originWidth=822&originalType=binary&ratio=2&rotation=0&showTitle=false&size=45773&status=done&style=none&taskId=u9c7f4699-e3aa-4e2b-8c72-b2aea0a63fa&title=&width=411">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040522538-f929b25d-0e7f-4438-9cb5-6368f878a5a0.png#averageHue=%23161616&clientId=ud68174ae-9c37-4&from=paste&height=177&id=uc1e6a9e5&originHeight=354&originWidth=1152&originalType=binary&ratio=2&rotation=0&showTitle=false&size=86502&status=done&style=none&taskId=uaa231076-e8b6-4cad-be88-1e663043e37&title=&width=576">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681047131033-9ff0ad7e-f57f-4682-aebd-fac6c539ed5c.png#averageHue=%23040404&clientId=ud68174ae-9c37-4&from=paste&height=377&id=u189dc2f9&originHeight=754&originWidth=1842&originalType=binary&ratio=2&rotation=0&showTitle=false&size=127274&status=done&style=none&taskId=ub3e4a2fb-f072-4af3-a4b2-fc57338362d&title=&width=921">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040729553-c1693ecf-3f88-4b5e-bace-948e5701c65b.png#averageHue=%23060606&clientId=ud68174ae-9c37-4&from=paste&height=77&id=u14993292&originHeight=154&originWidth=662&originalType=binary&ratio=2&rotation=0&showTitle=false&size=18913&status=done&style=none&taskId=u0e5120e5-add8-4167-aeb9-2ba24b335a1&title=&width=331">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040794609-70618175-2293-488a-82d3-9e2c672b6ffe.png#averageHue=%230a191e&clientId=ud68174ae-9c37-4&from=paste&height=824&id=ub6e1a914&originHeight=1648&originWidth=2746&originalType=binary&ratio=2&rotation=0&showTitle=false&size=455725&status=done&style=none&taskId=u0644060c-e8b7-4a7e-8311-a45e2867589&title=&width=1373">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116675416-97366da6-c0e9-4327-9774-fa02daa3540a.png#averageHue=%23f3e0eb&clientId=u51818e46-9fdb-4&from=paste&height=63&id=G3hAW&originHeight=126&originWidth=939&originalType=binary&ratio=1&rotation=0&showTitle=false&size=38507&status=done&style=none&taskId=u7a8ef003-c2d0-428c-9836-1076fd2b9fe&title=&width=469.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116713380-e442c73d-59d0-4167-8f79-2d5c922a41fb.png#averageHue=%23f6f6f6&clientId=u51818e46-9fdb-4&from=paste&height=84&id=nGXPr&originHeight=168&originWidth=714&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26831&status=done&style=none&taskId=u6b268a2c-01fa-4577-84d8-a1c4d4f256d&title=&width=357">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116747302-22201999-4325-4be4-9fcb-dbc0f9174e05.png#averageHue=%23f7f7f7&clientId=u51818e46-9fdb-4&from=paste&height=119&id=CqyZH&originHeight=237&originWidth=662&originalType=binary&ratio=1&rotation=0&showTitle=false&size=37151&status=done&style=none&taskId=u16e856b9-64ed-47e1-9230-04de38b1018&title=&width=331">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116929131-75536078-9ca2-4f1c-b062-148819ede0f6.png#averageHue=%23e6f6fd&clientId=u51818e46-9fdb-4&from=paste&height=98&id=u3faaa850&originHeight=195&originWidth=825&originalType=binary&ratio=1&rotation=0&showTitle=false&size=50102&status=done&style=none&taskId=u47db7e25-eef3-4bf8-9005-d3c66df0c0a&title=&width=412.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681117127099-9b7d7e75-73f8-41b4-bab9-7d218cc15933.png#averageHue=%232e0d24&clientId=u51818e46-9fdb-4&from=paste&height=174&id=u3ed6722e&originHeight=348&originWidth=1138&originalType=binary&ratio=1&rotation=0&showTitle=false&size=153325&status=done&style=none&taskId=ubd6e4f0c-9c49-4356-b8c4-be0acaa95a8&title=&width=569">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681117291554-00e6b960-6e26-4c54-bca0-7f43d36f5f4c.png#averageHue=%232e0d24&clientId=u51818e46-9fdb-4&from=paste&height=110&id=u8782fe5a&originHeight=220&originWidth=1139&originalType=binary&ratio=1&rotation=0&showTitle=false&size=167710&status=done&style=none&taskId=u2f668193-36ba-4628-9a27-248671cab4a&title=&width=569.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194312601-d34e30f3-7af7-4809-8fc8-4075a562f425.png#averageHue=%23110f0e&clientId=u3da3653d-44ff-4&from=paste&height=126&id=uf8dc6ae1&originHeight=252&originWidth=1268&originalType=binary&ratio=2&rotation=0&showTitle=false&size=75962&status=done&style=none&taskId=uda7d6c2c-0dd0-4325-981e-d5a8db2d470&title=&width=634">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194540552-ee8bd507-86e7-4b73-ab91-122a11f4cc89.png#averageHue=%23080808&clientId=u3da3653d-44ff-4&from=paste&height=437&id=ufd2f6cb4&originHeight=874&originWidth=2000&originalType=binary&ratio=2&rotation=0&showTitle=false&size=183521&status=done&style=none&taskId=u863086c2-76e0-4d9c-962b-aee47603f11&title=&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194643263-fe662c68-92d3-4988-9f43-4cd9a354f737.png#averageHue=%23010101&clientId=u3da3653d-44ff-4&from=paste&height=324&id=ucba7f700&originHeight=648&originWidth=740&originalType=binary&ratio=2&rotation=0&showTitle=false&size=76466&status=done&style=none&taskId=u89abcaf9-97a3-4f97-956c-46c62f8e7f4&title=&width=370">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681193190469-75c973cb-21ed-4c05-914b-3c69c4b91901.png#averageHue=%23f6f6f6&clientId=u3da3653d-44ff-4&from=paste&height=140&id=u81a36969&originHeight=280&originWidth=1472&originalType=binary&ratio=2&rotation=0&showTitle=false&size=90449&status=done&style=none&taskId=u050591d4-0c93-4368-ab4d-df2375bda52&title=&width=736">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681193272243-7e6ae09a-5097-423f-8521-6e0733e13eed.png#averageHue=%23f5f5f5&clientId=u3da3653d-44ff-4&from=paste&height=473&id=uf1e60620&originHeight=946&originWidth=1690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=205575&status=done&style=none&taskId=u738f7583-055d-4248-88ca-36d13f531d9&title=&width=845">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681295892769-bfb50f99-38d4-4410-bbef-e3685ff9c1e9.png#averageHue=%230f0c0c&clientId=u3da3653d-44ff-4&from=paste&height=334&id=u5a7dfeaa&originHeight=440&originWidth=781&originalType=binary&ratio=2&rotation=0&showTitle=false&size=98624&status=done&style=none&taskId=u7802f0bc-6f20-4527-b003-2de0e63edeb&title=&width=592.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681295959659-e17109a6-877e-4ba5-a79d-bb8b0043f3a6.png#averageHue=%23faf9f9&clientId=u3da3653d-44ff-4&from=paste&height=722&id=u9c5942c0&originHeight=1444&originWidth=1752&originalType=binary&ratio=2&rotation=0&showTitle=false&size=246930&status=done&style=none&taskId=u48837350-1fdb-48ea-b212-a1c021d65a0&title=&width=876">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296016997-36dbbb49-769d-4452-ab2a-5b396baf0f4a.png#averageHue=%23fdf9f7&clientId=u3da3653d-44ff-4&from=paste&height=237&id=uf4451090&originHeight=474&originWidth=1352&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85092&status=done&style=none&taskId=u4563d29a-89a7-406a-a47b-e69b945b0dc&title=&width=676">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296095946-38adac96-95a9-4e54-a60d-c06cafc0e392.png#averageHue=%23fdf7f5&clientId=u3da3653d-44ff-4&from=paste&height=318&id=ua47cb00f&originHeight=636&originWidth=1670&originalType=binary&ratio=2&rotation=0&showTitle=false&size=149707&status=done&style=none&taskId=u261a87ff-34e6-4f79-ae02-75db55dc13c&title=&width=835">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296250638-93c28e78-1260-4b96-99fa-6636dbebf12d.png#averageHue=%23fdf7f5&clientId=u3da3653d-44ff-4&from=paste&height=292&id=uef3c4f97&originHeight=584&originWidth=1656&originalType=binary&ratio=2&rotation=0&showTitle=false&size=137545&status=done&style=none&taskId=u16db773a-25ed-4f52-9b44-5b965cdd943&title=&width=828">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296297730-ce15d799-c3f5-4d10-a304-0e528b3b792a.png#averageHue=%23fdf6f4&clientId=u3da3653d-44ff-4&from=paste&height=307&id=ub64ce4f3&originHeight=614&originWidth=1696&originalType=binary&ratio=2&rotation=0&showTitle=false&size=149574&status=done&style=none&taskId=u043c683c-fa89-41d4-addd-d260cbdf329&title=&width=848">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296412547-9daef24f-1b3d-43fe-9987-760581652751.png#averageHue=%23fdfaf9&clientId=u3da3653d-44ff-4&from=paste&height=318&id=u94944cf4&originHeight=636&originWidth=1746&originalType=binary&ratio=2&rotation=0&showTitle=false&size=127084&status=done&style=none&taskId=u87068d36-f195-41c5-bd12-47574c79110&title=&width=873">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296455215-7d93ca40-8b3a-4577-8094-b8da7e3c335d.png#averageHue=%23fdf6f4&clientId=u3da3653d-44ff-4&from=paste&height=285&id=uf5df2a27&originHeight=570&originWidth=1488&originalType=binary&ratio=2&rotation=0&showTitle=false&size=129851&status=done&style=none&taskId=ud76f6c96-9ca0-48c5-b1e2-814c57e80cf&title=&width=744">
+<meta property="article:published_time" content="2023-09-11T09:43:37.000Z">
+<meta property="article:modified_time" content="2023-09-11T09:45:13.375Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038144557-a1406192-6a85-4c14-8eb9-5ac829e1183c.png#averageHue=%23f4f4f4&clientId=ud68174ae-9c37-4&from=paste&height=290&id=u41eb8dfe&originHeight=580&originWidth=2570&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85650&status=done&style=none&taskId=ue5603dcb-d34c-4e99-826a-6040e35c281&title=&width=1285">
+
+
+<link rel="canonical" href="http://example.com/2023/09/11/Web/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/09/11/Web/","path":"2023/09/11/Web/","title":"Web Security"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Web Security | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">11</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="nav-text">信息搜集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-text">信息搜集的重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">信息搜集的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%8F%E6%84%9F%E7%9B%AE%E5%BD%95%E6%B3%84%E9%9C%B2"><span class="nav-text">敏感目录泄露</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E6%B3%84%E9%9C%B2"><span class="nav-text">git泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0docker%E6%90%AD%E5%BB%BAweb%E7%8E%AF%E5%A2%83"><span class="nav-text">本地docker搭建web环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%90%9C%E9%9B%86"><span class="nav-text">常见的搜集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-yml"><span class="nav-text">docker-compose.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="nav-text">启动方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AEFlag"><span class="nav-text">题目Flag</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%97%E5%BF%83%E7%9A%84%E5%B0%8F%E6%9D%8E"><span class="nav-text">粗心的小李</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-1"><span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-yml-1"><span class="nav-text">docker-compose.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F-1"><span class="nav-text">启动方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AEFlag-1"><span class="nav-text">题目Flag</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CTFhub-Index"><span class="nav-text">CTFhub Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git%E5%9B%9E%E6%BB%9A"><span class="nav-text">git回滚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git%E6%B3%84%E9%9C%B2%E7%9A%84%E5%85%B6%E4%BB%96%E5%88%A9%E7%94%A8"><span class="nav-text">git泄露的其他利用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SVN%E6%B3%84%E9%9C%B2"><span class="nav-text">SVN泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-text">描述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4"><span class="nav-text">具体来说</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CTFhub-SVN%E6%B3%84%E9%9C%B2"><span class="nav-text">CTFhub SVN泄露</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HG%E6%B3%84%E9%9C%B2"><span class="nav-text">HG泄露</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%8F%E9%AA%8C"><span class="nav-text">总结经验</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#robots-txt"><span class="nav-text">robots.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vim%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6"><span class="nav-text">vim备份文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#CTFhub-vim%E7%BC%93%E5%AD%98"><span class="nav-text">CTFhub vim缓存</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DS-Store%E6%96%87%E4%BB%B6%E6%B3%84%E6%BC%8F"><span class="nav-text">DS_Store文件泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ds-store-exp%E5%B7%A5%E5%85%B7"><span class="nav-text">ds_store_exp工具</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CTFhub-DS-Store"><span class="nav-text">CTFhub .DS_Store</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E7%BB%8F%E9%AA%8C-1"><span class="nav-text">总结经验</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86"><span class="nav-text">目录遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%EF%BC%9F"><span class="nav-text">什么是目录遍历？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="nav-text">一些绕过方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-text">加密参数传递的数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-text">编码绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E9%99%90%E5%AE%9A%E7%BB%95%E8%BF%87"><span class="nav-text">目录限定绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%95%E8%BF%87%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E8%BF%87%E6%BB%A4"><span class="nav-text">绕过文件后缀过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%95%E8%BF%87%E6%9D%A5%E8%B7%AF%E9%AA%8C%E8%AF%81"><span class="nav-text">绕过来路验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PortSwigger%E4%BE%8B%E9%A2%98"><span class="nav-text">PortSwigger例题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-simple-case"><span class="nav-text">Lab: File path traversal, simple case</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-traversal-sequences-blocked-with-absolute-path-bypass"><span class="nav-text">Lab: File path traversal, traversal sequences blocked with absolute path bypass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-traversal-sequences-stripped-non-recursively"><span class="nav-text">Lab: File path traversal, traversal sequences stripped non-recursively</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-traversal-sequences-stripped-with-superfluous-URL-decode"><span class="nav-text">Lab: File path traversal, traversal sequences stripped with superfluous URL-decode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-validation-of-start-of-path"><span class="nav-text">Lab: File path traversal, validation of start of path</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lab-File-path-traversal-validation-of-file-extension-with-null-byte-bypass"><span class="nav-text">Lab: File path traversal, validation of file extension with null byte bypass</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-prevent-a-directory-traversal-attack"><span class="nav-text">How to prevent a directory traversal attack</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Java Engineer</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9IZWFkbWFzdGVyRWdneQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;HeadmasterEggy"><i class="fab fa-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2VnZ3lvbGRnb29zZQ==" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;eggyoldgoose"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/11/Web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Java Engineer">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Web Security | Joey">
+      <meta itemprop="description" content="git泄露">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web Security
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-09-11 17:43:37 / Modified: 17:45:13" itemprop="dateCreated datePublished" datetime="2023-09-11T17:43:37+08:00">2023-09-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">git泄露</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h1><h2 id="信息搜集的重要性"><a href="#信息搜集的重要性" class="headerlink" title="信息搜集的重要性"></a>信息搜集的重要性</h2><p>古人云“知己知彼，百战不殆”，在现实世界和比赛中，信息搜集是前期的必备工作，也是重中之重。在CTF线上比赛的Web类题目中，信息搜集涵盖的面非常广，有备份文件、目录信息、Banner信息等，这就需要参赛者有丰富的经验，或者利用一些脚本来帮助自己发现题目信息、挖掘题目漏洞。本节会尽可能叙述在CTF线上比赛中Web类题目包含的信息搜集，也会推荐一些作者测试无误的开源工具软件。<br>因为信息搜集大部分是工具的使用（git泄露可能涉及git命令的应用），所以本章可能不会有太多的技术细节。同时，因为信息搜集的种类比较多，本章会尽可能地涵盖，如有不足之处还望理解；最后会通过比赛的实际例子来体现信息搜集的重要性。</p>
+<h2 id="信息搜集的分类"><a href="#信息搜集的分类" class="headerlink" title="信息搜集的分类"></a>信息搜集的分类</h2><p>前期的题目信息搜集可能对于解决CTF线上比赛的题目有着非常重要的作用，下面将从敏感目录、敏感备份文件、Banner识别三方面来讲述基础的信息搜集，以及如何在CTF线上比赛中发现解题方向。</p>
+<h2 id="敏感目录泄露"><a href="#敏感目录泄露" class="headerlink" title="敏感目录泄露"></a>敏感目录泄露</h2><p>通过敏感目录泄露，我们往往能获取网站的源代码和敏感的URL地址，如网站的后台地址等。</p>
+<h2 id="git泄露"><a href="#git泄露" class="headerlink" title="git泄露"></a>git泄露</h2><p>【漏洞简介】git是一个主流的分布式版本控制系统，开发人员在开发过程中经常会遗忘.git文件夹，导致攻击者可以通过.git文件夹中的信息获取开发人员提交过的所有源码，进而可能导致服务器被攻击而沦陷。<br>（1）常规git泄露<br>常规git泄露：即没有任何其他操作，参赛者通过运用现成的工具或自己编写的脚本即可获取网站源码或者flag<br>工具:<br><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Rlbm55MDIyMy9zY3JhYmJsZQ==">GitHub - denny0223&#x2F;scrabble: Simple tool to recover .git folder from remote server<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="本地docker搭建web环境"><a href="#本地docker搭建web环境" class="headerlink" title="本地docker搭建web环境"></a>本地docker搭建web环境</h3><h3 id="常见的搜集"><a href="#常见的搜集" class="headerlink" title="常见的搜集"></a><span class="exturl" data-url="aHR0cHM6Ly9ib29rLm51MWwuY29tL3Rhc2tzLyMvcGFnZXMvd2ViLzEuMT9pZD0lZTUlYjglYjglZTglYTclODElZTclOWElODQlZTYlOTAlOWMlZTklOWIlODY=">常见的搜集<i class="fa fa-external-link-alt"></i></span></h3><h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><p>一共3部分flag</p>
+<h4 id="docker-compose-yml"><a href="#docker-compose-yml" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h4><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.2&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry.cn-hangzhou.aliyuncs.com/n1book/web-information-backk:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">80</span><span class="string">:80</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h4><p>docker-compose up -d</p>
+<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038144557-a1406192-6a85-4c14-8eb9-5ac829e1183c.png#averageHue=%23f4f4f4&clientId=ud68174ae-9c37-4&from=paste&height=290&id=u41eb8dfe&originHeight=580&originWidth=2570&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85650&status=done&style=none&taskId=ue5603dcb-d34c-4e99-826a-6040e35c281&title=&width=1285" alt="image.png"><br>用<strong>dirsearch</strong>扫一下<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038911744-f46386fc-7dd0-475a-9153-46e113142c69.png#averageHue=%23fdfdfd&clientId=ud68174ae-9c37-4&from=paste&height=629&id=ub9c24e96&originHeight=1258&originWidth=1528&originalType=binary&ratio=2&rotation=0&showTitle=false&size=295783&status=done&style=none&taskId=u5717c0b9-72ac-4f46-8c69-8c20f09e1a1&title=&width=764" alt="image.png"></p>
+<p>可以看见三个目录可以访问</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">/.index.php.swp</span><br><span class="line">/index.php~</span><br><span class="line">/.robots.txt</span><br></pre></td></tr></table></figure>
+
+<p>分别访问可以看到3个flag</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">flag1:n1book&#123;info_1 </span><br><span class="line">flag2:s_v3ry_im</span><br><span class="line">flag3:p0rtant_hack&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="题目Flag"><a href="#题目Flag" class="headerlink" title="题目Flag"></a>题目Flag</h4><blockquote>
+<p><strong>n1book{info_1s_v3ry_imp0rtant_hack}</strong></p>
+</blockquote>
+<h3 id="粗心的小李"><a href="#粗心的小李" class="headerlink" title="粗心的小李"></a><span class="exturl" data-url="aHR0cHM6Ly9ib29rLm51MWwuY29tL3Rhc2tzLyMvcGFnZXMvd2ViLzEuMT9pZD0lZTclYjIlOTclZTUlYmYlODMlZTclOWElODQlZTUlYjAlOGYlZTYlOWQlOGU=">粗心的小李<i class="fa fa-external-link-alt"></i></span></h3><h4 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h4><p>看看能不能找到信息吧？</p>
+<h4 id="docker-compose-yml-1"><a href="#docker-compose-yml-1" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h4><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.2&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry.cn-hangzhou.aliyuncs.com/n1book/web-information-git:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">80</span><span class="string">:80</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="启动方式-1"><a href="#启动方式-1" class="headerlink" title="启动方式"></a>启动方式</h4><p>docker-compose up -d</p>
+<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040349550-b0ccaca2-aa7d-4800-889b-872ff71b6f63.png#averageHue=%23f1f1f1&clientId=ud68174ae-9c37-4&from=paste&height=325&id=uc4a611d5&originHeight=650&originWidth=2138&originalType=binary&ratio=2&rotation=0&showTitle=false&size=126216&status=done&style=none&taskId=u74ec95fd-12e3-4833-befd-3d36ec49397&title=&width=1069" alt="image.png"><br>访问<span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMS8uZ2l0L2NvbmZpZw==">http://127.0.0.1/.git/<i class="fa fa-external-link-alt"></i></span>发现没东西<br>再访问<span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMS8uZ2l0L2NvbmZpZw==">http://127.0.0.1/.git/config<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040411116-e1adbe04-19e8-45bd-8303-1f02694c3402.png#averageHue=%231f1f1f&clientId=ud68174ae-9c37-4&from=paste&height=181&id=uac2972c3&originHeight=362&originWidth=822&originalType=binary&ratio=2&rotation=0&showTitle=false&size=45773&status=done&style=none&taskId=u9c7f4699-e3aa-4e2b-8c72-b2aea0a63fa&title=&width=411" alt="image.png"><br>用<strong>scrabble</strong>扫一下试试<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040522538-f929b25d-0e7f-4438-9cb5-6368f878a5a0.png#averageHue=%23161616&clientId=ud68174ae-9c37-4&from=paste&height=177&id=uc1e6a9e5&originHeight=354&originWidth=1152&originalType=binary&ratio=2&rotation=0&showTitle=false&size=86502&status=done&style=none&taskId=uaa231076-e8b6-4cad-be88-1e663043e37&title=&width=576" alt="image.png"><br><strong>Githack</strong>也可以<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681047131033-9ff0ad7e-f57f-4682-aebd-fac6c539ed5c.png#averageHue=%23040404&clientId=ud68174ae-9c37-4&from=paste&height=377&id=u189dc2f9&originHeight=754&originWidth=1842&originalType=binary&ratio=2&rotation=0&showTitle=false&size=127274&status=done&style=none&taskId=ub3e4a2fb-f072-4af3-a4b2-fc57338362d&title=&width=921" alt="image.png"><br>本地查看发现生成了<strong>index.html</strong>文件<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040729553-c1693ecf-3f88-4b5e-bace-948e5701c65b.png#averageHue=%23060606&clientId=ud68174ae-9c37-4&from=paste&height=77&id=u14993292&originHeight=154&originWidth=662&originalType=binary&ratio=2&rotation=0&showTitle=false&size=18913&status=done&style=none&taskId=u0e5120e5-add8-4167-aeb9-2ba24b335a1&title=&width=331" alt="image.png"><br>查看发现flag<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681040794609-70618175-2293-488a-82d3-9e2c672b6ffe.png#averageHue=%230a191e&clientId=ud68174ae-9c37-4&from=paste&height=824&id=ub6e1a914&originHeight=1648&originWidth=2746&originalType=binary&ratio=2&rotation=0&showTitle=false&size=455725&status=done&style=none&taskId=u0644060c-e8b7-4a7e-8311-a45e2867589&title=&width=1373" alt="image.png"></p>
+<h4 id="题目Flag-1"><a href="#题目Flag-1" class="headerlink" title="题目Flag"></a>题目Flag</h4><p>n1book{git_looks_s0_easyfun}</p>
+<h3 id="CTFhub-Index"><a href="#CTFhub-Index" class="headerlink" title="CTFhub Index"></a>CTFhub <strong>Index</strong></h3><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116675416-97366da6-c0e9-4327-9774-fa02daa3540a.png#averageHue=%23f3e0eb&clientId=u51818e46-9fdb-4&from=paste&height=63&id=G3hAW&originHeight=126&originWidth=939&originalType=binary&ratio=1&rotation=0&showTitle=false&size=38507&status=done&style=none&taskId=u7a8ef003-c2d0-428c-9836-1076fd2b9fe&title=&width=469.5" alt="image.png"><br>然后Githack<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116713380-e442c73d-59d0-4167-8f79-2d5c922a41fb.png#averageHue=%23f6f6f6&clientId=u51818e46-9fdb-4&from=paste&height=84&id=nGXPr&originHeight=168&originWidth=714&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26831&status=done&style=none&taskId=u6b268a2c-01fa-4577-84d8-a1c4d4f256d&title=&width=357" alt="image.png"><br>flag就有了<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116747302-22201999-4325-4be4-9fcb-dbc0f9174e05.png#averageHue=%23f7f7f7&clientId=u51818e46-9fdb-4&from=paste&height=119&id=CqyZH&originHeight=237&originWidth=662&originalType=binary&ratio=1&rotation=0&showTitle=false&size=37151&status=done&style=none&taskId=u16e856b9-64ed-47e1-9230-04de38b1018&title=&width=331" alt="image.png"></p>
+<h3 id="git回滚"><a href="#git回滚" class="headerlink" title="git回滚"></a>git回滚</h3><p>git作为一个版本控制工具，会记录每次提交（commit）的修改，所以当题目存在git泄露时，flag（敏感）文件可能在修改中被删除或被覆盖了，这时我们可以利用git的<strong>git reset</strong>命令来恢复到以前的版本。<br>除了使用“git reset”，更简单的方式是通过“git log-stat”命令查看每个commit修改了哪些文件，再用“git diff HEAD commit-id”比较在当前版本与想查看的commit之间的变化。</p>
+<h3 id="git泄露的其他利用"><a href="#git泄露的其他利用" class="headerlink" title="git泄露的其他利用"></a>git泄露的其他利用</h3><p>除了查看源码的常见利用方式，泄露的git中也可能有其他有用的信息，如.git&#x2F;config文件夹中可能含有access_token信息，从而可以访问这个用户的其他仓库。</p>
+<h4 id="SVN泄露"><a href="#SVN泄露" class="headerlink" title="SVN泄露"></a>SVN泄露</h4><p>SVN（subversion）是源代码版本管理软件，造成SVN源代码漏洞的主要原因是管理员操作不规范将SVN隐藏文件夹暴露于外网环境，可以利用.svn&#x2F;entries或wc.db文件获取服务器源码等信息。这里推荐两个工具：<br><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2tvc3QvZHZjcy1yaXBwZXI=">GitHub - kost&#x2F;dvcs-ripper: Rip web accessible (distributed) version control systems: SVN&#x2F;GIT&#x2F;HG…<i class="fa fa-external-link-alt"></i></span></p>
+<h5 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h5><p><strong>SVN（subversion）</strong>是程序员常用的源代码版本管理软件。一旦网站出现<strong>SVN</strong>漏洞，其危害远比SQL注入等其它常见网站漏洞更为致命，因为黑客获取到网站源代码后，一方面是掠夺了网站的技术知识资产，另一方面，黑客还可通过源代码分析其它安全漏洞，从而对网站服务器及用户数据造成持续威胁。更严重的问题在于，<strong>SVN</strong>产生的 <strong>.svn</strong>目录下还包含了以 <strong>.svn-base</strong>结尾的源代码文件副本（低版本<strong>SVN</strong>具体路径为<strong>text-base</strong>目录，高版本<strong>SVN</strong>为<strong>pristine</strong>目录），如果服务器没有对此类后缀做解析，黑客则可以直接获得文件源代码。</p>
+<h5 id="具体来说"><a href="#具体来说" class="headerlink" title="具体来说"></a>具体来说</h5><ol>
+<li>在使用SVN管理本地代码过程中，会自动生成一个隐藏文件夹，其中包含重要的源代码信息。但一些网站管理员在发布代码时，不愿意使用‘导出’功能，而是直接复制代码文件夹到WEB服务器上，这就使隐藏文件夹被暴露于外网环境，这使得渗透工程师可以借助其中包含版本信息追踪的网站文件，逐步摸清站点结构。</li>
+<li>在服务器上布署代码时。如果是使用 <strong>svn checkout</strong> 功能来更新代码，而没有配置好目录访问权限，则会存在此漏洞。黑客利用此漏洞，可以下载整套网站的源代码。</li>
+<li><strong>.svn</strong>目录（隐藏目录）使用 <strong>svn checkout</strong>后，项目目录下会生成隐藏的 <strong>.svn</strong>文件夹（<strong>Linux</strong>上用 <strong>ls</strong>命令看不到，要用 <strong>ls -al</strong>命令）。<strong>svn1.6</strong>及以前版本会在项目的每个文件夹下都生成一个 <strong>.svn</strong>文件夹，里面包含了所有文件的备份，文件名为 <strong>.svn&#x2F;text-base&#x2F;<strong>文件名 <strong>.svn-base</strong>。</strong>svn1.7</strong>及以后版本则只在项目根目录生成一个  <strong>.svn</strong>文件夹，里面的 <strong>pristine</strong>文件夹里包含了整个项目的所有文件备份。</li>
+</ol>
+<h5 id="CTFhub-SVN泄露"><a href="#CTFhub-SVN泄露" class="headerlink" title="CTFhub SVN泄露"></a>CTFhub SVN泄露</h5><p>先用dirsearch扫出来<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681116929131-75536078-9ca2-4f1c-b062-148819ede0f6.png#averageHue=%23e6f6fd&clientId=u51818e46-9fdb-4&from=paste&height=98&id=u3faaa850&originHeight=195&originWidth=825&originalType=binary&ratio=1&rotation=0&showTitle=false&size=50102&status=done&style=none&taskId=u47db7e25-eef3-4bf8-9005-d3c66df0c0a&title=&width=412.5" alt="image.png"><br>dvcs-ripper再扫<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681117127099-9b7d7e75-73f8-41b4-bab9-7d218cc15933.png#averageHue=%232e0d24&clientId=u51818e46-9fdb-4&from=paste&height=174&id=u3ed6722e&originHeight=348&originWidth=1138&originalType=binary&ratio=1&rotation=0&showTitle=false&size=153325&status=done&style=none&taskId=ubd6e4f0c-9c49-4356-b8c4-be0acaa95a8&title=&width=569" alt="image.png"><br>提示flag在旧版本<br><code>ls -a</code>进入<code>.svn</code><br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681117291554-00e6b960-6e26-4c54-bca0-7f43d36f5f4c.png#averageHue=%232e0d24&clientId=u51818e46-9fdb-4&from=paste&height=110&id=u8782fe5a&originHeight=220&originWidth=1139&originalType=binary&ratio=1&rotation=0&showTitle=false&size=167710&status=done&style=none&taskId=u2f668193-36ba-4628-9a27-248671cab4a&title=&width=569.5" alt="image.png"></p>
+<h4 id="HG泄露"><a href="#HG泄露" class="headerlink" title="HG泄露"></a>HG泄露</h4><p>在初始化项目时，HG会在当前文件夹下创建一个.hg隐藏文件夹，其中包含代码和分支修改记录等信息。这里推荐工具：<br><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2tvc3QvZHZjcy1yaXBwZXI=">GitHub - kost&#x2F;dvcs-ripper: Rip web accessible (distributed) version control systems: SVN&#x2F;GIT&#x2F;HG…<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="总结经验"><a href="#总结经验" class="headerlink" title="总结经验"></a>总结经验</h4><p>不论是.git这些隐藏文件，还是实战中的admin之类的敏感后台文件夹，其关键在于字典的强大，读者可以在某些工具的基础上进行二次开发，以满足自己需要。这里推荐一个开源的目录扫描工具：<br><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21hdXJvc29yaWEvZGlyc2VhcmNo">GitHub - maurosoria&#x2F;dirsearch: Web path scanner<i class="fa fa-external-link-alt"></i></span><br>CTF线上比赛往往会有重定向一类问题。例如，只要访问.git，便会返回403，此时试探着访问.git&#x2F;config，如果有文件内容返回，就说明存在git泄露，反之，一般不存在。而在SVN泄露中，一般是在entries中爬取源代码，但有时会出现entries为空的情况，这时注意wc.db文件存在与否，便可通过其中的checksum在pristine文件夹中获取源代码。</p>
+<h4 id="robots-txt"><a href="#robots-txt" class="headerlink" title="robots.txt"></a>robots.txt</h4><p>robots协议也称爬虫协议、爬虫规则等,是指网站可建立一个robots.txt文件来告诉搜索引擎哪些页面可以抓取,哪些页面不能抓取,而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取。简单来说就是网站里面放了robots.txt，来对爬虫说，我的网站这些路径不允许爬取。但 robots协议没有强制执行力，可以手动在网站域名后面输入robots.txt。<br>:::tips<br>例：某ctf 题目不允许爬取&#x2F;admin&#x2F;目录，不允许爬取flag.php，不允许爬取<span class="exturl" data-url="aHR0cDovL3d3dy50YXIuZ3ov">www.tar.gz<i class="fa fa-external-link-alt"></i></span><br>User-agent:<em>Disallow:&#x2F;admin&#x2F;</em> Disallow:&#x2F;flag.php Disallow:&#x2F;<span class="exturl" data-url="aHR0cDovL3d3dy50YXIuZ3ov">www.tar.gz<i class="fa fa-external-link-alt"></i></span><br>:::</p>
+<h4 id="vim备份文件"><a href="#vim备份文件" class="headerlink" title="vim备份文件"></a>vim备份文件</h4><p>vim是目前运用得最多的Linux编辑器，当用户在编辑文件但意外退出时（如通过SSH连接到服务器时，在用vim编辑文件的过程中可能遇到因为网速不够导致的命令行卡死而意外退出的情况），会在当前目录下生成一个备份文件，文件名格式为: .swp<br>.swp是vi编辑器异常退出，而产生的一个文件比如编辑admin.php异常退出会产生一个admin.php.swp。<br>利用方法:如果可以将admin.php.swp下载下来，删掉.swp可以得到admin.php源文件。<br>针对SWP备份文件，我们可以用“vim-r”命令恢复文件的内容。这里先模拟执行“vim flag”命令，随后直接关闭客户端，当前目录下会生成一个.flag.swp文件。恢复SWP备份文件的办法是，先在当前目录下创建一个flag文件，再使用“vim-r flag”命令，即可得到意外退出时编辑的内容</p>
+<h5 id="CTFhub-vim缓存"><a href="#CTFhub-vim缓存" class="headerlink" title="CTFhub vim缓存"></a>CTFhub vim缓存</h5><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194312601-d34e30f3-7af7-4809-8fc8-4075a562f425.png#averageHue=%23110f0e&clientId=u3da3653d-44ff-4&from=paste&height=126&id=uf8dc6ae1&originHeight=252&originWidth=1268&originalType=binary&ratio=2&rotation=0&showTitle=false&size=75962&status=done&style=none&taskId=uda7d6c2c-0dd0-4325-981e-d5a8db2d470&title=&width=634" alt="image.png"><br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194540552-ee8bd507-86e7-4b73-ab91-122a11f4cc89.png#averageHue=%23080808&clientId=u3da3653d-44ff-4&from=paste&height=437&id=ufd2f6cb4&originHeight=874&originWidth=2000&originalType=binary&ratio=2&rotation=0&showTitle=false&size=183521&status=done&style=none&taskId=u863086c2-76e0-4d9c-962b-aee47603f11&title=&width=1000" alt="image.png"><br>或者vim -r .index.php.swp回复文件<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681194643263-fe662c68-92d3-4988-9f43-4cd9a354f737.png#averageHue=%23010101&clientId=u3da3653d-44ff-4&from=paste&height=324&id=ucba7f700&originHeight=648&originWidth=740&originalType=binary&ratio=2&rotation=0&showTitle=false&size=76466&status=done&style=none&taskId=u89abcaf9-97a3-4f97-956c-46c62f8e7f4&title=&width=370" alt="image.png"></p>
+<h4 id="DS-Store文件泄漏"><a href="#DS-Store文件泄漏" class="headerlink" title="DS_Store文件泄漏"></a>DS_Store文件泄漏</h4><p>.DS_Store是Mac OS保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于Windows的desktop.ini。 其删除以后的副作用就是这些信息的失去。<br>和别人交换文件（或你做的网页需要上传的时候）应该把 .DS_Store 文件删除比较妥当，因为里面包含了一些你不一定希望别人看见的信息。<br>尤其是网站，通过 .DS_Store 可以知道这个目录里面所有文件的清单，很多时候这是一个不希望出现的问题。<br>由于开发&#x2F;设计人员在发布代码时未删除文件夹中隐藏的.DS_store，可能造成文件目录结构泄漏、源代码文件等敏感信息的泄露。</p>
+<h5 id="ds-store-exp工具"><a href="#ds-store-exp工具" class="headerlink" title="ds_store_exp工具"></a>ds_store_exp工具</h5><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xpamllamllL2RzX3N0b3JlX2V4cA==">GitHub - lijiejie&#x2F;ds_store_exp: A .DS_Store file disclosure exploit. It parses .DS_Store file and downloads files recursively.<i class="fa fa-external-link-alt"></i></span></p>
+<h5 id="CTFhub-DS-Store"><a href="#CTFhub-DS-Store" class="headerlink" title="CTFhub .DS_Store"></a>CTFhub <strong>.DS_Store</strong></h5><p>扫文件<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681193190469-75c973cb-21ed-4c05-914b-3c69c4b91901.png#averageHue=%23f6f6f6&clientId=u3da3653d-44ff-4&from=paste&height=140&id=u81a36969&originHeight=280&originWidth=1472&originalType=binary&ratio=2&rotation=0&showTitle=false&size=90449&status=done&style=none&taskId=u050591d4-0c93-4368-ab4d-df2375bda52&title=&width=736" alt="image.png"><br>用工具下载<br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681193272243-7e6ae09a-5097-423f-8521-6e0733e13eed.png#averageHue=%23f5f5f5&clientId=u3da3653d-44ff-4&from=paste&height=473&id=uf1e60620&originHeight=946&originWidth=1690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=205575&status=done&style=none&taskId=u738f7583-055d-4248-88ca-36d13f531d9&title=&width=845" alt="image.png"></p>
+<h4 id="总结经验-1"><a href="#总结经验-1" class="headerlink" title="总结经验"></a>总结经验</h4><p>在CTF线上比赛的过程中，出题人往往会在线运维题目，有时会因为各种情况导致SWP备份文件的生成，所以读者在比赛过程中可以编写实时监控脚本，对题目服务进行监控。<br>vim在第一次意外退出时生成的备份文件为*.swp，第二次意外退出时的为*.swo，第三次退出时的为*.swn，以此类推。vim的官方手册中还有*.un.文件名.swp类型的备份文件。<br>另外，在实际环境中，网站的备份往往可能是网站域名的压缩包。</p>
+<h2 id="目录遍历"><a href="#目录遍历" class="headerlink" title="目录遍历"></a>目录遍历</h2><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681295892769-bfb50f99-38d4-4410-bbef-e3685ff9c1e9.png#averageHue=%230f0c0c&clientId=u3da3653d-44ff-4&from=paste&height=334&id=u5a7dfeaa&originHeight=440&originWidth=781&originalType=binary&ratio=2&rotation=0&showTitle=false&size=98624&status=done&style=none&taskId=u7802f0bc-6f20-4527-b003-2de0e63edeb&title=&width=592.5" alt="image.png"></p>
+<h3 id="什么是目录遍历？"><a href="#什么是目录遍历？" class="headerlink" title="什么是目录遍历？"></a>什么是目录遍历？</h3><p>Directory traversal (also known as file path traversal) is a web security vulnerability that allows an attacker to read arbitrary files on the server that is running an application. This might include application code and data, credentials for back-end systems, and sensitive operating system files. In some cases, an attacker might be able to write to arbitrary files on the server, allowing them to modify application data or behavior, and ultimately take full control of the server.<br>目录遍历（也称为文件路径遍历）是一种网络安全漏洞，允许攻击者读取运行应用程序的服务器上的任意文件。这可能包括应用程序代码和数据、后端系统的凭据以及敏感的操作系统文件。在某些情况下，攻击者可能能够写入服务器上的任意文件，从而允许他们修改应用程序数据或行为，并最终完全控制服务器。</p>
+<p>目录遍历的漏洞通过..&#x2F;..&#x2F;..&#x2F;这样的形式来进行目录读取服务器中的文件，..&#x2F;..&#x2F;..&#x2F;..&#x2F;越多多好，因为在终端中，..&#x2F;是返回上一级目录，到根目录使用..&#x2F;会返回当前页面。</p>
+<p>一般发现目录遍历的漏洞的探针，也就是测试的时候往往是使用这样的payload<br><code>[http://www.xxxx.com/xxx.php?page=../../../../../../../../../../../../../etc/passwd](http://www.xxxx.com/xxx.php?page=../../../../../../../../../../../../../etc/passwd)</code></p>
+<h3 id="一些绕过方式"><a href="#一些绕过方式" class="headerlink" title="一些绕过方式"></a>一些绕过方式</h3><h4 id="加密参数传递的数据"><a href="#加密参数传递的数据" class="headerlink" title="加密参数传递的数据"></a>加密参数传递的数据</h4><p>有的网站程序传递参数后会进行base64加密（当然也会有其他加密），导致我们传递的参数无法解析，所以就无法利用目录遍历，而绕过方式也很简单，就是先对参数进行base64加密后再进行传参。如：<code>?page=bTByZS50eHQ=</code></p>
+<h4 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h4><p>进行传参时将参数进行编码，实现绕过，比如URL编码。<code>?page=%6D%30%72%65%2E%74%78%74</code></p>
+<h4 id="目录限定绕过"><a href="#目录限定绕过" class="headerlink" title="目录限定绕过"></a>目录限定绕过</h4><p>有些Web应用程序是通过限定目录权限来分离的。可以使用一些特殊的符号<del>来绕过。比如提交这样的&#96;xxx.php?page&#x3D;</del>&#x2F;..&#x2F;boot&#96;。就可以直接跳转到硬盘目录下。</p>
+<h4 id="绕过文件后缀过滤"><a href="#绕过文件后缀过滤" class="headerlink" title="绕过文件后缀过滤"></a>绕过文件后缀过滤</h4><p>一些Web应用程序在读取文件前，会对提交的文件后缀进行检测，攻击者可以在文件名后放一个空字节的编码，来绕过这样的文件类型的检查。<br>比如：<code>../../../../boot.ini%00.jpg</code>，Web应用程序使用的Api会允许字符串中包含空字符，当实际获取文件名时，则由系统的Api会直接截短，而解析为<code>../../../../boot.ini</code><br>在类Unix的系统中也可以使用Url编码的换行符，例如：<code>../../../etc/passwd%0a.jpg</code>如果文件系统在获取含有换行符的文件名，会截短为文件名。也可以尝试%20，例如: <code>../../../index.php%20</code></p>
+<h4 id="绕过来路验证"><a href="#绕过来路验证" class="headerlink" title="绕过来路验证"></a>绕过来路验证</h4><blockquote>
+<p>Http Referer : HTTP Referer是header的一部分，当浏览器向web服务器发送请求的时候，一般会带上Referer，告诉服务器我是从哪个页面链接过来的在一些Web应用程序中，会有对提交参数的来路进行判断的方法，而绕过的方法可以尝试通过在网站留言或者交互的地方提交Url再点击或者直接修改Http Referer即可，这主要是原因Http Referer是由客户端浏览器发送的，服务器是无法控制的，而将此变量当作一个值得信任源是错误的。</p>
+</blockquote>
+<h3 id="PortSwigger例题"><a href="#PortSwigger例题" class="headerlink" title="PortSwigger例题"></a>PortSwigger例题</h3><p><span class="exturl" data-url="aHR0cHM6Ly9wb3J0c3dpZ2dlci5uZXQvd2ViLXNlY3VyaXR5L2ZpbGUtcGF0aC10cmF2ZXJzYWwjNTYzMjA2ZDM3NWFhZTE5YjQ1YjYzNmZiZDA4ZmFmMzY4OTJlODIyOWIyZjg0ZDU5MDgxMTBiYmRiNzc5ODU2MQ==">What is directory traversal, and how to prevent it? | Web Security Academy<i class="fa fa-external-link-alt"></i></span><br><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681295959659-e17109a6-877e-4ba5-a79d-bb8b0043f3a6.png#averageHue=%23faf9f9&clientId=u3da3653d-44ff-4&from=paste&height=722&id=u9c5942c0&originHeight=1444&originWidth=1752&originalType=binary&ratio=2&rotation=0&showTitle=false&size=246930&status=done&style=none&taskId=u48837350-1fdb-48ea-b212-a1c021d65a0&title=&width=876" alt="image.png"></p>
+<h4 id="Lab-File-path-traversal-simple-case"><a href="#Lab-File-path-traversal-simple-case" class="headerlink" title="Lab: File path traversal, simple case"></a>Lab: File path traversal, simple case</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296016997-36dbbb49-769d-4452-ab2a-5b396baf0f4a.png#averageHue=%23fdf9f7&clientId=u3da3653d-44ff-4&from=paste&height=237&id=uf4451090&originHeight=474&originWidth=1352&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85092&status=done&style=none&taskId=u4563d29a-89a7-406a-a47b-e69b945b0dc&title=&width=676" alt="image.png"><br><code>payload:image?filename=../../../etc/passwd</code></p>
+<h4 id="Lab-File-path-traversal-traversal-sequences-blocked-with-absolute-path-bypass"><a href="#Lab-File-path-traversal-traversal-sequences-blocked-with-absolute-path-bypass" class="headerlink" title="Lab: File path traversal, traversal sequences blocked with absolute path bypass"></a>Lab: File path traversal, traversal sequences blocked with absolute path bypass</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296095946-38adac96-95a9-4e54-a60d-c06cafc0e392.png#averageHue=%23fdf7f5&clientId=u3da3653d-44ff-4&from=paste&height=318&id=ua47cb00f&originHeight=636&originWidth=1670&originalType=binary&ratio=2&rotation=0&showTitle=false&size=149707&status=done&style=none&taskId=u261a87ff-34e6-4f79-ae02-75db55dc13c&title=&width=835" alt="image.png"><br><code>payload:image?filename=/etc/passwd</code></p>
+<h4 id="Lab-File-path-traversal-traversal-sequences-stripped-non-recursively"><a href="#Lab-File-path-traversal-traversal-sequences-stripped-non-recursively" class="headerlink" title="Lab: File path traversal, traversal sequences stripped non-recursively"></a>Lab: File path traversal, traversal sequences stripped non-recursively</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296250638-93c28e78-1260-4b96-99fa-6636dbebf12d.png#averageHue=%23fdf7f5&clientId=u3da3653d-44ff-4&from=paste&height=292&id=uef3c4f97&originHeight=584&originWidth=1656&originalType=binary&ratio=2&rotation=0&showTitle=false&size=137545&status=done&style=none&taskId=u16db773a-25ed-4f52-9b44-5b965cdd943&title=&width=828" alt="image.png"><br><code>payload:image?filename=....//....//....//etc/passwd</code></p>
+<h4 id="Lab-File-path-traversal-traversal-sequences-stripped-with-superfluous-URL-decode"><a href="#Lab-File-path-traversal-traversal-sequences-stripped-with-superfluous-URL-decode" class="headerlink" title="Lab: File path traversal, traversal sequences stripped with superfluous URL-decode"></a>Lab: File path traversal, traversal sequences stripped with superfluous URL-decode</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296297730-ce15d799-c3f5-4d10-a304-0e528b3b792a.png#averageHue=%23fdf6f4&clientId=u3da3653d-44ff-4&from=paste&height=307&id=ub64ce4f3&originHeight=614&originWidth=1696&originalType=binary&ratio=2&rotation=0&showTitle=false&size=149574&status=done&style=none&taskId=u043c683c-fa89-41d4-addd-d260cbdf329&title=&width=848" alt="image.png"><br><code>payload:image?filename=%252e%252e%252f%252e%252e%252f%252e%252e%252f/etc/passwd</code></p>
+<h4 id="Lab-File-path-traversal-validation-of-start-of-path"><a href="#Lab-File-path-traversal-validation-of-start-of-path" class="headerlink" title="Lab: File path traversal, validation of start of path"></a>Lab: File path traversal, validation of start of path</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296412547-9daef24f-1b3d-43fe-9987-760581652751.png#averageHue=%23fdfaf9&clientId=u3da3653d-44ff-4&from=paste&height=318&id=u94944cf4&originHeight=636&originWidth=1746&originalType=binary&ratio=2&rotation=0&showTitle=false&size=127084&status=done&style=none&taskId=u87068d36-f195-41c5-bd12-47574c79110&title=&width=873" alt="image.png"><br><code>payload:/var/www/images/../../../etc/passwd</code></p>
+<h4 id="Lab-File-path-traversal-validation-of-file-extension-with-null-byte-bypass"><a href="#Lab-File-path-traversal-validation-of-file-extension-with-null-byte-bypass" class="headerlink" title="Lab: File path traversal, validation of file extension with null byte bypass"></a>Lab: File path traversal, validation of file extension with null byte bypass</h4><p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296455215-7d93ca40-8b3a-4577-8094-b8da7e3c335d.png#averageHue=%23fdf6f4&clientId=u3da3653d-44ff-4&from=paste&height=285&id=uf5df2a27&originHeight=570&originWidth=1488&originalType=binary&ratio=2&rotation=0&showTitle=false&size=129851&status=done&style=none&taskId=ud76f6c96-9ca0-48c5-b1e2-814c57e80cf&title=&width=744" alt="image.png"><br><code>payload:../../../etc/passwd%00.png</code></p>
+<h3 id="How-to-prevent-a-directory-traversal-attack"><a href="#How-to-prevent-a-directory-traversal-attack" class="headerlink" title="How to prevent a directory traversal attack"></a>How to prevent a directory traversal attack</h3><p>The most effective way to prevent file path traversal vulnerabilities is to avoid passing user-supplied input to filesystem APIs altogether. Many application functions that do this can be rewritten to deliver the same behavior in a safer way.<br>If it is considered unavoidable to pass user-supplied input to filesystem APIs, then two layers of defense should be used together to prevent attacks:</p>
+<ul>
+<li>The application should validate the user input before processing it. Ideally, the validation should compare against a whitelist of permitted values. If that isn’t possible for the required functionality, then the validation should verify that the input contains only permitted content, such as purely alphanumeric characters.</li>
+<li>After validating the supplied input, the application should append the input to the base directory and use a platform filesystem API to canonicalize the path. It should verify that the canonicalized path starts with the expected base directory.</li>
+</ul>
+<p>Below is an example of some simple Java code to validate the canonical path of a file based on user input:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(BASE_DIRECTORY, userInput);</span><br><span class="line"><span class="keyword">if</span> (file.getCanonicalPath().startsWith(BASE_DIRECTORY)) &#123;</span><br><span class="line">    <span class="comment">// process file</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Security/" rel="tag"><i class="fa fa-tag"></i> Security</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/11/IO/" rel="prev" title="IO">
+                  <i class="fa fa-angle-left"></i> IO
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">43k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">2:36</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.20/fancybox/fancybox.umd.js" integrity="sha256-q8XkJ6dj5VwSvzI8+nATCHHQG+Xv/dAZBCgqmu93zOY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.3.0/mermaid.min.js","integrity":"sha256-9y71g5Lz/KLsHjB8uXwnkuWDtAMDSzD/HdIbqhJfTAI="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/2023/09/11/Web/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+</body>
+</html>
