@@ -1245,9 +1245,6 @@ pre code {
 .links-of-author a {
   font-size: 0.8125em;
 }
-.links-of-author i[class^='fa'] {
-  margin-right: 2px;
-}
 .sidebar .sidebar-button:not(:first-child) {
   margin-top: 15px;
 }
@@ -1437,27 +1434,52 @@ pre code {
   top: -6px;
   transform: rotate(-45deg);
 }
-.site-state {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  line-height: 1.4;
+.post-toc {
+  font-size: 0.875em;
 }
-.site-state-item {
-  padding: 0 15px;
+.post-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 10px;
+  text-align: left;
 }
-.site-state-item a {
-  border-bottom: 0;
-  display: block;
+.post-toc ol > :last-child {
+  margin-bottom: 5px;
 }
-.site-state-item-count {
-  display: block;
-  font-size: 1em;
-  font-weight: 600;
+.post-toc ol > ol {
+  padding-left: 0;
 }
-.site-state-item-name {
-  color: #999;
-  font-size: 0.8125em;
+.post-toc ol a {
+  transition: all 0.2s ease-in-out;
+}
+.post-toc .nav-item {
+  line-height: 1.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.post-toc .nav .nav-child {
+  --height: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition-property: height, opacity, visibility;
+  transition: 0.2s ease-in-out;
+  visibility: hidden;
+}
+.post-toc .nav .active > .nav-child {
+  height: var(--height, auto);
+  opacity: 1;
+  visibility: unset;
+}
+.post-toc .nav .active > a {
+  border-bottom-color: #fc6423;
+  color: #fc6423;
+}
+.post-toc .nav .active-current > a {
+  color: #fc6423;
+}
+.post-toc .nav .active-current > a:hover {
+  color: #fc6423;
 }
 .footer {
   color: #999;
@@ -2447,17 +2469,6 @@ header.header {
   padding: 2px 5px;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
 }
-.main-menu .menu-item-active::after {
-  background: #bbb;
-  border-radius: 50%;
-  content: ' ';
-  height: 6px;
-  margin-top: -3px;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  width: 6px;
-}
 .sub-menu {
   margin: 0;
   padding: 6px 0;
@@ -2526,7 +2537,6 @@ header.header {
 }
 .links-of-author-item {
   margin: 5px 0 0;
-  width: 50%;
 }
 .links-of-author-item a {
   box-sizing: border-box;
