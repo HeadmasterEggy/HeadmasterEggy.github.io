@@ -24,16 +24,16 @@
 
     <meta name="description" content="回归问题 (Regression problem)Linear regression线性回归的目标是将一条线拟合到一组点   假设我们想用一条线对上述点集进行建模。为此，我们将使用标准 y &#x3D; mx + b 直线方程，其中 m 是直线的斜率， b 是直线的 y 截距。为了找到数据的最佳直线，我们需要找到最佳的斜率 m 和 y 截距 b 值集。 解决此类问题的标准方法是定义一个误差函数（也称为成本函">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ai">
+<meta property="og:title" content="Deep Learning">
 <meta property="og:url" content="http://example.com/2023/10/30/ai/index.html">
 <meta property="og:site_name" content="Joey">
 <meta property="og:description" content="回归问题 (Regression problem)Linear regression线性回归的目标是将一条线拟合到一组点   假设我们想用一条线对上述点集进行建模。为此，我们将使用标准 y &#x3D; mx + b 直线方程，其中 m 是直线的斜率， b 是直线的 y 截距。为了找到数据的最佳直线，我们需要找到最佳的斜率 m 和 y 截距 b 值集。 解决此类问题的标准方法是定义一个误差函数（也称为成本函">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/points_for_linear_regression1.png">
 <meta property="article:published_time" content="2023-10-30T02:33:32.000Z">
-<meta property="article:modified_time" content="2023-10-31T07:31:42.644Z">
+<meta property="article:modified_time" content="2023-10-31T07:41:37.743Z">
 <meta property="article:author" content="Joey">
-<meta property="article:tag" content="Deap Learning">
+<meta property="article:tag" content="Deep Learning">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://spin.atomicobject.com/wp-content/uploads/points_for_linear_regression1.png">
 
@@ -42,10 +42,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/10/30/ai/","path":"2023/10/30/ai/","title":"ai"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/10/30/ai/","path":"2023/10/30/ai/","title":"Deep Learning"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>ai | Joey</title>
+<title>Deep Learning | Joey</title>
   
 
 
@@ -201,12 +201,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="ai | Joey">
+      <meta itemprop="name" content="Deep Learning | Joey">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ai
+          Deep Learning
         </h1>
 
         <div class="post-meta-container">
@@ -224,7 +224,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-31 15:31:42" itemprop="dateModified" datetime="2023-10-31T15:31:42+08:00">2023-10-31</time>
+      <time title="Modified: 2023-10-31 15:41:37" itemprop="dateModified" datetime="2023-10-31T15:41:37+08:00">2023-10-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,7 +268,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># y = mx + b</span></span><br><span class="line"><span class="comment"># m is slope, b is y-intercept</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">computeErrorForLineGivenPoints</span>(<span class="params">b, m, points</span>):</span><br><span class="line">    totalError = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(points)):</span><br><span class="line">        totalError += (points[i].y - (m * points[i].x + b)) ** <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> totalError / <span class="built_in">float</span>(<span class="built_in">len</span>(points))</span><br></pre></td></tr></table></figure>
 
 <p>$\mathrm{Error}<em>{(\mathrm{m},\mathrm{b})}&#x3D;\frac{1}{N}\sum</em>{i&#x3D;1}^{N}(y_{i}-(m x_{i}+b))^{2}$</p>
-<h2 id="梯度下降法-gradient-descent"><a href="#梯度下降法-gradient-descent" class="headerlink" title="梯度下降法 (gradient descent)"></a>梯度下降法 (gradient descent)</h2><p>$\frac{∂}{∂\mathrm{m}}!&#x3D;!\frac{2}{N}\sum_{i&#x3D;1}^{N}!-!x_{i}(y_{i}!-!(m x_{i}!+!b))$</p>
+<h2 id="梯度下降法-gradient-descent"><a href="#梯度下降法-gradient-descent" class="headerlink" title="梯度下降法 (gradient descent)"></a>梯度下降法 (gradient descent)</h2><p>$\frac{∂}{∂\mathrm{m}}&#x3D;\frac{2}{N}\sum_{i&#x3D;1}^{N}!-x_{i}(y_{i}!-(m x_{i}+b))$</p>
 <p>$\frac{∂}{∂{\mathrm{b}}}&#x3D;\frac2N\sum_{i&#x3D;1}^{N}-(y_{i}-(m x_{i}+b))$</p>
 
     </div>
@@ -279,7 +279,7 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Deap-Learning/" rel="tag"><i class="fa fa-tag"></i> Deap Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
           </div>
 
         
