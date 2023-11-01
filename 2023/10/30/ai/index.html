@@ -30,7 +30,7 @@
 <meta property="og:description" content="Deep learning Notes">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-10-30T02:33:32.000Z">
-<meta property="article:modified_time" content="2023-11-01T12:56:23.730Z">
+<meta property="article:modified_time" content="2023-11-01T13:49:56.513Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -115,7 +115,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98-Regression-problem"><span class="nav-text">回归问题 (Regression problem)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92-Linear-regression"><span class="nav-text">线性回归 (Linear regression)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0-Loss-function"><span class="nav-text">损失函数 (Loss function)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95-gradient-descent"><span class="nav-text">梯度下降法 (gradient descent)</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98-Regression-problem"><span class="nav-text">回归问题 (Regression problem)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92-Linear-regression"><span class="nav-text">线性回归 (Linear regression)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0-Loss-function"><span class="nav-text">损失函数 (Loss function)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95-Gradient-descent"><span class="nav-text">梯度下降法 (Gradient descent)</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -222,7 +222,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-01 20:56:23" itemprop="dateModified" datetime="2023-11-01T20:56:23+08:00">2023-11-01</time>
+      <time title="Modified: 2023-11-01 21:49:56" itemprop="dateModified" datetime="2023-11-01T21:49:56+08:00">2023-11-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -241,14 +241,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>496</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -262,10 +262,15 @@
     <div class="post-body" itemprop="articleBody"><h1 id="回归问题-Regression-problem"><a href="#回归问题-Regression-problem" class="headerlink" title="回归问题 (Regression problem)"></a>回归问题 (Regression problem)</h1><h2 id="线性回归-Linear-regression"><a href="#线性回归-Linear-regression" class="headerlink" title="线性回归 (Linear regression)"></a>线性回归 (Linear regression)</h2><p>神经元输入向量$x&#x3D;[x_{1},x_{2},…,x_{n}]^T$,  经过函数映射$f_{θ}：x-&gt;y$后得到输出y, 其中θ为函数f自身的参数。一种简单的情形是线性变换：$f(x)&#x3D;w^Tx+b$</p>
 <p>![[神经元数学模型.png]]</p>
 <p>$w$称为权重 (weight)，权重决定了每个特征对我们预测值的影响。 $b$称为偏置(bias)、偏移量 (offset) 或截距 (intercept) 。 偏置是指当所有特征都取值为0时，预测值应该为多少。</p>
-<p>而在机器学习领域，我们通常使用的是高维数据集，建模时采用线性代数表示法会比较方便。 当我们的输入包含$d$个特征时，我们将预测结果$\hat{y}$ （通常使用“尖角”符号表示$y$的估计值）表示为：<br>$\hat{y} &#x3D; w_1  x_1 + … + w_d  x_d + b$<br>将所有特征放到向量$\mathbf{x} \in \mathbb{R}^d$， 并将所有权重放到向量$\mathbf{w} \in \mathbb{R}^d$中， 我们可以用点积形式来简洁地表达模型：<br>$\hat{y} &#x3D; \mathbf{w}^\top \mathbf{x} + b$</p>
-<h2 id="损失函数-Loss-function"><a href="#损失函数-Loss-function" class="headerlink" title="损失函数 (Loss function)"></a>损失函数 (Loss function)</h2><p>在我们开始考虑如何用模型拟合（fit）数据之前，我们需要确定一个拟合程度的度量。 损失函数（loss function）能够量化目标的实际值与预测值之间的差距。 通常我们会选择非负数作为损失，且数值越小表示损失越小，完美预测时的损失为0。 回归问题中最常用的损失函数是平方误差函数。 当样本$i$的预测值为$\hat{y}^{(i)}$，其相应的真实标签为$\hat{y}^{(i)}$时， 平方误差可以定义为以下公式：<br>$l^{(i)}(\mathbf{w}, b) &#x3D; \frac{1}{2} \left(\hat{y}^{(i)} - y^{(i)}\right)^2$</p>
-<h2 id="梯度下降法-gradient-descent"><a href="#梯度下降法-gradient-descent" class="headerlink" title="梯度下降法 (gradient descent)"></a>梯度下降法 (gradient descent)</h2><p>$\frac{∂}{∂\mathrm{m}}&#x3D;\frac{2}{N}\sum_{i&#x3D;1}^{N}!-x_{i}(y_{i}!-(m x_{i}+b))$</p>
-<p>$\frac{∂}{∂{\mathrm{b}}}&#x3D;\frac2N\sum_{i&#x3D;1}^{N}-(y_{i}-(m x_{i}+b))$</p>
+<p>而在机器学习领域，我们通常使用的是高维数据集，建模时采用线性代数表示法会比较方便。 当我们的输入包含$d$个特征时，我们将预测结果$\hat{y}$ （通常使用“尖角”符号表示$y$的估计值）表示为：<br>$$\hat{y} &#x3D; w_1  x_1 + … + w_d  x_d + b$$<br>将所有特征放到向量$\mathbf{x} \in \mathbb{R}^d$， 并将所有权重放到向量$\mathbf{w} \in \mathbb{R}^d$中， 我们可以用点积形式来简洁地表达模型：<br>$$\hat{y} &#x3D; \mathbf{w}^\top \mathbf{x} + b$$</p>
+<h2 id="损失函数-Loss-function"><a href="#损失函数-Loss-function" class="headerlink" title="损失函数 (Loss function)"></a>损失函数 (Loss function)</h2><p>考虑对于任何采样点，都有可能 存在观测误差，我们假设观测误差变量𝜖属于均值为𝜇，方差为$𝜎^2$ 的正态分布(Normal Distribution，或高斯分布，Gaussian Distribution): ${\mathcal{N}}(\mu,\sigma^{2})$，则采样到的样本符合:<br>$$𝑦 &#x3D; 𝑤𝑥 + 𝑏 + 𝜖, 𝜖~${\mathcal{N}}(\mu,\sigma^{2})$$<br>一旦引入观测误差后，即使简单如线性模型，如果仅采样两个数据点，可能会带来较大估 计偏差。如图 2.4 所示，图中的数据点均带有观测误差，如果基于蓝色矩形块的两个数据 点进行估计，则计算出的蓝色虚线与真实橙色直线存在较大偏差。为了减少观测误差引入 的估计偏差，可以通过采样多组数据样本集合$𝔻 &#x3D; {(x^{(1)},y^{(1)}),\bigl(x^{(2)},y^{(2)}\bigr),\ldots,\bigl(x^{(n)},y^{(n)}\bigr)}$然后找出一条“最好”的直线，使得它尽可能地 让所有采样点到该直线的误差(Error，或损失 Loss)之和最小。</p>
+<p>![[Pasted image 20231101212812.png]]</p>
+<p>求出当前模型的 所有采样点上的预测值$𝑤𝑥^{(𝑖)} + 𝑏$与真实值$𝑦^{(𝑖)}$之间的差的平方和作为总误差$\mathcal{L}$:<br>$${\mathcal{L}}&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>然后搜索一组参数$𝑤^∗, 𝑏^∗$使得$\mathcal{L}$最小，对应的直线就是我们要寻找的最优直线:<br>$$w_{i}^{\ast},b^{\ast}&#x3D;\arg\operatorname*{min}<em>{w,b}\frac{1}{n}\sum</em>{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>这种误差计算方法称为均方误差(Mean Squared Error，简称 MSE)。</p>
+<h2 id="梯度下降法-Gradient-descent"><a href="#梯度下降法-Gradient-descent" class="headerlink" title="梯度下降法 (Gradient descent)"></a>梯度下降法 (Gradient descent)</h2><p>我们需要找到一组参数$w^*$和$b^*$，使得ℒ最小。</p>
+<p><strong>梯度下降算法</strong>（Gradient Descent）是神经网络训练中最常用的优化算法，配合强大的图形处理芯片GPU(Graphics Processing Unit)的并行加速能力，非常适合优化海量数据的神经网络模型，自然也适合优化我们这里的神经元线性模型。</p>
+<p>函数的梯度(Gradient)定义为函数对各个自变量的偏导数(Partial Derivative)组成的向量。考虑 3 维函数$𝑧 &#x3D; 𝑓(𝑥, 𝑦)$，函数对自变量𝑥的偏导数记为${\frac{\partial z}{\partial x}}$, 函数对自变量$𝑦$的偏导数记为${\frac{\partial z}{\partial y}}$，则梯度$∇𝑓$为向量$({\frac{\partial z}{\partial x}},{\frac{\partial z}{\partial y}})$。</p>
+<p>函数在各处的梯度方向$∇𝑓$总是指向函数值增 大的方向，那么梯度的反方向$−∇𝑓$应指向函数值减少的方向。利用这一性质，我们只需要 按照<br>$$x^{\prime}&#x3D;x-\eta\cdot\nabla f$$<br>来迭代更新$x^{\prime}$，就能获得越来越小的函数值，其中𝜂用来缩放梯度向量，一般设置为某较小的值，如 0.01、0.001 等。特别地，对于一维函数，上述向量形式可以退化成标量形式:<br>$$x^{\prime}&#x3D;x-\eta\cdot{\frac{\mathrm{d}y}{\mathrm{d}x}}$$<br>通过上式迭代更新$x^{\prime}$若干次，这样得到的$x^{\prime}$处的函数值$y^{\prime}$，总是更有可能比在$𝑥$处的函数值$𝑦$小。<br>通过上式优化参数的方法称为梯度下降算法，它通过循环计算函数的梯度$∇𝑓$并 更新待优化参数$𝜃$，从而得到函数$𝑓$获得极小值时参数$𝜃$的最优数值解。</p>
+<p>需要优化的模型参数是𝑤和𝑏，因此我们按照下面方式循环更新参数。<br>$$w^{\prime}&#x3D;w-\eta{\frac{\partial\mathcal{L}}{\partial w}}$$<br>$$b^{\prime}&#x3D;b-\eta{\frac{\partial{\mathcal{L}}}{\partial b}}$$</p>
 
     </div>
 
@@ -324,14 +329,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">80k</span>
+    <span title="Word count total">81k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">4:52</span>
+    <span title="Reading time total">4:55</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
