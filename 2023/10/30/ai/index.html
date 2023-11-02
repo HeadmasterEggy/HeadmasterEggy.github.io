@@ -29,11 +29,14 @@
 <meta property="og:site_name" content="Joey">
 <meta property="og:description" content="Deep learning Notes">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/9174b48689e1c393040c2.png">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/38ab6dd9542b3cebfb979.png">
 <meta property="article:published_time" content="2023-10-30T02:33:32.000Z">
-<meta property="article:modified_time" content="2023-11-01T13:49:56.513Z">
+<meta property="article:modified_time" content="2023-11-02T00:36:25.631Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images-a2q.pages.dev/file/9174b48689e1c393040c2.png">
 
 
 <link rel="canonical" href="http://example.com/2023/10/30/AI/">
@@ -222,7 +225,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-01 21:49:56" itemprop="dateModified" datetime="2023-11-01T21:49:56+08:00">2023-11-01</time>
+      <time title="Modified: 2023-11-02 08:36:25" itemprop="dateModified" datetime="2023-11-02T08:36:25+08:00">2023-11-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -260,12 +263,12 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="回归问题-Regression-problem"><a href="#回归问题-Regression-problem" class="headerlink" title="回归问题 (Regression problem)"></a>回归问题 (Regression problem)</h1><h2 id="线性回归-Linear-regression"><a href="#线性回归-Linear-regression" class="headerlink" title="线性回归 (Linear regression)"></a>线性回归 (Linear regression)</h2><p>神经元输入向量$x&#x3D;[x_{1},x_{2},…,x_{n}]^T$,  经过函数映射$f_{θ}：x-&gt;y$后得到输出y, 其中θ为函数f自身的参数。一种简单的情形是线性变换：$f(x)&#x3D;w^Tx+b$</p>
-<p>![[神经元数学模型.png]]</p>
+<p><img data-src="https://images-a2q.pages.dev/file/9174b48689e1c393040c2.png" alt="神经元数学模型"></p>
 <p>$w$称为权重 (weight)，权重决定了每个特征对我们预测值的影响。 $b$称为偏置(bias)、偏移量 (offset) 或截距 (intercept) 。 偏置是指当所有特征都取值为0时，预测值应该为多少。</p>
 <p>而在机器学习领域，我们通常使用的是高维数据集，建模时采用线性代数表示法会比较方便。 当我们的输入包含$d$个特征时，我们将预测结果$\hat{y}$ （通常使用“尖角”符号表示$y$的估计值）表示为：<br>$$\hat{y} &#x3D; w_1  x_1 + … + w_d  x_d + b$$<br>将所有特征放到向量$\mathbf{x} \in \mathbb{R}^d$， 并将所有权重放到向量$\mathbf{w} \in \mathbb{R}^d$中， 我们可以用点积形式来简洁地表达模型：<br>$$\hat{y} &#x3D; \mathbf{w}^\top \mathbf{x} + b$$</p>
-<h2 id="损失函数-Loss-function"><a href="#损失函数-Loss-function" class="headerlink" title="损失函数 (Loss function)"></a>损失函数 (Loss function)</h2><p>考虑对于任何采样点，都有可能 存在观测误差，我们假设观测误差变量𝜖属于均值为𝜇，方差为$𝜎^2$ 的正态分布(Normal Distribution，或高斯分布，Gaussian Distribution): ${\mathcal{N}}(\mu,\sigma^{2})$，则采样到的样本符合:<br>$$𝑦 &#x3D; 𝑤𝑥 + 𝑏 + 𝜖, 𝜖~${\mathcal{N}}(\mu,\sigma^{2})$$<br>一旦引入观测误差后，即使简单如线性模型，如果仅采样两个数据点，可能会带来较大估 计偏差。如图 2.4 所示，图中的数据点均带有观测误差，如果基于蓝色矩形块的两个数据 点进行估计，则计算出的蓝色虚线与真实橙色直线存在较大偏差。为了减少观测误差引入 的估计偏差，可以通过采样多组数据样本集合$𝔻 &#x3D; {(x^{(1)},y^{(1)}),\bigl(x^{(2)},y^{(2)}\bigr),\ldots,\bigl(x^{(n)},y^{(n)}\bigr)}$然后找出一条“最好”的直线，使得它尽可能地 让所有采样点到该直线的误差(Error，或损失 Loss)之和最小。</p>
-<p>![[Pasted image 20231101212812.png]]</p>
-<p>求出当前模型的 所有采样点上的预测值$𝑤𝑥^{(𝑖)} + 𝑏$与真实值$𝑦^{(𝑖)}$之间的差的平方和作为总误差$\mathcal{L}$:<br>$${\mathcal{L}}&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>然后搜索一组参数$𝑤^∗, 𝑏^∗$使得$\mathcal{L}$最小，对应的直线就是我们要寻找的最优直线:<br>$$w_{i}^{\ast},b^{\ast}&#x3D;\arg\operatorname*{min}<em>{w,b}\frac{1}{n}\sum</em>{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>这种误差计算方法称为均方误差(Mean Squared Error，简称 MSE)。</p>
+<h2 id="损失函数-Loss-function"><a href="#损失函数-Loss-function" class="headerlink" title="损失函数 (Loss function)"></a>损失函数 (Loss function)</h2><p>考虑对于任何采样点，都有可能 存在观测误差，我们假设观测误差变量𝜖属于均值为𝜇，方差为$𝜎^2$ 的正态分布(Normal Distribution，或高斯分布，Gaussian Distribution): ${\mathcal{N}}(\mu,\sigma^{2})$，则采样到的样本符合:<br>$$𝑦 &#x3D; 𝑤𝑥 + 𝑏 + 𝜖, 𝜖~{\mathcal{N}}(\mu,\sigma^{2})$$<br>一旦引入观测误差后，即使简单如线性模型，如果仅采样两个数据点，可能会带来较大估 计偏差。如图 2.4 所示，图中的数据点均带有观测误差，如果基于蓝色矩形块的两个数据 点进行估计，则计算出的蓝色虚线与真实橙色直线存在较大偏差。为了减少观测误差引入 的估计偏差，可以通过采样多组数据样本集合$𝔻 &#x3D; {(x^{(1)},y^{(1)}),\bigl(x^{(2)},y^{(2)}\bigr),\ldots,\bigl(x^{(n)},y^{(n)}\bigr)}$然后找出一条“最好”的直线，使得它尽可能地 让所有采样点到该直线的误差(Error，或损失 Loss)之和最小。</p>
+<p><img data-src="https://images-a2q.pages.dev/file/38ab6dd9542b3cebfb979.png" alt="带观测误差的估计模型"></p>
+<p>求出当前模型的 所有采样点上的预测值$𝑤𝑥^{(𝑖)} + 𝑏$与真实值$𝑦^{(𝑖)}$之间的差的平方和作为总误差$\mathcal{L}$:<br>$${\mathcal{L}}&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>然后搜索一组参数$𝑤^∗, 𝑏^∗$使得$\mathcal{L}$最小，对应的直线就是我们要寻找的最优直线:<br>$$w_{i}^*,b^{\ast}&#x3D;\arg\operatorname*{min}<em>{w,b}\frac{1}{n}\sum</em>{i&#x3D;1}^{n}(w x^{(i)}+b-y^{(i)})^{2}$$<br>这种误差计算方法称为均方误差(Mean Squared Error，简称 MSE)。</p>
 <h2 id="梯度下降法-Gradient-descent"><a href="#梯度下降法-Gradient-descent" class="headerlink" title="梯度下降法 (Gradient descent)"></a>梯度下降法 (Gradient descent)</h2><p>我们需要找到一组参数$w^*$和$b^*$，使得ℒ最小。</p>
 <p><strong>梯度下降算法</strong>（Gradient Descent）是神经网络训练中最常用的优化算法，配合强大的图形处理芯片GPU(Graphics Processing Unit)的并行加速能力，非常适合优化海量数据的神经网络模型，自然也适合优化我们这里的神经元线性模型。</p>
 <p>函数的梯度(Gradient)定义为函数对各个自变量的偏导数(Partial Derivative)组成的向量。考虑 3 维函数$𝑧 &#x3D; 𝑓(𝑥, 𝑦)$，函数对自变量𝑥的偏导数记为${\frac{\partial z}{\partial x}}$, 函数对自变量$𝑦$的偏导数记为${\frac{\partial z}{\partial y}}$，则梯度$∇𝑓$为向量$({\frac{\partial z}{\partial x}},{\frac{\partial z}{\partial y}})$。</p>
