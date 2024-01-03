@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,700,700italic%7CGrand+Hotel:300,300italic,400,400italic,700,700italic%7CUbuntu:300,300italic,400,400italic,700,700italic%7CJetBrains+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Mysql基本操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql">
+<meta property="og:url" content="http://example.com/posts/54e1373e.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Mysql基本操作">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-07T06:36:00.000Z">
+<meta property="article:modified_time" content="2023-11-02T00:51:37.428Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Back-end">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/54e1373e.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/54e1373e.html","path":"posts/54e1373e.html","title":"Mysql"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mysql | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">16</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL"><span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96MySQL"><span class="nav-text">初始化MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E5%BD%95MySQL"><span class="nav-text">登录MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">删除数据库</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FLOAT%E5%92%8CDOUBLE%E5%B7%AE%E5%BC%82"><span class="nav-text">FLOAT和DOUBLE差异</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="nav-text">创建&#x2F;删除表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5SELECT"><span class="nav-text">查询语句SELECT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#limit-%E5%BA%94%E7%94%A8"><span class="nav-text">limit 应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WHERE%E5%AD%90%E5%8F%A5"><span class="nav-text">WHERE子句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E6%9D%A1%E4%BB%B6"><span class="nav-text">特殊条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0-%E5%88%A0%E9%99%A4"><span class="nav-text">更新&#x2F;删除</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UPDATE"><span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DELETE"><span class="nav-text">DELETE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LIKE%E5%AD%90%E5%8F%A5"><span class="nav-text">LIKE子句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UNION"><span class="nav-text">UNION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ORDER-BY"><span class="nav-text">ORDER BY</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Java Engineer</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9IZWFkbWFzdGVyRWdneQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;HeadmasterEggy"><i class="fab fa-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2VnZ3lvbGRnb29zZQ==" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;eggyoldgoose"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/54e1373e.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Java Engineer">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Mysql | Joey">
+      <meta itemprop="description" content="Mysql基本操作">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mysql
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-07 14:36:00" itemprop="dateCreated datePublished" datetime="2022-08-07T14:36:00+08:00">2022-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-02 08:51:37" itemprop="dateModified" datetime="2023-11-02T08:51:37+08:00">2023-11-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Database/" itemprop="url" rel="index"><span itemprop="name">Database</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Mysql基本操作</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><p>启动myslq</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service mysql start</span><br></pre></td></tr></table></figure>
+
+<h2 id="初始化MySQL"><a href="#初始化MySQL" class="headerlink" title="初始化MySQL"></a>初始化MySQL</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+
+<p>往下一直Y 直到人家谢谢你 初始化完成</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">Thanks <span class="keyword">for</span> <span class="keyword">using</span> MariaDB!</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="登录MySQL"><a href="#登录MySQL" class="headerlink" title="登录MySQL"></a>登录MySQL</h3><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">mysql -u root -<span class="selector-tag">p</span></span><br></pre></td></tr></table></figure>
+
+<p>这里密码为空，直接回车就可登入</p>
+<h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h4><p>这里是root用户，可以使用mysqladmin来创建database</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -<span class="selector-tag">p</span> create tutorials</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight n1ql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> tutorials</span><br></pre></td></tr></table></figure>
+
+<p>创建完成后show databases</p>
+<figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line"><span class="code">+--------------------+</span></span><br><span class="line"><span class="section">| Database           |</span></span><br><span class="line"><span class="section">+--------------------+</span></span><br><span class="line">| information<span class="emphasis">_schema |</span></span><br><span class="line"><span class="emphasis">| joeybase           |</span></span><br><span class="line"><span class="emphasis">| joeychamber        |</span></span><br><span class="line"><span class="emphasis">| mysql              |</span></span><br><span class="line"><span class="emphasis">| performance_</span>schema |</span><br><span class="line"><span class="section">| turorials          |</span></span><br><span class="line"><span class="section">+--------------------+</span></span><br><span class="line">6 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>使用root登录后</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> SPACE <span class="keyword">DEFAULT</span> CHARSET utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span><br></pre></td></tr></table></figure>
+
+<p>该命令的作用</p>
+<ul>
+<li><p>如果数据库不存在则创建，存在则不创建</p>
+</li>
+<li><p>创建SPACE数据库，并设定编码集为utf8</p>
+</li>
+</ul>
+<hr>
+<h4 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p drop joeychamber</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">drop databse joeychamber</span><br></pre></td></tr></table></figure>
+
+<p>再来show一遍</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| joeybase           |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| turorials          |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="FLOAT和DOUBLE差异"><a href="#FLOAT和DOUBLE差异" class="headerlink" title="FLOAT和DOUBLE差异"></a>FLOAT和DOUBLE差异</h1><p>（单精度与双精度有什么区别）</p>
+<p><strong>最本质的区别：</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">单精度(<span class="built_in">float</span>)在 <span class="number">32</span> 位机器上用<span class="number">4</span>个字节来存储的</span><br><span class="line">双精度(<span class="built_in">double</span>)是用<span class="number">8</span>个字节来存储的，由于存储位不同，他们能表示的数值的范围就不同，也就是能准确表示的数的位数就不同</span><br></pre></td></tr></table></figure>
+
+<p><strong>1、所占的内存不同</strong></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">单精度浮点数占用4个字节（32位）存储空间来存储一个浮点数，包括符号位1位，阶码8位，尾数23位</span><br><span class="line">而双精度浮点数使用 8个字节（64位）存储空间来存储一个浮点数，包括符号位1位，阶码11位，尾数52位</span><br></pre></td></tr></table></figure>
+
+<p><strong>2、所存的数值范围不同</strong></p>
+<figure class="highlight dns"><table><tr><td class="code"><pre><span class="line">单精度浮点数的数值范围为-<span class="number">3.4E38～3</span>.<span class="number">4</span>E38，而双精度浮点数可以表示的数字的绝对值范围大约是：-<span class="number">2.23E308</span> ~ <span class="number">1.79E308</span></span><br><span class="line">E表示<span class="number">10</span>的多少次方，如<span class="number">3</span>.<span class="number">4</span>E38指的是<span class="number">3</span>.<span class="number">4</span>乘以<span class="number">10</span>的<span class="number">38</span>次方</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、十进制下的位数不同</strong></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">单精度浮点数最多有7位十进制有效数字，如果某个数的有效数字位数超过7位，当把它定义为单精度变量时，超出的部分会自动四舍五入</span><br><span class="line">双精度浮点数可以表示十进制的15或16位有效数字，超出的部分也会自动四舍五入</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建-删除表"><a href="#创建-删除表" class="headerlink" title="创建&#x2F;删除表"></a>创建&#x2F;删除表</h1><figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span>/<span class="keyword">drop</span> <span class="keyword">table</span> <span class="built_in">table_name</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; create table joey_tbl(</span><br><span class="line">    -&gt; joey_id int not null auto_increment,</span><br><span class="line">    -&gt; joey_title varchar(100) not null,</span><br><span class="line">    -&gt; joey_author varchar(40) not null,</span><br><span class="line">    -&gt; submission_date date,</span><br><span class="line">    -&gt; primary key(joey_id)</span><br><span class="line">    -&gt; );</span><br><span class="line">Query OK, 0 rows affected (0.023 sec)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">insert into table_name(field1,f2,f3...)</span><br><span class="line">     values</span><br><span class="line">     (values1,v2,v3...);</span><br></pre></td></tr></table></figure>
+
+<p>如果数据是字符型，必须使用单引号( ‘ )或者双引号( “ )</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; insert into joey_tbl</span><br><span class="line">    -&gt; (joey_title,joey_author,submission_date)</span><br><span class="line">    -&gt; values</span><br><span class="line">    -&gt; (&quot;joey&quot;,&quot;Eggy&quot;,&quot;3/28&quot;);</span><br><span class="line"></span><br><span class="line">Query OK, 1 row affected (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h1 id="查询语句SELECT"><a href="#查询语句SELECT" class="headerlink" title="查询语句SELECT"></a>查询语句SELECT</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select _column,_column from _table [where Clause] [limit N][offset M]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**select * ** : 返回所有记录</li>
+<li><strong>limit N</strong> : 返回 N 条记录</li>
+<li><strong>offset M</strong> : 跳过 M 条记录, 默认 M&#x3D;0, 单独使用似乎不起作用</li>
+<li><strong>limit N,M</strong> : 相当于 <strong>limit M offset N</strong> , 从第 N 条记录开始, 返回 M 条记录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl; #读取数据表</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="limit-应用"><a href="#limit-应用" class="headerlink" title="limit 应用"></a>limit 应用</h2><p>LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量，第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1)： 为了与 PostgreSQL 兼容，MySQL 也支持句法： LIMIT # OFFSET </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM table LIMIT 5,10; // 检索记录行 6-15   </span><br><span class="line">  </span><br><span class="line">//如果只给定一个参数，它表示返回最大的记录行数目：    </span><br><span class="line">mysql&gt; SELECT * FROM table LIMIT 5; //检索前 5 个记录行   </span><br><span class="line">  </span><br><span class="line">//换句话说，LIMIT n 等价于 LIMIT 0,n。</span><br></pre></td></tr></table></figure>
+
+<h1 id="WHERE子句"><a href="#WHERE子句" class="headerlink" title="WHERE子句"></a>WHERE子句</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name1,table_name2... [WHERE condition1 [AND [OR]] condition2.....</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查询语句中你可以使用一个或者多个表，表之间使用逗号**,** 分割，并使用WHERE语句来设定查询条件。</li>
+<li>你可以在 WHERE 子句中指定任何条件。</li>
+<li>你可以使用 AND 或者 OR 指定&gt;&#x3D;1个条件。</li>
+<li>WHERE 可运用于 SQL 的 DELETE 或者 UPDATE 命令。</li>
+<li>WHERE 类似于 if 条件，根据 MySQL 表中的字段值来读取指定的数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_title=&quot;JOEY&quot;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2000-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="特殊条件"><a href="#特殊条件" class="headerlink" title="特殊条件"></a>特殊条件</h2><p>空值判断：<strong>is null</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where country is null;</span><br><span class="line">#查询joey_tbl表country列中的空值</span><br></pre></td></tr></table></figure>
+
+<p><strong>between and</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id between 1 and 5;</span><br><span class="line">#查询joey_tbl表中id列1到5的值</span><br></pre></td></tr></table></figure>
+
+<p><strong>in</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl where id in (1,3,5)</span><br><span class="line">#查询joey_tbl表id列等于1,3,5的值</span><br></pre></td></tr></table></figure>
+
+<h1 id="更新-删除"><a href="#更新-删除" class="headerlink" title="更新&#x2F;删除"></a>更新&#x2F;删除</h1><h2 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h2><p>用来修改或更新 MySQL 中的数据，我们可以使用 SQL UPDATE 命令来操作</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#update 表名称 set 列名称=新值 where 更新条件;</span><br><span class="line">UPDATE table_name SET field1=new-value1, field2=new-value2 [WHERE clause]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; update joey_tbl set submission_date=&quot;2020-03-28&quot; where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.005 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">1 row in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#DELETE FROM 表名称 where 删除条件;</span><br><span class="line">DELETE FROM table_name [WHERE Clause]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       1 | joey       | Eggy        | 2020-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; DELETE from joey_tbl where joey_id=1;</span><br><span class="line">Query OK, 1 row affected (0.001 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">Empty set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h1 id="LIKE子句"><a href="#LIKE子句" class="headerlink" title="LIKE子句"></a>LIKE子句</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT field1, field2,...fieldN FROM table_name WHERE field1 LIKE condition1 [AND [OR]] filed2 = &#x27;somevalue&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>%：多个字符</p>
+<p>_ ：1个字符</p>
+<p>M%：模糊查询信息为M开头的</p>
+<p>%M%：查询包含M的所有内容</p>
+<p>%M_:查询</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MariaDB [mysql]&gt; select * from joey_tbl;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       2 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       3 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       4 | JOEY       | EGGY        | 2022-03-28      |</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">5 rows in set (0.000 sec)</span><br><span class="line"></span><br><span class="line">#SQL LIKE 子句中使用百分号 % 字符来表示任意字符</span><br><span class="line">#如果没有使用百分号 %, LIKE 子句与等号 = 的效果是一样的</span><br><span class="line"></span><br><span class="line">MariaDB [mysql]&gt; select * from joey_tbl where joey_author like &#x27;%com&#x27;;</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">| joey_id | joey_title | joey_author | submission_date |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">|       5 | JOEY       | EGGY.com    | 2022-03-28      |</span><br><span class="line">|       6 | JOEY       | JOEY.com    | 2022-03-28      |</span><br><span class="line">+---------+------------+-------------+-----------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+
+<h1 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h1><p><strong>UNION 语句</strong>：查询不同表中相同列中的数据（不包括重复数据）</p>
+<p><strong>ALL</strong>:返回所有结果(包括重复数据)</p>
+<p><strong>DISTINCT</strong>:删除重复数据(默认UNION已经删除了重复数据)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#这是&quot;joey_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from joey_game;</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">| id | name              | value | country |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">|  1 | Apex Legend       | free  | USA     |</span><br><span class="line">|  2 | League of Legend  | free  | USA     |</span><br><span class="line">|  3 | Rainbow six Siege | $30   | USA     |</span><br><span class="line">+----+-------------------+-------+---------+</span><br><span class="line">#这是&quot;Eggy_game&quot;表的数据</span><br><span class="line">MariaDB [mysql]&gt; select * from Eggy_game;</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">| id | name                | value | country |</span><br><span class="line">+----+---------------------+-------+---------+</span><br><span class="line">|  1 | Dying light         | $40   | USA     |</span><br><span class="line">|  2 | Oxygen Not Included | $30   | USA     |</span><br><span class="line">|  3 | Elden Ring          | free  | USA     |</span><br><span class="line">+----+---------------------+-------+---------+</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#union</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line"></span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br><span class="line"></span><br><span class="line">#union all</span><br><span class="line">MariaDB [mysql]&gt; select value from joey_game</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select value from Eggy_game</span><br><span class="line">    -&gt; order by value;</span><br><span class="line">    </span><br><span class="line">+-------+</span><br><span class="line">| value |</span><br><span class="line">+-------+</span><br><span class="line">| $30   |</span><br><span class="line">| $30   |</span><br><span class="line">| $40   |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">| free  |</span><br><span class="line">+-------+</span><br></pre></td></tr></table></figure>
+
+<h1 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h1><p><strong>order by</strong>就是对结果排序</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from joey_game order by id asc,game desc </span><br><span class="line">#默认升序，asc可省，desc降序，不写明ASC DESC的时候，默认是ASC</span><br></pre></td></tr></table></figure>
+
+<p>ORDER BY 多列的时候，先按照第一个column name排序，在按照第二个column name排序</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Back-end/" rel="tag"><i class="fa fa-tag"></i> Back-end</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/fe644ae0.html" rel="prev" title="刷题记录">
+                  <i class="fa fa-angle-left"></i> 刷题记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/1c997186.html" rel="next" title="Web Security">
+                  Web Security <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">78k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">4:44</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js","integrity":"sha256-mm3Re3y7xlvh+yCD+l/Zs1d+PU0AEad93MkWvljfm/s="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/54e1373e.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
