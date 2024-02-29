@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://images-a2q.pages.dev/file/f76dbbe83077d49e44cea.png">
 <meta property="og:image" content="https://images-a2q.pages.dev/file/98796cecaca113035b7be.png">
 <meta property="article:published_time" content="2024-02-27T13:23:18.000Z">
-<meta property="article:modified_time" content="2024-02-29T11:08:19.490Z">
+<meta property="article:modified_time" content="2024-02-29T12:20:40.613Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-02-29 19:08:19" itemprop="dateModified" datetime="2024-02-29T19:08:19+08:00">2024-02-29</time>
+      <time title="Modified: 2024-02-29 20:20:40" itemprop="dateModified" datetime="2024-02-29T20:20:40+08:00">2024-02-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -249,7 +249,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>4.1k</span>
+      <span>4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -386,8 +386,8 @@
 <p><strong>向量内积</strong>：</p>
 <ul>
 <li>对每个查询和键向量进行内积运算，以此来计算它们之间的相似度。</li>
-<li>如果两个向量的内积较大（并且向量的范数一致），它们的余弦相似度越大，表示它们的相似度高。</li>
-<li>内积为0表示两个向量正交，没有相似度。</li>
+<li><strong>如果两个向量的内积较大（并且向量的范数一致），它们的余弦相似度越大，表示它们的相似度高。</strong></li>
+<li><strong>内积为0表示两个向量正交，没有相似度。</strong></li>
 </ul>
 <p><strong>计算注意力</strong>：</p>
 <ul>
@@ -463,21 +463,17 @@
 <li>计算softmax函数，此时 ( t ) 时刻以后的权重会变得非常小（接近于0）。</li>
 <li>这样，在计算最终的加权值（即 ( $\text{softmax}(QK^T)V$ )）时，( t ) 时刻以后的值基本上不会对输出产生影响。</li>
 </ul>
-<h1 id="Multi-head-attention"><a href="#Multi-head-attention" class="headerlink" title="Multi-head attention"></a>Multi-head attention</h1><p>与其做一个单个的注意力函数，不如说把整个 query、key、value 整个投影 project 到 1个低维，投影 h 次。然后再做 h 次的注意力函数，把每一个函数的输出 拼接在一起，然后 again projected，会得到最终的输出。</p>
-<p>输入是：原始的 value、key、query</p>
-<p>进入一个线形层，线形层把 value、key、query 投影到比较低的维度。然后再做一个 scaled dot product.</p>
-<p>执行 h 次会得到 h 个输出，再把 h 个 输出向量全部合并 concat 在一起，最后做一次线性的投影 Linear，会回到我们的 multi-head attention。</p>
-<p>为什么要做多头注意力机制呢？一个 dot product 的注意力里面，没有什么可以学的参数。具体函数就是内积，为了识别不一样的模式，希望有不一样的计算相似度的办法。</p>
-<p>加性 attention 有一个权重可学，也许能学到一些内容。</p>
-<p>本文的 dot-product attention，先投影到低维，投影的 w 是可以学习的。</p>
-<p>multi-head attention 给 h 次机会去学习 不一样的投影的方法，使得在投影进去的度量空间里面能够去匹配不同模式需要的一些相似函数，然后把 h 个 heads 拼接起来，最后再做一次投影。 </p>
-<p>有点像 CNN 多个输出通道的感觉。</p>
-<p>multi-head attention 具体公式</p>
-<p>Multi-head 的输入还是Q,K,V</p>
-<p>但是输出是 不同的头的输出的 concat 起来，再投影到一个 WO 里面。</p>
-<p>每一个头 hi 是把 Q,K,V 通过 可以学习的 Wq, Wk, Wv 投影到 dv 上，再通过注意力函数，得到 headi。 </p>
-<p>本文采用 8 个 heads。因为有残差连接的存在使得输入和输出的维度至少是一样的。</p>
-<p>投影维度 dv &#x3D; dmodel &#x2F; h &#x3D; 512 &#x2F; 8 &#x3D; 64，每个 head 得到 64 维度，concat，再投影回 dmodel。</p>
+<h1 id="Multi-head-attention"><a href="#Multi-head-attention" class="headerlink" title="Multi-head attention"></a>Multi-head attention</h1><p>多头注意力机制不单是执行单一的注意力函数那么简单。相反，它涉及将整个查询（query）、键（key）和值（value）映射到一个较低维度的空间中，这一映射过程会进行 h 次。接着，对每一次映射后的结果执行一次缩放点积注意力计算，将这些计算的输出拼接起来，再通过另一个线性层进行映射，最终形成多头注意力的输出。</p>
+<p>具体步骤如下：</p>
+<ul>
+<li>原始的查询（query）、键（key）和值（value）通过一个线性层进行映射，对于每个头，将Q、K、V通过可学习的线性变换（分别是($W^Q$)、($W^K$)、($W^V$)）投影到低维空间。</li>
+<li>每个变换的输出维度是 ($d_v &#x3D; \frac{d_{\text{model}}}{h}$)，其中 ($d_{\text{model}}$) 是模型的维度，($h$) 是头的数量。</li>
+<li>这一层将它们投影到一个较低的维度空间。</li>
+<li>在这个较低维度空间内，执行 h 次缩放点积注意力的计算，每次计算都独立进行。</li>
+<li>将这 h 次注意力计算的输出向量进行合并（拼接），形成一个长向量。</li>
+<li>这个长向量再次通过一个线性层进行映射，将所有头的输出拼接（concat）起来，然后通过另一个可学习的线性变换 ($W^O$)，以生成多头注意力机制 ( Multi-head attention ) 的最终输出。</li>
+<li>采用8个头的情况下，每个头处理的维度降低到原始维度的1&#x2F;8，即64维（假设$d_{model}&#x3D;512$​）。</li>
+</ul>
 
     </div>
 
@@ -540,7 +536,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">5:17</span>
+    <span title="Reading time total">5:18</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
