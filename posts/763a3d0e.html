@@ -30,8 +30,9 @@
 <meta property="og:description" content="Decision Tree Notes">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://images-a2q.pages.dev/file/f6b70503bdd7370dba5a0.png">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/892f242a8d5bd0498a77a.png">
 <meta property="article:published_time" content="2024-03-12T11:46:06.000Z">
-<meta property="article:modified_time" content="2024-03-12T23:48:10.898Z">
+<meta property="article:modified_time" content="2024-03-14T12:22:09.021Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -121,7 +122,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E6%A8%A1%E5%9E%8B"><span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A"><span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%86%B5-H-Y-X"><span class="nav-text">条件熵 $H(Y|X)$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%B0%BC%E6%8C%87%E6%95%B0-Gini"><span class="nav-text">基尼指数 (Gini)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-text">决策树的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3-%E7%AE%97%E6%B3%95"><span class="nav-text">ID3 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5-%E7%9A%84%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95"><span class="nav-text">C4.5 的生成算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D"><span class="nav-text">剪枝</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CART-%E7%AE%97%E6%B3%95"><span class="nav-text">CART 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CART-%E7%94%9F%E6%88%90"><span class="nav-text">CART 生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART-%E5%89%AA%E6%9E%9D"><span class="nav-text">CART 剪枝</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E6%A8%A1%E5%9E%8B"><span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%99%E5%86%9C%E7%86%B5-entropy"><span class="nav-text">香农熵(entropy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A"><span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E6%AF%94"><span class="nav-text">信息增益比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%86%B5-H-Y-X"><span class="nav-text">条件熵 $H(Y|X)$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%B0%BC%E6%8C%87%E6%95%B0-Gini"><span class="nav-text">基尼指数 (Gini)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-text">决策树的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3-%E7%AE%97%E6%B3%95"><span class="nav-text">ID3 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5-%E7%9A%84%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95"><span class="nav-text">C4.5 的生成算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D"><span class="nav-text">剪枝</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CART-%E7%AE%97%E6%B3%95"><span class="nav-text">CART 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CART-%E7%94%9F%E6%88%90"><span class="nav-text">CART 生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART-%E5%89%AA%E6%9E%9D"><span class="nav-text">CART 剪枝</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -228,7 +229,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-03-13 07:48:10" itemprop="dateModified" datetime="2024-03-13T07:48:10+08:00">2024-03-13</time>
+      <time title="Modified: 2024-03-14 20:22:09" itemprop="dateModified" datetime="2024-03-14T20:22:09+08:00">2024-03-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,14 +248,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>642</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -268,17 +269,23 @@
     <div class="post-body" itemprop="articleBody"><h1 id="决策树模型"><a href="#决策树模型" class="headerlink" title="决策树模型"></a>决策树模型</h1><p>分类决策树模型(Decision Tree)是一种描述对实例进行分类的树形结构，决策树由结点(node)和有向边(directed edge)组成，结点有两种类型:内部结点(internal node)和叶结点(leaf node)，内部结点表示一个特征或属性，叶结点表示一个类。</p>
 <p>决策树是一种基本的分类和回归方法。它通过模拟人类决策过程来预测目标变量的值，是一种树形结构的模型，其中每个内部节点代表一个属性上的测试，每个分支代表测试的结果，而每个叶节点代表一个类别（在分类树中）或一个连续值（在回归树中）。决策树的主要优点是模型具有很好的可解释性，即人们可以很容易地理解模型的决策过程。</p>
 <h1 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h1><p>决定用哪个特征来划分特征空间。<br>通过<strong>信息增益</strong>选取对训练数据具有分类能力的特征。</p>
-<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论与概率统计中，<strong>熵</strong>(entropy)是表示随机变量不确定性的度量。设 $X$ 是一个取有限个值的离散随机变量，其概率分布为<br>$$<br>P(X&#x3D;x_{i})&#x3D;p_{i},\ i&#x3D;1,2, \cdots ,n<br>$$<br>则随机变量 $X$ 的熵定义为</p>
+<h2 id="香农熵-entropy"><a href="#香农熵-entropy" class="headerlink" title="香农熵(entropy)"></a>香农熵(entropy)</h2><p>在信息论与概率统计中，<strong>熵</strong>(entropy)是表示随机变量不确定性的度量。设 $X$ 是一个取有限个值的离散随机变量，其概率分布为<br>$$<br>P(X&#x3D;x_{i})&#x3D;p_{i},\ i&#x3D;1,2, \cdots ,n<br>$$<br>则随机变量 $X$ 的熵定义为</p>
 <p>$$<br>H(X) &#x3D; - \sum_{i&#x3D;1}^{n}p_i \log_2{p_i}<br>$$<br>当随机变量只取两个值，例如$1，0$时，即 $X$ 的分布为<br>$$<br>P(X&#x3D;1)&#x3D;p \ , \quad P(X&#x3D;0)&#x3D;1-p \ ,\quad 0\le p\le1<br>$$<br>熵为<br>$$<br>H(p)&#x3D;-p\log_{2}p-(1-p)\log_{2}(1-p)<br>$$<br>这时，熵 $H(p)$ 随概率 $p$ 变化的曲线</p>
 <p><img data-src="https://images-a2q.pages.dev/file/f6b70503bdd7370dba5a0.png" alt="分布为贝努利分布时熵与概率的关系"></p>
 <ul>
 <li>当 $p&#x3D;0$ 或 $p&#x3D;1$ 时 $H(p)&#x3D;0$ ，随机变量完全没有不确定性。</li>
 <li>当 $p&#x3D;0.5$ 时 $H(p)&#x3D;1$ ，熵取值最大，随机变量不确定性最大.</li>
 </ul>
-<p>在划分数据集之前之后信息发生的变化称为<strong>信息增益</strong></p>
-<p>信息增益 $g(D,A)$ 定义为集合 $D$ 的经验熵 $H(D)$ 与特征 $A$ 给定条件下 $D$ 的经验条件熵 $H(D|A)$ 之差，即<br>$$<br>g(D,A)&#x3D;H(D)-H(D \mid A)<br>$$</p>
-<h2 id="条件熵-H-Y-X"><a href="#条件熵-H-Y-X" class="headerlink" title="条件熵 $H(Y|X)$"></a>条件熵 $H(Y|X)$</h2><p>$X$ 给定条件下 $Y$ 的条件概率分布的熵对 $X$ 的数学期望<br>$$<br>H(Y\mid X)&#x3D;\sum_{i&#x3D;1}^{n}p_{i}H(Y\mid X&#x3D;x_{i})<br>$$</p>
-<h2 id="基尼指数-Gini"><a href="#基尼指数-Gini" class="headerlink" title="基尼指数 (Gini)"></a>基尼指数 (Gini)</h2><p>$$<br>{\mathrm{Gini}}(p)&#x3D;\sum_{k&#x3D;1}^{K}p_{k}(1-p_{k})&#x3D;1-\sum_{k&#x3D;1}^{K}p_{k}^{2}<br>$$</p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在划分数据集之前之后信息发生的变化称为<strong>信息增益</strong>，即划分前的信息熵减去划分后的信息熵</p>
+<p>信息增益 $g(D,A)$ 定义为集合 $D$ 的经验熵 $H(D)$ 与特征 $A$ 给定条件下 $D$ 的经验条件熵 $H(D|A)$ 之差，即<br>$$<br>Gain(D,A)&#x3D;H(D)-H(D \mid A)<br>$$</p>
+<h2 id="信息增益比"><a href="#信息增益比" class="headerlink" title="信息增益比"></a>信息增益比</h2><p>特征 $A$ 对训练数据集 $D$ 的信息增益比 $g_R(D,4)$ 定义为其信息增益 $g(D,4)$ 与训练数据集 $D$ 的经验熵 $H(D)$ 之比:</p>
+<p>$$<br>G a i n_{-}r a t i o(D,a)&#x3D;\frac{G a i n(D,a)}{IV(a)}<br>$$<br><strong>计算属性A的固有值（Intrinsic Value）</strong>:<br>固有值衡量的是属性A自身的信息熵，而不是属性A带来的信息增益。<br>$$<br>\text{IV}(A) &#x3D; -\sum_{j&#x3D;1}^{n} \frac{|D_j|}{|D|} \log_2 \frac{|D_j|}{|D|}<br>$$</p>
+<p>其中，$n$ 是属性 $A$ 的不同值的数目，$D_j$ 是 $D$ 中属性 $A$ 取第 $j$ 个值时的子集，$|D_j|$ 是 $D_j$ 的样本数量，$|D|$ 是 $D$ 的样本总数量。</p>
+<p>在构建决策树（如C4.5决策树算法）时，信息增益比常被用来选择属性，因为它可以减少因属性值数量大而偏向于选择这些属性的倾向，从而选择更有区分能力的属性。</p>
+<p>算法C4.5是算法ID3的改进版，它使用了信息增益和增益比两种选择算法，先选出信息增益高于平均水平的属性，然后再在这些属性中选择增益比最高的，作为最优划分属性。这样综合了信息增益和增益比的优点，可以取得较好的效果。</p>
+<h2 id="条件熵-H-Y-X"><a href="#条件熵-H-Y-X" class="headerlink" title="条件熵 $H(Y|X)$"></a>条件熵 $H(Y|X)$</h2><p>$X$ 给定条件下 $Y$ 的条件概率分布的熵对 $X$ 的数学期望<br>$$<br>\text{H}(D|A) &#x3D; \sum_{j&#x3D;1}^{n} \frac{|D_j|}{|D|} \text{H}(D_j)<br>$$<br>其中，$n$ 是属性 $A$ 的不同值的数目，$D_j$​ 是D中属性 $A$ 取第 $j$ 个值时的子集，$|D_j​|$ 是 $D_j$​ 的样本数量，$|D|$ 是 $D$ 的样本总数量。</p>
+<h2 id="基尼指数-Gini"><a href="#基尼指数-Gini" class="headerlink" title="基尼指数 (Gini)"></a>基尼指数 (Gini)</h2><p>$$<br>{\mathrm{Gini}}(p)&#x3D;\sum_{k&#x3D;1}^{K}p_{k}(1-p_{k})&#x3D;1-\sum_{k&#x3D;1}^{K}p_{k}^{2}<br>$$<br>基尼指数就是在样本集中随机抽出两个样本不同类别的概率。当样本集越不纯的时候，这个概率也就越大，即基尼指数也越大。</p>
+<p><img data-src="https://images-a2q.pages.dev/file/892f242a8d5bd0498a77a.png"></p>
 <h1 id="决策树的生成"><a href="#决策树的生成" class="headerlink" title="决策树的生成"></a>决策树的生成</h1><h2 id="ID3-算法"><a href="#ID3-算法" class="headerlink" title="ID3 算法"></a>ID3 算法</h2><h2 id="C4-5-的生成算法"><a href="#C4-5-的生成算法" class="headerlink" title="C4.5 的生成算法"></a>C4.5 的生成算法</h2><h1 id="剪枝"><a href="#剪枝" class="headerlink" title="剪枝"></a>剪枝</h1><h1 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h1><h2 id="CART-生成"><a href="#CART-生成" class="headerlink" title="CART 生成"></a>CART 生成</h2><h2 id="CART-剪枝"><a href="#CART-剪枝" class="headerlink" title="CART 剪枝"></a>CART 剪枝</h2>
     </div>
 
@@ -334,14 +341,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">97k</span>
+    <span title="Word count total">98k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">5:53</span>
+    <span title="Reading time total">5:55</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
