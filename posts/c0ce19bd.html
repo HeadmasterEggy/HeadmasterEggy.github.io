@@ -22,25 +22,32 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="A Humble Apprentice">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey">
-<meta property="og:url" content="http://example.com/tags/back-end-Java-collections/index.html">
+    <meta name="description" content="#deepLearning&#x2F;word2vec 独热编码(one-hot)假设我们现在有单词数量为$𝑁$的词表，那可以生成一个长度为$𝑁$的向量来表示一个单词，在这个向量中该单词对应的位置数值为1，其余单词对应的位置数值全部为0。 词典: [queen, king, man, woman, boy, girl]  假设当前词典中有以上6个单词，图总展示了其中4个单词的one-hot编码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="词向量">
+<meta property="og:url" content="http://example.com/posts/c0ce19bd.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="A Humble Apprentice">
+<meta property="og:description" content="#deepLearning&#x2F;word2vec 独热编码(one-hot)假设我们现在有单词数量为$𝑁$的词表，那可以生成一个长度为$𝑁$的向量来表示一个单词，在这个向量中该单词对应的位置数值为1，其余单词对应的位置数值全部为0。 词典: [queen, king, man, woman, boy, girl]  假设当前词典中有以上6个单词，图总展示了其中4个单词的one-hot编码">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/2ee900a0cfb63b3ded0a4.png">
+<meta property="og:image" content="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png">
+<meta property="article:published_time" content="2024-04-01T08:14:40.000Z">
+<meta property="article:modified_time" content="2024-04-01T09:27:11.253Z">
 <meta property="article:author" content="Joey">
+<meta property="article:tag" content="#deepLearning">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png">
 
 
-<link rel="canonical" href="http://example.com/tags/back-end-Java-collections/">
+<link rel="canonical" href="http://example.com/posts/c0ce19bd.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":"","permalink":"","path":"tags/back-end-Java-collections/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/c0ce19bd.html","path":"posts/c0ce19bd.html","title":"词向量"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Tag: #back-end/Java/collections | Joey</title>
+<title>词向量 | Joey</title>
   
 
 
@@ -91,7 +98,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">20</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">6</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">22</span></a></li>
   </ul>
 </nav>
 
@@ -103,7 +110,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -116,6 +123,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81-one-hot"><span class="nav-text">独热编码(one-hot)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word-Embedding"><span class="nav-text">Word Embedding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word2Vec"><span class="nav-text">Word2Vec</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -130,7 +138,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -175,50 +183,118 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">#back-end/Java/collections
-          <small>Tag</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/c0ce19bd.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="词向量 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          词向量
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="Created: 2024-04-01 16:14:40 / Modified: 17:27:11" itemprop="dateCreated datePublished" datetime="2024-04-01T16:14:40+08:00">2024-04-01</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>648</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>2 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning&#x2F;word2vec</p>
+<h1 id="独热编码-one-hot"><a href="#独热编码-one-hot" class="headerlink" title="独热编码(one-hot)"></a>独热编码(one-hot)</h1><p>假设我们现在有单词数量为$𝑁$的词表，那可以生成一个长度为$𝑁$的向量来表示一个单词，在这个向量中该单词对应的位置数值为1，其余单词对应的位置数值全部为0。</p>
+<p><strong>词典</strong>: [queen, king, man, woman, boy, girl]</p>
+<p><img data-src="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png" alt="one-hot 编码图"></p>
+<p>假设当前词典中有以上6个单词，图总展示了其中4个单词的one-hot编码表示。</p>
+<p><strong>缺点</strong><br>在<code>one-hot</code>编码中，每个单词被表示为一个很长的向量，这个向量的维度等于词汇表的大小，向量中只有一个元素是1（表示该单词），其余元素都是0。这种表示方法虽然简单，但是它无法捕捉单词之间的关系，而且随着词汇表的增大，向量的维度也会大幅增加，导致计算效率低下。</p>
+<h1 id="Word-Embedding"><a href="#Word-Embedding" class="headerlink" title="Word Embedding"></a>Word Embedding</h1><p>单独的<code>one-hot</code>仅仅只代表了一个无意义的编码。通过词嵌入的方式，使得此单词可以被更多维度的特征所描述，而这些特征是在一个连续的向量空间中表示的。</p>
+<p><code>word embedding</code>将每个单词表示为一个固定长度的稠密向量，语义相近的单词之间的距离在向量空间中会比较近，语义不同的单词之间距离会比较远。<br><img data-src="https://images-a2q.pages.dev/file/2ee900a0cfb63b3ded0a4.png"><br>可以看到<code>France, England, Italy</code>等国家之间比较近，并形成一个小簇；<code>dog, dogs,cat,cats</code>形成一个小簇。</p>
+<h1 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h1><p><code>Word2Vec</code>是建模了一个单词预测的任务，通过这个任务来学习词向量。假设有这样一句话<strong>Pineapples are spiked and yellow</strong>，现在假设spiked这个单词被删掉了，现在要预测这个位置原本的单词是什么。</p>
+<p><code>Word2Vec</code>本身就是在建模这个单词预测任务，当这个单词预测任务训练完成之后，那每个单词对应的词向量也就训练好了。</p>
+<p><code>Word2vec</code>是2013年被Mikolov提出来的词向量训练算法，在<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzEzMDEuMzc4MS5wZGY=">论文<i class="fa fa-external-link-alt"></i></span>中作者提到了两种<code>word2vec</code>的具体实现方式：<strong>连续词袋模型CBOW</strong>和<strong>Skip-gram</strong>:</p>
+<p><strong>CBOW(Continuous Bag of Words)</strong>: 根据上下文预测当前单词<br><strong>Skip-gram</strong>: 根据当前单词预测上下文</p>
+<p><img data-src="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png" alt="CBOW和Skip-gram的对比"><br>一般来说，<strong>CBOW</strong>比<strong>Skip-garm</strong>训练快且更加稳定一些，然而，<strong>Skip-garm</strong>不会刻意地回避生僻词（即出现频率比较低的词），比<strong>CBOW</strong>能够更好地处理生僻词。</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-09-11T17:05:22+08:00"
-              content="2023-09-11">
-          09-11
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-        <a class="post-title-link" href="/posts/55b95c39.html" itemprop="url">
-          <span itemprop="name">Collections</span>
-        </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> #deepLearning</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/0.html" rel="prev" title="">
+                  <i class="fa fa-angle-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>
@@ -243,14 +319,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">100k</span>
+    <span title="Word count total">101k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">6:02</span>
+    <span title="Reading time total">6:06</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
@@ -297,7 +373,7 @@
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/tags/back-end-Java-collections/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/c0ce19bd.html"}</script>
   <script src="/js/third-party/quicklink.js"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
