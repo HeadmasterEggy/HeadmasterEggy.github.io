@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://images-a2q.pages.dev/file/2ee900a0cfb63b3ded0a4.png">
 <meta property="og:image" content="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png">
 <meta property="article:published_time" content="2024-04-01T08:14:40.000Z">
-<meta property="article:modified_time" content="2024-04-01T14:09:07.904Z">
+<meta property="article:modified_time" content="2024-04-08T11:40:31.678Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="#deepLearning">
 <meta name="twitter:card" content="summary">
@@ -123,7 +123,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81-one-hot"><span class="nav-text">独热编码(one-hot)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word-Embedding"><span class="nav-text">Word Embedding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word2Vec"><span class="nav-text">Word2Vec</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-text">预训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-text">语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-text">统计语言模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81-one-hot"><span class="nav-text">独热编码(one-hot)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word-Embedding"><span class="nav-text">Word Embedding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Word2Vec"><span class="nav-text">Word2Vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Skip-gram"><span class="nav-text">Skip-gram</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -222,9 +222,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2024-04-01 16:14:40 / Modified: 22:09:07" itemprop="dateCreated datePublished" datetime="2024-04-01T16:14:40+08:00">2024-04-01</time>
+      <time title="Created: 2024-04-01 16:14:40" itemprop="dateCreated datePublished" datetime="2024-04-01T16:14:40+08:00">2024-04-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-08 19:40:31" itemprop="dateModified" datetime="2024-04-08T19:40:31+08:00">2024-04-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -243,14 +249,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>648</span>
+      <span>2.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>7 mins.</span>
     </span>
 </div>
 
@@ -262,6 +268,42 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>#deepLearning&#x2F;word2vec</p>
+<h1 id="预训练"><a href="#预训练" class="headerlink" title="预训练"></a>预训练</h1><p>预训练的思想：任务 A 对应的模型 A 的参数不再是随机初始化的，而是通过任务 B 进行预先训练得到模型 B，然后利用模型 B 的参数对模型 A 进行初始化，再通过任务 A 的数据对模型 A 进行训练。注：模型 B 的参数是随机初始化的。</p>
+<h1 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h1><p>语言模型通俗点讲就是<strong>计算一个句子的概率</strong>。也就是说，对于语言序列 $w_1,w_2,\cdots,w_n$，语言模型就是计算该序列的概率，即 $P(w_1,w_2,\cdots,w_n)$。</p>
+<p>下面通过两个实例具体了解上述所描述的意思：</p>
+<ol>
+<li>假设给定两句话 <strong>“判断这个词的磁性”</strong> 和 <strong>“判断这个词的词性”</strong> ，语言模型会认为后者更自然。转化成数学语言也就是：$$P(判断，这个，词，的，词性) \gt P(判断，这个，词，的，磁性)$$</li>
+<li>假设给定一句话做填空 “<strong>判断这个词的__</strong>“，则问题就变成了给定前面的词，找出后面的一个词是什么，转化成数学语言就是：$$P(词性|判断，这个，词，的) \gt P(磁性|判断，这个，词，的)$$</li>
+</ol>
+<p>通过上述两个实例，可以给出语言模型更加具体的描述：给定一句由 $n$ 个词组成的句子 $W&#x3D;w_1,w_2,\cdots,w_n$，计算这个句子的概率 $P(w_1,w_2,\cdots,w_n)$，或者计算根据上文计算下一个词的概率 $P(w_n|w_1,w_2,\cdots,w_{n-1})$。</p>
+<p>下面将介绍语言模型的两个分支，统计语言模型和神经网络语言模型。</p>
+<h2 id="统计语言模型"><a href="#统计语言模型" class="headerlink" title="统计语言模型"></a>统计语言模型</h2><p>统计语言模型的基本思想就是<strong>计算条件概率</strong>。</p>
+<p>给定一句由 $n$ 个词组成的句子 $W&#x3D;w_1,w_2,\cdots,w_n$，计算这个句子的概率 $P(w_1,w_2,\cdots,w_n)$ 的公式如下（条件概率乘法公式的推广，链式法则）：</p>
+<p>$$<br>\begin{align*}<br>P(w_1, w_2, \cdots, w_n) &amp;&#x3D; P(w_1) \cdot P(w_2 \mid w_1) \cdot P(w_3 \mid w_1, w_2) \cdots P(w_n \mid w_1, w_2, \cdots, w_{n-1}) \<br>&amp;&#x3D; \prod_{i&#x3D;1}^{n} P(w_i \mid w_1, w_2, \cdots, w_{i-1})<br>\end{align*}<br>$$</p>
+<p>对于上一节提到的 “判断这个词的词性” 这句话，利用上述的公式，可以得到：</p>
+<p>$$<br>\begin{align*}<br>&amp; P(判断，这个，词，的，词性) &#x3D; \<br>&amp; P(判断)P(这个|判断)P(词|判断，这个) \<br>&amp; P(的|判断，这个，词)P(词性|判断，这个，词，的)P(判断，这个，词，的，词性)<br>\end{align*}<br>$$</p>
+<p>对于上一节提到的另外一个问题，当给定前面词的序列 “判断，这个，词，的” 时，想要知道下一个词是什么，可以直接计算如下概率：</p>
+<p>$$P(w_{next}|判断，这个，词，的)$$</p>
+<p>其中，$w_{next} \in V$表示词序列的下一个词，$V$ 是一个具有 $|V|$ 个词的词典（词集合）。</p>
+<p>对于公式（3），可以展开成如下形式：</p>
+<p>$$P(w_{next}|判断，这个，词，的) &#x3D; \frac{count(w_{next}，判断，这个，词，的)}{count(判断，这个，词，的)}$$</p>
+<p>对于公式（4），可以把字典 $V$ 中的多有单词，逐一作为 $w_{next}$，带入计算，最后取最大概率的词作为 $w_{next}$ 的候选词。</p>
+<p>如果 $|V|$ 特别大，公式（4）的计算将会非常困难，但是我们可以引入马尔科夫链的概念（当然，在这里只是简单讲讲如何做，关于马尔科夫链的数学理论知识可以自行查看其他参考资料）。</p>
+<p>假设字典 V 中有 “火星” 一词，可以明显发现 “火星” 不可能出现在 “判断这个词的” 后面，因此（火星，判断，这个，词，的）这个组合是不存在的，并且词典中会存在很多类似于 “火星” 这样的词。</p>
+<p>进一步，可以发现我们把（火星，判断，这个，词，的）这个组合判断为不存在，是因为 “火星” 不可能出现在 “词的” 后面，也就是说我们可以考虑是否把公式（3）转化为</p>
+<p>$$<br>P(w_{next}|判断，这个，词，的) \approx P(w_{next}|词，的)<br>$$</p>
+<p>公式（5）就是马尔科夫链的思想：假设 $w_{next}$ 只和它之前的 <strong>k 个词有相关性</strong>，$k&#x3D;1$ 时称作一个单元语言模型，$k&#x3D;2$ 时称为二元语言模型。</p>
+<p>可以发现通过马尔科夫链后改写的公式计算起来将会简单很多，下面我们举个简单的例子介绍下如何计算一个二元语言模型的概率。</p>
+<p>其中二元语言模型的公式为：</p>
+<p>$$P(w_i|w_{i-1})&#x3D;\frac{count(w_{i-1},w_i)}{count(w_{i-1})}$$</p>
+<p>假设有一个文本集合：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">“词性是动词”</span><br><span class="line">“判断单词的词性”</span><br><span class="line">“磁性很强的磁铁”</span><br><span class="line">“北京的词性是名词”</span><br></pre></td></tr></table></figure>
+
+<p>对于上述文本，如果要计算 P(词性|的) 的概率，通过公式（6），需要统计 “的，词性” 同时按序出现的次数，再除以 “的” 出现的次数：</p>
+<p>$$<br>P(词性|的) &#x3D; \frac{count(的，词性)}{count(的)} &#x3D; \frac{2}{3}<br>$$</p>
+<p>上述文本集合是我们自定制的，然而对于绝大多数具有现实意义的文本，会出现数据稀疏的情况，例如<strong>训练时未出现，测试时出现了的未登录单词</strong>。</p>
+<p>由于数据稀疏问题，则会出现概率值为 0 的情况（填空题将无法从词典中选择一个词填入），为了避免 0 值的出现，会使用一种平滑的策略——分子和分母都加入一个非 0 正数，例如可以把公式（6）改为：</p>
+<p>$$<br>P(w_i|w_{i-1}) &#x3D; \frac{count(w_{i-1},w_i)+1}{count(w_{i-1})+|V|}<br>$$</p>
 <h1 id="独热编码-one-hot"><a href="#独热编码-one-hot" class="headerlink" title="独热编码(one-hot)"></a>独热编码(one-hot)</h1><p>假设我们现在有单词数量为$𝑁$的词表，那可以生成一个长度为$𝑁$的向量来表示一个单词，在这个向量中该单词对应的位置数值为1，其余单词对应的位置数值全部为0。</p>
 <p><strong>词典</strong>: [queen, king, man, woman, boy, girl]</p>
 <p><img data-src="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png" alt="one-hot 编码图"></p>
@@ -274,7 +316,7 @@
 <p><code>Word2vec</code>是2013年被Mikolov提出来的词向量训练算法，在<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzEzMDEuMzc4MS5wZGY=">论文<i class="fa fa-external-link-alt"></i></span>中作者提到了两种<code>word2vec</code>的具体实现方式：<strong>连续词袋模型CBOW</strong>和<strong>Skip-gram</strong>:</p>
 <p><strong>CBOW(Continuous Bag of Words)</strong>: 根据上下文预测当前单词<br><strong>Skip-gram</strong>: 根据当前单词预测上下文</p>
 <p><img data-src="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png" alt="CBOW和Skip-gram的对比"><br>一般来说，<strong>CBOW</strong>比<strong>Skip-garm</strong>训练快且更加稳定一些，然而，<strong>Skip-garm</strong>不会刻意地回避生僻词（即出现频率比较低的词），比<strong>CBOW</strong>能够更好地处理生僻词。</p>
-
+<h2 id="Skip-gram"><a href="#Skip-gram" class="headerlink" title="Skip-gram"></a>Skip-gram</h2>
     </div>
 
     
@@ -329,14 +371,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">100k</span>
+    <span title="Word count total">102k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">6:05</span>
+    <span title="Reading time total">6:10</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
