@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://images-a2q.pages.dev/file/2e1e4d379e665542a6a98.jpg">
 <meta property="og:image" content="https://images-a2q.pages.dev/file/c262b9a8d7e3bb017bd30.png">
 <meta property="article:published_time" content="2024-04-01T08:14:40.000Z">
-<meta property="article:modified_time" content="2024-05-14T09:39:24.689Z">
+<meta property="article:modified_time" content="2024-05-14T09:41:44.504Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="#deepLearning">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-14 17:39:24" itemprop="dateModified" datetime="2024-05-14T17:39:24+08:00">2024-05-14</time>
+      <time title="Modified: 2024-05-14 17:41:44" itemprop="dateModified" datetime="2024-05-14T17:41:44+08:00">2024-05-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -360,24 +360,17 @@
 <li>随机把一些子词用 Mask 代替</li>
 <li>让模型去预测被 Mask 代替的子词</li>
 </ul>
-<p>例如: [“&lt;CLS&gt;“, “my”, “dog”, “is”, “cute”, “&lt;SEP&gt;“, “he”, “likes”, “play”, “##ing”, “&lt;SEP&gt;“]</p>
-<p>变为: [“&lt;CLS&gt;“, “my”, “&lt;mask&gt;“, “is”, “dog”, “&lt;SEP&gt;“, “he”, “likes”, “play”, “&lt;mask&gt;“, “&lt;SEP&gt;“]</p>
+<p>例如: <code>[&quot;&lt;CLS&gt;&quot;, &quot;my&quot;, &quot;dog&quot;, &quot;is&quot;, &quot;cute&quot;, &quot;&lt;SEP&gt;&quot;, &quot;he&quot;, &quot;likes&quot;, &quot;play&quot;, &quot;##ing&quot;, &quot;&lt;SEP&gt;&quot;]</code></p>
+<p>变为: <code>[&quot;&lt;CLS&gt;&quot;, &quot;my&quot;, &quot;&lt;mask&gt;&quot;, &quot;is&quot;, &quot;dog&quot;, &quot;&lt;SEP&gt;&quot;, &quot;he&quot;, &quot;likes&quot;, &quot;play&quot;, &quot;&lt;mask&gt;&quot;, &quot;&lt;SEP&gt;&quot;]</code></p>
 <p>随机去掉的 token 被称作掩码词，在训练中，掩码词将以 15% 的概率被替换成 [MASK]，这个操作则称为掩码操作。注意：<strong>在CBOW 模型中，每个词都会被预测一遍。</strong></p>
 <p>但是这样设计 MLM 的训练方法会引入弊端：<strong>在模型微调训练阶段或模型推理（测试）阶段，输入的文本中将没有 [MASK]，进而导致产生由训练和预测数据偏差导致的性能损失。</strong></p>
 <p>考虑到上述的弊端，BERT 并没有总用 [MASK] 替换掩码词，而是按照一定比例选取替换词。在选择 15% 的词作为掩码词后这些掩码词有三类替换选项：</p>
 <ul>
-<li><p>80% 练样本中：将选中的词用 [MASK] 来代替，例如：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是[MASK]八大行星之一”</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>10% 的训练样本中：选中的词不发生变化，<strong>该做法是为了缓解训练文本和预测文本的偏差带来的性能损失</strong>，例如：</p>
-</li>
+<li>80% 练样本中：将选中的词用 [MASK] 来代替，例如：<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是[MASK]八大行星之一”</span><br></pre></td></tr></table></figure></li>
+<li>10% 的训练样本中：选中的词不发生变化，<strong>该做法是为了缓解训练文本和预测文本的偏差带来的性能损失</strong>，例如：<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是太阳系八大行星之一”</span><br></pre></td></tr></table></figure></li>
+<li>10% 的训练样本中：将选中的词用任意的词来进行代替，<strong>该做法是为了让 BERT 学会根据上下文信息自动纠错</strong>，例如：<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是苹果八大行星之一”</span><br></pre></td></tr></table></figure></li>
 </ul>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是太阳系八大行星之一”</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>10% 的训练样本中：将选中的词用任意的词来进行代替，<strong>该做法是为了让 BERT 学会根据上下文信息自动纠错</strong>，例如：</li>
-</ul>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">“地球是苹果八大行星之一”</span><br></pre></td></tr></table></figure>
     </div>
 
     
