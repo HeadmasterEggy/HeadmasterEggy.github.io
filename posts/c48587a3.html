@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,700,700italic%7CGrand+Hotel:300,300italic,400,400italic,700,700italic%7CUbuntu:300,300italic,400,400italic,700,700italic%7CJetBrains+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Opinion Word Expansion and Target Extraction through Double Propagation">
+<meta property="og:url" content="http://example.com/posts/c48587a3.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion w">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-10-07T08:09:30.000Z">
+<meta property="article:modified_time" content="2024-10-07T08:23:19.266Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="#deepLearning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/c48587a3.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/c48587a3.html","path":"posts/c48587a3.html","title":"Opinion Word Expansion and Target Extraction through Double Propagation"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Opinion Word Expansion and Target Extraction through Double Propagation | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">28</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF"><span class="nav-text">1. 研究背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95"><span class="nav-text">2. 双重传播方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%84%8F%E8%A7%81%E8%AF%8D%E6%89%A9%E5%B1%95%E4%B8%8E%E7%9B%AE%E6%A0%87%E6%8F%90%E5%8F%96"><span class="nav-text">3. 意见词扩展与目标提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">4. 实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%9C%AA%E6%9D%A5%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="nav-text">5. 未来研究方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%88%B0%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="nav-text">应用到毕业设计的建议：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-text">1. 为什么使用双重传播方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%8E%E4%B9%88%E6%83%B3%E5%88%B0%E7%9A%84%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-text">2. 怎么想到的双重传播方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">3. 双重传播方法的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-text">4. 总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;twitter.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2VnZ3lvbGRnb29zZQ==" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;eggyoldgoose"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/c48587a3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Opinion Word Expansion and Target Extraction through Double Propagation | Joey">
+      <meta itemprop="description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion words (words expressing sentiment) and their targets (entities or features being evaluated). The double propagation method works iteratively, identifying opinion words using known targets and vice versa, expanding both sets iteratively through linguistic patterns and dependency relations in sentences. This semi-supervised approach allows the system to efficiently expand opinion word lexicons and extract sentiment targets with minimal manual intervention, enhancing the accuracy of sentiment analysis in various domains.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Opinion Word Expansion and Target Extraction through Double Propagation
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-10-07 16:09:30 / Modified: 16:23:19" itemprop="dateCreated datePublished" datetime="2024-10-07T16:09:30+08:00">2024-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>8 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion words (words expressing sentiment) and their targets (entities or features being evaluated). The double propagation method works iteratively, identifying opinion words using known targets and vice versa, expanding both sets iteratively through linguistic patterns and dependency relations in sentences. This semi-supervised approach allows the system to efficiently expand opinion word lexicons and extract sentiment targets with minimal manual intervention, enhancing the accuracy of sentiment analysis in various domains.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning </p>
+<p>这篇论文《Opinion Word Expansion and Target Extraction through Double Propagation》提出了一种双重传播方法，用于同时进行意见词扩展和目标（Target）提取。以下是论文的主要内容总结：</p>
+<h3 id="1-研究背景"><a href="#1-研究背景" class="headerlink" title="1. 研究背景"></a>1. <strong>研究背景</strong></h3><ul>
+<li><strong>意见挖掘与情感分析</strong>：意见挖掘（也称为情感分析）已经吸引了大量研究，主要目的是从文本中提取出表达情感的词汇和对应的对象（targets）。意见词是用来表达正面或负面情绪的词汇，而目标是这些情感的焦点，比如产品的某个特性（如“电池寿命”）。</li>
+<li>研究中指出现有的意见词典难以涵盖所有领域，因此，针对不同领域，需要扩展意见词典并提取特定的情感目标。</li>
+</ul>
+<h3 id="2-双重传播方法"><a href="#2-双重传播方法" class="headerlink" title="2. 双重传播方法"></a>2. <strong>双重传播方法</strong></h3><ul>
+<li><strong>传播原理</strong>：论文提出的双重传播方法基于语法依赖关系，通过迭代地从文本中提取意见词和目标。该方法通过语法分析，利用意见词和目标之间的自然关系来识别新的情感词和目标。这种双重传播是指通过意见词传播到目标，再通过目标传播回新的意见词，从而逐步扩展词典。</li>
+<li><strong>半监督学习</strong>：该方法使用一个初始的种子意见词典，并通过不断传播扩大意见词和目标的覆盖范围，因此被认为是半监督的。</li>
+<li><strong>语法依赖关系</strong>：方法依赖于句法依赖分析，如修饰关系（mod）、主语关系（subj）等，来识别意见词和目标之间的关系。</li>
+</ul>
+<h3 id="3-意见词扩展与目标提取"><a href="#3-意见词扩展与目标提取" class="headerlink" title="3. 意见词扩展与目标提取"></a>3. <strong>意见词扩展与目标提取</strong></h3><ul>
+<li><strong>意见词扩展</strong>：通过识别意见词与目标之间的语法关系，逐步扩展意见词典。对于新提取的意见词，系统会根据上下文来判断其情感极性（正面、负面或中性）。</li>
+<li><strong>目标提取</strong>：使用已知的意见词来识别新的目标，目标通常是名词或名词短语。论文中提到，许多产品评论中的目标是产品特性，如“相机电池寿命”等。</li>
+<li><strong>双重传播过程</strong>：意见词和目标通过多轮迭代进行相互提取，直到无法提取新的词汇为止。</li>
+</ul>
+<h3 id="4-实验结果"><a href="#4-实验结果" class="headerlink" title="4. 实验结果"></a>4. <strong>实验结果</strong></h3><ul>
+<li>论文在多个产品评论数据集上进行了实验，并与现有的方法进行了比较。结果表明，双重传播方法在意见词扩展和目标提取任务中的表现优于其他方法，特别是在召回率方面有显著提升。</li>
+<li>例如，在产品评论数据集上，该方法能够以较高的精度和召回率扩展意见词典，并能够从文本中准确提取出产品的特定特性。</li>
+</ul>
+<h3 id="5-未来研究方向"><a href="#5-未来研究方向" class="headerlink" title="5. 未来研究方向"></a>5. <strong>未来研究方向</strong></h3><ul>
+<li><strong>意见词剪枝</strong>：论文建议未来可以进一步研究如何剪枝（去除不必要的或错误的）意见词，以提高提取精度。</li>
+<li><strong>关系学习自动化</strong>：未来还可以尝试使用模式挖掘技术，自动学习更多的句法关系，以进一步提高方法的覆盖率。</li>
+</ul>
+<h3 id="应用到毕业设计的建议："><a href="#应用到毕业设计的建议：" class="headerlink" title="应用到毕业设计的建议："></a>应用到毕业设计的建议：</h3><p>   如果你希望将这篇论文的思想应用到毕业设计中，可以考虑以下几个方向：</p>
+<ol>
+<li><strong>情感分析系统的设计与实现</strong>：基于论文中的双重传播方法，可以设计一个用于产品评论分析的系统，从评论中提取用户对不同产品特性的情感意见。</li>
+<li><strong>意见词典的扩展与优化</strong>：将该方法应用于不同领域，通过领域特定的文本扩展意见词典，提高情感分析的准确性。</li>
+<li><strong>结合其他技术</strong>：你可以结合其他NLP技术（如深度学习）来进一步优化意见词和目标的提取，提升系统的性能。</li>
+</ol>
+<p>使用双重传播方法的原因主要源自意见挖掘与情感分析中<strong>意见词与目标</strong>之间的自然联系。双重传播利用了意见词和目标之间的语法依赖关系，通过迭代地互相传播信息，从而高效地扩展意见词和提取情感目标。这种方法之所以有效，是因为意见词和目标在句子中往往具有明确的语法关联，通过传播机制可以挖掘出更多未明确标注的信息。</p>
+<h3 id="1-为什么使用双重传播方法？"><a href="#1-为什么使用双重传播方法？" class="headerlink" title="1. 为什么使用双重传播方法？"></a>1. <strong>为什么使用双重传播方法？</strong></h3><p>   双重传播的主要优势和动机来源于以下几点：</p>
+<ul>
+<li><p><strong>语法依赖的互相增强作用</strong>：<br>意见词和目标在文本中往往紧密相关。例如，在“相机的电池寿命非常短”这句话中，“电池寿命”是目标，而“短”是表达负面情感的意见词。通过传播机制，一旦确定“短”是一个负面的意见词，它可以帮助确定“电池寿命”是负面情感的目标。</p>
+<ul>
+<li><strong>从意见词到目标</strong>：已知的意见词可以帮助提取目标，如“坏”可能描述产品特性，如“质量”。</li>
+<li><strong>从目标到意见词</strong>：一旦识别出目标，可以用目标来进一步扩展意见词，如“电池”与“长寿命”可能关联。</li>
+</ul>
+</li>
+<li><p><strong>半监督学习的灵活性</strong>：<br>使用双重传播可以从一个小规模的意见词和目标种子集出发，通过语法依赖关系不断扩展词典。这种半监督学习方法只需要少量人工标注的数据即可大规模提取新的意见词和目标，而不需要大量的手工标注数据。</p>
+</li>
+<li><p><strong>自动化扩展意见词典和目标</strong>：<br>意见词和目标的识别往往是领域特定的，现有的词典难以涵盖所有领域和场景。通过双重传播方法，系统可以自动从特定领域的评论中扩展词汇，适应不同领域的意见挖掘需求。比如在电子产品领域，“耐用”可能是重要的意见词，而在餐饮业，“美味”则更为重要。</p>
+</li>
+</ul>
+<h3 id="2-怎么想到的双重传播方法？"><a href="#2-怎么想到的双重传播方法？" class="headerlink" title="2. 怎么想到的双重传播方法？"></a>2. <strong>怎么想到的双重传播方法？</strong></h3><p>   双重传播方法的灵感来自于<strong>自然语言中的语法依赖关系</strong>和<strong>两者互相强化的特性</strong>，以及已有的语法依赖解析技术。以下是该方法如何被构思出来的：</p>
+<ul>
+<li><p><strong>依赖于语法结构的观察</strong>：研究人员观察到，意见词和目标之间存在着强烈的语法依赖关系。通过利用这些依赖关系（如修饰、主语、宾语等），可以从已知的意见词推断出目标，或者从目标推断出新的意见词。这一观察启发了双重传播的核心思想。</p>
+</li>
+<li><p><strong>启发自信息传播算法</strong>：双重传播方法受到<strong>迭代传播算法</strong>的启发，如PageRank等，这些算法利用节点之间的相互关系来不断更新和传播信息。类似地，意见词和目标之间也可以通过迭代传播来相互强化识别，逐步扩展词典。</p>
+</li>
+<li><p><strong>克服单一传播的局限性</strong>：在情感分析领域，研究人员意识到仅靠单一传播（从意见词到目标，或从目标到意见词）无法充分挖掘文本中的隐藏信息。双重传播方法通过双向的信息流动，既能从意见词中发现目标，又能从目标中扩展意见词，形成闭环，避免了单向传播的局限性。</p>
+</li>
+</ul>
+<h3 id="3-双重传播方法的优势"><a href="#3-双重传播方法的优势" class="headerlink" title="3. 双重传播方法的优势"></a>3. <strong>双重传播方法的优势</strong></h3><ul>
+<li><strong>高效性</strong>：双重传播方法能够在少量初始标注的情况下自动提取更多的意见词和目标，减少了手工标注的工作量。</li>
+<li><strong>准确性提升</strong>：通过语法依赖分析和迭代传播，模型能够准确地识别出意见词和目标的关系，从而提高情感分析的准确性。</li>
+<li><strong>跨领域扩展</strong>：该方法可以根据不同的语料库扩展领域特定的词汇，适用于多种领域的意见挖掘任务。</li>
+</ul>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. <strong>总结</strong></h3><p>   双重传播的设计思想源自意见词与目标之间的自然语法关联，通过信息的双向传播来逐步扩展词典和目标。该方法的提出是为了解决传统方法在扩展词汇和识别目标时的局限性，充分利用了语言中的依赖结构，并借鉴了信息传播算法的思想。</p>
+<p>如果你在毕业设计中应用这一方法，可以进一步研究如何在不同领域中通过双重传播来提高意见词和目标的识别精度，或结合其他NLP技术（如深度学习）优化这种传播过程。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> #deepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/e4126494.html" rel="prev" title="监督学习">
+                  <i class="fa fa-angle-left"></i> 监督学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/d5af3590.html" rel="next" title="A Novel Lexicalized HMM-based Learning Framework for Web Opinion Mining">
+                  A Novel Lexicalized HMM-based Learning Framework for Web Opinion Mining <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">118k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">7:07</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js","integrity":"sha256-mm3Re3y7xlvh+yCD+l/Zs1d+PU0AEad93MkWvljfm/s="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/c48587a3.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
