@@ -22,16 +22,17 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Introduction论文的引言部分介绍了意见挖掘（或称情感分析）的重要性，指出该领域受到广泛关注的原因是其广泛的应用前景和研究挑战。引言中讨论了两大关键问题：观点词汇扩展和观点目标提取。 • 观点词汇扩展：指的是在不同领域中，情感表达可能会用到不同的词汇，因此一个通用的情感词典很难满足所有领域的需求。为了提升情感分析的效果，有必要根据特定领域文本扩展已有的情感词汇表。 • 观点目标提取：即提取">
+    <meta name="description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion w">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Opinion Word Expansion and Target Extraction through Double Propagation">
 <meta property="og:url" content="http://example.com/posts/c48587a3.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="Introduction论文的引言部分介绍了意见挖掘（或称情感分析）的重要性，指出该领域受到广泛关注的原因是其广泛的应用前景和研究挑战。引言中讨论了两大关键问题：观点词汇扩展和观点目标提取。 • 观点词汇扩展：指的是在不同领域中，情感表达可能会用到不同的词汇，因此一个通用的情感词典很难满足所有领域的需求。为了提升情感分析的效果，有必要根据特定领域文本扩展已有的情感词汇表。 • 观点目标提取：即提取">
+<meta property="og:description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion w">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-10-30T04:00:59.000Z">
-<meta property="article:modified_time" content="2024-10-31T08:50:07.117Z">
+<meta property="article:published_time" content="2024-10-07T08:09:30.000Z">
+<meta property="article:modified_time" content="2024-10-07T08:23:19.266Z">
 <meta property="article:author" content="Joey">
+<meta property="article:tag" content="#deepLearning">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,7 +119,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Related-Work"><span class="nav-text">Related Work</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relation-Identification"><span class="nav-text">Relation Identification</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Opinion-Lexicon-Expansion-and-Target-Extraction"><span class="nav-text">Opinion Lexicon Expansion and Target Extraction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-4-Opinion-Target-Pruning"><span class="nav-text">4.4 Opinion Target Pruning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Experiments-and-Discussions"><span class="nav-text">5. Experiments and Discussions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Conclusion"><span class="nav-text">6. Conclusion</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF"><span class="nav-text">1. 研究背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95"><span class="nav-text">2. 双重传播方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%84%8F%E8%A7%81%E8%AF%8D%E6%89%A9%E5%B1%95%E4%B8%8E%E7%9B%AE%E6%A0%87%E6%8F%90%E5%8F%96"><span class="nav-text">3. 意见词扩展与目标提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">4. 实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%9C%AA%E6%9D%A5%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="nav-text">5. 未来研究方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%88%B0%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BB%BA%E8%AE%AE%EF%BC%9A"><span class="nav-text">应用到毕业设计的建议：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-text">1. 为什么使用双重传播方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%8E%E4%B9%88%E6%83%B3%E5%88%B0%E7%9A%84%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-text">2. 怎么想到的双重传播方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8F%8C%E9%87%8D%E4%BC%A0%E6%92%AD%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">3. 双重传播方法的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-text">4. 总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -203,7 +204,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Opinion Word Expansion and Target Extraction through Double Propagation | Joey">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion words (words expressing sentiment) and their targets (entities or features being evaluated). The double propagation method works iteratively, identifying opinion words using known targets and vice versa, expanding both sets iteratively through linguistic patterns and dependency relations in sentences. This semi-supervised approach allows the system to efficiently expand opinion word lexicons and extract sentiment targets with minimal manual intervention, enhancing the accuracy of sentiment analysis in various domains.">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -217,15 +218,18 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2024-10-30 12:00:59" itemprop="dateCreated datePublished" datetime="2024-10-30T12:00:59+08:00">2024-10-30</time>
+      <time title="Created: 2024-10-07 16:09:30 / Modified: 16:23:19" itemprop="dateCreated datePublished" datetime="2024-10-07T16:09:30+08:00">2024-10-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
+        <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-10-31 16:50:07" itemprop="dateModified" datetime="2024-10-31T16:50:07+08:00">2024-10-31</time>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
     </span>
 
   
@@ -235,250 +239,84 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>7k</span>
+      <span>2.3k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>25 mins.</span>
+      <span>8 mins.</span>
     </span>
 </div>
 
+            <div class="post-description">The paper introduces a method to extract opinion words and their corresponding targets in text using a DOUBLE PROPAGATION technique. This approach is based on the mutual relationship between opinion words (words expressing sentiment) and their targets (entities or features being evaluated). The double propagation method works iteratively, identifying opinion words using known targets and vice versa, expanding both sets iteratively through linguistic patterns and dependency relations in sentences. This semi-supervised approach allows the system to efficiently expand opinion word lexicons and extract sentiment targets with minimal manual intervention, enhancing the accuracy of sentiment analysis in various domains.</div>
         </div>
       </header>
 
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>论文的<strong>引言</strong>部分介绍了<strong>意见挖掘</strong>（或称情感分析）的重要性，指出该领域受到广泛关注的原因是其广泛的应用前景和研究挑战。引言中讨论了两大关键问题：<strong>观点词汇扩展</strong>和<strong>观点目标提取</strong>。</p>
-<p>• <strong>观点词汇扩展</strong>：指的是在不同领域中，情感表达可能会用到不同的词汇，因此一个通用的情感词典很难满足所有领域的需求。为了提升情感分析的效果，有必要根据特定领域文本扩展已有的情感词汇表。</p>
-<p>• <strong>观点目标提取</strong>：即提取出文本中情感表达所指向的对象（如“电池寿命”），以便理解情感指向，增加情感分析的实际价值。</p>
-<p>作者提出了一种<strong>基于依赖关系的双重传播方法</strong>，通过句法关系在观点词和目标词之间传播信息，逐步扩展词汇和提取目标。这种方法具有半监督的特点，因为它只需要一个初始的观点词词典来启动传播过程。实验表明，与其他现有方法相比，该方法在扩展词汇和提取目标方面均表现出更高的准确性。</p>
-<h1 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h1><p>论文的<strong>相关工作</strong>部分总结了在<strong>观点词提取</strong>和<strong>目标提取</strong>方面的研究进展。</p>
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning </p>
+<p>这篇论文《Opinion Word Expansion and Target Extraction through Double Propagation》提出了一种双重传播方法，用于同时进行意见词扩展和目标（Target）提取。以下是论文的主要内容总结：</p>
+<h3 id="1-研究背景"><a href="#1-研究背景" class="headerlink" title="1. 研究背景"></a>1. <strong>研究背景</strong></h3><ul>
+<li><strong>意见挖掘与情感分析</strong>：意见挖掘（也称为情感分析）已经吸引了大量研究，主要目的是从文本中提取出表达情感的词汇和对应的对象（targets）。意见词是用来表达正面或负面情绪的词汇，而目标是这些情感的焦点，比如产品的某个特性（如“电池寿命”）。</li>
+<li>研究中指出现有的意见词典难以涵盖所有领域，因此，针对不同领域，需要扩展意见词典并提取特定的情感目标。</li>
+</ul>
+<h3 id="2-双重传播方法"><a href="#2-双重传播方法" class="headerlink" title="2. 双重传播方法"></a>2. <strong>双重传播方法</strong></h3><ul>
+<li><strong>传播原理</strong>：论文提出的双重传播方法基于语法依赖关系，通过迭代地从文本中提取意见词和目标。该方法通过语法分析，利用意见词和目标之间的自然关系来识别新的情感词和目标。这种双重传播是指通过意见词传播到目标，再通过目标传播回新的意见词，从而逐步扩展词典。</li>
+<li><strong>半监督学习</strong>：该方法使用一个初始的种子意见词典，并通过不断传播扩大意见词和目标的覆盖范围，因此被认为是半监督的。</li>
+<li><strong>语法依赖关系</strong>：方法依赖于句法依赖分析，如修饰关系（mod）、主语关系（subj）等，来识别意见词和目标之间的关系。</li>
+</ul>
+<h3 id="3-意见词扩展与目标提取"><a href="#3-意见词扩展与目标提取" class="headerlink" title="3. 意见词扩展与目标提取"></a>3. <strong>意见词扩展与目标提取</strong></h3><ul>
+<li><strong>意见词扩展</strong>：通过识别意见词与目标之间的语法关系，逐步扩展意见词典。对于新提取的意见词，系统会根据上下文来判断其情感极性（正面、负面或中性）。</li>
+<li><strong>目标提取</strong>：使用已知的意见词来识别新的目标，目标通常是名词或名词短语。论文中提到，许多产品评论中的目标是产品特性，如“相机电池寿命”等。</li>
+<li><strong>双重传播过程</strong>：意见词和目标通过多轮迭代进行相互提取，直到无法提取新的词汇为止。</li>
+</ul>
+<h3 id="4-实验结果"><a href="#4-实验结果" class="headerlink" title="4. 实验结果"></a>4. <strong>实验结果</strong></h3><ul>
+<li>论文在多个产品评论数据集上进行了实验，并与现有的方法进行了比较。结果表明，双重传播方法在意见词扩展和目标提取任务中的表现优于其他方法，特别是在召回率方面有显著提升。</li>
+<li>例如，在产品评论数据集上，该方法能够以较高的精度和召回率扩展意见词典，并能够从文本中准确提取出产品的特定特性。</li>
+</ul>
+<h3 id="5-未来研究方向"><a href="#5-未来研究方向" class="headerlink" title="5. 未来研究方向"></a>5. <strong>未来研究方向</strong></h3><ul>
+<li><strong>意见词剪枝</strong>：论文建议未来可以进一步研究如何剪枝（去除不必要的或错误的）意见词，以提高提取精度。</li>
+<li><strong>关系学习自动化</strong>：未来还可以尝试使用模式挖掘技术，自动学习更多的句法关系，以进一步提高方法的覆盖率。</li>
+</ul>
+<h3 id="应用到毕业设计的建议："><a href="#应用到毕业设计的建议：" class="headerlink" title="应用到毕业设计的建议："></a>应用到毕业设计的建议：</h3><p>   如果你希望将这篇论文的思想应用到毕业设计中，可以考虑以下几个方向：</p>
 <ol>
-<li><strong>观点词提取</strong>：</li>
+<li><strong>情感分析系统的设计与实现</strong>：基于论文中的双重传播方法，可以设计一个用于产品评论分析的系统，从评论中提取用户对不同产品特性的情感意见。</li>
+<li><strong>意见词典的扩展与优化</strong>：将该方法应用于不同领域，通过领域特定的文本扩展意见词典，提高情感分析的准确性。</li>
+<li><strong>结合其他技术</strong>：你可以结合其他NLP技术（如深度学习）来进一步优化意见词和目标的提取，提升系统的性能。</li>
 </ol>
-<p>• <strong>语料库驱动方法</strong>：利用词的分布相似性和统计共现（如Turney和Littman的方法）来提取观点词。这类方法依赖于较大规模的语料，但在小规模数据集上表现不佳。</p>
-<p>• <strong>词典驱动方法</strong>：基于现有词典或语义网络（如WordNet）寻找观点词的同义词或反义词，但这种方法很难找到特定领域的情感词汇。</p>
-<p>• 总结：语料库方法依赖于领域语料，而词典方法则缺乏领域特异性。本文提出的方法利用语料库，同时不需要外部资源。</p>
-<ol start="2">
-<li><strong>观点目标提取</strong>：</li>
-</ol>
-<p>• <strong>基于频率的提取</strong>：如Hu和Liu的方法，利用频繁出现的名词或名词短语作为候选目标，但难以提取低频目标。</p>
-<p>• <strong>基于语言模型和统计方法</strong>：例如Scaffidi等人利用统计模型提取产品特性，依赖于特征词在产品评论中比一般语料中更常出现的假设。</p>
-<p>• <strong>主题建模方法</strong>：如PLSA用于识别评论中的一般主题，但在提取细粒度目标方面表现不佳。</p>
-<h1 id="Relation-Identification"><a href="#Relation-Identification" class="headerlink" title="Relation Identification"></a>Relation Identification</h1><p>在<strong>关系识别</strong>部分，论文描述了在观点词汇扩展和目标提取过程中用于识别观点词和目标之间关系的机制。</p>
-<ol>
-<li><strong>关系定义</strong>：</li>
-</ol>
-<p>• <strong>直接依赖关系（Direct Dependency, DD）</strong>：词语A和词语B直接相互依赖，或它们都直接依赖于第三个词。</p>
-<p>• <strong>间接依赖关系（Indirect Dependency, IDD）</strong>：词语A通过其他词语间接依赖于B，或它们通过其他词间接依赖于第三个词。</p>
-<ol start="2">
-<li><strong>关系识别方法</strong>：</li>
-</ol>
-<p>• 通过<strong>依赖句法解析</strong>，在句子中识别观点词和目标词之间的依赖关系。</p>
-<p>• 限制观点词为形容词（如“好”或“差”），目标词为名词（如“屏幕”或“电池寿命”），并定义它们之间的常见语法关系（如“mod”表示修饰关系）。</p>
-<ol start="3">
-<li><strong>关系分类</strong>：</li>
-</ol>
-<p>• 定义了三种关系类型：<strong>观点词与目标的关系（OT-Rel）</strong>、<strong>观点词之间的关系（OO-Rel）</strong>、<strong>目标词之间的关系（TT-Rel）</strong>。这些关系通过句法依赖特征来标注和识别。</p>
-<p>通过这种依赖关系的识别，双重传播方法可以在观点词和目标词之间不断传递信息，从而逐步扩展观点词汇和提取相关目标。</p>
-<h1 id="Opinion-Lexicon-Expansion-and-Target-Extraction"><a href="#Opinion-Lexicon-Expansion-and-Target-Extraction" class="headerlink" title="Opinion Lexicon Expansion and Target Extraction"></a>Opinion Lexicon Expansion and Target Extraction</h1><p><strong>1. 传播规则</strong></p>
-<p>论文定义了四类<strong>传播规则</strong>，它们用来指导系统如何在每一轮迭代中识别新的观点词和目标词。</p>
-<p>• <strong>R1类规则（已知观点词→目标提取）</strong>：从已知的观点词出发，识别句子中被这些观点词修饰的名词作为潜在的目标词。例如，在“这款手机的屏幕很好”中，已知“好”是一个观点词，依赖关系表明“好”修饰了“屏幕”，因此可以将“屏幕”提取为目标。</p>
-<p>• <strong>R2类规则（已知目标→观点词提取）</strong>：利用已知的目标词来发现新的观点词。例如，在句子“电池续航让人满意”中，如果知道“电池续航”是目标，那么根据句法关系可以识别出“满意”为新的观点词。</p>
-<p>• <strong>R3类规则（已提取目标→新目标提取）</strong>：使用已提取的目标词来发现新的目标词。通过识别目标词之间的并列或其它关系，可以将相关的目标词一并提取出来。例如，如果“音质”已经识别为目标，那么在句子“音质和画质都很不错”中，通过并列关系可以识别“画质”为另一个目标。</p>
-<p>• <strong>R4类规则（已提取观点词→新观点词提取）</strong>：使用已知的观点词来发现新的观点词。例如在“这款相机拍摄效果惊人且易用”中，“惊人”和“易用”通过“且”并列，因此可以将“易用”识别为新的观点词。</p>
-<p><strong>2. 双重传播算法</strong></p>
-<p>双重传播算法是一种迭代过程。具体过程如下：</p>
-<p>• <strong>初始化</strong>：给定一个初始的观点词词典（即一组已知的情感词，称为种子词汇）和产品评论文本数据集。</p>
-<p>• <strong>迭代传播</strong>：从初始观点词出发，利用传播规则迭代提取新的观点词和目标词：</p>
-<p>• 每一轮传播中，系统会利用新提取的词汇来发现更多的词。</p>
-<p>• 比如，从一组已知的观点词开始，可以根据依赖关系提取目标，然后用新提取的目标词进一步提取更多的观点词。</p>
-<p>• <strong>停止条件</strong>：传播过程会持续进行，直到不再有新的观点词或目标词被提取，算法随之停止。</p>
-<p>通过这种双向的传播，即观点词和目标词在每一轮中互相促进，达到逐步扩展观点词汇和目标集合的目的。</p>
-<p><strong>3. 极性分配与噪声清理</strong></p>
-<p>在<strong>Opinion Word Polarity Assignment（观点词极性分配）</strong>部分，论文详细介绍了如何为新提取的观点词分配情感极性（如正面或负面）。情感极性分配是情感分析中的关键一步，确保提取的词汇不仅能表示情感，还能指示情感的正负倾向。以下是这部分的详细解释：</p>
-<p><strong>1. 背景与动机</strong></p>
-<p>在情感分析中，<strong>极性</strong>表示情感词的情绪方向，即是正面的（如“好”）还是负面的（如“差”）。因为每个新提取的观点词的极性可能是未知的，所以有必要对其进行极性分配。该方法的基本假设是：在相同的上下文或领域中，同一词语通常会表现出一致的情感方向，除非被转折词（如“但是”）修正。</p>
-<p><strong>2. 主要观察</strong></p>
-<p>作者总结了观点词和目标词之间的以下规律，用来指导极性分配：</p>
-<p>• <strong>观察1</strong>（同一目标的一致性）：在一篇评论中，作者通常会对相同的目标表达一致的情感。例如，在描述一款手机时，如果作者先提到“电池续航好”，后续又提到“电池续航不足”，则可能有矛盾，但通常会保持正面或负面的一致性。</p>
-<p>• <strong>观察2</strong>（同一观点词的一致性）：在相同领域中，相同的观点词一般保持一致的情感方向。例如，在相机领域，“清晰”通常为正面词汇，而在其它领域可能没有这种特定的情感方向。</p>
-<p>基于这两种观察，作者提出了三个具体规则来处理情感极性分配。</p>
-<p><strong>3. 极性分配规则</strong></p>
-<p>为了根据上下文和句法关系给新提取的观点词分配极性，作者设计了以下三种规则：</p>
-<p><strong>规则1：异类规则（Heterogeneous Rule）</strong></p>
-<p>当观点词和目标词之间存在依赖关系时，可以将目标词的情感方向传递给观点词，或反之亦然。具体而言：</p>
-<p>• <strong>描述</strong>：如果一个观点词（或目标词）通过已知的目标词（或观点词）被提取出来，则它将继承该已知词的极性。</p>
-<p>• <strong>适用情况</strong>：当新提取的观点词和已知的目标词有直接依赖关系时。</p>
-<p>• <strong>考虑否定或转折</strong>：如果句子中包含否定词或转折词（例如“不是”、“但是”等），则要对情感进行修正。例如，“好”可以是正面情感，但在“不是很好”中应理解为负面。</p>
-<p><strong>例子</strong>：</p>
-<p>• 句子：“这款手机的电池续航很好”。如果“电池续航”已知为目标，并且“好”为正极性，则可以将“好”提取为正面观点词。</p>
-<p><strong>规则2：同类规则（Homogeneous Rule）</strong></p>
-<p>当观点词或目标词之间存在并列或同义关系时，可以将已知的词的极性传递给新的词。</p>
-<p>• <strong>描述</strong>：对于通过并列或相似关系提取出来的观点词或目标词，如果它们之间没有转折词，则会赋予相同的极性。</p>
-<p>• <strong>适用情况</strong>：当两个观点词或两个目标词之间存在并列或修饰关系时。</p>
-<p>• <strong>考虑否定或转折</strong>：若两个词之间存在否定或转折关系（例如“但是”、“尽管”），则视情况反转情感极性。系统会检查在这两个词之间是否有否定词或转折词，如果有，则反转极性。</p>
-<p><strong>例子</strong>：</p>
-<p>• 句子：“这个相机拍摄效果惊人且易用”。若“惊人”已知为正极性词，“且”表示并列关系，因此“易用”也可以被赋予正极性。</p>
-<p>• 句子：“这个相机拍摄效果惊人，但价格昂贵”。在这里，由于“但”是转折词，因此“昂贵”应该赋予负极性。</p>
-<p><strong>规则3：内部一致性规则（Intra-review Rule）</strong></p>
-<p>有时候，提取的新观点词在其他评论中也出现，但在当前评论中还没有极性指示。此时，系统可以依靠整个评论的总体情感倾向来推断该观点词的极性。</p>
-<p>• <strong>描述</strong>：对于在其他评论中提取的新观点词，如果该词在当前评论中没有与已知极性词关联，那么可以根据该评论的整体情感倾向推断该词的极性。</p>
-<p>• <strong>适用情况</strong>：当新提取的观点词在当前评论中没有直接的极性线索时。</p>
-<p>• <strong>计算方法</strong>：统计评论中的已知观点词的极性。如果评论中正面词多于负面词，则认为评论整体为正面，否则为负面。</p>
-<p><strong>例子</strong>：</p>
-<p>• 评论：“电池续航不错，屏幕清晰，操作方便。”如果这些正面词（“不错”、“清晰”、“方便”）构成了评论的主导情感，那么评论中未赋极性的观点词也可以推测为正面。</p>
-<p><strong>4. 多极性冲突的处理</strong></p>
-<p>在有些情况下，同一词可能被分配多种极性，例如在不同评论或不同句子中表现出不同的情感方向。为了解决这种<strong>极性冲突</strong>，作者采取了以下方法：</p>
-<p>• <strong>极性累加</strong>：将每个分配的极性视为+1（正面）或-1（负面），将该词的所有极性值相加。</p>
-<p>• 如果最终和为正数，则将该词设为正面极性；</p>
-<p>• 如果为负数，则为负面极性。</p>
-<p>通过这种累加法，系统可以在一定程度上消除个别评论中不一致的极性影响，更好地归纳出总体情感方向。</p>
-<h1 id="4-4-Opinion-Target-Pruning"><a href="#4-4-Opinion-Target-Pruning" class="headerlink" title="4.4 Opinion Target Pruning"></a>4.4 Opinion Target Pruning</h1><p>论文提出了一些方法来清理传播过程中可能提取出的噪声目标词。这些方法旨在去除无关或错误的目标词，以提高目标提取的精确度。由于观点词和目标词的传播过程可能引入不相关的词（如普通名词或其他品牌名词等），因此对目标词进行清理至关重要。下面是详细的解释：</p>
-<p><strong>1. 噪声类型</strong></p>
-<p>在传播过程中，可能产生两类主要的噪声：</p>
-<p>• <strong>非目标名词</strong>：如普通名词或不相关的名词，可能因解析错误或与观点词的关联关系而被误识别为目标词。</p>
-<p>• <strong>其他产品或商家名称</strong>：在评论中，用户可能会提及其他品牌或商家名称，但它们并不是该评论的主要目标。</p>
-<p><strong>2. 主要清理方法</strong></p>
-<p>针对这些噪声，作者设计了三种具体的清理方法：基于从句的清理、产品&#x2F;商家名称的过滤、和全局目标短语识别与清理。</p>
-<p><strong>方法1：基于从句的清理（Clause Pruning）</strong></p>
-<p>基于以下观察，系统能够去除一些错误的目标提取。</p>
-<p>• <strong>观察</strong>：在一句话或从句中，通常只有一个主要目标，除非有“和”、“或”等并列词。例如，“我一个月前买了这款Apex DVD播放器”中，“Apex”和“一个月”可能都会被提取为目标词，但它们位于同一从句中。</p>
-<p>• <strong>方法</strong>：利用<strong>从句边界</strong>（通过句法解析器确定），若在同一从句中发现多个目标词且没有并列关系，则可以保留更常见的目标词并删除其他低频词。</p>
-<p>• <strong>频率标准</strong>：选择保留目标的标准是词的频率，因为评论中如果多次提到某个目标词，说明该词更可能是真正的目标。通过这种方式，可以删除许多无关的普通名词，减少误提取。</p>
-<p><strong>例子</strong>：</p>
-<p>• 句子：“我一个月前买了这款Apex DVD播放器。”</p>
-<p>• 在这句话中，“Apex”和“一个月”都可能被提取为目标，但通过从句清理规则，可以将频率更低的“一个月”删除，仅保留“Apex”。</p>
-<p><strong>方法2：过滤其他产品或商家名称（Pruning of Other Products and Dealers）</strong></p>
-<p>在评论中，用户可能会提到其他产品或商家，而这些并不是当前评论的主要目标。该方法基于一些<strong>指示词</strong>来识别并删除这些噪声目标。</p>
-<p>• <strong>指示词</strong>：其他产品通常会出现在“相比于”或“好于”等指示词后面，而商家名称则可能出现在“从……购买”或“在……商店”之类的短语中。</p>
-<p>• <strong>产品指示词</strong>：如“相比”、“好于”、“差于”等，表明评论中涉及其他产品的对比。</p>
-<p>• <strong>商家指示词</strong>：如“在……购买”或“从……商店”，表示评论中提及的销售商或商家。</p>
-<p>• <strong>方法</strong>：在指示词后寻找最近的名词，并将这些名词标记为其他产品或商家名称，并从目标提取中排除。</p>
-<p><strong>例子</strong>：</p>
-<p>• 句子：“这款相机比佳能的型号更好。”</p>
-<p>• 这里“佳能”会被识别为另一品牌，通过指示词“比”可以将“佳能”识别为非目标并删除。</p>
-<p>• 句子：“我从Best Buy购买了这款产品。”</p>
-<p>• 这里的“Best Buy”在“从”后面出现，表明它是一个商家名称，而不是评论的实际目标，可以排除。</p>
-<p><strong>方法3：全局目标短语识别与清理（Identifying Target Phrases and Global Pruning）</strong></p>
-<p>由于目标词不仅仅是单个名词，很多情况下是一个短语（如“电池寿命”或“图像质量”），因此作者设计了一个方法来识别这些目标短语，并进一步清理低频目标词。</p>
-<p>• <strong>目标短语识别</strong>：系统通过与已识别的目标词相邻的词语构建目标短语。具体操作如下：</p>
-<p>• <strong>短语组合</strong>：将每个目标词与前后相邻的最多两个名词和一个形容词组合形成目标短语。</p>
-<p>• <strong>例子</strong>：若已提取“电池”为目标词，则可在“电池寿命”或“备用电池”中，将“电池寿命”识别为目标短语。</p>
-<p>• <strong>全局清理</strong>：在完成短语识别后，对所有目标进行全局频率清理。</p>
-<p>• <strong>低频词清理</strong>：如果某一目标仅在整个数据集中出现一次，则可能是误提取的噪声词，可以删除。</p>
-<p>• <strong>补充</strong>：如果短语中的一个词被误删，但其他词仍在短语中存在，那么短语可以被恢复，这种方法确保不会遗漏真正的目标短语。</p>
-<p><strong>例子</strong>：</p>
-<p>• 句子：“这款相机的电池寿命非常长。”</p>
-<p>• 通过目标短语识别，可以将“电池寿命”识别为目标短语，而不是单独的“电池”或“寿命”。</p>
-<p><strong>小结</strong></p>
-<p>这些目标清理方法通过分析从句边界、指示词以及短语组合等信息，有效减少了误提取的噪声目标词，从而提高了提取的准确性。具体而言：</p>
-<p>• <strong>基于从句的清理</strong>确保了同一从句内仅保留一个主要目标；</p>
-<p>• <strong>产品和商家名称过滤</strong>去除了与指示词关联的非目标；</p>
-<p>• <strong>全局短语识别与清理</strong>帮助系统识别更完整的目标短语并剔除低频噪声。</p>
-<p>这些清理步骤使得系统能够在多轮传播之后得到更准确的目标集合，提升了目标提取的精度和召回率。</p>
-<p>![[Pasted image 20241030144605.png]]<br>这个伪代码描述了<strong>双重传播算法</strong>用于扩展观点词典和提取目标特征的过程。算法的输入是<strong>初始观点词典</strong>和<strong>评论数据</strong>，输出是<strong>扩展后的观点词典</strong>和<strong>所有可能的目标特征</strong>。下面详细解释每一步的逻辑：</p>
-<p><strong>初始化部分</strong></p>
-<ol>
-<li><p><strong>初始化扩展后的观点词典</strong> {O-Expanded}，初始值为输入的观点词典 {O}。</p>
+<p>使用双重传播方法的原因主要源自意见挖掘与情感分析中<strong>意见词与目标</strong>之间的自然联系。双重传播利用了意见词和目标之间的语法依赖关系，通过迭代地互相传播信息，从而高效地扩展意见词和提取情感目标。这种方法之所以有效，是因为意见词和目标在句子中往往具有明确的语法关联，通过传播机制可以挖掘出更多未明确标注的信息。</p>
+<h3 id="1-为什么使用双重传播方法？"><a href="#1-为什么使用双重传播方法？" class="headerlink" title="1. 为什么使用双重传播方法？"></a>1. <strong>为什么使用双重传播方法？</strong></h3><p>   双重传播的主要优势和动机来源于以下几点：</p>
+<ul>
+<li><p><strong>语法依赖的互相增强作用</strong>：<br>意见词和目标在文本中往往紧密相关。例如，在“相机的电池寿命非常短”这句话中，“电池寿命”是目标，而“短”是表达负面情感的意见词。通过传播机制，一旦确定“短”是一个负面的意见词，它可以帮助确定“电池寿命”是负面情感的目标。</p>
+<ul>
+<li><strong>从意见词到目标</strong>：已知的意见词可以帮助提取目标，如“坏”可能描述产品特性，如“质量”。</li>
+<li><strong>从目标到意见词</strong>：一旦识别出目标，可以用目标来进一步扩展意见词，如“电池”与“长寿命”可能关联。</li>
+</ul>
 </li>
-<li><p><strong>初始化特征集合</strong> {F}为空集合，表示还没有提取出任何特征。</p>
+<li><p><strong>半监督学习的灵活性</strong>：<br>使用双重传播可以从一个小规模的意见词和目标种子集出发，通过语法依赖关系不断扩展词典。这种半监督学习方法只需要少量人工标注的数据即可大规模提取新的意见词和目标，而不需要大量的手工标注数据。</p>
 </li>
-<li><p><strong>初始化新提取的观点词集合</strong> {Oi}为空集合，用于存储每轮迭代中发现的新观点词。</p>
+<li><p><strong>自动化扩展意见词典和目标</strong>：<br>意见词和目标的识别往往是领域特定的，现有的词典难以涵盖所有领域和场景。通过双重传播方法，系统可以自动从特定领域的评论中扩展词汇，适应不同领域的意见挖掘需求。比如在电子产品领域，“耐用”可能是重要的意见词，而在餐饮业，“美味”则更为重要。</p>
 </li>
-</ol>
-<p><strong>第一阶段 - 遍历每个句子</strong></p>
-<ol start="4">
-<li><strong>对评论数据中的每个解析句子进行操作</strong>：</li>
-</ol>
-<p>• 首先检查是否存在尚未在 {F} 中的特征。</p>
-<ol start="5">
-<li><strong>使用规则 R1 和 R2 提取特征</strong>：</li>
-</ol>
-<p>• 如果该句子中存在观点词 {O-Expanded} 中的词，且可以通过规则 R1 和 R2 提取出特征词，则将这些特征提取到 {Fi} 中。</p>
-<ol start="6">
-<li><strong>提取新的观点词</strong>：</li>
-</ol>
-<p>• 检查是否存在尚未在 {O-Expanded} 中的观点词。</p>
-<p>• 使用规则 R4 和 R4_2（假设是两个不同的R4子规则）基于 {O-Expanded} 中的观点词来提取新的观点词 {Oi}。</p>
-<ol start="7">
-<li><p><strong>完成句子的遍历</strong>。</p>
+</ul>
+<h3 id="2-怎么想到的双重传播方法？"><a href="#2-怎么想到的双重传播方法？" class="headerlink" title="2. 怎么想到的双重传播方法？"></a>2. <strong>怎么想到的双重传播方法？</strong></h3><p>   双重传播方法的灵感来自于<strong>自然语言中的语法依赖关系</strong>和<strong>两者互相强化的特性</strong>，以及已有的语法依赖解析技术。以下是该方法如何被构思出来的：</p>
+<ul>
+<li><p><strong>依赖于语法结构的观察</strong>：研究人员观察到，意见词和目标之间存在着强烈的语法依赖关系。通过利用这些依赖关系（如修饰、主语、宾语等），可以从已知的意见词推断出目标，或者从目标推断出新的意见词。这一观察启发了双重传播的核心思想。</p>
 </li>
-<li><p><strong>更新集合</strong>：</p>
+<li><p><strong>启发自信息传播算法</strong>：双重传播方法受到<strong>迭代传播算法</strong>的启发，如PageRank等，这些算法利用节点之间的相互关系来不断更新和传播信息。类似地，意见词和目标之间也可以通过迭代传播来相互强化识别，逐步扩展词典。</p>
 </li>
-</ol>
-<p>• 将本轮提取的特征 {Fi} 加入到 {F} 中。</p>
-<p>• 将本轮提取的观点词 {Oi} 加入到 {O-Expanded} 中。</p>
-<p><strong>第二阶段 - 再次遍历每个句子</strong></p>
-<ol start="12">
-<li><p><strong>再次遍历每个句子</strong>，用于进一步扩展特征和观点词。</p>
+<li><p><strong>克服单一传播的局限性</strong>：在情感分析领域，研究人员意识到仅靠单一传播（从意见词到目标，或从目标到意见词）无法充分挖掘文本中的隐藏信息。双重传播方法通过双向的信息流动，既能从意见词中发现目标，又能从目标中扩展意见词，形成闭环，避免了单向传播的局限性。</p>
 </li>
-<li><p><strong>使用规则 R3 提取特征</strong>：</p>
-</li>
-</ol>
-<p>• 检查是否有新的特征可以加入 {F}。如果有，使用规则 R3_1 和 R3_2 基于 {Fi} 中的特征来提取新的特征 {F’}。</p>
-<ol start="16">
-<li><strong>使用规则 R2 提取观点词</strong>：</li>
-</ol>
-<p>• 检查是否有新的观点词可以加入 {O-Expanded}。</p>
-<p>• 使用规则 R2_1 和 R2_2 基于特征 {Fi} 提取新的观点词 {O’}。</p>
-<ol start="19">
-<li><p><strong>结束句子遍历</strong>。</p>
-</li>
-<li><p><strong>更新集合</strong>：</p>
-</li>
-</ol>
-<p>• 将本轮提取的特征 {F’} 加入到 {F} 中。</p>
-<p>• 将本轮提取的观点词 {O’} 加入到 {O}。</p>
-<p><strong>终止条件</strong></p>
-<ol start="22">
-<li><strong>重复迭代直到</strong> {Fi} <strong>和</strong> {Oi} <strong>大小为0</strong>，即在一轮迭代中没有新的特征或观点词被提取时停止传播。</li>
-</ol>
-<p><strong>总结</strong></p>
-<p>这个算法通过两轮遍历句子，分别从<strong>观点词</strong>扩展<strong>目标特征</strong>，再从<strong>特征</strong>扩展新的<strong>观点词</strong>，并不断地将新发现的词加入到集合中。这种双向传播的过程会持续进行，直到没有新词被提取为止。这就是双重传播方法在观点词汇扩展和目标提取中的具体操作步骤。</p>
-<h1 id="5-Experiments-and-Discussions"><a href="#5-Experiments-and-Discussions" class="headerlink" title="5. Experiments and Discussions"></a>5. Experiments and Discussions</h1><p>此部分详细介绍了实验设计、对比方法以及实验结果分析，验证了双重传播方法**在观点词扩展和目标提取方面的有效性。以下是各个实验细节的详细解释：</p>
-<p><strong>1. 实验设置</strong></p>
-<p>• <strong>数据集</strong>：实验使用了Hu和Liu（2004）提供的标准客户评论数据集，包括5组产品评论，涉及数码相机、DVD播放器、MP3播放器和手机等产品，每组包含不同数量的评论和句子。</p>
-<p>• <strong>种子词典</strong>：使用Hu和Liu（2004）提供的初始观点词典作为种子词，其中包含654个正面词和1098个负面词。</p>
-<p>• <strong>对比方法</strong>：选择了几种现有的观点词和目标提取方法来进行对比，包括：</p>
-<p>• <strong>KN06方法</strong>（Kanayama和Nasukawa, 2006）：一种基于句子相邻关系的情感词扩展方法。</p>
-<p>• <strong>条件随机场（CRF）</strong>：通过CRF模型进行观点词和目标提取的序列标注方法，分为全句标注的CRF和基于词间依赖关系的CRF-D。</p>
-<p>• <strong>PLSA</strong>：一种主题建模方法，通过生成文档集来挖掘隐含的主题（即目标）。</p>
-<p><strong>2. 观点词扩展实验</strong></p>
-<p><strong>对比结果</strong></p>
-<p>• <strong>精度</strong>：双重传播方法（Prop-dep）和无传播版本（noProp-dep）的精度都优于KN06和CRF方法，显示出依赖关系规则在识别观点词方面的有效性。CRF的精度较低，表明它难以区分普通形容词和情感词。PLSA的精度较差，无法提取到细粒度的观点词。</p>
-<p>• <strong>召回率</strong>：双重传播方法显著提高了观点词的召回率，特别是在种子词较少的情况下，即使仅使用10%的种子词，也能覆盖约75%的观点词集合。无传播版本（noProp-dep）的召回率较低，表明传播过程对观点词扩展的重要性。</p>
-<p>• <strong>F1分数</strong>：双重传播方法在所有种子词规模下均取得了最高的F1分数，表明该方法在观点词扩展中有较高的准确性和广泛性。</p>
-<p><strong>极性分配结果</strong></p>
-<p>• <strong>精度</strong>：在观点词的极性分配实验中，双重传播方法在较少种子词（如10%、20%）情况下的极性分配精度略低于KN06，但随着种子词数量的增加，双重传播方法逐渐超越KN06，且在80%种子词规模下精度最高。考虑到双重传播方法的召回率更高，这一结果表明该方法在保持高覆盖的前提下也能保证较高的极性分配准确性。</p>
-<p><strong>3. 目标提取实验</strong></p>
-<p>实验设计对比了不同方法在目标提取中的精度、召回率和F1分数。</p>
-<p><strong>对比结果</strong></p>
-<p>• <strong>精度</strong>：双重传播方法和无传播版本在目标提取精度上表现最好，特别是无传播版本的精度略高，表明清理规则有效控制了噪声目标的引入。</p>
-<p>• <strong>召回率</strong>：双重传播方法在目标提取的召回率上优于所有对比方法，显示了传播过程在提取更全面的目标方面的优势。相比之下，CRF和PLSA方法的召回率较低，说明它们难以提取足够的目标。</p>
-<p>• <strong>F1分数</strong>：双重传播方法在所有数据集上的F1分数均最高，表明该方法在精度和广泛性之间取得了良好的平衡。</p>
-<p><strong>4. 实验讨论</strong></p>
-<p>• <strong>对比现有方法的优势</strong>：双重传播方法在观点词扩展和目标提取上均显著优于KN06、CRF和PLSA等方法，主要得益于依赖关系规则的精确性和传播过程的有效性。相比之下，PLSA倾向于生成粗略的主题，适用于大规模文档主题挖掘，但难以提取细粒度的目标。CRF难以捕获长距离依赖关系，因此表现较弱。</p>
-<p>• <strong>传播过程的重要性</strong>：实验结果显示，传播过程显著提高了召回率和F1分数，尤其是在目标提取任务中，双重传播方法的召回率较无传播版本高出近20%，表明传播过程在扩展词汇表和识别目标方面至关重要。</p>
-<p><strong>小结</strong></p>
-<p><strong>实验结果验证了双重传播方法在观点词汇扩展和目标提取任务中的有效性</strong>。通过依赖关系规则和传播过程，系统能够在仅依赖少量初始种子词的情况下实现高精度和高召回率的情感词汇扩展和目标提取。</p>
-<h1 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6. Conclusion"></a>6. Conclusion</h1><p>论文总结了主要研究贡献和实验结果，指出双重传播方法在观点词扩展和目标提取任务中的优势，并提出未来的研究方向。</p>
-<p><strong>1. 研究贡献</strong></p>
-<p>• <strong>双重传播方法</strong>：提出了一种基于依赖关系的双重传播方法，通过在观点词和目标词之间传播信息，实现了观点词扩展和目标提取的双重任务。</p>
-<p>• <strong>依赖关系的使用</strong>：该方法通过句法依赖关系和词性信息，构建规则并逐步传播，从而在无需外部资源（仅需少量初始种子词）的条件下提取出更多的观点词和目标。</p>
-<p>• <strong>极性分配和噪声清理</strong>：论文还提出了新观点词的情感极性分配方法和多种噪声清理策略，提高了观点词和目标提取的准确性和鲁棒性。</p>
-<p><strong>2. 实验结果</strong></p>
-<p>实验结果表明，双重传播方法在观点词扩展和目标提取的<strong>精度</strong>和<strong>召回率</strong>方面均优于其他现有方法，尤其是在目标提取任务上，双重传播方法的召回率显著提高。此外，在少量种子词的情况下，双重传播方法仍能实现良好的扩展效果，证明了其高效性和稳定性。</p>
-<p><strong>3. 未来研究方向</strong></p>
-<p>论文指出了双重传播方法的局限性并提出未来的研究方向：</p>
-<p>• <strong>观点词清理方法</strong>：目前论文集中于目标词的清理，未来可在观点词清理上进行深入研究，以进一步提高精度。</p>
-<p>• <strong>自动学习句法关系</strong>：未来可以考虑通过大规模语料库的模式挖掘技术自动学习句法关系，以增加规则的覆盖面，减少对手工规则的依赖。</p>
-<p><strong>总结</strong></p>
-<p>整体而言，双重传播方法提供了一种高效且具有创新性的情感分析方法，通过简化外部资源依赖，仅依靠句法依赖关系和少量种子词，成功扩展了观点词汇和目标集合，适应不同领域的情感分析需求。这种方法在情感分析的应用中具有重要价值，为未来的研究和改进提供了新的方向。</p>
+</ul>
+<h3 id="3-双重传播方法的优势"><a href="#3-双重传播方法的优势" class="headerlink" title="3. 双重传播方法的优势"></a>3. <strong>双重传播方法的优势</strong></h3><ul>
+<li><strong>高效性</strong>：双重传播方法能够在少量初始标注的情况下自动提取更多的意见词和目标，减少了手工标注的工作量。</li>
+<li><strong>准确性提升</strong>：通过语法依赖分析和迭代传播，模型能够准确地识别出意见词和目标的关系，从而提高情感分析的准确性。</li>
+<li><strong>跨领域扩展</strong>：该方法可以根据不同的语料库扩展领域特定的词汇，适用于多种领域的意见挖掘任务。</li>
+</ul>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. <strong>总结</strong></h3><p>   双重传播的设计思想源自意见词与目标之间的自然语法关联，通过信息的双向传播来逐步扩展词典和目标。该方法的提出是为了解决传统方法在扩展词汇和识别目标时的局限性，充分利用了语言中的依赖结构，并借鉴了信息传播算法的思想。</p>
+<p>如果你在毕业设计中应用这一方法，可以进一步研究如何在不同领域中通过双重传播来提高意见词和目标的识别精度，或结合其他NLP技术（如深度学习）优化这种传播过程。</p>
 
     </div>
 
@@ -487,16 +325,22 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> #deepLearning</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/cc20b26.html" rel="prev" title="A Survey on Aspect-Based Sentiment Classification">
-                  <i class="fa fa-angle-left"></i> A Survey on Aspect-Based Sentiment Classification
+                <a href="/posts/e4126494.html" rel="prev" title="监督学习">
+                  <i class="fa fa-angle-left"></i> 监督学习
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/posts/d5af3590.html" rel="next" title="A Novel Lexicalized HMM-based Learning Framework for Web Opinion Mining">
+                  A Novel Lexicalized HMM-based Learning Framework for Web Opinion Mining <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -531,14 +375,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">127k</span>
+    <span title="Word count total">140k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">7:42</span>
+    <span title="Reading time total">8:30</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
