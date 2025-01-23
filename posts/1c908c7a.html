@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Batch-Size"><span class="nav-text">Batch Size</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFbatch-size"><span class="nav-text">什么是batch size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-size%E5%AF%B9%E7%BD%91%E7%BB%9C%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">batch size对网络的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-size%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-text">batch size的选择</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFbatch-size"><span class="nav-text">什么是batch size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-size%E5%AF%B9%E7%BD%91%E7%BB%9C%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">batch size对网络的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-size%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-text">batch size的选择</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -256,16 +256,38 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>#deepLearning&#x2F;ModelTuning</p>
-<h1 id="Batch-Size"><a href="#Batch-Size" class="headerlink" title="Batch Size"></a>Batch Size</h1><h2 id="什么是batch-size"><a href="#什么是batch-size" class="headerlink" title="什么是batch size"></a>什么是batch size</h2><p>在神经网络的训练过程中，一个非常直观的需要调整的超参数就是batch size。我们需要决定在一次训练中，要选取多少样本喂给神经网络，这个要选择的样本个数，就是batch size。batch size的可取值范围为1到全体样本数。举个例子，传统的梯度下降法（Gradient Descent）就是采用了全部样本来进行训练和梯度更新，而它的变体随机梯度下降法（stochastic gradient descent），则设定batch size为1，即每次只将一个样本喂给神经网络，在mini-batch梯度下降法中，则采用了一个折中的方法，每次选择一部分数据用于训练。那么，不同大小的batch对网络训练有什么区别呢？我们又该如何进行选择呢？</p>
-<h2 id="batch-size对网络的影响"><a href="#batch-size对网络的影响" class="headerlink" title="batch size对网络的影响"></a>batch size对网络的影响</h2><p>当采取传统的梯度下降法时，神经网络每一次训练都会使用全部数据。梯度基于全样本计算，因此会很准确。对于凸问题，局部最优即为全局最优的情况下，准确的梯度计算可以使梯度更新朝着正确的方向进行，以较快的速度达到全局最优解。但在真实的神经网络训练过程中，我们通常遇到的都是非凸问题，此时，局部最优解不是全局最优解，而传统的梯度下降法在这种情况下很容易陷入局部最优点或较点。同时，当整体样本数不大时，采用全体样本做batch size不会非常耗时，而当样本数很大时，每一次的计算将会非常耗时，也会导致内存爆炸。</p>
-<p>当采取随机梯度下降法时，batch size值为1，每次获得的梯度都是根据当前的随机样本计算得来。由于一个样本的梯度来近似所有的样本，会导致梯度估计不是很准确。同时，梯度易收到极端值的影响，导致损失剧烈震荡。但因为batch size为1，随机梯度下降法的计算速度会非常快。</p>
-<p>如果选取比较折中的batch size作为mini-batch来进行随机梯度下降，其优点是用部分样本来近似全部样本，梯度相对于batch size为1更为准确，同时相比与使用全部样本，计算量减少，计算速度和收敛速度都会得到提升。看到这里可能会有一个疑问，为什么10000样本训练1次会比100样本训练100次收敛慢呢？我们假设样本真实的标准差为$\sigma$，则 $n$ 个样本均值的标准差为$\frac{\sigma}{\sqrt{n}}$，$\sqrt{n}$ 表明使用更多样本来估计梯度的方法回报是低于线性的。10000个样本训练一次和100个样本训练一次，由于计算量是线性的，前者的计算量是后者的100倍，但均值标准差是后者低了10倍，那么在相同的计算量下（同样训练10000个样本），小样本的收敛速度是远大于使用整个样本集的。同时，样对于训练全部样本，由于梯度存在不准确性，噪声的影响很可能会在训练下降的过程中离开局部最优点或鞍点，从而有机会寻找全局最优点。</p>
-<h2 id="batch-size的选择"><a href="#batch-size的选择" class="headerlink" title="batch size的选择"></a>batch size的选择</h2><p>batch size的选取通常需要考虑一下几点：</p>
-<ol>
-<li>更大的batch size会得到更精确的梯度估计值，但其估计梯度的回报是低于线性的。</li>
-<li>如果训练集较小，可以直接使用梯度下降法，batch size等于样本集大小。</li>
-<li><code>Deep Learning</code> 书中提到，在某些硬件上使用特定大小的数组时，运行时间会更少。尤其是在使用GPU时，通常使用2的幂数作为batch size可以获得更少的运行时间。</li>
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning/ModelTuning # Batch Size</p>
+<h2 id="什么是batch-size">什么是batch size</h2>
+<p>在神经网络的训练过程中，一个非常直观的需要调整的超参数就是batch
+size。我们需要决定在一次训练中，要选取多少样本喂给神经网络，这个要选择的样本个数，就是batch
+size。batch
+size的可取值范围为1到全体样本数。举个例子，传统的梯度下降法（Gradient
+Descent）就是采用了全部样本来进行训练和梯度更新，而它的变体随机梯度下降法（stochastic
+gradient descent），则设定batch
+size为1，即每次只将一个样本喂给神经网络，在mini-batch梯度下降法中，则采用了一个折中的方法，每次选择一部分数据用于训练。那么，不同大小的batch对网络训练有什么区别呢？我们又该如何进行选择呢？</p>
+<h2 id="batch-size对网络的影响">batch size对网络的影响</h2>
+<p>当采取传统的梯度下降法时，神经网络每一次训练都会使用全部数据。梯度基于全样本计算，因此会很准确。对于凸问题，局部最优即为全局最优的情况下，准确的梯度计算可以使梯度更新朝着正确的方向进行，以较快的速度达到全局最优解。但在真实的神经网络训练过程中，我们通常遇到的都是非凸问题，此时，局部最优解不是全局最优解，而传统的梯度下降法在这种情况下很容易陷入局部最优点或较点。同时，当整体样本数不大时，采用全体样本做batch
+size不会非常耗时，而当样本数很大时，每一次的计算将会非常耗时，也会导致内存爆炸。</p>
+<p>当采取随机梯度下降法时，batch
+size值为1，每次获得的梯度都是根据当前的随机样本计算得来。由于一个样本的梯度来近似所有的样本，会导致梯度估计不是很准确。同时，梯度易收到极端值的影响，导致损失剧烈震荡。但因为batch
+size为1，随机梯度下降法的计算速度会非常快。</p>
+<p>如果选取比较折中的batch
+size作为mini-batch来进行随机梯度下降，其优点是用部分样本来近似全部样本，梯度相对于batch
+size为1更为准确，同时相比与使用全部样本，计算量减少，计算速度和收敛速度都会得到提升。看到这里可能会有一个疑问，为什么10000样本训练1次会比100样本训练100次收敛慢呢？我们假设样本真实的标准差为<span
+class="math inline">\(\sigma\)</span>，则 <span
+class="math inline">\(n\)</span> 个样本均值的标准差为<span
+class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span>，<span
+class="math inline">\(\sqrt{n}\)</span>
+表明使用更多样本来估计梯度的方法回报是低于线性的。10000个样本训练一次和100个样本训练一次，由于计算量是线性的，前者的计算量是后者的100倍，但均值标准差是后者低了10倍，那么在相同的计算量下（同样训练10000个样本），小样本的收敛速度是远大于使用整个样本集的。同时，样对于训练全部样本，由于梯度存在不准确性，噪声的影响很可能会在训练下降的过程中离开局部最优点或鞍点，从而有机会寻找全局最优点。</p>
+<h2 id="batch-size的选择">batch size的选择</h2>
+<p>batch size的选取通常需要考虑一下几点：</p>
+<ol type="1">
+<li>更大的batch
+size会得到更精确的梯度估计值，但其估计梯度的回报是低于线性的。</li>
+<li>如果训练集较小，可以直接使用梯度下降法，batch
+size等于样本集大小。</li>
+<li><code>Deep Learning</code> 书中提到，在某些硬件上使用特定大小的数组时，运行时间会更少。尤其是在使用GPU时，通常使用2的幂数作为batch
+size可以获得更少的运行时间。</li>
 </ol>
 
     </div>

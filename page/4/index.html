@@ -243,18 +243,26 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>给定一个训练集，对新输入的实例，在训练集中找到与该实例最邻近的k个实例，这k个实例的多数属于某个类，我们就把该输入实例分为这个类。</p>
-<h1 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h1><p><strong>输入</strong>：训练数据集 $T &#x3D; {x_1, y_1, x_2, y_2, \dots, x_N, y_N}$，其中 $x_i \in X$ 为实例的特征向量，$y_i \in {c_1, c_2, \dots, c_m}$ 为实例的类别；实例特征向量 $x$</p>
-<p><strong>输出</strong>：实例 $x$ 所属的类别 $y$</p>
-<ol>
-<li><p>根据给定的距离度量方式，在训练集 $T$ 中找到与 $x$ 最邻近的 $k$ 个点，涵盖着 $k$ 个点的区域记住 $N_k(x)$</p>
-</li>
-<li><p>在 $N_k(x)$ 中根据分类决策规则决定 $x$ 的类别 $y$</p>
-</li>
+<h1 id="算法描述">算法描述</h1>
+<p><strong>输入</strong>：训练数据集 <span class="math inline">\(T =
+\{x_1, y_1, x_2, y_2, \dots, x_N, y_N\}\)</span>，其中 <span class="math inline">\(x_i \in X\)</span> 为实例的特征向量，<span class="math inline">\(y_i \in \{c_1, c_2, \dots, c_m\}\)</span>
+为实例的类别；实例特征向量 <span class="math inline">\(x\)</span></p>
+<p><strong>输出</strong>：实例 <span class="math inline">\(x\)</span>
+所属的类别 <span class="math inline">\(y\)</span></p>
+<ol type="1">
+<li><p>根据给定的距离度量方式，在训练集 <span class="math inline">\(T\)</span> 中找到与 <span class="math inline">\(x\)</span> 最邻近的 <span class="math inline">\(k\)</span> 个点，涵盖着 <span class="math inline">\(k\)</span> 个点的区域记住 <span class="math inline">\(N_k(x)\)</span></p></li>
+<li><p>在 <span class="math inline">\(N_k(x)\)</span>
+中根据分类决策规则决定 <span class="math inline">\(x\)</span> 的类别
+<span class="math inline">\(y\)</span></p></li>
 </ol>
-<p>$$y &#x3D; \underset{c_j}{\arg\max} \sum_{x_i \in N_k(x)} I(y_i &#x3D; c_j)$$</p>
-<p>其中 $I(y_i &#x3D; c_j)$ 为指示函数，当 $y_i &#x3D; c_j$ 的时候 $I &#x3D; 1$，否则 $I &#x3D; 0$</p>
-<h1 id="KNN的基本要素"><a href="#KNN的基本要素" class="headerlink" title="KNN的基本要素"></a>KNN的基本要素</h1><p>对于一个确定的训练集，只要确定了<strong>距离度量、k值和分类决策规则</strong>，就能对任何一个新的实例，确定它的分类。</p>
-<h2 id="距离度量"><a href="#距离度量" class="headerlink" title="距离度量"></a>距离度量</h2>
+<p><span class="math display">\[y = \underset{c_j}{\arg\max} \sum_{x_i
+\in N_k(x)} I(y_i = c_j)\]</span></p>
+<p>其中 <span class="math inline">\(I(y_i = c_j)\)</span> 为指示函数，当
+<span class="math inline">\(y_i = c_j\)</span> 的时候 <span class="math inline">\(I = 1\)</span>，否则 <span class="math inline">\(I
+= 0\)</span></p>
+<h1 id="knn的基本要素">KNN的基本要素</h1>
+<p>对于一个确定的训练集，只要确定了<strong>距离度量、k值和分类决策规则</strong>，就能对任何一个新的实例，确定它的分类。</p>
+<h2 id="距离度量">距离度量</h2>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/eab7f7a5.html#more" rel="contents">
