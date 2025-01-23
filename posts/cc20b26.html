@@ -30,7 +30,7 @@
 <meta property="og:description" content="The essay reviews methods for analyzing sentiments tied to specific aspects or features of entities, such as product components. It introduces Aspect-Based Sentiment Classification (ABSC), a fine-grai">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-10T08:26:21.000Z">
-<meta property="article:modified_time" content="2024-12-03T11:12:11.584Z">
+<meta property="article:modified_time" content="2024-12-03T11:26:02.575Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -94,7 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">32</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">33</span></a></li>
   </ul>
 </nav>
 
@@ -134,7 +134,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -226,7 +226,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-03 19:12:11" itemprop="dateModified" datetime="2024-12-03T19:12:11+08:00">2024-12-03</time>
+      <time title="Modified: 2024-12-03 19:26:02" itemprop="dateModified" datetime="2024-12-03T19:26:02+08:00">2024-12-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,7 +266,7 @@
     <div class="post-body" itemprop="articleBody"><h1 id="A-Survey-on-Aspect-Based-Sentiment-Classification"><a href="#A-Survey-on-Aspect-Based-Sentiment-Classification" class="headerlink" title="A Survey on Aspect-Based Sentiment Classification"></a>A Survey on Aspect-Based Sentiment Classification</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>随着互联网上评论和其他带有情感的信息文本数量的不断增长，自动情感分析算法的需求持续上升。基于方面的情感分类（Aspect-Based Sentiment Classification, ABSC）能够从文本文档或句子中自动提取极为细粒度的情感信息。这篇综述总结了ABSC研究的快速发展状态，并提出了一种新颖的分类法，将ABSC模型分为三大类：基于知识的方法、机器学习模型和混合模型。文中不仅提供了这些模型性能的总结概览，还对各种ABSC模型进行了技术性和直观性的解释。</p>
 <p>本文讨论了当前最先进的ABSC模型，例如基于Transformer模型的模型和结合知识库的混合深度学习模型。此外，还回顾了各种模型输入表示与输出评估的技术。文章进一步探讨了ABSC研究的趋势，并就未来如何推进该领域发展提出了讨论。</p>
 <h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>万维网为人们通过各种基于文本的渠道（如在线评论和社交媒体）在线分享意见提供了途径。能够利用这些意见准确评估人们对某一产品、人物或地点的看法，在许多行业中都具有极高的价值。餐厅可以根据在线食品评论调整菜单，公司可以根据消费者的具体需求改进产品，政治活动的效果也可以通过分析社交媒体帖子来评估。因此，随着互联网的兴起，情感分析这一任务变得越来越重要【149】。</p>
-<p>情感分析是一项从文本中提取并分析人们对特定实体的情感的任务【118】。在文献中，情感分析有时也被称为“观点挖掘”。然而，需要区分“情感”（sentiments）和“观点”（opinions）。具体来说，“观点”表示某人对某一特定问题的看法，而“情感”则反映某人对某事物的感受。不过，这两个概念高度相关，通常可以通过“观点词”来提取情感【94, 95】。 在情感分析中，目标是根据文本内容分配情感极性。尽管“极性”（polarity）和“情感”（sentiment）这两个术语经常被互换使用，但实际上它们之间也可以进行区分：情感指代一种感受，而极性则表达一种方向性（例如，“正面”、“中性”或“负面”）。情感分析任务的粒度可以通过三个独立的特征来描述：情感类型、任务层次和任务目标。首先，情感输出的类型需要被明确。例如，该任务可能涉及简单的二元分类（“正面”或“负面”标签），但也可能包括其他标签（如“中性”），甚至需要预测情感的强度或分值。<br>其次，任务层次决定了从文本中提取情感的层级。例如，在文档级别的情感分析中，情感是针对整个文档进行分析的；而在句子级别的情感分析中，情感是针对文档中的每一个句子进行分析的。此外，还有许多其他层级，例如单词、段落、句子组或文本片段。最后，任务目标决定了情感的焦点。某些情况下可能不存在情感目标，这意味着任务是为整个文本分配一个情感分数或标签。而在其他情况下，可能需要了解针对文本中特定主题、实体或方面的情感。例如，假设我们在分析一篇产品评论。如果未定义目标，我们仅考虑整篇文本的情感。然而，明确消费者对产品的哪些具体方面感到满意或不满可能会更有用，因为这提供了许多应用所需的详细信息【115】。在文本中识别这些方面并分析其情感的任务被称为基于方面的情感分析（Aspect-Based Sentiment Analysis, ABSA）。</p>
+<p>情感分析是一项从文本中提取并分析人们对特定实体的情感的任务【118】。在文献中，情感分析有时也被称为“观点挖掘”。然而，需要区分“情感”（sentiments）和“观点”（opinions）。具体来说，“观点”表示某人对某一特定问题的看法，而“情感”则反映某人对某事物的感受。不过，这两个概念高度相关，通常可以通过“观点词”来提取情感【94, 95】。 在情感分析中，目标是根据文本内容分配情感极性。尽管“极性”（polarity）和“情感”（sentiment）这两个术语经常被互换使用，但实际上它们之间也可以进行区分：情感指代一种感受，而极性则表达一种方向性（例如，“正面”、“中性”或“负面”）。情感分析任务的粒度可以通过三个独立的特征来描述：情感类型、任务层次和任务目标。首先，情感输出的类型需要被明确。例如，该任务可能涉及简单的二元分类（“正面”或“负面”标签），但也可能包括其他标签（如“中性”），甚至需要预测情感的强度或分值。其次，任务层次决定了从文本中提取情感的层级。例如，在文档级别的情感分析中，情感是针对整个文档进行分析的；而在句子级别的情感分析中，情感是针对文档中的每一个句子进行分析的。此外，还有许多其他层级，例如单词、段落、句子组或文本片段。最后，任务目标决定了情感的焦点。某些情况下可能不存在情感目标，这意味着任务是为整个文本分配一个情感分数或标签。而在其他情况下，可能需要了解针对文本中特定主题、实体或方面的情感。例如，假设我们在分析一篇产品评论。如果未定义目标，我们仅考虑整篇文本的情感。然而，明确消费者对产品的哪些具体方面感到满意或不满可能会更有用，因为这提供了许多应用所需的详细信息【115】。在文本中识别这些方面并分析其情感的任务被称为基于方面的情感分析（Aspect-Based Sentiment Analysis, ABSA）。</p>
 <p>ABSA 是一个相对较新的研究领域，由于其广泛的应用价值而迅速获得了极高的关注【32】。然而，ABSA 和一般的情感分析任务一样，具有较高的难度，这主要源于句子结构和写作风格的多样性【174】。[143] 对 ABSA 中存在的问题和挑战进行了全面概述。与一般的情感分析任务类似，ABSA 可以在多个层次上执行，其中文档级和句子级通常是最受欢迎的【157】。文档级 ABSA 方法侧重于识别文档中与某一实体相关的一般方面，并为其分配情感。相比之下，句子级 ABSA 方法尝试逐句识别所有方面，确定这些方面相关的情感，并可能在评论层面聚合情感【157】。因此，文档级 ABSA 考虑的是总结文本情感的一般概念，而句子级 ABSA 则关注单独提及的各个方面。ABSA 的任务可以进一步分为三个子任务：<strong>方面检测&#x2F;提取</strong>、<strong>情感分类</strong>和<strong>情感聚合</strong>【174】。方面提取的任务是识别文本中存在的方面；分类步骤是为提取的方面分配情感标签或评分；聚合步骤则是汇总方面的情感分类结果。在本次综述中，我们的重点是情感分类步骤，这通常被称为<strong>基于方面的情感分类（Aspect-Based Sentiment Classification, ABSC）</strong>。</p>
 <p>关于 ABSA 的各种综述已经发表【152, 174】。然而，专注于 ABSC 的综述似乎能够更有效地深入讨论和评估 ABSC 模型。目前唯一专门针对 ABSC 的综述是文献【230】，其提供了对深度学习技术的概览。尽管深度学习模型目前是 ABSC 的最先进方法，但我们认为，扩展研究范围可以更有效地评估 ABSC 研究的当前状态和未来发展。例如，ABSC 中的一个重要部分是将知识库引入分类模型的相关研究。此外，之前的综述中缺少了一些重要的深度学习模型，例如基于 Transformer 的模型【201】。</p>
 <p>基于上述原因，本综述提供了关于当前最先进的 ABSC 模型的全面概览。为此，我们提出了一种文献中尚未出现的 ABSC 模型新分类法。该分类法将 ABSC 模型划分为三大类别：<strong>基于知识的方法</strong>、<strong>机器学习模型</strong>和<strong>混合模型</strong>。基于这一分类结构，我们使用技术性和直观性的解释讨论并比较了不同 ABSC 模型的架构。此外，我们还提供了比以往综述更大范围的 ABSC 模型性能总结概览。最后，我们识别了 ABSC 研究中的趋势，并利用这些发现讨论了推进该领域未来发展的可能途径。</p>
@@ -602,7 +602,7 @@
   </div>
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -614,14 +614,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">150k</span>
+    <span title="Word count total">158k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">9:04</span>
+    <span title="Reading time total">9:33</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
