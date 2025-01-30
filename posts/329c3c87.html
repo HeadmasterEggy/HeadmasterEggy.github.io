@@ -22,15 +22,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Why we use return_tensors &#x3D; &quot;pt&quot; during tokenization?  return_tensors (str or TensorType, optional) — If set, will return tensors instead of list of python integers. Acceptable values are:  &#39;tf&#39;: Retu">
+    <meta name="description" content="Why use &quot;return_tensors&#x3D;&quot;?">
 <meta property="og:type" content="article">
-<meta property="og:title" content="问题总结">
+<meta property="og:title" content="return_tensors">
 <meta property="og:url" content="http://example.com/posts/329c3c87.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="Why we use return_tensors &#x3D; &quot;pt&quot; during tokenization?  return_tensors (str or TensorType, optional) — If set, will return tensors instead of list of python integers. Acceptable values are:  &#39;tf&#39;: Retu">
+<meta property="og:description" content="Why use &quot;return_tensors&#x3D;&quot;?">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-01-30T10:44:19.000Z">
-<meta property="article:modified_time" content="2025-01-30T17:31:56.878Z">
+<meta property="article:modified_time" content="2025-01-30T17:35:01.239Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -39,10 +39,10 @@
 <link rel="canonical" href="http://example.com/posts/329c3c87.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/329c3c87.html","path":"posts/329c3c87.html","title":"问题总结"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/329c3c87.html","path":"posts/329c3c87.html","title":"return_tensors"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>问题总结 | Joey</title>
+<title>return_tensors | Joey</title>
   
 
 
@@ -206,12 +206,12 @@ return_tensors的作用</span></a><ol class="nav-child"><li class="nav-item nav-
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="问题总结 | Joey">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="return_tensors | Joey">
+      <meta itemprop="description" content="Why use "return_tensors="?">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          问题总结
+          return_tensors
         </h1>
 
         <div class="post-meta-container">
@@ -229,7 +229,7 @@ return_tensors的作用</span></a><ol class="nav-child"><li class="nav-item nav-
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-01-31 01:31:56" itemprop="dateModified" datetime="2025-01-31T01:31:56+08:00">2025-01-31</time>
+      <time title="Modified: 2025-01-31 01:35:01" itemprop="dateModified" datetime="2025-01-31T01:35:01+08:00">2025-01-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,17 +248,18 @@ return_tensors的作用</span></a><ol class="nav-child"><li class="nav-item nav-
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>995</span>
+      <span>858</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>3 mins.</span>
     </span>
 </div>
 
+            <div class="post-description">Why use "return_tensors="?</div>
         </div>
       </header>
 
@@ -280,7 +281,7 @@ PyTorch <code>torch.Tensor</code> objects.</li>
 Numpy <code>np.ndarray</code> objects.</li>
 </ul></li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load model and tokenizer</span></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>,</span><br><span class="line">    device_map=<span class="string">&quot;cuda&quot;</span>,</span><br><span class="line">    torch_dtype=<span class="string">&quot;auto&quot;</span>,</span><br><span class="line">    trust_remote_code=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>)</span><br><span class="line"></span><br><span class="line">prompt = <span class="string">&quot;Write an email apologizing to Sarah for the tragic gardening mishap. Explain how it happened.%3C|assistant|%3E&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tokenize the input prompt</span></span><br><span class="line">input_ids = tokenizer(prompt, return_tensors=<span class="string">&quot;pt&quot;</span>).input_ids.to(<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate the text</span></span><br><span class="line">generation_output = model.generate(</span><br><span class="line">  input_ids=input_ids,</span><br><span class="line">  max_new_tokens=<span class="number">20</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print the output</span></span><br><span class="line"><span class="built_in">print</span>(tokenizer.decode(generation_output[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">```](&lt;<span class="comment"># title: return_tensors=&quot;pt&quot;</span></span><br><span class="line">date: <span class="number">2025</span>-01-<span class="number">30</span> <span class="number">18</span>:<span class="number">44</span>:<span class="number">19</span></span><br><span class="line">tags:</span><br><span class="line">  - deepLearning</span><br><span class="line">categories: AI</span><br><span class="line">description: Why use <span class="string">&quot;return_tensors=&quot;</span>?</span><br><span class="line"></span><br><span class="line"><span class="comment"># [Why we use return_tensors = &quot;pt&quot; during tokenization?](https://stackoverflow.com/questions/78095157/why-we-use-return-tensors-pt-during-tokenization)</span></span><br><span class="line"></span><br><span class="line">- **return_tensors** (`<span class="built_in">str</span>` <span class="keyword">or</span> [TensorType](https://huggingface.co/docs/transformers/v4<span class="number">.48</span><span class="number">.1</span>/en/internal/file_utils<span class="comment">#transformers.TensorType), _optional_) — If set, will return tensors instead of list of python integers. Acceptable values are:</span></span><br><span class="line">  </span><br><span class="line">    - `<span class="string">&#x27;tf&#x27;</span>`: Return TensorFlow `tf.constant` objects.</span><br><span class="line">    - `<span class="string">&#x27;pt&#x27;</span>`: Return PyTorch `torch.Tensor` objects.</span><br><span class="line">    - `<span class="string">&#x27;np&#x27;</span>`: Return Numpy `np.ndarray` objects.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load model and tokenizer</span></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>,</span><br><span class="line">    device_map=<span class="string">&quot;cuda&quot;</span>,</span><br><span class="line">    torch_dtype=<span class="string">&quot;auto&quot;</span>,</span><br><span class="line">    trust_remote_code=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load model and tokenizer</span></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(</span><br><span class="line">    <span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>,</span><br><span class="line">    device_map=<span class="string">&quot;cuda&quot;</span>,</span><br><span class="line">    torch_dtype=<span class="string">&quot;auto&quot;</span>,</span><br><span class="line">    trust_remote_code=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;microsoft/Phi-3-mini-4k-instruct&quot;</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">&quot;Write an email apologizing to Sarah for the tragic gardening mishap. Explain how it happened.%3C|assistant|%3E&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tokenize the input prompt</span></span><br><span class="line">input_ids = tokenizer(prompt, return_tensors=<span class="string">&quot;pt&quot;</span>).input_ids.to(<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate the text</span></span><br><span class="line">generation_output = model.generate(</span><br><span class="line">  input_ids=input_ids,</span><br><span class="line">  max_new_tokens=<span class="number">20</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print the output</span></span><br><span class="line"><span class="built_in">print</span>(tokenizer.decode(generation_output[<span class="number">0</span>])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>在Hugging
 Face的<code>transformers</code>库中，<code>return_tensors</code>参数用于指定分词器（Tokenizer）输出的数据格式。以下是其核心作用及使用原因的详细解释：</p>
