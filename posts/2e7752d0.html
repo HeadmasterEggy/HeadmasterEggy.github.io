@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="了解 Tokens and Embeddings">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chapter 2">
+<meta property="og:url" content="http://example.com/posts/2e7752d0.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="了解 Tokens and Embeddings">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-02T12:28:40.000Z">
+<meta property="article:modified_time" content="2025-02-02T14:32:16.572Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="deepLearning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/2e7752d0.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/2e7752d0.html","path":"posts/2e7752d0.html","title":"Chapter 2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Chapter 2 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">37</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%90%E8%AF%8Dsubword%E7%9A%84-tokenization"><span class="nav-text">基于子词（subword）的
+tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pipeline-%E5%86%85%E9%83%A8"><span class="nav-text">Pipeline 内部</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#embedding"><span class="nav-text">Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#word-embedding-%E4%B8%8E-llm-%E6%97%A0%E5%85%B3"><span class="nav-text">Word Embedding （与 LLM 无关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9B%B8%E5%85%B3%E7%9A%84-embedding"><span class="nav-text">上下文相关的 Embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E5%8F%A5%E5%90%91%E9%87%8F"><span class="nav-text">文本向量（句向量）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2e7752d0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Chapter 2 | Joey">
+      <meta itemprop="description" content="了解 Tokens and Embeddings">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chapter 2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-02-02 20:28:40 / Modified: 22:32:16" itemprop="dateCreated datePublished" datetime="2025-02-02T20:28:40+08:00">2025-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>763</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">了解 Tokens and Embeddings</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="基于子词subword的-tokenization">基于子词（subword）的
+tokenization</h1>
+<p>subword 算法把 tokenization
+分为两部分，保持空间效率的同时具有语义意义（只需要两个 tokens
+就能表示一个长词）</p>
+<p>![[Subword token.png]]</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">&quot;Write an email apologizing to Sarah for the tragic gardening mishap. Explain how it happened.&lt;|assistant|&gt;&quot;</span></span><br><span class="line"><span class="comment"># Tokenize the input prompt</span></span><br><span class="line"></span><br><span class="line">input_ids = tokenizer(prompt, return_tensors=<span class="string">&quot;pt&quot;</span>).input_ids.to(<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">id</span> <span class="keyword">in</span> input_ids[<span class="number">0</span>]:</span><br><span class="line">	<span class="built_in">print</span>(tokenizer.decode(<span class="built_in">id</span>))</span><br><span class="line">    </span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">&lt;s&gt;</span><br><span class="line">Write</span><br><span class="line">an</span><br><span class="line">email</span><br><span class="line">apolog</span><br><span class="line">izing</span><br><span class="line">to</span><br><span class="line">Sarah</span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">the</span><br><span class="line">trag</span><br><span class="line">ic</span><br><span class="line">garden</span><br><span class="line">ing</span><br><span class="line">m</span><br><span class="line">ish</span><br><span class="line">ap</span><br><span class="line">.</span><br><span class="line">Exp</span><br><span class="line">lain</span><br><span class="line">how</span><br><span class="line">it</span><br><span class="line">happened</span><br><span class="line">.</span><br><span class="line">&lt;|assistant|&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="pipeline-内部">Pipeline 内部</h1>
+<p>pipeline 集成了三个步骤：预处理、模型计算和后处理： ![[Pipeline
+内部.png]] ## 使用 tokenizer（ tokenizer ）进行预处理</p>
+<p>与其他神经网络一样，Transformer
+模型无法直接处理原始文本，因此管道的第一步是将文本输入转换为模型能够理解的数字。为此，我们使用
+tokenizer（ tokenizer ），它将负责：</p>
+<ul>
+<li>将输入拆分为单词、子单词或符号（如标点符号），称为 <strong>token</strong></li>
+<li>将每个标记（token）映射到一个数字，称为 <strong>input
+ID</strong></li>
+<li>添加模型需要的其他输入，例如特殊标记（如 <code>[CLS]</code> 和 <code>[SEP]</code> ）</li>
+<li><ul>
+<li>位置编码：指示每个标记在句子中的位置。</li>
+</ul></li>
+<li><ul>
+<li>段落标记：区分不同段落的文本。</li>
+</ul></li>
+<li><ul>
+<li>特殊标记：例如 [CLS] 和 [SEP] 标记，用于标识句子的开头和结尾。</li>
+</ul></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tokenizer = AutoTokenizer.from_pretrained(model_name)</span><br></pre></td></tr></table></figure>
+<p>当有了 tokenizer，把 prompt 传给它，会得到 Input ID</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">&quot;Write an email apologizing to Sarah for the tragic gardening mishap. Explain how it happened.&lt;|assistant|&gt;&quot;</span></span><br><span class="line"></span><br><span class="line">inputs = tokenizer(prompt, padding=<span class="literal">True</span>, truncation=<span class="literal">True</span>, return_tensors=<span class="string">&quot;pt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(inputs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&#x27;input_ids&#x27;</span>: tensor([</span><br><span class="line">        [<span class="number">14350</span>,   <span class="number">385</span>,  <span class="number">4876</span>, <span class="number">27746</span>,  <span class="number">5281</span>,   <span class="number">304</span>, <span class="number">19235</span>,   <span class="number">363</span>,   <span class="number">278</span>, <span class="number">25305</span>,</span><br><span class="line">           <span class="number">293</span>, <span class="number">16423</span>,   <span class="number">292</span>,   <span class="number">286</span>,   <span class="number">728</span>,   <span class="number">481</span>, <span class="number">29889</span>, <span class="number">12027</span>,  <span class="number">7420</span>,   <span class="number">920</span>,</span><br><span class="line">           <span class="number">372</span>,  <span class="number">9559</span>, <span class="number">29889</span>, <span class="number">32001</span>]</span><br><span class="line">    ]), </span><br><span class="line">    <span class="string">&#x27;attention_mask&#x27;</span>: tensor([</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">    ])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Transformers 通常有三个维度：</p>
+<ul>
+<li><strong>Batch size</strong>（批次大小）：一次处理的序列数。</li>
+<li><strong>Sequence
+length</strong>（序列长度）：表示序列（句子）的长度。</li>
+<li><strong>Hidden
+size</strong>（隐藏层大小）：每个模型输入的向量维度。</li>
+</ul>
+<p>将预处理的之后的值输入到模型中，会得到以下输入：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">outputs = model(**inputs)</span><br><span class="line"><span class="built_in">print</span>(outputs.last_hidden_state.shape)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">torch.Size([<span class="number">2</span>, <span class="number">16</span>, <span class="number">768</span>])</span><br></pre></td></tr></table></figure>
+<h1 id="embedding">Embedding</h1>
+<h2 id="word-embedding-与-llm-无关">Word Embedding （与 LLM 无关）</h2>
+<p>Word2vec会显示意思相近的词源，但对于上下文意思不同但词源相同的文本
+outputs 还是一样的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gensim.downloader <span class="keyword">as</span> api</span><br><span class="line"></span><br><span class="line"><span class="comment"># Download embeddings (66MB, glove, trained on wikipedia, vector size: 50)</span></span><br><span class="line"><span class="comment"># Other options include &quot;word2vec-google-news-300&quot;</span></span><br><span class="line"><span class="comment"># More options at https://github.com/RaRe-Technologies/gensim-data</span></span><br><span class="line">model = api.load(<span class="string">&quot;glove-wiki-gigaword-50&quot;</span>)</span><br><span class="line"></span><br><span class="line">model.most_similar([model[<span class="string">&#x27;king&#x27;</span>]], topn=<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[(<span class="string">&#x27;king&#x27;</span>, <span class="number">1.0000001192092896</span>),</span><br><span class="line"> (<span class="string">&#x27;prince&#x27;</span>, <span class="number">0.8236179351806641</span>),</span><br><span class="line"> (<span class="string">&#x27;queen&#x27;</span>, <span class="number">0.7839043140411377</span>),</span><br><span class="line"> (<span class="string">&#x27;ii&#x27;</span>, <span class="number">0.7746230363845825</span>),</span><br><span class="line"> (<span class="string">&#x27;emperor&#x27;</span>, <span class="number">0.7736247777938843</span>),</span><br><span class="line"> (<span class="string">&#x27;son&#x27;</span>, <span class="number">0.766719400882721</span>),</span><br><span class="line"> (<span class="string">&#x27;uncle&#x27;</span>, <span class="number">0.7627150416374207</span>),</span><br><span class="line"> (<span class="string">&#x27;kingdom&#x27;</span>, <span class="number">0.7542161345481873</span>),</span><br><span class="line"> (<span class="string">&#x27;throne&#x27;</span>, <span class="number">0.7539914846420288</span>),</span><br><span class="line"> (<span class="string">&#x27;brother&#x27;</span>, <span class="number">0.7492411136627197</span>),</span><br><span class="line"> (<span class="string">&#x27;ruler&#x27;</span>, <span class="number">0.7434253692626953</span>)]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="上下文相关的-embedding">上下文相关的 Embedding</h2>
+<p>Contextualized Word Embeddings From a Language Model (Like BERT)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModel, AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load a tokenizer</span></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;microsoft/deberta-base&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load a language model</span></span><br><span class="line">model = AutoModel.from_pretrained(<span class="string">&quot;microsoft/deberta-v3-xsmall&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Tokenize the sentence</span></span><br><span class="line">tokens = tokenizer(<span class="string">&#x27;Hello world&#x27;</span>, return_tensors=<span class="string">&#x27;pt&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Process the tokens</span></span><br><span class="line">output = model(**tokens)[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">output.shape</span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">torch.Size([<span class="number">1</span>, <span class="number">4</span>, <span class="number">384</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> token <span class="keyword">in</span> tokens[<span class="string">&#x27;input_ids&#x27;</span>][<span class="number">0</span>]:</span><br><span class="line">    <span class="built_in">print</span>(tokenizer.decode(token))</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[CLS]</span><br><span class="line">Hello</span><br><span class="line"> world</span><br><span class="line">[SEP]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">output</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">tensor([[[-<span class="number">3.4816</span>,  <span class="number">0.0861</span>, -<span class="number">0.1819</span>,  ..., -<span class="number">0.0612</span>, -<span class="number">0.3911</span>,  <span class="number">0.3017</span>],</span><br><span class="line">         [ <span class="number">0.1898</span>,  <span class="number">0.3208</span>, -<span class="number">0.2315</span>,  ...,  <span class="number">0.3714</span>,  <span class="number">0.2478</span>,  <span class="number">0.8048</span>],</span><br><span class="line">         [ <span class="number">0.2071</span>,  <span class="number">0.5036</span>, -<span class="number">0.0485</span>,  ...,  <span class="number">1.2175</span>, -<span class="number">0.2292</span>,  <span class="number">0.8582</span>],</span><br><span class="line">         [-<span class="number">3.4278</span>,  <span class="number">0.0645</span>, -<span class="number">0.1427</span>,  ...,  <span class="number">0.0658</span>, -<span class="number">0.4367</span>,  <span class="number">0.3834</span>]]],</span><br><span class="line">       grad_fn=&lt;NativeLayerNormBackward0&gt;)</span><br></pre></td></tr></table></figure>
+<h2 id="文本向量句向量">文本向量（句向量）</h2>
+<p>Text Embeddings (For Sentences and Whole Documents)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load model</span></span><br><span class="line">model = SentenceTransformer(<span class="string">&#x27;sentence-transformers/all-mpnet-base-v2&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Convert text to text embeddings</span></span><br><span class="line">vector = model.encode(<span class="string">&quot;Best movie ever!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vector.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">(<span class="number">768</span>,)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> deepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/b77e036a.html" rel="prev" title="Chapter 1">
+                  <i class="fa fa-angle-left"></i> Chapter 1
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">180k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">10:55</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/2e7752d0.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
