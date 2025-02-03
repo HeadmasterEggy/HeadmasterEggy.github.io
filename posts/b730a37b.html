@@ -22,24 +22,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="A Humble Apprentice">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="Proposed framework for aspect-level sentiment analysis of hotel reviews 提出的ABSA方法将酒店评论作为输入。首先对收集到的酒店评论进行预处理，然后利用领域本体对评论进行特征提取；最后，使用不同的深度学习架构进行情感极性计算。图1概括了这些操作。 ![[Figure 1. Block diagram of the propos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies">
+<meta property="og:url" content="http://example.com/posts/b730a37b.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="A Humble Apprentice">
+<meta property="og:description" content="Proposed framework for aspect-level sentiment analysis of hotel reviews 提出的ABSA方法将酒店评论作为输入。首先对收集到的酒店评论进行预处理，然后利用领域本体对评论进行特征提取；最后，使用不同的深度学习架构进行情感极性计算。图1概括了这些操作。 ![[Figure 1. Block diagram of the propos">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-03T09:47:01.000Z">
+<meta property="article:modified_time" content="2025-02-03T11:59:14.736Z">
 <meta property="article:author" content="Joey">
+<meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/posts/b730a37b.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/b730a37b.html","path":"posts/b730a37b.html","title":"A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Joey</title>
+<title>A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies | Joey</title>
   
 
 
@@ -76,7 +79,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Joey</h1>
+      <p class="site-title">Joey</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -102,7 +105,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -115,6 +118,10 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#proposed-framework-for-aspect-level-sentiment-analysis-of-hotel-reviews"><span class="nav-text">Proposed
+framework for aspect-level sentiment analysis of hotel reviews</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86pre-processing"><span class="nav-text">预处理（pre-processing）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%96%B9%E9%9D%A2%E6%9C%AF%E8%AF%ADaspect-term-extraction-using-domain-ontology"><span class="nav-text">提取方面术语（Aspect
+term extraction using domain ontology）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getaspectannotations-%E7%AE%97%E6%B3%95"><span class="nav-text">GetAspectAnnotations() 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5"><span class="nav-text">输入：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA"><span class="nav-text">输出：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-text">算法步骤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E7%9B%AE%E6%A0%87%E8%A7%82%E7%82%B9%E5%88%86%E6%9E%90%E5%8F%A5%E5%AD%90%E7%BB%93%E6%9E%84target-opinion-extraction"><span class="nav-text">提取目标观点（分析句子结构）（Target
+opinion extraction）</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -174,16 +181,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/b730a37b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -197,13 +205,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joey">
+      <meta itemprop="name" content="A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies | Joey">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/b730a37b.html" class="post-title-link" itemprop="url">A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          A robust approach for aspectbased sentiment analysis using deep learning and domain ontologies
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -250,8 +258,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="proposed-framework-for-aspect-level-sentiment-analysis-of-hotel-reviews">Proposed
+    <div class="post-body" itemprop="articleBody"><h1
+id="proposed-framework-for-aspect-level-sentiment-analysis-of-hotel-reviews">Proposed
 framework for aspect-level sentiment analysis of hotel reviews</h1>
 <p>提出的ABSA方法将酒店评论作为输入。首先对收集到的酒店评论进行预处理，然后利用领域本体对评论进行特征提取；最后，使用不同的深度学习架构进行情感极性计算。图1概括了这些操作。</p>
 <p>![[Figure 1. Block diagram of the proposed SA approach.png]]</p>
@@ -264,18 +272,137 @@ framework for aspect-level sentiment analysis of hotel reviews</h1>
 </ol>
 <h2 id="预处理pre-processing">预处理（pre-processing）</h2>
 <p>把评论中的所有字母变成小写（比如“Great”变成“great”），避免电脑把“Great”和“great”当成两个不同的词，减少混乱。</p>
-<h2 id="提取方面术语aspect-term-extraction-using-domain-ontology">提取方面术语（Aspect
+<h2
+id="提取方面术语aspect-term-extraction-using-domain-ontology">提取方面术语（Aspect
 term extraction using domain ontology）</h2>
 <p>领域本体（Hontology）——一个酒店领域的知识库，里面列好了所有酒店相关的关键词，比如“房间、服务、清洁度”，还包含它们的关联词（比如“脏”关联到“清洁度”）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/b730a37b.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+<p>具体操作：</p>
+<ol type="1">
+<li>把评论拆成句子，比如“房间很脏，但位置方便”拆成两个句子。</li>
+<li>每个句子中的词和“知识库”里的关键词对比。</li>
+</ol>
+<ul>
+<li>直接匹配：比如“房间”直接对应知识库里的“房间”方面。</li>
+<li>隐式匹配：比如“脏”虽然不在“清洁度”的关键词列表里，但通过语义分析（比较词语在大量文本中的使用模式），发现它和“清洁度”高度相关，因此归入“清洁度”方面。</li>
+</ul>
+<p>结果：给每个句子打标签，标明它提到了哪些方面（比如第一句标“房间”和“清洁度”，第二句标“位置”）。</p>
+<p><strong>举个栗子</strong>🌰： 句子：“床很硬，但早餐很棒。”</p>
+<ul>
+<li>“床”直接匹配到“房间”方面。</li>
+<li>“早餐”匹配到“餐饮”方面。</li>
+</ul>
+<p>![[Figure 3. GetAspect Annotations(.) algorithm.png]]</p>
+<h2 id="getaspectannotations-算法">GetAspectAnnotations() 算法</h2>
+<p>用于执行基于方面的情感分析（Aspect-based Sentiment
+Analysis，ABSA）。其主要目标是根据给定的评论文本，将每个句子标注上相应的方面标签，进而分析情感。</p>
+<h3 id="输入">输入：</h3>
+<ul>
+<li><strong>评论 R</strong>：待分析的评论文本。</li>
+<li><strong>方面关键词 <span
+class="math inline">\(K_i\)</span></strong>：一组与每个方面（如房间、服务、清洁度等）相关的关键词集合，标记为
+<span class="math inline">\(K_{1i}, K_{2i}, ..., K_{Ni}\)</span>。</li>
+</ul>
+<h3 id="输出">输出：</h3>
+<ul>
+<li><strong>注释后的句子</strong>：将评论 <span
+class="math inline">\(R\)</span>
+分割成句子，并为每个句子分配相应的方面标签。</li>
+</ul>
+<h3 id="算法步骤">算法步骤：</h3>
+<ol type="1">
+<li><strong>分割评论为句子</strong>：将评论 <span
+class="math inline">\(R\)</span> 分割成多个句子 <span
+class="math inline">\(S_1, S_2, \dots, S_J\)</span>。</li>
+<li><strong>初始化计数器</strong>：对于每个句子 <span
+class="math inline">\(S_j\)</span>，初始化计数器
+<code>Count(j, i)</code>，表示每个方面 <span
+class="math inline">\(i\)</span> 在句子中的匹配次数。</li>
+<li><strong>分割句子为词元</strong>：将每个句子 <span
+class="math inline">\(S_j\)</span> 分割为词元集合 <span
+class="math inline">\(T_j = \{ t_1, t_2, ..., t_z \}\)</span>。</li>
+<li><strong>遍历每个词元</strong>：
+<ul>
+<li>对于句子中的每个词元 <span
+class="math inline">\(t_z\)</span>，检查它是否出现在某个方面关键词集合
+<span class="math inline">\(K_i\)</span> 中：
+<ul>
+<li>如果是，增加该方面的计数器 <code>Count(j, i)</code>。</li>
+<li>如果不是，但词元与方面关键词的语义相似度超过阈值 <span
+class="math inline">\(\theta\)</span>，则也增加该方面的计数器。</li>
+</ul></li>
+</ul></li>
+<li><strong>分配方面标签</strong>：如果计数器 <code>Count(j, i)</code>
+大于零，则为该句子分配一个方面标签 <span
+class="math inline">\(a_i\)</span>。一个句子可以被分配多个方面标签。</li>
+<li><strong>输出结果</strong>：输出带有方面标签的注释句子。</li>
+</ol>
+<h3 id="核心概念">核心概念：</h3>
+<ul>
+<li><strong>Count(j, i)</strong>：记录某个方面在句子中匹配的次数。</li>
+<li><strong>语义相似度</strong>：通过计算词元和方面关键词之间的语义相似度，发现隐含的、没有明确使用关键词但具有相关性的方面。例如，在句子中提到“房间很脏”，不仅提到了“房间”方面，还隐含了“清洁度”这一方面。</li>
+<li><strong>阈值 <span
+class="math inline">\(\theta\)</span></strong>：控制语义相似度是否足够高，以决定是否将一个词元归类为与某个方面相关。</li>
+</ul>
+<h2
+id="提取目标观点分析句子结构target-opinion-extraction">提取目标观点（分析句子结构）（Target
+opinion extraction）</h2>
+<p>从评论中提取与特定方面相关的情感信息。这个步骤的核心任务是识别与每个方面相关的情感表达，并确定这些情感的极性（如正面、负面或中立）。具体来说，目标情感提取需要解决两个问题：</p>
+<ol type="1">
+<li><strong>目标识别</strong>：从评论中找出描述特定方面（如“房间”、“服务”）的目标。</li>
+<li><strong>情感极性识别</strong>：判断这些目标的情感极性（正面、负面或中立）。</li>
+</ol>
+<p><strong>步骤：</strong></p>
+<ol type="1">
+<li><strong>使用依赖树和邻域关系</strong>：</li>
+</ol>
+<ul>
+<li><strong>依赖树</strong>（Dependency
+Tree）是一种句法结构，它展示了句子中各个词之间的依赖关系。在情感分析中，依赖树有助于理解句子中各个词汇如何相互作用，进而更好地识别与目标相关的情感词。</li>
+</ul>
+<blockquote>
+<p><strong>作用</strong>：像画句子的“骨架图”，标出词语间的语法关系。</p>
+<p><strong>举个栗子</strong>🌰： 句子：“服务员态度很差。”</p>
+<p>依赖树会标出“服务员”是主语（nsubj），“差”是形容词修饰语（amod），说明“差”是形容“态度”的。</p>
+<p>系统就知道“差”是针对“服务员态度”的负面评价</p>
+</blockquote>
+<ul>
+<li><strong>邻域关系</strong>（Neighborhood
+Relation）则指的是句子中相邻的两个词之间的关系。通过这种关系，可以识别出哪些词是与目标直接相关的情感表达。</li>
+</ul>
+<blockquote>
+<p><strong>规则</strong>：相邻的非停用词（如“很好”、“糟糕”）可能表达情感。</p>
+<p>比如“房间非常干净”中，“非常”和“干净”相邻，强化正面情感。</p>
+</blockquote>
+<ol start="2" type="1">
+<li><strong>依赖树和邻域关系的结合</strong>：</li>
+</ol>
+<p><strong>依赖树</strong>能够捕捉到句子中的语法关系，而<strong>邻域关系</strong>则能够捕捉到词汇在上下文中的位置关系。通过将两者结合，可以更全面地理解评论中目标与情感之间的联系。</p>
+<ul>
+<li><strong>操作</strong>：把依赖树中的语法关系 +
+邻近关系中的邻居关系，合并成一个“超级关系列表”（主关系集 M）。</li>
+<li><strong>目的</strong>：同时利用句子的“骨架”和“邻居”信息，更准确定位情感词。</li>
+</ul>
+<p><strong>举个栗子</strong>🌰： 句子：“床很硬，但早餐非常丰盛。”</p>
+<ul>
+<li><strong>依赖树分析</strong>：
+<ul>
+<li>“床”是主语，“硬”是形容词修饰“床”（amod）。</li>
+<li>“早餐”是主语，“丰盛”是形容词修饰“早餐”（amod）。</li>
+</ul></li>
+<li><strong>邻近关系分析</strong>：
+<ul>
+<li>“非常”和“丰盛”相邻，增强正面情感。</li>
+</ul></li>
+<li><strong>主关系集 M</strong>：
+<ul>
+<li>合并以上两种关系，系统会知道：
+<ul>
+<li>“硬”对应“床”（依赖树），是负面情感；</li>
+<li>“非常丰盛”对应“早餐”（依赖树 + 邻近关系），是强烈正面情感。</li>
+</ul></li>
+</ul></li>
+</ul>
+
     </div>
 
     
@@ -283,210 +410,21 @@ term extraction using domain ontology）</h2>
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> deepLearning</a>
+          </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2e7752d0.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
-      <meta itemprop="name" content="Joey">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joey">
-      <meta itemprop="description" content="A Humble Apprentice">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joey">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2e7752d0.html" class="post-title-link" itemprop="url">Chapter 2</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2025-02-02 20:28:40 / Modified: 22:32:19" itemprop="dateCreated datePublished" datetime="2025-02-02T20:28:40+08:00">2025-02-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count in article: </span>
-      <span>763</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>3 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>了解 Tokens and Embeddings</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2e7752d0.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/b77e036a.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
-      <meta itemprop="name" content="Joey">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joey">
-      <meta itemprop="description" content="A Humble Apprentice">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Joey">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/b77e036a.html" class="post-title-link" itemprop="url">Chapter 1</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2025-02-01 20:35:57 / Modified: 21:38:26" itemprop="dateCreated datePublished" datetime="2025-02-01T20:35:57+08:00">2025-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count in article: </span>
-      <span>462</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>了解如何加载模型</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/b77e036a.html">
-                Read more &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2e7752d0.html" rel="prev" title="Chapter 2">
+                  <i class="fa fa-angle-left"></i> Chapter 2
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
@@ -494,9 +432,7 @@ term extraction using domain ontology）</h2>
 
 
 
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+
 
 </div>
   </main>
@@ -581,7 +517,7 @@ term extraction using domain ontology）</h2>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/b730a37b.html"}</script>
   <script src="/js/third-party/quicklink.js"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
