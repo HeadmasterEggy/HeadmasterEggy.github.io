@@ -30,7 +30,7 @@
 <meta property="og:description" content="解释几种归一化的原理">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-05T12:21:01.000Z">
-<meta property="article:modified_time" content="2025-02-05T12:24:39.426Z">
+<meta property="article:modified_time" content="2025-02-05T13:06:18.971Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -105,7 +105,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -118,6 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#layernorm"><span class="nav-text">LayerNorm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="nav-text">操作过程：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rmsnorm"><span class="nav-text">RMSNorm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E8%BF%87%E7%A8%8B-1"><span class="nav-text">操作过程：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-text">区别：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-text">应用场景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结：</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -218,7 +219,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-02-05 20:21:01 / Modified: 20:24:39" itemprop="dateCreated datePublished" datetime="2025-02-05T20:21:01+08:00">2025-02-05</time>
+      <time title="Created: 2025-02-05 20:21:01 / Modified: 21:06:18" itemprop="dateCreated datePublished" datetime="2025-02-05T20:21:01+08:00">2025-02-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,14 +238,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>0</span>
+      <span>445</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -255,7 +256,72 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><h1 id="layernorm">LayerNorm</h1>
+<p>Layer Normalization
+是对每个样本在每一层的激活值进行标准化的技术。</p>
+<h2 id="操作过程">操作过程：</h2>
+<ul>
+<li>对每个样本（而非每个批次）进行归一化。</li>
+<li>对于神经网络层的输出 <span class="math inline">\(\mathbf{x} = (x_1,
+x_2, ..., x_d)\)</span>，计算均值 <span
+class="math inline">\(\mu\)</span> 和方差 <span
+class="math inline">\(\sigma^2\)</span>： <span class="math display">\[
+\mu = \frac{1}{d} \sum_{i=1}^{d} x_i
+\]</span> <span class="math display">\[
+\sigma^2 = \frac{1}{d} \sum_{i=1}^{d} (x_i - \mu)^2
+\]</span></li>
+<li>然后进行归一化： <span class="math display">\[
+\hat{x}_i = \frac{x_i - \mu}{\sqrt{\sigma^2 + \epsilon}}
+\]</span> 其中 <span class="math inline">\(\epsilon\)</span>
+是小常数，用于防止除零错误。</li>
+<li>最后，应用可学习的缩放参数 <span
+class="math inline">\(\gamma\)</span> 和偏移参数 <span
+class="math inline">\(\beta\)</span>： <span class="math display">\[
+y_i = \gamma \hat{x}_i + \beta
+\]</span></li>
+</ul>
+<h3 id="应用场景">应用场景：</h3>
+<ul>
+<li>适用于处理变长输入和序列数据，特别是 NLP 和 RNN。</li>
+<li>提高训练稳定性，并减少对批量大小的依赖。</li>
+</ul>
+<h1 id="rmsnorm">RMSNorm</h1>
+<p>RMSNorm 是 Layer Normalization
+的一种简化版本，仅使用均方根（RMS）来进行归一化，而不计算均值。</p>
+<h2 id="操作过程-1">操作过程：</h2>
+<ul>
+<li>对于输入向量 <span class="math inline">\(\mathbf{x} = (x_1, x_2,
+..., x_d)\)</span>，计算均方根： <span class="math display">\[
+\text{RMS} = \sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2}
+\]</span></li>
+<li>然后，使用均方根进行归一化： <span class="math display">\[
+\hat{x}_i = \frac{x_i}{\text{RMS} + \epsilon}
+\]</span></li>
+<li>最后，应用可学习的缩放参数 <span
+class="math inline">\(\gamma\)</span> 和偏移参数 <span
+class="math inline">\(\beta\)</span>： <span class="math display">\[
+y_i = \gamma \hat{x}_i + \beta
+\]</span></li>
+</ul>
+<h3 id="区别">区别：</h3>
+<ul>
+<li><strong>Layer Normalization</strong> 使用均值和方差进行归一化，而
+<strong>RMSNorm</strong> 只使用均方根。</li>
+<li><strong>RMSNorm</strong>
+更为简洁，没有均值计算，适合输入数据分布较为平稳的任务。</li>
+</ul>
+<h2 id="应用场景-1">应用场景：</h2>
+<ul>
+<li>通常在需要更轻量级归一化的任务中使用，特别是在 Transformer
+等架构中。</li>
+</ul>
+<h2 id="总结">总结：</h2>
+<ul>
+<li><strong>Layer Normalization</strong>
+适用于需要强烈中心化的数据分布任务，尤其在序列建模中效果较好。</li>
+<li><strong>RMSNorm</strong>
+则是一个简化的归一化方法，计算上更为高效，适合不需要严格中心化的任务。</li>
+</ul>
 
     </div>
 
@@ -318,7 +384,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">11:12</span>
+    <span title="Reading time total">11:13</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
