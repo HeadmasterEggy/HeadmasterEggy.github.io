@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Chapter 5 -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Text Clustering and Topic Modeling">
+<meta property="og:url" content="http://example.com/posts/4dafb607.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Chapter 5 -">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-08T11:21:29.000Z">
+<meta property="article:modified_time" content="2025-02-08T12:56:29.859Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="deepLearning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/4dafb607.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/4dafb607.html","path":"posts/4dafb607.html","title":"Text Clustering and Topic Modeling"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Text Clustering and Topic Modeling | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">41</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#text-clustering-and-topic-modeling"><span class="nav-text">Text Clustering and Topic
+Modeling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#arxiv-articles-computation-and-language"><span class="nav-text">ArXiv Articles:
+Computation and Language</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-common-pipeline-for-text-clustering"><span class="nav-text">A Common Pipeline for
+Text Clustering</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#embedding-documents"><span class="nav-text">Embedding Documents</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E9%99%8D%E7%BB%B4reducing-the-dimensionality-of-embeddings"><span class="nav-text">文本降维（Reducing
+the Dimensionality of Embeddings）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E9%99%8D%E7%BB%B4%E5%90%8E%E7%9A%84-embedding-%E8%BF%9B%E8%A1%8C%E8%81%9A%E7%B1%BBcluster-the-reduced-embeddings"><span class="nav-text">根据降维后的
+embedding 进行聚类(Cluster the Reduced Embeddings)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E8%81%9A%E7%B1%BB%E7%BB%93%E6%9E%9Cinspecting-the-clusters"><span class="nav-text">检查聚类结果（Inspecting
+the Clusters）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E7%BB%98%E5%9B%BE"><span class="nav-text">静态绘图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E6%9C%AC%E8%81%9A%E7%B1%BB%E5%88%B0%E4%B8%BB%E9%A2%98%E5%BB%BA%E6%A8%A1from-text-clustering-to-topic-modeling"><span class="nav-text">从文本聚类到主题建模（From
+Text Clustering to Topic Modeling）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bertopic-%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E4%B8%BB%E9%A2%98%E5%BB%BA%E6%A8%A1%E6%A1%86%E6%9E%B6bertopic-a-modular-topic-modeling-framework"><span class="nav-text">BERTopic:
+一个模块化的主题建模框架（BERTopic: A Modular Topic Modeling
+Framework）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96visualizations"><span class="nav-text">可视化（Visualizations）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E7%A4%BA%E6%A8%A1%E5%9E%8Brepresentation-models"><span class="nav-text">表示模型（Representation
+Models）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keybertinspired"><span class="nav-text">KeyBERTInspired</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#maximal-marginal-relevance"><span class="nav-text">Maximal Marginal Relevance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#keybertinspired-%E5%92%8C-maximal-marginal-relevance-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">KeyBERTInspired
+和 Maximal Marginal Relevance 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E5%81%9A%E6%96%87%E6%9C%AC%E8%81%9A%E7%B1%BB"><span class="nav-text">生成模型做文本聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flan-t5"><span class="nav-text">Flan-T5</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/4dafb607.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Text Clustering and Topic Modeling | Joey">
+      <meta itemprop="description" content="Chapter 5 -">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Text Clustering and Topic Modeling
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-02-08 19:21:29 / Modified: 20:56:29" itemprop="dateCreated datePublished" datetime="2025-02-08T19:21:29+08:00">2025-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>7 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Chapter 5 -</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="text-clustering-and-topic-modeling">Text Clustering and Topic
+Modeling</h1>
+<p>文本聚类是一种将大量文本数据按照内容或语义的相似性进行自动分组的无监督学习方法。</p>
+<h1 id="arxiv-articles-computation-and-language">ArXiv Articles:
+Computation and Language</h1>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Load data from huggingface</span></span><br><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset</span><br><span class="line">dataset = load_dataset(<span class="string">&quot;maartengr/arxiv_nlp&quot;</span>)[<span class="string">&quot;train&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Extract metadata</span></span><br><span class="line">abstracts = dataset[<span class="string">&quot;Abstracts&quot;</span>]</span><br><span class="line">titles = dataset[<span class="string">&quot;Titles&quot;</span>]</span><br><span class="line"></span><br><span class="line">dataset</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">Dataset(&#123;</span><br><span class="line">    features: [<span class="string">&#x27;Titles&#x27;</span>, <span class="string">&#x27;Abstracts&#x27;</span>, <span class="string">&#x27;Years&#x27;</span>, <span class="string">&#x27;Categories&#x27;</span>],</span><br><span class="line">    num_rows: <span class="number">44949</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># abstracts[:1], </span></span><br><span class="line"></span><br><span class="line">titles[:<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[<span class="string">&#x27;Introduction to Arabic Speech Recognition Using CMUSphinx System&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">abstracts[:<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[<span class="string">&#x27;  In this paper Arabic was investigated from the speech recognition problem\npoint of view. We propose a novel approach to build an Arabic Automated Speech\nRecognition System (ASR). This system is based on the open source CMU Sphinx-4,\nfrom the Carnegie Mellon University. CMU Sphinx is a large-vocabulary;\nspeaker-independent, continuous speech recognition system based on discrete\nHidden Markov Models (HMMs). We build a model using utilities from the\nOpenSource CMU Sphinx. We will demonstrate the possible adaptability of this\nsystem to Arabic voice recognition.\n&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h1 id="a-common-pipeline-for-text-clustering">A Common Pipeline for
+Text Clustering</h1>
+<h2 id="embedding-documents"><strong>Embedding Documents</strong></h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create an embedding for each abstract</span></span><br><span class="line">embedding_model = SentenceTransformer(<span class="string">&#x27;thenlper/gte-small&#x27;</span>)</span><br><span class="line">embeddings = embedding_model.encode(abstracts, show_progress_bar=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Check the dimensions of the resulting embeddings</span></span><br><span class="line">embeddings.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">(<span class="number">44949</span>, <span class="number">384</span>)</span><br></pre></td></tr></table></figure>
+<h2
+id="文本降维reducing-the-dimensionality-of-embeddings"><strong>文本降维（Reducing
+the Dimensionality of Embeddings）</strong></h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> umap <span class="keyword">import</span> UMAP</span><br><span class="line"></span><br><span class="line"><span class="comment"># We reduce the input embeddings from 384 dimenions to 5 dimenions</span></span><br><span class="line">umap_model = UMAP(</span><br><span class="line">    n_components=<span class="number">5</span>, min_dist=<span class="number">0.0</span>, metric=<span class="string">&#x27;cosine&#x27;</span>, random_state=<span class="number">42</span></span><br><span class="line">)</span><br><span class="line">reduced_embeddings = umap_model.fit_transform(embeddings)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reduced_embeddings.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">(<span class="number">44949</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h2
+id="根据降维后的-embedding-进行聚类cluster-the-reduced-embeddings">根据降维后的
+embedding 进行聚类(<strong>Cluster the Reduced Embeddings</strong>)</h2>
+<p>同样可以用 sklearn 的聚类方法，比如 sklearn.cluster.KMeans， DBSCAN
+等方法</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> hdbscan <span class="keyword">import</span> HDBSCAN</span><br><span class="line"></span><br><span class="line"><span class="comment"># euclidean 是欧几里得距离，cluster_selection_method=&#x27;eom&#x27; 是基于模型的聚类方法</span></span><br><span class="line">hdbscan_model = HDBSCAN(</span><br><span class="line">    min_cluster_size=<span class="number">50</span>, metric=<span class="string">&#x27;euclidean&#x27;</span>, cluster_selection_method=<span class="string">&#x27;eom&#x27;</span></span><br><span class="line">).fit(reduced_embeddings)</span><br><span class="line">clusters = hdbscan_model.labels_</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看聚类的数量</span></span><br><span class="line"><span class="built_in">len</span>(<span class="built_in">set</span>(clusters))</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">162</span></span><br></pre></td></tr></table></figure>
+<h2 id="检查聚类结果inspecting-the-clusters">检查聚类结果（Inspecting
+the Clusters）</h2>
+<p>手动检查 cluster 0 中的前三个文档</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印 cluster 0 中的前三个文档</span></span><br><span class="line">cluster = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> np.where(clusters==cluster)[<span class="number">0</span>][:<span class="number">3</span>]:</span><br><span class="line">    <span class="built_in">print</span>(abstracts[index][:<span class="number">300</span>] + <span class="string">&quot;... \n&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">  This works aims to design a statistical machine translation <span class="keyword">from</span> English text</span><br><span class="line">to American Sign Language (ASL). The system <span class="keyword">is</span> based on Moses tool <span class="keyword">with</span> some</span><br><span class="line">modifications <span class="keyword">and</span> the results are synthesized through a 3D avatar <span class="keyword">for</span></span><br><span class="line">interpretation. First, we translate the <span class="built_in">input</span> text to gloss, a written fo... </span><br><span class="line"></span><br><span class="line">  Researches on signed languages still strongly dissociate lin- guistic issues</span><br><span class="line">related on phonological <span class="keyword">and</span> phonetic aspects, <span class="keyword">and</span> gesture studies <span class="keyword">for</span></span><br><span class="line">recognition <span class="keyword">and</span> synthesis purposes. This paper focuses on the imbrication of</span><br><span class="line">motion <span class="keyword">and</span> meaning <span class="keyword">for</span> the analysis, synthesis <span class="keyword">and</span> evaluation of sign lang... </span><br><span class="line"></span><br><span class="line">  Modern computational linguistic software cannot produce important aspects of</span><br><span class="line">sign language translation. Using some researches we deduce that the majority of</span><br><span class="line">automatic sign language translation systems ignore many aspects when they</span><br><span class="line">generate animation; therefore the interpretation lost the truth inf... </span><br></pre></td></tr></table></figure>
+<h2 id="静态绘图">静态绘图</h2>
+<p>把 embedding 降到 2 维</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># Reduce 384-dimensional embeddings to 2 dimensions for easier visualization</span></span><br><span class="line">reduced_embeddings = UMAP(</span><br><span class="line">    n_components=<span class="number">2</span>, min_dist=<span class="number">0.0</span>, metric=<span class="string">&#x27;cosine&#x27;</span>, random_state=<span class="number">42</span></span><br><span class="line">).fit_transform(embeddings)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create dataframe</span></span><br><span class="line">df = pd.DataFrame(reduced_embeddings, columns=[<span class="string">&quot;x&quot;</span>, <span class="string">&quot;y&quot;</span>])</span><br><span class="line">df[<span class="string">&quot;title&quot;</span>] = titles</span><br><span class="line">df[<span class="string">&quot;cluster&quot;</span>] = [<span class="built_in">str</span>(c) <span class="keyword">for</span> c <span class="keyword">in</span> clusters]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Select outliers and non-outliers (clusters)</span></span><br><span class="line">clusters_df = df.loc[df.cluster != <span class="string">&quot;-1&quot;</span>, :]</span><br><span class="line">outliers_df = df.loc[df.cluster == <span class="string">&quot;-1&quot;</span>, :]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分别绘制离群点和非离群点</span></span><br><span class="line"><span class="comment"># 解释：alpha 是透明度，s 是点的大小，cmap 是颜色图</span></span><br><span class="line">plt.scatter(outliers_df.x, outliers_df.y, alpha=<span class="number">0.05</span>, s=<span class="number">2</span>, c=<span class="string">&quot;grey&quot;</span>)</span><br><span class="line">plt.scatter(</span><br><span class="line">    clusters_df.x, clusters_df.y, c=clusters_df.cluster.astype(<span class="built_in">int</span>),</span><br><span class="line">    alpha=<span class="number">0.6</span>, s=<span class="number">2</span>, cmap=<span class="string">&#x27;tab20b&#x27;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># plt.savefig(&quot;matplotlib.png&quot;, dpi=300)  # Uncomment to save the graph as a .png</span></span><br></pre></td></tr></table></figure>
+<p>![[matplotlib.png.png]]</p>
+<h1
+id="从文本聚类到主题建模from-text-clustering-to-topic-modeling">从文本聚类到主题建模（From
+Text Clustering to Topic Modeling）</h1>
+<h2
+id="bertopic-一个模块化的主题建模框架bertopic-a-modular-topic-modeling-framework">BERTopic:
+一个模块化的主题建模框架（BERTopic: A Modular Topic Modeling
+Framework）</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bertopic <span class="keyword">import</span> BERTopic</span><br><span class="line"></span><br><span class="line"><span class="comment"># Train our model with our previously defined models</span></span><br><span class="line">topic_model = BERTopic(</span><br><span class="line">    embedding_model=embedding_model,</span><br><span class="line">    umap_model=umap_model,</span><br><span class="line">    hdbscan_model=hdbscan_model,</span><br><span class="line">    verbose=<span class="literal">True</span></span><br><span class="line">).fit(abstracts, embeddings)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">2024</span>-04-<span class="number">24</span> <span class="number">10</span>:<span class="number">39</span>:<span class="number">22</span>,<span class="number">540</span> - BERTopic - Dimensionality - Completed ✓</span><br><span class="line"><span class="number">2024</span>-04-<span class="number">24</span> <span class="number">10</span>:<span class="number">39</span>:<span class="number">22</span>,<span class="number">543</span> - BERTopic - Cluster - Start clustering the reduced embeddings</span><br><span class="line"><span class="number">2024</span>-04-<span class="number">24</span> <span class="number">10</span>:<span class="number">39</span>:<span class="number">24</span>,<span class="number">548</span> - BERTopic - Cluster - Completed ✓</span><br><span class="line"><span class="number">2024</span>-04-<span class="number">24</span> <span class="number">10</span>:<span class="number">39</span>:<span class="number">24</span>,<span class="number">563</span> - BERTopic - Representation - Extracting topics <span class="keyword">from</span> clusters using representation models.</span><br><span class="line"><span class="number">2024</span>-04-<span class="number">24</span> <span class="number">10</span>:<span class="number">39</span>:<span class="number">34</span>,<span class="number">185</span> - BERTopic - Representation - Completed ✓</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">topic_model.get_topic_info()</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br></pre></td></tr></table></figure>
+<p>![[topics.png]]</p>
+<p>使用默认模型生成了数百个主题！要获取每个主题的前 10
+个关键词以及它们的 <code>c-TF-IDF</code> 权重，我们可以使用
+<code>get_topic()</code> 函数：</p>
+<blockquote>
+<p>TF-IDF 是词频-逆文档频率（Term Frequency-Inverse Document
+Frequency）的缩写，是一种用于评估词语在文档集合中的重要性的统计方法。
+c-TF-IDF 是类-词频-逆文档频率（Class-based
+TF-IDF）的缩写，是一种在主题建模中常用的加权方法，它考虑了文档类别对词语重要性的影响。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">topic_model.get_topic(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[(<span class="string">&#x27;speech&#x27;</span>, <span class="number">0.028216480930622023</span>),</span><br><span class="line"> (<span class="string">&#x27;asr&#x27;</span>, <span class="number">0.018903579737368923</span>),</span><br><span class="line"> (<span class="string">&#x27;recognition&#x27;</span>, <span class="number">0.013553139794284205</span>),</span><br><span class="line"> (<span class="string">&#x27;end&#x27;</span>, <span class="number">0.010026507690881847</span>),</span><br><span class="line"> (<span class="string">&#x27;acoustic&#x27;</span>, <span class="number">0.009696868164422345</span>),</span><br><span class="line"> (<span class="string">&#x27;speaker&#x27;</span>, <span class="number">0.00688304460778908</span>),</span><br><span class="line"> (<span class="string">&#x27;audio&#x27;</span>, <span class="number">0.0068022131315230725</span>),</span><br><span class="line"> (<span class="string">&#x27;wer&#x27;</span>, <span class="number">0.006414446042943717</span>),</span><br><span class="line"> (<span class="string">&#x27;error&#x27;</span>, <span class="number">0.0063871666249343045</span>),</span><br><span class="line"> (<span class="string">&#x27;automatic&#x27;</span>, <span class="number">0.006153347638246464</span>)]</span><br></pre></td></tr></table></figure>
+<p>我们可以使用 <code>find_topics()</code>
+函数基于搜索词来查找特定主题。让我们搜索一个关于主题建模的主题：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Returns:</span></span><br><span class="line"><span class="string">    similar_topics: the most similar topics from high to low</span></span><br><span class="line"><span class="string">    similarity: the similarity scores from high to low</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">topic_model.find_topics(<span class="string">&quot;topic modeling&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">([<span class="number">23</span>, -<span class="number">1</span>, <span class="number">43</span>, <span class="number">82</span>, <span class="number">40</span>],</span><br><span class="line"> [<span class="number">0.95474184</span>, <span class="number">0.91240776</span>, <span class="number">0.90763277</span>, <span class="number">0.9037941</span>, <span class="number">0.90360355</span>])</span><br></pre></td></tr></table></figure>
+<p>结果显示主题 30
+与我们的搜索词有较高的相似度（0.95）。如果我们进一步检查这个主题，我们可以看到它确实是一个关于主题建模的主题：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">topic_model.get_topic(<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[(<span class="string">&#x27;sense&#x27;</span>, <span class="number">0.06648167634000589</span>),</span><br><span class="line"> (<span class="string">&#x27;wsd&#x27;</span>, <span class="number">0.03922167607376744</span>),</span><br><span class="line"> (<span class="string">&#x27;senses&#x27;</span>, <span class="number">0.030380260753374123</span>),</span><br><span class="line"> (<span class="string">&#x27;word&#x27;</span>, <span class="number">0.029309445839038818</span>),</span><br><span class="line"> (<span class="string">&#x27;disambiguation&#x27;</span>, <span class="number">0.028877095221845412</span>),</span><br><span class="line"> (<span class="string">&#x27;embeddings&#x27;</span>, <span class="number">0.012890323147034454</span>),</span><br><span class="line"> (<span class="string">&#x27;wordnet&#x27;</span>, <span class="number">0.012073044968388328</span>),</span><br><span class="line"> (<span class="string">&#x27;words&#x27;</span>, <span class="number">0.0114478022625593</span>),</span><br><span class="line"> (<span class="string">&#x27;polysemous&#x27;</span>, <span class="number">0.007590680908917357</span>),</span><br><span class="line"> (<span class="string">&#x27;ambiguous&#x27;</span>, <span class="number">0.007242555580821115</span>)]</span><br></pre></td></tr></table></figure>
+<p>这其实就是经典 LDA 技术所特征化的主题。让我们看看 BERTopic
+论文是否也被分配到了主题 30</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">titles.index(<span class="string">&#x27;BERTopic: Neural topic modeling with a class-based TF-IDF procedure&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">25033</span></span><br><span class="line"></span><br><span class="line">topic_model.topics_[titles.index(<span class="string">&#x27;BERTopic: Neural topic modeling with a class-based TF-IDF procedure&#x27;</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">23</span></span><br></pre></td></tr></table></figure>
+<h2 id="可视化visualizations">可视化（Visualizations）</h2>
+<p><strong>Visualize Documents</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Visualize topics and documents</span></span><br><span class="line">fig = topic_model.visualize_documents(</span><br><span class="line">    titles,</span><br><span class="line">    reduced_embeddings=reduced_embeddings,</span><br><span class="line">    width=<span class="number">1200</span>,</span><br><span class="line">    hide_annotations=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Update fonts of legend for easier visualization</span></span><br><span class="line">fig.update_layout(font=<span class="built_in">dict</span>(size=<span class="number">16</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Visualize barchart with ranked keywords</span></span><br><span class="line">topic_model.visualize_barchart()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Visualize relationships between topics</span></span><br><span class="line">topic_model.visualize_heatmap(n_clusters=<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Visualize the potential hierarchical structure of topics</span></span><br><span class="line">topic_model.visualize_hierarchy()</span><br></pre></td></tr></table></figure>
+<p>![[newplot.png]]</p>
+<h2 id="表示模型representation-models">表示模型（Representation
+Models）</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bertopic.representation <span class="keyword">import</span> KeyBERTInspired</span><br><span class="line"><span class="keyword">from</span> bertopic <span class="keyword">import</span> BERTopic</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create your representation model</span></span><br><span class="line">representation_model = KeyBERTInspired()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Use the representation model in BERTopic on top of the default pipeline</span></span><br><span class="line">topic_model = BERTopic(representation_model=representation_model)</span><br></pre></td></tr></table></figure>
+<p>为了使用表示模型，我们首先要复制我们的主题模型，这样可以方便地展示有表示模型和没有表示模型的模型之间的差异。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 保存原始表示</span></span><br><span class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> deepcopy</span><br><span class="line">original_topics = deepcopy(topic_model.topic_representations_)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">topic_differences</span>(<span class="params">model, original_topics, nr_topics=<span class="number">5</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;显示两个模型之间主题表示的差异&quot;&quot;&quot;</span></span><br><span class="line">    df = pd.DataFrame(columns=[<span class="string">&quot;Topic&quot;</span>, <span class="string">&quot;Original&quot;</span>, <span class="string">&quot;Updated&quot;</span>])</span><br><span class="line">    <span class="keyword">for</span> topic <span class="keyword">in</span> <span class="built_in">range</span>(nr_topics):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 提取每个模型每个主题的前5个关键词</span></span><br><span class="line">        og_words = <span class="string">&quot; | &quot;</span>.join(<span class="built_in">list</span>(<span class="built_in">zip</span>(*original_topics[topic]))[<span class="number">0</span>][:<span class="number">5</span>])</span><br><span class="line">        new_words = <span class="string">&quot; | &quot;</span>.join(<span class="built_in">list</span>(<span class="built_in">zip</span>(*model.get_topic(topic)))[<span class="number">0</span>][:<span class="number">5</span>])</span><br><span class="line">        df.loc[<span class="built_in">len</span>(df)] = [topic, og_words, new_words]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df</span><br></pre></td></tr></table></figure>
+<h2 id="keybertinspired">KeyBERTInspired</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bertopic.representation <span class="keyword">import</span> KeyBERTInspired</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新我们的主题表示为 KeyBERTInspired</span></span><br><span class="line">representation_model = KeyBERTInspired()</span><br><span class="line">topic_model.update_topics(abstracts, representation_model=representation_model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示主题表示的差异</span></span><br><span class="line">topic_differences(topic_model, original_topics)</span><br></pre></td></tr></table></figure>
+<p>![[topic_differences.png]]</p>
+<h2 id="maximal-marginal-relevance">Maximal Marginal Relevance</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bertopic.representation <span class="keyword">import</span> MaximalMarginalRelevance</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新我们的主题表示为 MaximalMarginalRelevance</span></span><br><span class="line">representation_model = MaximalMarginalRelevance(diversity=<span class="number">0.5</span>)</span><br><span class="line">topic_model.update_topics(abstracts, representation_model=representation_model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示主题表示的差异</span></span><br><span class="line">topic_differences(topic_model, original_topics)</span><br></pre></td></tr></table></figure>
+<p>![[topic_differences_2.png]]</p>
+<h3
+id="keybertinspired-和-maximal-marginal-relevance-的区别">KeyBERTInspired
+和 Maximal Marginal Relevance 的区别</h3>
+<p>KeyBERTInspired:</p>
+<ul>
+<li>基于 KeyBERT 算法，使用 BERT 嵌入来提取关键词</li>
+<li>通过计算词嵌入和文档嵌入之间的余弦相似度来选择最相关的词</li>
+<li>倾向于选择语义上最相关的词，可能会导致一些重复</li>
+</ul>
+<p>Maximal Marginal Relevance (MMR):</p>
+<ul>
+<li>在相关性和多样性之间取得平衡</li>
+<li>通过迭代选择既相关又不同于已选词的词</li>
+<li>可以通过调整 diversity 参数来控制多样性程度</li>
+<li>有助于生成更多样化的主题表示，避免重复</li>
+</ul>
+<p>主要区别:</p>
+<ul>
+<li>KeyBERTInspired 专注于相关性，MMR 在相关性和多样性之间平衡</li>
+<li>MMR 可以产生更多样化的结果，而 KeyBERTInspired
+可能更专注但有重复</li>
+<li>MMR 有一个可调节的多样性参数，KeyBERTInspired 没有这种直接控制</li>
+</ul>
+<h2 id="生成模型做文本聚类">生成模型做文本聚类</h2>
+<h3 id="flan-t5">Flan-T5</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline</span><br><span class="line"><span class="keyword">from</span> bertopic.representation <span class="keyword">import</span> TextGeneration</span><br><span class="line"></span><br><span class="line">prompt = <span class="string">&quot;&quot;&quot;I have a topic that contains the following documents:</span></span><br><span class="line"><span class="string">[DOCUMENTS]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The topic is described by the following keywords: &#x27;[KEYWORDS]&#x27;.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Based on the documents and keywords, what is this topic about?&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># bertopic 会默认替换到 [DOCUMENTS] 和 [KEYWORDS]</span></span><br><span class="line"><span class="comment"># 初始文档表示：BERTopic 首先使用预训练的语言模型（如 BERT、RoBERTa 等）将文档转换为向量表示。这一步不需要任何预定义的主题或关键词。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Update our topic representations using Flan-T5</span></span><br><span class="line">generator = pipeline(</span><br><span class="line">    <span class="string">&#x27;text2text-generation&#x27;</span>, </span><br><span class="line">    model=<span class="string">&#x27;google/flan-t5-small&#x27;</span>, </span><br><span class="line">    device=<span class="string">&quot;cuda:0&quot;</span></span><br><span class="line">)</span><br><span class="line">representation_model = TextGeneration(</span><br><span class="line">    generator, prompt=prompt, doc_length=<span class="number">50</span>, tokenizer=<span class="string">&quot;whitespace&quot;</span></span><br><span class="line">)</span><br><span class="line">topic_model.update_topics(abstracts, representation_model=representation_model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示主题表示的差异</span></span><br><span class="line">topic_differences(topic_model, original_topics)</span><br></pre></td></tr></table></figure>
+<p>![[topic_differences_3.png]]</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(abstracts[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">  In this paper Arabic was investigated <span class="keyword">from</span> the speech recognition problem</span><br><span class="line">point of view. We propose a novel approach to build an Arabic Automated Speech</span><br><span class="line">Recognition System (ASR). This system <span class="keyword">is</span> based on the <span class="built_in">open</span> source CMU Sphinx-<span class="number">4</span>,</span><br><span class="line"><span class="keyword">from</span> the Carnegie Mellon University. CMU Sphinx <span class="keyword">is</span> a large-vocabulary;</span><br><span class="line">speaker-independent, continuous speech recognition system based on discrete</span><br><span class="line">Hidden Markov Models (HMMs). We build a model using utilities <span class="keyword">from</span> the</span><br><span class="line">OpenSource CMU Sphinx. We will demonstrate the possible adaptability of this</span><br><span class="line">system to Arabic voice recognition.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fig = topic_model.visualize_document_datamap(</span><br><span class="line">    titles,</span><br><span class="line">    topics=<span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">20</span>)),</span><br><span class="line">    reduced_embeddings=reduced_embeddings,</span><br><span class="line">    width=<span class="number">1200</span>,</span><br><span class="line">    label_font_size=<span class="number">11</span>,</span><br><span class="line">    label_wrap_width=<span class="number">20</span>,</span><br><span class="line">    use_medoids=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># plt.savefig(&quot;datamapplot.png&quot;, dpi=300)</span></span><br></pre></td></tr></table></figure>
+<p>![[Documents and Topics.png]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> deepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c714f7e5.html" rel="prev" title="Text Classification">
+                  <i class="fa fa-angle-left"></i> Text Classification
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">188k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">11:25</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/4dafb607.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
