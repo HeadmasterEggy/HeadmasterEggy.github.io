@@ -30,7 +30,7 @@
 <meta property="og:description" content="Chapter 2 - 了解 Tokens and Embeddings">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-02T12:28:40.000Z">
-<meta property="article:modified_time" content="2025-02-08T11:24:13.261Z">
+<meta property="article:modified_time" content="2025-02-15T09:36:59.112Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%90%E8%AF%8Dsubword%E7%9A%84-tokenization"><span class="nav-text">基于子词（subword）的
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8D%95%E8%AF%8Dword-based%E7%9A%84%E5%88%86%E8%AF%8D"><span class="nav-text">基于单词（Word-based）的分词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%97%E7%AC%A6character-based%E7%9A%84-tokenization"><span class="nav-text">基于字符（Character-based）的
+tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%90%E8%AF%8Dsubword%E7%9A%84-tokenization"><span class="nav-text">基于子词（subword）的
 tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pipeline-%E5%86%85%E9%83%A8"><span class="nav-text">Pipeline 内部</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#embedding"><span class="nav-text">Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#word-embedding-%E4%B8%8E-llm-%E6%97%A0%E5%85%B3"><span class="nav-text">Word Embedding （与 LLM 无关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9B%B8%E5%85%B3%E7%9A%84-embedding"><span class="nav-text">上下文相关的 Embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E5%8F%A5%E5%90%91%E9%87%8F"><span class="nav-text">文本向量（句向量）</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
@@ -226,7 +227,7 @@ tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-08 19:24:13" itemprop="dateModified" datetime="2025-02-08T19:24:13+08:00">2025-02-08</time>
+      <time title="Modified: 2025-02-15 17:36:59" itemprop="dateModified" datetime="2025-02-15T17:36:59+08:00">2025-02-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -245,14 +246,14 @@ tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>763</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>3 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -263,7 +264,33 @@ tokenization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="基于子词subword的-tokenization">基于子词（subword）的
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning/llm/2</p>
+<h1 id="基于单词word-based的分词">基于单词（Word-based）的分词</h1>
+<p>将文本字符串分割成单词作为最小单位。这种方法的基本原则是：<strong>每个空格、标点符号、换行符等自然语言的分隔符都作为分词的边界</strong>。
+![[word-based spilt.png]]</p>
+<ol type="1">
+<li><p><strong>词汇表大小和ID分配</strong>：基于单词的分词方法会将每个独立的单词分配一个唯一的
+ID，ID 从 0
+开始到词汇表的大小。为了完全覆盖一种语言，必须为每个单词分配一个
+ID，这样会生成一个非常大的词汇表。例如，英语中有超过 500,000
+个单词，需要为每个单词创建一个标识符。</p></li>
+<li><p><strong>相似词问题</strong>：基于单词的分词方法将每个词当作独立的
+token，像“dog”和“dogs”或“run”和“running”这样的词会被视为不相关的
+token，而忽略它们的相似性。</p></li>
+<li><p><strong>未知词（Unknown
+token）</strong>：如果词汇表中没有某个单词，tokenizer
+会使用一个特殊的“未知”标记（通常为 “[UNK]” 或
+“”）表示该单词。这通常是个不好的信号，表示分词器无法识别该词的合理表示，可能会导致信息丢失。</p></li>
+<li><p><strong>减少未知词</strong>：为了减少“未知”标记的出现，可以使用更细粒度的分词方法，如基于字符的分词器（character-based
+tokenizer），从而降低词汇表的需求，并帮助模型更好地处理词形变化。</p></li>
+</ol>
+<h1
+id="基于字符character-based的-tokenization">基于字符（Character-based）的
+tokenization</h1>
+<p>将文本拆分为字符，而不是单词，每个字符作为一个独立的 token。
+![[char-based spilt.png]]
+基于字符的分词方法虽然解决了OOV问题，但字符本身缺乏语义信息，且会产生大量tokens，增加计算复杂度。</p>
+<h1 id="基于子词subword的-tokenization">基于子词（subword）的
 tokenization</h1>
 <p>subword 算法把 tokenization
 分为两部分，保持空间效率的同时具有语义意义（只需要两个 tokens
@@ -377,14 +404,14 @@ outputs 还是一样的。</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">188k</span>
+    <span title="Word count total">189k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">11:25</span>
+    <span title="Reading time total">11:26</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
