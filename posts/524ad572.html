@@ -30,7 +30,7 @@
 <meta property="og:description" content="WordPiece 算法">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T13:09:49.000Z">
-<meta property="article:modified_time" content="2025-02-17T03:57:59.639Z">
+<meta property="article:modified_time" content="2025-02-17T04:07:18.009Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpiece-%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="nav-text">Wordpiece 算法思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpiece-%E5%90%88%E5%B9%B6%E8%A7%84%E5%88%99"><span class="nav-text">Wordpiece 合并规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-wordpiece"><span class="nav-text">实现 WordPiece</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpiece-%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="nav-text">WordPiece 算法思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpiece-%E5%90%88%E5%B9%B6%E8%A7%84%E5%88%99"><span class="nav-text">Wordpiece 合并规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-wordpiece"><span class="nav-text">实现 WordPiece</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -225,7 +225,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-17 11:57:59" itemprop="dateModified" datetime="2025-02-17T11:57:59+08:00">2025-02-17</time>
+      <time title="Modified: 2025-02-17 12:07:18" itemprop="dateModified" datetime="2025-02-17T12:07:18+08:00">2025-02-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -263,15 +263,14 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>#deepLearning/wordPiece</p>
-<h1 id="wordpiece-算法思想">Wordpiece 算法思想</h1>
+<h1 id="wordpiece-算法思想">WordPiece 算法思想</h1>
 <p>Wordpiece将文本在每个词内部添加前缀来分割成字符级，来构建词汇表。
 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">w ##o ##r ##d</span><br></pre></td></tr></table></figure></p>
 <h1 id="wordpiece-合并规则">Wordpiece 合并规则</h1>
 <p><strong>核心思想</strong>：合并能最大提升语言模型似然概率的子词对。
 <span class="math display">\[
-\text{score} =
-\frac{\text{freq\_of\_pair}}{\text{freq\_of\_first\_element} \times
-\text{freq\_of\_second\_element}}
+Score = \frac{freq\_of\_pair} { {freq\_of\_first\_element} \times
+{freq\_of\_second\_element} }
 \]</span>
 通过将两部分合在一起的频率除以其中各部分的频率的乘积，该算法优先合并那些在词汇表中单独出现出现的对。</p>
 <p>首先假设词汇表 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">(&quot;hug&quot;, 10), (&quot;pug&quot;, 5), (&quot;pun&quot;, 12), (&quot;bun&quot;, 4), (&quot;hugs&quot;, 5)</span><br></pre></td></tr></table></figure> 经过分割 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">(&quot;h&quot; &quot;##u&quot; &quot;##g&quot;, 10), (&quot;p&quot; &quot;##u&quot; &quot;##g&quot;, 5), (&quot;p&quot; &quot;##u&quot; &quot;##n&quot;, 12), (&quot;b&quot; &quot;##u&quot; &quot;##n&quot;, 4), (&quot;h&quot; &quot;##u&quot; &quot;##g&quot; &quot;##s&quot;, 5)</span><br></pre></td></tr></table></figure> 最初的词汇表为
