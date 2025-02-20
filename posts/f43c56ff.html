@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Unigram tokenization 算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unigram">
+<meta property="og:url" content="http://example.com/posts/f43c56ff.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Unigram tokenization 算法">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-17T07:06:24.000Z">
+<meta property="article:modified_time" content="2025-02-20T06:12:06.620Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="deepLearning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/f43c56ff.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/f43c56ff.html","path":"posts/f43c56ff.html","title":"Unigram"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Unigram | Joey</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">46</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#unigram-tokenization-%E7%AE%97%E6%B3%95"><span class="nav-text">Unigram tokenization 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%8D%9F%E5%A4%B1%E5%80%BC"><span class="nav-text">计算损失值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-unigram%E7%AE%97%E6%B3%95"><span class="nav-text">实现 Unigram算法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/f43c56ff.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Unigram | Joey">
+      <meta itemprop="description" content="Unigram tokenization 算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unigram
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-02-17 15:06:24" itemprop="dateCreated datePublished" datetime="2025-02-17T15:06:24+08:00">2025-02-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-02-20 14:12:06" itemprop="dateModified" datetime="2025-02-20T14:12:06+08:00">2025-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>7 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Unigram tokenization 算法</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>#deepLearning/unigram</p>
+<h1 id="unigram-tokenization-算法">Unigram tokenization 算法</h1>
+<p>Unigram 算法常用于 SentencePiece 中，该切分算法被
+AlBERT，T5，mBART，Big Bird 和 XLNet 等模型广泛采用。</p>
+<p>Unigram
+是基于概率的删除策略，从一个大词汇库开始，然后逐步删除词汇，直到达到目标词汇库大小。</p>
+<p>对于词汇表中的每个符号，算法计算如果删除该符号，整体损失会增加多少，如果增加得很少，说明这个词对整体来说并不重要可以删掉，然后寻找删除后损失增加最少的符号。</p>
+<p>这个过程非常消耗计算资源，因此删除与最低损失增长相关的百分之/p （p
+是一个可以控制的超参数，通常是 10 或
+20）的符号。然后重复此过程，直到词汇库达到所需大小。</p>
+<p>语料库 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">&quot;hug&quot;</span>, <span class="number">10</span>), (<span class="string">&quot;pug&quot;</span>, <span class="number">5</span>), (<span class="string">&quot;pun&quot;</span>, <span class="number">12</span>), (<span class="string">&quot;bun&quot;</span>, <span class="number">4</span>), (<span class="string">&quot;hugs&quot;</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>所有的子串作为初始词汇库 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&quot;h&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot;g&quot;</span>, <span class="string">&quot;hu&quot;</span>, <span class="string">&quot;ug&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;pu&quot;</span>, <span class="string">&quot;n&quot;</span>, <span class="string">&quot;un&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;bu&quot;</span>, <span class="string">&quot;s&quot;</span>, <span class="string">&quot;hug&quot;</span>, <span class="string">&quot;gs&quot;</span>, <span class="string">&quot;ugs&quot;</span>]</span><br></pre></td></tr></table></figure></p>
+<p>所有可能出现子词的频率 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">&quot;h&quot;</span>, <span class="number">15</span>) (<span class="string">&quot;u&quot;</span>, <span class="number">36</span>) (<span class="string">&quot;g&quot;</span>, <span class="number">20</span>) (<span class="string">&quot;hu&quot;</span>, <span class="number">15</span>) (<span class="string">&quot;ug&quot;</span>, <span class="number">20</span>) (<span class="string">&quot;p&quot;</span>, <span class="number">17</span>) (<span class="string">&quot;pu&quot;</span>, <span class="number">17</span>) (<span class="string">&quot;n&quot;</span>, <span class="number">16</span>)</span><br><span class="line">(<span class="string">&quot;un&quot;</span>, <span class="number">16</span>) (<span class="string">&quot;b&quot;</span>, <span class="number">4</span>) (<span class="string">&quot;bu&quot;</span>, <span class="number">4</span>) (<span class="string">&quot;s&quot;</span>, <span class="number">5</span>) (<span class="string">&quot;hug&quot;</span>, <span class="number">15</span>) (<span class="string">&quot;gs&quot;</span>, <span class="number">5</span>) (<span class="string">&quot;ugs&quot;</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+例如， <code>"ug"</code> 出现在 <code>"hug"</code> ， <code>"pug"</code> 和 <code>"hugs"</code> 中，所以它在我们的语料库中的频率是
+20。所以，所有频率之和为 210，子词 <code>"ug"</code> 出现的概率是
+20/210。</p>
+<p>现在对一个给定的单词进行分词，要查看所有可能的分词组合，并根据
+Unigram 模型计算出每种可能的概率。
+由于所有的分词都被视为独立的，因此这个单词分词的概率就是每个子词概率的乘积。例如，将 <code>"pug"</code> 分词为 <code>["p", "u", "g"]</code> 的概率为：</p>
+<p><span class="math display">\[
+P([\text{“p”}, \text{“u”}, \text{“g”}]) = P(\text{“p”}) \times
+P(\text{“u”}) \times P(\text{“g”}) = \frac{5}{210} \times \frac{36}{210}
+\times \frac{20}{210} = 0.000389
+\]</span> 将 “pug” 分词为 <code>["pu", "g"]</code> 的概率为：</p>
+<p><span class="math display">\[
+P([\text{“pu”}, \text{“g”}]) = P(\text{“pu”}) \times P(\text{“g”}) =
+\frac{5}{210} \times \frac{20}{210} = 0.0022676
+\]</span>
+后者的可能性更大。一般来说，分词数最少的分词方式将具有最高的概率（因为每个分词都要除以
+210）。</p>
+<p>利用 Unigram
+模型对一个词进行分词，就是找出概率最高的分词方式。以 <code>"pug"</code> 为例，得到的各种可能分词方式的概率如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&quot;p&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot;g&quot;</span>] : <span class="number">0.000389</span></span><br><span class="line">[<span class="string">&quot;p&quot;</span>, <span class="string">&quot;ug&quot;</span>] : <span class="number">0.0022676</span></span><br><span class="line">[<span class="string">&quot;pu&quot;</span>, <span class="string">&quot;g&quot;</span>] : <span class="number">0.0022676</span></span><br></pre></td></tr></table></figure>
+<p>因此， <code>"pug"</code> 将被分词为 <code>["p", "ug"]</code> 或 <code>["pu", "g"]</code>。</p>
+<h2 id="计算损失值">计算损失值</h2>
+<p>语料库中的每个词都有一个分数，损失（loss）值是这些分数的负对数似然 ——
+即所有词的语料库中所有词的 <code>-log(P(word))</code> 总和</p>
+<p>语料库 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">&quot;hug&quot;</span>, <span class="number">10</span>), (<span class="string">&quot;pug&quot;</span>, <span class="number">5</span>), (<span class="string">&quot;pun&quot;</span>, <span class="number">12</span>), (<span class="string">&quot;bun&quot;</span>, <span class="number">4</span>), (<span class="string">&quot;hugs&quot;</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>每个单词的得分 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;hug&quot;</span>: [<span class="string">&quot;hug&quot;</span>] (score <span class="number">0.071428</span>)</span><br><span class="line"><span class="string">&quot;pug&quot;</span>: [<span class="string">&quot;pu&quot;</span>, <span class="string">&quot;g&quot;</span>] (score <span class="number">0.007710</span>)</span><br><span class="line"><span class="string">&quot;pun&quot;</span>: [<span class="string">&quot;pu&quot;</span>, <span class="string">&quot;n&quot;</span>] (score <span class="number">0.006168</span>)</span><br><span class="line"><span class="string">&quot;bun&quot;</span>: [<span class="string">&quot;bu&quot;</span>, <span class="string">&quot;n&quot;</span>] (score <span class="number">0.001451</span>)</span><br><span class="line"><span class="string">&quot;hugs&quot;</span>: [<span class="string">&quot;hug&quot;</span>, <span class="string">&quot;s&quot;</span>] (score <span class="number">0.001701</span>)</span><br></pre></td></tr></table></figure></p>
+<p>损失值（loss）为 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">10</span> * (-log(<span class="number">0.071428</span>)) + <span class="number">5</span> * (-log(<span class="number">0.007710</span>)) + <span class="number">12</span> * (-log(<span class="number">0.006168</span>)) + <span class="number">4</span> * (-log(<span class="number">0.001451</span>)) + <span class="number">5</span> * (-log(<span class="number">0.001701</span>)) = <span class="number">169.8</span></span><br></pre></td></tr></table></figure></p>
+<p>“pug”可以被分词为 <code>["pu", "g"]</code> ，也可以被分词为 <code>["p", "ug"]</code> ，获得的分数是相同的。因此，去除词汇表中的 <code>"pu"</code> 损失值还会是一样的。</p>
+<p>但是，去除 <code>"hug"</code> 之后，损失会变得更糟，因为 <code>"hug"</code> 和 <code>"hugs"</code> 的
+tokenization 会变成 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;hug&quot;</span>: [<span class="string">&quot;hu&quot;</span>, <span class="string">&quot;g&quot;</span>] (score <span class="number">0.006802</span>)</span><br><span class="line"><span class="string">&quot;hugs&quot;</span>: [<span class="string">&quot;hu&quot;</span>, <span class="string">&quot;gs&quot;</span>] (score <span class="number">0.001701</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这些变化将导致损失增加 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">- <span class="number">10</span> * (-log(<span class="number">0.071428</span>)) + <span class="number">10</span> * (-log(<span class="number">0.006802</span>)) = <span class="number">23.5</span></span><br></pre></td></tr></table></figure> 因此， <code>"pu"</code> tokens
+可能会从词汇表中移除，但 <code>"hug"</code> 则不会。</p>
+<h1 id="实现-unigram算法">实现 Unigram算法</h1>
+<p>语料库 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">corpus = [</span><br><span class="line">    <span class="string">&quot;This is the Hugging Face Course.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;This chapter is about tokenization.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;This section shows several tokenizer algorithms.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Hopefully, you will be able to understand how they are trained and generate tokens.&quot;</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>xlnet-base-cased</code> 模型 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;xlnet-base-cased&quot;</span>)</span><br></pre></td></tr></table></figure></p>
+<p>计算语料库中每个单词的出现次数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"></span><br><span class="line">word_freqs = defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">for</span> text <span class="keyword">in</span> corpus:</span><br><span class="line">    words_with_offsets = tokenizer.backend_tokenizer.pre_tokenizer.pre_tokenize_str(text)</span><br><span class="line">    new_words = [word <span class="keyword">for</span> word, offset <span class="keyword">in</span> words_with_offsets]</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> new_words:</span><br><span class="line">        word_freqs[word] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">word_freqs</span><br></pre></td></tr></table></figure></p>
+<p>按出现频率进行排序 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">char_freqs = defaultdict(<span class="built_in">int</span>)</span><br><span class="line">subwords_freqs = defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">for</span> word, freq <span class="keyword">in</span> word_freqs.items():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word)):</span><br><span class="line">        char_freqs[word[i]] += freq</span><br><span class="line">        <span class="comment"># 循环遍历长度至少为2的子字</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">2</span>, <span class="built_in">len</span>(word) + <span class="number">1</span>):</span><br><span class="line">            subwords_freqs[word[i:j]] += freq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按频率对子词排序</span></span><br><span class="line">sorted_subwords = <span class="built_in">sorted</span>(subwords_freqs.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line">sorted_subwords[:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[(<span class="string">&#x27;▁t&#x27;</span>, <span class="number">7</span>), (<span class="string">&#x27;is&#x27;</span>, <span class="number">5</span>), (<span class="string">&#x27;er&#x27;</span>, <span class="number">5</span>), (<span class="string">&#x27;▁a&#x27;</span>, <span class="number">5</span>), (<span class="string">&#x27;▁to&#x27;</span>, <span class="number">4</span>), (<span class="string">&#x27;to&#x27;</span>, <span class="number">4</span>), (<span class="string">&#x27;en&#x27;</span>, <span class="number">4</span>), (<span class="string">&#x27;▁T&#x27;</span>, <span class="number">3</span>), (<span class="string">&#x27;▁Th&#x27;</span>, <span class="number">3</span>), (<span class="string">&#x27;▁Thi&#x27;</span>, <span class="number">3</span>)]</span><br></pre></td></tr></table></figure></p>
+<p>用最优的子词对字符进行分组，以获得大小为 300 的初始词汇表
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">token_freqs = <span class="built_in">list</span>(char_freqs.items()) + sorted_subwords[: <span class="number">300</span> - <span class="built_in">len</span>(char_freqs)]</span><br><span class="line">token_freqs = &#123;token: freq <span class="keyword">for</span> token, freq <span class="keyword">in</span> token_freqs&#125;</span><br></pre></td></tr></table></figure></p>
+<p>计算所有频率的总和，将频率转化为概率 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> log</span><br><span class="line"></span><br><span class="line">total_sum = <span class="built_in">sum</span>([freq <span class="keyword">for</span> token, freq <span class="keyword">in</span> token_freqs.items()])</span><br><span class="line">model = &#123;token: -log(freq / total_sum) <span class="keyword">for</span> token, freq <span class="keyword">in</span> token_freqs.items()&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在，主函数是使用 Viterbi
+算法对单词进行分词，这个算法会计算出每个词的最好的分割方式，把这个结果保存在一个叫做 <code>best_segmentations</code> 的变量里。</p>
+<p>为词的每一个位置（从 0
+开始，一直到词的总长度）都保存一个字典，字典里有两个键：最好的分割中最后一个词的起始位置，以及最好的分割的得分。</p>
+<p>只需要两个循环就可以填充这个列表：一个主循环用来遍历每个可能的开始位置，第二个循环则试着找出所有以这个开始位置开始的子串。</p>
+<p>如果这个子串在我们的词表里，那么我们就找到了一个新的分词方式，这个分词方式会在当前位置结束。然后，我们会把这个新的分词方式和 <code>best_segmentations</code> 里的内容进行比较。</p>
+<p>当主循环结束后，我们就从词的最后一个位置开始，然后一步步往前跳，跳过的每一步，我们都会记录下来，直到我们回到词的开头。
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encode_word</span>(<span class="params">word, model</span>):</span><br><span class="line">    best_segmentations = [&#123;<span class="string">&quot;start&quot;</span>: <span class="number">0</span>, <span class="string">&quot;score&quot;</span>: <span class="number">1</span>&#125;] + [</span><br><span class="line">        &#123;<span class="string">&quot;start&quot;</span>: <span class="literal">None</span>, <span class="string">&quot;score&quot;</span>: <span class="literal">None</span>&#125; <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word))</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> start_idx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word)):</span><br><span class="line">        <span class="comment"># best_score_at_start应该由循环的前面的步骤计算和填充</span></span><br><span class="line">        best_score_at_start = best_segmentations[start_idx][<span class="string">&quot;score&quot;</span>]</span><br><span class="line">        <span class="keyword">for</span> end_idx <span class="keyword">in</span> <span class="built_in">range</span>(start_idx + <span class="number">1</span>, <span class="built_in">len</span>(word) + <span class="number">1</span>):</span><br><span class="line">            token = word[start_idx:end_idx]</span><br><span class="line">            <span class="keyword">if</span> token <span class="keyword">in</span> model <span class="keyword">and</span> best_score_at_start <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                score = model[token] + best_score_at_start</span><br><span class="line">                <span class="comment"># 如果我们发现以 end_idx 结尾的更好分段,我们会更新</span></span><br><span class="line">                <span class="keyword">if</span> (</span><br><span class="line">                    best_segmentations[end_idx][<span class="string">&quot;score&quot;</span>] <span class="keyword">is</span> <span class="literal">None</span></span><br><span class="line">                    <span class="keyword">or</span> best_segmentations[end_idx][<span class="string">&quot;score&quot;</span>] &gt; score</span><br><span class="line">                ):</span><br><span class="line">                    best_segmentations[end_idx] = &#123;<span class="string">&quot;start&quot;</span>: start_idx, <span class="string">&quot;score&quot;</span>: score&#125;</span><br><span class="line"></span><br><span class="line">    segmentation = best_segmentations[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> segmentation[<span class="string">&quot;score&quot;</span>] <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 我们没有找到单词的 tokens  -&gt; unknown</span></span><br><span class="line">        <span class="keyword">return</span> [<span class="string">&quot;&lt;unk&gt;&quot;</span>], <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    score = segmentation[<span class="string">&quot;score&quot;</span>]</span><br><span class="line">    start = segmentation[<span class="string">&quot;start&quot;</span>]</span><br><span class="line">    end = <span class="built_in">len</span>(word)</span><br><span class="line">    tokens = []</span><br><span class="line">    <span class="keyword">while</span> start != <span class="number">0</span>:</span><br><span class="line">        tokens.insert(<span class="number">0</span>, word[start:end])</span><br><span class="line">        next_start = best_segmentations[start][<span class="string">&quot;start&quot;</span>]</span><br><span class="line">        end = start</span><br><span class="line">        start = next_start</span><br><span class="line">    tokens.insert(<span class="number">0</span>, word[start:end])</span><br><span class="line">    <span class="keyword">return</span> tokens, score</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(encode_word(<span class="string">&quot;Hopefully&quot;</span>, model))</span><br><span class="line"><span class="built_in">print</span>(encode_word(<span class="string">&quot;This&quot;</span>, model))</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">([<span class="string">&#x27;H&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;p&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;u&#x27;</span>, <span class="string">&#x27;ll&#x27;</span>, <span class="string">&#x27;y&#x27;</span>], <span class="number">41.5157494601402</span>)</span><br><span class="line">([<span class="string">&#x27;This&#x27;</span>], <span class="number">6.288267030694535</span>)</span><br></pre></td></tr></table></figure>
+<p>计算损失 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_loss</span>(<span class="params">model</span>):</span><br><span class="line">    loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> word, freq <span class="keyword">in</span> word_freqs.items():</span><br><span class="line">        _, word_loss = encode_word(word, model)</span><br><span class="line">        loss += freq * word_loss</span><br><span class="line">    <span class="keyword">return</span> loss</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">compute_loss(model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">413.10377642940875</span></span><br></pre></td></tr></table></figure>
+<p>计算分数 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_scores</span>(<span class="params">model</span>):</span><br><span class="line">    scores = &#123;&#125;</span><br><span class="line">    model_loss = compute_loss(model)</span><br><span class="line">    <span class="keyword">for</span> token, score <span class="keyword">in</span> model.items():</span><br><span class="line">        <span class="comment"># 我们将保留长度为 1 的 tokens</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(token) == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        model_without_token = copy.deepcopy(model)</span><br><span class="line">        _ = model_without_token.pop(token)</span><br><span class="line">        scores[token] = compute_loss(model_without_token) - model_loss</span><br><span class="line">    <span class="keyword">return</span> scores</span><br><span class="line"></span><br><span class="line">scores = compute_scores(model)</span><br><span class="line"><span class="built_in">print</span>(scores[<span class="string">&quot;ll&quot;</span>])</span><br><span class="line"><span class="built_in">print</span>(scores[<span class="string">&quot;his&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="number">6.376412403623874</span></span><br><span class="line"><span class="number">0.0</span></span><br></pre></td></tr></table></figure></p>
+<p>这种方式效率非常低，所以 SentencePiece
+使用了一种估算方法来计算如果没有 X
+token，模型的损失会是多少：它不是重新开始，而是只是用剩下的词表里 X
+token
+的分词方式来替代它。这样，所有的得分都能在和模型损失一起的同时计算出来。</p>
+<p>将模型使用的特殊 tokens
+添加到词汇表中，然后循环直到从词汇表中剪除足够多的 tokens
+以达到期望的规模 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">percent_to_remove = <span class="number">0.1</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">len</span>(model) &gt; <span class="number">100</span>:</span><br><span class="line">    scores = compute_scores(model)</span><br><span class="line">    sorted_scores = <span class="built_in">sorted</span>(scores.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>])</span><br><span class="line">    <span class="comment"># 删除分数最低的percent_to_remov tokens 。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">int</span>(<span class="built_in">len</span>(model) * percent_to_remove)):</span><br><span class="line">        _ = token_freqs.pop(sorted_scores[i][<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    total_sum = <span class="built_in">sum</span>([freq <span class="keyword">for</span> token, freq <span class="keyword">in</span> token_freqs.items()])</span><br><span class="line">    model = &#123;token: -log(freq / total_sum) <span class="keyword">for</span> token, freq <span class="keyword">in</span> token_freqs.items()&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">tokenize</span>(<span class="params">text, model</span>):</span><br><span class="line">    words_with_offsets = tokenizer.backend_tokenizer.pre_tokenizer.pre_tokenize_str(text)</span><br><span class="line">    pre_tokenized_text = [word <span class="keyword">for</span> word, offset <span class="keyword">in</span> words_with_offsets]</span><br><span class="line">    encoded_words = [encode_word(word, model)[<span class="number">0</span>] <span class="keyword">for</span> word <span class="keyword">in</span> pre_tokenized_text]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(encoded_words, [])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tokenize(<span class="string">&quot;This is the Hugging Face course.&quot;</span>, model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[<span class="string">&#x27;▁This&#x27;</span>, <span class="string">&#x27;▁is&#x27;</span>, <span class="string">&#x27;▁the&#x27;</span>, <span class="string">&#x27;▁Hugging&#x27;</span>, <span class="string">&#x27;▁Face&#x27;</span>, <span class="string">&#x27;▁&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;ou&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;.&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> deepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/524ad572.html" rel="prev" title="WordPiece">
+                  <i class="fa fa-angle-left"></i> WordPiece
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备 2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">194k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">11:47</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/f43c56ff.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
