@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这篇论文《Agnostic Federated Learning》（不可知联邦学习）由 Google Research 的 Mehryar Mohri、Gary Sivek 和 Ananda Theertha Suresh 撰写，提出了一种新的联邦学习框架，旨在解决传统联邦学习中对目标分布假设过强、可能导致模型在真实测试环境中表现不佳的问题。以下是对该论文的详细解释：  一、研究背景与动机 1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agnostic Federated Learning">
+<meta property="og:url" content="http://example.com/posts/f2360666.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="这篇论文《Agnostic Federated Learning》（不可知联邦学习）由 Google Research 的 Mehryar Mohri、Gary Sivek 和 Ananda Theertha Suresh 撰写，提出了一种新的联邦学习框架，旨在解决传统联邦学习中对目标分布假设过强、可能导致模型在真实测试环境中表现不佳的问题。以下是对该论文的详细解释：  一、研究背景与动机 1.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-16T12:57:10.000Z">
+<meta property="article:modified_time" content="2025-10-16T05:14:00.996Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/f2360666.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/f2360666.html","path":"posts/f2360666.html","title":"Agnostic Federated Learning"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agnostic Federated Learning | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/f2360666.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-text">1. 传统联邦学习的缺陷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E7%9A%84%E6%96%B0%E6%A1%86%E6%9E%B6agnostic-federated-learning-afl"><span class="nav-text">2.
+提出的新框架：Agnostic Federated Learning (AFL)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%90%86%E8%AE%BA%E8%B4%A1%E7%8C%AE"><span class="nav-text">二、理论贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96%E7%95%8C%E9%99%90generalization-bounds"><span class="nav-text">1. 泛化界限（Generalization
+Bounds）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E5%85%AC%E5%B9%B3%E6%80%A7%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">2. 与公平性的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1"><span class="nav-text">三、算法设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-text">1. 优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95stochastic-afl"><span class="nav-text">2. 随机优化算法：Stochastic-AFL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81"><span class="nav-text">四、实验验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#adult-%E6%95%B0%E6%8D%AE%E9%9B%86%E6%94%B6%E5%85%A5%E9%A2%84%E6%B5%8B"><span class="nav-text">1. Adult 数据集（收入预测）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fashion-mnist%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB"><span class="nav-text">2. Fashion-MNIST（图像分类）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%AF%9D-vs-%E6%96%87%E6%A1%A3"><span class="nav-text">3. 语言模型（对话 vs 文档）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E6%89%A9%E5%B1%95%E4%B8%8E%E8%AE%A8%E8%AE%BA"><span class="nav-text">五、扩展与讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">1. 域的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E5%85%88%E9%AA%8C%E7%9F%A5%E8%AF%86"><span class="nav-text">2. 引入先验知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="nav-text">3. 个性化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%80%BB%E7%BB%93%E4%B8%8E%E6%84%8F%E4%B9%89"><span class="nav-text">六、总结与意义</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/f2360666.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agnostic Federated Learning | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agnostic Federated Learning
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-16 12:57:10 / Modified: 05:14:00" itemprop="dateCreated datePublished" datetime="2025-10-16T12:57:10Z">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《Agnostic Federated Learning》（不可知联邦学习）由 Google
+Research 的 Mehryar Mohri、Gary Sivek 和 Ananda Theertha Suresh
+撰写，提出了一种新的联邦学习框架，旨在解决传统联邦学习中对目标分布假设过强、可能导致模型在真实测试环境中表现不佳的问题。以下是对该论文的详细解释：</p>
+<hr />
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="传统联邦学习的缺陷">1. 传统联邦学习的缺陷</h3>
+<ul>
+<li>传统联邦学习假设目标分布是客户端分布的加权平均（即均匀分布 ( = _k
+_k)）。</li>
+<li>但实际上，测试时的数据分布可能与训练时的分布不一致，导致模型在真实场景中表现不佳。</li>
+<li>这种不一致可能源于：
+<ul>
+<li>客户端参与训练的不确定性（如设备是否联网、是否充电）；</li>
+<li>不同客户端数据分布的差异；</li>
+<li>目标用户群体与训练用户群体的不匹配。</li>
+</ul></li>
+</ul>
+<h3 id="提出的新框架agnostic-federated-learning-afl">2.
+提出的新框架：Agnostic Federated Learning (AFL)</h3>
+<ul>
+<li>AFL
+不假设目标分布是已知的均匀分布，而是假设目标分布是客户端分布的<strong>任意混合</strong>。</li>
+<li>目标是最小化<strong>最坏情况下的期望损失</strong>，即： [
+<em>{</em>}(h) = <em>{} </em>{<em>}(h) ] 其中 (</em>= _{k=1}^p _k
+_k)，(_p) 是混合权重的集合。</li>
+</ul>
+<hr />
+<h2 id="二理论贡献">二、理论贡献</h2>
+<h3 id="泛化界限generalization-bounds">1. 泛化界限（Generalization
+Bounds）</h3>
+<ul>
+<li>提出了基于<strong>加权 Rademacher 复杂度</strong>的泛化界限。</li>
+<li>引入<strong>偏度（skewness）</strong> 参数
+(())，衡量混合分布与均匀分布的差异。</li>
+<li>定理2给出了期望损失与经验损失之间的界限，保证了学习的泛化能力。</li>
+</ul>
+<h3 id="与公平性的联系">2. 与公平性的联系</h3>
+<ul>
+<li>AFL 自然地引入了一种公平性概念：<strong>“善意公平”（good-intent
+fairness）</strong>。</li>
+<li>通过最小化最坏情况下的损失，模型不会偏向任何一个受保护群体（如性别、种族等）。</li>
+<li>特别适用于存在多个敏感群体的情况，确保模型在所有群体上表现均衡。</li>
+</ul>
+<hr />
+<h2 id="三算法设计">三、算法设计</h2>
+<h3 id="优化问题">1. 优化问题</h3>
+<ul>
+<li>AFL 的目标是求解如下 min-max 优化问题： [ <em>{h } </em>{}
+<em>{</em>}(h) + ]</li>
+<li>正则化项包括模型复杂度控制（如权重范数）和偏度控制。</li>
+</ul>
+<h3 id="随机优化算法stochastic-afl">2. 随机优化算法：Stochastic-AFL</h3>
+<ul>
+<li>提出了一个高效的随机梯度算法，适用于大规模数据。</li>
+<li>支持两种随机梯度估计方式：
+<ul>
+<li><strong>PerDomain</strong>：对每个域采样一个样本；</li>
+<li><strong>Weighted</strong>：按混合权重采样一个域，再采样一个样本。</li>
+</ul></li>
+<li>提供了收敛性分析，证明在凸损失和假设集下算法收敛。</li>
+</ul>
+<hr />
+<h2 id="四实验验证">四、实验验证</h2>
+<p>论文在三个数据集上验证了 AFL 的有效性：</p>
+<h3 id="adult-数据集收入预测">1. Adult 数据集（收入预测）</h3>
+<ul>
+<li>将数据分为“有博士学位”和“无博士学位”两个域。</li>
+<li>AFL 在最差域上的准确率高于传统联邦学习模型。</li>
+</ul>
+<h3 id="fashion-mnist图像分类">2. Fashion-MNIST（图像分类）</h3>
+<ul>
+<li>选取三个最难分类的服装类别作为三个域。</li>
+<li>AFL 在最难类别（衬衫）上的准确率显著提升。</li>
+</ul>
+<h3 id="语言模型对话-vs-文档">3. 语言模型（对话 vs 文档）</h3>
+<ul>
+<li>使用电影对话和 Penn TreeBank 作为两个域。</li>
+<li>AFL 在文档域上的困惑度（perplexity）更低，表现更优。</li>
+</ul>
+<hr />
+<h2 id="五扩展与讨论">五、扩展与讨论</h2>
+<h3 id="域的定义">1. 域的定义</h3>
+<ul>
+<li>建议对客户端进行聚类，形成更少但更纯的域，以提升泛化能力。</li>
+</ul>
+<h3 id="引入先验知识">2. 引入先验知识</h3>
+<ul>
+<li>若对混合权重有先验分布，可将其引入目标函数中。</li>
+</ul>
+<h3 id="个性化">3. 个性化</h3>
+<ul>
+<li>AFL 模型可与客户端特定模型结合，实现个性化预测。</li>
+</ul>
+<hr />
+<h2 id="六总结与意义">六、总结与意义</h2>
+<ul>
+<li><strong>理论方面</strong>：提出了不可知联邦学习的框架，给出了严格的泛化界限。</li>
+<li><strong>算法方面</strong>：设计了高效的随机优化算法，适用于大规模联邦学习。</li>
+<li><strong>应用方面</strong>：在多个任务中验证了其在公平性、鲁棒性和泛化能力上的优势。</li>
+<li><strong>广泛适用性</strong>：不仅限于联邦学习，也适用于领域自适应、漂移学习等训练与测试分布不一致的场景。</li>
+</ul>
+<hr />
+<p>如果想要进一步调整，请随时和我沟通。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/801c927a.html" rel="prev" title="Communication-Efficient Learning of Deep Networks from Decentralized Data">
+                  <i class="fa fa-angle-left"></i> Communication-Efficient Learning of Deep Networks from Decentralized Data
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/165c30ab.html" rel="next" title="FedAffect: Few-shot federated learning for facial expression recognition">
+                  FedAffect: Few-shot federated learning for facial expression recognition <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">205k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:26</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这篇论文《Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning》（TEAM）提出了一种新的小样本学习 框架，结合了元学习、度量学习和转导推理，以解决在数据极度稀缺的情况下如何学习一个泛化能力强且能快速适应新任务的分类器的问题。以下是对论文的详细解释：  一、研究背景与动机 1. 小样本学习的挑战  深度学习在大量标注数据上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning">
+<meta property="og:url" content="http://example.com/posts/bf913458.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="这篇论文《Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning》（TEAM）提出了一种新的小样本学习 框架，结合了元学习、度量学习和转导推理，以解决在数据极度稀缺的情况下如何学习一个泛化能力强且能快速适应新任务的分类器的问题。以下是对论文的详细解释：  一、研究背景与动机 1. 小样本学习的挑战  深度学习在大量标注数据上">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-16T13:11:42.000Z">
+<meta property="article:modified_time" content="2025-10-16T05:13:37.032Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/bf913458.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/bf913458.html","path":"posts/bf913458.html","title":"Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/bf913458.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-text">1. 小样本学习的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-text">2. 现有方法的不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cteam-%E6%A1%86%E6%9E%B6%E6%A6%82%E8%BF%B0"><span class="nav-text">二、TEAM 框架概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E6%96%B9%E6%B3%95%E7%BB%86%E8%8A%82"><span class="nav-text">三、方法细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%97%A0%E5%85%B3%E7%9A%84%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E5%99%A8"><span class="nav-text">1. 任务无关的特征提取器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%85%E6%99%AF%E8%87%AA%E9%80%82%E5%BA%94%E5%BA%A6%E9%87%8F%E6%A8%A1%E5%9D%97"><span class="nav-text">2. 情景自适应度量模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E7%9B%B8%E4%BC%BC%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-text">3. 双向相似度策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C"><span class="nav-text">四、实验与结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-text">2. 实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%BB%93%E6%9E%9C"><span class="nav-text">3. 主要结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C"><span class="nav-text">4. 消融实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E6%89%A9%E5%B1%95"><span class="nav-text">5. 半监督扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%B4%A1%E7%8C%AE%E6%80%BB%E7%BB%93"><span class="nav-text">五、贡献总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C"><span class="nav-text">六、未来工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/bf913458.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Transductive Episodic-Wise Adaptive Metric for Few-Shot Learning
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-16 13:11:42 / Modified: 05:13:37" itemprop="dateCreated datePublished" datetime="2025-10-16T13:11:42Z">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《Transductive Episodic-Wise Adaptive Metric for Few-Shot
+Learning》（TEAM）提出了一种新的<strong>小样本学习</strong>
+框架，结合了<strong>元学习</strong>、<strong>度量学习</strong>和<strong>转导推理</strong>，以解决在数据极度稀缺的情况下如何学习一个泛化能力强且能快速适应新任务的分类器的问题。以下是对论文的详细解释：</p>
+<hr />
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="小样本学习的挑战">1. 小样本学习的挑战</h3>
+<ul>
+<li>深度学习在大量标注数据上表现优异，但在数据稀缺的场景（如医疗图像、生物识别）中容易过拟合。</li>
+<li>小样本学习旨在从极少数样本中快速学习新概念，是当前研究热点。</li>
+</ul>
+<h3 id="现有方法的不足">2. 现有方法的不足</h3>
+<ul>
+<li><strong>任务无关的嵌入空间</strong>：大多数方法将所有样本嵌入到一个共享的度量空间，忽略了不同任务之间的特异性。</li>
+<li><strong>归纳推理的限制</strong>：传统方法在预测时逐个处理查询样本，未能充分利用查询集整体信息。</li>
+</ul>
+<hr />
+<h2 id="二team-框架概述">二、TEAM 框架概述</h2>
+<p>TEAM 的核心思想是： - 在元学习框架下，为<strong>每个任务</strong>
+构建一个<strong>任务特定的度量空间</strong>； -
+利用<strong>转导推理</strong>，在预测时同时考虑所有查询样本； -
+通过<strong>双向相似度策略</strong>
+更鲁棒地衡量查询与原型之间的关系。</p>
+<hr />
+<h2 id="三方法细节">三、方法细节</h2>
+<h3 id="任务无关的特征提取器">1. 任务无关的特征提取器</h3>
+<ul>
+<li>使用卷积神经网络（如 ConvNet 或 ResNet）提取特征。</li>
+<li>引入<strong>任务内部混合</strong>
+数据增强策略，通过样本间的凸组合生成新样本，提升模型泛化能力。</li>
+</ul>
+<h3 id="情景自适应度量模块">2. 情景自适应度量模块</h3>
+<ul>
+<li>为每个任务学习一个度量矩阵 ( M_t
+)，将特征从共享空间映射到任务特定空间。</li>
+<li>构建一个<strong>半定规划问题</strong>，目标是最小化同类样本距离，同时最大化不同类样本距离。</li>
+<li>引入<strong>正则化项</strong>，防止过拟合，确保度量矩阵接近一个先验矩阵
+( M_0 )（通常设为单位矩阵）。</li>
+<li>最终得到闭式解，无需迭代优化，计算高效。</li>
+</ul>
+<h3 id="双向相似度策略">3. 双向相似度策略</h3>
+<ul>
+<li>不仅计算查询样本到原型的相似度（正向），还计算原型到查询样本的相似度（反向）。</li>
+<li>最终相似度为两者的乘积，增强匹配的鲁棒性。</li>
+</ul>
+<hr />
+<h2 id="四实验与结果">四、实验与结果</h2>
+<h3 id="数据集">1. 数据集</h3>
+<ul>
+<li><strong>miniImageNet</strong>、<strong>Cifar-100</strong>、<strong>CUB</strong>（细粒度鸟类分类）</li>
+</ul>
+<h3 id="实验设置">2. 实验设置</h3>
+<ul>
+<li>使用 ConvNet 和 ResNet 作为 backbone。</li>
+<li>比较 5-way 1-shot 和 5-way 5-shot 任务。</li>
+</ul>
+<h3 id="主要结果">3. 主要结果</h3>
+<ul>
+<li>TEAM 在三个数据集上均优于基线模型和当时的最优方法。</li>
+<li>在 1-shot
+任务上提升尤为显著，说明转导推理在数据稀缺时作用更大。</li>
+</ul>
+<h3 id="消融实验">4. 消融实验</h3>
+<ul>
+<li><strong>TIM</strong>、<strong>EAM</strong>、<strong>Bi-SIM</strong>
+三个模块均对性能有贡献。</li>
+<li><strong>EAM</strong> 模块（情景自适应度量）对性能提升最大。</li>
+</ul>
+<h3 id="半监督扩展">5. 半监督扩展</h3>
+<ul>
+<li>TEAM
+可扩展为半监督版本（TEAM-semi），在部分标注数据上仍表现优异。</li>
+</ul>
+<hr />
+<h2 id="五贡献总结">五、贡献总结</h2>
+<ol type="1">
+<li><strong>提出 TEAM
+框架</strong>：结合元学习、度量学习与转导推理，为每个任务自适应构建度量空间。</li>
+<li><strong>双向相似度策略</strong>：增强查询与原型之间关系的鲁棒性。</li>
+<li><strong>任务级数据增强</strong>：通过 TIM 提升模型泛化能力。</li>
+<li><strong>实验验证</strong>：在多个基准数据集上达到最优性能，并可扩展至半监督学习。</li>
+</ol>
+<hr />
+<h2 id="六未来工作">六、未来工作</h2>
+<ul>
+<li>将 TEAM 框架应用于其他小样本学习方法；</li>
+<li>探索更复杂的任务自适应策略；</li>
+<li>进一步研究度量矩阵的稀疏性与结构特性。</li>
+</ul>
+<hr />
+<h2 id="总结">总结</h2>
+<p>TEAM
+是一种高效、灵活的小样本学习框架，通过在任务级别自适应地构建度量空间，并结合转导推理与双向相似度策略，显著提升了模型在数据稀缺情况下的分类性能。该方法不仅在监督学习中表现优异，也适用于半监督场景，具有广泛的实用价值。</p>
+<p>如果需要我进一步解释某一部分（如数学推导、实验细节或算法实现），可以继续告诉我。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/cb9100e.html" rel="prev" title="Prototypical Networks for Few-shot Learning">
+                  <i class="fa fa-angle-left"></i> Prototypical Networks for Few-shot Learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">205k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:26</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

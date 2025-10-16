@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这篇论文《PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization》提出了一种新颖的个性化联邦学习方法，通过部分参数初始化来解决跨域数据异构性问题。以下是对论文的详细解读：  一、研究背景与动机 1. 联邦学习的问题  联邦学习（FL）通过在多个数据孤岛之间仅传递模型参数来保护数据隐私，但">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization">
+<meta property="og:url" content="http://example.com/posts/2cb917ce.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="这篇论文《PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization》提出了一种新颖的个性化联邦学习方法，通过部分参数初始化来解决跨域数据异构性问题。以下是对论文的详细解读：  一、研究背景与动机 1. 联邦学习的问题  联邦学习（FL）通过在多个数据孤岛之间仅传递模型参数来保护数据隐私，但">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-16T13:09:07.000Z">
+<meta property="article:modified_time" content="2025-10-16T05:13:47.526Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/2cb917ce.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/2cb917ce.html","path":"posts/2cb917ce.html","title":"PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/2cb917ce.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1. 联邦学习的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E6%A0%B8%E5%BF%83%E8%B4%A1%E7%8C%AE"><span class="nav-text">2. 本文核心贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%96%B9%E6%B3%95partialfed"><span class="nav-text">二、方法：PartialFed</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">1. 整体流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partialfed-fix"><span class="nav-text">2. PartialFed-Fix</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A-vs-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B"><span class="nav-text">（1）自底向上 vs 自顶向下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%B9%E5%BD%92%E4%B8%80%E5%8C%96bn%E5%B1%82"><span class="nav-text">（2）批归一化（BN）层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%B3%E8%B7%83%E5%8A%A0%E8%BD%BD"><span class="nav-text">（3）跳跃加载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partialfed-adaptive"><span class="nav-text">3. PartialFed-Adaptive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%BB%93%E6%9E%9C"><span class="nav-text">三、实验设计与结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E5%88%86%E7%B1%BB%E7%BB%93%E6%9E%9Coffice-home"><span class="nav-text">2. 跨域分类结果（Office-Home）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E6%A3%80%E6%B5%8B%E7%BB%93%E6%9E%9Cuodb"><span class="nav-text">3. 跨域检测结果（UODB）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E5%88%86%E6%9E%90"><span class="nav-text">4. 策略分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%B4%A1%E7%8C%AE%E6%80%BB%E7%BB%93"><span class="nav-text">四、贡献总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-text">五、未来方向</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2cb917ce.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PartialFed: Cross-Domain Personalized Federated Learning via Partial Initialization
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-16 13:09:07 / Modified: 05:13:47" itemprop="dateCreated datePublished" datetime="2025-10-16T13:09:07Z">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《PartialFed: Cross-Domain Personalized Federated Learning
+via Partial
+Initialization》提出了一种新颖的<strong>个性化联邦学习方法</strong>，通过<strong>部分参数初始化</strong>来解决跨域数据异构性问题。以下是对论文的详细解读：</p>
+<hr />
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="联邦学习的问题">1. 联邦学习的问题</h3>
+<ul>
+<li>联邦学习（FL）通过在多个数据孤岛之间仅传递模型参数来保护数据隐私，但在数据异构（non-IID）情况下，尤其是跨域（如交通、航拍、室内图像）时，性能显著下降。</li>
+<li>传统FedAvg方法试图拟合一个“平均客户端”，当本地数据分布与全局分布差异较大时效果不佳。</li>
+</ul>
+<h3 id="本文核心贡献">2. 本文核心贡献</h3>
+<ul>
+<li>提出<strong>PartialFed</strong>方法，客户端在初始化时只加载全局模型的一部分参数，其余参数从本地上一轮模型加载，实现<strong>混合初始化</strong>。</li>
+<li>提出两种策略：
+<ul>
+<li><strong>PartialFed-Fix</strong>：基于人工先验的固定加载策略。</li>
+<li><strong>PartialFed-Adaptive</strong>：自适应学习每个客户端的个性化加载策略。</li>
+</ul></li>
+<li>在跨域分类和检测任务上达到最先进性能，且对极端分布偏移的客户端具有鲁棒性。</li>
+</ul>
+<hr />
+<h2 id="二方法partialfed">二、方法：PartialFed</h2>
+<h3 id="整体流程">1. 整体流程</h3>
+<ul>
+<li>与传统FL不同，客户端在每轮迭代中：
+<ul>
+<li>接收全局模型 (_t)。</li>
+<li>从本地加载上一轮模型 (_{t-1}^c)。</li>
+<li>使用混合初始化策略 (A_t^c) 组合全局和本地参数。</li>
+<li>本地训练后上传模型，服务器使用FedAvg聚合。</li>
+</ul></li>
+</ul>
+<h3 id="partialfed-fix">2. PartialFed-Fix</h3>
+<p>基于网络结构的人工先验设计固定策略：</p>
+<h4 id="自底向上-vs-自顶向下">（1）自底向上 vs 自顶向下</h4>
+<ul>
+<li><strong>自底向上</strong>：共享底层（低层特征提取器），私有化顶层。</li>
+<li><strong>自顶向下</strong>：共享顶层（分类器），私有化底层。</li>
+<li>实验表明：
+<ul>
+<li>所有部分加载策略均优于全参数加载（FedAvg）。</li>
+<li>共享底层策略通常优于共享顶层。</li>
+<li>同时共享所有层（包括分类器）会损害性能。</li>
+</ul></li>
+</ul>
+<h4 id="批归一化bn层">（2）批归一化（BN）层</h4>
+<ul>
+<li>不加载全局BN层（即使用本地BN）能提升性能。</li>
+<li>结合不加载全局分类器（fc）和BN层，性能提升显著（+4.88%）。</li>
+</ul>
+<h4 id="跳跃加载">（3）跳跃加载</h4>
+<ul>
+<li>交替共享和私有化网络块（如“共享-私有-共享-私有”）。</li>
+<li>实验表明跳跃加载策略（如ABCD、abcd）优于相邻块加载。</li>
+</ul>
+<h3 id="partialfed-adaptive">3. PartialFed-Adaptive</h3>
+<ul>
+<li>使用<strong>Gumbel-Softmax</strong>采样学习离散加载策略，使其可微分。</li>
+<li>策略参数 (_t^c) 表示每个参数加载全局或本地模型的概率。</li>
+<li>通过EM算法交替更新模型参数和策略参数。</li>
+<li>支持不同粒度：阶段级、块级、层级。</li>
+</ul>
+<hr />
+<h2 id="三实验设计与结果">三、实验设计与结果</h2>
+<h3 id="数据集">1. 数据集</h3>
+<ul>
+<li><strong>Office-Home</strong>：4个域（艺术、剪贴画、产品、真实世界），65类，用于分类。</li>
+<li><strong>UODB</strong>：11个域，不同领域、类别和数据量，用于检测。</li>
+</ul>
+<h3 id="跨域分类结果office-home">2. 跨域分类结果（Office-Home）</h3>
+<ul>
+<li>PartialFed-Fix（不加载BN和fc）比FedAvg提升4.88%。</li>
+<li>PartialFed-Adaptive（层级）比FedAvg提升5.43%，且在所有域上均优于单域训练。</li>
+<li>自适应策略能自动调整加载行为，缓解分布偏移。</li>
+</ul>
+<h3 id="跨域检测结果uodb">3. 跨域检测结果（UODB）</h3>
+<ul>
+<li>PartialFed-Fix和Adaptive分别比FedAvg提升2.65%和2.68%。</li>
+<li>在极端分布域（如医疗图像DeepLesion、人脸WiderFace、航拍DOTA）上表现尤其优异。</li>
+</ul>
+<h3 id="策略分析">4. 策略分析</h3>
+<ul>
+<li>可视化显示：
+<ul>
+<li>所有域更倾向于共享低层知识。</li>
+<li>高层（如fc）更倾向于私有化。</li>
+<li>不同域根据自身分布特点调整策略（如Art域在训练初期更依赖全局fc）。</li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="四贡献总结">四、贡献总结</h2>
+<ol type="1">
+<li><strong>提出PartialFed框架</strong>：通过部分参数初始化实现个性化FL，最小化对原框架的改动。</li>
+<li><strong>设计固定与自适应策略</strong>：Fix策略基于人工先验，Adaptive策略自动学习客户端个性化需求。</li>
+<li><strong>在跨域分类和检测上实现SOTA</strong>：显著提升性能，尤其在分布异构严重的客户端上。</li>
+<li><strong>隐私保护</strong>：仅传递模型参数，支持同态加密等隐私增强技术。</li>
+</ol>
+<hr />
+<h2 id="五未来方向">五、未来方向</h2>
+<ul>
+<li>结合人工先验与自适应学习，提升策略学习效率。</li>
+<li>扩展至更多任务和架构（如Transformer）。</li>
+<li>在MindSpore等框架上部署。</li>
+</ul>
+<hr />
+<p>如果有需要修改或者补充的地方，可以随时告诉我。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/3bd7481c.html" rel="prev" title="Meta-Transfer Learning for Few-Shot Learning">
+                  <i class="fa fa-angle-left"></i> Meta-Transfer Learning for Few-Shot Learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/cb9100e.html" rel="next" title="Prototypical Networks for Few-shot Learning">
+                  Prototypical Networks for Few-shot Learning <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">205k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:26</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

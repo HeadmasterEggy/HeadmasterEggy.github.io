@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这篇论文《Meta-Learning for Semi-Supervised Few-Shot Classification》（Ren 等，2018）提出了一种半监督小样本分类的元学习方法，扩展了传统的小样本学习框架，使其能够利用未标记样本来提升分类性能。以下是对论文的详细解读：  一、研究背景与动机 1. 小样本学习  目标：从极少量标记样本中学习分类器。 常用方法：元学习，通过在多个“任务”或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Meta-Learning for Semi-Supervised Few-Shot Classification">
+<meta property="og:url" content="http://example.com/posts/1ba2c99b.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="这篇论文《Meta-Learning for Semi-Supervised Few-Shot Classification》（Ren 等，2018）提出了一种半监督小样本分类的元学习方法，扩展了传统的小样本学习框架，使其能够利用未标记样本来提升分类性能。以下是对论文的详细解读：  一、研究背景与动机 1. 小样本学习  目标：从极少量标记样本中学习分类器。 常用方法：元学习，通过在多个“任务”或">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-16T13:04:22.000Z">
+<meta property="article:modified_time" content="2025-10-16T05:13:51.858Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/1ba2c99b.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/1ba2c99b.html","path":"posts/1ba2c99b.html","title":"Meta-Learning for Semi-Supervised Few-Shot Classification"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Meta-Learning for Semi-Supervised Few-Shot Classification | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/1ba2c99b.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0"><span class="nav-text">1. 小样本学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E5%B1%80%E9%99%90"><span class="nav-text">2. 现有局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E8%B4%A1%E7%8C%AE"><span class="nav-text">3. 本文贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%96%B9%E6%B3%95%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%8E%9F%E5%9E%8B%E7%BD%91%E7%BB%9C"><span class="nav-text">二、方法：半监督原型网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E7%BD%91%E7%BB%9C%E5%9B%9E%E9%A1%BE"><span class="nav-text">1. 原型网络回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E5%8D%8A%E7%9B%91%E7%9D%A3%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95"><span class="nav-text">2. 三种半监督扩展方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#soft-k-means"><span class="nav-text">（1）Soft k-Means</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#soft-k-means-with-a-distractor-cluster"><span class="nav-text">（2）Soft k-Means with a
+Distractor Cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#masked-soft-k-means"><span class="nav-text">（3）Masked Soft k-Means</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1%E4%B8%8E%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">三、实验设计与数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E8%AE%BE%E7%BD%AE"><span class="nav-text">2. 半监督设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%BA%BF%E6%A8%A1%E5%9E%8B"><span class="nav-text">3. 基线模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">四、实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%BB%93%E8%AE%BA"><span class="nav-text">主要结论：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%B4%A1%E7%8C%AE%E6%80%BB%E7%BB%93"><span class="nav-text">五、贡献总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-text">六、未来方向</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1ba2c99b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Meta-Learning for Semi-Supervised Few-Shot Classification | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Meta-Learning for Semi-Supervised Few-Shot Classification
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-16 13:04:22 / Modified: 05:13:51" itemprop="dateCreated datePublished" datetime="2025-10-16T13:04:22Z">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《Meta-Learning for Semi-Supervised Few-Shot
+Classification》（Ren
+等，2018）提出了一种<strong>半监督小样本分类的元学习方法</strong>，扩展了传统的小样本学习框架，使其能够利用<strong>未标记样本</strong>来提升分类性能。以下是对论文的详细解读：</p>
+<hr />
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="小样本学习">1. 小样本学习</h3>
+<ul>
+<li>目标：从极少量标记样本中学习分类器。</li>
+<li>常用方法：<strong>元学习</strong>，通过在多个“任务”或“情节”上训练模型，使其能够快速适应新任务。</li>
+</ul>
+<h3 id="现有局限">2. 现有局限</h3>
+<ul>
+<li>传统小样本学习仅使用标记样本，忽略了现实中大量存在的未标记数据。</li>
+<li>人类在学习新概念时，往往同时利用标记和未标记信息。</li>
+</ul>
+<h3 id="本文贡献">3. 本文贡献</h3>
+<ul>
+<li>提出<strong>半监督小样本学习</strong> 新范式，每个情节中包含：
+<ul>
+<li>标记样本（支持集）</li>
+<li>未标记样本（可能包含目标类或干扰类）</li>
+</ul></li>
+<li>提出三种<strong>扩展原型网络</strong>
+的方法，以利用未标记数据。</li>
+<li>构建新数据集
+<strong>tieredImageNet</strong>，具有层次结构，更贴近现实。</li>
+</ul>
+<hr />
+<h2 id="二方法半监督原型网络">二、方法：半监督原型网络</h2>
+<h3 id="原型网络回顾">1. 原型网络回顾</h3>
+<ul>
+<li>每个类的原型为该类嵌入向量的均值： [ _c = ]</li>
+<li>分类基于查询样本与各原型的距离。</li>
+</ul>
+<h3 id="三种半监督扩展方法">2. 三种半监督扩展方法</h3>
+<h4 id="soft-k-means">（1）Soft k-Means</h4>
+<ul>
+<li>将未标记样本以软分配方式加入原型计算： [ _c = ]</li>
+<li>其中 (_{j,c}) 是样本对类 (c) 的软分配权重。</li>
+</ul>
+<h4 id="soft-k-means-with-a-distractor-cluster">（2）Soft k-Means with a
+Distractor Cluster</h4>
+<ul>
+<li>引入一个“干扰簇”来捕获不属于任何目标类的样本，防止其污染原型。</li>
+<li>干扰簇原型设为原点，并学习其尺度参数 (r_{N+1})。</li>
+</ul>
+<h4 id="masked-soft-k-means">（3）Masked Soft k-Means</h4>
+<ul>
+<li>使用一个<strong>可学习的掩码机制</strong>，动态决定每个未标记样本对每个原型的贡献：
+[ m_{j,c} = (-<em>c (</em>{j,c} - _c)) ]</li>
+<li>其中 (_c, _c) 由一个小型MLP根据距离统计量预测。</li>
+</ul>
+<hr />
+<h2 id="三实验设计与数据集">三、实验设计与数据集</h2>
+<h3 id="数据集">1. 数据集</h3>
+<ul>
+<li><strong>Omniglot</strong>：手写字符，1,623类。</li>
+<li><strong>miniImageNet</strong>：100类，每类600张图像。</li>
+<li><strong>tieredImageNet</strong>（本文提出）：
+<ul>
+<li>608类，34个高级类别。</li>
+<li>训练/验证/测试类别来自不同高级类别，更具挑战性。</li>
+</ul></li>
+</ul>
+<h3 id="半监督设置">2. 半监督设置</h3>
+<ul>
+<li>将每类图像划分为：
+<ul>
+<li>标记部分（10% 或 40%）</li>
+<li>未标记部分（90% 或 60%）</li>
+</ul></li>
+<li>在情节中引入未标记样本，部分情节中还加入干扰类样本。</li>
+</ul>
+<h3 id="基线模型">3. 基线模型</h3>
+<ul>
+<li><strong>Supervised</strong>：标准原型网络。</li>
+<li><strong>Semi-Supervised
+Inference</strong>：仅在测试时使用软k均值。</li>
+</ul>
+<hr />
+<h2 id="四实验结果">四、实验结果</h2>
+<h3 id="主要结论">主要结论：</h3>
+<ul>
+<li>所有提出的半监督模型在<strong>有无干扰类</strong>的情况下均优于纯监督基线。</li>
+<li><strong>Masked Soft k-Means</strong> 在干扰类存在时表现最稳健。</li>
+<li>随着未标记样本数量增加，模型性能提升，说明模型学会了利用未标记数据。</li>
+<li>在 <em>tieredImageNet</em>
+上表现尤其显著，说明该方法在更具挑战性的数据集上有效。</li>
+</ul>
+<hr />
+<h2 id="五贡献总结">五、贡献总结</h2>
+<ol type="1">
+<li><strong>问题定义</strong>：首次系统研究半监督小样本学习，包括干扰类场景。</li>
+<li><strong>方法提出</strong>：三种基于原型网络的半监督扩展方法。</li>
+<li><strong>数据集构建</strong>：提出
+<em>tieredImageNet</em>，具有层次结构和更清晰的训练/测试划分。</li>
+<li><strong>实验验证</strong>：在多个数据集上验证了方法的有效性，尤其是在干扰类存在时的鲁棒性。</li>
+</ol>
+<hr />
+<h2 id="六未来方向">六、未来方向</h2>
+<ul>
+<li>引入<strong>快速权重</strong>机制，使嵌入函数能根据情节内容动态调整。</li>
+<li>探索更复杂的半监督和聚类机制。</li>
+<li>在更大规模或更具挑战性的数据集上验证方法。</li>
+</ul>
+<hr />
+<p>如果有需要修改或者补充的地方，可以随时告诉我。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/85898a84.html" rel="prev" title="Lightweight Industrial Image Classifier Based on Federated Few-Shot Learning">
+                  <i class="fa fa-angle-left"></i> Lightweight Industrial Image Classifier Based on Federated Few-Shot Learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/3bd7481c.html" rel="next" title="Meta-Transfer Learning for Few-Shot Learning">
+                  Meta-Transfer Learning for Few-Shot Learning <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">205k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:26</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

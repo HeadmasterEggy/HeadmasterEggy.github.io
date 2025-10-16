@@ -30,7 +30,7 @@
 <meta property="og:description" content="Task Learning">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-10-13T20:16:45.000Z">
-<meta property="article:modified_time" content="2025-10-15T10:06:42.164Z">
+<meta property="article:modified_time" content="2025-10-16T03:51:29.135Z">
 <meta property="article:author" content="Joey">
 <meta name="twitter:card" content="summary">
 
@@ -124,7 +124,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">46</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
   </ul>
 </nav>
 
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#task-vectors"><span class="nav-text">1 Task Vectors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#learning-via-addition"><span class="nav-text">4 LEARNING VIA ADDITION</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#image-classification"><span class="nav-text">4.1 IMAGE CLASSIFICATION</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-analogies"><span class="nav-text">5 TASK ANALOGIES</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#task-vectors"><span class="nav-text">1 Task Vectors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#forgetting-via-negation"><span class="nav-text">2 Forgetting via Negation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#learning-via-addition"><span class="nav-text">3 Learning Via Addition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#image-classification"><span class="nav-text">3.1 Image Classification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-analogies"><span class="nav-text">5 Task Analogies</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -256,7 +256,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-10-15 10:06:42" itemprop="dateModified" datetime="2025-10-15T10:06:42Z">2025-10-15</time>
+      <time title="Modified: 2025-10-16 03:51:29" itemprop="dateModified" datetime="2025-10-16T03:51:29Z">2025-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,14 +275,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>662</span>
+      <span>971</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -294,11 +294,35 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="task-vectors">1 Task Vectors</h1>
+<p>任务向量是微调预训练模型和初始模型的权重差值，这个向量可以用到任意其他同一架构的模型来提升模型的性能。
+<span class="math inline">\(τ = θ_{ft} - θ_{pre}\)</span> -
+<code>θ_pre</code> 表示初始预训练模型的权重参数。</p>
+<ul>
+<li><code>θ_ft</code> 表示微调预训练模型后的权重。</li>
+</ul>
 <p>![[Figure 1. An illustration of task vectors and the arithmetic
 operations we study for editing models..png]]</p>
-<h1 id="learning-via-addition">4 LEARNING VIA ADDITION</h1>
+<p>通过将 A 和 B 任务合并，应用得到的模型，可以同时具备AB 任务的能力。
+<span class="math inline">\(τ_{new} = τ_A + τ_B\)</span></p>
+<p>对原始任务向量取反，使模型遗忘该任务的能力。 <span
+class="math inline">\(τ_{new} = -τ\)</span></p>
+<p>添加 <span class="math inline">\(λ\)</span>
+缩放系数，控制任务影响的强度。当 <span
+class="math inline">\(λ=1\)</span> 时，效果等于在模型上进行微调。 <span
+class="math inline">\(τ_{new} = τ + λ * τ\)</span></p>
+<p>A is to B as C is to D，通过类比关系推导出新任务向量。 <span
+class="math inline">\(τ_D ≈ τ_C + (τ_B - τ_A)\)</span></p>
+<h1 id="forgetting-via-negation">2 Forgetting via Negation</h1>
+<p>Table 1 测试了通过取反遗忘特定任务对其他任务的影响。 - Target task
+是希望取反遗忘的任务 - Control task 是对照
+task，遗忘特定任务后应该对该任务影响微小</p>
+<p>图中表示 acc，target 的 acc下降，说明成功遗忘了该任务的知识，而对
+control 任务的能力没有影响。</p>
+<p>![[Table 1. Forgetting image classification tasks via
+negation..png]]</p>
+<h1 id="learning-via-addition">3 Learning Via Addition</h1>
 <p>添加任务向量，目的是构建能够同时精通多任务的多任务模型或者提升单任务的性能。</p>
-<h2 id="image-classification">4.1 IMAGE CLASSIFICATION</h2>
+<h2 id="image-classification">3.1 Image Classification</h2>
 <p>实验涉及多个图像分类任务，将这些任务两两配对。</p>
 <p>不同任务的难度有差异，所以要统一 normalize
 归一化，处理后微调模型在各个任务的表现为 1，使用多 specialized
@@ -318,7 +342,7 @@ tasks..png]] 在 subset 上添加任务向量对准确率的影响。
 91.2%。</p>
 <p>![[Figure 3. Adding task vectors builds multi-task models for image
 classification tasks..png]]</p>
-<h1 id="task-analogies">5 TASK ANALOGIES</h1>
+<h1 id="task-analogies">5 Task Analogies</h1>
 <p>A is to B as C is to D.</p>
 <p>从 A 到 B 的变化≈从 C 到 D 的变化。 <span class="math display">\[
 τ_D - τ_C ≈ τ_B - τ_A
@@ -332,9 +356,8 @@ lm}\)</span>（无监督任务向量）：Amazon领域特性
 <p><span class="math inline">\(τ_{amazon;
 sent}\)</span>（有监督任务向量）：Amazon领域特性 + 情感分析能力
 这个向量包含了模型为了<strong>在Amazon评论的文本基础上准确分类情感</strong>所需要调整的参数变化。它学会了哪些词、短语和结构对应于“正面”或“负面”情感。</p>
-<p><span class="math inline">\((τ_{amazon; sent} - τ_{amazon;
-lm})\)</span> ≈ 情感分析能力。
-这个能力不依赖特定的领域，比如Amazon。</p>
+<p><span class="math inline">\(τ_{amazon; sent} - τ_{amazon;
+lm}\)</span> ≈ 情感分析能力。 这个能力不依赖特定的领域，比如Amazon。</p>
 <p><span class="math inline">\(τ_{yelp;
 lm}\)</span>（目标领域的无监督向量）：Yelp 领域的基础语言表达 <span
 class="math display">\[
@@ -363,6 +386,9 @@ sent}\)</span>。</p>
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/posts/801c927a.html" rel="next" title="Communication-Efficient Learning of Deep Networks from Decentralized Data">
+                  Communication-Efficient Learning of Deep Networks from Decentralized Data <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -397,14 +423,14 @@ sent}\)</span>。</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">195k</span>
+    <span title="Word count total">205k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">11:49</span>
+    <span title="Reading time total">12:26</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

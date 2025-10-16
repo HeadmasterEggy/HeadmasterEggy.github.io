@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这篇论文《Communication-Efficient Learning of Deep Networks from Decentralized Data》是联邦学习领域的奠基性工作，由 Google 团队在 2017 年发表。文中首次系统性地提出了“联邦学习”这一概念，并给出了一个简单而有效的算法 FederatedAveraging，为解决在分布式、隐私敏感数据上训练深度学习模型的问题提供了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Communication-Efficient Learning of Deep Networks from Decentralized Data">
+<meta property="og:url" content="http://example.com/posts/801c927a.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="这篇论文《Communication-Efficient Learning of Deep Networks from Decentralized Data》是联邦学习领域的奠基性工作，由 Google 团队在 2017 年发表。文中首次系统性地提出了“联邦学习”这一概念，并给出了一个简单而有效的算法 FederatedAveraging，为解决在分布式、隐私敏感数据上训练深度学习模型的问题提供了">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-16T12:56:10.000Z">
+<meta property="article:modified_time" content="2025-10-16T05:13:58.461Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/801c927a.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/801c927a.html","path":"posts/801c927a.html","title":"Communication-Efficient Learning of Deep Networks from Decentralized Data"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Communication-Efficient Learning of Deep Networks from Decentralized Data | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/801c927a.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">55</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89"><span class="nav-text">1. 问题定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E4%BC%98%E5%8A%BF"><span class="nav-text">2. 联邦学习的定义与优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E4%BC%98%E5%8C%96-vs-%E4%BC%A0%E7%BB%9F%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%98%E5%8C%96"><span class="nav-text">3. 联邦优化 vs 传统分布式优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%A0%B8%E5%BF%83%E7%AE%97%E6%B3%95federatedaveraging"><span class="nav-text">二、核心算法：FederatedAveraging</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="nav-text">1. 算法思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0"><span class="nav-text">2. 算法控制参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81algorithm-1"><span class="nav-text">3. 算法伪代码（Algorithm 1）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%BB%93%E6%9E%9C"><span class="nav-text">三、实验设计与结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-text">1. 实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">2. 关键实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E5%A2%9E%E5%8A%A0%E5%B9%B6%E8%A1%8C%E6%80%A7%E5%A2%9E%E5%A4%A7-c"><span class="nav-text">a) 增加并行性（增大 ( C )）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E5%A2%9E%E5%8A%A0%E6%9C%AC%E5%9C%B0%E8%AE%A1%E7%AE%97%E5%A2%9E%E5%A4%A7-e-%E6%88%96%E5%87%8F%E5%B0%8F-b"><span class="nav-text">b) 增加本地计算（增大 ( E )
+或减小 ( B )）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-%E4%B8%8E-fedsgd-%E5%AF%B9%E6%AF%94"><span class="nav-text">c) 与 FedSGD 对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#d-%E6%9C%AC%E5%9C%B0%E8%AE%AD%E7%BB%83%E8%BD%AE%E6%95%B0-e-%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">d) 本地训练轮数 ( E ) 的影响</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E9%87%8D%E8%A6%81%E7%BB%93%E8%AE%BA%E4%B8%8E%E8%B4%A1%E7%8C%AE"><span class="nav-text">四、重要结论与贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="nav-text">1. 主要贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E6%84%8F%E4%B9%89"><span class="nav-text">2. 实用意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-text">3. 未来方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E6%80%BB%E7%BB%93"><span class="nav-text">五、总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/801c927a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Communication-Efficient Learning of Deep Networks from Decentralized Data | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Communication-Efficient Learning of Deep Networks from Decentralized Data
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-16 12:56:10 / Modified: 05:13:58" itemprop="dateCreated datePublished" datetime="2025-10-16T12:56:10Z">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《Communication-Efficient Learning of Deep Networks from
+Decentralized Data》是联邦学习领域的奠基性工作，由 Google 团队在 2017
+年发表。文中首次系统性地提出了“联邦学习”这一概念，并给出了一个简单而有效的算法
+<strong>FederatedAveraging</strong>，为解决在分布式、隐私敏感数据上训练深度学习模型的问题提供了可行方案。以下是对该论文的详细解析：</p>
+<hr />
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="问题定义">1. 问题定义</h3>
+<ul>
+<li><strong>数据分布在移动设备上</strong>，具有隐私敏感性、大规模、非中心化等特点。</li>
+<li><strong>传统中心化训练不适用</strong>：将数据上传到数据中心训练既侵犯隐私，也面临通信和存储成本高的问题。</li>
+</ul>
+<h3 id="联邦学习的定义与优势">2. 联邦学习的定义与优势</h3>
+<ul>
+<li><strong>联邦学习</strong>：在多个客户端（如手机）上本地训练模型，仅将模型更新（而非原始数据）发送到服务器进行聚合。</li>
+<li><strong>优势</strong>：
+<ul>
+<li>隐私保护：数据不出本地；</li>
+<li>符合“数据最小化”原则；</li>
+<li>降低中心化存储风险。</li>
+</ul></li>
+</ul>
+<h3 id="联邦优化-vs-传统分布式优化">3. 联邦优化 vs 传统分布式优化</h3>
+<p>联邦优化具有以下特点： -
+<strong>Non-IID</strong>：每个客户端的数据分布不同； -
+<strong>Unbalanced</strong>：不同客户端数据量差异大； -
+<strong>Massively
+distributed</strong>：客户端数量远大于每个客户端的数据量； -
+<strong>Limited
+communication</strong>：客户端通信受限（带宽低、不稳定）。</p>
+<hr />
+<h2
+id="二核心算法federatedaveraging">二、核心算法：FederatedAveraging</h2>
+<h3 id="算法思想">1. 算法思想</h3>
+<ul>
+<li><strong>FedAvg</strong> 是 FedSGD 的扩展：
+<ul>
+<li>FedSGD：每轮每个客户端计算一次梯度，服务器聚合梯度；</li>
+<li>FedAvg：每个客户端在本地进行多轮 SGD
+更新，再将模型参数上传，服务器进行加权平均。</li>
+</ul></li>
+</ul>
+<h3 id="算法控制参数">2. 算法控制参数</h3>
+<ul>
+<li>( C )：每轮参与训练的客户端比例；</li>
+<li>( E )：每个客户端本地训练的轮数；</li>
+<li>( B )：本地训练的批次大小。</li>
+</ul>
+<h3 id="算法伪代码algorithm-1">3. 算法伪代码（Algorithm 1）</h3>
+<figure class="highlight fsharp"><table><tr><td class="code"><pre><span class="line">服务器初始化 w_0</span><br><span class="line"><span class="keyword">for</span> 每轮 t <span class="operator">=</span> <span class="number">1</span>, <span class="number">2</span>, <span class="operator">...</span> <span class="keyword">do</span></span><br><span class="line">    m ← max(C · K, <span class="number">1</span>)  <span class="comment">// 选择部分客户端</span></span><br><span class="line">    S_t ← 随机选择 m 个客户端</span><br><span class="line">    <span class="keyword">for</span> 每个客户端 k ∈ S_t 并行 <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">w_</span>&#123;t<span class="operator">+</span><span class="number">1</span>&#125;<span class="symbol">^k</span> ← ClientUpdate(k, w_t)</span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">for</span></span><br><span class="line">    <span class="keyword">w_</span>&#123;t<span class="operator">+</span><span class="number">1</span>&#125; ← ∑<span class="keyword">_</span>&#123;k<span class="operator">=</span><span class="number">1</span>&#125;<span class="symbol">^K</span> (n_k <span class="operator">/</span> n) · <span class="keyword">w_</span>&#123;t<span class="operator">+</span><span class="number">1</span>&#125;<span class="symbol">^k</span></span><br><span class="line"><span class="keyword">end</span> <span class="keyword">for</span></span><br><span class="line"></span><br><span class="line">ClientUpdate(k, w)<span class="operator">:</span>  <span class="comment">// 在客户端 k 上</span></span><br><span class="line">    B ← 本地批次大小</span><br><span class="line">    E ← 本地训练轮数</span><br><span class="line">    <span class="keyword">for</span> 每轮本地训练 e <span class="operator">=</span> <span class="number">1</span> <span class="keyword">to</span> E <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">for</span> 每个批次 b ∈ 本地数据 <span class="keyword">do</span></span><br><span class="line">            w ← w <span class="operator">-</span> η · ∇ℓ(w; b)</span><br><span class="line">        <span class="keyword">end</span> <span class="keyword">for</span></span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">for</span></span><br><span class="line">    <span class="keyword">return</span> w 给服务器</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="三实验设计与结果">三、实验设计与结果</h2>
+<h3 id="实验设置">1. 实验设置</h3>
+<ul>
+<li><strong>模型</strong>：
+<ul>
+<li>MNIST：2NN 多层感知机、CNN；</li>
+<li>Shakespeare：字符级 LSTM 语言模型；</li>
+<li>CIFAR-10：CNN；</li>
+<li>大规模 LSTM：词级语言模型。</li>
+</ul></li>
+<li><strong>数据划分</strong>：
+<ul>
+<li>IID：数据随机分给客户端；</li>
+<li>Non-IID：按标签或角色划分，模拟真实场景。</li>
+</ul></li>
+</ul>
+<h3 id="关键实验结果">2. 关键实验结果</h3>
+<h4 id="a-增加并行性增大-c">a) 增加并行性（增大 ( C )）</h4>
+<ul>
+<li>增加客户端参与比例可提升收敛速度，但收益有饱和点。</li>
+</ul>
+<h4 id="b-增加本地计算增大-e-或减小-b">b) 增加本地计算（增大 ( E )
+或减小 ( B )）</h4>
+<ul>
+<li><strong>显著减少通信轮数</strong>，提升通信效率；</li>
+<li>在 MNIST IID 数据上，通信轮数减少 <strong>35–46 倍</strong>；</li>
+<li>即使在 Non-IID 数据上也能收敛，表现出鲁棒性。</li>
+</ul>
+<h4 id="c-与-fedsgd-对比">c) 与 FedSGD 对比</h4>
+<ul>
+<li>FedAvg 不仅收敛更快，<strong>最终准确率也更高</strong>；</li>
+<li>说明模型平均具有正则化效果，类似 Dropout。</li>
+</ul>
+<h4 id="d-本地训练轮数-e-的影响">d) 本地训练轮数 ( E ) 的影响</h4>
+<ul>
+<li>( E ) 过大可能导致发散或震荡，需适当调整；</li>
+<li>建议在训练后期减小 ( E ) 或增大 ( B )，类似学习率衰减。</li>
+</ul>
+<hr />
+<h2 id="四重要结论与贡献">四、重要结论与贡献</h2>
+<h3 id="主要贡献">1. 主要贡献</h3>
+<ul>
+<li>提出 <strong>联邦学习</strong> 这一新范式；</li>
+<li>提出 <strong>FederatedAveraging</strong>
+算法，显著降低通信成本；</li>
+<li>通过大量实验验证其在 Non-IID、不平衡数据上的有效性。</li>
+</ul>
+<h3 id="实用意义">2. 实用意义</h3>
+<ul>
+<li>FedAvg 可训练多种网络结构（MLP、CNN、LSTM）；</li>
+<li>在图像分类、语言建模等任务上均表现优异；</li>
+<li>为在移动设备上实现隐私保护的分布式学习提供了可行路径。</li>
+</ul>
+<h3 id="未来方向">3. 未来方向</h3>
+<ul>
+<li>结合差分隐私、安全多方计算等增强隐私保护；</li>
+<li>进一步优化通信效率（如模型压缩、稀疏更新）；</li>
+<li>处理动态客户端、掉线、恶意攻击等实际问题。</li>
+</ul>
+<hr />
+<h2 id="五总结">五、总结</h2>
+<p>这篇论文奠定了联邦学习的基础，不仅提出了一个简单有效的算法
+<strong>FedAvg</strong>，还通过系统的实验验证了其在真实场景中的可行性。它标志着机器学习从“数据中心化”向“算法中心化、数据分布化”转变的重要一步，为后续联邦学习的研究与落地提供了坚实的理论和实践基础。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/87f1168c.html" rel="prev" title="Editing Models with Task Arithmetic">
+                  <i class="fa fa-angle-left"></i> Editing Models with Task Arithmetic
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/f2360666.html" rel="next" title="Agnostic Federated Learning">
+                  Agnostic Federated Learning <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">205k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:26</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
