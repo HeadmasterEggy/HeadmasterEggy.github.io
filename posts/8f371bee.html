@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="#COMP5313&#x2F;week2a # COMP5313&#x2F;COMP4313 Week 2a: Graph Ties 总结 本讲围绕大规模网络中的关系边（ties）与节点角色展开，主线是把社会学经典理论放到大规模在线网络里做验证。核心问题包括：世界为什么“看起来很小”、弱关系为何有力量、在线社交网络里强弱关系怎么衡量，以及结构洞如何影响信息流与个体优势。 1) Small World 现象与六度分隔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week2a Graph Ties 课程总结">
+<meta property="og:url" content="http://example.com/posts/8f371bee.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="#COMP5313&#x2F;week2a # COMP5313&#x2F;COMP4313 Week 2a: Graph Ties 总结 本讲围绕大规模网络中的关系边（ties）与节点角色展开，主线是把社会学经典理论放到大规模在线网络里做验证。核心问题包括：世界为什么“看起来很小”、弱关系为何有力量、在线社交网络里强弱关系怎么衡量，以及结构洞如何影响信息流与个体优势。 1) Small World 现象与六度分隔">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-05T17:45:00.000Z">
+<meta property="article:modified_time" content="2026-03-05T08:15:21.755Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Course">
+<meta property="article:tag" content="COMP5313">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/8f371bee.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/8f371bee.html","path":"posts/8f371bee.html","title":"COMP5313 Week2a Graph Ties 课程总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week2a Graph Ties 课程总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/8f371bee.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">20</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">75</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#small-world-%E7%8E%B0%E8%B1%A1%E4%B8%8E%E5%85%AD%E5%BA%A6%E5%88%86%E9%9A%94"><span class="nav-text">1) Small World 现象与六度分隔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E5%85%B3%E7%B3%BB%E7%9A%84%E5%8A%9B%E9%87%8Fbridge-%E4%B8%8E-local-bridge"><span class="nav-text">2) 弱关系的力量：Bridge 与
+Local Bridge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strong-triadic-closure-%E4%B8%8E%E7%90%86%E8%AE%BA%E8%81%94%E7%B3%BB"><span class="nav-text">3) Strong Triadic Closure
+与理论联系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%AE%9E%E8%AF%81%E6%89%8B%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%9C%A8%E7%BA%BF%E7%A4%BE%E4%BA%A4"><span class="nav-text">4)
+大规模实证：手机网络与在线社交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E9%80%9A%E4%BF%A1%E7%BD%91%E7%BB%9Connela-%E7%AD%89"><span class="nav-text">手机通信网络（Onnela 等）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#facebook-twitter"><span class="nav-text">Facebook &#x2F; Twitter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#embeddedness-%E4%B8%8E-structural-holes%E8%8A%82%E7%82%B9%E8%A7%92%E8%89%B2"><span class="nav-text">5) Embeddedness 与
+Structural Holes（节点角色）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E7%BB%93%E8%AE%BA%E4%B8%8E%E6%96%B9%E6%B3%95%E8%AE%BA%E6%84%8F%E4%B9%89"><span class="nav-text">6) 本讲结论与方法论意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E4%B9%A0%E5%BB%BA%E8%AE%AE"><span class="nav-text">7) 复习建议</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/8f371bee.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week2a Graph Ties 课程总结 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week2a Graph Ties 课程总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-05 17:45:00 / Modified: 08:15:21" itemprop="dateCreated datePublished" datetime="2026-03-05T17:45:00Z">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>#COMP5313/week2a<br />
+# COMP5313/COMP4313 Week 2a: Graph Ties 总结</p>
+<p>本讲围绕<strong>大规模网络中的关系边（ties）与节点角色</strong>展开，主线是把社会学经典理论放到大规模在线网络里做验证。核心问题包括：世界为什么“看起来很小”、弱关系为何有力量、在线社交网络里强弱关系怎么衡量，以及结构洞如何影响信息流与个体优势。</p>
+<h2 id="small-world-现象与六度分隔">1) Small World 现象与六度分隔</h2>
+<ul>
+<li>Small World
+指网络中任意两点之间的最短路径通常较短，即常说的六度分隔。<br />
+</li>
+<li>课上回顾了 Milgram
+的信件实验：让参与者通过熟人链把信传给目标人物；成功链条的中位长度约为
+6。<br />
+</li>
+<li>同时强调实验局限：只针对特定目标、许多信件未送达、短路径不等于社会距离近。<br />
+</li>
+<li>在大规模数据（如即时通信网络）中，计算机实验同样发现巨型连通分量内平均距离很小（例如平均约
+6.6、中位约 7），进一步支持 small-world 结构在真实大网中的普遍性。</li>
+</ul>
+<h2 id="弱关系的力量bridge-与-local-bridge">2) 弱关系的力量：Bridge 与
+Local Bridge</h2>
+<ul>
+<li>Granovetter
+的结论：找工作等稀缺信息往往不是从最亲密朋友获得，而是从“熟人/弱关系”获得。<br />
+</li>
+<li>直觉原因：强关系通常处于同一紧密社群，信息高度重叠；弱关系更可能跨社群，带来非冗余信息。<br />
+</li>
+<li><strong>Bridge</strong>：删除该边会把网络分成两个不连通部分（在真实社交网中较少见）。<br />
+</li>
+<li><strong>Local
+Bridge</strong>：边两端没有共同邻居；删掉后两端距离会变成大于 2。它比
+bridge 更常见，更适合刻画现实中的“跨圈连接”。<br />
+</li>
+<li>Local bridge 的
+<strong>span</strong>（删除后两端距离）越大，越像“关键跨区通道”。</li>
+</ul>
+<h2 id="strong-triadic-closure-与理论联系">3) Strong Triadic Closure
+与理论联系</h2>
+<ul>
+<li>课程引入<strong>强三角闭包（Strong Triadic Closure）</strong>：若 A
+与 B、C 都是强关系，则 B 与 C 至少应有一条边（强或弱）。<br />
+</li>
+<li>关键结论：若节点满足强三角闭包且有至少两条强关系，则它参与的 local
+bridge 必为弱关系。<br />
+</li>
+<li>这把“局部定义（强/弱关系）”与“全局结构（桥接能力）”联系起来：<strong>能跨社区的边通常是弱关系</strong>。</li>
+</ul>
+<h2 id="大规模实证手机网络与在线社交">4)
+大规模实证：手机网络与在线社交</h2>
+<h3 id="手机通信网络onnela-等">手机通信网络（Onnela 等）</h3>
+<ul>
+<li>使用双向通话网络做实证，定义 tie strength（如通话时长）与
+neighborhood overlap（共同邻居占比）。<br />
+</li>
+<li>overlap 越低，越接近 local
+bridge；结果显示：<strong>关系强度越高，邻域重叠通常越高</strong>，与理论一致。<br />
+</li>
+<li>边删除实验显示：优先删除弱边会更快破坏巨型连通分量，说明弱关系对跨社群连通性至关重要。</li>
+</ul>
+<h3 id="facebook-twitter">Facebook / Twitter</h3>
+<ul>
+<li>即使好友/关注很多，真正高频互动的强关系数量通常很小。<br />
+</li>
+<li>多数连接是弱关系或被动关注关系，这些边虽然“弱”，却对信息扩散范围和速度非常关键。<br />
+</li>
+<li>启示：在线网络不是“人人都强连接”，而是“少量强关系 +
+大量弱关系”的混合结构。</li>
+</ul>
+<h2 id="embeddedness-与-structural-holes节点角色">5) Embeddedness 与
+Structural Holes（节点角色）</h2>
+<ul>
+<li><strong>Embeddedness（嵌入性）</strong>：一条边两端的共同邻居数量。嵌入性高，往往更易建立信任与社会约束。<br />
+</li>
+<li>但网络价值不止“高信任”：处在多个群体边界的人（位于 local bridges
+一端）可跨结构洞。<br />
+</li>
+<li><strong>Structural
+Hole（结构洞）</strong>：两个群体之间缺乏直接联系的“空隙”。占据该位置的节点拥有：
+<ul>
+<li>多源异质信息优势<br />
+</li>
+<li>创造性组合优势<br />
+</li>
+<li>gatekeeper（把关）能力（控制信息何时、如何跨群流动）<br />
+</li>
+</ul></li>
+<li>也指出潜在冲突：把关者的个人利益可能与组织整体“加速信息流”目标不一致。</li>
+</ul>
+<h2 id="本讲结论与方法论意义">6) 本讲结论与方法论意义</h2>
+<ul>
+<li>大规模网络常呈小世界特征：平均距离短、巨型连通分量显著。<br />
+</li>
+<li>强弱关系高度异质：强关系稀少且集中，弱关系丰富且承担跨社区连接。<br />
+</li>
+<li>紧密社群（高嵌入）与结构洞（低重叠桥接）共同塑造网络中的信任、扩散与权力结构。<br />
+</li>
+<li>在实际分析中，识别 tightly-knit regions 与 structural holes
+对于优化信息传播、发现关键节点、理解组织协作都很重要。</li>
+</ul>
+<h2 id="复习建议">7) 复习建议</h2>
+<ul>
+<li>对照教材 Chapter 3（按课上要求剔除 advanced
+部分）复习定义与命题。<br />
+</li>
+<li>重点掌握以下可计算量：最短路径分布、邻域重叠、边强度、local bridge
+span。<br />
+</li>
+<li>练习题方向：给定网络图，判断 strong triadic closure 是否满足、识别
+local bridges 与潜在结构洞节点。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Course/" rel="tag"><i class="fa fa-tag"></i> Course</a>
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/d58cab04.html" rel="prev" title="几何分布知识点整理">
+                  <i class="fa fa-angle-left"></i> 几何分布知识点整理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/9f0368f0.html" rel="next" title="COMP5313 Week2b&3a Structural Balance 课程总结">
+                  COMP5313 Week2b&3a Structural Balance 课程总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">226k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">13:43</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
