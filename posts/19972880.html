@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="self-improving-agent 在 OpenClaw 中的安装状态、使用方式与复盘流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="self-improving-agent-使用指南">
+<meta property="og:url" content="http://example.com/posts/19972880.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="self-improving-agent 在 OpenClaw 中的安装状态、使用方式与复盘流程">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-03T22:32:00.000Z">
+<meta property="article:modified_time" content="2026-03-03T11:35:33.908Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="OpenClaw">
+<meta property="article:tag" content="skill">
+<meta property="article:tag" content="self-improving-agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/19972880.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/19972880.html","path":"posts/19972880.html","title":"self-improving-agent-使用指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>self-improving-agent-使用指南 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/19972880.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">22</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">65</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#self-improving-agent-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97openclaw-%E7%89%88"><span class="nav-text">self-improving-agent
+使用指南（OpenClaw 版）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA-skill-%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="nav-text">这个 Skill 是做什么的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E7%8E%B0%E5%9C%A8%E7%9A%84%E5%AE%89%E8%A3%85%E7%8A%B6%E6%80%81%E5%B7%B2%E5%AE%8C%E6%88%90"><span class="nav-text">你现在的安装状态（已完成）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%B8%B8%E6%80%8E%E4%B9%88%E7%94%A8%E6%9C%80%E7%AE%80%E6%B5%81%E7%A8%8B"><span class="nav-text">日常怎么用（最简流程）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%A8%A1%E6%9D%BF%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%A4%8D%E5%88%B6"><span class="nav-text">快速模板（可直接复制）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#learnings.md"><span class="nav-text">LEARNINGS.md</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#errors.md"><span class="nav-text">ERRORS.md</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feature_requests.md"><span class="nav-text">FEATURE_REQUESTS.md</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E6%9C%AC%E5%9C%B0%E6%97%A5%E5%BF%97%E7%8A%B6%E6%80%81%E5%AE%9E%E6%97%B6"><span class="nav-text">当前本地日志状态（实时）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%89%E4%B8%AA%E6%96%87%E4%BB%B6%E5%88%86%E5%88%AB%E8%AE%B0%E5%BD%95%E4%BB%80%E4%B9%88"><span class="nav-text">这三个文件分别记录什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E6%9C%89%E6%9B%B4%E6%96%B0"><span class="nav-text">是否有更新？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E6%AF%8F%E5%91%A8%E4%B8%80%E6%AC%A1%E5%A4%8D%E7%9B%98%E5%8A%A8%E4%BD%9C"><span class="nav-text">推荐每周一次复盘动作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E6%9C%AC%E5%9C%B0"><span class="nav-text">已有官方文档（本地）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/19972880.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="self-improving-agent-使用指南 | Joey">
+      <meta itemprop="description" content="self-improving-agent 在 OpenClaw 中的安装状态、使用方式与复盘流程">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          self-improving-agent-使用指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-03 22:32:00 / Modified: 11:35:33" itemprop="dateCreated datePublished" datetime="2026-03-03T22:32:00Z">2026-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>587</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>2 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">self-improving-agent 在 OpenClaw 中的安装状态、使用方式与复盘流程</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="self-improving-agent-使用指南openclaw-版">self-improving-agent
+使用指南（OpenClaw 版）</h1>
+<blockquote>
+<p>Skill 页面：<span class="exturl" data-url="aHR0cHM6Ly9jbGF3aHViLmFpL3Bza29ldHQvc2VsZi1pbXByb3ZpbmctYWdlbnQ=">https://clawhub.ai/pskoett/self-improving-agent<i class="fa fa-external-link-alt"></i></span></p>
+</blockquote>
+<h2 id="这个-skill-是做什么的">这个 Skill 是做什么的？</h2>
+<p><code>self-improving-agent</code> 用来把「犯错 / 被纠正 /
+发现更好做法 / 新需求」沉淀成可复用经验，写到 <code>.learnings</code>
+里，长期减少重复犯错。</p>
+<hr />
+<h2 id="你现在的安装状态已完成">你现在的安装状态（已完成）</h2>
+<ul>
+<li>Skill
+已安装：<code>~/.openclaw/workspace/skills/self-improving-agent</code></li>
+<li>Hook 已启用：<code>self-improvement</code></li>
+<li>学习日志目录已建：<code>~/.openclaw/workspace/.learnings/</code>
+<ul>
+<li><code>LEARNINGS.md</code></li>
+<li><code>ERRORS.md</code></li>
+<li><code>FEATURE_REQUESTS.md</code></li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="日常怎么用最简流程">日常怎么用（最简流程）</h2>
+<ol type="1">
+<li><strong>发生错误</strong>（命令失败、API 报错）
+<ul>
+<li>记到：<code>.learnings/ERRORS.md</code></li>
+</ul></li>
+<li><strong>被用户纠正 / 知识过时 / 找到更好方法</strong>
+<ul>
+<li>记到：<code>.learnings/LEARNINGS.md</code></li>
+<li>推荐 category：<code>correction</code> / <code>knowledge_gap</code>
+/ <code>best_practice</code></li>
+</ul></li>
+<li><strong>用户提新能力需求</strong>
+<ul>
+<li>记到：<code>.learnings/FEATURE_REQUESTS.md</code></li>
+</ul></li>
+<li><strong>复盘后“升级规则”</strong>（高价值）
+<ul>
+<li>工作流类 -&gt; <code>AGENTS.md</code></li>
+<li>行为风格类 -&gt; <code>SOUL.md</code></li>
+<li>工具坑位类 -&gt; <code>TOOLS.md</code></li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="快速模板可直接复制">快速模板（可直接复制）</h2>
+<h3 id="learnings.md">LEARNINGS.md</h3>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="section">## [LRN-YYYYMMDD-001] best<span class="emphasis">_practice</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Logged**</span>: 2026-03-03T20:45:00+11:00</span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Priority**</span>: medium</span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Status**</span>: pending</span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Area**</span>: config</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">### Summary</span></span></span><br><span class="line"><span class="emphasis"><span class="section">一句话说明学到了什么</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">### Details</span></span></span><br><span class="line"><span class="emphasis"><span class="section">发生了什么、为什么之前做法不佳、正确做法是什么</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">### Suggested Action</span></span></span><br><span class="line"><span class="emphasis"><span class="section">下一次怎么做</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">### Metadata</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- Source: conversation</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- Related Files: path/to/file</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- Tags: openclaw, workflow</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="errors.md">ERRORS.md</h3>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="section">## [ERR-YYYYMMDD-001] command-name</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**Logged**</span>: 2026-03-03T20:45:00+11:00</span><br><span class="line"><span class="strong">**Priority**</span>: high</span><br><span class="line"><span class="strong">**Status**</span>: pending</span><br><span class="line"><span class="strong">**Area**</span>: infra</span><br><span class="line"></span><br><span class="line"><span class="section">### Summary</span></span><br><span class="line">报错摘要</span><br><span class="line"></span><br><span class="line"><span class="section">### Error</span></span><br><span class="line">原始报错信息</span><br><span class="line"></span><br><span class="line"><span class="section">### Context</span></span><br><span class="line">命令、参数、环境</span><br><span class="line"></span><br><span class="line"><span class="section">### Suggested Fix</span></span><br><span class="line">可能修复路径</span><br></pre></td></tr></table></figure>
+<h3 id="feature_requests.md">FEATURE_REQUESTS.md</h3>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="section">## [FEAT-YYYYMMDD-001] capability-name</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**Logged**</span>: 2026-03-03T20:45:00+11:00</span><br><span class="line"><span class="strong">**Priority**</span>: medium</span><br><span class="line"><span class="strong">**Status**</span>: pending</span><br><span class="line"><span class="strong">**Area**</span>: workflow</span><br><span class="line"></span><br><span class="line"><span class="section">### Requested Capability</span></span><br><span class="line">用户想要实现什么</span><br><span class="line"></span><br><span class="line"><span class="section">### User Context</span></span><br><span class="line">为什么需要</span><br><span class="line"></span><br><span class="line"><span class="section">### Suggested Implementation</span></span><br><span class="line">你建议怎么做</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="当前本地日志状态实时">当前本地日志状态（实时）</h2>
+<p>当前 3
+个文件都已创建，但<strong>还没有实际条目</strong>（都是空文件）：</p>
+<ul>
+<li><code>~/.openclaw/workspace/.learnings/LEARNINGS.md</code>（0
+B）</li>
+<li><code>~/.openclaw/workspace/.learnings/ERRORS.md</code>（0 B）</li>
+<li><code>~/.openclaw/workspace/.learnings/FEATURE_REQUESTS.md</code>（0
+B）</li>
+</ul>
+<h3 id="这三个文件分别记录什么">这三个文件分别记录什么</h3>
+<ul>
+<li><code>LEARNINGS.md</code>：纠正、知识缺口、最佳实践（例如 category:
+<code>correction</code> / <code>knowledge_gap</code> /
+<code>best_practice</code>）</li>
+<li><code>ERRORS.md</code>：命令失败、接口异常、工具报错</li>
+<li><code>FEATURE_REQUESTS.md</code>：用户提出的新能力需求</li>
+</ul>
+<h3 id="是否有更新">是否有更新？</h3>
+<p>截至当前检查：<strong>暂无更新</strong>（仅初始化，未写入条目）。</p>
+<hr />
+<h2 id="推荐每周一次复盘动作">推荐每周一次复盘动作</h2>
+<ul>
+<li>清理重复条目（加 <code>See Also</code>）</li>
+<li>把 recurring 项目提权（priority 提高）</li>
+<li>把跨任务通用经验提升到
+<code>AGENTS.md / SOUL.md / TOOLS.md</code></li>
+<li>把已修复项改为 <code>resolved</code></li>
+</ul>
+<hr />
+<h2 id="已有官方文档本地">已有官方文档（本地）</h2>
+<ol type="1">
+<li><code>~/.openclaw/workspace/skills/self-improving-agent/SKILL.md</code></li>
+<li><code>~/.openclaw/workspace/skills/self-improving-agent/references/openclaw-integration.md</code></li>
+<li><code>~/.openclaw/workspace/skills/self-improving-agent/references/hooks-setup.md</code></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenClaw/" rel="tag"><i class="fa fa-tag"></i> OpenClaw</a>
+              <a href="/tags/skill/" rel="tag"><i class="fa fa-tag"></i> skill</a>
+              <a href="/tags/self-improving-agent/" rel="tag"><i class="fa fa-tag"></i> self-improving-agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/6430a7cd.html" rel="prev" title="INFO5990-Week1-Reading-Summary">
+                  <i class="fa fa-angle-left"></i> INFO5990-Week1-Reading-Summary
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/539fb7f0.html" rel="next" title="每日科技速递-2026-03-04">
+                  每日科技速递-2026-03-04 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">219k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">13:15</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
