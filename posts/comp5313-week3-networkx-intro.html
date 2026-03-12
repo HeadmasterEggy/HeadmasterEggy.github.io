@@ -30,7 +30,7 @@
 <meta property="og:description" content="#COMP5313&#x2F;week3 # COMP5313 Week 3：NetworkX 新手入门笔记  适用对象：刚开始学 Python &#x2F; 刚开始接触 NetworkX 的同学 对应内容：Week 3 - Python and NetworkX (COMP5313&#x2F;COMP4313)   1. 这份实验在学什么？ 这份实验的核心目标是： 学会用 Python 里的 NetworkX 库来表示和操作">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-12T19:35:00.000Z">
-<meta property="article:modified_time" content="2026-03-12T08:46:54.515Z">
+<meta property="article:modified_time" content="2026-03-12T08:58:29.065Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
 <meta property="article:tag" content="NetworkX">
@@ -265,7 +265,7 @@ algorithm from NetworkX</span></a><ol class="nav-child"><li class="nav-item nav-
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-03-12 19:35:00 / Modified: 08:46:54" itemprop="dateCreated datePublished" datetime="2026-03-12T19:35:00Z">2026-03-12</time>
+      <time title="Created: 2026-03-12 19:35:00 / Modified: 08:58:29" itemprop="dateCreated datePublished" datetime="2026-03-12T19:35:00Z">2026-03-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,14 +284,14 @@ algorithm from NetworkX</span></a><ol class="nav-child"><li class="nav-item nav-
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>2.6k</span>
+      <span>2.8k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>9 mins.</span>
+      <span>10 mins.</span>
     </span>
 </div>
 
@@ -550,18 +550,35 @@ the graph presented in the figure</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="number">0</span>,<span class="number">1</span>), (<span class="number">1</span>,<span class="number">2</span>), (<span class="number">1</span>,<span class="number">3</span>), (<span class="number">2</span>,<span class="number">3</span>), (<span class="number">3</span>,<span class="number">4</span>), (<span class="number">4</span>,<span class="number">5</span>), (<span class="number">5</span>,<span class="number">6</span>), (<span class="number">6</span>,<span class="number">7</span>), (<span class="number">7</span>,<span class="number">8</span>), (<span class="number">8</span>,<span class="number">9</span>)</span><br></pre></td></tr></table></figure>
 <p>你可以这样创建：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g = nx.Graph()</span><br><span class="line">g.add_nodes_from([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>])</span><br><span class="line">g.add_edges_from([(<span class="number">0</span>,<span class="number">1</span>), (<span class="number">1</span>,<span class="number">2</span>), (<span class="number">1</span>,<span class="number">3</span>), (<span class="number">2</span>,<span class="number">3</span>), (<span class="number">3</span>,<span class="number">4</span>), (<span class="number">4</span>,<span class="number">5</span>), (<span class="number">5</span>,<span class="number">6</span>), (<span class="number">6</span>,<span class="number">7</span>), (<span class="number">7</span>,<span class="number">8</span>), (<span class="number">8</span>,<span class="number">9</span>)])</span><br></pre></td></tr></table></figure>
-<p>如果老师要求“用不超过两行 Python
-检查这个图是不是和图上一样”，你可以写：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(g.nodes())</span><br><span class="line"><span class="built_in">print</span>(g.edges())</span><br></pre></td></tr></table></figure>
-<p>或者更直观一点：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nx.draw(g, with_labels=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>如果老师要求“用代码检查这个图是不是和图上一样”，除了直接看
+<code>nodes</code> 和 <code>edges</code>，也可以结合后面
+<strong>Exercise 3</strong> 学到的函数来测试。</p>
+<p>最基础的检查可以写：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(g.number_of_nodes(), g.number_of_edges())</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(g.degree()))</span><br></pre></td></tr></table></figure>
+<p>这样可以快速确认： - 节点数是不是 <code>10</code> - 边数是不是
+<code>10</code> - 每个节点的 degree 是否和图一致</p>
+<p>如果想进一步用 <strong>Exercise 3 的图操作函数</strong>
+来验证，可以抽出图左半部分做检查：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g2 = nx.subgraph(g, [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(g2.edges())</span><br></pre></td></tr></table></figure>
+<p>这一步的意思是：</p>
+<blockquote>
+<p>从你构造好的图 <code>g</code> 中，取出节点 <code>0,1,2,3,4</code>
+对应的子图，看它的边是不是和原图左半部分一致。</p>
+</blockquote>
+<p>理论上应该得到：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[(<span class="number">0</span>,<span class="number">1</span>), (<span class="number">1</span>,<span class="number">2</span>), (<span class="number">1</span>,<span class="number">3</span>), (<span class="number">2</span>,<span class="number">3</span>), (<span class="number">3</span>,<span class="number">4</span>)]</span><br></pre></td></tr></table></figure>
+<p>如果你想图形化地检查，也可以：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nx.draw(g, with_labels=<span class="literal">True</span>)</span><br><span class="line">nx.draw(g2, with_labels=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
 <h4 id="这里用到的函数">这里用到的函数</h4>
 <ul>
 <li><code>nx.Graph()</code>：创建空图</li>
 <li><code>add_nodes_from()</code>：批量加入节点</li>
 <li><code>add_edges_from()</code>：批量加入边</li>
-<li><code>g.nodes()</code>：查看节点</li>
-<li><code>g.edges()</code>：查看边</li>
+<li><code>g.number_of_nodes()</code>：查看节点总数</li>
+<li><code>g.number_of_edges()</code>：查看边总数</li>
+<li><code>g.degree()</code>：查看每个节点的度数</li>
+<li><code>nx.subgraph()</code>：从原图中取子图（Exercise 3）</li>
+<li><code>g2.edges()</code>：查看子图中的边</li>
 <li><code>nx.draw()</code>：把图画出来</li>
 </ul>
 <hr />
@@ -598,6 +615,8 @@ degree</h3>
 4：Draw the graph resulting from the subgraph code</h3>
 <p>给定代码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">bunch = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">g2 = nx.subgraph(g, bunch)</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>nx.subgraph()</code> 就是 <strong>Exercise 3: Graph
+Operations</strong> 里最重要的函数之一。</p>
 <p>这表示：</p>
 <blockquote>
 <p>从原图 <code>g</code> 中，只保留节点
@@ -729,14 +748,14 @@ centrality of the nodes in the graph.</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">240k</span>
+    <span title="Word count total">241k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">14:34</span>
+    <span title="Reading time total">14:35</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
