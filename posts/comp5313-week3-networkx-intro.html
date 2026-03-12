@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="#COMP5313&#x2F;week3 # COMP5313 Week 3：NetworkX 新手入门笔记  适用对象：刚开始学 Python &#x2F; 刚开始接触 NetworkX 的同学 对应内容：Week 3 - Python and NetworkX (COMP5313&#x2F;COMP4313)   1. 这份实验在学什么？ 这份实验的核心目标是： 学会用 Python 里的 NetworkX 库来表示和操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 3 NetworkX 新手入门">
+<meta property="og:url" content="http://example.com/posts/comp5313-week3-networkx-intro.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="#COMP5313&#x2F;week3 # COMP5313 Week 3：NetworkX 新手入门笔记  适用对象：刚开始学 Python &#x2F; 刚开始接触 NetworkX 的同学 对应内容：Week 3 - Python and NetworkX (COMP5313&#x2F;COMP4313)   1. 这份实验在学什么？ 这份实验的核心目标是： 学会用 Python 里的 NetworkX 库来表示和操作">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-12T19:35:00.000Z">
+<meta property="article:modified_time" content="2026-03-12T08:39:55.122Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="NetworkX">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="图论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/comp5313-week3-networkx-intro.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/comp5313-week3-networkx-intro.html","path":"posts/comp5313-week3-networkx-intro.html","title":"COMP5313 Week 3 NetworkX 新手入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 3 NetworkX 新手入门 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/comp5313-week3-networkx-intro.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">29</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">83</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%BB%BD%E5%AE%9E%E9%AA%8C%E5%9C%A8%E5%AD%A6%E4%BB%80%E4%B9%88"><span class="nav-text">1. 这份实验在学什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-graph"><span class="nav-text">2. 什么是 Graph？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nodes%E8%8A%82%E7%82%B9"><span class="nav-text">2.1 Nodes（节点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edges%E8%BE%B9"><span class="nav-text">2.2 Edges（边）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AE%B5%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">3. 第一段最重要的代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#import-networkx-as-nx"><span class="nav-text">3.1
+import networkx as nx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g-nx.graph"><span class="nav-text">3.2 g &#x3D; nx.Graph()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%8A%A0%E8%8A%82%E7%82%B9nodes"><span class="nav-text">4. 怎么加节点（Nodes）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="nav-text">4.1 加一个节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%A4%9A%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="nav-text">4.2 加多个节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9"><span class="nav-text">4.3 查看当前所有节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%9B%BE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%8A%82%E7%82%B9"><span class="nav-text">4.4 从另一个图中导入节点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#h-nx.path_graph10"><span class="nav-text">h &#x3D; nx.path_graph(10)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#g.add_nodes_fromh"><span class="nav-text">g.add_nodes_from(h)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="nav-text">4.5 删除节点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%8A%A0%E8%BE%B9edges"><span class="nav-text">5. 怎么加边（Edges）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E4%B8%80%E6%9D%A1%E8%BE%B9"><span class="nav-text">5.1 加一条边</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%8A%A0%E5%A4%9A%E6%9D%A1%E8%BE%B9"><span class="nav-text">5.2 一次加多条边</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E8%BE%B9"><span class="nav-text">5.3 查看所有边</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E4%B8%80%E5%AE%9A%E8%A6%81%E4%BC%9A%E7%9C%8B%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0"><span class="nav-text">6. 你一定要会看的几个基本函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E6%80%BB%E6%95%B0"><span class="nav-text">6.1 节点总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E6%80%BB%E6%95%B0"><span class="nav-text">6.2 边总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E9%82%BB%E5%B1%85"><span class="nav-text">6.3 查看某个节点的邻居</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%BA%A6%E6%95%B0"><span class="nav-text">6.4 查看某个节点的度数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E5%9B%BE-path_graph10-%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">7. 路径图
+path_graph(10) 到底是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%BB%BD-notebook-%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="nav-text">8. 这份 notebook 的学习路线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-1-graphs-in-python"><span class="nav-text">Exercise 1: Graphs in Python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-2-graph-properties"><span class="nav-text">Exercise 2: Graph Properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-3-graph-operations"><span class="nav-text">Exercise 3: Graph Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-4-graph-advanced-properties"><span class="nav-text">Exercise 4: Graph Advanced
+Properties</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E6%96%B0%E6%89%8B%E7%9A%84%E6%9C%80%E5%B0%8F%E5%8F%AF%E8%BF%90%E8%A1%8C%E4%BE%8B%E5%AD%90"><span class="nav-text">9. 给新手的最小可运行例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E7%8E%B0%E5%9C%A8%E6%9C%80%E9%9C%80%E8%A6%81%E8%AE%B0%E4%BD%8F%E7%9A%84-6-%E4%B8%AA%E5%91%BD%E4%BB%A4"><span class="nav-text">10. 你现在最需要记住的 6
+个命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E6%9C%80%E9%80%9A%E4%BF%97%E7%9A%84%E8%AF%9D%E7%90%86%E8%A7%A3-networkx"><span class="nav-text">11. 一句最通俗的话理解
+NetworkX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%BB%BA%E8%AE%AE"><span class="nav-text">12. 下一步建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">13. 总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/comp5313-week3-networkx-intro.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 3 NetworkX 新手入门 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 3 NetworkX 新手入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 19:35:00 / Modified: 08:39:55" itemprop="dateCreated datePublished" datetime="2026-03-12T19:35:00Z">2026-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>#COMP5313/week3 # COMP5313 Week 3：NetworkX 新手入门笔记</p>
+<blockquote>
+<p>适用对象：刚开始学 Python / 刚开始接触 NetworkX 的同学<br />
+对应内容：Week 3 - Python and NetworkX (COMP5313/COMP4313)</p>
+</blockquote>
+<hr />
+<h2 id="这份实验在学什么">1. 这份实验在学什么？</h2>
+<p>这份实验的核心目标是：</p>
+<p><strong>学会用 Python 里的 <code>NetworkX</code>
+库来表示和操作“图（Graph）/ 网络（Network）”。</strong></p>
+<p>在复杂网络课程里，很多对象都可以抽象成“节点 + 边”的结构：</p>
+<ul>
+<li>社交网络：人是节点，关系是边</li>
+<li>道路网络：城市是节点，道路是边</li>
+<li>网页网络：网页是节点，链接是边</li>
+<li>通信网络：设备是节点，连接是边</li>
+</ul>
+<p>所以，这一周实际上是在学：</p>
+<ol type="1">
+<li>怎么建一个图</li>
+<li>怎么加节点和边</li>
+<li>怎么查看图的结构</li>
+<li>怎么计算一些图的基本性质</li>
+</ol>
+<hr />
+<h2 id="什么是-graph">2. 什么是 Graph？</h2>
+<p>一个图（Graph）最基本由两部分组成：</p>
+<h3 id="nodes节点">2.1 Nodes（节点）</h3>
+<p>节点就是图里的“点”。</p>
+<p>例如： - 一个人 - 一个城市 - 一个网页 - 一台电脑</p>
+<h3 id="edges边">2.2 Edges（边）</h3>
+<p>边就是两个节点之间的连接关系。</p>
+<p>例如： - 两个人认识 - 两个城市之间有路 - 两个网页之间有链接 -
+两台设备之间有通信</p>
+<p>所以：</p>
+<blockquote>
+<p><strong>Graph = Nodes + Edges</strong></p>
+</blockquote>
+<p>这是这份 notebook 最核心的概念。</p>
+<hr />
+<h2 id="第一段最重要的代码">3. 第一段最重要的代码</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line">g = nx.Graph()</span><br></pre></td></tr></table></figure>
+<h3 id="import-networkx-as-nx">3.1
+<code>import networkx as nx</code></h3>
+<p>意思是：</p>
+<ul>
+<li>导入 <code>networkx</code> 这个 Python 库</li>
+<li>给它取一个简写名字 <code>nx</code></li>
+</ul>
+<p>所以后面你会一直看到
+<code>nx.Graph()</code>、<code>nx.path_graph()</code> 这种写法。</p>
+<h3 id="g-nx.graph">3.2 <code>g = nx.Graph()</code></h3>
+<p>意思是：</p>
+<ul>
+<li>创建一个空的图（graph）</li>
+<li>把它存到变量 <code>g</code> 里</li>
+</ul>
+<p>你可以把 <code>g</code>
+想成一个空的网络容器，后面所有节点和边都往里面加。</p>
+<hr />
+<h2 id="怎么加节点nodes">4. 怎么加节点（Nodes）</h2>
+<h3 id="加一个节点">4.1 加一个节点</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_node(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>往图 <code>g</code> 里加一个节点，这个节点的名字是 <code>1</code></p>
+</blockquote>
+<p>注意： 节点不一定只能是数字，也可以是字符串：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_node(<span class="string">&quot;Alice&quot;</span>)</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="加多个节点">4.2 加多个节点</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_nodes_from([<span class="number">2</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>从列表 <code>[2, 3]</code> 中把多个节点一次性加入图
+<code>g</code></p>
+</blockquote>
+<p>这是批量添加节点的常见写法。</p>
+<hr />
+<h3 id="查看当前所有节点">4.3 查看当前所有节点</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.nodes</span><br></pre></td></tr></table></figure>
+<p>可能会输出：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">NodeView((<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<p>意思就是：</p>
+<blockquote>
+<p>当前图里有 1、2、3 这几个节点</p>
+</blockquote>
+<hr />
+<h3 id="从另一个图中导入节点">4.4 从另一个图中导入节点</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">h = nx.path_graph(<span class="number">10</span>)</span><br><span class="line">g.add_nodes_from(h)</span><br></pre></td></tr></table></figure>
+<p>这里有两个知识点：</p>
+<h4 id="h-nx.path_graph10"><code>h = nx.path_graph(10)</code></h4>
+<p>这会自动创建一个“路径图”：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9</span><br></pre></td></tr></table></figure>
+<p>也就是 10 个节点按顺序连成一条线。</p>
+<h4 id="g.add_nodes_fromh"><code>g.add_nodes_from(h)</code></h4>
+<p>意思是：</p>
+<blockquote>
+<p>把图 <code>h</code> 里的节点加到图 <code>g</code> 里</p>
+</blockquote>
+<p>要注意：
+这一步主要是在加入节点本身，不一定等于把边也一起完整搬过来。</p>
+<hr />
+<h3 id="删除节点">4.5 删除节点</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.remove_node(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>把节点 <code>2</code> 从图中删除</p>
+</blockquote>
+<p>如果这个节点和其他边有连接，相关边也会一起消失。</p>
+<hr />
+<h2 id="怎么加边edges">5. 怎么加边（Edges）</h2>
+<h3 id="加一条边">5.1 加一条边</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>在节点 1 和节点 2 之间连一条边</p>
+</blockquote>
+<p>你可以理解成：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">1 --- 2</span><br></pre></td></tr></table></figure>
+<p>如果这是无向图（<code>nx.Graph()</code> 默认是无向图），那么： -
+<code>(1, 2)</code> 和 <code>(2, 1)</code> 是同一条边</p>
+<hr />
+<h3 id="一次加多条边">5.2 一次加多条边</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_edges_from([(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>)])</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<ul>
+<li>1 和 2 连一条边</li>
+<li>2 和 3 连一条边</li>
+<li>3 和 4 连一条边</li>
+</ul>
+<p>这和批量加节点的思路一样。</p>
+<hr />
+<h3 id="查看所有边">5.3 查看所有边</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.edges</span><br></pre></td></tr></table></figure>
+<p>可能输出：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">EdgeView([(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>)])</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>当前图中有这些连接关系</p>
+</blockquote>
+<hr />
+<h2 id="你一定要会看的几个基本函数">6. 你一定要会看的几个基本函数</h2>
+<h3 id="节点总数">6.1 节点总数</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.number_of_nodes()</span><br></pre></td></tr></table></figure>
+<p>返回图里有多少个节点。</p>
+<p>文档中也提到：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.order()</span><br></pre></td></tr></table></figure>
+<p>和上面这个意思一样。</p>
+<hr />
+<h3 id="边总数">6.2 边总数</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.number_of_edges()</span><br></pre></td></tr></table></figure>
+<p>返回图里有多少条边。</p>
+<p>文档里也提到：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.size()</span><br></pre></td></tr></table></figure>
+<p>也是类似作用。</p>
+<hr />
+<h3 id="查看某个节点的邻居">6.3 查看某个节点的邻居</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">list</span>(g.neighbors(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<blockquote>
+<p>找出所有和节点 1 直接相连的节点</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>那么：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">list</span>(g.neighbors(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>结果就是：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="查看某个节点的度数">6.4 查看某个节点的度数</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">g.degree(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>“度数（degree）”的意思就是：</p>
+<blockquote>
+<p>这个节点连接了多少条边</p>
+</blockquote>
+<p>如果 1 连着 2、3、4， 那么 <code>g.degree(1)</code> 就等于 3。</p>
+<hr />
+<h2 id="路径图-path_graph10-到底是什么">7. 路径图
+<code>path_graph(10)</code> 到底是什么？</h2>
+<p>这个在 notebook 里很常见，所以单独讲一下。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">h = nx.path_graph(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<p>意思是创建这样一个图：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9</span><br></pre></td></tr></table></figure>
+<p>特点： - 一共有 10 个节点 - 每个节点只和前后相邻节点相连 -
+两端的节点度数是 1 - 中间节点度数通常是 2</p>
+<p>它是教学中最常见的简单例子之一。</p>
+<hr />
+<h2 id="这份-notebook-的学习路线">8. 这份 notebook 的学习路线</h2>
+<p>根据文档结构，这份实验大致分成下面几部分：</p>
+<h3 id="exercise-1-graphs-in-python">Exercise 1: Graphs in Python</h3>
+<p>这是基础中的基础，主要在学： - 创建图 - 添加节点 - 添加边 - 删除节点
+- 查看节点和边 - 查看邻居和度数</p>
+<h3 id="exercise-2-graph-properties">Exercise 2: Graph Properties</h3>
+<p>开始分析图的性质，例如： - 节点度数 - 路径 - 连通性 -
+网络结构特征</p>
+<h3 id="exercise-3-graph-operations">Exercise 3: Graph Operations</h3>
+<p>开始学习对图做操作，例如： - 组合图 - 取子图 - 遍历和变换</p>
+<h3 id="exercise-4-graph-advanced-properties">Exercise 4: Graph Advanced
+Properties</h3>
+<p>更高级的复杂网络分析内容。</p>
+<hr />
+<h2 id="给新手的最小可运行例子">9. 给新手的最小可运行例子</h2>
+<p>如果你刚学，我建议你先单独跑下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"></span><br><span class="line">g = nx.Graph()</span><br><span class="line"></span><br><span class="line">g.add_node(<span class="number">1</span>)</span><br><span class="line">g.add_nodes_from([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">g.add_edge(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;nodes:&quot;</span>, g.nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;edges:&quot;</span>, g.edges)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;neighbors of 1:&quot;</span>, <span class="built_in">list</span>(g.neighbors(<span class="number">1</span>)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;degree of 1:&quot;</span>, g.degree(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;number of nodes:&quot;</span>, g.number_of_nodes())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;number of edges:&quot;</span>, g.number_of_edges())</span><br></pre></td></tr></table></figure>
+<p>这段代码会帮你同时理解： - 什么是图 - 什么是节点 - 什么是边 -
+什么是邻居 - 什么是度数</p>
+<hr />
+<h2 id="你现在最需要记住的-6-个命令">10. 你现在最需要记住的 6
+个命令</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line">g = nx.Graph()</span><br><span class="line">g.add_node(<span class="number">1</span>)</span><br><span class="line">g.add_nodes_from([<span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">g.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="built_in">list</span>(g.neighbors(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>如果你把这几个都搞懂了，这周实验就已经入门了。</p>
+<hr />
+<h2 id="一句最通俗的话理解-networkx">11. 一句最通俗的话理解
+NetworkX</h2>
+<p>你可以把 <code>NetworkX</code> 理解成：</p>
+<blockquote>
+<p><strong>一个专门帮你在 Python
+里画关系、存关系、查关系、分析关系的工具。</strong></p>
+</blockquote>
+<p>你不是在学一个很玄的东西， 你其实是在学：</p>
+<ul>
+<li>怎么把“谁和谁有关系”这件事写成代码</li>
+<li>再让 Python 帮你分析这个关系结构</li>
+</ul>
+<hr />
+<h2 id="下一步建议">12. 下一步建议</h2>
+<p>如果你接下来继续学，我建议按这个顺序：</p>
+<ol type="1">
+<li>先彻底理解 <code>Graph / node / edge</code></li>
+<li>再理解 <code>neighbors</code> 和 <code>degree</code></li>
+<li>再看图的性质（Exercise 2）</li>
+<li>最后再碰高级性质和复杂操作</li>
+</ol>
+<p>不要一下子想把整份 notebook
+全吃掉。先把最前面的基础操作练熟，后面会顺很多。</p>
+<hr />
+<h2 id="总结">13. 总结</h2>
+<p>这份 Week 3 tutorial 本质上是在教你：</p>
+<ul>
+<li>用 Python 建立图结构</li>
+<li>用 NetworkX 操作图</li>
+<li>用节点和边表示现实世界中的关系网络</li>
+</ul>
+<p>如果你是刚入门，最重要的不是一下看懂全部理论， 而是先会：</p>
+<ul>
+<li>创建图</li>
+<li>加节点</li>
+<li>加边</li>
+<li>看邻居</li>
+<li>看度数</li>
+</ul>
+<p>只要这几个会了，你就已经进门了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/NetworkX/" rel="tag"><i class="fa fa-tag"></i> NetworkX</a>
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/%E5%9B%BE%E8%AE%BA/" rel="tag"><i class="fa fa-tag"></i> 图论</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/620d0f2a.html" rel="prev" title="每日科技速递 - 2026-03-10">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-03-10
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">240k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">14:31</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

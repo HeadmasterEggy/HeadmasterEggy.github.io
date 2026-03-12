@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="用一篇文章讲清 OpenClaw System Prompt 的九层结构、真正可控的层，以及实战优化路径。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenClaw System Prompt 九层架构：从“能用”到“可控”">
+<meta property="og:url" content="http://example.com/posts/59e057e5.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="用一篇文章讲清 OpenClaw System Prompt 的九层结构、真正可控的层，以及实战优化路径。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-07T22:05:00.000Z">
+<meta property="article:modified_time" content="2026-03-07T11:21:42.530Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="OpenClaw">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Prompt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/59e057e5.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/59e057e5.html","path":"posts/59e057e5.html","title":"OpenClaw System Prompt 九层架构：从“能用”到“可控”"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenClaw System Prompt 九层架构：从“能用”到“可控” | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/59e057e5.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">29</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">83</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%90%86%E8%A7%A3%E4%B9%9D%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-text">为什么要理解“九层架构”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E5%B1%82%E7%BB%93%E6%9E%84%E5%B7%A5%E7%A8%8B%E8%A7%86%E8%A7%92"><span class="nav-text">九层结构（工程视角）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#layer-16%E6%A1%86%E6%9E%B6%E8%87%AA%E5%8A%A8%E5%B1%82%E7%A8%B3%E5%AE%9A%E6%80%A7%E4%BC%98%E5%85%88"><span class="nav-text">Layer
+1～6：框架自动层（稳定性优先）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#layer-7%E9%9D%99%E6%80%81%E5%8F%AF%E6%8E%A7%E5%B1%82workspace-files"><span class="nav-text">Layer 7：静态可控层（Workspace
+Files）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#layer-8%E5%8A%A8%E6%80%81%E5%8F%AF%E6%8E%A7%E5%B1%82hooks"><span class="nav-text">Layer 8：动态可控层（Hooks）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#layer-9%E5%85%A5%E7%AB%99%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B1%82inbound-context"><span class="nav-text">Layer
+9：入站上下文层（Inbound Context）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%8E%A7%E5%88%B6%E9%9D%A2%E5%9C%A8%E5%93%AA"><span class="nav-text">真正的“控制面”在哪？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="nav-text">常见误区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA-1%E5%8F%AA%E7%9B%AF%E7%9D%80%E7%B3%BB%E7%BB%9F%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%96%87%E6%9C%AC"><span class="nav-text">误区 1：只盯着系统提示词文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA-2%E6%8A%8A%E6%89%80%E6%9C%89%E9%9C%80%E6%B1%82%E9%83%BD%E5%A1%9E%E8%BF%9B%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-text">误区
+2：把所有需求都塞进一个文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA-3%E5%BF%BD%E8%A7%86%E4%B8%8A%E4%B8%8B%E6%96%87%E5%99%AA%E5%A3%B0"><span class="nav-text">误区 3：忽视上下文噪声</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%A5%97%E5%8F%AF%E8%90%BD%E5%9C%B0%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">一套可落地的优化方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/59e057e5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenClaw System Prompt 九层架构：从“能用”到“可控” | Joey">
+      <meta itemprop="description" content="用一篇文章讲清 OpenClaw System Prompt 的九层结构、真正可控的层，以及实战优化路径。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenClaw System Prompt 九层架构：从“能用”到“可控”
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-07 22:05:00 / Modified: 11:21:42" itemprop="dateCreated datePublished" datetime="2026-03-07T22:05:00Z">2026-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Engineering/" itemprop="url" rel="index"><span itemprop="name">AI Engineering</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>842</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">用一篇文章讲清 OpenClaw System Prompt 的九层结构、真正可控的层，以及实战优化路径。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="为什么要理解九层架构">为什么要理解“九层架构”</h2>
+<p>很多人把 Agent 的行为理解为“一个 System Prompt 决定一切”。</p>
+<p>但在 OpenClaw 里，System Prompt 更像是一个
+<strong>动态组装系统</strong>：
+它不是单文件，而是由多个层级在运行时拼接而成。</p>
+<p>理解这件事的价值在于：</p>
+<ul>
+<li>你会知道哪里可以改，哪里不该改</li>
+<li>你会明白为什么“同样一句话，不同会话表现不一样”</li>
+<li>你能把“玄学调参”变成“工程化配置”</li>
+</ul>
+<hr />
+<h2 id="九层结构工程视角">九层结构（工程视角）</h2>
+<h3 id="layer-16框架自动层稳定性优先">Layer
+1～6：框架自动层（稳定性优先）</h3>
+<p>这部分通常由框架自动注入，目标是保证一致性与安全边界：</p>
+<ol type="1">
+<li>Framework Core（框架核心规则）</li>
+<li>Tool Definitions（工具定义与参数约束）</li>
+<li>Skills Registry（技能注册与可用性）</li>
+<li>Model Aliases（模型别名）</li>
+<li>Protocol Specs（协议规范，如 Reply Tags / Heartbeat）</li>
+<li>Runtime Info（运行时信息，如 agent、host、model、channel）</li>
+</ol>
+<p>这 6 层通常不建议“硬改”，而是通过配置间接影响。</p>
+<hr />
+<h3 id="layer-7静态可控层workspace-files">Layer 7：静态可控层（Workspace
+Files）</h3>
+<p>这是最直接、最稳定的个性化入口。常见文件包括：</p>
+<ul>
+<li><code>AGENTS.md</code></li>
+<li><code>SOUL.md</code></li>
+<li><code>USER.md</code></li>
+<li><code>IDENTITY.md</code></li>
+<li><code>TOOLS.md</code></li>
+<li><code>HEARTBEAT.md</code></li>
+<li><code>MEMORY.md</code> / <code>memory/*.md</code></li>
+</ul>
+<p>适合放：</p>
+<ul>
+<li>角色定位</li>
+<li>长期偏好</li>
+<li>工作规范</li>
+<li>可复用决策</li>
+</ul>
+<hr />
+<h3 id="layer-8动态可控层hooks">Layer 8：动态可控层（Hooks）</h3>
+<p>这是“按场景注入”的关键能力。比如：</p>
+<ul>
+<li>根据会话类型加载不同文档</li>
+<li>在 prompt 构建前注入实时上下文</li>
+<li>按条件追加 bootstrap 文件</li>
+</ul>
+<p>适合放：</p>
+<ul>
+<li>会变的内容</li>
+<li>上下文相关内容</li>
+<li>自动化拼装逻辑</li>
+</ul>
+<hr />
+<h3 id="layer-9入站上下文层inbound-context">Layer
+9：入站上下文层（Inbound Context）</h3>
+<p>每次请求都会带上：</p>
+<ul>
+<li>发送者信息</li>
+<li>渠道元信息</li>
+<li>会话上下文</li>
+<li>当前消息特征</li>
+</ul>
+<p>它解释了为什么同样 prompt，在不同渠道/会话里会出现不同响应倾向。</p>
+<hr />
+<h2 id="真正的控制面在哪">真正的“控制面”在哪？</h2>
+<p>结论很简单：</p>
+<ul>
+<li><strong>长期稳定行为</strong>：放 Layer 7</li>
+<li><strong>动态场景行为</strong>：放 Layer 8</li>
+<li><strong>会话差异影响</strong>：理解 Layer 9</li>
+</ul>
+<p>也就是说，真正可控的核心不是“改一段神奇 prompt”，而是：</p>
+<blockquote>
+<p><strong>Layer 7 + Layer 8 的协同设计</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="常见误区">常见误区</h2>
+<h3 id="误区-1只盯着系统提示词文本">误区 1：只盯着系统提示词文本</h3>
+<p>问题：你看到的只是结果，不是组装过程。</p>
+<p>建议：先弄清“由谁、在何时、按什么规则”拼装。</p>
+<h3 id="误区-2把所有需求都塞进一个文件">误区
+2：把所有需求都塞进一个文件</h3>
+<p>问题：静态内容和动态内容混在一起，后期维护灾难。</p>
+<p>建议：</p>
+<ul>
+<li>稳定规则写 Layer 7</li>
+<li>动态逻辑写 Layer 8</li>
+</ul>
+<h3 id="误区-3忽视上下文噪声">误区 3：忽视上下文噪声</h3>
+<p>问题：Layer 9 带来的对话历史噪声会让输出漂移。</p>
+<p>建议：定期收敛上下文，保持任务边界清晰。</p>
+<hr />
+<h2 id="一套可落地的优化方法">一套可落地的优化方法</h2>
+<ol type="1">
+<li>先清理 Layer 7：删重复、删修辞、留规则</li>
+<li>再约束 Layer 8：只注入必要内容，避免重依赖</li>
+<li>观察 Layer 9：排查“历史消息污染”</li>
+<li>逐步迭代：每次只改一个变量，便于回归验证</li>
+</ol>
+<hr />
+<h2 id="总结">总结</h2>
+<p>OpenClaw 的 System Prompt 不是“写作题”，是“系统工程题”。</p>
+<p>当你把九层看成一个组装管线，而不是一段固定文本时， 你就从“会用
+Agent”走到了“能设计 Agent”。</p>
+<p>下一步最值得做的，不是继续堆提示词，而是把你的 Layer 7/8
+做成可维护、可迭代、可验证的配置体系。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenClaw/" rel="tag"><i class="fa fa-tag"></i> OpenClaw</a>
+              <a href="/tags/Agent/" rel="tag"><i class="fa fa-tag"></i> Agent</a>
+              <a href="/tags/Prompt/" rel="tag"><i class="fa fa-tag"></i> Prompt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/e572abc8.html" rel="prev" title="每日科技速递 - 2026-03-07">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-03-07
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/75cdb659.html" rel="next" title="每日科技速递 - 2026-03-08">
+                  每日科技速递 - 2026-03-08 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">240k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">14:31</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
