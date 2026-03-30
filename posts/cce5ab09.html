@@ -22,15 +22,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="COMP5313 Assignment 1 题解（一） Task 1 — Strong and Weak Ties 这一题考的是 Strong Triadic Closure Property, 简称 STC。 它本质上是在问：  如果一个人和两个人都是“强关系”，那么这两个人之间是否至少也认识？  如果答案是否定的，那么这个节点就违反了 STC。  1. 题目目标 题目要求：  判断图中是否 所">
+    <meta name="description" content="COMP5313 Assignment 1 题解（一） Task 1 — Strong and Weak Ties 题目 给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie。题目要求判断：是否所有节点都满足 Strong Triadic Closure Property (STC)；如果不是，需要列出所有违反该性质的节点。 这一题考的是 Stron">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COMP5313 Assignment 1 题解 01 - Strong and Weak Ties">
 <meta property="og:url" content="http://example.com/posts/cce5ab09.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="COMP5313 Assignment 1 题解（一） Task 1 — Strong and Weak Ties 这一题考的是 Strong Triadic Closure Property, 简称 STC。 它本质上是在问：  如果一个人和两个人都是“强关系”，那么这两个人之间是否至少也认识？  如果答案是否定的，那么这个节点就违反了 STC。  1. 题目目标 题目要求：  判断图中是否 所">
+<meta property="og:description" content="COMP5313 Assignment 1 题解（一） Task 1 — Strong and Weak Ties 题目 给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie。题目要求判断：是否所有节点都满足 Strong Triadic Closure Property (STC)；如果不是，需要列出所有违反该性质的节点。 这一题考的是 Stron">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-26T18:25:00.000Z">
-<meta property="article:modified_time" content="2026-03-26T07:23:37.552Z">
+<meta property="article:modified_time" content="2026-03-30T13:15:02.550Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
 <meta property="article:tag" content="Assignment 1">
@@ -240,7 +240,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">83</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">145</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">91</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">166</span></a></li>
   </ul>
 </nav>
 
@@ -266,7 +266,7 @@ mjx-container[display="true"] + br {
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-assignment-1-%E9%A2%98%E8%A7%A3%E4%B8%80"><span class="nav-text">COMP5313 Assignment 1
-题解（一）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-1-strong-and-weak-ties"><span class="nav-text">Task 1 — Strong and Weak Ties</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%9B%AE%E6%A0%87"><span class="nav-text">1. 题目目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stc-%E7%9A%84%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-text">2. STC 的直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-1-%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86"><span class="nav-text">3. Figure 1 的图结构整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-mermaid-%E7%94%BB%E5%87%BA%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F"><span class="nav-text">4. 用 Mermaid 画出结构示意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E7%AD%96%E7%95%A5"><span class="nav-text">5. 解题策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-text">通用步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%90%E7%82%B9%E8%AF%A6%E7%BB%86%E6%A3%80%E6%9F%A5"><span class="nav-text">6. 逐点详细检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-a"><span class="nav-text">6.1 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-b"><span class="nav-text">6.2 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-c"><span class="nav-text">6.3 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-d"><span class="nav-text">6.4 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-e"><span class="nav-text">6.5 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E8%A1%A8%E6%A0%BC"><span class="nav-text">7. 总结表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88"><span class="nav-text">8. 最终答案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-python-networkx-%E9%AA%8C%E8%AF%81"><span class="nav-text">10. 用 Python &#x2F; NetworkX 验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%A2%98%E6%9C%80%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">11. 这题最容易错的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-1%E6%8A%8A-weak-edge-%E5%BD%93%E6%88%90%E4%B8%8D%E7%AE%97%E8%BE%B9"><span class="nav-text">错误 1：把 weak edge
+题解（一）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-1-strong-and-weak-ties"><span class="nav-text">Task 1 — Strong and Weak Ties</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%9B%AE%E6%A0%87"><span class="nav-text">1. 题目目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stc-%E7%9A%84%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-text">2. STC 的直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-1-%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86"><span class="nav-text">3. Figure 1 的图结构整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-mermaid-%E7%94%BB%E5%87%BA%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F"><span class="nav-text">4. 用 Mermaid 画出结构示意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E7%AD%96%E7%95%A5"><span class="nav-text">5. 解题策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-text">通用步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%90%E7%82%B9%E8%AF%A6%E7%BB%86%E6%A3%80%E6%9F%A5"><span class="nav-text">6. 逐点详细检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-a"><span class="nav-text">6.1 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-b"><span class="nav-text">6.2 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-c"><span class="nav-text">6.3 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-d"><span class="nav-text">6.4 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-e"><span class="nav-text">6.5 Node </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E8%A1%A8%E6%A0%BC"><span class="nav-text">7. 总结表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88"><span class="nav-text">8. 最终答案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-python-networkx-%E9%AA%8C%E8%AF%81"><span class="nav-text">10. 用 Python &#x2F; NetworkX 验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%A2%98%E6%9C%80%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">11. 这题最容易错的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-1%E6%8A%8A-weak-edge-%E5%BD%93%E6%88%90%E4%B8%8D%E7%AE%97%E8%BE%B9"><span class="nav-text">错误 1：把 weak edge
 当成“不算边”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-2%E6%A3%80%E6%9F%A5%E4%BA%86%E6%89%80%E6%9C%89%E9%82%BB%E5%B1%85%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AA%E6%A3%80%E6%9F%A5-strong-neighbors"><span class="nav-text">错误
 2：检查了所有邻居，而不是只检查 strong neighbors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-3%E8%A7%89%E5%BE%97%E6%B2%A1%E6%9C%89-strong-ties-%E7%9A%84%E7%82%B9%E4%B8%8D%E7%9F%A5%E9%81%93%E7%AE%97%E4%B8%8D%E7%AE%97%E6%BB%A1%E8%B6%B3"><span class="nav-text">错误
 3：觉得没有 strong ties 的点“不知道算不算满足”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BF%86"><span class="nav-text">12. 一句话记忆</span></a></li></ol></li></ol></div>
@@ -284,18 +284,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-count">91</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -368,9 +368,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-03-26 18:25:00 / Modified: 07:23:37" itemprop="dateCreated datePublished" datetime="2026-03-26T18:25:00Z">2026-03-26</time>
+      <time title="Created: 2026-03-26 18:25:00" itemprop="dateCreated datePublished" datetime="2026-03-26T18:25:00Z">2026-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-30 13:15:02" itemprop="dateModified" datetime="2026-03-30T13:15:02Z">2026-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -413,6 +419,10 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody"><h1 id="comp5313-assignment-1-题解一">COMP5313 Assignment 1
 题解（一）</h1>
 <h1 id="task-1-strong-and-weak-ties">Task 1 — Strong and Weak Ties</h1>
+<h2 id="题目">题目</h2>
+<p>给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak
+tie。题目要求判断：是否所有节点都满足 <strong>Strong Triadic Closure
+Property (STC)</strong>；如果不是，需要列出所有违反该性质的节点。</p>
 <p>这一题考的是 <strong>Strong Triadic Closure Property</strong>, 简称
 <strong>STC</strong>。</p>
 <p>它本质上是在问：</p>
@@ -674,8 +684,6 @@ neighbors，自然不可能违反定义，因此默认满足。</p>
 <p>在这张图里，正好就是：</p>
 <p><span class="math display"><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -1.043ex;" xmlns="http://www.w3.org/2000/svg" width="6.268ex" height="3.267ex" role="img" focusable="false" viewBox="0 -983 2770.7 1444"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="menclose"><g transform="translate(267, 0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mstyle"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g><g data-mml-node="mo" transform="translate(750,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1194.7,0)"><path data-c="1D438" d="M492 213Q472 213 472 226Q472 230 477 250T482 285Q482 316 461 323T364 330H312Q311 328 277 192T243 52Q243 48 254 48T334 46Q428 46 458 48T518 61Q567 77 599 117T670 248Q680 270 683 272Q690 274 698 274Q718 274 718 261Q613 7 608 2Q605 0 322 0H133Q31 0 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H757Q764 676 764 669Q764 664 751 557T737 447Q735 440 717 440H705Q698 445 698 453L701 476Q704 500 704 528Q704 558 697 578T678 609T643 625T596 632T532 634H485Q397 633 392 631Q388 629 386 622Q385 619 355 499T324 377Q347 376 372 376H398Q464 376 489 391T534 472Q538 488 540 490T557 493Q562 493 565 493T570 492T572 491T574 487T577 483L544 351Q511 218 508 216Q505 213 492 213Z"></path></g></g></g></g></g><rect x="33.5" y="-427.5" width="2425.7" height="1377" fill="none" stroke-width="67"></rect></g><g data-mml-node="mo" transform="translate(2492.7,0)"><path data-c="2E" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z"></path></g></g></g></svg></mjx-container></span></p>
 <hr>
-<p>如果你要，我下一步可以继续按这个风格写 <strong>Task 2
-的中文详细题解</strong>。</p>
 
     </div>
 
@@ -737,14 +745,14 @@ neighbors，自然不可能违反定义，因此默认满足。</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">352k</span>
+    <span title="Word count total">364k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">21:20</span>
+    <span title="Reading time total">22:04</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

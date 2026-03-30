@@ -22,15 +22,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="COMP5313 Assignment 1 题解（五） Task 5 — Girvan-Newman 这一题要求用 Girvan-Newman partitioning method 给出图的 nested regions，也就是：  第 0 层，整个图是一个 region； 然后不断删除 edge betweenness 最高的边； 每删完一轮后，记录当前图被分成了哪些 connected co">
+    <meta name="description" content="COMP5313 Assignment 1 题解（五） Task 5 — Girvan-Newman 题目 对 Figure 5 使用 Girvan-Newman partitioning method，写出这个图在每一层分割过程中得到的 nested regions，也就是每一层的 connected components &#x2F; regions。 这一题要求用 Girvan-Newman part">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COMP5313 Assignment 1 题解 05 - Girvan-Newman">
 <meta property="og:url" content="http://example.com/posts/39dfb97.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="COMP5313 Assignment 1 题解（五） Task 5 — Girvan-Newman 这一题要求用 Girvan-Newman partitioning method 给出图的 nested regions，也就是：  第 0 层，整个图是一个 region； 然后不断删除 edge betweenness 最高的边； 每删完一轮后，记录当前图被分成了哪些 connected co">
+<meta property="og:description" content="COMP5313 Assignment 1 题解（五） Task 5 — Girvan-Newman 题目 对 Figure 5 使用 Girvan-Newman partitioning method，写出这个图在每一层分割过程中得到的 nested regions，也就是每一层的 connected components &#x2F; regions。 这一题要求用 Girvan-Newman part">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-26T19:05:00.000Z">
-<meta property="article:modified_time" content="2026-03-26T07:38:35.201Z">
+<meta property="article:modified_time" content="2026-03-30T13:14:36.211Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
 <meta property="article:tag" content="Girvan-Newman">
@@ -238,7 +238,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">83</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">145</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">91</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">166</span></a></li>
   </ul>
 </nav>
 
@@ -264,7 +264,7 @@ mjx-container[display="true"] + br {
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-assignment-1-%E9%A2%98%E8%A7%A3%E4%BA%94"><span class="nav-text">COMP5313 Assignment 1
-题解（五）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-5-girvan-newman"><span class="nav-text">Task 5 — Girvan-Newman</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-5-%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84"><span class="nav-text">1. Figure 5 的图结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mermaid-%E9%87%8D%E6%9E%84%E5%9B%BE"><span class="nav-text">2. Mermaid 重构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#girvan-newman-%E6%96%B9%E6%B3%95%E5%9B%9E%E9%A1%BE"><span class="nav-text">3. Girvan-Newman 方法回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#level-0"><span class="nav-text">4. Level 0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">5. 第一轮删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-ce-%E5%92%8C-df-%E7%9A%84-betweenness-%E6%9C%80%E9%AB%98"><span class="nav-text">5.1 为什么  和  的 betweenness 最高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%90%8E%E7%9A%84%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F"><span class="nav-text">5.2 删除后的连通分量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">6. 第二轮删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A6%E8%BE%B9%E5%AD%90%E5%9B%BE-abcd"><span class="nav-text">左边子图 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%B3%E8%BE%B9%E5%AD%90%E5%9B%BE-efg"><span class="nav-text">右边子图 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%90%8E%E7%9A%84%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F-1"><span class="nav-text">6.1 删除后的连通分量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">7. 第三轮删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88-nested-regions"><span class="nav-text">8. 最终 nested regions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#level-0-1"><span class="nav-text">Level 0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-1"><span class="nav-text">Level 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-2"><span class="nav-text">Level 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-3"><span class="nav-text">Level 3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%86%99%E6%88%90%E7%AD%94%E6%A1%88%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-text">9. 最后可直接写成答案的形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81"><span class="nav-text">10. Python 验证代码</span></a></li></ol></li></ol></div>
+题解（五）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-5-girvan-newman"><span class="nav-text">Task 5 — Girvan-Newman</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-5-%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84"><span class="nav-text">1. Figure 5 的图结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mermaid-%E9%87%8D%E6%9E%84%E5%9B%BE"><span class="nav-text">2. Mermaid 重构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#girvan-newman-%E6%96%B9%E6%B3%95%E5%9B%9E%E9%A1%BE"><span class="nav-text">3. Girvan-Newman 方法回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#level-0"><span class="nav-text">4. Level 0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">5. 第一轮删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-ce-%E5%92%8C-df-%E7%9A%84-betweenness-%E6%9C%80%E9%AB%98"><span class="nav-text">5.1 为什么  和  的 betweenness 最高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%90%8E%E7%9A%84%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F"><span class="nav-text">5.2 删除后的连通分量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">6. 第二轮删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A6%E8%BE%B9%E5%AD%90%E5%9B%BE-abcd"><span class="nav-text">左边子图 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%B3%E8%BE%B9%E5%AD%90%E5%9B%BE-efg"><span class="nav-text">右边子图 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%90%8E%E7%9A%84%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F-1"><span class="nav-text">6.1 删除后的连通分量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E8%BD%AE%E5%88%A0%E9%99%A4"><span class="nav-text">7. 第三轮删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88-nested-regions"><span class="nav-text">8. 最终 nested regions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#level-0-1"><span class="nav-text">Level 0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-1"><span class="nav-text">Level 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-2"><span class="nav-text">Level 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level-3"><span class="nav-text">Level 3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%86%99%E6%88%90%E7%AD%94%E6%A1%88%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-text">9. 最后可直接写成答案的形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81"><span class="nav-text">10. Python 验证代码</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -279,18 +279,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-count">91</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -363,9 +363,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-03-26 19:05:00 / Modified: 07:38:35" itemprop="dateCreated datePublished" datetime="2026-03-26T19:05:00Z">2026-03-26</time>
+      <time title="Created: 2026-03-26 19:05:00" itemprop="dateCreated datePublished" datetime="2026-03-26T19:05:00Z">2026-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-30 13:14:36" itemprop="dateModified" datetime="2026-03-30T13:14:36Z">2026-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -388,7 +394,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.1k</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -408,6 +414,10 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody"><h1 id="comp5313-assignment-1-题解五">COMP5313 Assignment 1
 题解（五）</h1>
 <h1 id="task-5-girvan-newman">Task 5 — Girvan-Newman</h1>
+<h2 id="题目">题目</h2>
+<p>对 Figure 5 使用 <strong>Girvan-Newman partitioning
+method</strong>，写出这个图在每一层分割过程中得到的 <strong>nested
+regions</strong>，也就是每一层的 connected components / regions。</p>
 <p>这一题要求用 <strong>Girvan-Newman partitioning method</strong>
 给出图的 <strong>nested regions</strong>，也就是：</p>
 <ul>
@@ -603,14 +613,14 @@ betweenness 最大。</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">352k</span>
+    <span title="Word count total">364k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">21:20</span>
+    <span title="Reading time total">22:04</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

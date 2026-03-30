@@ -22,19 +22,19 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="COMP5313 Assignment 1 题解（三） Task 3 — Structural Balance 这一题按 lecture 里的 two-step approach 来判断：  任选一个点放进阵营 ； 正边两端放同一阵营，负边两端放不同阵营； 如果推导过程中出现矛盾，则图不 balanced；如果能完整分成两个阵营，则 balanced。   Figure 3(a) 按图中的符号，从">
+    <meta name="description" content="COMP5313 Assignment 1 题解（三） Task 3 — Structural Balance 题目 Figure 3(a) 和 Figure 3(b) 给出了两个带正负号的社交网络。题目要求用 lecture 中讲的 two-step approach 判断这两个 signed network 是否 balanced。 这一题按 lecture 里的 two-step appro">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COMP5313 Assignment 1 题解 03 - Structural Balance">
 <meta property="og:url" content="http://example.com/posts/6a20eea6.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="COMP5313 Assignment 1 题解（三） Task 3 — Structural Balance 这一题按 lecture 里的 two-step approach 来判断：  任选一个点放进阵营 ； 正边两端放同一阵营，负边两端放不同阵营； 如果推导过程中出现矛盾，则图不 balanced；如果能完整分成两个阵营，则 balanced。   Figure 3(a) 按图中的符号，从">
+<meta property="og:description" content="COMP5313 Assignment 1 题解（三） Task 3 — Structural Balance 题目 Figure 3(a) 和 Figure 3(b) 给出了两个带正负号的社交网络。题目要求用 lecture 中讲的 two-step approach 判断这两个 signed network 是否 balanced。 这一题按 lecture 里的 two-step appro">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-26T18:42:00.000Z">
-<meta property="article:modified_time" content="2026-03-26T07:31:42.702Z">
+<meta property="article:modified_time" content="2026-03-30T13:14:36.189Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
-<meta property="article:tag" content="Assignment 1">
 <meta property="article:tag" content="Structural Balance">
+<meta property="article:tag" content="Assignment 1">
 <meta name="twitter:card" content="summary">
 
 
@@ -239,7 +239,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">83</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">145</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">91</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">166</span></a></li>
   </ul>
 </nav>
 
@@ -265,7 +265,7 @@ mjx-container[display="true"] + br {
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-assignment-1-%E9%A2%98%E8%A7%A3%E4%B8%89"><span class="nav-text">COMP5313 Assignment 1
-题解（三）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-3-structural-balance"><span class="nav-text">Task 3 — Structural Balance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-3a"><span class="nav-text">Figure 3(a)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-3b"><span class="nav-text">Figure 3(b)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88"><span class="nav-text">最终答案</span></a></li></ol></li></ol></div>
+题解（三）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-3-structural-balance"><span class="nav-text">Task 3 — Structural Balance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-3a"><span class="nav-text">Figure 3(a)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-3b"><span class="nav-text">Figure 3(b)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88"><span class="nav-text">最终答案</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -280,18 +280,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-count">91</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -364,9 +364,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-03-26 18:42:00 / Modified: 07:31:42" itemprop="dateCreated datePublished" datetime="2026-03-26T18:42:00Z">2026-03-26</time>
+      <time title="Created: 2026-03-26 18:42:00" itemprop="dateCreated datePublished" datetime="2026-03-26T18:42:00Z">2026-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-30 13:14:36" itemprop="dateModified" datetime="2026-03-30T13:14:36Z">2026-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -389,14 +395,14 @@ mjx-container[display="true"] + br {
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>377</span>
+      <span>422</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -409,6 +415,10 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody"><h1 id="comp5313-assignment-1-题解三">COMP5313 Assignment 1
 题解（三）</h1>
 <h1 id="task-3-structural-balance">Task 3 — Structural Balance</h1>
+<h2 id="题目">题目</h2>
+<p>Figure 3(a) 和 Figure 3(b) 给出了两个带正负号的社交网络。题目要求用
+lecture 中讲的 <strong>two-step approach</strong> 判断这两个 signed
+network 是否 balanced。</p>
 <p>这一题按 lecture 里的 <strong>two-step approach</strong> 来判断：</p>
 <ol type="1">
 <li>任选一个点放进阵营 <span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.928ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 852 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D44B" d="M42 0H40Q26 0 26 11Q26 15 29 27Q33 41 36 43T55 46Q141 49 190 98Q200 108 306 224T411 342Q302 620 297 625Q288 636 234 637H206Q200 643 200 645T202 664Q206 677 212 683H226Q260 681 347 681Q380 681 408 681T453 682T473 682Q490 682 490 671Q490 670 488 658Q484 643 481 640T465 637Q434 634 411 620L488 426L541 485Q646 598 646 610Q646 628 622 635Q617 635 609 637Q594 637 594 648Q594 650 596 664Q600 677 606 683H618Q619 683 643 683T697 681T738 680Q828 680 837 683H845Q852 676 852 672Q850 647 840 637H824Q790 636 763 628T722 611T698 593L687 584Q687 585 592 480L505 384Q505 383 536 304T601 142T638 56Q648 47 699 46Q734 46 734 37Q734 35 732 23Q728 7 725 4T711 1Q708 1 678 1T589 2Q528 2 496 2T461 1Q444 1 444 10Q444 11 446 25Q448 35 450 39T455 44T464 46T480 47T506 54Q523 62 523 64Q522 64 476 181L429 299Q241 95 236 84Q232 76 232 72Q232 53 261 47Q262 47 267 47T273 46Q276 46 277 46T280 45T283 42T284 35Q284 26 282 19Q279 6 276 4T261 1Q258 1 243 1T201 2T142 2Q64 2 42 0Z"></path></g></g></g></svg></mjx-container></span>；</li>
@@ -472,8 +482,8 @@ balanced。</li>
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
-              <a href="/tags/Assignment-1/" rel="tag"><i class="fa fa-tag"></i> Assignment 1</a>
               <a href="/tags/Structural-Balance/" rel="tag"><i class="fa fa-tag"></i> Structural Balance</a>
+              <a href="/tags/Assignment-1/" rel="tag"><i class="fa fa-tag"></i> Assignment 1</a>
           </div>
 
         
@@ -522,14 +532,14 @@ balanced。</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">352k</span>
+    <span title="Word count total">364k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">21:20</span>
+    <span title="Reading time total">22:04</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
