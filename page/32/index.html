@@ -122,7 +122,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">73</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">126</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">83</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">145</span></a></li>
   </ul>
 </nav>
 
@@ -161,7 +161,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,7 +172,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -216,7 +216,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/329c3c87.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/3bd7481c.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -234,7 +234,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/329c3c87.html" class="post-title-link" itemprop="url">return_tensors</a>
+          <a href="/posts/3bd7481c.html" class="post-title-link" itemprop="url">Meta-Transfer Learning for Few-Shot Learning</a>
         </h2>
 
         <div class="post-meta-container">
@@ -245,7 +245,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2025-01-30 18:44:19" itemprop="dateCreated datePublished" datetime="2025-01-30T18:44:19Z">2025-01-30</time>
+      <time title="Created: 2025-10-16 13:08:16" itemprop="dateCreated datePublished" datetime="2025-10-16T13:08:16Z">2025-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -260,7 +260,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
         </span>
     </span>
 
@@ -271,14 +271,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>850</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>3 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -289,10 +289,39 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Why use "return_tensors="?</p>
+          <p>这篇论文《Meta-Transfer Learning for Few-Shot Learning》（Sun
+等，2019）提出了一种创新的<strong>元迁移学习框架</strong>，旨在解决小样本学习中的关键挑战。以下是对论文的详细解读：</p>
+<hr>
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="小样本学习的问题">1. 小样本学习的问题</h3>
+<ul>
+<li>深度学习在大规模标注数据上表现优异，但在小样本场景下（如每类只有1-5个样本）容易<strong>过拟合</strong>。</li>
+<li>人类能够快速学习新概念，而机器模型在此方面仍有显著差距。</li>
+</ul>
+<h3 id="现有方法的局限">2. 现有方法的局限</h3>
+<ul>
+<li><strong>元学习</strong>方法（如MAML）通过多个任务学习快速适应，但存在两大局限：
+<ul>
+<li>需要大量相似任务进行元训练，计算成本高。</li>
+<li>通常使用<strong>浅层网络</strong>（如4层CNN）以避免过拟合，限制了模型表达能力。</li>
+</ul></li>
+</ul>
+<h3 id="本文核心贡献">3. 本文核心贡献</h3>
+<ul>
+<li>提出 <strong>Meta-Transfer Learning</strong>：
+<ul>
+<li><strong>Transfer</strong>：利用大规模预训练的深度网络权重。</li>
+<li><strong>Meta</strong>：通过元学习训练轻量级的 <strong>Scaling &amp;
+Shifting</strong> 操作，调整神经元激活以适应小样本任务。</li>
+</ul></li>
+<li>提出 <strong>Hard Task Meta-Batch</strong>
+策略，通过在线选择困难任务加速收敛并提升性能。</li>
+<li>在多个基准数据集上达到最先进性能。</li>
+</ul>
+<hr>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/329c3c87.html">
+              <a class="btn" href="/posts/3bd7481c.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -323,7 +352,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/db5f6cf8.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1ba2c99b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -341,7 +370,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/db5f6cf8.html" class="post-title-link" itemprop="url">Emotion Ontology Studies: A Framework for Expressing Feelings Digitally and its Application to Sentiment Analysis</a>
+          <a href="/posts/1ba2c99b.html" class="post-title-link" itemprop="url">Meta-Learning for Semi-Supervised Few-Shot Classification</a>
         </h2>
 
         <div class="post-meta-container">
@@ -352,14 +381,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2025-01-25 16:09:09" itemprop="dateCreated datePublished" datetime="2025-01-25T16:09:09Z">2025-01-25</time>
+      <time title="Created: 2025-10-16 13:04:22" itemprop="dateCreated datePublished" datetime="2025-10-16T13:04:22Z">2025-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-03 05:28:35" itemprop="dateModified" datetime="2026-03-03T05:28:35Z">2026-03-03</time>
+      <time title="Modified: 2026-03-03 05:29:50" itemprop="dateModified" datetime="2026-03-03T05:29:50Z">2026-03-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -378,14 +407,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>23k</span>
+      <span>996</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1:22</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -396,10 +425,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Emotion ontologies have been developed to capture affect, a concept that encompasses discrete emotions and feelings, especially for research on sentiment analysis, which analyzes a customer's attitude towards a company or a product. However, there have been limited efforts to adapt and employ these ontologies. This research surveys and synthesizes emotion ontology studies to develop a Framework of Emotion Ontologies that can be used to help a user select or design an appropriate emotion ontology to support sentiment analysis and increase the user's understanding of the roles of affect, context, and behavioral information with respect to sentiment. The framework, which is derived from research on emotion ontologies, psychology, and sentiment analysis, classifies emotion ontologies as discrete emotion or one of two hybrid ontologies that are combinations of the discrete, dimensional, or componential process emotion paradigms. To illustrate its usefulness, the framework is applied to the development of an emotion ontology for a sentiment analysis application.</p>
+          <p>这篇论文《Meta-Learning for Semi-Supervised Few-Shot
+Classification》（Ren
+等，2018）提出了一种<strong>半监督小样本分类的元学习方法</strong>，扩展了传统的小样本学习框架，使其能够利用<strong>未标记样本</strong>来提升分类性能。以下是对论文的详细解读：</p>
+<hr>
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="小样本学习">1. 小样本学习</h3>
+<ul>
+<li>目标：从极少量标记样本中学习分类器。</li>
+<li>常用方法：<strong>元学习</strong>，通过在多个“任务”或“情节”上训练模型，使其能够快速适应新任务。</li>
+</ul>
+<h3 id="现有局限">2. 现有局限</h3>
+<ul>
+<li>传统小样本学习仅使用标记样本，忽略了现实中大量存在的未标记数据。</li>
+<li>人类在学习新概念时，往往同时利用标记和未标记信息。</li>
+</ul>
+<h3 id="本文贡献">3. 本文贡献</h3>
+<ul>
+<li>提出<strong>半监督小样本学习</strong> 新范式，每个情节中包含：
+<ul>
+<li>标记样本（支持集）</li>
+<li>未标记样本（可能包含目标类或干扰类）</li>
+</ul></li>
+<li>提出三种<strong>扩展原型网络</strong>
+的方法，以利用未标记数据。</li>
+<li>构建新数据集
+<strong>tieredImageNet</strong>，具有层次结构，更贴近现实。</li>
+</ul>
+<hr>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/db5f6cf8.html">
+              <a class="btn" href="/posts/1ba2c99b.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -430,7 +486,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/9573d52c.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/85898a84.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -448,7 +504,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/9573d52c.html" class="post-title-link" itemprop="url">Ontology-based sentiment analysis of twitter posts</a>
+          <a href="/posts/85898a84.html" class="post-title-link" itemprop="url">Lightweight Industrial Image Classifier Based on Federated Few-Shot Learning</a>
         </h2>
 
         <div class="post-meta-container">
@@ -459,14 +515,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2025-01-23 14:04:14" itemprop="dateCreated datePublished" datetime="2025-01-23T14:04:14Z">2025-01-23</time>
+      <time title="Created: 2025-10-16 13:00:45" itemprop="dateCreated datePublished" datetime="2025-10-16T13:00:45Z">2025-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-03 05:28:35" itemprop="dateModified" datetime="2026-03-03T05:28:35Z">2026-03-03</time>
+      <time title="Modified: 2026-03-03 05:29:50" itemprop="dateModified" datetime="2026-03-03T05:29:50Z">2026-03-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -485,14 +541,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>7.9k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>29 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -503,10 +559,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>The emergence of Web 2.0 has drastically altered the way users perceive the Internet, by improving information sharing, collaboration and interoperability. Micro-blogging is one of the most popular Web 2.0 applications and related services, like Twitter, have evolved into a practical means for sharing opinions on almost all aspects of everyday life. Consequently, micro-blogging web sites have since become rich data sources for opinion mining and sentiment analysis. Towards this direction, text-based sentiment classiﬁers often prove inefﬁcient, since tweets typically do not consist of representative and syntactically consistent words, due to the imposed character limit. This paper proposes the deployment of original ontology-based techniques towards a more efﬁcient sentiment analysis of Twitter posts. The novelty of the proposed approach is that posts are not simply characterized by a sentiment score, as is the case with machine learning-based classiﬁers, but instead receive a sentiment grade for each distinct notion in the post. Overall, our proposed architecture results in a more detailed analysis of post opinions regarding a speciﬁc topic.</p>
+          <p>这篇论文《Lightweight Industrial Image Classifier Based on Federated
+Few-Shot
+Learning》提出了一种面向<strong>工业图像分类</strong>的<strong>轻量级联邦小样本学习框架</strong>，旨在解决工业场景中数据隐私、样本稀缺和资源受限的问题。以下是对该论文的详细解析：</p>
+<hr>
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="工业图像分类的挑战">1. 工业图像分类的挑战</h3>
+<ul>
+<li><strong>数据隐私</strong>：工业图像常含敏感信息，受GDPR等法规限制，不能集中上传。</li>
+<li><strong>样本稀缺</strong>：标注成本高、长尾分布、类间隔离，导致单个机构样本不足。</li>
+<li><strong>资源受限</strong>：传统DCNN计算量大，工业设备通信、计算、存储资源有限。</li>
+</ul>
+<h3 id="现有方法的不足">2. 现有方法的不足</h3>
+<ul>
+<li><strong>传统FL</strong>：假设数据IID分布，无法处理类别隔离的非IID数据。</li>
+<li><strong>传统FSL</strong>：依赖单机训练，无法从多个机构的隔离类别中提取全局知识。</li>
+<li><strong>现有FFSL方法</strong>：模型复杂、资源消耗大，不适用于资源受限的工业设备。</li>
+</ul>
+<hr>
+<h2 id="二flrn-框架设计">二、FLRN 框架设计</h2>
+<h3 id="整体架构联邦小样本学习">1. 整体架构：联邦小样本学习</h3>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/9573d52c.html">
+              <a class="btn" href="/posts/85898a84.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -530,7 +605,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/31/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/33/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/31/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&hellip;</span><a class="page-number" href="/page/49/">49</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/33/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -556,14 +631,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">300k</span>
+    <span title="Word count total">352k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">18:13</span>
+    <span title="Reading time total">21:20</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
