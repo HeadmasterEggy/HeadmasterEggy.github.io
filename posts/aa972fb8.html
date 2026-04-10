@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="图结构基础：节点、边、邻接矩阵与网络表示方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 - Chapter 2 Graphs 图">
+<meta property="og:url" content="http://example.com/posts/aa972fb8.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="图结构基础：节点、边、邻接矩阵与网络表示方法">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-11T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-10T22:52:00.428Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Networks">
+<meta property="article:tag" content="Graph Theory">
+<meta property="article:tag" content="图论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/aa972fb8.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/aa972fb8.html","path":"posts/aa972fb8.html","title":"COMP5313 - Chapter 2 Graphs 图"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 - Chapter 2 Graphs 图 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/aa972fb8.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">97</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">174</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-2-graphs%E5%9B%BE"><span class="nav-text">Chapter 2: Graphs（图）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%AB%A0%E8%8A%82%E6%80%BB%E8%A7%88"><span class="nav-text">一、章节总览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89section-2.1-basic-definitions"><span class="nav-text">二、基本定义（Section
+2.1: Basic Definitions）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">2.1 图的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E5%90%91%E5%9B%BE%E4%B8%8E%E6%9C%89%E5%90%91%E5%9B%BE"><span class="nav-text">2.2 无向图与有向图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E4%BD%9C%E4%B8%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%A8%A1%E5%9E%8Bgraphs-as-models-of-networks"><span class="nav-text">2.3
+图作为网络的模型（Graphs as Models of Networks）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%B7%AF%E5%BE%84%E4%B8%8E%E8%BF%9E%E9%80%9A%E6%80%A7section-2.2-paths-and-connectivity"><span class="nav-text">三、路径与连通性（Section
+2.2: Paths and Connectivity）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84path"><span class="nav-text">3.1 路径（Path）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AFcycle"><span class="nav-text">3.2 环（Cycle）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E9%80%9A%E6%80%A7connectivity"><span class="nav-text">3.3 连通性（Connectivity）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8Fconnected-component"><span class="nav-text">3.4 连通分量（Connected
+Component）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A8%E5%88%86%E9%87%8Fgiant-component"><span class="nav-text">3.5 巨分量（Giant Component）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%B7%9D%E7%A6%BB%E4%B8%8E%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2section-2.3-distance-and-breadth-first-search"><span class="nav-text">四、距离与广度优先搜索（Section
+2.3: Distance and Breadth-First Search）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E9%95%BF%E5%BA%A6path-length"><span class="nav-text">4.1 路径长度（Path Length）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BBdistance"><span class="nav-text">4.2 距离（Distance）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2breadth-first-search-bfs"><span class="nav-text">4.3
+广度优先搜索（Breadth-First Search, BFS）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%B8%96%E7%95%8C%E7%8E%B0%E8%B1%A1the-small-world-phenomenon"><span class="nav-text">4.4 小世界现象（The
+Small-World Phenomenon）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%B8%96%E7%95%8C%E7%8E%B0%E8%B1%A1%E7%9A%84%E7%8E%B0%E4%BB%A3%E9%AA%8C%E8%AF%81"><span class="nav-text">4.5 小世界现象的现代验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%9B%86%E6%A6%82%E8%BF%B0section-2.4-network-datasets-an-overview"><span class="nav-text">五、网络数据集概述（Section
+2.4: Network Datasets: An Overview）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E5%8A%A8%E6%9C%BA"><span class="nav-text">5.1 研究网络数据集的动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E4%BA%94%E5%A4%A7%E7%B1%BB%E5%9E%8B"><span class="nav-text">5.2 大规模网络数据集的五大类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5section-2.5-exercises"><span class="nav-text">六、课后习题中的重要概念（Section
+2.5: Exercises）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%8A%82%E7%82%B9pivotal-node"><span class="nav-text">6.1 关键节点（Pivotal Node）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%88%E9%97%A8%E4%BA%BAgatekeeper%E4%B8%8E%E5%B1%80%E9%83%A8%E5%AE%88%E9%97%A8%E4%BA%BAlocal-gatekeeper"><span class="nav-text">6.2
+守门人（Gatekeeper）与局部守门人（Local Gatekeeper）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E5%BE%84%E4%B8%8E%E5%B9%B3%E5%9D%87%E8%B7%9D%E7%A6%BB"><span class="nav-text">6.3 直径与平均距离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E6%B1%87%E6%80%BB"><span class="nav-text">七、关键术语汇总</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">174</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/aa972fb8.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 - Chapter 2 Graphs 图 | Joey">
+      <meta itemprop="description" content="图结构基础：节点、边、邻接矩阵与网络表示方法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 - Chapter 2 Graphs 图
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2026-04-11T00:00:00Z">2026-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-10 22:52:00" itemprop="dateModified" datetime="2026-04-10T22:52:00Z">2026-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>18 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">图结构基础：节点、边、邻接矩阵与网络表示方法</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="chapter-2-graphs图">Chapter 2: Graphs（图）</h1>
+<blockquote>
+<p>教材：<em>Networks, Crowds, and Markets: Reasoning about a Highly
+Connected World</em> 作者：David Easley &amp; Jon Kleinberg, Cambridge
+University Press, 2010</p>
+</blockquote>
+<hr />
+<h2 id="一章节总览">一、章节总览</h2>
+<p>第二章是全书<strong>第一部分（图论与社会网络）</strong>
+的开端，系统介绍了<strong>图论（Graph Theory）</strong>
+的基本概念。图论为研究网络结构提供了统一的数学语言。本章从最基础的定义出发，逐步引入路径、连通性、距离、广度优先搜索等核心概念，并通过大量真实网络案例加以说明。最后概述了大规模网络数据集的主要来源。</p>
+<hr />
+<h2 id="二基本定义section-2.1-basic-definitions">二、基本定义（Section
+2.1: Basic Definitions）</h2>
+<h3 id="图的定义">2.1 图的定义</h3>
+<p><strong>图（Graph）</strong>
+是一种描述一组事物之间关系的方式。一个图由以下两部分组成：</p>
+<ul>
+<li><strong>节点（Nodes）</strong>：又称顶点（vertices），代表图中的对象，通常用小圆圈表示</li>
+<li><strong>边（Edges）</strong>：又称链接（links），连接某些节点对，通常用线段表示</li>
+</ul>
+<p><strong>形式化定义</strong>：图 G = (V, E)，其中 V 是节点集合，E
+是边集合，每条边连接 V 中的一对节点。</p>
+<p><strong>邻居（Neighbors）</strong>：如果两个节点由一条边相连，则称它们互为邻居。</p>
+<h3 id="无向图与有向图">2.2 无向图与有向图</h3>
+<p><strong>（1）无向图（Undirected Graph）</strong> -
+边是<strong>对称的</strong>：如果 A 与 B 相连，则 B 也与 A 相连 -
+边用不带箭头的线段表示 - 除非特别说明，本书中的图默认为无向图</p>
+<p><strong>（2）有向图（Directed Graph）</strong> -
+边是<strong>不对称的</strong>：A 指向 B 不意味着 B 指向 A -
+边称为<strong>有向边（Directed Edges）</strong>，用带箭头的线段表示 -
+用于表达非对称关系，如"A 指向 B"、"A 引用 B"等</p>
+<p><strong>典型案例（Figure 2.1）</strong>：展示了同样 4 个节点 A, B, C,
+D 的无向图和有向图版本。</p>
+<h3 id="图作为网络的模型graphs-as-models-of-networks">2.3
+图作为网络的模型（Graphs as Models of Networks）</h3>
+<p>图在许多领域中都有广泛应用，可用于表示各类网络结构：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>网络类型</th>
+<th>节点含义</th>
+<th>边的含义</th>
+<th>典型案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>通信网络</strong>（Communication Network）</td>
+<td>计算机或设备</td>
+<td>可传输消息的直接链路</td>
+<td>1970年 Arpanet（Figure 2.2, 2.3）</td>
+</tr>
+<tr>
+<td><strong>社交网络</strong>（Social Network）</td>
+<td>人或人群</td>
+<td>社交互动关系</td>
+<td>友谊网络、空手道俱乐部</td>
+</tr>
+<tr>
+<td><strong>信息网络</strong>（Information Network）</td>
+<td>网页或文档</td>
+<td>超链接、引用、交叉引用</td>
+<td>Web 链接网络</td>
+</tr>
+<tr>
+<td><strong>交通网络</strong>（Transportation Network）</td>
+<td>目的地</td>
+<td>直接连接（航线、铁路等）</td>
+<td>航线图、地铁图（Figure 2.4a, 2.4b）</td>
+</tr>
+<tr>
+<td><strong>依赖网络</strong>（Dependency Network）</td>
+<td>任务</td>
+<td>先后依赖关系（有向边）</td>
+<td>课程先修关系（Figure 2.4c）</td>
+</tr>
+<tr>
+<td><strong>结构网络</strong>（Structural Network）</td>
+<td>节点/关节</td>
+<td>物理连接</td>
+<td>桥梁结构（Figure 2.4d）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键概念</strong>：在画图时，节点的实际空间位置无关紧要——重要的是哪些节点之间有边相连。因此同一个图可以有不同的画法（如
+Figure 2.2 和 Figure 2.3 是同一个 13 节点 Arpanet
+图的两种不同画法）。</p>
+<hr />
+<h2
+id="三路径与连通性section-2.2-paths-and-connectivity">三、路径与连通性（Section
+2.2: Paths and Connectivity）</h2>
+<h3 id="路径path">3.1 路径（Path）</h3>
+<p><strong>定义</strong>：图中的一条<strong>路径（Path）</strong>
+是一个节点序列，其中每对连续节点之间都由一条边相连。</p>
+<p><strong>要点</strong>： -
+路径可以重复经过同一节点（一般情况下的路径定义） -
+<strong>简单路径（Simple Path）</strong>：不重复经过任何节点的路径 -
+路径体现了图中"事物沿边从一个节点移动到另一个节点"的核心思想——信息传递、航班旅行、网页跳转等</p>
+<p><strong>案例</strong>：在 1970 年 Arpanet 图中，MIT → BBN → RAND →
+UCLA 是一条路径，CASE → LINCOLN → MIT → UTAH → SRI → UCSB
+也是一条路径。</p>
+<h3 id="环cycle">3.2 环（Cycle）</h3>
+<p><strong>定义</strong>：<strong>环（Cycle）</strong>
+是一种特殊的非简单路径，形成一个"环形"结构——首尾节点相同，且至少包含三条边，中间所有节点各不相同。</p>
+<p><strong>重要性</strong>： -
+通信和交通网络中，环的存在提供了<strong>冗余性（Redundancy）</strong>——如果某条边失效，可以沿环的"另一个方向"绕行
+- 1970 年 Arpanet
+的每条边都属于至少一个环，这是刻意设计的：即使一条线路被切断，任何节点仍可到达其他任何节点
+-
+社交网络中也常见环结构：例如发现妻子的表亲的高中好友恰好是自己兄弟的同事</p>
+<h3 id="连通性connectivity">3.3 连通性（Connectivity）</h3>
+<p><strong>定义</strong>：如果图中每对节点之间都存在一条路径，则称该图是<strong>连通的（Connected）</strong>。</p>
+<p><strong>要点</strong>： -
+通信和交通网络通常期望是连通的（因为它们的目标是传输流量） -
+社交网络不一定是连通的（可能存在完全无法通过朋友链到达的两个人）</p>
+<h3 id="连通分量connected-component">3.4 连通分量（Connected
+Component）</h3>
+<p><strong>定义</strong>：图的一个<strong>连通分量（Connected
+Component）</strong>（简称分量/组件）是满足以下两个条件的节点子集： 1.
+<strong>内部连通</strong>：子集中任意两个节点之间存在路径 2.
+<strong>最大性</strong>：该子集不是某个更大的满足条件(1)的子集的真子集</p>
+<p><strong>直觉理解</strong>：如果一个图不连通，它会自然分裂为若干个独立的"碎片"，每个碎片就是一个连通分量。</p>
+<p><strong>案例</strong>： - Figure 2.5
+展示了一个有三个连通分量的图：{A, B}、{C, D, E}、{F, G, H, I, J, K, L,
+M} - Figure 2.6 展示了生物研究中心 SGPP 的合作网络，也有三个连通分量</p>
+<p><strong>分量的内部结构</strong>： -
+将图分解为连通分量只是描述结构的第一步 -
+在一个连通分量内部，可能存在更丰富的结构——密集连接的区域、中心节点等 -
+移除某个关键节点可能导致一个连通分量分裂成多个分量（例如 Figure 2.6
+中最大分量的中心节点）</p>
+<h3 id="巨分量giant-component">3.5 巨分量（Giant Component）</h3>
+<p><strong>定义</strong>：<strong>巨分量（Giant Component）</strong>
+是一个非正式术语，指包含图中相当大比例节点的连通分量。</p>
+<p><strong>核心性质</strong>： - 大规模复杂网络通常拥有一个巨分量 -
+当网络中存在巨分量时，<strong>几乎总是只有一个</strong> -
+原因：如果存在两个巨分量（各含数亿人），只需一条边就能将它们合并为一个——这种边的存在几乎不可避免</p>
+<p><strong>巨分量的唯一性论证</strong>： -
+假设全球社交网络有两个巨分量，各含数亿人 -
+只需第一个分量中的一个人与第二个分量中的一个人成为朋友，两个巨分量就合并了
+-
+在现实中，这样的边必然存在，因此两个共存的巨分量几乎从未在真实网络中观察到</p>
+<p><strong>历史案例</strong>： -
+大约五千年前，全球社交网络可能有两个巨分量——美洲与欧亚大陆 -
+当欧洲探险家到达西半球时，这两个分量突然合并，结果是灾难性的（技术和疾病的不对称传播）</p>
+<p><strong>小规模案例</strong>： - Figure 2.7 展示了美国高中生 18
+个月内的恋爱关系网络 -
+该网络有一个显著的巨分量，对理解性传播疾病的传播至关重要 -
+一个只有一个伴侣的学生可能不知不觉地处于巨分量中，成为潜在传播路径的一部分</p>
+<hr />
+<h2
+id="四距离与广度优先搜索section-2.3-distance-and-breadth-first-search">四、距离与广度优先搜索（Section
+2.3: Distance and Breadth-First Search）</h2>
+<h3 id="路径长度path-length">4.1 路径长度（Path Length）</h3>
+<p><strong>定义</strong>：路径的<strong>长度（Length）</strong>
+是该路径中包含的边的数量（即步数）。</p>
+<h3 id="距离distance">4.2 距离（Distance）</h3>
+<p><strong>定义</strong>：两个节点之间的<strong>距离（Distance）</strong>
+是它们之间<strong>最短路径的长度</strong>。</p>
+<p><strong>案例</strong>：在 Arpanet 图（Figure 2.3）中，LINC 与 SRI
+之间的距离为 3。</p>
+<h3 id="广度优先搜索breadth-first-search-bfs">4.3
+广度优先搜索（Breadth-First Search, BFS）</h3>
+<p><strong>定义与过程</strong>：广度优先搜索是一种从起始节点出发，<strong>逐层向外探索</strong>的系统方法，用于确定从一个节点到所有其他节点的距离。</p>
+<p><strong>算法步骤</strong>（从节点 s 开始）： 1. 将 s
+的所有直接邻居声明为距离 1（<strong>第 1 层</strong>） 2. 将第 1
+层节点的所有未被发现的邻居声明为距离 2（<strong>第 2 层</strong>） 3.
+将第 2 层节点的所有未被发现的邻居声明为距离 3（<strong>第 3
+层</strong>） 4.
+以此类推，每一层由<strong>尚未被发现的、与上一层某节点相邻的所有节点</strong>构成</p>
+<p><strong>关键特性</strong>： - BFS
+从起始节点向外搜索，<strong>先到达近的节点，后到达远的节点</strong> -
+每个节点只被"发现"一次，发现时所在层即为其到起始节点的距离 - BFS
+不仅是一种计算距离的方法，也是<strong>按距离组织图结构</strong>的概念框架</p>
+<p><strong>案例（Figure 2.9）</strong>：从 MIT 出发对 Arpanet 进行 BFS：
+- 距离 1（第 1 层）：UTAH, BBN, LINC - 距离 2（第 2 层）：SRI, SDC,
+RAND, HARV, CASE - 距离 3（第 3 层）：UCSB, STAN, UCLA, CARN</p>
+<h3 id="小世界现象the-small-world-phenomenon">4.4 小世界现象（The
+Small-World Phenomenon）</h3>
+<p><strong>核心观察</strong>：在典型的大型网络中，不仅大部分节点属于同一个巨分量（即存在路径相连），而且这些路径<strong>出乎意料地短</strong>。</p>
+<p><strong>六度分隔（Six Degrees of Separation）</strong>： - 该概念源于
+John Guare 的戏剧 -
+核心思想：地球上任意两个人之间，平均只需经过大约六个中间人即可建立联系</p>
+<p><strong>Milgram 实验（1960s）</strong>： -
+<strong>实验设计</strong>：Stanley Milgram 选择 296
+个随机"出发者"，要求他们通过转寄信件（每次只转给认识的人），将信送到波士顿郊区的一位目标人物（股票经纪人）
+- <strong>实验结果</strong>：64
+封信成功到达目标；成功链的<strong>中位长度为 6</strong>（Figure 2.10） -
+<strong>实验意义</strong>：这是第一个实验性地验证"小世界"假说的研究 -
+<strong>实验局限</strong>： - 目标只是一个人，且是相对富裕的人群 -
+许多信件未能到达目标 - 重复实验因参与率低而困难</p>
+<p><strong>Milgram
+的洞见</strong>：如果每个人是自己社交"世界"的中心，那么"六步之遥"实际上意味着"六个世界之隔"——这让"六"这个数字的含义比表面看起来要大得多。</p>
+<h3 id="小世界现象的现代验证">4.5 小世界现象的现代验证</h3>
+<p><strong>（1）Microsoft 即时通讯网络研究</strong> -
+<strong>研究者</strong>：Jure Leskovec 和 Eric Horvitz -
+<strong>数据</strong>：2.4 亿活跃 Microsoft Instant Messenger 用户账户 -
+<strong>边的定义</strong>：两个用户在一个月观察期内进行过双向对话 -
+<strong>结果</strong>： - 网络有一个包含几乎所有节点的巨分量 -
+巨分量内的距离非常短 - 平均距离约 <strong>6.6</strong>，中位距离为
+<strong>7</strong> - Figure 2.11 展示了距离分布（对数坐标），峰值在 6-7
+附近 -
+<strong>局限</strong>：该网络只追踪有即时通讯工具的人，且基于通信行为而非真正的友谊关系</p>
+<p><strong>（2）Erdős 数（Erdős Number）</strong> - 数学家 Paul Erdős
+一生发表约 1500 篇论文，是数学合作网络的中心人物 - <strong>Erdős
+数</strong>：一个数学家到 Erdős 在合作图中的距离 - 大多数数学家的 Erdős
+数不超过 4 或 5 - 跨学科延伸：Einstein 的 Erdős 数为 2，Fermi 为
+3，Chomsky 和 Pauling 为 4 - 说明科学界确实是一个"小世界"</p>
+<p><strong>（3）Bacon 数（Bacon Number）</strong> - 类似 Erdős
+数，但针对好莱坞演员合作网络 -
+节点是演员，如果两个演员共同出演过电影则有边相连 - <strong>Bacon
+数</strong>：演员到 Kevin Bacon 在该图中的距离 - IMDB 中所有演员的平均
+Bacon 数约为 <strong>2.9</strong>，很难找到大于 5 的 -
+进一步证实了"小世界"在各种网络中普遍存在</p>
+<hr />
+<h2
+id="五网络数据集概述section-2.4-network-datasets-an-overview">五、网络数据集概述（Section
+2.4: Network Datasets: An Overview）</h2>
+<h3 id="研究网络数据集的动机">5.1 研究网络数据集的动机</h3>
+<p>研究某个网络数据集可能有三种不同但往往共存的动机： 1.
+<strong>领域关注</strong>：关心数据本身所在的具体领域 2.
+<strong>代理作用</strong>：将该数据集作为难以直接测量的更大网络的近似 3.
+<strong>普遍规律</strong>：寻找跨越不同领域的共同网络属性</p>
+<h3 id="大规模网络数据集的五大类型">5.2 大规模网络数据集的五大类型</h3>
+<p><strong>（1）合作图（Collaboration Graphs）</strong> -
+记录谁与谁合作的网络 - <strong>典型案例</strong>： - 科学共同作者网络 -
+演员共同出演网络 - 企业董事会共同任职网络（Fortune 500 公司） -
+Wikipedia 编辑合作网络 - 魔兽世界玩家合作网络 -
+<strong>研究价值</strong>：合作网络提供了长期社交互动的详细快照，可追踪跨越一个世纪的学科内合作模式</p>
+<p><strong>（2）谁和谁通话图（Who-Talks-to-Whom Graphs）</strong> -
+捕获通信模式的网络 - <strong>典型案例</strong>： - Microsoft IM
+网络（2.4 亿用户） - 企业内部电子邮件日志 - 大学电子邮件网络 -
+电话通话记录图（Call Graphs） - 面对面接触图（通过蓝牙手机记录物理接近）
+-
+<strong>隐私问题</strong>：这类网络中的节点通常是有强烈隐私期望的个人——通信痕迹可被用于重建行为细节，因此研究受到严格限制
+-
+<strong>经济延伸</strong>：经济网络测量记录市场或金融社区的"谁和谁交易"结构，可用于研究不同的市场准入水平如何导致不同的市场力量和价格</p>
+<p><strong>（3）信息链接图（Information Linkage Graphs）</strong> - Web
+快照是典型的信息链接网络：节点是网页，有向边代表从一个页面到另一个页面的链接
+- <strong>Web 数据特点</strong>： - 规模极大（数十亿信息片段） -
+多样性极高（个人页面、企业页面、政府页面等） -
+不仅是信息本身，背后还有复杂的社会和经济结构 -
+<strong>研究实践</strong>：由于全 Web
+规模过大，很多研究集中在有趣的子集上——博客链接网络、Wikipedia
+页面、社交网站页面、购物网站评论等 - <strong>引用网络（Citation
+Networks）</strong>：信息链接图的研究远早于 Web——引用分析从 20
+世纪初就开始研究科学论文或专利之间的引用网络结构</p>
+<p><strong>（4）技术网络（Technological Networks）</strong> - Web
+虽然建立在技术之上，但本质是人类创造的思想、信息和社会经济结构在技术上的投射
+- 更纯粹的技术网络： -
+<strong>互联网</strong>：节点是路由器/计算机，边是物理连接 -
+<strong>电力网</strong>：节点是发电站，边是输电线路 -
+互联网有两个层次：底层是设备级物理连接图；高层是<strong>自治系统图（AS
+Graph）</strong>——节点是ISP（互联网服务提供商），边代表ISP之间的数据传输协议</p>
+<p><strong>（5）自然界中的网络（Networks in the Natural World）</strong>
+- 生物学和自然科学中广泛存在图结构，涉及从种群到分子的多个尺度：</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 32%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>尺度</th>
+<th>网络类型</th>
+<th>节点</th>
+<th>边</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>种群</td>
+<td><strong>食物网（Food Web）</strong></td>
+<td>物种</td>
+<td>捕食关系（有向边：A→B 表示 A 吃 B）</td>
+<td>可用于推理级联灭绝</td>
+</tr>
+<tr>
+<td>器官</td>
+<td><strong>神经网络（Neural Network）</strong></td>
+<td>神经元</td>
+<td>神经连接</td>
+<td>线虫 C. Elegans 的完整脑图（302 节点，~7000 边）已被绘制</td>
+</tr>
+<tr>
+<td>分子</td>
+<td><strong>代谢网络（Metabolic Network）</strong></td>
+<td>化合物</td>
+<td>化学反应关系</td>
+<td>可揭示细胞内的复杂反应通路和调节反馈环</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="六课后习题中的重要概念section-2.5-exercises">六、课后习题中的重要概念（Section
+2.5: Exercises）</h2>
+<h3 id="关键节点pivotal-node">6.1 关键节点（Pivotal Node）</h3>
+<p><strong>定义</strong>：对于两个不同节点 Y 和 Z，如果节点 X（X ≠ Y 且
+X ≠ Z）出现在 Y 和 Z 之间的<strong>每一条最短路径</strong>上，则称 X 对
+(Y, Z) 对是<strong>关键的（Pivotal）</strong>。</p>
+<p><strong>案例（Figure 2.13）</strong>： - 节点 B
+对两个节点对是关键的：(A, C) 和 (A, D) - 节点 D 对任何节点对都不是关键的
+- 注意：B 对 (D, E) 不是关键的，因为存在不经过 B 的最短路径（通过 C 和
+F）</p>
+<h3 id="守门人gatekeeper与局部守门人local-gatekeeper">6.2
+守门人（Gatekeeper）与局部守门人（Local Gatekeeper）</h3>
+<p><strong>守门人（Gatekeeper）</strong>： -
+<strong>定义</strong>：如果对于某两个节点 Y 和 Z，从 Y 到 Z
+的<strong>每一条路径</strong>（不仅是最短路径）都经过 X，则称 X 是守门人
+- 这是一个"全局"概念——需要考虑图中的所有路径</p>
+<p><strong>局部守门人（Local Gatekeeper）</strong>： -
+<strong>定义</strong>：如果节点 X 有两个邻居 Y 和 Z，且 Y 与 Z
+之间没有边，则 X 是局部守门人 -
+这是一个"局部"概念——只需检查邻居之间的连接情况</p>
+<p><strong>关系</strong>：守门人一定是局部守门人，但局部守门人不一定是守门人。</p>
+<p><strong>案例（Figure 2.14）</strong>： - 节点 A
+既是守门人又是局部守门人 - 节点 D 是局部守门人（邻居 B 和 C
+之间无边），但不是守门人（B 和 C 之间存在不经过 D 的路径）</p>
+<h3 id="直径与平均距离">6.3 直径与平均距离</h3>
+<p><strong>直径（Diameter）</strong>：图中任意两个节点之间<strong>最大距离</strong>。</p>
+<p><strong>平均距离（Average
+Distance）</strong>：图中所有节点对之间距离的<strong>算术平均值</strong>。</p>
+<p><strong>关键洞察</strong>：在许多图中直径和平均距离接近，但也存在两者差异极大的图——可以构造直径超过平均距离
+3 倍甚至任意倍数的图。</p>
+<hr />
+<h2 id="七关键术语汇总">七、关键术语汇总</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>英文术语</th>
+<th>中文翻译</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graph</td>
+<td>图</td>
+<td>由节点和边组成的结构</td>
+</tr>
+<tr>
+<td>Node (Vertex)</td>
+<td>节点（顶点）</td>
+<td>图中的对象</td>
+</tr>
+<tr>
+<td>Edge (Link)</td>
+<td>边（链接）</td>
+<td>连接两个节点的关系</td>
+</tr>
+<tr>
+<td>Neighbor</td>
+<td>邻居</td>
+<td>由边直接相连的节点</td>
+</tr>
+<tr>
+<td>Undirected Graph</td>
+<td>无向图</td>
+<td>边是对称的图</td>
+</tr>
+<tr>
+<td>Directed Graph</td>
+<td>有向图</td>
+<td>边有方向的图</td>
+</tr>
+<tr>
+<td>Directed Edge</td>
+<td>有向边</td>
+<td>从一个节点指向另一个节点的边</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>路径</td>
+<td>每对连续节点间有边相连的节点序列</td>
+</tr>
+<tr>
+<td>Simple Path</td>
+<td>简单路径</td>
+<td>不重复经过任何节点的路径</td>
+</tr>
+<tr>
+<td>Cycle</td>
+<td>环</td>
+<td>首尾相同、中间不重复的路径（≥3 边）</td>
+</tr>
+<tr>
+<td>Connected</td>
+<td>连通</td>
+<td>任意两节点间存在路径</td>
+</tr>
+<tr>
+<td>Connected Component</td>
+<td>连通分量</td>
+<td>最大的内部连通节点子集</td>
+</tr>
+<tr>
+<td>Giant Component</td>
+<td>巨分量</td>
+<td>包含网络中大部分节点的连通分量</td>
+</tr>
+<tr>
+<td>Path Length</td>
+<td>路径长度</td>
+<td>路径中的边数</td>
+</tr>
+<tr>
+<td>Distance</td>
+<td>距离</td>
+<td>两节点间最短路径的长度</td>
+</tr>
+<tr>
+<td>Breadth-First Search (BFS)</td>
+<td>广度优先搜索</td>
+<td>逐层向外探索的图搜索算法</td>
+</tr>
+<tr>
+<td>Small-World Phenomenon</td>
+<td>小世界现象</td>
+<td>大型网络中任意两节点间路径极短</td>
+</tr>
+<tr>
+<td>Six Degrees of Separation</td>
+<td>六度分隔</td>
+<td>任意两人约需六个中间人即可连接</td>
+</tr>
+<tr>
+<td>Erdős Number</td>
+<td>Erdős 数</td>
+<td>数学家到 Erdős 在合作图中的距离</td>
+</tr>
+<tr>
+<td>Bacon Number</td>
+<td>Bacon 数</td>
+<td>演员到 Kevin Bacon 在合作图中的距离</td>
+</tr>
+<tr>
+<td>Collaboration Graph</td>
+<td>合作图</td>
+<td>记录合作关系的网络</td>
+</tr>
+<tr>
+<td>Communication Network</td>
+<td>通信网络</td>
+<td>节点间可传递消息的网络</td>
+</tr>
+<tr>
+<td>Information Network</td>
+<td>信息网络</td>
+<td>信息资源通过链接相连的网络</td>
+</tr>
+<tr>
+<td>Transportation Network</td>
+<td>交通网络</td>
+<td>目的地之间有直接连接的网络</td>
+</tr>
+<tr>
+<td>Dependency Network</td>
+<td>依赖网络</td>
+<td>任务间先后依赖关系的有向网络</td>
+</tr>
+<tr>
+<td>Food Web</td>
+<td>食物网</td>
+<td>物种间捕食关系的有向网络</td>
+</tr>
+<tr>
+<td>Neural Network</td>
+<td>神经网络</td>
+<td>神经元间连接的网络</td>
+</tr>
+<tr>
+<td>Metabolic Network</td>
+<td>代谢网络</td>
+<td>化合物间化学反应关系的网络</td>
+</tr>
+<tr>
+<td>AS Graph</td>
+<td>自治系统图</td>
+<td>ISP 间数据传输协议关系的网络</td>
+</tr>
+<tr>
+<td>Citation Network</td>
+<td>引用网络</td>
+<td>论文/专利间引用关系的网络</td>
+</tr>
+<tr>
+<td>Call Graph</td>
+<td>通话记录图</td>
+<td>基于电话通话记录的网络</td>
+</tr>
+<tr>
+<td>Pivotal Node</td>
+<td>关键节点</td>
+<td>出现在某节点对所有最短路径上的节点</td>
+</tr>
+<tr>
+<td>Gatekeeper</td>
+<td>守门人</td>
+<td>某节点对的所有路径都必须经过的节点</td>
+</tr>
+<tr>
+<td>Local Gatekeeper</td>
+<td>局部守门人</td>
+<td>有两个不相连邻居的节点</td>
+</tr>
+<tr>
+<td>Diameter</td>
+<td>直径</td>
+<td>图中任意两节点间的最大距离</td>
+</tr>
+<tr>
+<td>Average Distance</td>
+<td>平均距离</td>
+<td>所有节点对距离的算术平均值</td>
+</tr>
+</tbody>
+</table>
+<!-- 图谱链接（自动添加） -->
+<p>[[标签集合/COMP5313]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Networks/" rel="tag"><i class="fa fa-tag"></i> Networks</a>
+              <a href="/tags/Graph-Theory/" rel="tag"><i class="fa fa-tag"></i> Graph Theory</a>
+              <a href="/tags/%E5%9B%BE%E8%AE%BA/" rel="tag"><i class="fa fa-tag"></i> 图论</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/d0a6de58.html" rel="prev" title="COMP5313 Tutorial 05 — Hub and Authority 详细题解">
+                  <i class="fa fa-angle-left"></i> COMP5313 Tutorial 05 — Hub and Authority 详细题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5bb4132a.html" rel="next" title="COMP5313 - Chapter 1 Overview 概述">
+                  COMP5313 - Chapter 1 Overview 概述 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">338k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">20:30</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
