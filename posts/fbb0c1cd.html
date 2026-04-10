@@ -22,23 +22,18 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="Binary Search">
+    <meta name="description" content="算法思路：假设目标值在闭区间l, r中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 当我们将区间l, r划分成l, mid和mid + 1, r时，其更新操作是r &#x3D; mid或者l &#x3D; mid +">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Binary Search">
 <meta property="og:url" content="http://example.com/posts/fbb0c1cd.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="Binary Search">
+<meta property="og:description" content="算法思路：假设目标值在闭区间l, r中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 当我们将区间l, r划分成l, mid和mid + 1, r时，其更新操作是r &#x3D; mid或者l &#x3D; mid +">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg#id=EWRWr&amp;originHeight=253&amp;originWidth=253&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=">
-<meta property="og:image" content="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg#id=oh0Ct&amp;originHeight=333&amp;originWidth=333&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=">
-<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/05/mat.jpg#id=VU6dt&amp;originHeight=242&amp;originWidth=322&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=">
-<meta property="og:image" content="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg#id=MYtnZ&amp;originHeight=242&amp;originWidth=322&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=">
 <meta property="article:published_time" content="2022-07-30T12:27:00.000Z">
-<meta property="article:modified_time" content="2026-04-10T22:15:31.319Z">
+<meta property="article:modified_time" content="2026-04-10T22:37:11.998Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg#id=EWRWr&amp;originHeight=253&amp;originWidth=253&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=">
 
 
 <link rel="canonical" href="http://example.com/posts/fbb0c1cd.html">
@@ -130,7 +125,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">104</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">176</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">101</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">172</span></a></li>
   </ul>
 </nav>
 
@@ -156,9 +151,7 @@
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC1"><span class="nav-text">版本1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC2"><span class="nav-text">版本2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC3"><span class="nav-text">版本3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode704-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="nav-text">Leetcode704 二分查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE"><span class="nav-text">Leetcode34 在排序数组中查找元素的第一个和最后一个位置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode69-x-%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9"><span class="nav-text">Leetcode69 x
-的平方根</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode278-%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%94%99%E8%AF%AF%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-text">Leetcode278 第一个错误的版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode441-%E6%8E%92%E5%88%97%E7%A1%AC%E5%B8%81"><span class="nav-text">Leetcode441 排列硬币</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#acwing67-%E6%95%B0%E5%AD%97%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0"><span class="nav-text">ACwing67
-数字在排序数组中出现的次数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leetcode74-%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5"><span class="nav-text">Leetcode74
-搜索二维矩阵</span></a></div>
+的平方根</span></a></div>
         </div>
         <!--/noindex-->
 
@@ -173,18 +166,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-count">101</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -243,7 +236,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Binary Search | Joey">
-      <meta itemprop="description" content="Binary Search">
+      <meta itemprop="description" content="算法思路：假设目标值在闭区间l, r中， 每次将区间长度缩小一半，当l = r时，我们就找到了目标值。 当我们将区间l, r划分成l, mid和mid + 1, r时，其更新操作是r = mid或者l = mid +">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -265,7 +258,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
+      <time title="Modified: 2026-04-10 22:37:11" itemprop="dateModified" datetime="2026-04-10T22:37:11Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,18 +277,18 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>2.1k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>8 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">Binary Search</div>
+            <div class="post-description">算法思路：假设目标值在闭区间l, r中， 每次将区间长度缩小一半，当l = r时，我们就找到了目标值。 当我们将区间l, r划分成l, mid和mid + 1, r时，其更新操作是r = mid或者l = mid +</div>
         </div>
       </header>
 
@@ -382,80 +375,10 @@ id="leetcode34-在排序数组中查找元素的第一个和最后一个位置">
 <li><code>0 &lt;= x &lt;= 231 - 1</code></li>
 </ul>
 <p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=69 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [69] x 的平方根 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> <span class="title function_">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">0</span>, r = x;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (mid &gt; x / mid)</span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<h1 id="leetcode278-第一个错误的版本">Leetcode278 <span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9maXJzdC1iYWQtdmVyc2lvbi9kZXNjcmlwdGlvbi8=">第一个错误的版本<i class="fa fa-external-link-alt"></i></span></h1>
-<p>你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。</p>
-<p>假设你有 <code>n</code> 个版本
-<code>[1, 2, ..., n]</code>，你想找出导致之后所有版本出错的第一个错误的版本。</p>
-<p>你可以通过调用 <code>bool isBadVersion(version)</code>
-接口来判断版本号 <code>version</code>
-是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用
-API 的次数。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">输入：n = <span class="number">5</span>, bad = <span class="number">4</span></span><br><span class="line">输出：<span class="number">4</span></span><br><span class="line">解释：</span><br><span class="line">调用 isBadVersion<span class="function"><span class="params">(<span class="number">3</span>)</span> -&gt;</span> <span class="literal">false</span> </span><br><span class="line">调用 isBadVersion<span class="function"><span class="params">(<span class="number">5</span>)</span> -&gt;</span> <span class="literal">true</span> </span><br><span class="line">调用 isBadVersion<span class="function"><span class="params">(<span class="number">4</span>)</span> -&gt;</span> <span class="literal">true</span></span><br><span class="line">所以，<span class="number">4</span> 是第一个错误的版本。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line">输入：<span class="built_in">n</span> = <span class="number">1</span>, bad = <span class="number">1</span></span><br><span class="line">输出：<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= bad &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=278 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [278] 第一个错误的版本</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="comment">// The API isBadVersion is defined for you.</span></span><br><span class="line"><span class="comment">// bool isBadVersion(int version);</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">public: </span><br><span class="line">    <span class="type">int</span> <span class="title function_">firstBadVersion</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="type">long</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(isBadVersion(mid))</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<h1 id="leetcode441-排列硬币">Leetcode441 <span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9hcnJhbmdpbmctY29pbnMvZGVzY3JpcHRpb24v">排列硬币<i class="fa fa-external-link-alt"></i></span></h1>
-<p>你总共有 <code>n</code> 枚硬币，并计划将它们按阶梯状排列。对于一个由
-<code>k</code> 行组成的阶梯，其第 <code>i</code> 行必须正好有
-<code>i</code> 枚硬币。阶梯的最后一行 <strong>可能</strong>
-是不完整的。</p>
-<p>给你一个数字 <code>n</code> ，计算并返回可形成
-<strong>完整阶梯行</strong> 的总行数。</p>
-<p><strong>示例 1：</strong></p>
-<p><img data-src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg#id=EWRWr&amp;originHeight=253&amp;originWidth=253&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=" /></p>
-<figure class="highlight abnf"><table><tr><td class="code"><pre><span class="line">输入：n <span class="operator">=</span> <span class="number">5</span></span><br><span class="line">输出：<span class="number">2</span></span><br><span class="line">解释：因为第三行不完整，所以返回 <span class="number">2</span> 。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<p><img data-src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg#id=oh0Ct&amp;originHeight=333&amp;originWidth=333&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=" /></p>
-<figure class="highlight abnf"><table><tr><td class="code"><pre><span class="line">输入：n <span class="operator">=</span> <span class="number">8</span></span><br><span class="line">输出：<span class="number">3</span></span><br><span class="line">解释：因为第四行不完整，所以返回 <span class="number">3</span> 。</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=441 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [441] 排列硬币</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> <span class="title function_">arrangeCoins</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;r)&#123;</span><br><span class="line">            <span class="type">long</span> <span class="type">long</span> mid = l + (r - l+<span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">long</span> <span class="type">long</span>)mid * (mid + <span class="number">1</span>) &lt;= (<span class="type">long</span> <span class="type">long</span>)<span class="number">2</span> * n)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<h1 id="acwing67-数字在排序数组中出现的次数"><span class="exturl" data-url="aHR0cHM6Ly93d3cuYWN3aW5nLmNvbS9wcm9ibGVtL2NvbnRlbnQvNjMv">ACwing67<i class="fa fa-external-link-alt"></i></span>
-数字在排序数组中出现的次数</h1>
-<p>统计一个数字在排序数组中出现的次数。</p>
-<p>例如输入排序数组 [1,2,3,3,3,3,4,5] 和数字 33，由于 33
-在这个数组中出现了 44 次，因此输出 44。</p>
-<p><strong>数据范围</strong></p>
-<p>数组长度 [0,1000]</p>
-<p><strong>样例</strong></p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><span class="line">输入：<span class="string">[1, 2, 3, 3, 3, 3, 4, 5]</span> ,  <span class="number">3</span></span><br><span class="line"></span><br><span class="line">输出：<span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> <span class="title function_">getNumberOfK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (nums.empty())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= k)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (nums[l] != k)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> start = l;</span><br><span class="line">        l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &lt;= k)</span><br><span class="line">                l = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> end = r;</span><br><span class="line">        <span class="keyword">if</span> (start == end)</span><br><span class="line">            <span class="keyword">return</span> end;</span><br><span class="line">        <span class="keyword">return</span> start - end + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h1 id="leetcode74-搜索二维矩阵"><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zZWFyY2gtYS0yZC1tYXRyaXgv">Leetcode74<i class="fa fa-external-link-alt"></i></span>
-搜索二维矩阵</h1>
-<p>编写一个高效的算法来判断 <code>m x n</code>
-矩阵中，是否存在一个目标值。该矩阵具有如下特性：</p>
-<ul>
-<li>每行中的整数从左到右按升序排列。</li>
-<li>每行的第一个整数大于前一行的最后一个整数。</li>
-</ul>
-<p><strong>示例 1：</strong></p>
-<p><img data-src="https://assets.leetcode.com/uploads/2020/10/05/mat.jpg#id=VU6dt&amp;originHeight=242&amp;originWidth=322&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=" /></p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">输入：matrix = <span class="string">[[1,3,5,7],[10,11,16,20],[23,30,34,60]]</span>, target = <span class="number">3</span></span><br><span class="line">输出：<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<p><img data-src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg#id=MYtnZ&amp;originHeight=242&amp;originWidth=322&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;title=" /></p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">输入：matrix = <span class="string">[[1,3,5,7],[10,11,16,20],[23,30,34,60]]</span>, target = <span class="number">13</span></span><br><span class="line">输出：<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>m == matrix.length</code></li>
-<li><code>n == matrix[i].length</code></li>
-<li><code>1 &lt;= m, n &lt;= 100</code></li>
-<li><code>-104 &lt;= matrix[i][j], target &lt;= 104</code></li>
-</ul>
-<p><strong>source code</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=74 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [74] 搜索二维矩阵</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">bool</span> <span class="title function_">searchMatrix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;&gt; &amp;matrix, <span class="type">int</span> target)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> n = matrix.size(), m = matrix[<span class="number">0</span>].size();</span><br><span class="line">        <span class="keyword">if</span> (matrix.empty() || matrix[<span class="number">0</span>].empty())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">                a.push_back(matrix[i][j]);  <span class="comment">//把二维matrix存到一维数组</span></span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = a.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//二分</span></span><br><span class="line">        <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (a[mid] &gt;= target)</span><br><span class="line">                r = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[r]!=target)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @lc code=end</span></span><br></pre></td></tr></table></figure>
-<!-- 图谱链接（自动添加） -->
-<p>[[标签集合/算法]]</p>
+<p>```c /<em> </em> <span class="citation" data-cites="lc">@lc</span>
+app=leetcode.cn id=69 lang=cpp <em> </em> [69] x 的平方根 */</p>
+<p>// <span class="citation" data-cites="lc">@lc</span> code=start class
+Solution { public: int mySqrt(int x) {</p>
 
     </div>
 
@@ -514,14 +437,14 @@ API 的次数。</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">412k</span>
+    <span title="Word count total">326k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">24:57</span>
+    <span title="Reading time total">19:47</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

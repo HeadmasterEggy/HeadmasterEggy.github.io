@@ -122,7 +122,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">104</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">176</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">101</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">172</span></a></li>
   </ul>
 </nav>
 
@@ -161,18 +161,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-count">101</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -216,7 +216,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-1-session-token.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -234,7 +234,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/info5995-task3-1-session-token.html" class="post-title-link" itemprop="url">漏洞 1：Session Token 角色定义</a>
+          <a href="/posts/info5995-task3-6.html" class="post-title-link" itemprop="url">漏洞 6（支撑）：从本地文件读取并验证凭证</a>
         </h2>
 
         <div class="post-meta-container">
@@ -252,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
+      <time title="Modified: 2026-04-10 22:36:36" itemprop="dateModified" datetime="2026-04-10T22:36:36Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,7 +275,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>468</span>
+      <span>619</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -293,51 +293,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="漏洞-1session-token-角色定义">漏洞 1：Session Token
-角色定义</h1>
-<h2 id="代码证据">代码证据</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">KEY_SESSION_TOKEN</span> <span class="operator">=</span> <span class="string">&quot;sessionToken&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SESSION_PREF_NAME</span> <span class="operator">=</span> <span class="string">&quot;SessionPrefs&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences.Editor editor;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences sharedPreferences;</span><br></pre></td></tr></table></figure>
-<p>出处：<code>Login.java</code>，第 26-29 行。</p>
-<hr>
-<h2 id="逐行解释">逐行解释</h2>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th>代码</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>KEY_SESSION_TOKEN = "sessionToken"</code></td>
-<td>后面存入手机的 key 叫 <code>"sessionToken"</code></td>
-</tr>
-<tr>
-<td><code>SESSION_PREF_NAME = "SessionPrefs"</code></td>
-<td>存储文件名是 <code>"SessionPrefs"</code></td>
-</tr>
-<tr>
-<td><code>SharedPreferences.Editor editor</code></td>
-<td>写入数据的工具</td>
-</tr>
-<tr>
-<td><code>SharedPreferences sharedPreferences</code></td>
-<td>读取数据的工具</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<h2 id="这个值是什么">这个值是什么</h2>
-<p>这段代码定义了一个常量： -
-<strong>KEY（键）</strong>：<code>"sessionToken"</code> -
-<strong>存储位置</strong>：<code>SharedPreferences</code></p>
+          <p>Login.java 第 77-93 行，凭证验证逻辑： java BufferedReader bufferedReader = new BufferedReader( new</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/info5995-task3-1-session-token.html#more" rel="contents">
+              <a class="btn" href="/posts/info5995-task3-6.html">
                 Read more &raquo;
               </a>
             </div>
@@ -368,7 +327,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-3.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/tutorial-15-group-1-task1-prep.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -386,7 +345,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/info5995-task3-3.html" class="post-title-link" itemprop="url">漏洞 3（核心）：弱随机数生成器用于安全敏感值</a>
+          <a href="/posts/tutorial-15-group-1-task1-prep.html" class="post-title-link" itemprop="url">Tutorial-15-Group-1 — Task 1 开工准备清单</a>
         </h2>
 
         <div class="post-meta-container">
@@ -404,7 +363,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
+      <time title="Modified: 2026-04-10 22:36:36" itemprop="dateModified" datetime="2026-04-10T22:36:36Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -427,14 +386,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>672</span>
+      <span>836</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>3 mins.</span>
     </span>
 </div>
 
@@ -445,49 +404,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="漏洞-3核心弱随机数生成器用于安全敏感值">漏洞
-3（核心）：弱随机数生成器用于安全敏感值</h1>
-<h2 id="代码证据">代码证据</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="number">16</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        sb.append(<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;</span></span><br><span class="line">            .charAt(random.nextInt(<span class="number">62</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>出处：<code>Login.java</code>，第 183-189 行。</p>
-<hr>
-<h2 id="逐行解释">逐行解释</h2>
-<table>
-<thead>
-<tr>
-<th>代码</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>new Random()</code></td>
-<td>创建 Java 的普通随机数生成器</td>
-</tr>
-<tr>
-<td><code>StringBuilder sb = new StringBuilder(16)</code></td>
-<td>准备生成 16 个字符</td>
-</tr>
-<tr>
-<td><code>for (int i = 0; i &lt; 16; i++)</code></td>
-<td>循环 16 次</td>
-</tr>
-<tr>
-<td><code>random.nextInt(62)</code></td>
-<td>从 0-61 里随机挑一个数</td>
-</tr>
-<tr>
-<td>62 字符集 = A-Z(26) + a-z(26) + 0-9(10)</td>
-<td>每次从这 62 个字符里挑一个</td>
-</tr>
-</tbody>
-</table>
-<p><strong>最终结果：</strong> 一个 16 位的随机字符串。</p>
-<hr>
-<h2 id="表面上看起来很随机">表面上看起来很随机</h2>
+          <p>根据当前整理材料与截图内容，Assignment 1 有这些关键规则： Task 1 不是找漏洞，而是先完成 APK 的基础逆向分析，拿到后续 Task 2 / Task 3 / Task 4 都要用到的入口信息。 你需要确认并记录：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/info5995-task3-3.html#more" rel="contents">
+              <a class="btn" href="/posts/tutorial-15-group-1-task1-prep.html">
                 Read more &raquo;
               </a>
             </div>
@@ -518,7 +438,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-4.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -536,7 +456,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/info5995-task3-4.html" class="post-title-link" itemprop="url">漏洞 4：登录验证流程——Token 在验证之后才生成</a>
+          <a href="/posts/info5995-task3-5.html" class="post-title-link" itemprop="url">漏洞 5（支撑）：明文凭证存储</a>
         </h2>
 
         <div class="post-meta-container">
@@ -554,7 +474,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
+      <time title="Modified: 2026-04-10 22:36:36" itemprop="dateModified" datetime="2026-04-10T22:36:36Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -577,7 +497,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>515</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -595,20 +515,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="漏洞-4登录验证流程token-在验证之后才生成">漏洞
-4：登录验证流程——Token 在验证之后才生成</h1>
-<h2 id="代码证据">代码证据</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">((Button) findViewById(R.id.button2)).setOnClickListener(<span class="keyword">new</span> <span class="title class_">View</span>.OnClickListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClick</span><span class="params">(View view)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">zCheckCredentials</span> <span class="operator">=</span> Login.<span class="built_in">this</span></span><br><span class="line">            .checkCredentials(editText.getText().toString(),</span><br><span class="line">                             editText2.getText().toString());</span><br><span class="line">        <span class="keyword">if</span> (!zCheckCredentials) &#123;</span><br><span class="line">            Toast.makeText(Login.<span class="built_in">this</span>, <span class="string">&quot;Wrong Credential&quot;</span>, <span class="number">0</span>).show();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Login.<span class="built_in">this</span>.createSession();</span><br><span class="line">        Login.<span class="built_in">this</span>.startActivity(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Intent</span>(Login.<span class="built_in">this</span>, (Class&lt;?&gt;) Profile.class));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>出处：<code>Login.java</code>，第 49-60 行。</p>
-<hr>
-<h2 id="流程解读">流程解读</h2>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">用户输入用户名 + 密码</span><br><span class="line">         ↓</span><br><span class="line">checkCredentials() 读取本地文件验证</span><br><span class="line">         ↓</span><br><span class="line">   验证失败 → 显示 &quot;Wrong Credential&quot; → 停在登录页</span><br><span class="line">         ↓</span><br><span class="line">   验证成功 → createSession() → 跳转到 Profile</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="三元条件的证据意义">三元条件的证据意义</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (!zCheckCredentials) &#123;</span><br><span class="line">    <span class="keyword">return</span>;         <span class="comment">// 验证失败：不做任何会话操作</span></span><br><span class="line">&#125;</span><br><span class="line">Login.<span class="built_in">this</span>.createSession();  <span class="comment">// 验证成功后才执行</span></span><br></pre></td></tr></table></figure>
+          <p>java fileOutputStreamOpenFileOutput = openFileOutput("credentials.txt", 32768); fileOutputStreamOpenFileOutput.write(</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/info5995-task3-4.html#more" rel="contents">
+              <a class="btn" href="/posts/info5995-task3-5.html">
                 Read more &raquo;
               </a>
             </div>
@@ -632,7 +542,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/59/">59</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/58/">58</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -658,14 +568,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">412k</span>
+    <span title="Word count total">326k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">24:57</span>
+    <span title="Reading time total">19:47</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
