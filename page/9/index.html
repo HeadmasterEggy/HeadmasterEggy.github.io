@@ -122,7 +122,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">101</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">178</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">104</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">176</span></a></li>
   </ul>
 </nav>
 
@@ -161,7 +161,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-count">176</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,7 +172,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -216,7 +216,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -234,7 +234,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/info5995-task3.html" class="post-title-link" itemprop="url">Task 3 完整漏洞链分析</a>
+          <a href="/posts/info5995-task3-5.html" class="post-title-link" itemprop="url">漏洞 5（支撑）：明文凭证存储</a>
         </h2>
 
         <div class="post-meta-container">
@@ -252,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-30 13:12:04" itemprop="dateModified" datetime="2026-03-30T13:12:04Z">2026-03-30</time>
+      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,14 +275,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.1k</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -293,24 +293,25 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="task-3-完整漏洞链分析">Task 3 完整漏洞链分析</h1>
-<h2 id="一句话总结">一句话总结</h2>
-<blockquote>
-<p>App 用 <code>java.util.Random</code> 生成 session token，而 session
-token 是用户登录后的"身份凭证"。因为 Random
-可预测，攻击者可以绕过登录直接冒充任意用户。</p>
-</blockquote>
+          <h1 id="漏洞-5支撑明文凭证存储">漏洞 5（支撑）：明文凭证存储</h1>
+<h2 id="代码证据">代码证据</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">fileOutputStreamOpenFileOutput = openFileOutput(<span class="string">&quot;credentials.txt&quot;</span>, <span class="number">32768</span>);</span><br><span class="line">fileOutputStreamOpenFileOutput.write(</span><br><span class="line">    (<span class="string">&quot;Username: &quot;</span> + str + <span class="string">&quot; Password: &quot;</span> + str2 + <span class="string">&quot;\n&quot;</span>).getBytes());</span><br><span class="line">Toast.makeText(<span class="built_in">this</span>, <span class="string">&quot;Credentials saved to file&quot;</span>, <span class="number">0</span>).show();</span><br></pre></td></tr></table></figure>
+<p>出处：<code>MainActivity.java</code>，第 59-61 行。</p>
 <hr>
-<h2 id="漏洞链全景图">漏洞链全景图</h2>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        攻击者视角                            │</span><br><span class="line">│  <span class="number">1.</span> 反编译 APK → 看到 generateSessionToken() 算法           │</span><br><span class="line">│  <span class="number">2.</span> 知道用了 <span class="built_in">new</span> Random().nextInt(<span class="number">62</span>)                      │</span><br><span class="line">│  <span class="number">3.</span> 知道 Java Random 是 <span class="number">48</span>-<span class="type">bit</span> 种子 LCG                     │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        四步证据链                           │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">1</span>步：KEY_SESSION_TOKEN = &quot;sessionToken&quot;                  │</span><br><span class="line">│         → 这个值叫 <span class="keyword">session</span> token，安全敏感                   │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">2</span>步：checkCredentials() 验证成功                         │</span><br><span class="line">│         → 验证成功后才有资格获得 token                       │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">3</span>步：createSession() 执行                                │</span><br><span class="line">│         → generateSessionToken() 的结果存入 SharedPrefs     │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">4</span>步：generateSessionToken() 里是 <span class="built_in">new</span> Random()            │</span><br><span class="line">│         → 用了弱随机数生成器                                 │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        攻击可行性                           │</span><br><span class="line">│                                                             │</span><br><span class="line">│  <span class="number">48</span>-<span class="type">bit</span> 种子空间 = <span class="number">2</span>^<span class="number">48</span> ≈ <span class="number">2.8</span>×<span class="number">10</span>^<span class="number">14</span>                       │</span><br><span class="line">│  已知算法 + 本地计算 → 几天内可预测有效 token               │</span><br><span class="line">│  预测出 token → 直接进入用户账户（无需密码）                 │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        修复方案                             │</span><br><span class="line">│                                                             │</span><br><span class="line">│  <span class="built_in">new</span> Random() → <span class="built_in">new</span> SecureRandom()                         │</span><br><span class="line">│  <span class="number">48</span>-<span class="type">bit</span> → <span class="number">128</span>-<span class="type">bit</span> 熵                                       │</span><br><span class="line">│  暴力破解：从&quot;几天&quot;→&quot;不可能&quot;                               │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="这段代码在做什么">这段代码在做什么</h2>
+<ol type="1">
+<li>调用 <code>openFileOutput("credentials.txt", ...)</code>
+打开/创建一个文件</li>
+<li>把用户名和密码<strong>直接写入</strong>文件</li>
+<li>显示提示"Credentials saved to file"</li>
+</ol>
 <hr>
-<h2 id="第一步session-token-的角色定义">第一步：Session Token
-的角色定义</h2>
-<p><strong>文件：</strong> <code>Login.java</code> 第 26-29 行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">KEY_SESSION_TOKEN</span> <span class="operator">=</span> <span class="string">&quot;sessionToken&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SESSION_PREF_NAME</span> <span class="operator">=</span> <span class="string">&quot;SessionPrefs&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences.Editor editor;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences sharedPreferences;</span><br></pre></td></tr></table></figure>
+<h2 id="存储的内容长什么样">存储的内容长什么样</h2>
+<p>假设用户注册时输入： - 用户名：<code>alice</code> -
+密码：<code>password123</code></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/info5995-task3.html#more" rel="contents">
+              <a class="btn" href="/posts/info5995-task3-5.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -341,7 +342,7 @@ token 是用户登录后的"身份凭证"。因为 Random
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/info5995-task3-6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -359,7 +360,7 @@ token 是用户登录后的"身份凭证"。因为 Random
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/info5995-task3.html" class="post-title-link" itemprop="url">修复方案分析：SecureRandom 为什么能解决这个问题</a>
+          <a href="/posts/info5995-task3-6.html" class="post-title-link" itemprop="url">漏洞 6（支撑）：从本地文件读取并验证凭证</a>
         </h2>
 
         <div class="post-meta-container">
@@ -377,7 +378,7 @@ token 是用户登录后的"身份凭证"。因为 Random
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-30 13:12:04" itemprop="dateModified" datetime="2026-03-30T13:12:04Z">2026-03-30</time>
+      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -400,7 +401,7 @@ token 是用户登录后的"身份凭证"。因为 Random
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>537</span>
+      <span>619</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -418,21 +419,26 @@ token 是用户登录后的"身份凭证"。因为 Random
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="修复方案分析securerandom-为什么能解决这个问题">修复方案分析：SecureRandom
-为什么能解决这个问题</h1>
-<h2 id="当前问题">当前问题</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();  <span class="comment">// 48-bit 种子，确定性算法</span></span><br></pre></td></tr></table></figure>
-<p><strong>问题：</strong> 种子空间太小，算法是公开的，可以被反推。</p>
+          <h1 id="漏洞-6支撑从本地文件读取并验证凭证">漏洞
+6（支撑）：从本地文件读取并验证凭证</h1>
+<h2 id="代码证据">代码证据</h2>
+<p><code>Login.java</code> 第 77-93 行，凭证验证逻辑：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">BufferedReader</span> <span class="variable">bufferedReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(openFileInput(<span class="string">&quot;credentials.txt&quot;</span>)));</span><br><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> bufferedReader.readLine();</span><br><span class="line"><span class="keyword">if</span> (str == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line">String[] split = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">trim</span> <span class="operator">=</span> split[<span class="number">1</span>].trim();</span><br><span class="line"><span class="type">String</span> <span class="variable">trim2</span> <span class="operator">=</span> str.substring(split[<span class="number">0</span>].length() + <span class="number">1</span>).trim();</span><br><span class="line"><span class="keyword">return</span> editText.getText().toString().trim().equals(trim)</span><br><span class="line">    &amp;&amp; editText2.getText().toString().trim().equals(trim2);</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="修复方案">修复方案</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">SecureRandom</span> <span class="variable">secureRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureRandom</span>();</span><br></pre></td></tr></table></figure>
+<h2 id="这段代码在做什么">这段代码在做什么</h2>
+<ol type="1">
+<li>打开 <code>credentials.txt</code></li>
+<li>读出存储的内容：<code>"Username: alice Password: password123"</code></li>
+<li>用空格分割字符串</li>
+<li>提取出存的用户名和密码</li>
+<li>和用户输入比较</li>
+</ol>
 <hr>
-<h2 id="securerandom-和-random-的三个关键区别">SecureRandom 和 Random
-的三个关键区别</h2>
-<h3 id="区别-1种子大小">区别 1：种子大小</h3>
+<h2 id="验证逻辑">验证逻辑</h2>
+<figure class="highlight abnf"><table><tr><td class="code"><pre><span class="line">stored_username <span class="operator">=</span><span class="operator">=</span> input_username  AND  stored_password <span class="operator">=</span><span class="operator">=</span> input_password</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/info5995-task3.html#more" rel="contents">
+              <a class="btn" href="/posts/info5995-task3-6.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -499,7 +505,7 @@ token 是用户登录后的"身份凭证"。因为 Random
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-30 13:12:04" itemprop="dateModified" datetime="2026-03-30T13:12:04Z">2026-03-30</time>
+      <time title="Modified: 2026-04-10 22:15:31" itemprop="dateModified" datetime="2026-04-10T22:15:31Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -522,7 +528,7 @@ token 是用户登录后的"身份凭证"。因为 Random
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>823</span>
+      <span>836</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -595,7 +601,7 @@ matrix</strong></li>
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/60/">60</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/59/">59</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -621,14 +627,14 @@ matrix</strong></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">409k</span>
+    <span title="Word count total">412k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">24:48</span>
+    <span title="Reading time total">24:57</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
