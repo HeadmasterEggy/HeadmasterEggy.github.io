@@ -22,19 +22,19 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="java Random random &#x3D; new Random();  &#x2F;&#x2F; 48-bit 种子，确定性算法  问题： 种子空间太小，算法是公开的，可以被反推。 java SecureRandom secureRandom &#x3D; new">
+    <meta name="description" content="App 用 java.util.Random 生成 session token，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="修复方案分析：SecureRandom 为什么能解决这个问题">
+<meta property="og:title" content="Task 3 完整漏洞链分析">
 <meta property="og:url" content="http://example.com/posts/info5995-task3.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="java Random random &#x3D; new Random();  &#x2F;&#x2F; 48-bit 种子，确定性算法  问题： 种子空间太小，算法是公开的，可以被反推。 java SecureRandom secureRandom &#x3D; new">
+<meta property="og:description" content="App 用 java.util.Random 生成 session token，">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-31T00:10:00.000Z">
-<meta property="article:modified_time" content="2026-04-10T22:36:36.068Z">
+<meta property="article:modified_time" content="2026-04-10T22:44:51.246Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Security">
-<meta property="article:tag" content="INFO5995">
 <meta property="article:tag" content="Assignment">
+<meta property="article:tag" content="INFO5995">
 <meta property="article:tag" content="Task 3">
 <meta name="twitter:card" content="summary">
 
@@ -42,10 +42,10 @@
 <link rel="canonical" href="http://example.com/posts/info5995-task3.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/info5995-task3.html","path":"posts/info5995-task3.html","title":"修复方案分析：SecureRandom 为什么能解决这个问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/info5995-task3.html","path":"posts/info5995-task3.html","title":"Task 3 完整漏洞链分析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>修复方案分析：SecureRandom 为什么能解决这个问题 | Joey</title>
+<title>Task 3 完整漏洞链分析 | Joey</title>
   
 
 
@@ -128,7 +128,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">97</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">176</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">94</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">163</span></a></li>
   </ul>
 </nav>
 
@@ -153,9 +153,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88%E5%88%86%E6%9E%90securerandom-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-text">修复方案分析：SecureRandom
-为什么能解决这个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E9%97%AE%E9%A2%98"><span class="nav-text">当前问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88"><span class="nav-text">修复方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#securerandom-%E5%92%8C-random-%E7%9A%84%E4%B8%89%E4%B8%AA%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="nav-text">SecureRandom 和 Random
-的三个关键区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB-1%E7%A7%8D%E5%AD%90%E5%A4%A7%E5%B0%8F"><span class="nav-text">区别 1：种子大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB-2%E7%86%B5%E6%BA%90"><span class="nav-text">区别 2：熵源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB-3%E5%AF%86%E7%A0%81%E5%AD%A6%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-text">区别 3：密码学安全性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E5%AF%B9%E6%AF%94"><span class="nav-text">量化对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%BF%99%E4%B8%AA-app-%E9%87%8C%E6%80%8E%E4%B9%88%E6%94%B9"><span class="nav-text">在这个 App 里怎么改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%98%8E%E6%96%87%E5%87%AD%E8%AF%81%E5%AD%98%E5%82%A8%E7%9A%84%E4%BF%AE%E5%A4%8D"><span class="nav-text">关于明文凭证存储的修复</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#task-3-%E5%AE%8C%E6%95%B4%E6%BC%8F%E6%B4%9E%E9%93%BE%E5%88%86%E6%9E%90"><span class="nav-text">Task 3 完整漏洞链分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="nav-text">一句话总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%93%BE%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="nav-text">漏洞链全景图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5session-token-%E7%9A%84%E8%A7%92%E8%89%B2%E5%AE%9A%E4%B9%89"><span class="nav-text">第一步：Session Token
+的角色定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5token-%E7%9A%84%E7%94%9F%E6%88%90%E6%97%B6%E6%9C%BA"><span class="nav-text">第二步：Token 的生成时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5token-%E7%9A%84%E5%AD%98%E5%82%A8%E5%8A%A8%E4%BD%9C"><span class="nav-text">第三步：Token 的存储动作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E5%BC%B1%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90"><span class="nav-text">第四步：弱随机数生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="nav-text">攻击路径完整示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E6%BC%8F%E6%B4%9E%E9%93%BE%E5%AE%8C%E6%95%B4"><span class="nav-text">为什么这个漏洞链完整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E5%AF%B9%E6%AF%94"><span class="nav-text">量化对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E4%BB%A3%E7%A0%81"><span class="nav-text">修复代码</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -170,7 +169,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-count">163</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -181,7 +180,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-count">94</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -239,12 +238,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="修复方案分析：SecureRandom 为什么能解决这个问题 | Joey">
-      <meta itemprop="description" content="java Random random = new Random();  // 48-bit 种子，确定性算法  问题： 种子空间太小，算法是公开的，可以被反推。 java SecureRandom secureRandom = new">
+      <meta itemprop="name" content="Task 3 完整漏洞链分析 | Joey">
+      <meta itemprop="description" content="App 用 java.util.Random 生成 session token，">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          修复方案分析：SecureRandom 为什么能解决这个问题
+          Task 3 完整漏洞链分析
         </h1>
 
         <div class="post-meta-container">
@@ -262,7 +261,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-10 22:36:36" itemprop="dateModified" datetime="2026-04-10T22:36:36Z">2026-04-10</time>
+      <time title="Modified: 2026-04-10 22:44:51" itemprop="dateModified" datetime="2026-04-10T22:44:51Z">2026-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -285,137 +284,182 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>550</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">java Random random = new Random();  // 48-bit 种子，确定性算法  问题： 种子空间太小，算法是公开的，可以被反推。 java SecureRandom secureRandom = new</div>
+            <div class="post-description">App 用 java.util.Random 生成 session token，</div>
         </div>
       </header>
 
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1
-id="修复方案分析securerandom-为什么能解决这个问题">修复方案分析：SecureRandom
-为什么能解决这个问题</h1>
-<h2 id="当前问题">当前问题</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();  <span class="comment">// 48-bit 种子，确定性算法</span></span><br></pre></td></tr></table></figure>
-<p><strong>问题：</strong> 种子空间太小，算法是公开的，可以被反推。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="task-3-完整漏洞链分析">Task 3 完整漏洞链分析</h1>
+<h2 id="一句话总结">一句话总结</h2>
+<blockquote>
+<p>App 用 <code>java.util.Random</code> 生成 session token，而 session
+token 是用户登录后的"身份凭证"。因为 Random
+可预测，攻击者可以绕过登录直接冒充任意用户。</p>
+</blockquote>
 <hr />
-<h2 id="修复方案">修复方案</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">SecureRandom</span> <span class="variable">secureRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureRandom</span>();</span><br></pre></td></tr></table></figure>
+<h2 id="漏洞链全景图">漏洞链全景图</h2>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        攻击者视角                            │</span><br><span class="line">│  <span class="number">1.</span> 反编译 APK → 看到 generateSessionToken() 算法           │</span><br><span class="line">│  <span class="number">2.</span> 知道用了 <span class="built_in">new</span> Random().nextInt(<span class="number">62</span>)                      │</span><br><span class="line">│  <span class="number">3.</span> 知道 Java Random 是 <span class="number">48</span>-<span class="type">bit</span> 种子 LCG                     │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        四步证据链                           │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">1</span>步：KEY_SESSION_TOKEN = &quot;sessionToken&quot;                  │</span><br><span class="line">│         → 这个值叫 <span class="keyword">session</span> token，安全敏感                   │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">2</span>步：checkCredentials() 验证成功                         │</span><br><span class="line">│         → 验证成功后才有资格获得 token                       │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">3</span>步：createSession() 执行                                │</span><br><span class="line">│         → generateSessionToken() 的结果存入 SharedPrefs     │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第<span class="number">4</span>步：generateSessionToken() 里是 <span class="built_in">new</span> Random()            │</span><br><span class="line">│         → 用了弱随机数生成器                                 │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        攻击可行性                           │</span><br><span class="line">│                                                             │</span><br><span class="line">│  <span class="number">48</span>-<span class="type">bit</span> 种子空间 = <span class="number">2</span>^<span class="number">48</span> ≈ <span class="number">2.8</span>×<span class="number">10</span>^<span class="number">14</span>                       │</span><br><span class="line">│  已知算法 + 本地计算 → 几天内可预测有效 token               │</span><br><span class="line">│  预测出 token → 直接进入用户账户（无需密码）                 │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br><span class="line">                              ↓</span><br><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        修复方案                             │</span><br><span class="line">│                                                             │</span><br><span class="line">│  <span class="built_in">new</span> Random() → <span class="built_in">new</span> SecureRandom()                         │</span><br><span class="line">│  <span class="number">48</span>-<span class="type">bit</span> → <span class="number">128</span>-<span class="type">bit</span> 熵                                       │</span><br><span class="line">│  暴力破解：从&quot;几天&quot;→&quot;不可能&quot;                               │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
 <hr />
-<h2 id="securerandom-和-random-的三个关键区别">SecureRandom 和 Random
-的三个关键区别</h2>
-<h3 id="区别-1种子大小">区别 1：种子大小</h3>
+<h2 id="第一步session-token-的角色定义">第一步：Session Token
+的角色定义</h2>
+<p><strong>文件：</strong> <code>Login.java</code> 第 26-29 行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">KEY_SESSION_TOKEN</span> <span class="operator">=</span> <span class="string">&quot;sessionToken&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SESSION_PREF_NAME</span> <span class="operator">=</span> <span class="string">&quot;SessionPrefs&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences.Editor editor;</span><br><span class="line"><span class="keyword">private</span> SharedPreferences sharedPreferences;</span><br></pre></td></tr></table></figure>
+<p><strong>含义：</strong></p>
+<ul>
+<li>App 明确用 <code>"sessionToken"</code> 这个 key 存储一个值</li>
+<li>存在 <code>SessionPrefs</code> 文件里</li>
+<li>这个值的作用是<strong>代表用户的登录状态</strong></li>
+</ul>
+<p><strong>为什么重要：</strong></p>
+<p>Session token
+是安全敏感值——它的存在意味着"有一个合法用户刚刚成功登录了"。</p>
+<hr />
+<h2 id="第二步token-的生成时机">第二步：Token 的生成时机</h2>
+<p><strong>文件：</strong> <code>Login.java</code> 第 49-60 行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">((Button) findViewById(R.id.button2)).setOnClickListener(<span class="keyword">new</span> <span class="title class_">View</span>.OnClickListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClick</span><span class="params">(View view)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">zCheckCredentials</span> <span class="operator">=</span> Login.<span class="built_in">this</span></span><br><span class="line">            .checkCredentials(editText.getText().toString(),</span><br><span class="line">                             editText2.getText().toString());</span><br><span class="line">        <span class="keyword">if</span> (!zCheckCredentials) &#123;</span><br><span class="line">            Toast.makeText(Login.<span class="built_in">this</span>, <span class="string">&quot;Wrong Credential&quot;</span>, <span class="number">0</span>).show();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Login.<span class="built_in">this</span>.createSession();  <span class="comment">// ← 验证成功后才执行</span></span><br><span class="line">        Login.<span class="built_in">this</span>.startActivity(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Intent</span>(Login.<span class="built_in">this</span>, (Class&lt;?&gt;) Profile.class));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>含义：</strong></p>
+<ul>
+<li>先验证用户名和密码</li>
+<li>验证失败 → 停在登录页</li>
+<li><strong>验证成功 → 才调用 createSession()</strong></li>
+</ul>
+<p><strong>为什么重要：</strong></p>
+<p>Token
+不是随意生成的，而是在用户<strong>证明了自己是谁之后</strong>才生成的。这意味着
+token 的存在 = 成功登录的证明。</p>
+<hr />
+<h2 id="第三步token-的存储动作">第三步：Token 的存储动作</h2>
+<p><strong>文件：</strong> <code>Login.java</code> 第 174-177 行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createSession</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.editor.putString(KEY_SESSION_TOKEN, generateSessionToken());</span><br><span class="line">    <span class="built_in">this</span>.editor.apply();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>含义：</strong></p>
+<ul>
+<li>把 <code>generateSessionToken()</code> 的结果用
+<code>putString</code> 存进 SharedPreferences</li>
+<li>Key 就是第一步定义的 <code>"sessionToken"</code></li>
+</ul>
+<p><strong>为什么重要：</strong></p>
+<p>这个存储动作把"弱随机数生成器"和"认证状态"绑在了一起——生成的随机字符串直接成为了用户身份凭证。</p>
+<hr />
+<h2 id="第四步弱随机数生成">第四步：弱随机数生成</h2>
+<p><strong>文件：</strong> <code>Login.java</code> 第 183-189 行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="number">16</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        sb.append(<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;</span></span><br><span class="line">            .charAt(random.nextInt(<span class="number">62</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>含义：</strong></p>
+<ul>
+<li>用 <code>new Random()</code> 生成 16 个随机字符</li>
+<li>字符集是 A-Z, a-z, 0-9（62个字符）</li>
+</ul>
+<p><strong>为什么重要：</strong></p>
+<p><code>java.util.Random</code>
+是<strong>线性同余生成器（LCG）</strong>，只有 <strong>48-bit
+内部状态</strong>。这意味着： - 知道算法 + 少量观察 → 可以反推种子 -
+种子已知 → 可以预测未来所有 token</p>
+<hr />
+<h2 id="攻击路径完整示例">攻击路径完整示例</h2>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">攻击者条件：</span><br><span class="line">- 有一台 Android 设备（真机或模拟器）</span><br><span class="line">- 安装了该 App</span><br><span class="line">- 可以访问 SharedPreferences（需要 Root 或 ADB）</span><br><span class="line"></span><br><span class="line">攻击步骤：</span><br><span class="line"></span><br><span class="line"><span class="keyword">Step</span> <span class="number">1</span>：反编译 APK</span><br><span class="line">→ 用 jadx 打开 APK</span><br><span class="line">→ 找到 Login.java</span><br><span class="line">→ 看到 generateSessionToken() 的算法</span><br><span class="line"></span><br><span class="line"><span class="keyword">Step</span> <span class="number">2</span>：读取当前 session token</span><br><span class="line">→ 通过 ADB 或 Root 访问：</span><br><span class="line">  <span class="regexp">/data/</span>data<span class="regexp">/com.example.mastg_test0016/</span>shared_prefs/SessionPrefs.xml</span><br><span class="line"></span><br><span class="line"><span class="keyword">Step</span> <span class="number">3</span>：离线计算种子</span><br><span class="line">→ 把已知 token 的 <span class="number">16</span> 个字符对应到 <span class="number">16</span> 个 nextInt(<span class="number">62</span>) 输出</span><br><span class="line">→ 反推 <span class="number">48</span>-bit 种子（确定性计算，几秒完成）</span><br><span class="line"></span><br><span class="line"><span class="keyword">Step</span> <span class="number">4</span>：预测其他用户的 token</span><br><span class="line">→ 用相同算法 + 反推的种子</span><br><span class="line">→ 计算出有效 token</span><br><span class="line"></span><br><span class="line"><span class="keyword">Step</span> <span class="number">5</span>：冒充用户</span><br><span class="line">→ 把计算出的 token 写入 SharedPreferences</span><br><span class="line">→ 打开 App → 直接进入该用户账户</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="为什么这个漏洞链完整">为什么这个漏洞链完整</h2>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
 <tr>
-<th></th>
-<th>Random</th>
-<th>SecureRandom</th>
+<th>证据点</th>
+<th>内容</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>种子大小</td>
-<td><strong>48 位</strong></td>
-<td><strong>≥ 128 位</strong></td>
+<td>1. 角色定义</td>
+<td>KEY_SESSION_TOKEN</td>
+<td>说明这是安全敏感值</td>
 </tr>
 <tr>
-<td>暴力破解</td>
-<td>几天可破</td>
-<td>不可能（当前算力）</td>
+<td>2. 时机证据</td>
+<td>checkCredentials → createSession</td>
+<td>说明 token = 登录证明</td>
+</tr>
+<tr>
+<td>3. 存储动作</td>
+<td>putString in createSession</td>
+<td>把弱随机数和认证绑定</td>
+</tr>
+<tr>
+<td>4. 弱随机数</td>
+<td>new Random()</td>
+<td>漏洞的根因</td>
+</tr>
+<tr>
+<td>5. 攻击可行性</td>
+<td>48-bit 种子可破解</td>
+<td>说明漏洞有实际影响</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Random</span>:     <span class="number">2</span>^<span class="number">48</span> ≈ <span class="number">2</span>.<span class="number">8</span> × <span class="number">10</span>^<span class="number">14</span>  可能值</span><br><span class="line"><span class="attribute">SecureRandom</span>: <span class="number">2</span>^<span class="number">128</span> ≈ <span class="number">3</span>.<span class="number">4</span> × <span class="number">10</span>^<span class="number">38</span> 可能值</span><br></pre></td></tr></table></figure>
-<p>差距是 <strong>10^24
-倍</strong>——不是几千几万倍，是一万亿万亿倍。</p>
-<hr />
-<h3 id="区别-2熵源">区别 2：熵源</h3>
-<p><strong>Random 的熵源：</strong> - 种子是确定性的 - 相同种子 →
-相同序列</p>
-<p><strong>SecureRandom 的熵源：</strong> - 从操作系统获取真随机数 -
-Android 上通常来自 <code>/dev/urandom</code> -
-基于硬件噪声、时钟、进程状态等</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">操作系统真随机数池</span><br><span class="line">         ↓</span><br><span class="line">SecureRandom 每次获取种子</span><br><span class="line">         ↓</span><br><span class="line">输出在计算上不可预测</span><br></pre></td></tr></table></figure>
-<hr />
-<h3 id="区别-3密码学安全性">区别 3：密码学安全性</h3>
-<p><strong>Random 不满足任何密码学安全属性：</strong></p>
-<ul>
-<li>给定一些输出，可以反推种子</li>
-<li>可以预测未来所有输出</li>
-</ul>
-<p><strong>SecureRandom 设计目标就是密码学安全：</strong></p>
-<ul>
-<li><strong>下一位测试（Next Bit
-Test）</strong>：没有任何多项式时间算法能以大于 1/2
-的概率预测出下一位</li>
-<li><strong>不可预测性</strong>：即使知道之前的输出，也无法预测下一个</li>
-</ul>
+<p><strong>缺少任何一个环节，漏洞链就不完整。</strong></p>
 <hr />
 <h2 id="量化对比">量化对比</h2>
 <table>
 <thead>
 <tr>
 <th>属性</th>
-<th>Random</th>
-<th>SecureRandom</th>
+<th>当前（有漏洞）</th>
+<th>修复后</th>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>随机数生成器</td>
+<td><code>java.util.Random</code></td>
+<td><code>java.security.SecureRandom</code></td>
+</tr>
 <tr>
 <td>种子大小</td>
 <td>48-bit</td>
 <td>≥128-bit</td>
 </tr>
 <tr>
-<td>算法确定性</td>
-<td>✅ 是</td>
-<td>❌ 否（每次从 OS 获取新熵）</td>
+<td>可能种子数</td>
+<td>2^48 ≈ 2.8×10^14</td>
+<td>2^128 ≈ 3.4×10^38</td>
 </tr>
 <tr>
 <td>暴力破解时间</td>
-<td>几天</td>
+<td>几天（可行）</td>
 <td>不可能</td>
 </tr>
 <tr>
-<td>满足 Next Bit Test</td>
-<td>❌</td>
-<td>✅</td>
+<td>预测可行性</td>
+<td>确定可预测</td>
+<td>计算不可行</td>
 </tr>
 <tr>
-<td>适合生成 Token</td>
-<td>❌</td>
-<td>✅</td>
+<td>是否满足 CWE-338</td>
+<td>❌ 是</td>
+<td>✅ 否</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="在这个-app-里怎么改">在这个 App 里怎么改</h2>
-<p><strong>修改前：</strong> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();  <span class="comment">// 弱随机数</span></span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="number">16</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        sb.append(<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;</span></span><br><span class="line">            .charAt(random.nextInt(<span class="number">62</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>修改后：</strong> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">SecureRandom</span> <span class="variable">secureRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureRandom</span>();</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="number">16</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        sb.append(<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;</span></span><br><span class="line">            .charAt(secureRandom.nextInt(<span class="number">62</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>一行之差：<code>new Random()</code> →
-<code>new SecureRandom()</code></strong></p>
-<hr />
-<h2 id="关于明文凭证存储的修复">关于明文凭证存储的修复</h2>
-<p><code>EncryptedSharedPreferences</code>（Android Jetpack
-Security）：</p>
-<ul>
-<li>用 <strong>AES-256-GCM</strong> 加密存储内容</li>
-<li>密钥存在 <strong>Android Keystore System</strong> 里</li>
-<li>即使设备被 Root，攻击者也拿不到密钥</li>
-</ul>
-<p>这是解决支撑发现（CWE-312）的最直接方案。</p>
+<h2 id="修复代码">修复代码</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 修改前</span></span><br><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();  <span class="comment">// ❌ 48-bit 种子</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改后</span></span><br><span class="line"><span class="keyword">private</span> String <span class="title function_">generateSessionToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">SecureRandom</span> <span class="variable">secureRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureRandom</span>();  <span class="comment">// ✅ 128-bit+ 熵</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>一行之差，从"可预测"变成"不可预测"。</strong></p>
 <!-- 图谱链接（自动添加） -->
 <p>[[标签集合/INFO5995]]</p>
 
@@ -428,8 +472,8 @@ Security）：</p>
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Security/" rel="tag"><i class="fa fa-tag"></i> Security</a>
-              <a href="/tags/INFO5995/" rel="tag"><i class="fa fa-tag"></i> INFO5995</a>
               <a href="/tags/Assignment/" rel="tag"><i class="fa fa-tag"></i> Assignment</a>
+              <a href="/tags/INFO5995/" rel="tag"><i class="fa fa-tag"></i> INFO5995</a>
               <a href="/tags/Task-3/" rel="tag"><i class="fa fa-tag"></i> Task 3</a>
           </div>
 
@@ -437,13 +481,13 @@ Security）：</p>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/info5995-task3-1-session-token.html" rel="prev" title="漏洞 1：Session Token 角色定义">
-                  <i class="fa fa-angle-left"></i> 漏洞 1：Session Token 角色定义
+                <a href="/posts/info5995-task3-5.html" rel="prev" title="漏洞 5（支撑）：明文凭证存储">
+                  <i class="fa fa-angle-left"></i> 漏洞 5（支撑）：明文凭证存储
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/info5995-task3.html" rel="next" title="Task 3 完整漏洞链分析">
-                  Task 3 完整漏洞链分析 <i class="fa fa-angle-right"></i>
+                <a href="/posts/info5995-task3.html" rel="next" title="修复方案分析：SecureRandom 为什么能解决这个问题">
+                  修复方案分析：SecureRandom 为什么能解决这个问题 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -479,14 +523,14 @@ Security）：</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">341k</span>
+    <span title="Word count total">294k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">20:38</span>
+    <span title="Reading time total">17:50</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
