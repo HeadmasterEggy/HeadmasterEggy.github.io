@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="what to know before start O(), Ω(), Θ()  渐近复杂度：\(O(\cdot),\ \Omega(\cdot),\ \Theta(\cdot)\) 概率统计：\(\Pr[\cdot],\ \mathbb{E}[\cdot],\ \mathrm{Var}[\cdot],\ X\sim\pi\)  一、渐近复杂度符号（Asymptotic Notation） ![[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5270">
+<meta property="og:url" content="http://example.com/posts/ad62607b.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="what to know before start O(), Ω(), Θ()  渐近复杂度：\(O(\cdot),\ \Omega(\cdot),\ \Theta(\cdot)\) 概率统计：\(\Pr[\cdot],\ \mathbb{E}[\cdot],\ \mathrm{Var}[\cdot],\ X\sim\pi\)  一、渐近复杂度符号（Asymptotic Notation） ![[">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-25T01:12:49.600Z">
+<meta property="article:modified_time" content="2026-04-11T07:57:39.070Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/ad62607b.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/ad62607b.html","path":"posts/ad62607b.html","title":"COMP5270"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5270 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/ad62607b.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">51</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">174</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#what-to-know-before-start"><span class="nav-text">what to know before start</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%B8%90%E8%BF%91%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%AC%A6%E5%8F%B7asymptotic-notation"><span class="nav-text">一、渐近复杂度符号（Asymptotic
+Notation）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ogn%E4%B8%8A%E7%95%8Cbig-o"><span class="nav-text">1. \(O(g(n))\)：上界（Big-O）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omegagn%E4%B8%8B%E7%95%8Cbig-omega"><span class="nav-text">2. \(\Omega(g(n))\)：下界（Big-Omega）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thetagn%E7%B4%A7%E7%A1%AE%E7%95%8Cbig-theta"><span class="nav-text">3. \(\Theta(g(n))\)：紧确界（Big-Theta）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%A6%82%E7%8E%87%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%AC%A6%E5%8F%B7"><span class="nav-text">二、概率与统计符号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prcdot%E6%A6%82%E7%8E%87probability"><span class="nav-text">1. \(\Pr[\cdot]\)：概率（Probability）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mathbbecdot%E6%9C%9F%E6%9C%9Bexpectation"><span class="nav-text">2. \(\mathbb{E}[\cdot]\)：期望（Expectation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mathrmvarcdot%E6%96%B9%E5%B7%AEvariance"><span class="nav-text">3. \(\mathrm{Var}[\cdot]\)：方差（Variance）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xsimpi%E6%9C%8D%E4%BB%8E%E5%88%86%E5%B8%83-pi"><span class="nav-text">4. \(X\sim\pi\)：服从分布 \(\pi\)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%BF%AB%E9%80%9F%E5%AF%B9%E7%85%A7%E8%A1%A8"><span class="nav-text">三、快速对照表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%AE%80%E7%9F%AD%E7%A4%BA%E4%BE%8B%E8%BF%9E%E8%B5%B7%E6%9D%A5%E7%9C%8B"><span class="nav-text">四、简短示例（连起来看）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2"><span class="nav-text">Problem 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-3"><span class="nav-text">Problem 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-4"><span class="nav-text">Problem 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-5"><span class="nav-text">Problem 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-6"><span class="nav-text">Problem 6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-7"><span class="nav-text">Problem 7</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">174</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/ad62607b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5270 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5270
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-02-25 01:12:49" itemprop="dateCreated datePublished" datetime="2026-02-25T01:12:49Z">2026-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-11 07:57:39" itemprop="dateModified" datetime="2026-04-11T07:57:39Z">2026-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5270/" itemprop="url" rel="index"><span itemprop="name">COMP5270</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="what-to-know-before-start">what to know before start</h1>
+<p><code>O(), Ω(), Θ()</code></p>
+<ul>
+<li><p>渐近复杂度：<span class="math inline">\(O(\cdot),\
+\Omega(\cdot),\ \Theta(\cdot)\)</span></p></li>
+<li><p>概率统计：<span class="math inline">\(\Pr[\cdot],\
+\mathbb{E}[\cdot],\ \mathrm{Var}[\cdot],\ X\sim\pi\)</span></p></li>
+</ul>
+<h2
+id="一渐近复杂度符号asymptotic-notation">一、渐近复杂度符号（Asymptotic
+Notation）</h2>
+<p>![[asymptotic-notation-theta-o-omega.png]] <span
+class="math inline">\(O(1) &lt; O(\log(n)) &lt; O(n) &lt; O(n \log n)
+&lt; O(n^2) &lt; O(2^n) &lt; O(n!) &lt; O(n^n)\)</span><br />
+需要注意的是：对数函数在没有底数时，默认底数为 <span
+class="math inline">\(2\)</span>；如 <span class="math inline">\(lg,n =
+\log n = \log_2 n\)</span>，因为计算机中很多程序是用二分法实现的。</p>
+<p>设 f(n), g(n) 为非负函数，且 n 足够大时有意义。</p>
+<h3 id="ogn上界big-o">1. <span
+class="math inline">\(O(g(n))\)</span>：上界（Big-O）</h3>
+<p>定义：设 <span class="math inline">\(f(n)\)</span> 和 <span
+class="math inline">\(g(n)\)</span> 是定义域为自然数集 <span
+class="math inline">\(N\)</span> 上的函数。若存在正数 <span
+class="math inline">\(c\)</span> 和 <span
+class="math inline">\(n_0\)</span>，使得对一切 <span
+class="math inline">\(n \ge n_0\)</span> 都有 <span
+class="math inline">\(0 \le f(n) \le c g(n)\)</span> 成立。</p>
+<p><span class="math display">\[  
+0\le f(n)\le c\,g(n).  
+\]</span></p>
+<p>则称 <span class="math inline">\(f(n)\)</span> 的渐进的上界是 <span
+class="math inline">\(g(n)\)</span>，记作 <span
+class="math inline">\(f(n) = O(g(n))\)</span>。 通俗的说 <span
+class="math inline">\(n\)</span> 满足一定条件范围内，函数 <span
+class="math inline">\(f(n)\)</span> 的阶不高于函数 <span
+class="math inline">\(g(n)\)</span>。</p>
+<p><span class="math display">\[  
+f(n)=O(g(n))  
+\]</span></p>
+<p>直观：<span class="math inline">\(f(n)\)</span> 的增长速度“最多”与
+<span class="math inline">\(g(n)\)</span> 同阶（差一个常数倍）。</p>
+<p>例子：</p>
+<p><span class="math display">\[  
+3n+2 = O(n),\qquad n\log n = O(n^2).  
+\]</span></p>
+<hr />
+<h3 id="omegagn下界big-omega">2. <span
+class="math inline">\(\Omega(g(n))\)</span>：下界（Big-Omega）</h3>
+<p>定义：设 <span class="math inline">\(f(n)\)</span> 和 <span
+class="math inline">\(g(n)\)</span> 是定义域为自然数集 <span
+class="math inline">\(N\)</span> 上的函数。若存在正数 <span
+class="math inline">\(c\)</span> 和 <span
+class="math inline">\(n_0\)</span>，使得对一切 <span
+class="math inline">\(n \ge n_0\)</span> 都有 <span
+class="math inline">\(0 \le c g(n) \le f(n)\)</span> 成立。</p>
+<p><span class="math display">\[  
+0\le c\,g(n)\le f(n).  
+\]</span></p>
+<p>则称 <span class="math inline">\(f(n)\)</span> 的渐进的下界是 <span
+class="math inline">\(g(n)\)</span>，记作 <span
+class="math inline">\(f(n) = \Omega(g(n))\)</span>。通俗的说 <span
+class="math inline">\(n\)</span> 满足一定条件范围内，函数 <span
+class="math inline">\(f(n)\)</span> 的阶不低于函数 <span
+class="math inline">\(g(n)\)</span>。</p>
+<p><span class="math display">\[  
+f(n)=\Omega(g(n))  
+\]</span></p>
+<p>直观：<span class="math inline">\(f(n)\)</span> 的增长速度“至少”与
+<span class="math inline">\(g(n)\)</span> 同阶。</p>
+<p>例子：</p>
+<p><span class="math display">\[  
+3n+2=\Omega(n),\qquad n^2=\Omega(n\log n).  
+\]</span></p>
+<hr />
+<h3 id="thetagn紧确界big-theta">3. <span
+class="math inline">\(\Theta(g(n))\)</span>：紧确界（Big-Theta）</h3>
+<p>定义：<span class="math inline">\(\Theta(g(n)) =
+f(n)\)</span>：存在正常量 <span
+class="math inline">\(c_1\)</span>、<span
+class="math inline">\(c_2\)</span> 和 <span
+class="math inline">\(n_0\)</span>，使得对所有 <span
+class="math inline">\(n \ge n_0\)</span>，</p>
+<p><span class="math display">\[  
+0\le c_1 g(n)\le f(n)\le c_2 g(n).  
+\]</span></p>
+<p>若存在正常量 <span class="math inline">\(c_1\)</span>、<span
+class="math inline">\(c_2\)</span>，使得对于足够大的 <span
+class="math inline">\(n\)</span>，函数 <span
+class="math inline">\(f(n)\)</span> 能夹入”<span
+class="math inline">\(c_1 g(n)\)</span> 与 <span
+class="math inline">\(c_2 g(n)\)</span> 之间，则 <span
+class="math inline">\(f(n)\)</span> 属于集合 <span
+class="math inline">\(\Theta(g(n))\)</span>，记作 <span
+class="math inline">\(f(n) \in
+\Theta(g(n))\)</span>。作为代替，我们通常记</p>
+<p><span class="math display">\[  
+f(n)=\Theta(g(n))  
+\]</span></p>
+<p>直观：<span class="math inline">\(f(n)\)</span> 与 <span
+class="math inline">\(g(n)\)</span> 同一个量级（同时有上界和下界）。</p>
+<p>例子：</p>
+<p><span class="math display">\[  
+3n+2=\Theta(n),\qquad 5n^2+7n=\Theta(n^2).  
+\]</span></p>
+<hr />
+<h2 id="二概率与统计符号">二、概率与统计符号</h2>
+<h3 id="prcdot概率probability">1. <span
+class="math inline">\(\Pr[\cdot]\)</span>：概率（Probability）</h3>
+<p>定义：事件发生的概率，取值在 [0,1]。</p>
+<p><span class="math display">\[  
+\Pr(A)\in[0,1].  
+\]</span></p>
+<p>常见形式：</p>
+<p><span class="math display">\[  
+\Pr(X=x),\quad \Pr(A\cap B),\quad \Pr(A\mid B).  
+\]</span></p>
+<hr />
+<h3 id="mathbbecdot期望expectation">2. <span
+class="math inline">\(\mathbb{E}[\cdot]\)</span>：期望（Expectation）</h3>
+<p>定义：随机变量在概率权重下的平均值（长期平均）。</p>
+<p><span class="math display">\[  
+\mathbb{E}[X].  
+\]</span></p>
+<p>离散型随机变量（取值集合为 <span
+class="math inline">\(S\)</span>）：</p>
+<p><span class="math display">\[  
+\mathbb{E}[X]=\sum_{x\in S} x\,\Pr(X=x).  
+\]</span></p>
+<p>连续型随机变量（密度为 <span
+class="math inline">\(f_X\)</span>）：</p>
+<p><span class="math display">\[  
+\mathbb{E}[X]=\int_{-\infty}^{\infty} x\,f_X(x)\,dx.  
+\]</span></p>
+<p>更一般地，对函数 g：</p>
+<p><span class="math display">\[  
+\mathbb{E}[g(X)] = \begin{cases} \sum_{x\in S} g(x)\Pr(X=x), &amp;
+\text{离散}\\ \int_{-\infty}^{\infty} g(x)f_X(x)\,dx, &amp; \text{连续}
+\end{cases}  
+\]</span></p>
+<hr />
+<h3 id="mathrmvarcdot方差variance">3. <span
+class="math inline">\(\mathrm{Var}[\cdot]\)</span>：方差（Variance）</h3>
+<p>定义：衡量随机变量围绕期望的波动程度。</p>
+<p><span class="math display">\[  
+\mathrm{Var}(X)=\mathbb{E}\!\left[(X-\mathbb{E}[X])^2\right].  
+\]</span></p>
+<p>常用等价式：</p>
+<p><span class="math display">\[  
+\mathrm{Var}(X)=\mathbb{E}[X^2]-\big(\mathbb{E}[X]\big)^2.  
+\]</span></p>
+<p>性质（常用）：</p>
+<p><span class="math display">\[  
+\mathrm{Var}(aX+b)=a^2\mathrm{Var}(X).  
+\]</span></p>
+<hr />
+<h3 id="xsimpi服从分布-pi">4. <span
+class="math inline">\(X\sim\pi\)</span>：服从分布 <span
+class="math inline">\(\pi\)</span></h3>
+<p>定义：随机变量 <span class="math inline">\(X\)</span> 的概率分布是
+<span class="math inline">\(\pi\)</span>。</p>
+<p><span class="math display">\[  
+X\sim\pi.  
+\]</span></p>
+<p>例子：</p>
+<p><span class="math display">\[  
+X\sim\mathcal{N}(0,1),\qquad X\sim\mathrm{Bernoulli}(p),\qquad
+X\sim\mathrm{Poisson}(\lambda).  
+\]</span></p>
+<p>含义分别为：标准正态分布、参数为 <span
+class="math inline">\(p\)</span> 的伯努利分布、参数为<span
+class="math inline">\(\lambda\)</span> 的泊松分布。</p>
+<hr />
+<h2 id="三快速对照表">三、快速对照表</h2>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>名称</th>
+<th>核心含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O(g(n))</td>
+<td>上界</td>
+<td>增长速度至多是 g(n) 的常数倍</td>
+</tr>
+<tr>
+<td>(g(n))</td>
+<td>下界</td>
+<td>增长速度至少是 g(n) 的常数倍</td>
+</tr>
+<tr>
+<td>(g(n))</td>
+<td>紧确界</td>
+<td>增长速度与 g(n) 同阶</td>
+</tr>
+<tr>
+<td></td>
+<td>概率</td>
+<td>事件发生的可能性</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>期望</td>
+<td>随机变量平均水平</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>方差</td>
+<td>随机变量波动程度</td>
+</tr>
+<tr>
+<td>X</td>
+<td>分布记号</td>
+<td>X 服从分布 </td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四简短示例连起来看">四、简短示例（连起来看）</h2>
+<p>若算法运行时间 <span
+class="math inline">\(T(n)=3n+2\)</span>，则：</p>
+<p><span class="math display">\[  
+T(n)=O(n),\quad T(n)=\Omega(n),\quad T(n)=\Theta(n).  
+\]</span></p>
+<p>若随机变量 <span
+class="math inline">\(X\sim\mathrm{Bernoulli}(p)\)</span>，则：</p>
+<p><span class="math display">\[  
+\Pr(X=1)=p,\quad \Pr(X=0)=1-p,  
+\]</span></p>
+<p><span class="math display">\[  
+\mathbb{E}[X]=p,\quad \mathrm{Var}(X)=p(1-p).  
+\]</span> # Tutorial ## Problem 1 ![[problem-1-cards-same-suit.png]]
+第一题可以用“指示变量 + 期望线性性”完整做出来。</p>
+<p>题目：4n 张牌，4 种花色各 n
+张。随机洗牌后，相邻同花色对数的期望是多少？</p>
+<p>设随机变量</p>
+<p><span class="math display">\[  
+X=\text{相邻同花色对的总数}.  
+\]</span></p>
+<p>牌位有 <span
+class="math inline">\(1,2,\dots,4n，\)</span>所以相邻对一共有 <span
+class="math inline">\(4n-1\)</span>个：<span
+class="math inline">\((1,2),(2,3),\dots,(4n-1,4n)\)</span>。</p>
+<p>对每个 <span class="math inline">\(i=1,\dots,4n-1\)</span>，定义</p>
+<p><span class="math display">\[  
+I_i= \begin{cases} 1, &amp; \text{第 }i\text{ 张和第 }i+1\text{
+张同花色}\\ 0, &amp; \text{否则} \end{cases}  
+\]</span></p>
+<p>那么</p>
+<p><span class="math display">\[  
+X=\sum_{i=1}^{4n-1} I_i.  
+\]</span></p>
+<p>由期望线性性：</p>
+<p><span class="math display">\[  
+\mathbb E[X]=\sum_{i=1}^{4n-1}\mathbb E[I_i]
+=\sum_{i=1}^{4n-1}\Pr(I_i=1).  
+\]</span></p>
+<p>现在算<span class="math inline">\(\Pr(I_i=1)\)</span>（任意 i
+都一样）：</p>
+<ul>
+<li><p>先看第 <span class="math inline">\(i\)</span>
+张，不管它是什么花色；</p></li>
+<li><p>剩下 <span
+class="math inline">\(4n-1\)</span>张里，和它同花色的还剩 <span
+class="math inline">\(n-1\)</span> 张。</p></li>
+</ul>
+<p>所以</p>
+<p><span class="math display">\[  
+\Pr(I_i=1)=\frac{n-1}{4n-1}.  
+\]</span></p>
+<p>代回去：</p>
+<p><span class="math display">\[  
+\mathbb E[X]=(4n-1)\cdot \frac{n-1}{4n-1}=n-1.  
+\]</span></p>
+<p>结论：</p>
+<p><span class="math display">\[  
+\boxed{\mathbb E[X]=n-1}.  
+\]</span></p>
+<p>补充两个容易错的点：</p>
+<ol type="1">
+<li><p>不是 4n 个相邻对，而是 4n-1 个。</p></li>
+<li><p>不需要假设这些相邻事件独立；期望线性性永远成立。</p></li>
+</ol>
+<h2 id="problem-2">Problem 2</h2>
+<p>![[problem-2-consecutive-runs-of-3-ones.png]]
+第二题本质是在数：长度为 2024 的随机比特串里，有多少个位置
+<code>i</code> 满足 <code>(第 i 位, 第 i+1 位, 第 i+2 位) = 111</code>。
+注意这里<strong>允许重叠</strong>，因为题目给了 <code>1111</code> 有 2
+个（位置 1-3 和 2-4）。</p>
+<p>设比特串是 <span
+class="math inline">\(B_1,\dots,B_{2024}\)</span>，每位独立且 <span
+class="math inline">\(\Pr(B_j=1)=1/2\)</span>。</p>
+<ol type="1">
+<li>定义指示变量</li>
+</ol>
+<p><span class="math display">\[  
+I_i=\mathbf 1[(B_i,B_{i+1},B_{i+2})=(1,1,1)],\quad i=1,\dots,2022.  
+\]</span></p>
+<p>为什么是 2022？因为长度为 3 的窗口起点只能到 2024-3+1=2022。</p>
+<ol start="2" type="1">
+<li>总个数写成和</li>
+</ol>
+<p><span class="math display">\[  
+X=\sum_{i=1}^{2022} I_i.  
+\]</span></p>
+<ol start="3" type="1">
+<li>求每一项期望</li>
+</ol>
+<p><span class="math display">\[  
+\mathbb E[I_i]=\Pr(I_i=1)=\Pr(B_i=1,B_{i+1}=1,B_{i+2}=1)=(1/2)^3=1/8.  
+\]</span></p>
+<ol start="4" type="1">
+<li>用期望线性性</li>
+</ol>
+<p><span class="math display">\[  
+\mathbb E[X]=\sum_{i=1}^{2022}\mathbb
+E[I_i]=2022\cdot\frac18=\frac{2022}{8}=\frac{1011}{4}=252.75.  
+\]</span></p>
+<p>结论：</p>
+<p><span class="math display">\[  
+\boxed{\mathbb E[X]=252.75}  
+\]</span></p>
+<p>补充：期望可以不是整数；它表示“重复很多次实验后的平均个数”。
+（这里不需要窗口之间独立，线性性直接成立。）</p>
+<h2 id="problem-3">Problem 3</h2>
+<p>![[problem-3-fixed-point-permutation.png]]</p>
+<p>题目：在 <span class="math inline">\(\{1,2,\dots,n\}\)</span>
+的均匀随机排列 <span class="math inline">\(\pi\)</span>
+中，定义不动点为满足 <span class="math inline">\(\pi(i)=i\)</span>的位置
+<span class="math inline">\(i\)</span>。设 <span
+class="math inline">\(X\)</span> 为不动点个数。求 <span
+class="math inline">\(E[X]\)</span> 和 <span
+class="math inline">\(\mathrm{Var}(X)\)</span>。</p>
+<ol type="1">
+<li>定义指示变量</li>
+</ol>
+<p><span class="math display">\[  
+X_i=\mathbf{1}\{\pi(i)=i\},\quad i=1,\dots,n  
+\]</span></p>
+<p>则</p>
+<p><span class="math display">\[  
+X=\sum_{i=1}^n X_i.  
+\]</span></p>
+<ol start="2" type="1">
+<li>先求期望 <span class="math inline">\(E[X]\)</span> 对任意 <span
+class="math inline">\(i\)</span>，因为排列均匀随机，<span
+class="math inline">\(\pi(i)\)</span> 在 <span
+class="math inline">\(1,\dots,n\)</span> 上等可能：</li>
+</ol>
+<p><span class="math display">\[  
+P(\pi(i)=i)=\frac1n.  
+\]</span></p>
+<p>所以</p>
+<p><span class="math display">\[  
+E[X_i]=P(X_i=1)=\frac1n.  
+\]</span></p>
+<p>由期望线性性：</p>
+<p><span class="math display">\[  
+E[X]=\sum_{i=1}^n E[X_i]=\sum_{i=1}^n \frac1n=1.  
+\]</span></p>
+<ol start="3" type="1">
+<li>求方差 <span class="math inline">\(\mathrm{Var}(X)\)</span></li>
+</ol>
+<p><span class="math display">\[  
+\mathrm{Var}(X)=E[X^2]-E[X]^2.  
+\]</span></p>
+<p>已知 <span class="math inline">\(E[X]=1\)</span>，只需算 <span
+class="math inline">\(E[X^2]\)</span>。</p>
+<ol start="4" type="1">
+<li>展开 <span class="math inline">\(X^2\)</span></li>
+</ol>
+<p><span class="math display">\[  
+X^2=\left(\sum_{i=1}^n X_i\right)^2 =\sum_{i=1}^n X_i^2+\sum_{i\ne
+j}X_iX_j.  
+\]</span></p>
+<p>取期望：</p>
+<p><span class="math display">\[  
+E[X^2]=\sum_{i=1}^n E[X_i^2]+\sum_{i\ne j}E[X_iX_j].  
+\]</span> 关键在于“交叉项怎么计数”。</p>
+<p>有两种等价写法：</p>
+<ol start="2" type="1">
+<li><p>按<strong>无序对</strong>写： <span class="math display">\[
+   \left(\sum_{i=1}^n X_i\right)^2
+   = \sum_{i=1}^n X_i^2 + 2\sum_{1\le i&lt;j\le n}X_iX_j
+   \]</span> 这里有系数 <span
+class="math inline">\(2\)</span>。</p></li>
+<li><p>按<strong>有序对</strong>写： <span class="math display">\[
+   \left(\sum_{i=1}^n X_i\right)^2
+   = \sum_{i=1}^n X_i^2 + \sum_{i\ne j}X_iX_j
+   \]</span> 这里没有显式的 <span class="math inline">\(2\)</span>，因为
+<span class="math inline">\((i,j)\)</span> 和 <span
+class="math inline">\((j,i)\)</span> 都在 <span
+class="math inline">\(\sum_{i\ne j}\)</span> 里，等价于前面的 <span
+class="math inline">\(2\sum_{i&lt;j}\)</span>。</p></li>
+</ol>
+<p>所以不是 <span class="math inline">\(2E[X_i^2]\)</span>。<br />
+“2”乘的是交叉项，不是平方项。平方项每个只出现一次。</p>
+<ol start="4" type="1">
+<li>计算第一项 <span class="math inline">\(X_i\in\{0,1\}\)</span>，所以
+<span class="math inline">\(X_i^2=X_i\)</span>。因此</li>
+</ol>
+<p><span class="math display">\[  
+\sum_{i=1}^n E[X_i^2]=\sum_{i=1}^n E[X_i]=1.  
+\]</span></p>
+<ol start="6" type="1">
+<li>计算第二项</li>
+</ol>
+<p><span class="math display">\[  
+E[X_iX_j]=P(\pi(i)=i,\ \pi(j)=j),\quad i\ne j.  
+\]</span></p>
+<p>用条件概率：</p>
+<p><span class="math display">\[  
+P(\pi(i)=i,\pi(j)=j)=P(\pi(i)=i)\,P(\pi(j)=j\mid \pi(i)=i)
+=\frac1n\cdot\frac1{n-1} =\frac1{n(n-1)}.  
+\]</span></p>
+<p>而 <span class="math inline">\(i\ne j\)</span> 的有序对个数是 <span
+class="math inline">\(n(n-1)\)</span>，所以</p>
+<p><span class="math display">\[  
+\sum_{i\ne j}E[X_iX_j] =n(n-1)\cdot\frac1{n(n-1)}=1.  
+\]</span></p>
+<ol start="7" type="1">
+<li>合并</li>
+</ol>
+<p><span class="math display">\[  
+E[X^2]=1+1=2.  
+\]</span></p>
+<p><span class="math display">\[  
+\mathrm{Var}(X)=E[X^2]-E[X]^2=2-1^2=1.  
+\]</span></p>
+<p>结论：</p>
+<p><span class="math display">\[  
+\boxed{E[X]=1,\quad \mathrm{Var}(X)=1.}  
+\]</span></p>
+<hr />
+<p><strong>知识点总结</strong></p>
+<ol type="1">
+<li><p>指示变量法：计数问题写成 <span class="math inline">\(X=\sum
+X_i\)</span>。</p></li>
+<li><p>期望线性性：<span class="math inline">\(E[\sum X_i]=\sum
+E[X_i]\)</span>，不要求独立。</p></li>
+<li><p>随机排列对称性：<span
+class="math inline">\(P(\pi(i)=i)=1/n\)</span>。</p></li>
+<li><p>平方展开：<span class="math inline">\((\sum X_i)^2=\sum
+X_i^2+\sum_{i\ne j}X_iX_j\)</span>。</p></li>
+<li><p>指示变量性质：<span
+class="math inline">\(X_i\in\{0,1\}\Rightarrow
+X_i^2=X_i\)</span>。</p></li>
+<li><p>交集概率计算：<span class="math inline">\(P(A\cap B)=P(A)P(B\mid
+A)\)</span>，不是默认直接相乘。</p></li>
+<li><p>有序对计数：<span class="math inline">\((i,j),i\ne j 共
+n(n-1)\)</span> 个。</p></li>
+<li><p>方差公式：<span
+class="math inline">\(\mathrm{Var}(X)=E[X^2]-E[X]^2\)</span>。</p></li>
+</ol>
+<h2 id="problem-4">Problem 4</h2>
+<p>![[problem-4-infinite-expectation.png]] 1. 给出一个定义在 <span
+class="math inline">\([0,\infty)\)</span> 上的随机变量 <span
+class="math inline">\(X\)</span>，使得 <span
+class="math inline">\(\mathbb E[X]=\infty\)</span>。</p>
+<ol start="2" type="1">
+<li>给出一个定义在 <span class="math inline">\(\mathbb N\)</span>
+上的随机变量 <span class="math inline">\(X\)</span>，使得 <span
+class="math inline">\(\mathbb E[X]=\infty\)</span>。</li>
+</ol>
+<p><strong>口诀</strong> <span class="math display">\[  
+\sum \frac1{n^p},\ \int_1^\infty \frac1{x^p}dx  
+\]</span></p>
+<p>都是 <span class="math inline">\(p&gt;1\)</span> 收敛，<span
+class="math inline">\(p\le1\)</span> 发散。</p>
+<p>看“收敛/发散”就看<strong>极限是不是有限数</strong>。</p>
+<ol type="1">
+<li>积分的收敛/发散（广义积分）<br />
+<span class="math display">\[
+\int_0^\infty g(x)\,dx:=\lim_{R\to\infty}\int_0^R g(x)\,dx
+\]</span></li>
+</ol>
+<ul>
+<li>极限是有限数：收敛<br />
+</li>
+<li>极限是 <span class="math inline">\(\infty\)</span>
+或不存在：发散</li>
+</ul>
+<ol start="2" type="1">
+<li>级数的收敛/发散<br />
+<span class="math display">\[
+\sum_{n=1}^\infty a_n:=\lim_{N\to\infty}\sum_{n=1}^N a_n
+\]</span></li>
+</ol>
+<ul>
+<li>极限有限：收敛<br />
+</li>
+<li>否则发散</li>
+</ul>
+<p>常用秒判（你现在最有用）：</p>
+<ol type="1">
+<li><span class="math inline">\(p\)</span>-型积分<br />
+<span class="math display">\[
+\int_1^\infty \frac1{x^p}dx
+\]</span></li>
+</ol>
+<ul>
+<li><span class="math inline">\(p&gt;1\)</span> 收敛<br />
+</li>
+<li><span class="math inline">\(p\le 1\)</span> 发散</li>
+</ul>
+<ol start="2" type="1">
+<li><span class="math inline">\(p\)</span>-型级数<br />
+<span class="math display">\[
+\sum_{n=1}^\infty \frac1{n^p}
+\]</span></li>
+</ol>
+<ul>
+<li><span class="math inline">\(p&gt;1\)</span> 收敛<br />
+</li>
+<li><span class="math inline">\(p\le1\)</span> 发散（如调和级数 <span
+class="math inline">\(\sum 1/n\)</span> 发散）</li>
+</ul>
+<ol start="3" type="1">
+<li>比较法<br />
+如果 <span class="math inline">\(g(x)\)</span> 在无穷远处“长得像” <span
+class="math inline">\(1/x^p\)</span>，就按上面判。<br />
+你那题里： <span class="math display">\[
+\frac{x}{(1+x)^2}\sim \frac1x
+\]</span> 所以积分发散，<span
+class="math inline">\(E[X]=\infty\)</span>。</li>
+</ol>
+<hr />
+<p>什么是离散型/连续型随机变量：</p>
+<ol type="1">
+<li>离散型（Discrete）<br />
+</li>
+</ol>
+<ul>
+<li>取值是可数的（如 <span
+class="math inline">\(1,2,3,\dots\)</span>）<br />
+</li>
+<li>用概率质量函数 <span class="math inline">\(P(X=k)\)</span><br />
+</li>
+<li>期望： <span class="math display">\[
+E[X]=\sum_k k\,P(X=k)
+\]</span></li>
+</ul>
+<ol start="2" type="1">
+<li>连续型（Continuous）<br />
+</li>
+</ol>
+<ul>
+<li>取值在区间上（不可数）<br />
+</li>
+<li>用密度函数 <span class="math inline">\(f(x)\)</span>，满足 <span
+class="math inline">\(\int f(x)dx=1\)</span><br />
+</li>
+<li><span class="math inline">\(P(X=a)=0\)</span>（单点概率为0）<br />
+</li>
+<li>期望： <span class="math display">\[
+E[X]=\int x f(x)\,dx
+\]</span></li>
+</ul>
+<p>一句话：<br />
+- 离散型用“求和”<br />
+- 连续型用“积分”。</p>
+<p><strong>3步模板（构造 <span
+class="math inline">\(E[X]=\infty\)</span>）</strong></p>
+<ol type="1">
+<li><p>先选“慢衰减尾巴” 连续型常用：<span class="math inline">\(f(x)\sim
+1/x^2\)</span>（在 <span class="math inline">\([1,\infty)\)</span>）
+离散型常用：<span class="math inline">\(p_n\sim 1/n^2\)</span></p></li>
+<li><p>调成合法分布（总概率=1） 连续：乘常数 C 让 <span
+class="math inline">\(\int f=1\)</span> 离散：乘常数 C 让 <span
+class="math inline">\(\sum p_n=1\)</span></p></li>
+<li><p>检查期望 连续：<span class="math inline">\(\int x
+f(x)\,dx\)</span> 是否发散（通常变成 <span class="math inline">\(\int
+1/x\)</span>） 离散：<span class="math inline">\(\sum n p_n\)</span>
+是否发散（通常变成 <span class="math inline">\(\sum
+1/n\)</span>）</p></li>
+<li><p>连续（<span class="math inline">\([0,\infty)\)</span>）</p></li>
+</ol>
+<p><span class="math display">\[  
+f(x)=\frac1{(1+x)^2},\quad x\ge0  
+\]</span></p>
+<p><span class="math display">\[  
+\int_0^\infty f(x)\,dx=1,\qquad E[X]=\int_0^\infty
+\frac{x}{(1+x)^2}dx=\infty  
+\]</span></p>
+<ol start="5" type="1">
+<li>离散（<span class="math inline">\(\mathbb N\)</span>）</li>
+</ol>
+<p><span class="math display">\[  
+P(X=n)=\frac1{n(n+1)},\quad n\ge1  
+\]</span></p>
+<p><span class="math display">\[  
+\sum_{n=1}^\infty P(X=n)=1,\qquad E[X]=\sum_{n=1}^\infty
+\frac1{n+1}=\infty  
+\]</span></p>
+<h2 id="problem-5">Problem 5</h2>
+<p>![[problem-3-fixed-point-permutation.png]]</p>
+<p><strong>题目翻译</strong></p>
+<p>证明课上的结论：如果随机变量 <span class="math inline">\(X\)</span>
+的方差有限，那么 <span class="math display">\[
+\mathrm{Var}(X)=\mathbb E[X^2]-\big(\mathbb E[X]\big)^2.
+\]</span></p>
+<p><strong>解题过程</strong></p>
+<p>设 <span class="math display">\[
+\mu=\mathbb E[X].
+\]</span> 由方差定义： <span class="math display">\[
+\mathrm{Var}(X)=\mathbb E\!\left[(X-\mu)^2\right].
+\]</span></p>
+<p>展开平方： <span class="math display">\[
+(X-\mu)^2=X^2-2\mu X+\mu^2.
+\]</span></p>
+<p>两边取期望（用期望线性性）： <span class="math display">\[
+\mathrm{Var}(X)=\mathbb E[X^2]-2\mu\,\mathbb E[X]+\mu^2.
+\]</span></p>
+<p>因为 <span class="math inline">\(\mu=\mathbb E[X]\)</span>，所以
+<span class="math display">\[
+\mathrm{Var}(X)=\mathbb E[X^2]-2\mu^2+\mu^2
+=\mathbb E[X^2]-\mu^2
+=\mathbb E[X^2]-\big(\mathbb E[X]\big)^2.
+\]</span></p>
+<p>证毕。</p>
+<p><strong>知识点</strong></p>
+<ol type="1">
+<li>方差定义：<span class="math inline">\(\mathrm{Var}(X)=\mathbb
+E[(X-\mathbb E[X])^2]\)</span><br />
+</li>
+<li>代数展开：<span
+class="math inline">\((a-b)^2=a^2-2ab+b^2\)</span><br />
+</li>
+<li>期望线性性：<span class="math inline">\(\mathbb E[A+B]=\mathbb
+E[A]+\mathbb E[B]\)</span>，<span class="math inline">\(\mathbb
+E[cX]=c\,\mathbb E[X]\)</span><br />
+</li>
+<li>“方差有限”保证相关期望量是良定义的，推导合法。</li>
+</ol>
+<h2 id="problem-6">Problem 6</h2>
+<p>![[problem-4-infinite-expectation.png]]</p>
+<p><strong>题目翻译</strong></p>
+<p>证明课上的结论：如果随机变量 <span class="math inline">\(X\)</span>
+取值于 <span class="math inline">\(\mathbb
+N=\{0,1,2,\dots\}\)</span>，且 <span class="math inline">\(\mathbb
+E[X]&lt;\infty\)</span>，那么 <span class="math display">\[
+\mathbb E[X]=\sum_{n=1}^{\infty}\Pr[X\ge n].
+\]</span></p>
+<p><strong>解题过程</strong></p>
+<p>对每个样本点 <span class="math inline">\(\omega\)</span>，因为 <span
+class="math inline">\(X(\omega)\)</span> 是非负整数，有恒等式 <span
+class="math display">\[
+X(\omega)=\sum_{n=1}^{\infty}\mathbf 1_{\{X(\omega)\ge n\}}.
+\]</span> （若 <span class="math inline">\(X(\omega)=k\)</span>，右边前
+<span class="math inline">\(k\)</span> 项是 1，后面全是 0，总和就是
+<span class="math inline">\(k\)</span>。）</p>
+<p>两边取期望： <span class="math display">\[
+\mathbb E[X]=\mathbb E\!\left[\sum_{n=1}^{\infty}\mathbf 1_{\{X\ge
+n\}}\right].
+\]</span></p>
+<p>由于求和项非负，可用单调收敛定理（等价地
+Tonelli）交换期望与无穷求和： <span class="math display">\[
+\mathbb E[X]
+=\sum_{n=1}^{\infty}\mathbb E[\mathbf 1_{\{X\ge n\}}]
+=\sum_{n=1}^{\infty}\Pr(X\ge n).
+\]</span></p>
+<p>即得所证。</p>
+<p><strong>知识点</strong></p>
+<ol type="1">
+<li>非负整数随机变量可写成指示变量和：<span
+class="math inline">\(X=\sum_{n\ge1}\mathbf 1_{\{X\ge
+n\}}\)</span>。<br />
+</li>
+<li>指示变量期望：<span class="math inline">\(\mathbb E[\mathbf
+1_A]=\Pr(A)\)</span>。<br />
+</li>
+<li>单调收敛定理 / Tonelli：非负项时可交换 <span
+class="math inline">\(\mathbb E\)</span> 与无穷和。<br />
+</li>
+<li>尾和公式（tail-sum formula）：<span class="math inline">\(\mathbb
+E[X]=\sum_{n\ge1}\Pr(X\ge n)\)</span>。<br />
+</li>
+<li>条件 <span class="math inline">\(\mathbb E[X]&lt;\infty\)</span>
+保证右侧级数是有限值。</li>
+</ol>
+<h2 id="problem-7">Problem 7</h2>
+<p>![[problem-7-biased-coin-fair-toss.png]]
+<strong>中文翻译</strong></p>
+<p>题目 7：假设你有一枚有偏硬币，正面概率为 <span
+class="math inline">\(p=\Pr[\text{Heads}]\in(0,1)\)</span>，但 p
+的值未知。你的目标是：只能使用这枚有偏硬币，生成一次<strong>均匀随机</strong>的掷硬币结果（即公平硬币结果）。</p>
+<ol type="1">
+<li><p>描述一种实现该目标的策略。</p></li>
+<li><p>给出一个关于未知参数 p
+的界：为了生成一次公平结果，期望需要掷这枚有偏硬币多少次。</p></li>
+</ol>
+<hr />
+<p><strong>解题思路（标准做法：Von Neumann 方法）</strong></p>
+<ol type="1">
+<li><p>连掷两次硬币。</p></li>
+<li><p>若结果是 <code>HT</code>，输出 <code>H</code>；若结果是
+<code>TH</code>，输出 <code>T</code>。</p></li>
+<li><p>若结果是 <code>HH</code> 或 <code>TT</code>，丢弃这一轮，重新做第
+1 步。</p></li>
+</ol>
+<p>为什么公平：</p>
+<p><span class="math display">\[  
+\Pr(HT)=p(1-p),\quad \Pr(TH)=(1-p)p  
+\]</span></p>
+<p>两者相等，所以在“接受事件” {HT,TH} 下，</p>
+<p><span class="math display">\[  
+\Pr(\text{输出 }H)=\Pr(\text{输出 }T)=\tfrac12.  
+\]</span></p>
+<p>期望掷币次数：</p>
+<ul>
+<li>一轮成功概率</li>
+</ul>
+<p><span class="math display">\[  
+q=\Pr(HT\text{ 或 }TH)=2p(1-p).  
+\]</span></p>
+<ul>
+<li>需要的轮数 <span class="math inline">\(N\sim
+\text{Geom}(q)\)</span>，</li>
+</ul>
+<p><span class="math display">\[  
+\mathbb E[N]=\frac1q.  
+\]</span></p>
+<ul>
+<li>每轮 2 次掷币，所以</li>
+</ul>
+<p><span class="math display">\[  
+\mathbb E[T]=2\mathbb E[N]=\frac{2}{2p(1-p)}=\frac{1}{p(1-p)}.  
+\]</span></p>
+<p>这个值对该策略是<strong>精确值</strong>（不只是上界）。 并且不存在与
+<span class="math inline">\(p\)</span> 无关的统一常数上界（当 <span
+class="math inline">\(p\to0\)</span> 或 <span
+class="math inline">\(p\to1\)</span> 时会变大）。</p>
+<hr />
+<p><strong>解这题需要知道的知识点</strong></p>
+<ol type="1">
+<li><p>独立伯努利试验（每次掷币独立）。</p></li>
+<li><p>条件概率与对称性（<span
+class="math inline">\(\Pr(HT)=\Pr(TH)\)</span>）。</p></li>
+<li><p>拒绝采样思想（<code>HH/TT</code> 丢弃重来）。</p></li>
+<li><p>几何分布的期望（<span class="math inline">\(\mathbb
+E[N]=1/q\)</span>）。</p></li>
+<li><p>期望线性放缩（<span class="math inline">\(总次数 = 每轮次数
+\times 轮数期望\)</span>）。</p></li>
+</ol>
+<!-- 图谱链接（自动添加） -->
+<p>[[标签集合/COMP5270]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/3977b5c.html" rel="prev" title="联邦学习">
+                  <i class="fa fa-angle-left"></i> 联邦学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/a8349c4b.html" rel="next" title="COMP5270 口诀速记">
+                  COMP5270 口诀速记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">340k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">20:36</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
