@@ -22,12 +22,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="CTF Web信息搜集：备份文件、目录扫描、Banner获取与">
+    <meta name="description" content="CTF线上赛Web题的信息搜集攻略，涵盖备份文件、目录扫描、Banner获取与源码泄露等核心技巧。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Web Security">
+<meta property="og:title" content="CTF Web信息搜集完全指南">
 <meta property="og:url" content="http://example.com/posts/1c997186.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="CTF Web信息搜集：备份文件、目录扫描、Banner获取与">
+<meta property="og:description" content="CTF线上赛Web题的信息搜集攻略，涵盖备份文件、目录扫描、Banner获取与源码泄露等核心技巧。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038144557-a1406192-6a85-4c14-8eb9-5ac829e1183c.png#averageHue=%23f4f4f4&amp;clientId=ud68174ae-9c37-4&amp;from=paste&amp;height=290&amp;id=u41eb8dfe&amp;originHeight=580&amp;originWidth=2570&amp;originalType=binary&amp;ratio=2&amp;rotation=0&amp;showTitle=false&amp;size=85650&amp;status=done&amp;style=none&amp;taskId=ue5603dcb-d34c-4e99-826a-6040e35c281&amp;title=&amp;width=1285">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038911744-f46386fc-7dd0-475a-9153-46e113142c69.png#averageHue=%23fdfdfd&amp;clientId=ud68174ae-9c37-4&amp;from=paste&amp;height=629&amp;id=ub9c24e96&amp;originHeight=1258&amp;originWidth=1528&amp;originalType=binary&amp;ratio=2&amp;rotation=0&amp;showTitle=false&amp;size=295783&amp;status=done&amp;style=none&amp;taskId=u5717c0b9-72ac-4f46-8c69-8c20f09e1a1&amp;title=&amp;width=764">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296412547-9daef24f-1b3d-43fe-9987-760581652751.png#averageHue=%23fdfaf9&amp;clientId=u3da3653d-44ff-4&amp;from=paste&amp;height=318&amp;id=u94944cf4&amp;originHeight=636&amp;originWidth=1746&amp;originalType=binary&amp;ratio=2&amp;rotation=0&amp;showTitle=false&amp;size=127084&amp;status=done&amp;style=none&amp;taskId=u87068d36-f195-41c5-bd12-47574c79110&amp;title=&amp;width=873">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681296455215-7d93ca40-8b3a-4577-8094-b8da7e3c335d.png#averageHue=%23fdf6f4&amp;clientId=u3da3653d-44ff-4&amp;from=paste&amp;height=285&amp;id=uf5df2a27&amp;originHeight=570&amp;originWidth=1488&amp;originalType=binary&amp;ratio=2&amp;rotation=0&amp;showTitle=false&amp;size=129851&amp;status=done&amp;style=none&amp;taskId=ud76f6c96-9ca0-48c5-b1e2-814c57e80cf&amp;title=&amp;width=744">
 <meta property="article:published_time" content="2023-09-11T09:43:37.997Z">
-<meta property="article:modified_time" content="2026-04-12T09:12:18.057Z">
+<meta property="article:modified_time" content="2026-04-12T09:41:57.932Z">
 <meta property="article:author" content="Joey">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/28161567/1681038144557-a1406192-6a85-4c14-8eb9-5ac829e1183c.png#averageHue=%23f4f4f4&amp;clientId=ud68174ae-9c37-4&amp;from=paste&amp;height=290&amp;id=u41eb8dfe&amp;originHeight=580&amp;originWidth=2570&amp;originalType=binary&amp;ratio=2&amp;rotation=0&amp;showTitle=false&amp;size=85650&amp;status=done&amp;style=none&amp;taskId=ue5603dcb-d34c-4e99-826a-6040e35c281&amp;title=&amp;width=1285">
@@ -66,10 +66,10 @@
 <link rel="canonical" href="http://example.com/posts/1c997186.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/1c997186.html","path":"posts/1c997186.html","title":"Web Security"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/1c997186.html","path":"posts/1c997186.html","title":"CTF Web信息搜集完全指南"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Web Security | Joey</title>
+<title>CTF Web信息搜集完全指南 | Joey</title>
   
 
 
@@ -271,12 +271,12 @@ directory traversal attack</span></a></li></ol></li></ol></li></ol></div>
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Web Security | Joey">
-      <meta itemprop="description" content="CTF Web信息搜集：备份文件、目录扫描、Banner获取与">
+      <meta itemprop="name" content="CTF Web信息搜集完全指南 | Joey">
+      <meta itemprop="description" content="CTF线上赛Web题的信息搜集攻略，涵盖备份文件、目录扫描、Banner获取与源码泄露等核心技巧。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Web Security
+          CTF Web信息搜集完全指南
         </h1>
 
         <div class="post-meta-container">
@@ -294,7 +294,7 @@ directory traversal attack</span></a></li></ol></li></ol></li></ol></div>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-12 09:12:18" itemprop="dateModified" datetime="2026-04-12T09:12:18Z">2026-04-12</time>
+      <time title="Modified: 2026-04-12 09:41:57" itemprop="dateModified" datetime="2026-04-12T09:41:57Z">2026-04-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,7 +324,7 @@ directory traversal attack</span></a></li></ol></li></ol></li></ol></div>
     </span>
 </div>
 
-            <div class="post-description">CTF Web信息搜集：备份文件、目录扫描、Banner获取与</div>
+            <div class="post-description">CTF线上赛Web题的信息搜集攻略，涵盖备份文件、目录扫描、Banner获取与源码泄露等核心技巧。</div>
         </div>
       </header>
 
