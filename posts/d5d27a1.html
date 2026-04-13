@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Chapter 13: The Structure of the Web（万维网的结构）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cambridge University Press, 2010   一、万维网简史">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 - Chapter 13 The Structure of the Web 万维网的结构">
+<meta property="og:url" content="http://example.com/posts/d5d27a1.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Chapter 13: The Structure of the Web（万维网的结构）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cambridge University Press, 2010   一、万维网简史">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-13T10:41:39.786Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/d5d27a1.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/d5d27a1.html","path":"posts/d5d27a1.html","title":"COMP5313 - Chapter 13 The Structure of the Web 万维网的结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 - Chapter 13 The Structure of the Web 万维网的结构 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/d5d27a1.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">25</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">186</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-13-the-structure-of-the-web%E4%B8%87%E7%BB%B4%E7%BD%91%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">Chapter 13: The
+Structure of the Web（万维网的结构）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%87%E7%BB%B4%E7%BD%91%E7%AE%80%E5%8F%B2%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5the-world-wide-web"><span class="nav-text">一、万维网简史与基本概念（The
+World Wide Web）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%87%E7%BB%B4%E7%BD%91%E7%9A%84%E8%AF%9E%E7%94%9F%E4%B8%8E%E5%8F%91%E5%B1%95"><span class="nav-text">1.1 万维网的诞生与发展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%87%E7%BB%B4%E7%BD%91%E7%9A%84%E4%B8%A4%E4%B8%AA%E4%B8%AD%E5%BF%83%E7%89%B9%E5%BE%81"><span class="nav-text">1.2 万维网的两个中心特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%96%87%E6%9C%AC%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">1.3 超文本与网络图的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%96%87%E6%9C%AC%E6%A6%82%E5%BF%B5%E7%9A%84%E5%8E%86%E5%8F%B2%E6%B8%8A%E6%BA%90"><span class="nav-text">1.4 超文本概念的历史渊源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%B6%85%E6%96%87%E6%9C%AC%E4%B8%8E%E8%81%94%E6%83%B3%E8%AE%B0%E5%BF%86information-networks-hypertext-and-associative-memory"><span class="nav-text">二、信息网络、超文本与联想记忆（Information
+Networks, Hypertext, and Associative Memory）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%80%A7%E8%B4%A8"><span class="nav-text">2.1 信息网络的定义与性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%96%87%E6%9C%AC%E7%9A%84%E7%9F%A5%E8%AF%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E8%81%94%E6%83%B3%E8%AE%B0%E5%BF%86"><span class="nav-text">2.2
+超文本的知识论基础：联想记忆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8E%86%E5%8F%B2%E4%BE%8B%E5%AD%90"><span class="nav-text">2.3 信息网络的历史例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A6%E6%9C%AF%E5%BC%95%E7%94%A8%E7%BD%91%E7%BB%9C"><span class="nav-text">2.3.1 学术引用网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6%E4%B8%8E%E4%BA%A4%E5%8F%89%E5%8F%82%E8%80%83"><span class="nav-text">2.3.2 百科全书与交叉参考</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%AF%8D%E6%B1%87%E8%81%94%E6%83%B3"><span class="nav-text">2.3.3 语义网络与词汇联想</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%B0%BC%E7%93%A6%E5%B0%94%E5%B8%83%E4%BB%80%E4%B8%8Ememex%E8%AE%BE%E6%83%B3"><span class="nav-text">2.4 范尼瓦尔·布什与Memex设想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%83%E4%BB%80%E7%9A%84%E9%97%AE%E9%A2%98%E8%AF%8A%E6%96%AD"><span class="nav-text">2.4.1 布什的问题诊断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#memex%E7%9A%84%E6%84%BF%E6%99%AF"><span class="nav-text">2.4.2 Memex的愿景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#memex%E7%9A%84%E5%8E%86%E5%8F%B2%E5%BD%B1%E5%93%8D"><span class="nav-text">2.4.3 Memex的历史影响</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%87%E7%BB%B4%E7%BD%91%E7%9A%84%E6%BC%94%E8%BF%9B%E4%B8%8E%E9%93%BE%E6%8E%A5%E7%B1%BB%E5%9E%8B"><span class="nav-text">2.5 万维网的演进与链接类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-text">2.5.1 早期网络的特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A4%9A%E9%87%8D%E5%8A%9F%E8%83%BD"><span class="nav-text">2.5.2 链接的多重功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AF%BC%E8%88%AA%E7%BB%93%E6%9E%84"><span class="nav-text">2.5.3 网络的导航结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%BD%9C%E4%B8%BA%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E4%B8%87%E7%BB%B4%E7%BD%91the-web-as-a-directed-graph"><span class="nav-text">三、作为有向图的万维网（The
+Web as a Directed Graph）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">3.1 有向图的数学基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E9%9D%9E%E5%AF%B9%E7%A7%B0%E6%80%A7"><span class="nav-text">3.2 有向图的非对称性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E4%B8%8E%E5%8F%AF%E8%BE%BE%E6%80%A7"><span class="nav-text">3.3 路径与可达性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E8%BF%9E%E9%80%9A%E6%80%A7%E4%B8%8E%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F"><span class="nav-text">3.4 强连通性与强连通分量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E8%BF%9E%E9%80%9A%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">3.4.1 强连通的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8Fscc%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">3.4.2 强连通分量（SCC）的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scc%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">3.4.3 SCC在网络分析中的应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scc%E7%9A%84%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="nav-text">3.4.4 SCC的具体例子</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%87%E7%BB%B4%E7%BD%91%E7%9A%84%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84the-bow-tie-structure-of-the-web"><span class="nav-text">四、万维网的弓形结构（The
+Bow-Tie Structure of the Web）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#broder%E7%AD%89%E4%BA%BA%E7%9A%84%E9%87%8C%E7%A8%8B%E7%A2%91%E7%A0%94%E7%A9%B6"><span class="nav-text">4.1 Broder等人的里程碑研究</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A8%E5%9E%8B%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E5%8F%91%E7%8E%B0"><span class="nav-text">4.2 巨型强连通分量的发现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A8%E5%9E%8Bscc%E7%9A%84%E5%AD%98%E5%9C%A8"><span class="nav-text">4.2.1 巨型SCC的存在</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A8%E5%9E%8Bscc%E7%9A%84%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-text">4.2.2 巨型SCC的唯一性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">4.3 弓形结构的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#in%E9%9B%86%E5%90%88%E4%B8%8A%E6%B8%B8%E5%8C%BA%E5%9F%9F"><span class="nav-text">4.3.1 IN集合（上游区域）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#out%E9%9B%86%E5%90%88%E4%B8%8B%E6%B8%B8%E5%8C%BA%E5%9F%9F"><span class="nav-text">4.3.2 OUT集合（下游区域）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tendrils%E5%92%8Ctubes%E8%A7%A6%E9%A1%BB%E5%92%8C%E9%80%9A%E9%81%93"><span class="nav-text">4.3.3
+Tendrils和Tubes（触须和通道）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%88%86%E9%87%8Fdisconnected-components"><span class="nav-text">4.3.4
+断开连接的分量（Disconnected Components）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E9%87%8F%E5%8C%96%E7%BB%9F%E8%AE%A1"><span class="nav-text">4.4 弓形结构的量化统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E8%A7%86%E8%A7%89%E8%A1%A8%E7%A4%BA"><span class="nav-text">4.5 弓形结构的视觉表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%E4%B8%8E%E6%BC%94%E5%8F%98"><span class="nav-text">4.6 弓形结构的稳定性与演变</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E7%9A%84%E7%9B%B8%E5%AF%B9%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="nav-text">4.6.1 结构的相对稳定性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%99%AE%E9%81%8D%E6%80%A7"><span class="nav-text">4.6.2 模式的普遍性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%93%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E7%90%86%E8%AE%BA%E6%84%8F%E4%B9%89"><span class="nav-text">4.7 弓形结构的理论意义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%84%86%E5%BC%B1%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-text">4.7.1 网络脆弱性分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E4%BF%A1%E6%81%AF%E5%8F%91%E7%8E%B0"><span class="nav-text">4.7.2 搜索和信息发现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94web-2.0%E7%9A%84%E5%87%BA%E7%8E%B0%E4%B8%8E%E6%BC%94%E8%BF%9Bthe-emergence-of-web-2.0"><span class="nav-text">五、Web
+2.0的出现与演进（The Emergence of Web 2.0）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%BD%E5%90%8D"><span class="nav-text">5.1 Web 2.0的定义与命名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E7%9A%84%E8%B5%B7%E6%BA%90"><span class="nav-text">5.1.1 术语的起源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%A5%E8%8E%B1%E5%88%A9%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">5.1.2 奥莱利的定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E7%9A%84%E4%B8%89%E4%B8%AA%E4%B8%BB%E8%A6%81%E9%A9%B1%E5%8A%A8%E5%8A%9B"><span class="nav-text">5.2 Web 2.0的三个主要驱动力</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C%E5%86%85%E5%AE%B9%E5%88%9B%E5%BB%BAcollaborative-content-creation"><span class="nav-text">5.2.1
+协作内容创建（Collaborative Content Creation）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8C%96personal-data-on-cloud-services"><span class="nav-text">5.2.2
+个人数据的云服务化（Personal Data on Cloud Services）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%BA%E9%99%85%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BC%BA%E8%B0%83links-emphasizing-people-connections"><span class="nav-text">5.2.3
+人际连接的强调（Links Emphasizing People Connections）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E5%90%88web-2.0%E5%B9%B3%E5%8F%B0"><span class="nav-text">5.3 综合Web 2.0平台</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#flickr%E7%85%A7%E7%89%87%E5%85%B1%E4%BA%AB"><span class="nav-text">5.3.1 Flickr（照片共享）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#youtube%E8%A7%86%E9%A2%91%E5%85%B1%E4%BA%AB"><span class="nav-text">5.3.2 YouTube（视频共享）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#twitter%E5%BE%AE%E5%8D%9A%E5%B9%B3%E5%8F%B0"><span class="nav-text">5.3.3 Twitter（微博平台）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%95%88%E5%BA%94%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">5.4 Web 2.0与网络效应的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E9%9A%8F%E7%9D%80%E4%BD%BF%E7%94%A8%E5%8F%98%E5%BE%97%E6%9B%B4%E5%A5%BD"><span class="nav-text">5.4.1 &quot;软件随着使用变得更好&quot;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%97%E6%99%BA%E7%9A%84%E5%8A%9B%E9%87%8F"><span class="nav-text">5.4.2 &quot;众智的力量&quot;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%95%BF%E5%B0%BE%E7%8E%B0%E8%B1%A1"><span class="nav-text">5.4.3 &quot;长尾&quot;现象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81%E4%B8%8E%E6%8A%80%E6%9C%AF"><span class="nav-text">5.5 Web 2.0的关键特征与技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E8%AA%89%E5%92%8C%E4%BF%A1%E4%BB%BB%E7%B3%BB%E7%BB%9Freputation-and-trust-systems"><span class="nav-text">5.5.1
+信誉和信任系统（Reputation and Trust Systems）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9Frecommendation-systems"><span class="nav-text">5.5.2 推荐系统（Recommendation
+Systems）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E4%B8%8E%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-text">5.6 Web 2.0与搜索引擎的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E6%BC%94%E5%8F%98"><span class="nav-text">5.6.1 搜索引擎的演变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%8Eweb-2.0%E7%9A%84%E5%85%B1%E7%94%9F%E5%85%B3%E7%B3%BB"><span class="nav-text">5.6.2 搜索引擎与Web
+2.0的共生关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E7%9A%84%E7%A4%BE%E4%BC%9A%E5%92%8C%E7%BB%8F%E6%B5%8E%E5%BD%B1%E5%93%8D"><span class="nav-text">5.7 Web 2.0的社会和经济影响</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E5%88%9B%E4%BD%9C%E7%9A%84%E6%B0%91%E4%B8%BB%E5%8C%96"><span class="nav-text">5.7.1 内容创作的民主化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B3%E5%8F%B0%E7%BB%8F%E6%B5%8E%E7%9A%84%E5%85%B4%E8%B5%B7"><span class="nav-text">5.7.2 平台经济的兴起</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BD%9C%E4%B8%BA%E8%B5%84%E4%BA%A7"><span class="nav-text">5.7.3 数据作为资产</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-2.0%E4%B8%8E%E4%B9%A6%E4%B8%AD%E5%85%B6%E4%BB%96%E7%AB%A0%E8%8A%82%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">5.8 Web
+2.0与书中其他章节的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%80%BB%E7%BB%93%E4%B8%8E%E7%9F%A5%E8%AF%86%E6%A1%86%E6%9E%B6%E6%95%B4%E5%90%88"><span class="nav-text">六、总结与知识框架整合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8Eweb%E7%BB%93%E6%9E%84%E5%88%B0%E7%BD%91%E7%BB%9C%E7%A7%91%E5%AD%A6"><span class="nav-text">6.1 从Web结构到网络科学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E5%BF%B5%E7%9A%84%E6%B7%B1%E5%B1%82%E8%81%94%E7%B3%BB"><span class="nav-text">6.2 本章概念的深层联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E5%88%B0%E7%8E%B0%E5%AE%9E%E5%BA%94%E7%94%A8"><span class="nav-text">6.3 从网络结构到现实应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">专业术语表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/d5d27a1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 - Chapter 13 The Structure of the Web 万维网的结构 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 - Chapter 13 The Structure of the Web 万维网的结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-13 00:00:00 / Modified: 10:41:39" itemprop="dateCreated datePublished" datetime="2026-04-13T00:00:00Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>9.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>36 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="chapter-13-the-structure-of-the-web万维网的结构">Chapter 13: The
+Structure of the Web（万维网的结构）</h1>
+<blockquote>
+<p>教材：<em>Networks, Crowds, and Markets: Reasoning about a Highly
+Connected World</em> 作者：David Easley &amp; Jon Kleinberg, Cambridge
+University Press, 2010</p>
+</blockquote>
+<hr />
+<h2
+id="一万维网简史与基本概念the-world-wide-web">一、万维网简史与基本概念（The
+World Wide Web）</h2>
+<h3 id="万维网的诞生与发展">1.1 万维网的诞生与发展</h3>
+<p>万维网(<strong>World Wide Web,
+WWW</strong>)是由瑞士科学家蒂姆·伯纳斯-李(<strong>Tim
+Berners-Lee</strong>)在1989-1991年间创立的。伯纳斯-李在欧洲核子研究组织(<strong>CERN</strong>)工作期间，为了便于科学家之间共享和交换信息，提出了一套应用系统方案。这个方案利用互联网(<strong>Internet</strong>)基础设施，创造了一个全新的信息共享方式。</p>
+<p>万维网的核心目标是成为一个通用的文档共享和信息交换平台。在此之前，虽然互联网已经存在，但缺乏一个统一的、易于使用的信息组织和访问框架。伯纳斯-李的发明彻底改变了信息获取和传播的方式。</p>
+<h3 id="万维网的两个中心特征">1.2 万维网的两个中心特征</h3>
+<p>万维网基于两个相互关联的中心特征：</p>
+<p><strong>第一个特征：网页文档(</strong>Web
+Pages/Documents<strong>)</strong> -
+网页是信息的基本载体，每个网页是一个独立的文档 -
+网页可以包含文本、图像、多媒体内容等多种形式的信息 -
+每个网页都有唯一的标识符——统一资源定位符(<strong>Uniform Resource
+Locator, URL</strong>) - URLs遵循统一的格式，如
+<code>https://www.example.com/page.html</code></p>
+<p><strong>第二个特征：浏览器(</strong>Web Browsers<strong>)</strong> -
+浏览器是访问和显示网页的应用程序 -
+用户通过浏览器输入URL，浏览器就会从指定的服务器获取相应网页 -
+浏览器负责解析<strong>超文本标记语言(</strong>HTML**)代码，将其渲染成可视化的内容
+-
+浏览器提供了一个统一的用户界面，使得各种不同来源的网页看起来和操作起来都很相似</p>
+<h3 id="超文本与网络图的概念">1.3 超文本与网络图的概念</h3>
+<p><strong>超文本(</strong>Hypertext<strong>)</strong>是组织信息的一种革命性方式。传统的文本是线性的，按照从开始到结束的顺序组织。而超文本则使用<strong>网络隐喻(</strong>network
+metaphor<strong>)</strong>来组织信息——通过链接(<strong>links</strong>)将不同的页面连接起来。</p>
+<p>从图论(<strong>Graph
+Theory</strong>)的角度看，万维网可以被建模为一个有向图(<strong>Directed
+Graph</strong>)：</p>
+<ul>
+<li><strong>节点(</strong>Nodes<strong>)</strong>：万维网上的每个网页都是一个节点</li>
+<li><strong>有向边(</strong>Directed
+Edges<strong>)</strong>：从一个网页指向另一个网页的超链接(<strong>Hyperlinks</strong>)构成有向边</li>
+<li><strong>方向性(</strong>Directionality<strong>)</strong>：一个超链接只有一个方向，从包含链接的页面指向被链接的页面。如果两个页面要相互链接，需要各自都包含指向对方的链接</li>
+</ul>
+<p>这个有向图表示允许用户从一个网页"跳跃"到另一个网页，形成一个复杂的信息网络。图的连接性(<strong>connectivity</strong>)反映了网页之间的关系和信息流的可能路径。</p>
+<h3 id="超文本概念的历史渊源">1.4 超文本概念的历史渊源</h3>
+<p>有趣的是，超文本的概念并非伯纳斯-李的原创。早在20世纪中期，计算机科学家和信息学家就开始探索这种概念：</p>
+<ul>
+<li><strong>1945年</strong>：范尼瓦尔·布什(<strong>Vannevar
+Bush</strong>)发表了影响深远的文章，提议了一个称为<strong>"记忆扩展装置"(</strong>Memex<strong>)</strong>的假想设备</li>
+<li><strong>1960年代</strong>：特德·纳尔逊(<strong>Ted
+Nelson</strong>)创造了"超文本"一词，并探索了如何用计算机实现这种概念</li>
+<li><strong>1980年代</strong>：苹果公司的<strong>HyperCard</strong>软件将超文本概念引入个人计算机</li>
+</ul>
+<p>伯纳斯-李的天才之处在于：他整合了这些先前的理论思想，结合互联网技术，创造出了实用、可扩展且全球通用的超文本系统。</p>
+<hr />
+<h2
+id="二信息网络超文本与联想记忆information-networks-hypertext-and-associative-memory">二、信息网络、超文本与联想记忆（Information
+Networks, Hypertext, and Associative Memory）</h2>
+<h3 id="信息网络的定义与性质">2.1 信息网络的定义与性质</h3>
+<p><strong>信息网络(</strong>Information
+Networks<strong>)</strong>是一种特殊的网络，其中：</p>
+<ul>
+<li><strong>节点(</strong>Nodes<strong>)</strong>代表信息的片段、概念或知识单位</li>
+<li><strong>链接(</strong>Links<strong>)</strong>编码这些信息片段之间的关系或联系</li>
+</ul>
+<p>信息网络与社会网络(<strong>Social
+Networks</strong>)或生物网络(<strong>Biological
+Networks</strong>)的关键区别在于：它们关注的是知识、思想和概念之间的关系，而不是人与人或生物之间的物理关系。</p>
+<h3 id="超文本的知识论基础联想记忆">2.2
+超文本的知识论基础：联想记忆</h3>
+<p>人类的思维方式具有<strong>联想性(</strong>Associative**)的特点：</p>
+<ul>
+<li>当我们思考一个概念时，往往会联想到相关的其他概念</li>
+<li>这种联想是非线性的、多向的、网络式的</li>
+<li>例如，思考"网络"这个概念，可能会联想到"图"、"节点"、"边"、"连通性"、"社区结构"等多个相关概念</li>
+</ul>
+<p>传统的线性存储方式（如书籍、线性数据库）与人类的联想思维方式不匹配。超文本通过提供多个可能的导航路径，使得信息的组织方式更接近人类思维的自然方式。</p>
+<h3 id="信息网络的历史例子">2.3 信息网络的历史例子</h3>
+<h4 id="学术引用网络">2.3.1 学术引用网络</h4>
+<p><strong>引用网络(</strong>Citation
+Networks<strong>)</strong>是最古老的信息网络之一：</p>
+<ul>
+<li><strong>节点</strong>：学术论文、著作或研究工作</li>
+<li><strong>有向边</strong>：从一篇论文指向它引用的其他论文</li>
+<li><strong>有向性特征</strong>：引用网络具有明确的<strong>时间箭头(</strong>Arrow
+of Time<strong>)</strong>
+<ul>
+<li>一篇论文只能引用发表时间早于或等于它的作品</li>
+<li>论文不能引用未来发表的作品（在发表时不存在）</li>
+<li>这导致了一个<strong>无环有向图(</strong>Directed Acyclic Graph,
+DAG<strong>)</strong>结构</li>
+</ul></li>
+</ul>
+<p>这个特性使得引用网络与一般的网络有本质区别。通过分析引用网络，学者可以：
+- 追踪思想的演化过程 - 识别学术领域的重要贡献者 -
+理解研究主题的发展历程</p>
+<h4 id="百科全书与交叉参考">2.3.2 百科全书与交叉参考</h4>
+<p><strong>百科全书(</strong>(Encyclopedias<strong>)</strong>如维基百科(<strong>Wikipedia</strong>)提供了另一种信息网络的实现：</p>
+<ul>
+<li><strong>节点</strong>：百科全书的条目或文章</li>
+<li><strong>链接</strong>：文章内的交叉参考(<strong>Cross-references</strong>)</li>
+<li>例如，关于<strong>博弈论(</strong>Game
+Theory<strong>)</strong>的维基百科条目可能包含指向"纳什均衡(<strong>Nash
+Equilibrium</strong>)"、"囚徒困境(<strong>Prisoner's
+Dilemma</strong>)"、"博弈论家(<strong>Game
+Theorist</strong>)"等相关条目的链接</li>
+</ul>
+<p>百科全书的引导设计使读者能够通过多条路径探索相关主题，就像地图上的不同导航路线一样。</p>
+<h4 id="语义网络与词汇联想">2.3.3 语义网络与词汇联想</h4>
+<p><strong>语义网络(</strong>Semantic
+Networks<strong>)</strong>是认知心理学中的重要概念：</p>
+<ul>
+<li><strong>节点</strong>：代表概念、词汇或想法</li>
+<li><strong>边</strong>：编码这些概念之间的逻辑或感知关系</li>
+<li><strong>关系类型</strong>包括：
+<ul>
+<li><strong>is-a关系</strong>："狗"是"哺乳动物"</li>
+<li><strong>part-of关系</strong>："轮子"是"汽车"的一部分</li>
+<li><strong>关联关系</strong>："夏天"与"冰淇淋"相关联</li>
+</ul></li>
+</ul>
+<p>心理学研究中的<strong>词汇联想研究(</strong>Word Association
+Studies<strong>)</strong>表明，当人类听到一个词时，会迅速激活相关词汇的心理表征。这种联想遵循网络的拓扑结构——词汇之间的"距离"越近，激活的速度越快。</p>
+<h3 id="范尼瓦尔布什与memex设想">2.4 范尼瓦尔·布什与Memex设想</h3>
+<h4 id="布什的问题诊断">2.4.1 布什的问题诊断</h4>
+<p>1945年，范尼瓦尔·布什在《大西洋月刊(<strong>The Atlantic
+Monthly</strong>)<strong>上发表了著名文章《《我们如何思考(</strong>As We
+May Think<strong>)</strong>：</p>
+<p>布什观察到人类知识管理的一个根本矛盾：</p>
+<ul>
+<li><strong>信息存储方式</strong>：传统的存储系统（库、文件系统）基于<strong>线性(</strong>Linear<strong>)</strong>或<strong>分类(</strong>Hierarchical<strong>)</strong>组织</li>
+<li><strong>人类思维方式</strong>：人类思维是<strong>联想式(</strong>Associative<strong>)</strong>的，通过相关性和联想进行导航</li>
+</ul>
+<p>这种不匹配导致了知识的"孤立化"——有用的信息可能很难被找到，因为它们在存储系统中不在你期望的位置。</p>
+<h4 id="memex的愿景">2.4.2 Memex的愿景</h4>
+<p>布什提议了一个假想的设备——<strong>Memex</strong>（<strong>Memory
+Extension</strong>的缩写）：</p>
+<p><strong>物理特征</strong>： -
+一个一般桌子大小的设备，包含个人的文献和通信记录 -
+配备有屏幕、操控装置、存储介质</p>
+<p><strong>核心功能</strong>： - 可以存储大量数字化的知识和文献 -
+允许用户通过<strong>联想链接(</strong>Associative
+Links<strong>)</strong>连接相关的信息片段 -
+用户可以创建"链的关联路径"，类似于现代的"书签集合"或"播放列表"</p>
+<p><strong>运作原理</strong>： -
+用户在查看一条信息时，可以点击按钮建立指向另一条信息的链接 -
+可以给这个链接起名字和标注 -
+后续查看时，可以轻松遵循这些联想链接进行导航</p>
+<h4 id="memex的历史影响">2.4.3 Memex的历史影响</h4>
+<p>虽然Memex在技术上无法在1945年实现，但它的<strong>概念影响</strong>深远：</p>
+<ul>
+<li>为超文本的发展提供了理论基础</li>
+<li>启发了后来的<strong>超链接(</strong>Hyperlinks<strong>)</strong>设计</li>
+<li>预示了现代网络搜索和信息发现的基本原理</li>
+<li>引入了"<strong>通用百科全书(</strong>Universal
+Encyclopedia<strong>)"和"</strong>全球大脑(<strong>Global
+Brain</strong>)"的隐喻</li>
+</ul>
+<p>这些隐喻在描述互联网和万维网时仍然被使用，反映了Memex愿景的持久影响力。</p>
+<h3 id="万维网的演进与链接类型">2.5 万维网的演进与链接类型</h3>
+<h4 id="早期网络的特征">2.5.1 早期网络的特征</h4>
+<p>万维网发展的<strong>早期阶段</strong>（1990年代）：</p>
+<ul>
+<li><strong>网页类型</strong>：主要是<strong>静态网页(</strong>Static
+Pages<strong>)</strong>，内容不随用户交互而改变</li>
+<li><strong>链接类型</strong>：大多是<strong>导航链接(</strong>Navigational
+Links<strong>)</strong>，简单地将用户从一个页面带到另一个页面</li>
+<li><strong>网络结构</strong>：形成了一个相对稳定的"<strong>导航骨架(</strong>Navigational
+Backbone**)"，连接了网络的主要枢纽</li>
+</ul>
+<h4 id="链接的多重功能">2.5.2 链接的多重功能</h4>
+<p>随着网络的发展，链接的功能变得更加多样化：</p>
+<p><strong>导航链接(</strong>Navigational Links<strong>)</strong>： -
+将用户从一个网页传输到另一个网页 -
+简单的<strong>超文本参考(</strong>Hypertext References<strong>)</strong>
+- 例如："返回首页"链接、文章中的"相关阅读"链接</p>
+<p><strong>事务链接(</strong>Transactional Links<strong>)</strong>： -
+不仅导航用户，还<strong>触发计算(</strong>Trigger
+Computation<strong>)</strong> - 实现具体的业务功能 - 例子： -
+"<strong>立即购买(</strong>Buy
+Now<strong>)"按钮——触发购物车操作和支付流程 -
+"</strong>登录(<strong>Login</strong>)"链接——触发身份验证流程 -
+"<strong>提交(</strong>Submit**)"按钮——触发表单数据处理</p>
+<h4 id="网络的导航结构">2.5.3 网络的导航结构</h4>
+<p><strong>现代网络的导航特性</strong>： -
+尽管网络规模和功能不断扩展，<strong>导航骨架仍然存在</strong> -
+搜索引擎（特别是<strong>谷歌(</strong>Google<strong>)</strong>）的兴起强化了这一点
+- 搜索引擎能够区分<strong>导航内容(</strong>Navigational
+Content<strong>)</strong>和<strong>事务内容(</strong>Transactional
+Content<strong>)</strong> - 用户的搜索查询可以分为三类： 1.
+<strong>导航查询(</strong>Navigational
+Queries<strong>)</strong>："Facebook登录" 2.
+<strong>信息查询(</strong>Informational
+Queries<strong>)</strong>："气候变化原因" 3.
+<strong>事务查询(</strong>(Transactional
+Queries<strong>)</strong>："购买二手书"</p>
+<p>这个分类反映了网络仍然保持着其基本的导航结构，同时又承载了越来越多的事务功能。</p>
+<hr />
+<h2
+id="三作为有向图的万维网the-web-as-a-directed-graph">三、作为有向图的万维网（The
+Web as a Directed Graph）</h2>
+<h3 id="有向图的数学基础">3.1 有向图的数学基础</h3>
+<p>将万维网建模为<strong>有向图(</strong>Directed
+Graph<strong>)</strong>G = (V, E)，其中：</p>
+<ul>
+<li><strong>V</strong>：顶点集合，代表网络上的所有网页</li>
+<li><strong>E</strong>：边集合，代表超链接，E ⊆ V × V</li>
+<li>对每条边 (u, v) ∈ E，u称为<strong>源节点(</strong>source
+node<strong>)</strong>，v称为<strong>目标节点(</strong>target
+node<strong>)</strong></li>
+</ul>
+<h3 id="有向图的非对称性">3.2 有向图的非对称性</h3>
+<p><strong>有向图的关键特性</strong>：</p>
+<p>与<strong>无向图(</strong>Undirected
+Graphs<strong>)</strong>不同，有向图的边是<strong>非对称的(</strong>(asymmetric)**：</p>
+<ul>
+<li>如果存在从页面A到页面B的链接，不意味着存在从B回到A的链接</li>
+<li>这与现实中很多关系模型类似：
+<ul>
+<li><strong>名誉网络(</strong>Name Recognition
+Networks<strong>)</strong>：你可能认识一个名人，但名人可能不认识你</li>
+<li><strong>友谊网络(</strong>Friendship
+Networks<strong>)</strong>与之相反，通常是对称的——如果A是B的朋友，那么B也是A的朋友</li>
+</ul></li>
+</ul>
+<p>万维网的非对称性反映了信息权力结构的不平等——大型门户网站、新闻媒体等接收大量入链，而普通网页可能只被少数网站链接。</p>
+<h3 id="路径与可达性">3.3 路径与可达性</h3>
+<p>在有向图中，<strong>路径(</strong>Path<strong>)</strong>是一个重要概念：</p>
+<p><strong>路径的定义</strong>： - 一个节点序列 v₁, v₂, ..., vₖ -
+满足对所有 i = 1, 2, ..., k-1，都存在边 (vᵢ, vᵢ₊₁) -
+路径遵循边的<strong>方向</strong>——只能沿着箭头方向移动</p>
+<p><strong>长度(</strong>Length<strong>)</strong>： - 路径中边的数量 -
+从v₁到vₖ的路径长度为 k-1</p>
+<p><strong>可达性(</strong>Reachability<strong>)</strong>： -
+如果存在从节点A到节点B的路径，则称B是从A<strong>可达的(</strong>reachable<strong>)</strong>
+- 表记为：A → B 或者 A 可达 B</p>
+<h3 id="强连通性与强连通分量">3.4 强连通性与强连通分量</h3>
+<h4 id="强连通的定义">3.4.1 强连通的定义</h4>
+<p><strong>强连通(</strong>Strongly
+Connected<strong>)</strong>的有向图：</p>
+<p>一个有向图G称为<strong>强连通</strong>，当且仅当对于图中任意两个不同的节点u和v，都存在：
+- 从u到v的路径 - 从v到u的路径</p>
+<p>用数学语言表示：∀u, v ∈ V, 且 u ≠ v，都有路径 u → v 和路径 v → u</p>
+<p><strong>直观理解</strong>： -
+在强连通图中，从任意节点出发，都可以到达任何其他节点 -
+所有节点之间都是"相互可达"的 - 强连通图中，没有"孤立"的节点或群体</p>
+<h4 id="强连通分量scc的定义">3.4.2 强连通分量（SCC）的定义</h4>
+<p><strong>强连通分量(</strong>Strongly Connected Components,
+SCC<strong>)</strong>是强连通性的推广：</p>
+<p><strong>SCC的数学定义</strong>： 一个节点集合S ⊆
+V称为一个强连通分量，当且仅当：</p>
+<ol type="1">
+<li><strong>内部强连通</strong>：S中的任意两个不同节点u和v，都存在从u到v的路径和从v到u的路径
+<ul>
+<li>∀u, v ∈ S，u ≠ v：u → v 且 v → u</li>
+</ul></li>
+<li><strong>最大性</strong>：S不是任何更大集合的真子集，该更大的集合也满足上述强连通性质
+<ul>
+<li>不存在 S' ⊃ S 也满足强连通性</li>
+</ul></li>
+</ol>
+<p><strong>直观理解</strong>： - SCC是图中的"核心社群"——成员之间紧密联系
+- SCC之间有单向的流向，但SCC内部双向可达 -
+一个图可以被唯一地分解为若干个不相交的SCC</p>
+<h4 id="scc在网络分析中的应用">3.4.3 SCC在网络分析中的应用</h4>
+<p><strong>计算可达性</strong>：
+给定两个节点A和B，判断是否存在从A到B的路径：</p>
+<ol type="1">
+<li>计算A所在的SCC，记为SCC(A)</li>
+<li>计算B所在的SCC，记为SCC(B)</li>
+<li>如果SCC(A) = SCC(B)，则存在路径：<strong>是</strong></li>
+<li>如果SCC(A) ≠ SCC(B)，则需要检查<strong>SCC有向无环图(</strong>(DAG
+of SCCs)<strong>)</strong>中是否存在从SCC(A)指向SCC(B)的路径</li>
+</ol>
+<p><strong>SCC DAG的性质</strong>： - 将所有SCC看作单个超级节点 -
+SCC之间的边关系形成一个<strong>有向无环图(</strong>DAG<strong>)</strong>
+- 这个DAG的无环性来自于SCC的最大性定义</p>
+<h4 id="scc的具体例子">3.4.4 SCC的具体例子</h4>
+<p>考虑一个简化的网页链接图：</p>
+<figure class="highlight mathematica"><table><tr><td class="code"><pre><span class="line">页面 <span class="variable">A</span> → <span class="variable">B</span> → <span class="built_in">D</span></span><br><span class="line">  ↓   ↓   ↓</span><br><span class="line">  <span class="built_in">C</span> ← <span class="built_in">E</span> ← <span class="variable">F</span></span><br><span class="line">  ↓       ↓</span><br><span class="line">  ← ← ← ←</span><br></pre></td></tr></table></figure>
+<p>分析： - 节点A, B, C, E可以相互到达，构成一个SCC：SCC₁ = {A, B, C, E}
+- 节点D只能到达F和E，但不能被SCC₁中的节点到达，构成一个SCC：SCC₂ = {D} -
+节点F既能到达E，也被D到达，但与SCC₁不能相互到达，构成一个SCC：SCC₃ =
+{F}</p>
+<p>SCC DAG的结构：SCC₂ → SCC₃ → SCC₁</p>
+<hr />
+<h2
+id="四万维网的弓形结构the-bow-tie-structure-of-the-web">四、万维网的弓形结构（The
+Bow-Tie Structure of the Web）</h2>
+<h3 id="broder等人的里程碑研究">4.1 Broder等人的里程碑研究</h3>
+<p>2000年，<strong>Albert
+Broder</strong>及其同事发表了一项对万维网结构的<strong>经验分析</strong>。该研究使用<strong>AltaVista</strong>搜索引擎的数据，抓取了约<strong>2亿个网页</strong>和<strong>19亿条链接</strong>，对网络的全局拓扑结构进行了第一次大规模的系统研究。</p>
+<h3 id="巨型强连通分量的发现">4.2 巨型强连通分量的发现</h3>
+<h4 id="巨型scc的存在">4.2.1 巨型SCC的存在</h4>
+<p>Broder等人的第一个重要发现：</p>
+<p><strong>存在一个巨型强连通分量(</strong>(Giant Strongly Connected
+Component, GSCC<strong>)</strong>：</p>
+<ul>
+<li>包含约<strong>5600万个网页</strong>（约占总网页数的27%）</li>
+<li>在这个GSCC内部，任意两个网页都是<strong>相互可达</strong>的</li>
+<li>GSCC包含互联网的"主干"——主要的门户网站、搜索引擎目录、热门网站</li>
+</ul>
+<h4 id="巨型scc的唯一性">4.2.2 巨型SCC的唯一性</h4>
+<p><strong>定理</strong>：有向图中<strong>最多只能有一个巨型SCC</strong>。</p>
+<p><strong>证明直观</strong>： - 假设存在两个不同的SCC：SCC₁和SCC₂ -
+由SCC的最大性定义，SCC₁中的任何节点都无法到达SCC₂的任何节点，反之亦然（否则它们会合并成一个更大的SCC）
+-
+但如果存在从SCC₁的某个节点到SCC₂的某个节点的单向路径，那么这两个SCC会被合并成一个
+-
+因此，如果两个SCC都是"巨型"的（占网络重要部分），它们之间必然存在连接，这会与SCC的定义矛盾</p>
+<p><strong>实际含义</strong>：
+网络存在一个唯一的、包含大多数重要节点的"核心"。这与<strong>物理网络</strong>（如飞行网络、电力网络）中的观察一致。</p>
+<h3 id="弓形结构的分类">4.3 弓形结构的分类</h3>
+<p>相对于GSCC，Broder等人将网络的所有其他节点分为若干个分类。这些分类形成了著名的<strong>弓形结构</strong>（因其形状像弓而得名）：</p>
+<h4 id="in集合上游区域">4.3.1 IN集合（上游区域）</h4>
+<p><strong>定义</strong>： <strong>IN</strong> = {v ∈ V | 存在路径 v →
+某个GSCC中的节点 ∧ 不存在路径 从GSCC中的节点 → v}</p>
+<p><strong>特征</strong>： - <strong>入流节点</strong>(<strong>(Inflow
+Nodes)</strong>)<strong>：能够到达GSCC，但自身无法被GSCC到达 -
+约含</strong>4400万个网页<strong>（约占总网页数的21%） -
+通常是</strong>新网站<strong>或</strong>专业站点**，尚未被主流网络充分链接</p>
+<p><strong>现实例子</strong>： - 新发布的博客或网站 -
+学术网站、个人网页等专业内容 - 尚未被重要网站发现和链接的新内容</p>
+<h4 id="out集合下游区域">4.3.2 OUT集合（下游区域）</h4>
+<p><strong>定义</strong>： <strong>OUT</strong> = {v ∈ V | 不存在路径 v
+→ 某个GSCC中的节点 ∧ 存在路径 从GSCC中的节点 → v}</p>
+<p><strong>特征</strong>： - <strong>出流节点</strong>(<strong>(Outflow
+Nodes)</strong>)<strong>：可以被GSCC到达，但自身无法到达GSCC -
+约含</strong>4400万个网页<strong>（约占总网页数的21%） -
+通常是GSCC中</strong>权威网站**的链接目标</p>
+<p><strong>现实例子</strong>： -
+<strong>PDF文件</strong>或<strong>视频内容</strong>：搜索引擎抓取这些媒体，但这些媒体本身没有链接
+-
+<strong>电商产品页面</strong>：由搜索引擎或目录链接，但本身可能是<strong>孤立的</strong>
+- <strong>档案页面</strong>：历史内容，入链较多但出链很少</p>
+<h4 id="tendrils和tubes触须和通道">4.3.3
+Tendrils和Tubes（触须和通道）</h4>
+<p><strong>触须(Tendrils)</strong>：</p>
+<p>存在两种类型的触须：</p>
+<ol type="1">
+<li><strong>前向触须(</strong>(Forward Tendrils)<strong>)</strong>：
+<ul>
+<li>定义：能被IN中的节点到达，但无法到达GSCC</li>
+<li>特点：从IN集合的"分支"延伸出去</li>
+</ul></li>
+<li><strong>后向触须(</strong>(Backward Tendrils)<strong>)</strong>：
+<ul>
+<li>定义：能够到达OUT中的节点，但不能从GSCC到达</li>
+<li>特点：通向OUT集合的"分支"</li>
+</ul></li>
+</ol>
+<ul>
+<li>约含<strong>4400万个网页</strong>（约占总网页数的21%）</li>
+<li>通常是小型网站集群或隔离的内容</li>
+</ul>
+<p><strong>通道(Tubes)</strong>：</p>
+<ul>
+<li><strong>定义</strong>：能够被IN中的节点到达，同时能到达OUT中的节点，但<strong>绕过GSCC</strong></li>
+<li><strong>特点</strong>：形成从IN到OUT的替代路径</li>
+<li><strong>数量</strong>：相对较少，因为大多数路径都经过GSCC</li>
+</ul>
+<p><strong>直观理解触须和通道</strong>：
+想象GSCC是一条高速公路的枢纽。IN是通向枢纽的进入路线，OUT是从枢纽出发的出口路线。触须是不连接到枢纽但与进入/出口路线相连的支路，通道是绕过枢纽但仍连接IN和OUT的旁路。</p>
+<h4 id="断开连接的分量disconnected-components">4.3.4
+断开连接的分量（Disconnected Components）</h4>
+<p><strong>定义</strong>：
+与GSCC及其所有上述分量都无路径连接的节点和SCC</p>
+<p><strong>特征</strong>： - 完全隔离的网络岛屿 -
+即使忽略链接方向（将有向图视为无向图），也无法连接到主要网络 -
+包括：<strong>暗网(</strong>Dark
+Web<strong>)内容</strong>、<strong>私有内部网络</strong>、<strong>孤立的镜像站点</strong>等</p>
+<h3 id="弓形结构的量化统计">4.4 弓形结构的量化统计</h3>
+<p>基于Broder等人使用1999年AltaVista数据的研究结果：</p>
+<table>
+<thead>
+<tr>
+<th>结构成分</th>
+<th>网页数量（百万）</th>
+<th>占比</th>
+<th>特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GSCC</strong></td>
+<td>56</td>
+<td>27%</td>
+<td>核心枢纽，相互可达</td>
+</tr>
+<tr>
+<td><strong>IN</strong></td>
+<td>44</td>
+<td>21%</td>
+<td>上游入流</td>
+</tr>
+<tr>
+<td><strong>OUT</strong></td>
+<td>44</td>
+<td>21%</td>
+<td>下游出流</td>
+</tr>
+<tr>
+<td><strong>Tendrils</strong></td>
+<td>44</td>
+<td>21%</td>
+<td>分支触须</td>
+</tr>
+<tr>
+<td><strong>Disconnected</strong></td>
+<td>约16</td>
+<td>8%</td>
+<td>断开连接</td>
+</tr>
+</tbody>
+</table>
+<h3 id="弓形结构的视觉表示">4.5 弓形结构的视觉表示</h3>
+<p>弓形结构可以用如下的文本图表示：</p>
+<figure class="highlight scss"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────┐</span><br><span class="line">│                      网络视图                         │</span><br><span class="line">├─────────────────────────────────────────────────────┤</span><br><span class="line">│                                                      │</span><br><span class="line">│        IN (上游)          GSCC (核心)                 │</span><br><span class="line">│         ↓                ↙ ↑ ↖                      │</span><br><span class="line">│  前向触须  →  前向Tendrils → <span class="selector-attr">[核心网络]</span> ← 后向Tendrils │</span><br><span class="line">│         ↓       ↓           ↑        ↑              │</span><br><span class="line">│                 └─→  Tubes  ─→      │              │</span><br><span class="line">│                                 │                   │</span><br><span class="line">│                         OUT (下游)                   │</span><br><span class="line">│                                 │                   │</span><br><span class="line">│                    Disconnected Components          │</span><br><span class="line">│                    (断开连接的分量)                 │</span><br><span class="line">│                                                     │</span><br><span class="line">└─────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h3 id="弓形结构的稳定性与演变">4.6 弓形结构的稳定性与演变</h3>
+<h4 id="结构的相对稳定性">4.6.1 结构的相对稳定性</h4>
+<p>Broder等人的一个重要发现是：<strong>弓形结构的整体性质在时间上相对稳定</strong>。</p>
+<p><strong>稳定的方面</strong>： -
+三个主要分量（GSCC、IN、OUT）的<strong>相对大小</strong>保持较为稳定 -
+<strong>弓形结构本身</strong>作为网络的基本拓扑特征持续存在 -
+核心GSCC的存在一直得到确认</p>
+<p><strong>变化的方面</strong>： -
+<strong>具体的网页和链接</strong>在不断变化 -
+<strong>网页在各分量中的归属</strong>可能改变 -
+IN中的网页可能逐渐进入GSCC（当被足够多的网站链接后） -
+新网页不断进入IN集合</p>
+<h4 id="模式的普遍性">4.6.2 模式的普遍性</h4>
+<p>弓形结构的发现促发了大量后续研究，验证了这一结构的普遍性：</p>
+<p><strong>应用领域</strong>： 1.
+<strong>Google索引</strong>：在Google爬虫数据上重现弓形结构 2.
+<strong>维基百科</strong>：页面之间的链接关系显示类似的结构 3.
+<strong>金融网络</strong>：银行间的贷款网络显示类似的核心-外围结构 4.
+<strong>学术引用网络</strong>：论文引用关系中存在类似的分层结构</p>
+<p><strong>结构的名称变体</strong>： -
+<strong>核心-外围结构</strong>(Core-Periphery Structure)<strong> -
+</strong>三部分模式<strong>(</strong>(Triadic
+Structure)<strong>)</strong> -
+后来的研究识别了更复杂的<strong>分层模式</strong></p>
+<h3 id="弓形结构的理论意义">4.7 弓形结构的理论意义</h3>
+<h4 id="网络脆弱性分析">4.7.1 网络脆弱性分析</h4>
+<p>弓形结构告诉我们：</p>
+<ul>
+<li><strong>GSCC是关键</strong>：移除GSCC中的节点会对整个网络的连通性造成严重破坏</li>
+<li><strong>IN和OUT相对脆弱</strong>：这些节点的移除影响较小，因为它们只是单向连接</li>
+<li><strong>网络的韧性</strong>取决于GSCC的大小和稳定性</li>
+</ul>
+<h4 id="搜索和信息发现">4.7.2 搜索和信息发现</h4>
+<p>弓形结构对搜索引擎的设计有重要启示：</p>
+<ul>
+<li><strong>页面排名问题</strong>：GSCC中的页面通过相互链接获得权力，而IN中的新页面需要时间进入GSCC</li>
+<li><strong>可达性问题</strong>：搜索引擎必须特别关注OUT集合，因为这部分内容可能无法通过链接发现</li>
+<li><strong>爬虫策略</strong>：搜索引擎需要不同的策略来爬取不同结构区域的内容</li>
+</ul>
+<hr />
+<h2 id="五web-2.0的出现与演进the-emergence-of-web-2.0">五、Web
+2.0的出现与演进（The Emergence of Web 2.0）</h2>
+<h3 id="web-2.0的定义与命名">5.1 Web 2.0的定义与命名</h3>
+<h4 id="术语的起源">5.1.1 术语的起源</h4>
+<p><strong>"Web
+2.0"</strong>一词由<strong>蒂姆·奥莱利</strong>(<strong>Tim
+O'Reilly</strong>)在约2004-2005年间推广。这个术语并非指任何技术上的重大变化或新版本（互联网并没有官方的"版本号"），而是用来描述万维网使用和设计<strong>理念的演变</strong>。</p>
+<h4 id="奥莱利的定义">5.1.2 奥莱利的定义</h4>
+<p>奥莱利强调："<strong>Web
+2.0是一种态度，不是一种技术</strong>"(<strong>Web 2.0 is an attitude,
+not a technology</strong>)。</p>
+<p>这个定义强调了Web 2.0不是关于特定的编程语言、框架或协议，而是关于： -
+如何设计和使用网络 - 如何组织人与信息的关系 - 如何利用网络的集体智慧 -
+如何创建更具交互性和参与性的在线体验</p>
+<h3 id="web-2.0的三个主要驱动力">5.2 Web 2.0的三个主要驱动力</h3>
+<p>在2000-2009年这个关键十年中，三股主要力量推动了从Web 1.0到Web
+2.0的转变：</p>
+<h4 id="协作内容创建collaborative-content-creation">5.2.1
+协作内容创建（Collaborative Content Creation）</h4>
+<p><strong>特点</strong>： - 不再由专业出版机构独家控制内容 -
+普通用户可以创建、编辑和发布内容 - 集体智慧<strong>(</strong>Collective
+Wisdom<strong>)</strong>的汇聚</p>
+<p><strong>代表性平台</strong>： -
+<strong>维基百科</strong>(<strong>Wikipedia</strong>)：最著名的协作内容创建例子
+- 任何用户都可以编辑条目 - 通过讨论和协作达成共识 -
+创建了最大的人类知识在线百科全书 -
+验证了"众多眼睛使所有错误浮出水面"的原则</p>
+<ul>
+<li>其他例子：<strong>Wiktionary</strong>（词典）、<strong>Wikimedia
+Commons</strong>（多媒体库）</li>
+</ul>
+<h4 id="个人数据的云服务化personal-data-on-cloud-services">5.2.2
+个人数据的云服务化（Personal Data on Cloud Services）</h4>
+<p><strong>背景</strong>： -
+早期互联网中，用户数据通常存储在本地计算机上 - Web
+2.0引入了<strong>云计算</strong>(<strong>Cloud
+Computing</strong>)的概念——数据存储在远程服务器上</p>
+<p><strong>代表性平台</strong>： -
+<strong>Gmail</strong>：谷歌提供的免费电子邮件服务 -
+海量存储空间（相比传统邮箱） - 强大的搜索功能 -
+基于网页访问，而非桌面软件</p>
+<ul>
+<li><p><strong>在线相册服务</strong>：Picasa、Flickr等</p>
+<ul>
+<li>用户可以上传照片到云端</li>
+<li>可以在任何地方、任何设备访问</li>
+<li>社交分享功能</li>
+</ul></li>
+<li><p><strong>日历和日程管理</strong>：Google
+Calendar、Outlook等</p></li>
+<li><p><strong>在线办公套件</strong>：Google Docs, Office 365</p>
+<ul>
+<li>允许多用户实时协作编辑</li>
+<li>无需在本地安装软件</li>
+</ul></li>
+</ul>
+<p><strong>优势</strong>： -
+<strong>数据同步</strong>：跨多个设备无缝同步 -
+<strong>可访问性</strong>：随时随地通过网络访问 -
+<strong>社交性</strong>：容易与他人共享和协作</p>
+<h4 id="人际连接的强调links-emphasizing-people-connections">5.2.3
+人际连接的强调（Links Emphasizing People Connections）</h4>
+<p><strong>范式转变</strong>： -
+<strong>早期网络</strong>：强调文档之间的链接（页面→页面） - <strong>Web
+2.0</strong>：强调<strong>人与人之间的联系</strong>（人→人）</p>
+<p><strong>代表性平台</strong>： - <strong>社交网络</strong>： -
+<strong>MySpace</strong>：早期的社交网络平台 -
+<strong>Facebook</strong>（2004年创立）：最成功的社交网络 -
+个人档案(<strong>Profiles</strong>)展示用户信息 -
+好友关系(<strong>Friend Relationships</strong>)建立社交图 -
+信息流(<strong>News Feed</strong>)展示朋友活动 -
+完全改变了互联网的社交方式</p>
+<ul>
+<li><strong>微博和消息平台</strong>：
+<ul>
+<li><strong>Twitter</strong>：微博和实时信息共享</li>
+<li>建立了用户之间的关注关系(<strong>Follow Relationships</strong>)</li>
+</ul></li>
+<li><strong>视频共享</strong>：
+<ul>
+<li><strong>YouTube</strong>（2005年创立）：用户上传和分享视频</li>
+<li>将个人成为内容创作者(<strong>Content Creators</strong>)</li>
+<li>推荐系统连接观众和内容</li>
+</ul></li>
+<li><strong>照片共享</strong>：
+<ul>
+<li><strong>Flickr</strong>：专业和业余摄影师的社区</li>
+<li>标签系统(<strong>Tagging Systems</strong>)增强发现性</li>
+</ul></li>
+<li><strong>微博和实时通信</strong>：
+<ul>
+<li><strong>Twitter</strong>：实时新闻和观点分享</li>
+</ul></li>
+</ul>
+<h3 id="综合web-2.0平台">5.3 综合Web 2.0平台</h3>
+<p>某些平台结合了上述三个原则的多个方面：</p>
+<h4 id="flickr照片共享">5.3.1 <strong>Flickr</strong>（照片共享）</h4>
+<ul>
+<li><strong>协作创建</strong>：用户上传和标注照片</li>
+<li><strong>云服务</strong>：照片存储在Flickr服务器上</li>
+<li><strong>人际连接</strong>：用户可以关注摄影师，加入兴趣社群</li>
+</ul>
+<h4 id="youtube视频共享">5.3.2 <strong>YouTube</strong>（视频共享）</h4>
+<ul>
+<li><strong>协作创建</strong>：任何用户可以上传视频内容</li>
+<li><strong>云服务</strong>：视频存储和流传输由YouTube处理</li>
+<li><strong>人际连接</strong>：
+<ul>
+<li>频道订阅(<strong>Channel Subscriptions</strong>)</li>
+<li>评论和回复系统</li>
+<li>推荐算法连接创作者和观众</li>
+</ul></li>
+</ul>
+<h4 id="twitter微博平台">5.3.3 <strong>Twitter</strong>（微博平台）</h4>
+<ul>
+<li><strong>协作创建</strong>：用户创建和分享"推文"(<strong>Tweets</strong>)</li>
+<li><strong>云服务</strong>：推文数据存储在Twitter平台</li>
+<li><strong>人际连接</strong>：
+<ul>
+<li>关注关系(<strong>Followers</strong>)形成社交图</li>
+<li>转推(<strong>Retweets</strong>)促进信息传播</li>
+<li>主题标签(<strong>Hashtags</strong>)创建全球对话</li>
+</ul></li>
+</ul>
+<h3 id="web-2.0与网络效应的关系">5.4 Web 2.0与网络效应的关系</h3>
+<p>Easley和Kleinberg的著作中强调了Web
+2.0与<strong>网络效应</strong>(<strong>Network
+Effects</strong>)的深刻联系：</p>
+<h4 id="软件随着使用变得更好">5.4.1 "软件随着使用变得更好"</h4>
+<p><strong>概念</strong>： 某些Web
+2.0应用的价值随着用户数量增加而指数级增长——这是<strong>正网络外部性</strong>(<strong>Positive
+Network Externalities</strong>)的表现。</p>
+<p><strong>例子</strong>： -
+<strong>Facebook</strong>：你加入Facebook时，价值取决于你的朋友也在使用
+- <strong>Twitter</strong>：平台上用户越多，信息流越丰富，价值越大 -
+<strong>维基百科</strong>：贡献者越多，百科全书越完整准确</p>
+<p><strong>相关理论章节</strong>： - 第16章
+<strong>网络效应与采用动力</strong>(<strong>(Network Effects and
+Adoption Dynamics)</strong>)<strong>) - 第17章
+</strong>竞争网络<strong>(</strong>(Competing
+Networks)<strong>)</strong>) - 第19章
+<strong>匹配市场</strong>(<strong>(Matching Markets)</strong>)**)</p>
+<h4 id="众智的力量">5.4.2 "众智的力量"</h4>
+<p><strong>概念</strong>：
+众多独立贡献者的集体决策经常比任何个体专家更准确——<strong>信息聚合</strong>(<strong>Information
+Aggregation</strong>)现象。</p>
+<p><strong>经典研究</strong>： -
+Surowiecki的《众智：为什么多数人都聪明》(<em>The Wisdom of Crowds</em>)
+- 群体能够准确估计数量（"有多少颗豆子在罐子里？"） -
+众多投资者的汇总决策通常击败个人选股者</p>
+<p><strong>Web 2.0的应用</strong>： -
+<strong>维基百科的编辑过程</strong>：众多编辑通过讨论和冲突解决达成准确的描述
+-
+<strong>推荐系统</strong>：众多用户的行为（喜欢、购买、评分）汇总提供准确的推荐
+- <strong>热题趋势</strong>：Twitter趋势话题反映了全球集体关注</p>
+<p><strong>相关理论章节</strong>： - 第22章
+<strong>投票、聚合和信息级联</strong>(<strong>Voting, Aggregation, and
+Information Cascades)</strong>)**)</p>
+<h4 id="长尾现象">5.4.3 "长尾"现象</h4>
+<p><strong>概念</strong>：
+在互联网时代，"<strong>长尾</strong>"(<strong>Long
+Tail</strong>)**商品或内容的总体重要性可以与少数"热门"项目相比。</p>
+<p><strong>传统零售与互联网的对比</strong>： -
+<strong>传统</strong>：商店空间有限，只能展示最畅销的商品（少数热门项）
+- <strong>互联网</strong>：存储空间便宜，可以提供广泛的选择 -
+Amazon可以销售数百万种书籍，包括销售量很少的书 -
+YouTube可以托管数十亿个视频，包括观看次数很少的视频</p>
+<p><strong>经济影响</strong>： -
+曾经"不可销售"的小众内容现在可以形成可观的收入（汇总） -
+创意者有动力创建小众内容，因为互联网消除了发行成本</p>
+<p><strong>相关理论章节</strong>： - 第18章
+<strong>网络中的排名和信息检索</strong>(<strong>(Ranking and Information
+Retrieval in Networks)</strong>)**)</p>
+<h3 id="web-2.0的关键特征与技术">5.5 Web 2.0的关键特征与技术</h3>
+<h4 id="信誉和信任系统reputation-and-trust-systems">5.5.1
+信誉和信任系统（Reputation and Trust Systems）</h4>
+<p><strong>问题</strong>：
+在众人贡献的平台上，如何确保内容质量和用户真实性？</p>
+<p><strong>解决方案</strong>： -
+<strong>用户评分系统</strong>：eBay、Amazon等的卖家/产品评分 -
+<strong>维基百科的编辑历史</strong>：可以看到谁做了什么改动 -
+<strong>Facebook的真实身份政策</strong>：促进真实身份交互 -
+<strong>Stack Overflow的声誉系统</strong>：高声誉用户获得特权</p>
+<p><strong>理论基础</strong>： -
+博弈论中的<strong>重复博弈</strong>(<strong>Repeated Games</strong>) -
+信息经济学中的<strong>信号传递</strong>(<strong>Signaling</strong>)</p>
+<p><strong>相关理论章节</strong>： - 第5章
+<strong>社交网络中的结构</strong>(<strong>(Structure in Social
+Networks)</strong>)<strong>) - 第22章 </strong>投票和聚合**</p>
+<h4 id="推荐系统recommendation-systems">5.5.2 推荐系统（Recommendation
+Systems）</h4>
+<p><strong>功能</strong>：
+根据用户的历史行为和其他用户的偏好，推荐可能感兴趣的内容。</p>
+<p><strong>算法基础</strong>： -
+<strong>协同过滤</strong>(<strong>Collaborative
+Filtering</strong>)：用户A和用户B有相似的历史，可以互相推荐 -
+<strong>内容过滤</strong>(<strong>Content-Based
+Filtering</strong>)：推荐与用户已喜欢内容相似的新内容 -
+<strong>混合方法</strong>：结合多种信号</p>
+<p><strong>Web 2.0平台的应用</strong>： -
+<strong>Netflix</strong>：电影推荐 - <strong>Spotify</strong>：音乐推荐
+- <strong>YouTube</strong>：视频推荐 -
+<strong>Amazon</strong>："经常一起购买"和"顾客也查看了"功能</p>
+<p><strong>相关理论章节</strong>： - 第18章
+<strong>排名和信息检索</strong></p>
+<h3 id="web-2.0与搜索引擎的作用">5.6 Web 2.0与搜索引擎的作用</h3>
+<h4 id="搜索引擎的演变">5.6.1 搜索引擎的演变</h4>
+<p><strong>从Web 1.0到Web
+2.0的转变中，搜索引擎扮演了关键角色</strong>：</p>
+<p><strong>早期网络</strong>： - 网络目录(<strong>Web
+Directories</strong>)如Yahoo目录：人工编辑 -
+关键词搜索：匹配网页中的关键词</p>
+<p><strong>谷歌革命</strong>（1998年）： -
+<strong>PageRank算法</strong>：将网络链接结构视为投票 -
+被链接越多的页面越重要 - 来自重要页面的链接更有价值 -
+大幅提升了搜索结果的相关性</p>
+<p><strong>Web 2.0时代</strong>： -
+搜索引擎需要适应新类型的内容：社交媒体、视频、实时数据 -
+搜索意图识别：区分导航、信息和事务查询 -
+个性化搜索：根据用户历史定制结果</p>
+<h4 id="搜索引擎与web-2.0的共生关系">5.6.2 搜索引擎与Web
+2.0的共生关系</h4>
+<p><strong>搜索引擎如何促进Web 2.0</strong>： -
+使用户能够找到和发现用户生成内容(<strong>User-Generated
+Content</strong>) - 为小众创作者提供可见性 - 使长尾内容可被发现</p>
+<p><strong>Web 2.0如何影响搜索</strong>： -
+社交信号变成排名因素（Twitter提及、Facebook分享） -
+实时内容需求（最新新闻、实时事件） -
+用户参与度信号（停留时间、点击率）反映内容质量</p>
+<h3 id="web-2.0的社会和经济影响">5.7 Web 2.0的社会和经济影响</h3>
+<h4 id="内容创作的民主化">5.7.1 内容创作的民主化</h4>
+<p><strong>变化</strong>： - 出版权不再垄断于传统媒体 -
+任何人都可以成为创作者和出版者 - 形成了多种不同的声音和观点</p>
+<p><strong>影响</strong>： -
+<strong>积极</strong>：更多样的声音，更多创意机会 -
+<strong>消极</strong>：信息泛滥，虚假信息传播</p>
+<h4 id="平台经济的兴起">5.7.2 平台经济的兴起</h4>
+<p><strong>特点</strong>： - 平台（如Facebook、YouTube、Airbnb）充当中介
+- 用户既是消费者又是生产者 - <strong>多边市场</strong>(<strong>Two-Sided
+Markets</strong>)理论适用</p>
+<p><strong>商业模式</strong>： -
+<strong>广告</strong>：提供免费服务，通过广告变现 -
+<strong>交易费用</strong>：从交易中提取佣金 -
+<strong>高级服务</strong>：免费基础版本，付费高级版本</p>
+<h4 id="数据作为资产">5.7.3 数据作为资产</h4>
+<p><strong>转变</strong>： - 用户数据变得极为宝贵 -
+平台通过分析用户数据优化推荐和广告 - 隐私和数据所有权的问题变得突出</p>
+<h3 id="web-2.0与书中其他章节的联系">5.8 Web
+2.0与书中其他章节的联系</h3>
+<p>在《Networks, Crowds, and Markets》中，Web
+2.0的各种现象都与后续章节的理论相联系：</p>
+<table>
+<thead>
+<tr>
+<th>Web 2.0现象</th>
+<th>相关理论</th>
+<th>书中章节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络效应、用户增长</td>
+<td>网络外部性</td>
+<td>16, 17, 19</td>
+</tr>
+<tr>
+<td>众智与内容聚合</td>
+<td>信息聚合、多数意见</td>
+<td>22</td>
+</tr>
+<tr>
+<td>长尾现象</td>
+<td>权力律分布、排名</td>
+<td>18, 21</td>
+</tr>
+<tr>
+<td>社区与信任</td>
+<td>网络结构、声誉</td>
+<td>5, 22</td>
+</tr>
+<tr>
+<td>推荐与寻找</td>
+<td>配对、搜索</td>
+<td>18, 19</td>
+</tr>
+<tr>
+<td>信息传播</td>
+<td>信息级联、谣言</td>
+<td>16, 19</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六总结与知识框架整合">六、总结与知识框架整合</h2>
+<h3 id="从web结构到网络科学">6.1 从Web结构到网络科学</h3>
+<p>本章介绍了万维网从<strong>物理实体</strong>（互联网上的网页和链接）到<strong>抽象概念</strong>（有向图和网络结构）的映射：</p>
+<ol type="1">
+<li><strong>数据层</strong>：网页和超链接</li>
+<li><strong>图论层</strong>：节点、边、路径、连通分量</li>
+<li><strong>拓扑层</strong>：弓形结构、SCC、IN/OUT</li>
+<li><strong>社会经济层</strong>：Web 2.0、网络效应、平台经济</li>
+</ol>
+<h3 id="本章概念的深层联系">6.2 本章概念的深层联系</h3>
+<p><strong>弓形结构的含义</strong>： -
+GSCC代表互联网的"<strong>权力核心</strong>"——这些网站相互链接，形成自我强化的权力
+- IN代表"<strong>新兴者</strong>"——努力进入核心的新网站和专业内容 -
+OUT代表"<strong>消费者</strong>"——接收核心发出的信息和服务</p>
+<p>这种结构反映了现实世界中的<strong>权力分布</strong>和<strong>机会不平等</strong>。</p>
+<p><strong>Web 2.0的意义</strong>： -
+不仅是技术变化，更是<strong>权力结构的民主化</strong> -
+每个人都可以成为内容创建者（打破IN/OUT的界限） -
+协作创建和众智取代了单向的内容流</p>
+<h3 id="从网络结构到现实应用">6.3 从网络结构到现实应用</h3>
+<p>本章的理论有直接的实际应用：</p>
+<ul>
+<li><strong>搜索引擎优化</strong>(<strong>Search Engine Optimization,
+SEO</strong>)：理解网络的结构有助于优化网站在搜索中的可见性</li>
+<li><strong>网络安全</strong>：识别关键节点和SCC有助于防御网络攻击</li>
+<li><strong>信息传播</strong>：理解网络拓扑可以预测信息如何传播</li>
+<li><strong>平台设计</strong>：Web
+2.0企业利用网络效应和信任系统创建具有粘性的平台</li>
+</ul>
+<hr />
+<h2 id="专业术语表">专业术语表</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 43%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文术语</th>
+<th>English Term</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>万维网</td>
+<td>World Wide Web (WWW)</td>
+<td>由蒂姆·伯纳斯-李创建的全球信息共享系统</td>
+</tr>
+<tr>
+<td>网页</td>
+<td>Web Page</td>
+<td>万维网上的单个文档或资源</td>
+</tr>
+<tr>
+<td>浏览器</td>
+<td>Web Browser</td>
+<td>用来访问和显示网页的应用程序</td>
+</tr>
+<tr>
+<td>超文本</td>
+<td>Hypertext</td>
+<td>通过链接组织信息的文本形式</td>
+</tr>
+<tr>
+<td>超链接</td>
+<td>Hyperlink</td>
+<td>连接两个网页的有向引用</td>
+</tr>
+<tr>
+<td>有向图</td>
+<td>Directed Graph</td>
+<td>边具有方向的图</td>
+</tr>
+<tr>
+<td>节点</td>
+<td>Node/Vertex</td>
+<td>图中代表实体的点</td>
+</tr>
+<tr>
+<td>有向边</td>
+<td>Directed Edge</td>
+<td>具有方向的连接线</td>
+</tr>
+<tr>
+<td>路径</td>
+<td>Path</td>
+<td>沿着边的方向连接的节点序列</td>
+</tr>
+<tr>
+<td>可达性</td>
+<td>Reachability</td>
+<td>从一个节点到另一个节点是否存在路径</td>
+</tr>
+<tr>
+<td>强连通</td>
+<td>Strongly Connected</td>
+<td>图中任意两点相互可达的性质</td>
+</tr>
+<tr>
+<td>强连通分量</td>
+<td>Strongly Connected Component (SCC)</td>
+<td>图中的最大强连通子集</td>
+</tr>
+<tr>
+<td>引用网络</td>
+<td>Citation Networks</td>
+<td>学术论文之间的引用关系形成的网络</td>
+</tr>
+<tr>
+<td>信息网络</td>
+<td>Information Networks</td>
+<td>信息片段之间的关系网络</td>
+</tr>
+<tr>
+<td>语义网络</td>
+<td>Semantic Networks</td>
+<td>概念与其逻辑关系形成的网络</td>
+</tr>
+<tr>
+<td>联想记忆</td>
+<td>Associative Memory</td>
+<td>通过关联进行的记忆和思维方式</td>
+</tr>
+<tr>
+<td>Memex</td>
+<td>Memex</td>
+<td>范尼瓦尔·布什提出的假想记忆扩展装置</td>
+</tr>
+<tr>
+<td>导航链接</td>
+<td>Navigational Links</td>
+<td>将用户从一个页面带到另一个页面的链接</td>
+</tr>
+<tr>
+<td>事务链接</td>
+<td>Transactional Links</td>
+<td>触发具体操作的链接（如购买、登录）</td>
+</tr>
+<tr>
+<td>弓形结构</td>
+<td>Bow-Tie Structure</td>
+<td>万维网的特征拓扑结构</td>
+</tr>
+<tr>
+<td>巨型SCC</td>
+<td>Giant Strongly Connected Component (GSCC)</td>
+<td>网络中包含大多数关键节点的最大SCC</td>
+</tr>
+<tr>
+<td>IN集合</td>
+<td>IN Component</td>
+<td>能到达GSCC但不被GSCC到达的节点</td>
+</tr>
+<tr>
+<td>OUT集合</td>
+<td>OUT Component</td>
+<td>被GSCC到达但不能到达GSCC的节点</td>
+</tr>
+<tr>
+<td>触须</td>
+<td>Tendrils</td>
+<td>与主要结构相连但不与SCC交互的分支</td>
+</tr>
+<tr>
+<td>通道</td>
+<td>Tubes</td>
+<td>绕过GSCC连接IN和OUT的路径</td>
+</tr>
+<tr>
+<td>Broder研究</td>
+<td>Broder et al. Study</td>
+<td>2000年对网络弓形结构的经典研究</td>
+</tr>
+<tr>
+<td>Web 1.0</td>
+<td>Web 1.0</td>
+<td>早期静态网页和单向信息流的网络阶段</td>
+</tr>
+<tr>
+<td>Web 2.0</td>
+<td>Web 2.0</td>
+<td>强调用户参与和社交互动的网络阶段</td>
+</tr>
+<tr>
+<td>协作内容创建</td>
+<td>Collaborative Content Creation</td>
+<td>多个用户共同创建和编辑内容</td>
+</tr>
+<tr>
+<td>云服务</td>
+<td>Cloud Services</td>
+<td>通过互联网提供的远程计算和存储服务</td>
+</tr>
+<tr>
+<td>社交网络</td>
+<td>Social Networks</td>
+<td>连接人与人的网络</td>
+</tr>
+<tr>
+<td>用户生成内容</td>
+<td>User-Generated Content (UGC)</td>
+<td>由普通用户而非专业人士创建的内容</td>
+</tr>
+<tr>
+<td>网络效应</td>
+<td>Network Effects</td>
+<td>网络价值随用户数量增加而增加的现象</td>
+</tr>
+<tr>
+<td>众智</td>
+<td>Collective Wisdom/Crowd Wisdom</td>
+<td>群体集体决策的聚合</td>
+</tr>
+<tr>
+<td>长尾</td>
+<td>Long Tail</td>
+<td>互联网中少量热门项目加众多小众项目的分布</td>
+</tr>
+<tr>
+<td>推荐系统</td>
+<td>Recommendation Systems</td>
+<td>根据用户偏好推荐内容的系统</td>
+</tr>
+<tr>
+<td>协同过滤</td>
+<td>Collaborative Filtering</td>
+<td>基于相似用户的推荐方法</td>
+</tr>
+<tr>
+<td>信誉系统</td>
+<td>Reputation Systems</td>
+<td>评估用户可信度和贡献质量的系统</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>PageRank</td>
+<td>Google的链接分析算法，用于网页排名</td>
+</tr>
+<tr>
+<td>导航查询</td>
+<td>Navigational Queries</td>
+<td>用户寻找特定网站的搜索查询</td>
+</tr>
+<tr>
+<td>信息查询</td>
+<td>Informational Queries</td>
+<td>用户寻求信息的搜索查询</td>
+</tr>
+<tr>
+<td>事务查询</td>
+<td>Transactional Queries</td>
+<td>用户意图完成某项操作的搜索查询</td>
+</tr>
+<tr>
+<td>维基百科</td>
+<td>Wikipedia</td>
+<td>以协作方式创建的免费网络百科全书</td>
+</tr>
+<tr>
+<td>Facebook</td>
+<td>Facebook</td>
+<td>最大的社交网络平台</td>
+</tr>
+<tr>
+<td>Twitter</td>
+<td>Twitter</td>
+<td>微博和实时信息共享平台</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>YouTube</td>
+<td>视频共享和流媒体平台</td>
+</tr>
+<tr>
+<td>搜索引擎优化</td>
+<td>Search Engine Optimization (SEO)</td>
+<td>优化网站在搜索引擎中排名的技术</td>
+</tr>
+<tr>
+<td>有向无环图</td>
+<td>Directed Acyclic Graph (DAG)</td>
+<td>不包含有向环的有向图</td>
+</tr>
+<tr>
+<td>名誉网络</td>
+<td>Name-Recognition Networks</td>
+<td>基于知名度的单向关系网络</td>
+</tr>
+<tr>
+<td>多边市场</td>
+<td>Two-Sided Markets</td>
+<td>连接两类用户的平台市场</td>
+</tr>
+<tr>
+<td>信息聚合</td>
+<td>Information Aggregation</td>
+<td>汇总多个信息源得出结论的过程</td>
+</tr>
+<tr>
+<td>广告网络</td>
+<td>Advertising Networks</td>
+<td>基于用户行为和兴趣的广告投放系统</td>
+</tr>
+<tr>
+<td>平台经济</td>
+<td>Platform Economy</td>
+<td>由中介平台连接供应方和需求方的经济</td>
+</tr>
+<tr>
+<td>蒂姆·伯纳斯-李</td>
+<td>Tim Berners-Lee</td>
+<td>万维网的发明者</td>
+</tr>
+<tr>
+<td>蒂姆·奥莱利</td>
+<td>Tim O'Reilly</td>
+<td>提出并推广Web 2.0概念的人物</td>
+</tr>
+<tr>
+<td>范尼瓦尔·布什</td>
+<td>Vannevar Bush</td>
+<td>提出Memex概念的先驱思想家</td>
+</tr>
+<tr>
+<td>CERN</td>
+<td>CERN</td>
+<td>欧洲核子研究组织，万维网发源地</td>
+</tr>
+<tr>
+<td>AltaVista</td>
+<td>AltaVista</td>
+<td>1990年代流行的搜索引擎</td>
+</tr>
+<tr>
+<td>谷歌</td>
+<td>Google</td>
+<td>现代搜索引擎领导者</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>文档完成时间</strong>：2026年4月13日<br />
+<strong>适用课程</strong>：COMP5313 - Networks, Crowds, and
+Markets<br />
+<strong>涵盖范围</strong>：第13章 万维网的结构（Sections 13.1-13.5）</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/815987d1.html" rel="prev" title="COMP5313 - Chapter 14 Link Analysis and Web Search 链接分析与网络搜索">
+                  <i class="fa fa-angle-left"></i> COMP5313 - Chapter 14 Link Analysis and Web Search 链接分析与网络搜索
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/34e2da02.html" rel="next" title="COMP5313-Ch09-Auctions">
+                  COMP5313-Ch09-Auctions <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">202k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:13</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

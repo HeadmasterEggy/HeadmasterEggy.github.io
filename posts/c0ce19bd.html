@@ -22,33 +22,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="预训练的思想：任务 A 对应的模型 A 的参数不再是随机">
+    <meta name="description" content="--- title: Word2Vec">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Word2Vec">
+<meta property="og:title" content="词向量">
 <meta property="og:url" content="http://example.com/posts/c0ce19bd.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="预训练的思想：任务 A 对应的模型 A 的参数不再是随机">
+<meta property="og:description" content="--- title: Word2Vec">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png">
-<meta property="og:image" content="https://images-a2q.pages.dev/file/2ee900a0cfb63b3ded0a4.png">
-<meta property="og:image" content="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png">
-<meta property="og:image" content="https://images-a2q.pages.dev/file/060a94c685f8bd1d4b60a.png">
-<meta property="og:image" content="https://images-a2q.pages.dev/file/802a54ee77c9c6b741098.png">
-<meta property="article:published_time" content="2024-04-01T16:14:40.000Z">
-<meta property="article:modified_time" content="2026-04-13T06:01:19.232Z">
+<meta property="article:published_time" content="2024-04-01T08:14:40.645Z">
+<meta property="article:modified_time" content="2026-04-13T10:41:05.814Z">
 <meta property="article:author" content="Joey">
-<meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png">
 
 
 <link rel="canonical" href="http://example.com/posts/c0ce19bd.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/c0ce19bd.html","path":"posts/c0ce19bd.html","title":"Word2Vec"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/c0ce19bd.html","path":"posts/c0ce19bd.html","title":"词向量"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Word2Vec | Joey</title>
+<title>词向量 | Joey</title>
   
 
 
@@ -131,7 +124,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">58</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">29</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">184</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">25</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">186</span></a></li>
   </ul>
 </nav>
 
@@ -143,7 +136,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -156,7 +149,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-text">预训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-text">语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-text">统计语言模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word-embedding"><span class="nav-text">Word Embedding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec"><span class="nav-text">Word2Vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#skip-gram"><span class="nav-text">Skip-gram</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,18 +163,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">186</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -240,12 +232,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Word2Vec | Joey">
-      <meta itemprop="description" content="预训练的思想：任务 A 对应的模型 A 的参数不再是随机">
+      <meta itemprop="name" content="词向量 | Joey">
+      <meta itemprop="description" content="--- title: Word2Vec">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Word2Vec
+          词向量
         </h1>
 
         <div class="post-meta-container">
@@ -256,14 +248,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2024-04-01 16:14:40" itemprop="dateCreated datePublished" datetime="2024-04-01T16:14:40Z">2024-04-01</time>
+      <time title="Created: 2024-04-01 08:14:40" itemprop="dateCreated datePublished" datetime="2024-04-01T08:14:40Z">2024-04-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-13 06:01:19" itemprop="dateModified" datetime="2026-04-13T06:01:19Z">2026-04-13</time>
+      <time title="Modified: 2026-04-13 10:41:05" itemprop="dateModified" datetime="2026-04-13T10:41:05Z">2026-04-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -282,197 +274,25 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>2.6k</span>
+      <span>0</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>9 mins.</span>
+      <span>1 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">预训练的思想：任务 A 对应的模型 A 的参数不再是随机</div>
+            <div class="post-description">--- title: Word2Vec</div>
         </div>
       </header>
 
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>#deepLearning/word2vec</p>
-<h1 id="预训练">预训练</h1>
-<p>预训练的思想：任务 A 对应的模型 A
-的参数不再是随机初始化的，而是通过任务 B 进行预先训练得到模型
-B，然后利用模型 B 的参数对模型 A 进行初始化，再通过任务 A 的数据对模型 A
-进行训练。注：模型 B 的参数是随机初始化的。</p>
-<h1 id="语言模型">语言模型</h1>
-<p>语言模型通俗点讲就是<strong>计算一个句子的概率</strong>。也就是说，对于语言序列 <span
-class="math inline">\(w_1,w_2,\cdots,w_n\)</span>，语言模型就是计算该序列的概率，即 <span
-class="math inline">\(P(w_1,w_2,\cdots,w_n)\)</span>。</p>
-<p>下面通过两个实例具体了解上述所描述的意思：</p>
-<ol type="1">
-<li>假设给定两句话 <strong>"判断这个词的磁性"</strong> 和
-<strong>"判断这个词的词性"</strong>
-，语言模型会认为后者更自然。转化成数学语言也就是：<span
-class="math display">\[P(判断，这个，词，的，词性) \gt
-P(判断，这个，词，的，磁性)\]</span></li>
-<li>假设给定一句话做填空
-"**判断这个词的__**"，则问题就变成了给定前面的词，找出后面的一个词是什么，转化成数学语言就是：<span
-class="math display">\[P(词性|判断，这个，词，的) \gt
-P(磁性|判断，这个，词，的)\]</span></li>
-</ol>
-<p>通过上述两个实例，可以给出语言模型更加具体的描述：给定一句由 <span
-class="math inline">\(n\)</span> 个词组成的句子 <span
-class="math inline">\(W=w_1,w_2,\cdots,w_n\)</span>，计算这个句子的概率 <span
-class="math inline">\(P(w_1,w_2,\cdots,w_n)\)</span>，或者计算根据上文计算下一个词的概率 <span
-class="math inline">\(P(w_n|w_1,w_2,\cdots,w_{n-1})\)</span>。</p>
-<p>下面将介绍语言模型的两个分支，统计语言模型和神经网络语言模型。</p>
-<h2 id="统计语言模型">统计语言模型</h2>
-<p>统计语言模型的基本思想就是<strong>计算条件概率</strong>。</p>
-<p>给定一句由 <span
-class="math inline">\(n\)</span> 个词组成的句子 <span
-class="math inline">\(W=w_1,w_2,\cdots,w_n\)</span>，计算这个句子的概率 <span
-class="math inline">\(P(w_1,w_2,\cdots,w_n)\)</span> 的公式如下（条件概率乘法公式的推广，链式法则）：</p>
-<p><span class="math display">\[
-\begin{align*}
-P(w_1, w_2, \cdots, w_n) &amp;= P(w_1) \cdot P(w_2 \mid w_1) \cdot P(w_3
-\mid w_1, w_2) \cdots P(w_n \mid w_1, w_2, \cdots, w_{n-1}) \\
-&amp;= \prod_{i=1}^{n} P(w_i \mid w_1, w_2, \cdots, w_{i-1})
-\end{align*}
-\]</span></p>
-<p>对于上一节提到的 “判断这个词的词性”
-这句话，利用上述的公式，可以得到：</p>
-<p><span class="math display">\[
-\begin{align*}
-&amp; P(判断，这个，词，的，词性) = \\
-&amp; P(判断)P(这个|判断)P(词|判断，这个) \\
-&amp;
-P(的|判断，这个，词)P(词性|判断，这个，词，的)P(判断，这个，词，的，词性)
-\end{align*}
-\]</span></p>
-<p>对于上一节提到的另外一个问题，当给定前面词的序列 “判断，这个，词，的”
-时，想要知道下一个词是什么，可以直接计算如下概率：</p>
-<p><span
-class="math display">\[P(w_{next}|判断，这个，词，的)\]</span></p>
-<p>其中，<span class="math inline">\(w_{next} \in
-V\)</span>表示词序列的下一个词，<span
-class="math inline">\(V\)</span> 是一个具有 <span
-class="math inline">\(|V|\)</span> 个词的词典（词集合）。</p>
-<p>对于公式（3），可以展开成如下形式：</p>
-<p><span class="math display">\[P(w_{next}|判断，这个，词，的) =
-\frac{count(w_{next}，判断，这个，词，的)}{count(判断，这个，词，的)}\]</span></p>
-<p>对于公式（4），可以把字典 <span
-class="math inline">\(V\)</span> 中的多有单词，逐一作为 <span
-class="math inline">\(w_{next}\)</span>，带入计算，最后取最大概率的词作为 <span
-class="math inline">\(w_{next}\)</span> 的候选词。</p>
-<p>如果 <span
-class="math inline">\(|V|\)</span> 特别大，公式（4）的计算将会非常困难，但是我们可以引入马尔科夫链的概念（当然，在这里只是简单讲讲如何做，关于马尔科夫链的数学理论知识可以自行查看其他参考资料）。</p>
-<p>假设字典 V 中有 “火星” 一词，可以明显发现 “火星” 不可能出现在
-“判断这个词的”
-后面，因此（火星，判断，这个，词，的）这个组合是不存在的，并且词典中会存在很多类似于
-“火星” 这样的词。</p>
-<p>进一步，可以发现我们把（火星，判断，这个，词，的）这个组合判断为不存在，是因为
-“火星” 不可能出现在 “词的”
-后面，也就是说我们可以考虑是否把公式（3）转化为</p>
-<p><span class="math display">\[
-P(w_{next}|判断，这个，词，的) \approx P(w_{next}|词，的)
-\]</span></p>
-<p>公式（5）就是马尔科夫链的思想：假设 <span
-class="math inline">\(w_{next}\)</span> 只和它之前的 <strong>k 个词有相关性</strong>，<span
-class="math inline">\(k=1\)</span> 时称作一个单元语言模型，<span
-class="math inline">\(k=2\)</span> 时称为二元语言模型。</p>
-<p>可以发现通过马尔科夫链后改写的公式计算起来将会简单很多，下面我们举个简单的例子介绍下如何计算一个二元语言模型的概率。</p>
-<p>其中二元语言模型的公式为：</p>
-<p><span
-class="math display">\[P(w_i|w_{i-1})=\frac{count(w_{i-1},w_i)}{count(w_{i-1})}\]</span></p>
-<p>假设有一个文本集合：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">“词性是动词”</span><br><span class="line">“判断单词的词性”</span><br><span class="line">“磁性很强的磁铁”</span><br><span class="line">“北京的词性是名词”</span><br></pre></td></tr></table></figure>
-<p>对于上述文本，如果要计算 P(词性|的) 的概率，通过公式（6），需要统计
-“的，词性” 同时按序出现的次数，再除以 “的” 出现的次数：</p>
-<p><span class="math display">\[
-P(词性|的) = \frac{count(的，词性)}{count(的)} = \frac{2}{3}
-\]</span></p>
-<p>上述文本集合是我们自定制的，然而对于绝大多数具有现实意义的文本，会出现数据稀疏的情况，例如<strong>训练时未出现，测试时出现了的未登录单词</strong>。</p>
-<p>由于数据稀疏问题，则会出现概率值为 0
-的情况（填空题将无法从词典中选择一个词填入），为了避免 0
-值的出现，会使用一种平滑的策略——分子和分母都加入一个非 0
-正数，例如可以把公式（6）改为：</p>
-<p><span class="math display">\[
-P(w_i|w_{i-1}) = \frac{count(w_{i-1},w_i)+1}{count(w_{i-1})+|V|}
-\]</span> # 独热编码(one-hot)</p>
-<p>假设我们现在有单词数量为<span
-class="math inline">\(𝑁\)</span>的词表，那可以生成一个长度为<span
-class="math inline">\(𝑁\)</span>的向量来表示一个单词，在这个向量中该单词对应的位置数值为1，其余单词对应的位置数值全部为0。</p>
-<p><strong>词典</strong>: [queen, king, man, woman, boy, girl]</p>
-<figure>
-<img data-src="https://images-a2q.pages.dev/file/7a1e78633b697eed40588.png"
-alt="one-hot 编码图" />
-<figcaption aria-hidden="true">one-hot 编码图</figcaption>
-</figure>
-<p>假设当前词典中有以上6个单词，图总展示了其中4个单词的one-hot编码表示。</p>
-<p><strong>缺点</strong>
-在<code>one-hot</code>编码中，每个单词被表示为一个很长的向量，这个向量的维度等于词汇表的大小，向量中只有一个元素是1（表示该单词），其余元素都是0。这种表示方法虽然简单，但是它无法捕捉单词之间的关系，而且随着词汇表的增大，向量的维度也会大幅增加，导致计算效率低下。</p>
-<h1 id="word-embedding">Word Embedding</h1>
-<p>单独的<code>one-hot</code>仅仅只代表了一个无意义的编码。通过词嵌入的方式，使得此单词可以被更多维度的特征所描述，而这些特征是在一个连续的向量空间中表示的。</p>
-<p><code>word embedding</code>将每个单词表示为一个固定长度的稠密向量，语义相近的单词之间的距离在向量空间中会比较近，语义不同的单词之间距离会比较远。
-<img data-src="https://images-a2q.pages.dev/file/2ee900a0cfb63b3ded0a4.png" />
-可以看到<code>France, England, Italy</code>等国家之间比较近，并形成一个小簇；<code>dog, dogs,cat,cats</code>形成一个小簇。</p>
-<h1 id="word2vec">Word2Vec</h1>
-<p><code>Word2Vec</code>是建模了一个单词预测的任务，通过这个任务来学习词向量。假设有这样一句话<strong>Pineapples
-are spiked and
-yellow</strong>，现在假设spiked这个单词被删掉了，现在要预测这个位置原本的单词是什么。</p>
-<p><code>Word2Vec</code>本身就是在建模这个单词预测任务，当这个单词预测任务训练完成之后，那每个单词对应的词向量也就训练好了。</p>
-<p><code>Word2vec</code>是2013年被Mikolov提出来的词向量训练算法，在<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzEzMDEuMzc4MS5wZGY=">论文<i class="fa fa-external-link-alt"></i></span>中作者提到了两种<code>word2vec</code>的具体实现方式：<strong>连续词袋模型CBOW</strong>和<strong>Skip-gram</strong>:</p>
-<p><strong>CBOW(Continuous Bag of Words)</strong>:
-根据上下文预测当前单词 <strong>Skip-gram</strong>:
-根据当前单词预测上下文</p>
-<p><img data-src="https://images-a2q.pages.dev/file/b68a6e26d650f6b050f48.png"
-alt="CBOW和Skip-gram的对比" />
-一般来说，<strong>CBOW</strong>比<strong>Skip-garm</strong>训练快且更加稳定一些，然而，<strong>Skip-garm</strong>不会刻意地回避生僻词（即出现频率比较低的词），比<strong>CBOW</strong>能够更好地处理生僻词。</p>
-<h2 id="skip-gram">Skip-gram</h2>
-<p>前边说到，<strong>Skip-gram</strong>是通过中心词来预测上下文。以<strong>Pineapples
-are spiked and
-yellow</strong>为例进行讲解，如<strong>图</strong>所示，中心词是spiked，上下文是Pineapples
-are and
-yellow，在<strong>Skip-gram</strong>中，上下文是我们要预测的词，因此这些词也叫目标词。
-<img data-src="https://images-a2q.pages.dev/file/060a94c685f8bd1d4b60a.png"
-alt="Skip-gram原理图" /> ## Skip-gram网络结构 <img data-src="https://images-a2q.pages.dev/file/802a54ee77c9c6b741098.png"
-alt="Skip-gram网络结构" /></p>
-<p><strong>Skip-gram</strong>的网络结构共包含三层：输入层，隐藏层和输出层。它的处理步骤是这样的：</p>
-<ol type="1">
-<li><p>输入层接收shape为 <span class="math inline">\([1,V]\)</span> 的
-<span class="math inline">\(one-hot\)</span> 向量 <span
-class="math inline">\(x\)</span>，其中 <span
-class="math inline">\(V\)</span> 代表词表中单词的数量，这个 <span
-class="math inline">\(one-hot\)</span>
-向量就是上边提到的中心词。</p></li>
-<li><p>隐藏层包含一个shape为 <span class="math inline">\([V,N]\)</span>
-的参数矩阵 <span class="math inline">\(W_1\)</span>，其中这个 <span
-class="math inline">\(N\)</span> 代表词向量的维度，<span
-class="math inline">\(W_1\)</span> 就是word embedding
-矩阵，即我们要学习的词向量。将输入的 <span
-class="math inline">\(one-hot\)</span> 向量 <span
-class="math inline">\(x\)</span> 与 <span
-class="math inline">\(W_1\)</span> 相乘，便可得到一个shape为 <span
-class="math inline">\([1, N]\)</span> 的向量，即该输入单词对应的词向量
-<span class="math inline">\(e\)</span>。</p></li>
-<li><p>输出层包含一个shape为 <span class="math inline">\([N,V]\)</span>
-的参数矩阵 <span class="math inline">\(W_2\)</span>，将隐藏层输出的
-<span class="math inline">\(e\)</span> 与 <span
-class="math inline">\(W_2\)</span> 相乘，便可以得到shape为 <span
-class="math inline">\([1,V]\)</span> 的向量 <span
-class="math inline">\(r\)</span>，内部的数值分别代表每个候选词的打分，使用softmax函数，对这些打分进行归一化，即得到中心词的预测各个单词的概率。</p></li>
-</ol>
-<p>这是一种比较<strong>理想的</strong>实现方式，但是这里有两个问题：</p>
-<ol type="1">
-<li><p>这个输入向量是个one-hot编码的方式，只有一个元素为1，其他全是0，是个极其稀疏的向量，假设它第2个位置为1，它和word
-embedding相乘，便可获得word
-embedding矩阵的第二行的数据。那么我们知道这个规律，直接通过访存的方式直接获取就可以了，不需要进行矩阵相乘。</p></li>
-<li><p>在获取了输入单词对应的词向量 <span
-class="math inline">\(e\)</span> 后，它是一个 <span
-class="math inline">\([1,N]\)</span> 向量。接下来，会使</p></li>
-</ol>
+    <div class="post-body" itemprop="articleBody">
 
     </div>
 
@@ -481,16 +301,13 @@ class="math inline">\([1,N]\)</span> 向量。接下来，会使</p></li>
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/deepLearning/" rel="tag"><i class="fa fa-tag"></i> deepLearning</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/763a3d0e.html" rel="prev" title="DecisionTree">
-                  <i class="fa fa-angle-left"></i> DecisionTree
+                <a href="/posts/8ddc7426.html" rel="prev" title="决策树">
+                  <i class="fa fa-angle-left"></i> 决策树
                 </a>
             </div>
             <div class="post-nav-item">
@@ -531,14 +348,14 @@ class="math inline">\([1,N]\)</span> 向量。接下来，会使</p></li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">379k</span>
+    <span title="Word count total">202k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">22:59</span>
+    <span title="Reading time total">12:13</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

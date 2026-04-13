@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="## Week 1: 课程介绍 &amp; 图论基础 ### 课程概述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313_Week1-6_Summary">
+<meta property="og:url" content="http://example.com/posts/976d7425.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="## Week 1: 课程介绍 &amp; 图论基础 ### 课程概述">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-10T17:06:12.620Z">
+<meta property="article:modified_time" content="2026-04-13T10:41:05.691Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/976d7425.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/976d7425.html","path":"posts/976d7425.html","title":"COMP5313_Week1-6_Summary"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313_Week1-6_Summary | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/976d7425.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">25</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">186</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#week-1-%E8%AF%BE%E7%A8%8B%E4%BB%8B%E7%BB%8D-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="nav-text">Week 1: 课程介绍 &amp; 图论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">课程概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E5%AE%89%E6%8E%92"><span class="nav-text">课程安排</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%83%E6%A0%B8%E7%BB%93%E6%9E%84"><span class="nav-text">考核结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">图论基础概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#week-2-%E5%9B%BE%E7%9A%84-ties-%E4%B8%8E-structural-balance"><span class="nav-text">Week 2: 图的 Ties 与
+Structural Balance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%B8%96%E7%95%8C%E7%8E%B0%E8%B1%A1-small-world-phenomenon"><span class="nav-text">小世界现象 (Small World
+Phenomenon)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%BC%B1%E8%BF%9E%E6%8E%A5-strong-weak-ties"><span class="nav-text">强连接与弱连接 (Strong &amp;
+Weak Ties)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E6%B4%9E-structural-holes"><span class="nav-text">结构洞 (Structural Holes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#structural-balance-signed-graph"><span class="nav-text">Structural Balance (Signed
+Graph)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#week-3-structural-balance%E7%BB%AD-%E7%BD%91%E7%BB%9C%E6%BC%94%E5%8C%96"><span class="nav-text">Week 3: Structural
+Balance（续）&amp; 网络演化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%AE%8C%E5%85%A8%E5%9B%BE%E7%9A%84-structural-balance"><span class="nav-text">不完全图的 Structural
+Balance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%E4%B8%A4%E6%AD%A5%E6%B3%95"><span class="nav-text">检测算法（两步法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-text">应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#homophily%E5%90%8C%E8%B4%A8%E6%80%A7"><span class="nav-text">Homophily（同质性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#affiliation-network-%E9%97%AD%E5%8C%85%E8%BF%87%E7%A8%8B"><span class="nav-text">Affiliation Network &amp;
+闭包过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#schelling-%E6%A8%A1%E5%9E%8B%E9%9A%94%E7%A6%BB%E6%A8%A1%E5%9E%8B"><span class="nav-text">Schelling 模型（隔离模型）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#week-4-%E7%A4%BE%E5%8C%BA%E6%A3%80%E6%B5%8B-community-detection"><span class="nav-text">Week 4: 社区检测 (Community
+Detection)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BE%E5%8C%BA%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">社区的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%A1%86%E6%9E%B6"><span class="nav-text">两种框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#modularity%E6%A8%A1%E5%9D%97%E5%BA%A6"><span class="nav-text">Modularity（模块度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#girvan-newman-%E7%AE%97%E6%B3%95divisive"><span class="nav-text">Girvan-Newman 算法（Divisive）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95%E7%AE%80%E8%BF%B0"><span class="nav-text">其他方法（简述）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#week-5-%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C-hub-authority-%E7%AE%97%E6%B3%95"><span class="nav-text">Week 5: 信息网络 &amp;
+Hub-Authority 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C"><span class="nav-text">信息网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE%E6%A6%82%E5%BF%B5"><span class="nav-text">有向图概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-%E7%9A%84%E8%9D%B4%E8%9D%B6%E7%BB%93%E7%BB%93%E6%9E%84-bow-tie-structure"><span class="nav-text">Web 的蝴蝶结结构 (Bow-Tie
+Structure)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hub-authority-%E7%AE%97%E6%B3%95-hits"><span class="nav-text">Hub-Authority 算法 (HITS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%B1%E5%88%86%E6%9E%90%E5%8F%AF%E9%80%89advanced"><span class="nav-text">谱分析（可选&#x2F;Advanced）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#week-6-pagerank-%E7%AE%97%E6%B3%95"><span class="nav-text">Week 6: PageRank 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC-pagerank"><span class="nav-text">基本 PageRank</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC-pagerank-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">基本 PageRank 的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scaled-pagerank%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC"><span class="nav-text">Scaled
+PageRank（实际使用版本）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#personalized-pagerank-ppr"><span class="nav-text">Personalized PageRank (PPR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89-pagerank%E5%8F%AF%E9%80%89"><span class="nav-text">广义 PageRank（可选）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%80%83%E7%82%B9%E6%8F%90%E9%86%92"><span class="nav-text">关键考点提醒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/976d7425.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313_Week1-6_Summary | Joey">
+      <meta itemprop="description" content="## Week 1: 课程介绍 & 图论基础 ### 课程概述">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313_Week1-6_Summary
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-10 17:06:12" itemprop="dateCreated datePublished" datetime="2026-04-10T17:06:12Z">2026-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-13 10:41:05" itemprop="dateModified" datetime="2026-04-13T10:41:05Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">## Week 1: 课程介绍 & 图论基础 ### 课程概述</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="week-1-课程介绍-图论基础">Week 1: 课程介绍 &amp; 图论基础</h2>
+<h3 id="课程概述">课程概述</h3>
+<ul>
+<li><strong>课程名称</strong>: Large Scale Networks（大规模网络）</li>
+<li><strong>核心内容</strong>:
+用图/网络模型分析现实系统（社交网络、Web、交通网络等）</li>
+<li><strong>教材</strong>: <em>Networks, Crowds, and Markets</em> —
+David Easley &amp; Jon Kleinberg（电子版免费）</li>
+</ul>
+<h3 id="课程安排">课程安排</h3>
+<table>
+<thead>
+<tr>
+<th>周次</th>
+<th>主题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2–4</td>
+<td>社交网络（ties、structural balance、社区检测）</td>
+</tr>
+<tr>
+<td>5–6</td>
+<td>信息网络（Hub/Authority、PageRank）</td>
+</tr>
+<tr>
+<td>7–8</td>
+<td>图上的机器学习</td>
+</tr>
+<tr>
+<td>9–11</td>
+<td>网络动力学（信息级联、去中心化搜索）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="考核结构">考核结构</h3>
+<ul>
+<li>Assignment 1（10%）：解题</li>
+<li>Midterm Quiz（10%）：选择题，纸笔，可带纸质资料</li>
+<li>Assignment 2（20%）：小组项目 + 报告 + 录制展示</li>
+<li>Final Exam（60%）：hurdle，需 ≥ 40% 才能通过</li>
+</ul>
+<h3 id="图论基础概念">图论基础概念</h3>
+<p><strong>图的表示</strong>: G = (V, E)，V 为节点集，E 为边集</p>
+<p><strong>无向图 vs 有向图</strong>: - 无向图：边是对称关系（如
+Facebook 友谊） - 有向图：边有方向（如 Twitter 关注、Web 超链接）</p>
+<p><strong>路径 (Path)</strong>:
+节点序列，每对相邻节点之间有边；路径长度 = 边数</p>
+<p><strong>连通分量 (Connected Component)</strong>:
+无向图中的最大连通子图</p>
+<p><strong>巨型连通分量 (Giant Component)</strong>:
+一个网络通常只有一个远大于其他分量的连通分量。两个大分量只需一条边即可合并。</p>
+<p><strong>距离与直径</strong>: 距离 = 最短路径长度；直径 =
+所有节点对中最大的距离</p>
+<p><strong>BFS（广度优先搜索）</strong>:
+从起点逐层扩展，可计算从起点到所有节点的距离。BFS
+树中的边只连接同层或相邻层节点。</p>
+<hr />
+<h2 id="week-2-图的-ties-与-structural-balance">Week 2: 图的 Ties 与
+Structural Balance</h2>
+<h3 id="小世界现象-small-world-phenomenon">小世界现象 (Small World
+Phenomenon)</h3>
+<p><strong>Milgram 实验 (1960s)</strong>: 约 300
+人尝试通过私人关系将信件转交到特定目标人物。64 封信到达，中位步数为 6 →
+"六度分隔"</p>
+<p><strong>Microsoft Messenger 验证 (2008)</strong>: 2.4
+亿用户网络，巨型连通分量包含几乎所有节点，平均距离 6.6，中位距离 7</p>
+<h3 id="强连接与弱连接-strong-weak-ties">强连接与弱连接 (Strong &amp;
+Weak Ties)</h3>
+<p><strong>核心发现</strong>:
+找工作时，熟人（弱连接）比亲密朋友（强连接）更有用 →
+弱连接跨越不同群体，带来新信息</p>
+<p><strong>桥 (Bridge)</strong>:
+删除后使两端点不连通的边（现实中极少）</p>
+<p><strong>局部桥 (Local Bridge)</strong>:
+两端点无公共邻居的边（删除后距离 &gt; 2）；Span =
+删除后两端点的新距离</p>
+<p><strong>Strong Triadic Closure 性质</strong>: 若节点 A 满足该性质且有
+≥ 2 条强连接，则 A 的所有局部桥必为弱连接</p>
+<p><strong>证明</strong>（反证法）: 假设 A-B 是强连接的局部桥，A
+还有另一强连接 A-C，则 B、C 应相连（by STC），但这与局部桥定义矛盾。</p>
+<p><strong>实证验证 (手机通话数据)</strong>: - Tie
+strength（通话总时长）与 Neighbourhood overlap（公共邻居比例）呈正相关 -
+先移除弱连接 → 巨型分量迅速缩小；先移除强连接 → 巨型分量仍保持</p>
+<p><strong>Neighbourhood Overlap</strong>: |N(A) ∩ N(B)| / |N(A) ∪ N(B)
+ {A,B}|，局部桥的 overlap = 0</p>
+<h3 id="结构洞-structural-holes">结构洞 (Structural Holes)</h3>
+<p><strong>Embeddedness</strong>: 一条边两端点的公共邻居数量</p>
+<p><strong>结构洞</strong>: 节点 B 位于多个不互动群体的交界处 →
+充当"守门人"角色，控制信息流通，具有战略优势</p>
+<h3 id="structural-balance-signed-graph">Structural Balance (Signed
+Graph)</h3>
+<p><strong>Signed Graph</strong>: 每条边标记为正（朋友）或负（敌人）</p>
+<p><strong>三角形平衡规则</strong>: - 平衡：3 正边 或 1 正 2 负 -
+不平衡：2 正 1 负 或 3 负</p>
+<p><strong>完全图的 Balance Theorem</strong>: 一个有标签完全图是
+balanced ⟺ 所有边为正 <strong>或</strong>
+节点可分为两组（组内全正、组间全负）</p>
+<p><strong>证明思路</strong>: 选取有负边的节点 A，将其朋友归入
+X、敌人归入 Y，利用 balanced 三角形条件推导出 X 内全正、Y 内全正、X-Y
+间全负。</p>
+<hr />
+<h2 id="week-3-structural-balance续-网络演化">Week 3: Structural
+Balance（续）&amp; 网络演化</h2>
+<h3 id="不完全图的-structural-balance">不完全图的 Structural
+Balance</h3>
+<p><strong>两种等价定义</strong>: 1. 能否补全缺失边使其成为 balanced
+完全图 2. 能否将节点分为两组：组内全正、组间全负</p>
+<p><strong>关键定理</strong>: Signed graph 不平衡 ⟺
+存在含奇数条负边的环</p>
+<h3 id="检测算法两步法">检测算法（两步法）</h3>
+<p><strong>Step 1</strong>: 只看正边，找连通分量（supernodes）。若某
+supernode 内部有负边 → 直接判定不平衡（找到只含 1 条负边的环）</p>
+<p><strong>Step 2</strong>: 将 supernodes
+缩点，得到只含负边的简化图。判断该图是否为二部图（用 BFS）： - 是二部图
+→ balanced - 存在奇数环 → unbalanced</p>
+<p><strong>也可直接用 BFS/DFS</strong>:
+从任意节点开始，遇正边同组、负边异组，若产生矛盾则 unbalanced</p>
+<h3 id="应用">应用</h3>
+<ul>
+<li><strong>国际关系分析</strong>: 1972 年各国关系构成 signed
+graph，美国支持巴基斯坦可由 balance 分组解释</li>
+<li><strong>在线信任网络</strong>: Slashdot、Epinions 等数据集</li>
+</ul>
+<h3 id="homophily同质性">Homophily（同质性）</h3>
+<p><strong>定义</strong>: 人们倾向与相似的人建立关系</p>
+<p><strong>检测方法</strong>: 比较实际跨组边比例与随机图中的期望比例
+2pq。若实际比例显著低于 2pq → 存在 homophily</p>
+<p><strong>两大驱动机制</strong>: - <strong>Selection（选择）</strong>:
+人们选择与自己相似的人交友 - <strong>Social
+Influence（社会影响）</strong>: 朋友之间互相影响行为</p>
+<h3 id="affiliation-network-闭包过程">Affiliation Network &amp;
+闭包过程</h3>
+<p><strong>社会关联网络</strong>: 二部图（人 ↔︎ 活动/组织）+ 社交网络</p>
+<p><strong>三种闭包过程</strong>: 1. <strong>Triadic
+Closure</strong>（选择）: 共同朋友 → 成为朋友 2. <strong>Focal
+Closure</strong>（选择）: 共同活动 → 成为朋友 3. <strong>Membership
+Closure</strong>（社会影响）: 朋友参加的活动 → 自己也加入</p>
+<p><strong>实证（email 数据）</strong>:
+共同朋友越多，未来成为朋友的概率越高（近似线性增长）</p>
+<p><strong>Clustering Coefficient</strong>: 节点 A 的朋友之间实际边数 /
+最大可能边数。Triadic closure 会增大此值。</p>
+<h3 id="schelling-模型隔离模型">Schelling 模型（隔离模型）</h3>
+<ul>
+<li>两类 agent 在网格上，若同类邻居不足阈值 T 则搬家</li>
+<li>即使 T 很小（如 3），也会产生大面积同质区域 → homophily 导致
+segregation</li>
+</ul>
+<hr />
+<h2 id="week-4-社区检测-community-detection">Week 4: 社区检测 (Community
+Detection)</h2>
+<h3 id="社区的定义">社区的定义</h3>
+<p>社区 = 内部连接密集、与外部连接稀疏的节点子集（无严格数学定义）</p>
+<h3 id="两种框架">两种框架</h3>
+<ul>
+<li><strong>Divisive（自顶向下）</strong>:
+逐步移除边，将图分裂为子图</li>
+<li><strong>Agglomerative（自底向上）</strong>:
+逐步合并相似的节点/社区</li>
+</ul>
+<p>两种方法均生成
+<strong>Dendrogram（树状图）</strong>，水平切割确定最终社区数</p>
+<h3 id="modularity模块度">Modularity（模块度）</h3>
+<p><span class="math display">\[Q = \sum_{s \in S} \left[ \frac{m_s}{m}
+- \left(\frac{D_s}{2m}\right)^2 \right]\]</span></p>
+<ul>
+<li><span class="math inline">\(m_s\)</span>: 社区 s 内部边数</li>
+<li><span class="math inline">\(D_s\)</span>: 社区 s 内节点度数之和</li>
+<li><span class="math inline">\(m\)</span>: 图的总边数</li>
+<li>取值范围 [-1, 1]，越大越好</li>
+<li>所有节点归为一个社区 → Q = 0；每个节点自成社区 → Q &lt; 0</li>
+</ul>
+<h3 id="girvan-newman-算法divisive">Girvan-Newman 算法（Divisive）</h3>
+<p><strong>Edge Betweenness</strong>:
+所有节点对的最短路径中经过该边的流量总和</p>
+<p><strong>算法流程</strong>: 1. 计算所有边的 betweenness 2. 移除
+betweenness 最高的边 3. 重新计算 betweenness（重要！） 4.
+若产生新连通分量则记录 5. 重复，直到所有边被移除</p>
+<p><strong>Betweenness 高效计算（BFS 法）</strong>: 1. 从起点做
+BFS，逐层记录最短路径数 2.
+<strong>自底向上</strong>计算每条边的流量：每个节点的流量 = 1 +
+下层传来的流量，按最短路径数比例分配给上层边 3. 对所有起点求和，最终除以
+2</p>
+<p><strong>时间复杂度</strong>: 计算所有边 betweenness = O(nm)；完整
+Girvan-Newman = O(nm²)</p>
+<h3 id="其他方法简述">其他方法（简述）</h3>
+<ul>
+<li><strong>Agglomerative（Ravasz 算法）</strong>: 定义节点相似度 →
+逐步合并最相似社区</li>
+<li><strong>Clique Percolation</strong>: 以 k-clique 为基本单元，共享
+k-1 个节点的 cliques 合并为社区 → 可发现重叠社区</li>
+<li><strong>Louvain</strong>: 直接优化 modularity 的启发式算法（NP-hard
+问题）</li>
+</ul>
+<hr />
+<h2 id="week-5-信息网络-hub-authority-算法">Week 5: 信息网络 &amp;
+Hub-Authority 算法</h2>
+<h3 id="信息网络">信息网络</h3>
+<p><strong>Web Graph</strong>: 节点 = 网页，有向边 =
+超链接。去中心化系统。</p>
+<p><strong>Citation Network</strong>: 节点 = 论文，有向边 =
+引用关系。具有时间特性（只能引用已发表的论文）。</p>
+<h3 id="有向图概念">有向图概念</h3>
+<p><strong>路径</strong>: 必须沿边方向行进</p>
+<p><strong>强连通分量 (SCC)</strong>:
+有向图中，每个节点到其他所有节点都有路径的最大子图。每个节点恰属于一个
+SCC。</p>
+<h3 id="web-的蝴蝶结结构-bow-tie-structure">Web 的蝴蝶结结构 (Bow-Tie
+Structure)</h3>
+<p>Broder et al. (1999) 用 AltaVista 爬取的数据发现： - <strong>Giant
+SCC</strong> (56M 节点): 核心，任意两点互达 - <strong>IN 节点</strong>
+(44M): 可达 SCC 但 SCC 不可达它们 - <strong>OUT 节点</strong> (44M): SCC
+可达但不可回到 SCC - <strong>Tendrils</strong>: 与 SCC 通过 IN/OUT
+间接相连的节点 - <strong>Disconnected</strong>: 与 SCC 完全无关</p>
+<h3 id="hub-authority-算法-hits">Hub-Authority 算法 (HITS)</h3>
+<p><strong>提出者</strong>: Jon Kleinberg（教材作者之一）</p>
+<p><strong>核心思想</strong>: 每个网页有两个角色 -
+<strong>Authority（权威）</strong>: 被很多好 hub 指向的页面 -
+<strong>Hub（枢纽）</strong>: 指向很多好 authority 的页面</p>
+<p><strong>更新规则</strong>: - Authority 更新: <span
+class="math inline">\(a_p = \sum_{q \to p} h_q\)</span>（所有指向 p
+的页面的 hub 分数之和） - Hub 更新: <span class="math inline">\(h_p =
+\sum_{p \to q} a_q\)</span>（p 指向的所有页面的 authority 分数之和）</p>
+<p><strong>算法</strong>: 1. 初始化所有 hub score = 1 2. 交替应用
+authority 更新和 hub 更新，共 K 步 3. 归一化。K ≈ 20 通常足够</p>
+<p><strong>矩阵形式</strong>: - <span class="math inline">\(\mathbf{a} =
+A^T \mathbf{h}\)</span>（authority 更新） - <span
+class="math inline">\(\mathbf{h} = A \mathbf{a}\)</span>（hub 更新） -
+经 K 步后: <span class="math inline">\(\mathbf{h}^{(K)} = (AA^T)^K
+\mathbf{h}^{(0)}\)</span></p>
+<h3 id="谱分析可选advanced">谱分析（可选/Advanced）</h3>
+<p><span class="math inline">\(AA^T\)</span> 是对称半正定矩阵 → 有 n
+个正交单位特征向量 <span class="math inline">\(Z_1, ...,
+Z_n\)</span>，对应非负特征值 <span class="math inline">\(C_1 \geq C_2
+\geq ...\)</span></p>
+<p><strong>收敛定理</strong>: 只要初始 hub score 全为正数，归一化后的
+hub vector 收敛到 <span class="math inline">\(AA^T\)</span>
+的<strong>最大特征值对应的特征向量</strong> <span
+class="math inline">\(Z_1\)</span>。Authority 类似，收敛到 <span
+class="math inline">\(A^T A\)</span> 的最大特征向量。</p>
+<hr />
+<h2 id="week-6-pagerank-算法">Week 6: PageRank 算法</h2>
+<h3 id="基本-pagerank">基本 PageRank</h3>
+<p><strong>核心思想</strong>: 每个网页只有一个重要性分数。页面将
+PageRank 均分给所有出链目标。</p>
+<p><strong>公式</strong>: <span class="math inline">\(R_j = \sum_{i \to
+j} \frac{R_i}{d_i}\)</span>，其中 <span
+class="math inline">\(d_i\)</span> 是节点 i 的出度</p>
+<p><strong>与 HITS 的区别</strong>: - 只有一个分数（不区分
+hub/authority） - endorsement 直接在节点间传递</p>
+<p><strong>矩阵形式</strong>: <span
+class="math inline">\(\mathbf{r}^{(t+1)} = \mathbf{r}^{(t)}
+W\)</span>，其中 <span class="math inline">\(W =
+D^{-1}A\)</span>（行随机矩阵，每行和为 1）</p>
+<p><strong>求解</strong>: - <strong>小图</strong>: 列线性方程组 + 约束
+<span class="math inline">\(\sum R_i = 1\)</span>，高斯消元 -
+<strong>大图</strong>: 迭代算法，初始 <span class="math inline">\(R_i =
+1/N\)</span></p>
+<p><strong>特殊处理</strong>: 无出链节点添加自环，避免 PageRank 泄漏</p>
+<h3 id="基本-pagerank-的问题">基本 PageRank 的问题</h3>
+<ol type="1">
+<li><strong>Spider Trap</strong>: 非强连通图中，PageRank
+积累在下游节点，其余归零</li>
+<li><strong>不收敛</strong>: 即使强连通图，迭代也可能不收敛（如 4
+节点循环图的反例）</li>
+</ol>
+<p><strong>收敛条件</strong>:
+无向图需连通且非二部图；有向图需强连通才有唯一均衡值</p>
+<p><strong>无向图均衡值</strong>: <span class="math inline">\(R_i =
+\frac{d_i}{2m}\)</span>（度数正比）</p>
+<h3 id="scaled-pagerank实际使用版本">Scaled
+PageRank（实际使用版本）</h3>
+<p><strong>更新规则</strong>: <span class="math display">\[R_j^{new} =
+\alpha \sum_{i \to j} \frac{R_i}{d_i} + \frac{1-\alpha}{N}\]</span></p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span> 通常取 0.85</li>
+<li>先用基本规则更新并乘以 α，再将 (1-α) 均匀分配给所有节点</li>
+</ul>
+<p><strong>直觉</strong>: 如同水循环中的蒸发-降雨，防止 PageRank
+在下游积累</p>
+<p><strong>随机游走解释</strong>: 每步以概率 α 跟随随机出链，以概率 1-α
+跳转到随机页面</p>
+<p><strong>矩阵形式</strong>: <span class="math inline">\(\tilde{W} =
+\alpha W + \frac{1-\alpha}{N} \mathbf{e}^T \mathbf{e}\)</span></p>
+<p><strong>关键性质</strong>: - 等价于完全图（<span
+class="math inline">\(\tilde{W}\)</span> 无零元素）→ 必然强连通 →
+必有唯一均衡值 - 即使初始值全为 0 也能收敛（每步注入 1-α 的新 PageRank）
+- 误差以 <span class="math inline">\(\alpha^K\)</span> 衰减 - 均衡值:
+<span class="math inline">\(\mathbf{r} = \frac{1-\alpha}{N} \mathbf{e}
+(I - \alpha W)^{-1}\)</span></p>
+<p><strong><span class="math inline">\((I - \alpha W)\)</span>
+可逆的证明</strong>: 该矩阵严格对角占优（对角线值 = 1 &gt;
+行内其余元素之和 = α &lt; 1）</p>
+<h3 id="personalized-pagerank-ppr">Personalized PageRank (PPR)</h3>
+<p><strong>与 Scaled PageRank 唯一区别</strong>:
+随机跳转时不跳到所有页面，而是跳到预选目标集 S</p>
+<p><strong>公式</strong>: 将均匀分布 <span
+class="math inline">\(\frac{1}{N}\mathbf{e}\)</span> 替换为个性化向量
+<span class="math inline">\(\mathbf{s}\)</span></p>
+<p><strong>PPR 矩阵</strong>: n×n 矩阵，第 i 行 = 以节点 i 为目标的 PPR
+值；Scaled PageRank = 所有行的平均</p>
+<p><strong>优势</strong>: 比最短路径更精细——能区分同距离的节点</p>
+<h3 id="广义-pagerank可选">广义 PageRank（可选）</h3>
+<ul>
+<li>不同长度随机游走赋予不同权重</li>
+<li>Heat Kernel: 赋予长度 L 的随机游走权重 <span
+class="math inline">\(e^{-t} \cdot t^L / L!\)</span></li>
+<li>也可用机器学习方法学习权重</li>
+</ul>
+<hr />
+<h2 id="关键考点提醒">关键考点提醒</h2>
+<ol type="1">
+<li><strong>证明题</strong>: Strong Triadic Closure →
+局部桥为弱连接（反证法）；Balance Theorem</li>
+<li><strong>计算题</strong>: PageRank 均衡值（线性方程组）、Edge
+Betweenness（手算）、Modularity、Neighbourhood Overlap</li>
+<li><strong>概念辨析</strong>: Bridge vs Local
+Bridge、强连通分量、Homophily 检测、Scaled vs Basic PageRank</li>
+<li><strong>算法理解</strong>: BFS、Girvan-Newman、Hub-Authority
+更新规则、Scaled PageRank 迭代</li>
+<li><strong>矩阵表示</strong>: 邻接矩阵、行随机矩阵 W、<span
+class="math inline">\(AA^T\)</span> 与特征向量的关系</li>
+</ol>
+<!-- 图谱链接（自动添加） -->
+<p>[[标签集合/COMP5313]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/b65520ec.html" rel="prev" title="虾仁炒芦笋">
+                  <i class="fa fa-angle-left"></i> 虾仁炒芦笋
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/b220a24d.html" rel="next" title="COMP5313-Ch01-Overview">
+                  COMP5313-Ch01-Overview <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">202k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:13</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
