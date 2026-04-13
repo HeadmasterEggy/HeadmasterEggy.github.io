@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Assignment 1 题解（一）">
+<meta property="og:url" content="http://example.com/posts/36182a1b.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-26T07:11:33.780Z">
+<meta property="article:modified_time" content="2026-04-13T11:28:51.571Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/36182a1b.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/36182a1b.html","path":"posts/36182a1b.html","title":"COMP5313 Assignment 1 题解（一）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Assignment 1 题解（一） | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/36182a1b.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">0</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">187</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-assignment-1-%E9%A2%98%E8%A7%A3%E4%B8%80"><span class="nav-text">COMP5313 Assignment 1
+题解（一）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-1-strong-and-weak-ties"><span class="nav-text">Task 1 — Strong and Weak Ties</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%9B%AE%E6%A0%87"><span class="nav-text">1. 题目目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stc-%E7%9A%84%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-text">2. STC 的直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-1-%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86"><span class="nav-text">3. Figure 1 的图结构整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-mermaid-%E7%94%BB%E5%87%BA%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F"><span class="nav-text">4. 用 Mermaid 画出结构示意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E7%AD%96%E7%95%A5"><span class="nav-text">5. 解题策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-text">通用步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%90%E7%82%B9%E8%AF%A6%E7%BB%86%E6%A3%80%E6%9F%A5"><span class="nav-text">6. 逐点详细检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-a"><span class="nav-text">6.1 Node \(A\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-b"><span class="nav-text">6.2 Node \(B\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-c"><span class="nav-text">6.3 Node \(C\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-d"><span class="nav-text">6.4 Node \(D\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-e"><span class="nav-text">6.5 Node \(E\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E8%A1%A8%E6%A0%BC"><span class="nav-text">7. 总结表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88"><span class="nav-text">8. 最终答案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-python-networkx-%E9%AA%8C%E8%AF%81"><span class="nav-text">10. 用 Python &#x2F; NetworkX 验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%A2%98%E6%9C%80%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">11. 这题最容易错的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-1%E6%8A%8A-weak-edge-%E5%BD%93%E6%88%90%E4%B8%8D%E7%AE%97%E8%BE%B9"><span class="nav-text">错误 1：把 weak edge
+当成“不算边”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-2%E6%A3%80%E6%9F%A5%E4%BA%86%E6%89%80%E6%9C%89%E9%82%BB%E5%B1%85%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AA%E6%A3%80%E6%9F%A5-strong-neighbors"><span class="nav-text">错误
+2：检查了所有邻居，而不是只检查 strong neighbors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-3%E8%A7%89%E5%BE%97%E6%B2%A1%E6%9C%89-strong-ties-%E7%9A%84%E7%82%B9%E4%B8%8D%E7%9F%A5%E9%81%93%E7%AE%97%E4%B8%8D%E7%AE%97%E6%BB%A1%E8%B6%B3"><span class="nav-text">错误
+3：觉得没有 strong ties 的点“不知道算不算满足”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BF%86"><span class="nav-text">12. 一句话记忆</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/36182a1b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Assignment 1 题解（一） | Joey">
+      <meta itemprop="description" content="给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Assignment 1 题解（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-03-26 07:11:33" itemprop="dateCreated datePublished" datetime="2026-03-26T07:11:33Z">2026-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-13 11:28:51" itemprop="dateModified" datetime="2026-04-13T11:28:51Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>5 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak tie</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5313-assignment-1-题解一">COMP5313 Assignment 1
+题解（一）</h1>
+<h1 id="task-1-strong-and-weak-ties">Task 1 — Strong and Weak Ties</h1>
+<h2 id="题目">题目</h2>
+<p>给定 Figure 1 中的社交网络，其中每条边都标记为 strong tie 或 weak
+tie。题目要求判断：是否所有节点都满足 <strong>Strong Triadic Closure
+Property (STC)</strong>；如果不是，需要列出所有违反该性质的节点。</p>
+<p>这一题考的是 <strong>Strong Triadic Closure Property</strong>, 简称
+<strong>STC</strong>。</p>
+<p>它本质上是在问：</p>
+<blockquote>
+<p>如果一个人和两个人都是“强关系”，那么这两个人之间是否至少也认识？</p>
+</blockquote>
+<p>如果答案是否定的，那么这个节点就违反了 STC。</p>
+<hr />
+<h2 id="题目目标">1. 题目目标</h2>
+<p>题目要求：</p>
+<ol type="1">
+<li>判断图中是否 <strong>所有节点</strong> 都满足 Strong Triadic Closure
+Property；</li>
+<li>如果不是，列出所有违反该性质的节点。</li>
+</ol>
+<hr />
+<h2 id="stc-的直观理解">2. STC 的直观理解</h2>
+<p>设某个节点是 <span class="math inline">\(u\)</span>，它和两个邻居
+<span class="math inline">\(v,w\)</span> 都是 <strong>strong
+ties</strong>。</p>
+<p>那么 STC 要求：</p>
+<p><span class="math display">\[
+(u,v) \text{ is strong and } (u,w) \text{ is strong}
+\implies
+(v,w) \in E.
+\]</span></p>
+<p>这里 <span class="math inline">\((v,w) \in E\)</span> 的意思是：</p>
+<ul>
+<li><span class="math inline">\(v\)</span> 和 <span
+class="math inline">\(w\)</span> 之间至少要有一条边；</li>
+<li>这条边可以是 <strong>strong</strong>，也可以是
+<strong>weak</strong>。</li>
+</ul>
+<p>所以 STC 检查的是：</p>
+<ul>
+<li>不是要求形成一个全是 strong 的三角形；</li>
+<li>只要求这两个 strong neighbors 之间 <strong>不要断开</strong>。</li>
+</ul>
+<hr />
+<h2 id="figure-1-的图结构整理">3. Figure 1 的图结构整理</h2>
+<p>根据题图，可以把节点和边整理出来。</p>
+<p>节点集合为：</p>
+<p><span class="math display">\[
+V = \{A,B,C,D,E\}.
+\]</span></p>
+<p>边集合为：</p>
+<ul>
+<li><span class="math inline">\(A\)</span>--<span
+class="math inline">\(B\)</span>: strong</li>
+<li><span class="math inline">\(A\)</span>--<span
+class="math inline">\(C\)</span>: strong</li>
+<li><span class="math inline">\(A\)</span>--<span
+class="math inline">\(E\)</span>: weak</li>
+<li><span class="math inline">\(B\)</span>--<span
+class="math inline">\(D\)</span>: weak</li>
+<li><span class="math inline">\(B\)</span>--<span
+class="math inline">\(E\)</span>: strong</li>
+<li><span class="math inline">\(C\)</span>--<span
+class="math inline">\(D\)</span>: weak</li>
+<li><span class="math inline">\(C\)</span>--<span
+class="math inline">\(E\)</span>: strong</li>
+<li><span class="math inline">\(D\)</span>--<span
+class="math inline">\(E\)</span>: weak</li>
+</ul>
+<p>因此：</p>
+<p><span class="math display">\[
+E = \{AB, AC, AE, BD, BE, CD, CE, DE\}.
+\]</span></p>
+<p>其中 strong edges 为：</p>
+<p><span class="math display">\[
+E_s = \{AB, AC, BE, CE\}.
+\]</span></p>
+<p>weak edges 为：</p>
+<p><span class="math display">\[
+E_w = \{AE, BD, CD, DE\}.
+\]</span></p>
+<hr />
+<h2 id="用-mermaid-画出结构示意">4. 用 Mermaid 画出结构示意</h2>
+<p>下面这个图不是原题扫描图，而是我根据题目重构的结构图，便于看题解逻辑。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A((A))</span><br><span class="line">    B((B))</span><br><span class="line">    C((C))</span><br><span class="line">    D((D))</span><br><span class="line">    E((E))</span><br><span class="line"></span><br><span class="line">    A ---|s| B</span><br><span class="line">    A ---|s| C</span><br><span class="line">    A ---|w| E</span><br><span class="line">    B ---|w| D</span><br><span class="line">    B ---|s| E</span><br><span class="line">    C ---|w| D</span><br><span class="line">    C ---|s| E</span><br><span class="line">    D ---|w| E</span><br></pre></td></tr></table></figure>
+<p>从这个结构里最关键的观察是：</p>
+<ul>
+<li><span class="math inline">\(B\)</span> 和 <span
+class="math inline">\(C\)</span> <strong>没有直接边</strong>；</li>
+<li>但 <span class="math inline">\(A\)</span> 同时和 <span
+class="math inline">\(B,C\)</span> 是 strong；</li>
+<li><span class="math inline">\(E\)</span> 也同时和 <span
+class="math inline">\(B,C\)</span> 是 strong。</li>
+</ul>
+<p>所以这两个点很可能违反 STC。</p>
+<hr />
+<h2 id="解题策略">5. 解题策略</h2>
+<p>这一题最稳妥的方法是：<strong>逐个节点检查 strong
+neighbors</strong>。</p>
+<h3 id="通用步骤">通用步骤</h3>
+<p>对于每个节点 <span class="math inline">\(u\)</span>：</p>
+<ol type="1">
+<li>找出所有与 <span class="math inline">\(u\)</span> 通过
+<strong>strong edge</strong> 相连的邻居；</li>
+<li>如果 strong neighbors 少于 2 个，那么 <span
+class="math inline">\(u\)</span> 自动满足 STC；</li>
+<li>如果 strong neighbors 至少有 2 个，就检查这些 strong neighbors
+两两之间是否有边；</li>
+<li>只要存在一对 strong neighbors 之间没有边，那么 <span
+class="math inline">\(u\)</span> 就违反 STC。</li>
+</ol>
+<hr />
+<h2 id="逐点详细检查">6. 逐点详细检查</h2>
+<h2 id="node-a">6.1 Node <span class="math inline">\(A\)</span></h2>
+<p>与 <span class="math inline">\(A\)</span> 相连的边有：</p>
+<ul>
+<li><span class="math inline">\(AB\)</span>：strong</li>
+<li><span class="math inline">\(AC\)</span>：strong</li>
+<li><span class="math inline">\(AE\)</span>：weak</li>
+</ul>
+<p>所以 <span class="math inline">\(A\)</span> 的 strong neighbors
+是：</p>
+<p><span class="math display">\[
+N_s(A) = \{B,C\}.
+\]</span></p>
+<p>现在检查 <span class="math inline">\(B\)</span> 和 <span
+class="math inline">\(C\)</span> 之间是否有边。</p>
+<p>观察图可知：</p>
+<p><span class="math display">\[
+BC \notin E.
+\]</span></p>
+<p>也就是说，<span class="math inline">\(A\)</span> 有两个 strong
+neighbors，但这两个节点彼此之间不相连。</p>
+<p>因此：</p>
+<p><span class="math display">\[
+A \text{ violates STC.}
+\]</span></p>
+<hr />
+<h2 id="node-b">6.2 Node <span class="math inline">\(B\)</span></h2>
+<p>与 <span class="math inline">\(B\)</span> 相连的边有：</p>
+<ul>
+<li><span class="math inline">\(AB\)</span>：strong</li>
+<li><span class="math inline">\(BE\)</span>：strong</li>
+<li><span class="math inline">\(BD\)</span>：weak</li>
+</ul>
+<p>所以 <span class="math inline">\(B\)</span> 的 strong neighbors
+是：</p>
+<p><span class="math display">\[
+N_s(B) = \{A,E\}.
+\]</span></p>
+<p>检查 <span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(E\)</span> 之间是否有边。</p>
+<p>图中有：</p>
+<p><span class="math display">\[
+AE \in E,
+\]</span></p>
+<p>并且它是 weak edge。</p>
+<p>注意，这里 weak edge 也够了，因为 STC 只要求
+“存在边”，不要求这条边也是 strong。</p>
+<p>因此：</p>
+<p><span class="math display">\[
+B \text{ satisfies STC.}
+\]</span></p>
+<hr />
+<h2 id="node-c">6.3 Node <span class="math inline">\(C\)</span></h2>
+<p>与 <span class="math inline">\(C\)</span> 相连的边有：</p>
+<ul>
+<li><span class="math inline">\(AC\)</span>：strong</li>
+<li><span class="math inline">\(CE\)</span>：strong</li>
+<li><span class="math inline">\(CD\)</span>：weak</li>
+</ul>
+<p>所以 <span class="math inline">\(C\)</span> 的 strong neighbors
+是：</p>
+<p><span class="math display">\[
+N_s(C) = \{A,E\}.
+\]</span></p>
+<p>检查 <span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(E\)</span> 是否相连。</p>
+<p>由于图中有 weak edge <span
+class="math inline">\(AE\)</span>，因此：</p>
+<p><span class="math display">\[
+AE \in E.
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+C \text{ satisfies STC.}
+\]</span></p>
+<hr />
+<h2 id="node-d">6.4 Node <span class="math inline">\(D\)</span></h2>
+<p>与 <span class="math inline">\(D\)</span> 相连的边有：</p>
+<ul>
+<li><span class="math inline">\(BD\)</span>：weak</li>
+<li><span class="math inline">\(CD\)</span>：weak</li>
+<li><span class="math inline">\(DE\)</span>：weak</li>
+</ul>
+<p>所以 <span class="math inline">\(D\)</span> <strong>没有 strong
+tie</strong>。</p>
+<p>也就是说：</p>
+<p><span class="math display">\[
+N_s(D) = \varnothing.
+\]</span></p>
+<p>因为 strong neighbors 少于 2 个，<span
+class="math inline">\(D\)</span> 不可能构成违反 STC
+的情形，因此自动满足。</p>
+<p>所以：</p>
+<p><span class="math display">\[
+D \text{ satisfies STC.}
+\]</span></p>
+<hr />
+<h2 id="node-e">6.5 Node <span class="math inline">\(E\)</span></h2>
+<p>与 <span class="math inline">\(E\)</span> 相连的边有：</p>
+<ul>
+<li><span class="math inline">\(BE\)</span>：strong</li>
+<li><span class="math inline">\(CE\)</span>：strong</li>
+<li><span class="math inline">\(AE\)</span>：weak</li>
+<li><span class="math inline">\(DE\)</span>：weak</li>
+</ul>
+<p>所以 <span class="math inline">\(E\)</span> 的 strong neighbors
+是：</p>
+<p><span class="math display">\[
+N_s(E) = \{B,C\}.
+\]</span></p>
+<p>现在检查 <span class="math inline">\(B\)</span> 和 <span
+class="math inline">\(C\)</span> 之间是否有边。</p>
+<p>图中没有 <span class="math inline">\(BC\)</span> 这条边，因此：</p>
+<p><span class="math display">\[
+BC \notin E.
+\]</span></p>
+<p>于是 <span class="math inline">\(E\)</span> 也有两个 strong
+neighbors，但这两个 neighbors 彼此不相连。</p>
+<p>所以：</p>
+<p><span class="math display">\[
+E \text{ violates STC.}
+\]</span></p>
+<hr />
+<h2 id="总结表格">7. 总结表格</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Node</th>
+<th>Strong neighbors</th>
+<th>这些 strong neighbors 之间是否有边</th>
+<th>是否满足 STC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(A\)</span></td>
+<td><span class="math inline">\(\{B,C\}\)</span></td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td><span class="math inline">\(B\)</span></td>
+<td><span class="math inline">\(\{A,E\}\)</span></td>
+<td>是，<span class="math inline">\(AE\)</span> 存在</td>
+<td>是</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C\)</span></td>
+<td><span class="math inline">\(\{A,E\}\)</span></td>
+<td>是，<span class="math inline">\(AE\)</span> 存在</td>
+<td>是</td>
+</tr>
+<tr>
+<td><span class="math inline">\(D\)</span></td>
+<td><span class="math inline">\(\varnothing\)</span></td>
+<td>不需要检查</td>
+<td>是</td>
+</tr>
+<tr>
+<td><span class="math inline">\(E\)</span></td>
+<td><span class="math inline">\(\{B,C\}\)</span></td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="最终答案">8. 最终答案</h2>
+<p>并不是所有节点都满足 Strong Triadic Closure Property。</p>
+<p>违反该性质的节点是：</p>
+<p><span class="math display">\[
+\boxed{A \text{ and } E}.
+\]</span></p>
+<hr />
+<h2 id="用-python-networkx-验证">10. 用 Python / NetworkX 验证</h2>
+<p>虽然这题完全可以手算，但也可以用代码验证你的结论。</p>
+<p>下面是一个简单的 Python 思路。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> combinations</span><br><span class="line"></span><br><span class="line">G = nx.Graph()</span><br><span class="line"></span><br><span class="line"><span class="comment"># add edges with tie labels</span></span><br><span class="line">edges = [</span><br><span class="line">    (<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;s&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;s&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;w&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;w&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;s&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;w&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;s&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;w&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> u, v, tie <span class="keyword">in</span> edges:</span><br><span class="line">    G.add_edge(u, v, tie=tie)</span><br><span class="line"></span><br><span class="line">violations = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> u <span class="keyword">in</span> G.nodes():</span><br><span class="line">    strong_neighbors = [</span><br><span class="line">        v <span class="keyword">for</span> v <span class="keyword">in</span> G.neighbors(u)</span><br><span class="line">        <span class="keyword">if</span> G[u][v][<span class="string">&#x27;tie&#x27;</span>] == <span class="string">&#x27;s&#x27;</span></span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    ok = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">for</span> v, w <span class="keyword">in</span> combinations(strong_neighbors, <span class="number">2</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> G.has_edge(v, w):</span><br><span class="line">            ok = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> ok:</span><br><span class="line">        violations.append(u)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Violating nodes:&#x27;</span>, violations)</span><br></pre></td></tr></table></figure>
+<p>运行结果应为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Violating nodes: [<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;E&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="这题最容易错的地方">11. 这题最容易错的地方</h2>
+<h3 id="错误-1把-weak-edge-当成不算边">错误 1：把 weak edge
+当成“不算边”</h3>
+<p>这是最常见错误。</p>
+<p>STC 要求的是 strong neighbors 之间
+<strong>有边即可</strong>，不管这条边是 strong 还是 weak。</p>
+<p>所以像 <span class="math inline">\(AE\)</span> 虽然是
+weak，但它依然足以让：</p>
+<ul>
+<li><span class="math inline">\(B\)</span> 满足 STC；</li>
+<li><span class="math inline">\(C\)</span> 满足 STC。</li>
+</ul>
+<h3 id="错误-2检查了所有邻居而不是只检查-strong-neighbors">错误
+2：检查了所有邻居，而不是只检查 strong neighbors</h3>
+<p>STC 只关心某个节点的 <strong>strong ties</strong>。</p>
+<p>weak ties 不会触发 STC 检查。</p>
+<h3 id="错误-3觉得没有-strong-ties-的点不知道算不算满足">错误
+3：觉得没有 strong ties 的点“不知道算不算满足”</h3>
+<p>像 <span class="math inline">\(D\)</span> 这种点没有两个 strong
+neighbors，自然不可能违反定义，因此默认满足。</p>
+<hr />
+<h2 id="一句话记忆">12. 一句话记忆</h2>
+<p>这题可以记成一句话：</p>
+<blockquote>
+<p><strong>谁同时通过 strong tie 连到 <span
+class="math inline">\(B\)</span> 和 <span
+class="math inline">\(C\)</span>，而 <span
+class="math inline">\(B,C\)</span> 又没边，谁就违反 STC。</strong></p>
+</blockquote>
+<p>在这张图里，正好就是：</p>
+<p><span class="math display">\[
+\boxed{A, E}.
+\]</span></p>
+<hr />
+<!-- 图谱链接（自动添加） -->
+<p>[[标签集合/COMP5313]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/f3764f7d.html" rel="prev" title="daily-2026-03-26">
+                  <i class="fa fa-angle-left"></i> daily-2026-03-26
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/a6d9f9f9.html" rel="next" title="COMP5313 Assignment 1 题解（二）">
+                  COMP5313 Assignment 1 题解（二） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">208k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:37</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

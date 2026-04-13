@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="题目给出一张 Sydney highway map，并且 NSW Roads Minister 提出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Assignment 1 题解（四）">
+<meta property="og:url" content="http://example.com/posts/d64244cc.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="题目给出一张 Sydney highway map，并且 NSW Roads Minister 提出">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-26T07:36:23.225Z">
+<meta property="article:modified_time" content="2026-04-13T11:28:51.579Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/d64244cc.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/d64244cc.html","path":"posts/d64244cc.html","title":"COMP5313 Assignment 1 题解（四）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Assignment 1 题解（四） | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/d64244cc.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">0</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">187</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-assignment-1-%E9%A2%98%E8%A7%A3%E5%9B%9B"><span class="nav-text">COMP5313 Assignment 1
+题解（四）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#task-4-network-bottlenecks"><span class="nav-text">Task 4 — Network Bottlenecks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%A8%E8%80%83%E4%BB%80%E4%B9%88"><span class="nav-text">1. 题目在考什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#figure-4-%E7%9A%84%E5%9B%BE%E6%8A%BD%E8%B1%A1"><span class="nav-text">2. Figure 4 的图抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%BD%91%E9%87%8D%E6%9E%84%E5%9B%BE"><span class="nav-text">3. 路网重构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#question-i"><span class="nav-text">4. Question (i)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#assume-that-traffic-is-uniform-between-all-pairs-of-nodes.-what-property-should-we-compute-does-it-apply-to-nodes-or-edges"><span class="nav-text">Assume
+that traffic is uniform between all pairs of nodes. What property should
+we compute? Does it apply to nodes or edges?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i-%E7%9A%84%E7%AD%94%E6%A1%88"><span class="nav-text">(i) 的答案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#question-ii"><span class="nav-text">5. Question (ii)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#your-task-is-now-to-verify-whether-traffic-bottlenecks-will-be-reduced-after-westconnex-is-created.-how-do-you-proceed"><span class="nav-text">Your
+task is now to verify whether traffic bottlenecks will be reduced after
+WestConnex is created. How do you proceed?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1-%E5%9C%A8%E5%8E%9F%E5%9B%BE%E4%B8%8A%E8%AE%A1%E7%AE%97%E6%89%80%E6%9C%89-edge-betweenness"><span class="nav-text">Step 1:
+在原图上计算所有 edge betweenness</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2-%E5%8A%A0%E5%85%A5-westconnex-%E5%90%8E%E9%87%8D%E6%96%B0%E8%AE%A1%E7%AE%97"><span class="nav-text">Step 2: 加入 WestConnex
+后重新计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3-%E6%AF%94%E8%BE%83%E5%89%8D%E5%90%8E%E7%BB%93%E6%9E%9C"><span class="nav-text">Step 3: 比较前后结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#before-after-%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-text">6. Before &#x2F; After 的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BE%B9%E4%B9%8B%E5%89%8D%E8%BE%83%E5%A4%A7%E7%9A%84-bottleneck-%E5%9C%A8"><span class="nav-text">加边之前，较大的 bottleneck
+在：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5-westconnex-%E4%B9%8B%E5%90%8E"><span class="nav-text">加入 WestConnex 之后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#question-iii"><span class="nav-text">7. Question (iii)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#is-the-claim-true-or-false"><span class="nav-text">Is the claim true or false?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%9C%E4%B8%9A%E5%86%99%E6%B3%95%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="nav-text">8. 更适合作业写法的结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i"><span class="nav-text">(i)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ii"><span class="nav-text">(ii)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iii"><span class="nav-text">(iii)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81"><span class="nav-text">9. Python 验证代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%A2%98%E6%9C%80%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">10. 这题最容易错的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-1%E6%8A%8A-bottleneck-%E7%90%86%E8%A7%A3%E6%88%90-node-centrality"><span class="nav-text">错误 1：把
+bottleneck 理解成 node centrality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-2%E5%8F%AA%E7%9C%8B%E6%96%B0%E5%A2%9E%E8%BE%B9%E6%9C%AC%E8%BA%AB%E5%8F%98%E5%BE%97%E5%BE%88%E6%9C%89%E7%94%A8%E5%B0%B1%E8%AF%B4-claim-%E4%B8%BA%E7%9C%9F"><span class="nav-text">错误
+2：只看新增边本身变得很有用，就说 claim 为真</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF-3%E6%B2%A1%E6%9C%89%E6%AF%94%E8%BE%83-before-after"><span class="nav-text">错误 3：没有比较 before &#x2F;
+after</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/d64244cc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Assignment 1 题解（四） | Joey">
+      <meta itemprop="description" content="题目给出一张 Sydney highway map，并且 NSW Roads Minister 提出">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Assignment 1 题解（四）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-03-26 07:36:23" itemprop="dateCreated datePublished" datetime="2026-03-26T07:36:23Z">2026-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-13 11:28:51" itemprop="dateModified" datetime="2026-04-13T11:28:51Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">题目给出一张 Sydney highway map，并且 NSW Roads Minister 提出</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5313-assignment-1-题解四">COMP5313 Assignment 1
+题解（四）</h1>
+<h1 id="task-4-network-bottlenecks">Task 4 — Network Bottlenecks</h1>
+<h2 id="题目">题目</h2>
+<p>题目给出一张 Sydney highway map，并且 NSW Roads Minister 提出
+claim：</p>
+<blockquote>
+<p>The new WestConnex project will reduce traffic congestion in the
+Sydney area.</p>
+</blockquote>
+<p>在“所有点对之间交通需求均匀”的假设下，需要回答三件事：</p>
+<ol type="1">
+<li>应该计算什么图性质来衡量 bottleneck；</li>
+<li>如果加入边 <span class="math inline">\(\langle \text{Strathfield},
+\text{Airport} \rangle\)</span>（WestConnex），应如何验证 bottleneck
+是否下降；</li>
+<li>这个 claim 最终应判为 true 还是 false，并解释原因。</li>
+</ol>
+<p>这一题的核心非常明确：</p>
+<ul>
+<li>题目说 <strong>traffic is uniform between all pairs of
+nodes</strong>；</li>
+<li>这正对应 lecture 里用 <strong>betweenness</strong>
+来近似流量压力；</li>
+<li>因为这里关注的是“哪一段 highway 更像 bottleneck”，所以重点是
+<strong>edge betweenness</strong>，不是 node betweenness。</li>
+</ul>
+<hr />
+<h2 id="题目在考什么">1. 题目在考什么</h2>
+<p>如果每一对节点之间都等概率地产生交通需求，那么：</p>
+<ul>
+<li>一条边出现在越多最短路径上，</li>
+<li>它承受的潜在交通压力就越大，</li>
+<li>它越像 bottleneck。</li>
+</ul>
+<p>因此本题要计算的量是：</p>
+<p><span class="math display">\[
+\boxed{\text{edge betweenness centrality}}
+\]</span></p>
+<hr />
+<h2 id="figure-4-的图抽象">2. Figure 4 的图抽象</h2>
+<p>把 Figure 4 抽象成 lecture 里的 graph，可以把主要节点看成：</p>
+<ul>
+<li>Dean Park</li>
+<li>M2</li>
+<li>North Sydney</li>
+<li>M1</li>
+<li>Airport</li>
+<li>M5</li>
+<li>M7（south）</li>
+<li>Eastern Creek</li>
+<li>M7（north）</li>
+<li>M4</li>
+<li>Strathfield</li>
+</ul>
+<p>在不加入 WestConnex 前，可把主要连接关系写成：</p>
+<ul>
+<li>Dean Park -- M2</li>
+<li>Dean Park -- M7 (north)</li>
+<li>M7 (north) -- Eastern Creek</li>
+<li>Eastern Creek -- M4</li>
+<li>Eastern Creek -- M7 (south)</li>
+<li>M4 -- Strathfield</li>
+<li>M2 -- North Sydney</li>
+<li>North Sydney -- M1</li>
+<li>Strathfield -- M1</li>
+<li>M1 -- Airport</li>
+<li>Airport -- M5</li>
+<li>M5 -- M7 (south)</li>
+</ul>
+<p>而题目说新建的 WestConnex 是：</p>
+<p><span class="math display">\[
+\langle \text{Strathfield}, \text{Airport} \rangle
+\]</span></p>
+<p>也就是在原图上新增一条边：</p>
+<ul>
+<li>Strathfield -- Airport</li>
+</ul>
+<hr />
+<h2 id="路网重构图">3. 路网重构图</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    DP[Dean Park]</span><br><span class="line">    M2[M2]</span><br><span class="line">    NS[North Sydney]</span><br><span class="line">    M1[M1]</span><br><span class="line">    AP[Airport]</span><br><span class="line">    M5[M5]</span><br><span class="line">    M7S[M7 south]</span><br><span class="line">    EC[Eastern Creek]</span><br><span class="line">    M7N[M7 north]</span><br><span class="line">    M4[M4]</span><br><span class="line">    ST[Strathfield]</span><br><span class="line"></span><br><span class="line">    DP --- M2</span><br><span class="line">    DP --- M7N</span><br><span class="line">    M7N --- EC</span><br><span class="line">    EC --- M4</span><br><span class="line">    EC --- M7S</span><br><span class="line">    M4 --- ST</span><br><span class="line">    M2 --- NS</span><br><span class="line">    NS --- M1</span><br><span class="line">    ST --- M1</span><br><span class="line">    M1 --- AP</span><br><span class="line">    AP --- M5</span><br><span class="line">    M5 --- M7S</span><br></pre></td></tr></table></figure>
+<p>加上 WestConnex 后，只是多一条：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    DP[Dean Park]</span><br><span class="line">    M2[M2]</span><br><span class="line">    NS[North Sydney]</span><br><span class="line">    M1[M1]</span><br><span class="line">    AP[Airport]</span><br><span class="line">    M5[M5]</span><br><span class="line">    M7S[M7 south]</span><br><span class="line">    EC[Eastern Creek]</span><br><span class="line">    M7N[M7 north]</span><br><span class="line">    M4[M4]</span><br><span class="line">    ST[Strathfield]</span><br><span class="line"></span><br><span class="line">    DP --- M2</span><br><span class="line">    DP --- M7N</span><br><span class="line">    M7N --- EC</span><br><span class="line">    EC --- M4</span><br><span class="line">    EC --- M7S</span><br><span class="line">    M4 --- ST</span><br><span class="line">    M2 --- NS</span><br><span class="line">    NS --- M1</span><br><span class="line">    ST --- M1</span><br><span class="line">    M1 --- AP</span><br><span class="line">    AP --- M5</span><br><span class="line">    M5 --- M7S</span><br><span class="line">    ST ---|WestConnex| AP</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="question-i">4. Question (i)</h2>
+<h3
+id="assume-that-traffic-is-uniform-between-all-pairs-of-nodes.-what-property-should-we-compute-does-it-apply-to-nodes-or-edges">Assume
+that traffic is uniform between all pairs of nodes. What property should
+we compute? Does it apply to nodes or edges?</h3>
+<p>应该计算的是：</p>
+<p><span class="math display">\[
+\boxed{\text{edge betweenness centrality}}
+\]</span></p>
+<p>原因是：</p>
+<ul>
+<li>uniform all-pairs traffic
+意味着每对节点之间都有潜在最短路径流量；</li>
+<li>bottleneck 反映的是“哪条 link 被大量 shortest paths 经过”；</li>
+<li>所以这里关注的是 <strong>link / edge</strong>，不是 vertex。</li>
+</ul>
+<h3 id="i-的答案">(i) 的答案</h3>
+<ul>
+<li>Property: <strong>edge betweenness centrality</strong></li>
+<li>It applies to: <strong>edges (links)</strong></li>
+</ul>
+<hr />
+<h2 id="question-ii">5. Question (ii)</h2>
+<h3
+id="your-task-is-now-to-verify-whether-traffic-bottlenecks-will-be-reduced-after-westconnex-is-created.-how-do-you-proceed">Your
+task is now to verify whether traffic bottlenecks will be reduced after
+WestConnex is created. How do you proceed?</h3>
+<p>流程就是两步：</p>
+<h3 id="step-1-在原图上计算所有-edge-betweenness">Step 1:
+在原图上计算所有 edge betweenness</h3>
+<p>对 Figure 4 原始路网的每一条边，计算：</p>
+<p><span class="math display">\[
+\operatorname{betweenness}(e)
+=
+\sum_{s&lt;t}
+\frac{\sigma_{st}(e)}{\sigma_{st}}
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(\sigma_{st}\)</span> 是 <span
+class="math inline">\(s\)</span> 到 <span
+class="math inline">\(t\)</span> 的最短路径条数；</li>
+<li><span class="math inline">\(\sigma_{st}(e)\)</span>
+是这些最短路径中经过边 <span class="math inline">\(e\)</span>
+的条数。</li>
+</ul>
+<h3 id="step-2-加入-westconnex-后重新计算">Step 2: 加入 WestConnex
+后重新计算</h3>
+<p>把新边</p>
+<p><span class="math display">\[
+(\text{Strathfield}, \text{Airport})
+\]</span></p>
+<p>加进图中，再计算一次所有 edge betweenness。</p>
+<h3 id="step-3-比较前后结果">Step 3: 比较前后结果</h3>
+<p>重点看两类变化：</p>
+<ol type="1">
+<li><strong>最大 bottleneck 是否下降</strong>；</li>
+<li><strong>原本高 betweenness 的关键边是否明显减压</strong>。</li>
+</ol>
+<p>如果只是某几条边下降，但最严重 bottleneck 没变，那么不能简单说“Sydney
+area 的 congestion 被整体缓解”。</p>
+<hr />
+<h2 id="before-after-的比较">6. Before / After 的比较</h2>
+<p>在上面的图抽象下，计算 edge betweenness 后，可以看到：</p>
+<h3 id="加边之前较大的-bottleneck-在">加边之前，较大的 bottleneck
+在：</h3>
+<ul>
+<li>Eastern Creek -- M7 (north)</li>
+<li>M1 -- North Sydney</li>
+<li>Airport -- M1</li>
+<li>Eastern Creek -- M7 (south)</li>
+<li>M1 -- Strathfield</li>
+</ul>
+<p>其中最高的一组大约是：</p>
+<p><span class="math display">\[
+14
+\]</span></p>
+<hr />
+<h3 id="加入-westconnex-之后">加入 WestConnex 之后</h3>
+<p>新增边 Strathfield -- Airport 会吸走一部分原本必须经过</p>
+<ul>
+<li>Strathfield -- M1</li>
+<li>M1 -- Airport</li>
+</ul>
+<p>的最短路径流量。</p>
+<p>所以这些边的 betweenness 会下降，例如：</p>
+<ul>
+<li><span class="math inline">\(\text{Strathfield} -
+\text{M1}\)</span>：下降</li>
+<li><span class="math inline">\(\text{M1} -
+\text{Airport}\)</span>：下降</li>
+<li><span class="math inline">\(\text{M5}\)</span>
+一侧的一部分压力也会下降</li>
+</ul>
+<p>但是，最高 bottleneck 并没有整体消失。</p>
+<p>像下面这些边仍然非常高：</p>
+<ul>
+<li>Eastern Creek -- M7 (north)</li>
+<li>M1 -- North Sydney</li>
+</ul>
+<p>也就是说，WestConnex 主要缓解的是 <strong>Strathfield 到 Airport
+之间的 east-west 连接压力</strong>，但并没有把整个网络最严重的
+bottleneck 都降下来。</p>
+<hr />
+<h2 id="question-iii">7. Question (iii)</h2>
+<h3 id="is-the-claim-true-or-false">Is the claim true or false?</h3>
+<p>题目原话是：</p>
+<blockquote>
+<p>The new WestConnex project will reduce traffic congestion in the
+Sydney area.</p>
+</blockquote>
+<p>如果按照本题的 graph model 和 uniform all-pairs shortest-path traffic
+来理解，这个说法 <strong>过于强</strong>。</p>
+<p>更准确的结论是：</p>
+<ul>
+<li><strong>WestConnex 会降低部分边的
+betweenness</strong>，尤其是原来依赖 Strathfield -- M1 -- Airport
+这条通道的最短路径；</li>
+<li><strong>但网络中的最大 bottleneck 不一定下降</strong>；</li>
+<li>有些最关键的高压边仍然保持很高的 betweenness。</li>
+</ul>
+<p>因此，如果把“reduce traffic congestion in the Sydney area”理解成
+<strong>整个 Sydney 网络层面的 bottleneck 都明显变小</strong>，那么这个
+claim 应判为：</p>
+<p><span class="math display">\[
+\boxed{\text{False}}
+\]</span></p>
+<p>因为它只是 <strong>局部缓解</strong>，不是 <strong>整体消除主要
+bottleneck</strong>。</p>
+<hr />
+<h2 id="更适合作业写法的结论">8. 更适合作业写法的结论</h2>
+<h3 id="i">(i)</h3>
+<p>应该计算 <strong>edge betweenness centrality</strong>，它作用在
+<strong>edges / links</strong> 上。</p>
+<h3 id="ii">(ii)</h3>
+<p>做法是：</p>
+<ol type="1">
+<li>在原始路网上计算所有 edge betweenness；</li>
+<li>加入边 <span class="math inline">\((\text{Strathfield},
+\text{Airport})\)</span>；</li>
+<li>再次计算 edge betweenness；</li>
+<li>比较 bottleneck edges 的数值是否下降，尤其看最大值是否下降。</li>
+</ol>
+<h3 id="iii">(iii)</h3>
+<p>结论：</p>
+<p><span class="math display">\[
+\boxed{\text{The claim is false in this model.}}
+\]</span></p>
+<p>原因是 WestConnex 确实会降低一部分局部边的
+betweenness，但不会把整个网络里最严重的 bottleneck
+都降下来，所以不能直接说 Sydney area 的 congestion 整体被有效降低。</p>
+<hr />
+<h2 id="python-验证代码">9. Python 验证代码</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------- Build the graph ----------</span></span><br><span class="line">edges_before = [</span><br><span class="line">    (<span class="string">&#x27;Dean Park&#x27;</span>, <span class="string">&#x27;M2&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Dean Park&#x27;</span>, <span class="string">&#x27;M7 North&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;M7 North&#x27;</span>, <span class="string">&#x27;Eastern Creek&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Eastern Creek&#x27;</span>, <span class="string">&#x27;M4&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Eastern Creek&#x27;</span>, <span class="string">&#x27;M7 South&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;M4&#x27;</span>, <span class="string">&#x27;Strathfield&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;M2&#x27;</span>, <span class="string">&#x27;North Sydney&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;North Sydney&#x27;</span>, <span class="string">&#x27;M1&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Strathfield&#x27;</span>, <span class="string">&#x27;M1&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;M1&#x27;</span>, <span class="string">&#x27;Airport&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Airport&#x27;</span>, <span class="string">&#x27;M5&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;M5&#x27;</span>, <span class="string">&#x27;M7 South&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">westconnex = (<span class="string">&#x27;Strathfield&#x27;</span>, <span class="string">&#x27;Airport&#x27;</span>)</span><br><span class="line"></span><br><span class="line">G_before = nx.Graph()</span><br><span class="line">G_before.add_edges_from(edges_before)</span><br><span class="line"></span><br><span class="line">G_after = G_before.copy()</span><br><span class="line">G_after.add_edge(*westconnex)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------- Compute edge betweenness ----------</span></span><br><span class="line">before_bc = nx.edge_betweenness_centrality(G_before, normalized=<span class="literal">False</span>)</span><br><span class="line">after_bc = nx.edge_betweenness_centrality(G_after, normalized=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------- Sort and print ----------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_scores</span>(<span class="params">title, scores</span>):</span><br><span class="line">    <span class="built_in">print</span>(title)</span><br><span class="line">    <span class="keyword">for</span> edge, value <span class="keyword">in</span> <span class="built_in">sorted</span>(scores.items(), key=<span class="keyword">lambda</span> x: (-x[<span class="number">1</span>], x[<span class="number">0</span>])):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;edge&#125;</span>: <span class="subst">&#123;value&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line">print_scores(<span class="string">&quot;Before WestConnex:&quot;</span>, before_bc)</span><br><span class="line">print_scores(<span class="string">&quot;After WestConnex:&quot;</span>, after_bc)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------- Compare changes ----------</span></span><br><span class="line">all_edges = <span class="built_in">sorted</span>(<span class="built_in">set</span>(before_bc) | <span class="built_in">set</span>(after_bc))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Changes (after - before):&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> edge <span class="keyword">in</span> all_edges:</span><br><span class="line">    before = before_bc.get(edge, <span class="number">0</span>)</span><br><span class="line">    after = after_bc.get(edge, <span class="number">0</span>)</span><br><span class="line">    diff = after - before</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;edge&#125;</span>: before=<span class="subst">&#123;before&#125;</span>, after=<span class="subst">&#123;after&#125;</span>, change=<span class="subst">&#123;diff&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="这题最容易错的地方">10. 这题最容易错的地方</h2>
+<h3 id="错误-1把-bottleneck-理解成-node-centrality">错误 1：把
+bottleneck 理解成 node centrality</h3>
+<p>这里讨论的是 highway links，所以要看的是 <strong>edge
+betweenness</strong>。</p>
+<h3 id="错误-2只看新增边本身变得很有用就说-claim-为真">错误
+2：只看新增边本身变得很有用，就说 claim 为真</h3>
+<p>新增边有用，不代表 <strong>整体 bottleneck</strong> 一定下降。</p>
+<h3 id="错误-3没有比较-before-after">错误 3：没有比较 before /
+after</h3>
+<p>这题不是单独算一次 centrality，而是必须比较：</p>
+<ul>
+<li>原图</li>
+<li>加 WestConnex 后的图</li>
+</ul>
+<p>只有这样才能回答 “will be reduced” 这个动态问题。</p>
+<!-- 图谱链接（自动添加） -->
+<p>[[标签集合/COMP5313]]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/179d0030.html" rel="prev" title="COMP5313 Assignment 1 题解（三）">
+                  <i class="fa fa-angle-left"></i> COMP5313 Assignment 1 题解（三）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/dddace6b.html" rel="next" title="COMP5313 Assignment 1 题解（五）">
+                  COMP5313 Assignment 1 题解（五） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">208k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:37</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

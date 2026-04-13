@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="同质性（Homophily）是指个体倾向于与自己在各种特征上相似的人建立联系和友谊的现象。这一原理指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313-Ch04-NetworksInContext">
+<meta property="og:url" content="http://example.com/posts/7015b6e4.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="同质性（Homophily）是指个体倾向于与自己在各种特征上相似的人建立联系和友谊的现象。这一原理指">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-11T12:42:26.592Z">
+<meta property="article:modified_time" content="2026-04-13T11:28:51.577Z">
+<meta property="article:author" content="Joey">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/7015b6e4.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/7015b6e4.html","path":"posts/7015b6e4.html","title":"COMP5313-Ch04-NetworksInContext"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313-Ch04-NetworksInContext | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/7015b6e4.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">0</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">187</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%90%8C%E8%B4%A8%E6%80%A7%E5%8E%9F%E7%90%86-homophily-principle"><span class="nav-text">一、同质性原理 (Homophily
+Principle)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E8%B4%A8%E6%80%A7%E7%9A%84%E5%AE%9A%E9%87%8F%E6%B5%8B%E9%87%8F"><span class="nav-text">同质性的定量测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%80%BC%E7%89%B9%E5%BE%81%E7%9A%84%E5%90%8C%E8%B4%A8%E6%80%A7"><span class="nav-text">多值特征的同质性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%90%8C%E8%B4%A8%E6%80%A7%E7%9A%84%E6%9C%BA%E5%88%B6%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A4%BE%E4%BC%9A%E5%BD%B1%E5%93%8D"><span class="nav-text">二、同质性的机制：选择与社会影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%95%88%E5%BA%94-selection-effect"><span class="nav-text">选择效应 (Selection Effect)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BE%E4%BC%9A%E5%BD%B1%E5%93%8D%E6%95%88%E5%BA%94-social-influence-socialization"><span class="nav-text">社会影响效应
+(Social Influence &#x2F; Socialization)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%A6%BB%E4%B8%A4%E7%A7%8D%E6%9C%BA%E5%88%B6"><span class="nav-text">分离两种机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%AF%81%E6%A1%88%E4%BE%8B"><span class="nav-text">实证案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%BB%8E%E5%B1%9E%E5%85%B3%E7%B3%BB%E4%B8%8E%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%BB%9C-affiliation-networks"><span class="nav-text">三、从属关系与社交网络
+(Affiliation Networks)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%B1%9E%E7%BD%91%E7%BB%9C%E6%A6%82%E5%BF%B5"><span class="nav-text">从属网络概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BE%E4%BA%A4-%E4%BB%8E%E5%B1%9E%E8%9E%8D%E5%90%88%E7%BD%91%E7%BB%9C"><span class="nav-text">社交-从属融合网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E4%B8%89%E7%A7%8D%E6%9C%BA%E5%88%B6"><span class="nav-text">闭包的三种机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E9%97%AD%E5%8C%85-triadic-closure"><span class="nav-text">1. 三元闭包 (Triadic Closure)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%84%A6%E7%82%B9%E9%97%AD%E5%8C%85-focal-closure"><span class="nav-text">2. 焦点闭包 (Focal Closure)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%90%E5%91%98%E9%97%AD%E5%8C%85-membership-closure"><span class="nav-text">3. 成员闭包 (Membership
+Closure)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E5%90%8C%E8%BF%9B%E5%8C%96-co-evolution"><span class="nav-text">共同进化 (Co-evolution)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%9C%A8%E7%BA%BF%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%BD%A2%E6%88%90%E8%BF%BD%E8%B8%AA-tracking-link-formation-in-on-line-data"><span class="nav-text">四、在线数据中的链接形成追踪
+(Tracking Link Formation in On-Line Data)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%B1%80%E9%99%90"><span class="nav-text">大规模数据集的优势与局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E9%97%AD%E5%8C%85%E7%9A%84%E5%AE%9A%E9%87%8F%E5%8C%96"><span class="nav-text">三元闭包的定量化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-text">方法论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E7%BA%BF%E6%A8%A1%E5%9E%8B"><span class="nav-text">基线模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E8%AF%81%E5%8F%91%E7%8E%B0kossinets-watts%E7%A0%94%E7%A9%B6"><span class="nav-text">实证发现：Kossinets &amp;
+Watts研究</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%84%A6%E7%82%B9%E9%97%AD%E5%8C%85%E7%9A%84%E5%AE%9A%E9%87%8F%E5%8C%96"><span class="nav-text">焦点闭包的定量化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AF%BE%E7%A8%8B%E6%97%B6%E9%97%B4%E8%A1%A8%E6%95%B0%E6%8D%AE"><span class="nav-text">方法：课程时间表数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%8F%91%E7%8E%B0"><span class="nav-text">关键发现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E9%97%AD%E5%8C%85%E7%9A%84%E9%87%8F%E5%8C%96"><span class="nav-text">成员闭包的量化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#livejournal%E6%95%B0%E6%8D%AE"><span class="nav-text">LiveJournal数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wikipedia%E7%BC%96%E8%BE%91%E8%80%85%E6%95%B0%E6%8D%AE"><span class="nav-text">Wikipedia编辑者数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A4%BE%E4%BC%9A%E5%BD%B1%E5%93%8D%E7%9A%84%E9%87%8F%E5%8C%96wikipedia%E6%A1%88%E4%BE%8B"><span class="nav-text">选择与社会影响的量化：Wikipedia案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%AE%BA-1"><span class="nav-text">方法论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%97%B6%E9%97%B4%E7%82%B9"><span class="nav-text">关键时间点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E9%9A%94%E7%A6%BB%E7%9A%84%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8Bschelling%E6%A8%A1%E5%9E%8B-spatial-model-of-segregation"><span class="nav-text">五、隔离的空间模型：Schelling模型
+(Spatial Model of Segregation)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#schelling%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="nav-text">Schelling模型简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%BE%E7%BD%AE"><span class="nav-text">模型设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%A6%81%E7%B4%A0"><span class="nav-text">基本要素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%BB%E5%9F%9F%E4%B8%8E%E6%BB%A1%E8%B6%B3%E5%BA%A6"><span class="nav-text">邻域与满足度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8A%A8%E5%8A%9B%E5%AD%A6"><span class="nav-text">模型动力学</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%88%E5%80%BC-t3-%E7%9A%84%E6%A1%88%E4%BE%8B"><span class="nav-text">阈值 \(t&#x3D;3\)
+的案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E6%9D%A1%E4%BB%B6%E4%B8%8E%E7%BB%93%E6%9E%9C"><span class="nav-text">初始条件与结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%88%E5%80%BC-t4-%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-text">阈值 \(t&#x3D;4\)
+的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#schelling%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%B3%E9%94%AE%E6%B4%9E%E8%A7%81"><span class="nav-text">Schelling模型的关键洞见</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%9A%84%E8%87%AA%E5%8F%91%E4%BA%A7%E7%94%9F"><span class="nav-text">隔离的自发产生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%80%8D%E5%A2%9E%E6%95%88%E5%BA%94"><span class="nav-text">倍增效应</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE%E4%B8%8E%E7%BB%93%E6%9E%9C%E7%9A%84%E8%84%B1%E8%8A%82"><span class="nav-text">意图与结果的脱节</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%80%BB%E7%BB%93%E4%B8%8E%E5%85%B3%E9%94%AE%E8%81%94%E7%B3%BB"><span class="nav-text">六、总结与关键联系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8-terminology-table"><span class="nav-text">术语表 (Terminology Table)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/7015b6e4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313-Ch04-NetworksInContext | Joey">
+      <meta itemprop="description" content="同质性（Homophily）是指个体倾向于与自己在各种特征上相似的人建立联系和友谊的现象。这一原理指">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313-Ch04-NetworksInContext
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-11 12:42:26" itemprop="dateCreated datePublished" datetime="2026-04-11T12:42:26Z">2026-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-13 11:28:51" itemprop="dateModified" datetime="2026-04-13T11:28:51Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>17 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">同质性（Homophily）是指个体倾向于与自己在各种特征上相似的人建立联系和友谊的现象。这一原理指</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一同质性原理-homophily-principle">一、同质性原理 (Homophily
+Principle)</h2>
+<h3 id="基本概念">基本概念</h3>
+<p>同质性（<strong>Homophily</strong>）是指个体倾向于与自己在各种特征上相似的人建立联系和友谊的现象。这一原理指出，在种族/民族、年龄、职业、财富、兴趣、信念和观点等多个维度上，我们倾向于与相似的人成为朋友。</p>
+<p>古代哲学家已经观察到这一现象。柏拉图指出"相似产生友谊"，亚里士多德也记录了类似观察。现代研究则由拉扎斯菲尔德（<strong>Lazarsfeld</strong>）和默顿（<strong>Merton</strong>）在20世纪50年代推动。他们的工作催化了关于同质性的现代研究浪潮。</p>
+<h3 id="同质性的定量测量">同质性的定量测量</h3>
+<p>为了定量测量同质性，我们需要比较实际的异质边（<strong>Heterogeneous
+edges</strong>）数量与随机混合下的预期数量。</p>
+<p>假设网络中有两种类型的节点： - 类型A的比例为 <span
+class="math inline">\(p\)</span> - 类型B的比例为 <span
+class="math inline">\(q\)</span> - <span class="math inline">\(p + q =
+1\)</span></p>
+<p>在完全随机混合的情况下，边连接两个不同类型节点的概率应该是 <span
+class="math inline">\(2pq\)</span>。因此，在具有 <span
+class="math inline">\(m\)</span>
+条边的网络中，<strong>异质边（Cross-type
+edges）</strong>的期望数量为：</p>
+<p><span class="math display">\[E[\text{异质边}] = 2pqm\]</span></p>
+<p>我们可以将实际的异质边比例与 <span class="math inline">\(2pq\)</span>
+进行比较：</p>
+<ul>
+<li><strong>如果</strong> 异质边比例 <span class="math inline">\(\approx
+2pq\)</span> → 随机混合，<strong>无同质性（No homophily）</strong></li>
+<li><strong>如果</strong> 异质边比例 <span class="math inline">\(\ll
+2pq\)</span> → 明显的同质性存在（<strong>Homophily
+present</strong>）</li>
+<li><strong>如果</strong> 异质边比例 <span class="math inline">\(\gg
+2pq\)</span> →
+反向同质性或反同质性（<strong>Anti-homophily</strong>），节点倾向于与不同类型的节点连接</li>
+</ul>
+<h3 id="多值特征的同质性">多值特征的同质性</h3>
+<p>同质性概念可以推广到具有多个值的特征。例如，在学校友谊网络中，学生可能按照种族、年级、兴趣等多个维度表现出同质性。研究表明，学生往往与同种族和同年级的同学有更多的友谊连接，这违反了随机混合模型的预期。</p>
+<hr />
+<h2
+id="二同质性的机制选择与社会影响">二、同质性的机制：选择与社会影响</h2>
+<h3 id="选择效应-selection-effect">选择效应 (Selection Effect)</h3>
+<p>选择（<strong>Selection</strong>）是指个体根据自身属性主动选择与相似的人建立联系。在这种机制中，<strong>个人属性决定连接</strong>（个人特征
+→ 网络连接）。</p>
+<p>例如，在线下交友中，具有共同兴趣爱好、相似教育背景或职业的人更可能相互吸引而成为朋友。这种机制强调的是个体的主动选择。</p>
+<h3 id="社会影响效应-social-influence-socialization">社会影响效应
+(Social Influence / Socialization)</h3>
+<p>社会影响或社会化（<strong>Social Influence</strong> /
+<strong>Socialization</strong>）是指个体与友人互动过程中改变自身行为和属性以与友人保持一致。在这种机制中，<strong>网络连接导致属性改变</strong>（网络连接
+→ 个人特征）。</p>
+<p>例如，青少年往往会因为朋友的影响而改变吸烟或饮酒习惯；社交网络中的肥胖可能通过朋友之间的行为影响而传播。</p>
+<h3 id="分离两种机制">分离两种机制</h3>
+<p>选择和社会影响往往同时作用，很难区分。<strong>纵向研究（Longitudinal
+studies）</strong>通过追踪个体特征和连接关系随时间的变化来分离这两种效应。</p>
+<p>在纵向分析中，我们可以观察到： -
+<strong>选择效应特征</strong>：在两个个体首次接触<strong>之前</strong>，相似性迅速增加
+-
+<strong>社会影响特征</strong>：在首次接触<strong>之后</strong>，相似性继续缓慢增加</p>
+<h3 id="实证案例">实证案例</h3>
+<p><strong>青少年药物使用研究</strong>：研究发现，青少年的药物使用倾向在成为朋友之前就存在相似性（选择），但在成为朋友之后，他们的行为会进一步趋同（社会影响）。</p>
+<p><strong>肥胖的社交传播</strong>：Christakis和Fowler的著名研究显示，社交网络中的肥胖存在相关性。但这种关联源于三个混淆因素：
+1. <strong>选择效应</strong>：相似体质的人倾向于成为朋友 2.
+<strong>同质性在其他相关特征中</strong>：与肥胖相关的其他特征（如生活方式、经济地位）本身表现出同质性
+3. <strong>社会影响效应</strong>：朋友间的饮食和运动习惯相互影响</p>
+<hr />
+<h2
+id="三从属关系与社交网络-affiliation-networks">三、从属关系与社交网络
+(Affiliation Networks)</h2>
+<h3 id="从属网络概念">从属网络概念</h3>
+<p>从属网络（<strong>Affiliation
+networks</strong>）表示个体参与哪些团体或活动的关系。这种网络的基本结构是<strong>二部图（Bipartite
+graph）</strong>： - 一组节点代表<strong>个人（People）</strong> -
+另一组节点代表<strong>焦点/团体（Foci/Groups）</strong> -
+边仅在这两组之间存在；同组内部没有边</p>
+<p>例如，企业董事会成员网络中： -
+一组节点是董事（<strong>Directors</strong>） -
+另一组节点是公司（<strong>Companies</strong>） -
+边表示某董事是否担任某公司的董事</p>
+<h3 id="社交-从属融合网络">社交-从属融合网络</h3>
+<p><strong>社交-从属融合网络（Social-Affiliation
+Network）</strong>结合了两种类型的边： 1. <strong>社交边（Social
+edges）</strong>：连接两个个人（代表友谊或联系） 2.
+<strong>从属边（Affiliation
+edges）</strong>：连接个人和焦点（代表参与关系）</p>
+<p>这种融合网络捕捉了社交关系和群体参与的相互作用。</p>
+<h3 id="闭包的三种机制">闭包的三种机制</h3>
+<p>在社交-从属融合网络中，有三种重要的<strong>闭包（Closure）</strong>机制，它们解释了新联系如何形成：</p>
+<h4 id="三元闭包-triadic-closure">1. 三元闭包 (Triadic Closure)</h4>
+<p>三元闭包（<strong>Triadic
+closure</strong>）发生在：B和C都与A是朋友时，他们倾向于成为朋友。 -
+<strong>机制</strong>：共享朋友 → 新的人际关系 -
+<strong>路径</strong>：人-人-人（People-People-People） -
+<strong>示例</strong>：两个大学室友通过另一个室友介绍而成为朋友</p>
+<h4 id="焦点闭包-focal-closure">2. 焦点闭包 (Focal Closure)</h4>
+<p>焦点闭包（<strong>Focal
+closure</strong>）发生在：B和C都参与同一焦点（如同一俱乐部或课程）时，他们倾向于成为朋友。
+- <strong>机制</strong>：共享参与的活动/团体 → 新的人际关系 -
+<strong>路径</strong>：人-焦点-人（People-Focus-People） -
+<strong>类似机制</strong>：类似于<strong>选择</strong>，因为共同的环境使相似的人聚集
+-
+<strong>示例</strong>：同一门课程的学生更可能成为朋友；同一运动队的成员更可能建立友谊</p>
+<h4 id="成员闭包-membership-closure">3. 成员闭包 (Membership
+Closure)</h4>
+<p>成员闭包（<strong>Membership
+closure</strong>）发生在：个人B的朋友A已经参加焦点C时，B倾向于加入焦点C。
+- <strong>机制</strong>：朋友参与 → 个人参与新焦点 -
+<strong>路径</strong>：焦点-人-人（Focus-People-People） -
+<strong>类似机制</strong>：类似于<strong>社会影响</strong>，因为个体受朋友行为的影响
+-
+<strong>示例</strong>：一个人加入健身房，因为他的朋友已经是会员；学生选择课程，因为他的朋友也选了</p>
+<h3 id="共同进化-co-evolution">共同进化 (Co-evolution)</h3>
+<p>社交网络和从属网络随时间共同进化。这意味着： -
+社交边的形成可能导致新的从属关系 - 共享的从属关系可能导致新的社交边 -
+这两个过程相互强化，形成复杂的动态系统</p>
+<hr />
+<h2
+id="四在线数据中的链接形成追踪-tracking-link-formation-in-on-line-data">四、在线数据中的链接形成追踪
+(Tracking Link Formation in On-Line Data)</h2>
+<h3 id="大规模数据集的优势与局限">大规模数据集的优势与局限</h3>
+<p>大型在线数据集使研究者能够定量追踪链接形成过程，获得前所未有的规模和时间精度。然而，需要注意的是，很难从数字交互推断到非数字（面对面）交互的情况。</p>
+<h3 id="三元闭包的定量化">三元闭包的定量化</h3>
+<h4 id="方法论">方法论</h4>
+<p>为了定量测量三元闭包，研究者通常： 1.
+获取两个不同时间点的网络快照（<strong>Snapshots</strong>） 2.
+在第一个快照中，找出所有有<strong>恰好k个共同朋友但未直接连接</strong>的节点对
+3. 追踪这些对中有多少在第二个快照中形成了新边 4. 计算 <span
+class="math inline">\(T(k)\)</span> = 形成新边的比例</p>
+<h4 id="基线模型">基线模型</h4>
+<p>在零假设（独立随机混合）下，对于k个共同朋友的节点对，在给定时间内形成新边的概率遵循基线模型：</p>
+<p><span class="math display">\[T_{\text{baseline}}(k) = 1 -
+(1-p)^k\]</span></p>
+<p>其中： - <span class="math inline">\(p\)</span> =
+给定任意一个共同朋友导致链接形成的概率 - <span
+class="math inline">\((1-p)^k\)</span> =
+所有k个共同朋友都未导致链接的概率</p>
+<h4 id="实证发现kossinets-watts研究">实证发现：Kossinets &amp;
+Watts研究</h4>
+<p>在对约22,000名学生的电子邮件数据集（追踪一年）的研究中： - 实际的
+<span class="math inline">\(T(k)\)</span>
+曲线随k增加而增加（<strong>符合直觉</strong>） -
+<strong>关键发现</strong>：曲线显示<strong>向上弯曲</strong>（<strong>Upward
+bend</strong>），尤其是在0→2个朋友转换时 -
+这种模式<strong>强于基线预测</strong>，表明： -
+共同朋友的增加效应是<strong>超加性的（Superadditive）</strong> -
+第一个共同朋友比第二个贡献更多（<strong>强度递减</strong>） -
+多个共同朋友的组合效应大于独立概率的乘积</p>
+<p>这表明三元闭包不是简单的独立过程，而是存在<strong>结构化的社交动力</strong>。</p>
+<h3 id="焦点闭包的定量化">焦点闭包的定量化</h3>
+<h4 id="方法课程时间表数据">方法：课程时间表数据</h4>
+<p>使用学生课程时间表数据，研究者可以量化焦点闭包： -
+焦点（<strong>Focus</strong>）= 课程（<strong>Class</strong>） -
+如果两个学生选了同一门课，他们有一个共同焦点 -
+追踪他们随后成为朋友的概率</p>
+<h4 id="关键发现">关键发现</h4>
+<ul>
+<li><strong>绝对效应</strong>：单个共享焦点的影响大致相当于单个共享朋友的影响</li>
+<li><strong>曲线形状</strong>：焦点闭包曲线向下弯曲（<strong>Diminishing
+returns</strong>），与三元闭包不同
+<ul>
+<li>第一个共享焦点产生强效应</li>
+<li>后续的共享焦点产生较弱的增量效应</li>
+<li>这可能反映了通过焦点接近并不能保证成为朋友（需要额外的社交互动）</li>
+</ul></li>
+</ul>
+<p>这种模式表明，虽然焦点创造了机会，但将共享环境转化为友谊需要额外的条件。</p>
+<h3 id="成员闭包的量化">成员闭包的量化</h3>
+<h4 id="livejournal数据">LiveJournal数据</h4>
+<p>在LiveJournal社区（<strong>Communities</strong>）中： -
+追踪个人加入社区的概率 - 与已经在该社区中的朋友数量相关 -
+发现概率随朋友数量的增加而增加（<strong>成员闭包存在</strong>）</p>
+<h4 id="wikipedia编辑者数据">Wikipedia编辑者数据</h4>
+<p>在Wikipedia中： - 追踪编辑者编辑特定文章的概率 -
+与已经编辑该文章并与该编辑者有过交流的编辑者数量相关 -
+显示编辑者倾向于跟随他们已认识的其他编辑者的兴趣</p>
+<h3
+id="选择与社会影响的量化wikipedia案例">选择与社会影响的量化：Wikipedia案例</h3>
+<h4 id="方法论-1">方法论</h4>
+<p>为了分离选择和社会影响，研究者追踪两个编辑者的<strong>编辑相似性</strong>：</p>
+<p><span class="math display">\[\text{相似性} =
+\frac{\text{两者都编辑的文章数}}{\text{至少一人编辑的文章数}}\]</span></p>
+<p>相似性相对于<strong>首次通信时间</strong>进行分析。</p>
+<h4 id="关键时间点">关键时间点</h4>
+<ul>
+<li><strong>首次通信前</strong>：迅速增加的相似性 →
+<strong>选择效应</strong>（相似的编辑者倾向于相互交互）</li>
+<li><strong>首次通信后</strong>：继续缓慢增加的相似性 →
+<strong>社会影响效应</strong>（交流导致编辑兴趣的收敛）</li>
+</ul>
+<p>这种时间模式证实了<strong>两种机制都在运作</strong>，但操作的时间尺度不同。</p>
+<hr />
+<h2
+id="五隔离的空间模型schelling模型-spatial-model-of-segregation">五、隔离的空间模型：Schelling模型
+(Spatial Model of Segregation)</h2>
+<h3 id="schelling模型简介">Schelling模型简介</h3>
+<p>托马斯·谢林（<strong>Thomas
+Schelling</strong>）在1965-66年提出的空间模型解释了<strong>全局隔离</strong>如何从<strong>本地同质性偏好</strong>中自发产生。这一模型是理解社会隔离现象的经典框架。</p>
+<h3 id="模型设置">模型设置</h3>
+<h4 id="基本要素">基本要素</h4>
+<p>模型设置如下： -
+<strong>网格（Grid）</strong>：一个二维网格（如150×150） -
+<strong>代理（Agents）</strong>：两种类型的代理，标记为X和O -
+<strong>初始配置</strong>：均匀分布约10,000个X类代理和10,000个O类代理，加上2,500个空单元格</p>
+<h4 id="邻域与满足度">邻域与满足度</h4>
+<p>每个代理有<strong>8个邻居</strong>（包括对角线）：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-attr">[邻]</span> <span class="selector-attr">[邻]</span> <span class="selector-attr">[邻]</span></span><br><span class="line"><span class="selector-attr">[邻]</span> <span class="selector-attr">[代理]</span> <span class="selector-attr">[邻]</span></span><br><span class="line"><span class="selector-attr">[邻]</span> <span class="selector-attr">[邻]</span> <span class="selector-attr">[邻]</span></span><br></pre></td></tr></table></figure>
+<p>定义阈值 <span class="math inline">\(t\)</span>： -
+如果代理的邻居中<strong>至少有t个是同类型</strong>，则代理<strong>满意（Satisfied）</strong>
+-
+否则代理<strong>不满意（Unsatisfied）</strong>并倾向于<strong>移动（Move）</strong></p>
+<p>例如，若 <span class="math inline">\(t=3\)</span>： -
+代理在至少3个邻居是同类型时满意 - 代理愿意接受5个邻居是不同类型（8-3=5）
+- 这表示相对温和的同质性偏好</p>
+<h4 id="模型动力学">模型动力学</h4>
+<p>模型按轮次迭代： 1. 识别所有<strong>不满意的代理</strong> 2.
+这些代理随机移动到满足他们偏好的<strong>空单元格</strong> 3.
+重复直到所有代理满意或无法移动</p>
+<h3 id="阈值-t3-的案例">阈值 <span class="math inline">\(t=3\)</span>
+的案例</h3>
+<h4 id="初始条件与结果">初始条件与结果</h4>
+<p>在150×150网格上： - 初始配置：随机分布 -
+运行大约<strong>50轮</strong>就能达到<strong>稳定状态</strong> -
+<strong>关键结果</strong>：产生了<strong>大型同质区域</strong>，尽管没有代理<strong>明确寻求全面隔离</strong></p>
+<p>虽然棋盘模式（黑白相间）可能满足所有代理的偏好，但从随机初始配置开始，系统无法到达这个状态。集中的大区域更容易从随机开始达到，因此往往是稳定的终态。</p>
+<h3 id="阈值-t4-的情况">阈值 <span class="math inline">\(t=4\)</span>
+的情况</h3>
+<p>当阈值增加到 <span class="math inline">\(t=4\)</span>
+时（代理需要至少4个同类邻居）： - <strong>隔离程度更加极端</strong> -
+产生两个大型的单独区域，中间有明确的边界 -
+说明随着对本地同质性要求的增加，全局隔离程度也随之加强</p>
+<h3 id="schelling模型的关键洞见">Schelling模型的关键洞见</h3>
+<h4 id="隔离的自发产生">隔离的自发产生</h4>
+<p>模型的最重要洞见是：<strong>隔离可以在没有人明确寻求隔离的情况下出现</strong>。
+- 代理不要求与其他类型完全隔离 - 每个代理仅要求不成为极少数（本地水平）
+- 这种温和的局部偏好导致<strong>全局的极端隔离</strong></p>
+<h4 id="倍增效应">倍增效应</h4>
+<p>隔离通过"<strong>逐步瓦解（Progressive
+unraveling）</strong>"机制自我强化： 1. 代理看到不满意的邻域环境并移动
+2. 移动改变了其他代理的邻域构成 3. 这可能导致第二波和第三波代理移动 4.
+结果：集中的同质区域扩大，不同类型的人越来越分离</p>
+<h4 id="意图与结果的脱节">意图与结果的脱节</h4>
+<p><strong>本地偏好 → 全局模式</strong>的转变表明： -
+个体决策的集合效应可能与个体意图大不相同 -
+温和的个体偏好可以产生极端的全局结果 - <strong>无意的隔离（Unintended
+segregation）</strong>是复杂系统的特征</p>
+<hr />
+<h2 id="六总结与关键联系">六、总结与关键联系</h2>
+<p>四个主要机制在网络及其周围环境中相互作用：</p>
+<ol type="1">
+<li><strong>同质性</strong>原则表明个体与相似的人建立关系</li>
+<li><strong>选择与社会影响</strong>是同质性产生的两种基本机制</li>
+<li><strong>从属网络</strong>中的三种闭包机制（三元、焦点、成员）解释了网络结构如何演化</li>
+<li><strong>Schelling模型</strong>展示了局部偏好如何导致全局模式，包括社会隔离</li>
+</ol>
+<p>这些概念共同提供了理解为什么社会网络具有其特定结构特征的框架。</p>
+<hr />
+<h2 id="术语表-terminology-table">术语表 (Terminology Table)</h2>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 34%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>英文术语</th>
+<th>中文术语</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homophily</td>
+<td>同质性</td>
+<td>个体倾向于与相似的人建立联系的现象</td>
+</tr>
+<tr>
+<td>Heterogeneous edges</td>
+<td>异质边</td>
+<td>连接不同类型节点的边</td>
+</tr>
+<tr>
+<td>Cross-type edges</td>
+<td>异质边/跨类型边</td>
+<td>连接两个不同类型节点的边</td>
+</tr>
+<tr>
+<td>Anti-homophily</td>
+<td>反同质性</td>
+<td>节点倾向于与不同类型的节点连接</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td>选择</td>
+<td>个体根据自身属性选择相似朋友的机制</td>
+</tr>
+<tr>
+<td>Social Influence</td>
+<td>社会影响</td>
+<td>个体为符合朋友而改变自身属性的机制</td>
+</tr>
+<tr>
+<td>Socialization</td>
+<td>社会化</td>
+<td>社会影响的同义词</td>
+</tr>
+<tr>
+<td>Longitudinal studies</td>
+<td>纵向研究</td>
+<td>追踪同一主体随时间变化的研究方法</td>
+</tr>
+<tr>
+<td>Affiliation networks</td>
+<td>从属网络/附属网络</td>
+<td>表示个体参与团体的网络</td>
+</tr>
+<tr>
+<td>Bipartite graph</td>
+<td>二部图</td>
+<td>节点分为两个不相交集合，边仅在集合间的图</td>
+</tr>
+<tr>
+<td>Focus/Foci</td>
+<td>焦点</td>
+<td>从属网络中的团体或活动</td>
+</tr>
+<tr>
+<td>Social-Affiliation Network</td>
+<td>社交-从属融合网络</td>
+<td>结合社交边和从属边的网络</td>
+</tr>
+<tr>
+<td>Closure</td>
+<td>闭包</td>
+<td>新关系形成的过程</td>
+</tr>
+<tr>
+<td>Triadic closure</td>
+<td>三元闭包</td>
+<td>B和C因共享朋友A而成为朋友</td>
+</tr>
+<tr>
+<td>Focal closure</td>
+<td>焦点闭包</td>
+<td>B和C因共享焦点而成为朋友</td>
+</tr>
+<tr>
+<td>Membership closure</td>
+<td>成员闭包</td>
+<td>个人因朋友参与而加入焦点</td>
+</tr>
+<tr>
+<td>Co-evolution</td>
+<td>共同进化</td>
+<td>社交网络和从属网络随时间相互影响的过程</td>
+</tr>
+<tr>
+<td>Snapshots</td>
+<td>快照</td>
+<td>不同时间点的网络状态</td>
+</tr>
+<tr>
+<td>Superadditive</td>
+<td>超加性</td>
+<td>多个因素的组合效应大于单独效应之和</td>
+</tr>
+<tr>
+<td>Diminishing returns</td>
+<td>递减收益</td>
+<td>额外投入的边际效应逐渐减少</td>
+</tr>
+<tr>
+<td>Schelling model</td>
+<td>Schelling模型</td>
+<td>解释隔离如何从本地偏好产生的空间模型</td>
+</tr>
+<tr>
+<td>Grid</td>
+<td>网格</td>
+<td>Schelling模型中的二维空间</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>代理</td>
+<td>Schelling模型中的个体</td>
+</tr>
+<tr>
+<td>Threshold</td>
+<td>阈值</td>
+<td>代理满意所需的同类邻居最少数量</td>
+</tr>
+<tr>
+<td>Satisfied</td>
+<td>满意</td>
+<td>代理的邻域符合其偏好条件</td>
+</tr>
+<tr>
+<td>Unsatisfied</td>
+<td>不满意</td>
+<td>代理的邻域不符合其偏好条件</td>
+</tr>
+<tr>
+<td>Segregation</td>
+<td>隔离/种族隔离</td>
+<td>不同类型个体在空间上的分离</td>
+</tr>
+<tr>
+<td>Progressive unraveling</td>
+<td>逐步瓦解</td>
+<td>隔离通过连锁移动自我强化的过程</td>
+</tr>
+<tr>
+<td>Unintended segregation</td>
+<td>无意的隔离</td>
+<td>个体温和的偏好导致的全局隔离</td>
+</tr>
+<tr>
+<td>Friendship network</td>
+<td>友谊网络</td>
+<td>代表人与人之间友谊关系的网络</td>
+</tr>
+<tr>
+<td>School network</td>
+<td>学校网络</td>
+<td>在学校环境中形成的社交网络</td>
+</tr>
+<tr>
+<td>Email network</td>
+<td>电子邮件网络</td>
+<td>基于电子邮件通信的网络</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>社区/社群</td>
+<td>共同兴趣或参与的团体</td>
+</tr>
+<tr>
+<td>Director</td>
+<td>董事</td>
+<td>在公司担任董事职务的个人</td>
+</tr>
+<tr>
+<td>Company</td>
+<td>公司</td>
+<td>企业或商业组织</td>
+</tr>
+<tr>
+<td>Editor</td>
+<td>编辑</td>
+<td>Wikipedia或类似平台上的编辑者</td>
+</tr>
+<tr>
+<td>Article</td>
+<td>文章</td>
+<td>需要编辑的内容单位</td>
+</tr>
+<tr>
+<td>Similarity</td>
+<td>相似性</td>
+<td>两个个体在特征或行为上的相似程度</td>
+</tr>
+<tr>
+<td>Drug use</td>
+<td>药物使用</td>
+<td>研究中的行为指标</td>
+</tr>
+<tr>
+<td>Obesity</td>
+<td>肥胖</td>
+<td>社交传播研究中的健康指标</td>
+</tr>
+<tr>
+<td>Interest</td>
+<td>兴趣</td>
+<td>个人的偏好和关注领域</td>
+</tr>
+<tr>
+<td>Belief</td>
+<td>信念</td>
+<td>个人的观点和价值观</td>
+</tr>
+<tr>
+<td>Opinion</td>
+<td>观点</td>
+<td>个人对事物的看法</td>
+</tr>
+<tr>
+<td>Confounding factors</td>
+<td>混淆因素</td>
+<td>影响因果关系的其他因素</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>文档统计</strong> - 总字数（中文）：约12,000字 -
+主要章节：5个 - 核心概念：15+ - 实证研究案例：8+ - 公式与模型：6+ -
+术语表条目：50+</p>
+<p>此文档为COMP5313课程Chapter
+4的完整知识点总结，涵盖同质性、社交机制、从属网络、在线链接形成追踪和Schelling隔离模型的所有关键概念。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/974ef99c.html" rel="prev" title="COMP5313-Ch03-StrongAndWeakTies">
+                  <i class="fa fa-angle-left"></i> COMP5313-Ch03-StrongAndWeakTies
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/e111eb33.html" rel="next" title="COMP5313-Ch05-PositiveAndNegativeRelationships">
+                  COMP5313-Ch05-PositiveAndNegativeRelationships <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">208k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:37</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
