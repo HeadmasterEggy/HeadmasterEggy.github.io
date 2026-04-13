@@ -22,15 +22,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="联邦学习笔记">
+    <meta name="description" content="这篇论文《Meta-Learning for Semi-Supervised Few-Shot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="联邦学习">
 <meta property="og:url" content="http://example.com/posts/db802ba6.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="联邦学习笔记">
+<meta property="og:description" content="这篇论文《Meta-Learning for Semi-Supervised Few-Shot">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-10-18T12:48:33.709Z">
-<meta property="article:modified_time" content="2026-04-13T12:29:42.526Z">
+<meta property="article:modified_time" content="2026-04-13T13:01:58.278Z">
 <meta property="article:author" content="Joey">
 <meta name="twitter:card" content="summary">
 
@@ -124,7 +124,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">0</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">12</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">186</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">174</span></a></li>
   </ul>
 </nav>
 
@@ -136,7 +136,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -149,6 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="nav-text">一、研究背景与动机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0"><span class="nav-text">1. 小样本学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E7%BD%91%E7%BB%9C%E5%9B%9E%E9%A1%BE"><span class="nav-text">1. 原型网络回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#soft-k-means"><span class="nav-text">（1）Soft k-Means</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">1. 数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%BB%93%E8%AE%BA"><span class="nav-text">主要结论：</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -163,14 +164,19 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-count">174</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
@@ -228,7 +234,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="联邦学习 | Joey">
-      <meta itemprop="description" content="联邦学习笔记">
+      <meta itemprop="description" content="这篇论文《Meta-Learning for Semi-Supervised Few-Shot">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -250,7 +256,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-13 12:29:42" itemprop="dateModified" datetime="2026-04-13T12:29:42Z">2026-04-13</time>
+      <time title="Modified: 2026-04-13 13:01:58" itemprop="dateModified" datetime="2026-04-13T13:01:58Z">2026-04-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -269,25 +275,64 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>0</span>
+      <span>955</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>3 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">联邦学习笔记</div>
+            <div class="post-description">这篇论文《Meta-Learning for Semi-Supervised Few-Shot</div>
         </div>
       </header>
 
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><p>这篇论文《Meta-Learning for Semi-Supervised Few-Shot
+Classification》（Ren
+等，2018）提出了一种<strong>半监督小样本分类的元学习方法</strong>，扩展了传统的小样本学习框架，使其能够利用<strong>未标记样本</strong>来提升分类性能。以下是对论文的详细解读：</p>
+<h2 id="一研究背景与动机">一、研究背景与动机</h2>
+<h3 id="小样本学习">1. 小样本学习</h3>
+<p>目标：从极少量标记样本中学习分类器。常用方法：<strong>元学习</strong>，通过在多个“任务”或“情节”上训练模型，使其能够快速适应新任务。
+### 2. 现有局限
+传统小样本学习仅使用标记样本，忽略了现实中大量存在的未标记数据。人类在学习新概念时，往往同时利用标记和未标记信息。
+### 3. 本文贡献
+提出<strong>半监督小样本学习</strong>新范式，每个情节中包含：标记样本（支持集）未标记样本（可能包含目标类或干扰类）提出三种<strong>扩展原型网络</strong>的方法，以利用未标记数据。构建新数据集<strong>tieredImageNet</strong>，具有层次结构，更贴近现实。
+## 二、方法：半监督原型网络</p>
+<h3 id="原型网络回顾">1. 原型网络回顾</h3>
+<p>每个类的原型为该类嵌入向量的均值： [ {p}_c =
+]分类基于查询样本与各原型的距离。 ### 2. 三种半监督扩展方法</p>
+<h4 id="soft-k-means">（1）Soft k-Means</h4>
+<p>将未标记样本以软分配方式加入原型计算： [ _c = ]其中 (<em>{j,c}(
+是样本对类 (c) 的软分配权重。 #### （2）Soft k-Means with a Distractor
+Cluster
+引入一个“干扰簇”来捕获不属于任何目标类的样本，防止其污染原型。干扰簇原型设为原点，并学习其尺度参数
+(r</em>{N+1})。 #### （3）Masked Soft k-Means
+使用一个<strong>可学习的掩码机制</strong>，动态决定每个未标记样本对每个原型的贡献：
+[ m_{j,c} = (-<em>c (</em>{j,c} - _c)) ]其中 (_c, _c)
+由一个小型MLP根据距离统计量预测。 ## 三、实验设计与数据集</p>
+<h3 id="数据集">1. 数据集</h3>
+<p><strong>Omniglot</strong>：手写字符，1,623类。<strong>miniImageNet</strong>：100类，每类600张图像。<strong>tieredImageNet</strong>（本文提出）：608类，34个高级类别。训练/验证/测试类别来自不同高级类别，更具挑战性。
+### 2. 半监督设置 将每类图像划分为：标记部分（10% 或
+40%）未标记部分（90% 或
+60%）在情节中引入未标记样本，部分情节中还加入干扰类样本。 ### 3.
+基线模型
+<strong>Supervised</strong>：标准原型网络。<strong>Semi-Supervised
+Inference</strong>：仅在测试时使用软k均值。 ## 四、实验结果</p>
+<h3 id="主要结论">主要结论：</h3>
+<p>所有提出的半监督模型在<strong>有无干扰类</strong>的情况下均优于纯监督基线。<strong>Masked
+Soft
+k-Means</strong>在干扰类存在时表现最稳健。随着未标记样本数量增加，模型性能提升，说明模型学会了利用未标记数据。在<em>tieredImageNet</em>上表现尤其显著，说明该方法在更具挑战性的数据集上有效。
+## 五、贡献总结
+<strong>问题定义</strong>：首次系统研究半监督小样本学习，包括干扰类场景。<strong>方法提出</strong>：三种基于原型网络的半监督扩展方法。<strong>数据集构建</strong>：提出<em>tieredImageNet</em>，具有层次结构和更清晰的训练/测试划分。<strong>实验验证</strong>：在多个数据集上验证了方法的有效性，尤其是在干扰类存在时的鲁棒性。
+## 六、未来方向
+引入<strong>快速权重</strong>机制，使嵌入函数能根据情节内容动态调整。探索更复杂的半监督和聚类机制。在更大规模或更具挑战性的数据集上验证方法。如果有需要修改或者补充的地方，可以随时告诉我。
+[[联邦学习/联邦学习]]</p>
 
     </div>
 
@@ -343,14 +388,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">208k</span>
+    <span title="Word count total">375k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">12:37</span>
+    <span title="Reading time total">22:43</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
