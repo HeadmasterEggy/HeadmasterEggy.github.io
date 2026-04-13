@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="教材：Mining of Massive Datasets 作者：Jure Leskovec, An">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 - MMDS Chapter 5 Link Analysis 链接分析">
+<meta property="og:url" content="http://example.com/posts/fd354148.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="教材：Mining of Massive Datasets 作者：Jure Leskovec, An">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-13T11:12:35.668Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="PageRank">
+<meta property="article:tag" content="Link Analysis">
+<meta property="article:tag" content="HITS">
+<meta property="article:tag" content="Link Spam">
+<meta property="article:tag" content="TrustRank">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/fd354148.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/fd354148.html","path":"posts/fd354148.html","title":"COMP5313 - MMDS Chapter 5 Link Analysis 链接分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 - MMDS Chapter 5 Link Analysis 链接分析 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/fd354148.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">29</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">187</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mmds-chapter-5-link-analysis%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90"><span class="nav-text">MMDS Chapter 5: Link
+Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%A6%82%E8%BF%B0%E4%B8%8E%E8%83%8C%E6%99%AF"><span class="nav-text">一、概述与背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cpagerank-%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80"><span class="nav-text">二、PageRank 算法基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%8E%E6%9C%AF%E8%AF%AD%E5%9E%83%E5%9C%BE"><span class="nav-text">2.1 早期搜索引擎与术语垃圾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pagerank-%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">2.2 PageRank 的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%9B%BE%E8%A1%A8%E7%A4%BA"><span class="nav-text">2.2.1 网络图表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%AC%E7%A7%BB%E7%9F%A9%E9%98%B5"><span class="nav-text">2.2.2 转移矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.2.3 随机游走模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%B3%E5%AE%9A%E5%88%86%E5%B8%83%E4%B8%8E-pagerank"><span class="nav-text">2.2.4 稳定分布与 PageRank</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BB%93%E6%9E%84%E9%97%AE%E9%A2%98"><span class="nav-text">2.3 真实网络的结构问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%AD%BB%E7%AB%AF%E9%97%AE%E9%A2%98"><span class="nav-text">2.4 处理死端问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%9C%98%E8%9B%9B%E9%99%B7%E9%98%B1%E4%B8%8E%E7%A8%8E%E6%94%B6%E6%96%B9%E6%B3%95"><span class="nav-text">2.5 蜘蛛陷阱与税收方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%B8%AD%E4%BD%BF%E7%94%A8-pagerank"><span class="nav-text">2.6 在搜索引擎中使用 PageRank</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89pagerank-%E7%9A%84%E9%AB%98%E6%95%88%E8%AE%A1%E7%AE%97"><span class="nav-text">三、PageRank 的高效计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%A7%BB%E7%9F%A9%E9%98%B5%E7%9A%84%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA"><span class="nav-text">3.1 转移矩阵的稀疏表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-mapreduce-%E7%9A%84-pagerank-%E8%BF%AD%E4%BB%A3"><span class="nav-text">3.2 基于 MapReduce 的 PageRank
+迭代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-combiner-%E5%90%88%E5%B9%B6%E7%BB%93%E6%9E%9C%E5%90%91%E9%87%8F"><span class="nav-text">3.3 使用 Combiner 合并结果向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%A7%BB%E7%9F%A9%E9%98%B5%E5%9D%97%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="nav-text">3.4 转移矩阵块的表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%AB%98%E6%95%88%E6%96%B9%E6%B3%95"><span class="nav-text">3.5 其他高效方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%BB%E9%A2%98%E6%95%8F%E6%84%9F%E7%9A%84-pagerank"><span class="nav-text">四、主题敏感的 PageRank</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8A%A8%E6%9C%BA"><span class="nav-text">4.1 基本动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%81%8F%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0"><span class="nav-text">4.2 有偏随机游走</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E6%95%8F%E6%84%9F-pagerank-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">4.3 主题敏感 PageRank 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">4.4 混合向量的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E6%9C%AC%E6%8E%A8%E6%96%AD%E4%B8%BB%E9%A2%98"><span class="nav-text">4.5 从文本推断主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E9%93%BE%E6%8E%A5%E5%9E%83%E5%9C%BE%E5%92%8C%E5%AF%B9%E6%8A%97"><span class="nav-text">五、链接垃圾和对抗</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%86%9C%E5%9C%BA%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-text">5.1 垃圾农场的架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%86%9C%E5%9C%BA%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">5.2 垃圾农场的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%8A%97%E9%93%BE%E6%8E%A5%E5%9E%83%E5%9C%BE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-text">5.3 对抗链接垃圾的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trustrank"><span class="nav-text">5.4 TrustRank</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E8%B4%A8%E9%87%8F%E5%BA%A6%E9%87%8F"><span class="nav-text">5.5 垃圾质量度量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADhits-%E7%AE%97%E6%B3%95%E6%9E%A2%E7%BA%BD%E4%B8%8E%E6%9D%83%E5%A8%81"><span class="nav-text">六、HITS 算法：枢纽与权威</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-%E7%AE%97%E6%B3%95%E7%9A%84%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-text">6.1 HITS 算法的直观理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%A2%E7%BA%BD%E5%92%8C%E6%9D%83%E5%A8%81%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%8C%96"><span class="nav-text">6.2 枢纽和权威的形式化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-%E7%AE%97%E6%B3%95%E7%9A%84%E8%BF%AD%E4%BB%A3%E8%BF%87%E7%A8%8B"><span class="nav-text">6.3 HITS 算法的迭代过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-%E7%9A%84%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="nav-text">6.4 HITS 的具体例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-vs-pagerank"><span class="nav-text">6.5 HITS vs PageRank</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-%E7%9A%84%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-text">6.6 HITS 的特征向量分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-text">七、总结与应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">7.1 链接分析的核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-text">7.2 实际应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E4%BB%A3%E6%8C%91%E6%88%98"><span class="nav-text">7.3 当代挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E6%B1%87%E6%80%BB%E8%A1%A8"><span class="nav-text">术语汇总表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/fd354148.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 - MMDS Chapter 5 Link Analysis 链接分析 | Joey">
+      <meta itemprop="description" content="教材：Mining of Massive Datasets 作者：Jure Leskovec, An">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 - MMDS Chapter 5 Link Analysis 链接分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-13 00:00:00 / Modified: 11:12:35" itemprop="dateCreated datePublished" datetime="2026-04-13T00:00:00Z">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>24 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">教材：Mining of Massive Datasets 作者：Jure Leskovec, An</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="mmds-chapter-5-link-analysis链接分析">MMDS Chapter 5: Link
+Analysis（链接分析）</h1>
+<blockquote>
+<p>教材：<em>Mining of Massive Datasets</em> 作者：Jure Leskovec, Anand
+Rajaraman, Jeffrey D. Ullman</p>
+</blockquote>
+<hr />
+<h2 id="一概述与背景">一、概述与背景</h2>
+<p>链接分析 (<strong>Link Analysis</strong>)
+是大规模网络数据挖掘中的核心主题之一。本章深入探讨如何利用网页之间的链接关系来评估网页的重要性，这是现代搜索引擎的关键技术基础。</p>
+<p>互联网的本质是一个庞大的有向图，其中每个网页是一个节点，超链接则形成了节点之间的有向边。通过分析这种链接结构，我们可以发现哪些网页对用户最有价值，以及如何利用这些信息改进搜索引擎的排名。</p>
+<hr />
+<h2 id="二pagerank-算法基础">二、PageRank 算法基础</h2>
+<h3 id="早期搜索引擎与术语垃圾">2.1 早期搜索引擎与术语垃圾</h3>
+<p>在 <strong>Google</strong>
+搜索引擎出现之前，早期的搜索引擎采用了相对简单的方法：</p>
+<ul>
+<li><strong>爬虫技术</strong>：网络爬虫遍历万维网，获取每个网页的内容</li>
+<li><strong>倒排索引</strong>：建立从术语到网页的映射，即
+(<strong>Inverted Index</strong>) 结构</li>
+<li><strong>排名方法</strong>：基于查询词在网页中的出现频率、位置（如标题、头部）等因素进行排名</li>
+</ul>
+<p>然而，这种方法存在严重的安全漏洞——<strong>术语垃圾</strong>
+(<strong>Term Spam</strong>)：</p>
+<p>恶意网页创建者可以通过以下技巧欺骗搜索引擎： 1.
+在网页中无限次重复与实际内容无关的热门搜索词（如"电影"） 2.
+将这些重复的词设置为与背景色相同，使用户看不见但搜索引擎能检测到 3.
+复制排名靠前的网页内容以获得高排名</p>
+<p><strong>Google 的两项创新</strong>： 1. <strong>PageRank
+算法</strong>：通过随机游走模型来评估网页的重要性，基于网页被其他网页链接的频率
+2.
+<strong>链接锚文本分析</strong>：考虑指向网页的链接及其上下文词汇，而不仅仅是网页本身的内容</p>
+<p>这两项创新共同解决了术语垃圾问题，因为： -
+简单的链接计数虽然看起来可行，但垃圾制造者可以创建数百万个链接指向目标网页
+- 需要更复杂的算法来区分有意义的链接和垃圾链接</p>
+<h3 id="pagerank-的定义">2.2 PageRank 的定义</h3>
+<p><strong>PageRank</strong>
+是基于随机游走模型的网页排名算法。其核心思想是：一个网页的重要性取决于有多少个重要的网页链接到它。</p>
+<h4 id="网络图表示">2.2.1 网络图表示</h4>
+<p>将万维网表示为有向图 <span class="math inline">\(G=(V,E)\)</span>： -
+顶点集 <span class="math inline">\(V\)</span>：所有网页 - 边集 <span
+class="math inline">\(E\)</span>：所有超链接 - 出度
+(<strong>Out-Degree</strong>)：<span class="math inline">\(d_j\)</span>
+表示网页 <span class="math inline">\(j\)</span> 的出链数量</p>
+<h4 id="转移矩阵">2.2.2 转移矩阵</h4>
+<p>设网络包含 <span class="math inline">\(n\)</span> 个网页，定义 <span
+class="math inline">\(n \times n\)</span> 的转移矩阵 <span
+class="math inline">\(M\)</span>（也称为 <strong>Transition
+Matrix</strong>）：</p>
+<p><span class="math display">\[M_{ij} = \begin{cases}
+\frac{1}{d_j} &amp; \text{if page } j \text{ has a link to page } i \\
+0 &amp; \text{otherwise}
+\end{cases}\]</span></p>
+<p>其中 <span class="math inline">\(d_j\)</span> 是网页 <span
+class="math inline">\(j\)</span> 的出链数。矩阵 <span
+class="math inline">\(M\)</span> 是列随机的
+(<strong>Column-Stochastic</strong>)，即每列的和为 1。</p>
+<p><strong>示例 5.1：四节点网络</strong></p>
+<p>考虑有向图：<span class="math inline">\(A \rightarrow
+B\)</span>，<span class="math inline">\(B \rightarrow C\)</span>，<span
+class="math inline">\(C \rightarrow A, B\)</span>，<span
+class="math inline">\(D \rightarrow C, D\)</span></p>
+<p>各页面出度：<span class="math inline">\(d_A=1, d_B=1, d_C=2,
+d_D=2\)</span></p>
+<p>转移矩阵为：</p>
+<p><span class="math display">\[M = \begin{pmatrix}
+0 &amp; 0 &amp; 1/2 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 1/2 \\
+0 &amp; 0 &amp; 1/2 &amp; 1/2
+\end{pmatrix}\]</span></p>
+<h4 id="随机游走模型">2.2.3 随机游走模型</h4>
+<p><strong>随机游走</strong> (<strong>Random Walk/Random
+Surfer</strong>) 的过程： 1. 初始时，游走者从 <span
+class="math inline">\(n\)</span> 个网页中均匀随机选择一个（初始分布
+<span class="math inline">\(v_0 = e/n\)</span>，其中 <span
+class="math inline">\(e\)</span> 是全1向量） 2.
+在每个时步，游走者从当前网页随机选择一条出链，跳转到相邻网页 3.
+重复此过程</p>
+<p>在 <span class="math inline">\(t\)</span> 步之后的概率分布为： <span
+class="math display">\[v_t = M^t v_0\]</span></p>
+<p>其中 <span class="math inline">\(v_t\)</span> 是第 <span
+class="math inline">\(t\)</span> 步的概率分布向量。</p>
+<h4 id="稳定分布与-pagerank">2.2.4 稳定分布与 PageRank</h4>
+<p>如果马尔可夫链 (<strong>Markov Chain</strong>) 满足以下条件： 1.
+图是强连通的 (<strong>Strongly Connected</strong>) 2. 不存在死端
+(<strong>Dead End</strong>)</p>
+<p>则随机游走过程会收敛到唯一的稳定分布 <span
+class="math inline">\(v\)</span>，满足： <span class="math display">\[v
+= Mv\]</span></p>
+<p>即 <span class="math inline">\(v\)</span> 是矩阵 <span
+class="math inline">\(M\)</span> 的特征值为 1
+的特征向量（主特征向量）。</p>
+<p><strong>PageRank</strong> 就是这个稳定分布，通常在 50-75
+次迭代后收敛到足够精度。</p>
+<p><strong>示例 5.2：计算四节点网络的 PageRank</strong></p>
+<p>从 <span class="math inline">\(v_0 = (1/4, 1/4, 1/4, 1/4)^T\)</span>
+开始迭代：</p>
+<p><span class="math display">\[v_1 = M v_0 = \begin{pmatrix} 1/8 \\ 1/4
+\\ 3/8 \\ 1/4 \end{pmatrix}\]</span></p>
+<p>继续迭代直到收敛，最终稳定分布为： <span class="math display">\[v =
+\left(\frac{3}{9}, \frac{2}{9}, \frac{2}{9},
+\frac{2}{9}\right)^T\]</span></p>
+<p>网页 A 的 PageRank 最高（1/3），因为有两个网页链接到它。</p>
+<h3 id="真实网络的结构问题">2.3 真实网络的结构问题</h3>
+<p>真实网络与理论假设有重大差异，不满足强连通性和无死端的要求。</p>
+<p><strong>蝴蝶结构</strong> (<strong>Bow-Tie Structure</strong>)： -
+<strong>强连通分量</strong> (<strong>SCC, Strongly Connected
+Component</strong>)：约占网页 27%，形成网络的核心 -
+<strong>入分量</strong> (<strong>In-Component</strong>)：能到达 SCC
+但不能从 SCC 返回的网页（约 21%） - <strong>出分量</strong>
+(<strong>Out-Component</strong>)：能从 SCC 到达但不能被 SCC
+到达的网页（约 21%） - <strong>须条</strong>
+(<strong>Tendrils</strong>)：连接到 In 和 Out 的网页 -
+<strong>管道</strong> (<strong>Tubes</strong>)：直接连接 In 到 Out
+的网页 - <strong>孤立分量</strong> (<strong>Disconnected
+Components</strong>)：与其他部分无连接</p>
+<p>这种结构导致 PageRank 收敛条件不满足，需要特殊处理。</p>
+<h3 id="处理死端问题">2.4 处理死端问题</h3>
+<p><strong>死端</strong> (<strong>Dead End</strong>)
+是指没有任何出链的网页。在转移矩阵中，死端对应一个全零列。</p>
+<p><strong>问题</strong>： - 死端使矩阵 <span
+class="math inline">\(M\)</span> 失去列随机性质（成为亚随机矩阵） -
+随机游走者进入死端后无法离开，概率会逐步积累 - 最终所有网页的 PageRank
+趋向于 0</p>
+<p><strong>示例 5.3</strong>：如果在示例 5.1 中移除 <span
+class="math inline">\(C \rightarrow A\)</span> 的链接，使 C
+成为死端，则所有 PageRank 最终都趋向于 0。</p>
+<p><strong>解决方案 1：递归删除法</strong> (<strong>Recursive
+Deletion</strong>)</p>
+<p>步骤如下： 1. 识别所有死端网页 2. 从图中删除死端及其出链 3.
+重复直到没有新的死端 4. 在删除死端的网页上计算 PageRank 5.
+按相反顺序恢复被删除网页的 PageRank</p>
+<p>恢复公式：对于被删除的死端网页 <span
+class="math inline">\(p\)</span>，其 PageRank 为： <span
+class="math display">\[r_p = \sum_{q \in pred(p)}
+\frac{r_q}{d_q}\]</span></p>
+<p>其中 <span class="math inline">\(pred(p)\)</span> 是指向 <span
+class="math inline">\(p\)</span> 的所有网页，<span
+class="math inline">\(r_q\)</span> 是 <span
+class="math inline">\(q\)</span> 的 PageRank，<span
+class="math inline">\(d_q\)</span> 是 <span
+class="math inline">\(q\)</span> 的出度。</p>
+<p><strong>示例 5.4：多级死端</strong></p>
+<p>如果移除 C 的出链使其成为死端，这进而可能使 B 也成为死端（如果 B
+只链接到 C）。需要逐级处理： 1. 第一级：删除 E（初始死端） 2.
+第二级：删除 C（删除 E 后成为死端） 3. 在简化图上计算 PageRank 4. 按
+C、E 的顺序恢复</p>
+<h3 id="蜘蛛陷阱与税收方法">2.5 蜘蛛陷阱与税收方法</h3>
+<p><strong>蜘蛛陷阱</strong> (<strong>Spider Trap</strong>)
+是指一组网页，其中所有出链都指向组内网页，与其他网络部分无连接。</p>
+<p><strong>问题</strong>： - 随机游走者一旦进入陷阱，永远无法离开 - 所有
+PageRank 最终聚集在陷阱中的网页 - 其他网页的 PageRank 趋向于 0</p>
+<p><strong>示例 5.5</strong>：如果 D 有自环（D
+指向自己）且没有其他出链，在收敛后： <span class="math display">\[v
+\rightarrow (0, 0, 0, 1)^T\]</span></p>
+<p><strong>解决方案：税收方法</strong> (<strong>Taxation
+Method</strong>) 或 <strong>传送方法</strong> (<strong>Teleportation
+Method</strong>)</p>
+<p>改进的 PageRank 公式： <span class="math display">\[v&#39; = \beta M
+v + \frac{1-\beta}{n} e\]</span></p>
+<p>其中： - <span class="math inline">\(\beta \in [0.8, 0.9]\)</span>
+通常为 0.85，称为 <strong>阻尼因子</strong> (<strong>Damping
+Factor</strong>) - <span class="math inline">\(e\)</span> 是全 1 向量 -
+<span class="math inline">\(n\)</span> 是网页数量</p>
+<p><strong>概率解释</strong>： - 以概率 <span
+class="math inline">\(\beta\)</span> 执行随机游走的标准步骤（跟随出链）
+- 以概率 <span class="math inline">\(1-\beta\)</span>
+进行"传送"，均匀随机跳转到任意网页 - 传送相当于在键盘上随机输入 URL</p>
+<p><strong>示例 5.6</strong>：使用 <span class="math inline">\(\beta =
+0.8\)</span> 和 D 的自环</p>
+<p>迭代过程会收敛到： <span class="math display">\[v = (15/148, 19/148,
+95/148, 19/148)^T\]</span></p>
+<p>虽然 D 仍然获得最高 PageRank，但不再是全部（95/148 ≈
+0.642），其他网页也获得合理的分值。</p>
+<h3 id="在搜索引擎中使用-pagerank">2.6 在搜索引擎中使用 PageRank</h3>
+<p><strong>Google 搜索引擎的排名因素</strong>： - Google 使用 250+
+种排名属性和信号 - PageRank 是其中重要的一个，但不是唯一决定因素</p>
+<p><strong>综合排名过程</strong>： 1. 网页必须包含用户查询的搜索词 2.
+PageRank 作为一般性重要性指标 3. 其他重要因素包括： -
+搜索词在标题中的位置和频率 -
+搜索词在指向该网页的链接的锚文本中的出现情况 - 指向该网页的高 PageRank
+网页数量及其相关性</p>
+<hr />
+<h2 id="三pagerank-的高效计算">三、PageRank 的高效计算</h2>
+<h3 id="转移矩阵的稀疏表示">3.1 转移矩阵的稀疏表示</h3>
+<p>互联网图极为稀疏——平均每个网页约有 10
+条出链，而总页数高达数十亿。</p>
+<p><strong>密集矩阵表示的问题</strong>： - 完整的 <span
+class="math inline">\(n \times n\)</span> 矩阵需要 <span
+class="math inline">\(n^2\)</span> 空间 - 对于 <span
+class="math inline">\(n = 10^9\)</span>，这将需要 <span
+class="math inline">\(10^{18}\)</span> 字节的存储，完全不可行</p>
+<p><strong>稀疏表示方案</strong>：</p>
+<ol type="1">
+<li><strong>坐标表示</strong> (<strong>Coordinate Format</strong>)
+<ul>
+<li>存储每个非零元素的行号、列号和值</li>
+<li>每个元素约需 16 字节</li>
+</ul></li>
+<li><strong>按列优化表示</strong> (<strong>Column-wise
+Representation</strong>)
+<ul>
+<li>对每列，存储：出度 <span
+class="math inline">\(d_j\)</span>、该列非零元素的行号列表</li>
+<li>每个元素约需 4 字节</li>
+<li>是计算矩阵-向量乘积的最高效格式</li>
+</ul></li>
+</ol>
+<p><strong>示例 5.7：列表表示</strong></p>
+<p>对于示例 5.1 的矩阵，按列表示为：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">列<span class="number">1</span>: 出度=<span class="number">1</span>, 目标=&#123;<span class="number">2</span>&#125;</span><br><span class="line">列<span class="number">2</span>: 出度=<span class="number">1</span>, 目标=&#123;<span class="number">3</span>&#125;</span><br><span class="line">列<span class="number">3</span>: 出度=<span class="number">2</span>, 目标=&#123;<span class="number">1</span>,<span class="number">4</span>&#125;</span><br><span class="line">列<span class="number">4</span>: 出度=<span class="number">2</span>, 目标=&#123;<span class="number">3</span>,<span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>这种表示紧凑且便于计算 <span class="math inline">\(v&#39; =
+Mv\)</span>：对每列 <span class="math inline">\(j\)</span>，将 <span
+class="math inline">\(v_j/d_j\)</span> 添加到对应的行中。</p>
+<h3 id="基于-mapreduce-的-pagerank-迭代">3.2 基于 MapReduce 的 PageRank
+迭代</h3>
+<p>在处理超大规模网络时，计算机的内存可能无法存储完整的向量 <span
+class="math inline">\(v\)</span>，需要使用分布式计算框架。</p>
+<p><strong>单机可行情况</strong>： - 矩阵 <span
+class="math inline">\(M\)</span> 无法一次性加载，但向量 <span
+class="math inline">\(v\)</span> 可以存储在内存中 - 每次迭代执行 <span
+class="math inline">\(v&#39; = \beta M v + (1-\beta)e/n\)</span> -
+使用流式处理方法：逐块读取 <span
+class="math inline">\(M\)</span>，更新对应的 <span
+class="math inline">\(v&#39;\)</span> 部分</p>
+<h3 id="使用-combiner-合并结果向量">3.3 使用 Combiner 合并结果向量</h3>
+<p>当数据规模极大时，即使向量 <span class="math inline">\(v\)</span>
+也可能无法存储在单台机器的内存中。</p>
+<p><strong>条带化方法</strong> (<strong>Striping</strong>)： - 将矩阵
+<span class="math inline">\(M\)</span> 分解为 <span
+class="math inline">\(k\)</span> 个竖条带 - 将向量 <span
+class="math inline">\(v\)</span> 和 <span
+class="math inline">\(v&#39;\)</span> 分解为 <span
+class="math inline">\(k\)</span> 个段 - <span
+class="math inline">\(k\)</span> 个 Map 任务，每个处理一个条带</p>
+<p><strong>问题</strong>：向量 <span
+class="math inline">\(v&#39;\)</span> 的不同段可能来自多个 Map
+任务的输出，导致： - 多个任务输出同一向量位置的部分计算 -
+需要合并这些部分贡献（Reduce）</p>
+<p><strong>分块矩阵方法</strong> (<strong>Block Matrix
+Approach</strong>)：</p>
+<p>将矩阵分解为 <span class="math inline">\(k \times k\)</span>
+的块矩阵：</p>
+<p><span class="math display">\[M = \begin{pmatrix}
+M_{11} &amp; M_{12} &amp; \cdots &amp; M_{1k} \\
+M_{21} &amp; M_{22} &amp; \cdots &amp; M_{2k} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+M_{k1} &amp; M_{k2} &amp; \cdots &amp; M_{kk}
+\end{pmatrix}, \quad v = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_k
+\end{pmatrix}\]</span></p>
+<p>矩阵-向量乘积： <span class="math display">\[v&#39;_i =
+\sum_{j=1}^{k} M_{ij} v_j\]</span></p>
+<p><strong>MapReduce 实现</strong>： - 创建 <span
+class="math inline">\(k^2\)</span> 个 Map 任务，每个任务 <span
+class="math inline">\((i,j)\)</span> 处理块 <span
+class="math inline">\(M_{ij}\)</span> 和向量分片 <span
+class="math inline">\(v_j\)</span> - 块 <span
+class="math inline">\(M_{ij}\)</span> 与 <span
+class="math inline">\(v_j\)</span> 的乘积仅贡献到 <span
+class="math inline">\(v&#39;_i\)</span> - 所有贡献到 <span
+class="math inline">\(v&#39;_i\)</span> 的部分可在 Reduce 阶段合并 -
+使用 Combiner 在 Map 端进行局部求和，减少网络传输</p>
+<h3 id="转移矩阵块的表示">3.4 转移矩阵块的表示</h3>
+<p><strong>块表示格式</strong>： - 对每个块 <span
+class="math inline">\(M_{ij}\)</span>，列出所有非零元素 -
+对每列，记录出度和目标行号列表 - 空间复杂度略高于条带表示（最多 2
+倍），但便于块级处理</p>
+<h3 id="其他高效方法">3.5 其他高效方法</h3>
+<p><strong>行块分配</strong>： - 将矩阵的行块分配给单个 Map 任务 - 每个
+Map 任务读取整个向量 <span
+class="math inline">\(v\)</span>，但仅读取矩阵的 1/k 部分 - Map
+任务数减少到 <span class="math inline">\(k\)</span>（而非 <span
+class="math inline">\(k^2\)</span>）</p>
+<p><strong>单机优化</strong>： - 模拟行逐行处理 - 仅读取一次矩阵，读取
+<span class="math inline">\(k\)</span> 次向量 - 在现代 CPU
+缓存体系下可能比块方法更高效</p>
+<hr />
+<h2 id="四主题敏感的-pagerank">四、主题敏感的 PageRank</h2>
+<h3 id="基本动机">4.1 基本动机</h3>
+<p>不同用户对相同搜索词的理解和需求差异巨大。</p>
+<p><strong>例子</strong>：搜索"美洲虎"(<strong>Jaguar</strong>) - 用户
+A：寻找关于美洲虎动物的信息 - 用户 B：搜索美洲虎汽车品牌 - 用户 C：查找
+macOS Jaguar 操作系统 - 用户 D：寻找美洲虎游戏机 (Atari)</p>
+<p><strong>全局 PageRank 的问题</strong>： - 对所有用户和查询使用相同的
+PageRank 向量 - 无法体现个人或主题兴趣 - 理想方案是为每个用户维护个性化
+PageRank，但不可行（数十亿用户）</p>
+<p><strong>实际方案：主题敏感 PageRank</strong> (<strong>Topic-Sensitive
+PageRank</strong>) - 预计算少量主题特定的 PageRank 向量（如 16-32 个） -
+根据用户兴趣选择对应向量 - 可行性强，计算量合理</p>
+<h3 id="有偏随机游走">4.2 有偏随机游走</h3>
+<p><strong>传送集合</strong> (<strong>Teleport Set</strong>) <span
+class="math inline">\(S\)</span>：一组已知属于特定主题的网页。</p>
+<p><strong>有偏 PageRank 公式</strong>： <span
+class="math display">\[v&#39; = \beta M v + \frac{1-\beta}{|S|}
+e_S\]</span></p>
+<p>其中 <span class="math inline">\(e_S\)</span> 是一个向量，仅在 <span
+class="math inline">\(S\)</span> 中的位置为 1，其他位置为 0。</p>
+<p><strong>概率解释</strong>： - 以概率 <span
+class="math inline">\(\beta\)</span> 执行随机游走的标准步骤 - 以概率
+<span class="math inline">\(1-\beta\)</span> 进行"传送"，但仅传送到
+<span class="math inline">\(S\)</span> 中的网页，均匀分布 - 相比标准
+PageRank，新网页访问仅限制在特定主题范围内</p>
+<p><strong>初始化</strong>： <span class="math display">\[v_0 =
+\frac{e_S}{|S|}\]</span></p>
+<p>游走始终从主题网页开始。</p>
+<h3 id="主题敏感-pagerank-的使用">4.3 主题敏感 PageRank 的使用</h3>
+<p><strong>实现步骤</strong>：</p>
+<ol type="1">
+<li><p><strong>选择主题</strong>：使用预定义分类体系（如 DMOZ 开放目录的
+16 个顶级分类）</p>
+<ul>
+<li>商业、科技、艺术、体育等</li>
+</ul></li>
+<li><p><strong>定义传送集合</strong>：对每个主题，选择具有代表性的权威网页</p>
+<ul>
+<li>可人工精选高质量网站</li>
+<li>或自动从目录中抽取</li>
+</ul></li>
+<li><p><strong>预计算向量</strong>：为每个主题离线计算 PageRank
+向量（50-75 次迭代）</p></li>
+<li><p><strong>用户分类</strong>：在搜索时确定用户兴趣主题</p>
+<ul>
+<li>用户选择（显式菜单）</li>
+<li>推断自浏览历史、搜索历史</li>
+<li>从用户的书签或社交媒体推断</li>
+</ul></li>
+<li><p><strong>生成排名</strong>：使用对应主题的 PageRank
+向量排名搜索结果</p></li>
+</ol>
+<h3 id="混合向量的使用">4.4 混合向量的使用</h3>
+<p>对于多主题兴趣用户，可以加权组合多个主题向量： <span
+class="math display">\[v_{user} = \sum_{i=1}^{k} w_i
+v_{topic_i}\]</span></p>
+<p>其中 <span class="math inline">\(w_i\)</span> 是主题 <span
+class="math inline">\(i\)</span> 的权重，<span
+class="math inline">\(\sum w_i = 1\)</span>。</p>
+<p><strong>示例 5.10</strong>：</p>
+<p>设有 4 个网页，传送集合 <span class="math inline">\(S = \{B,
+D\}\)</span>（网页 B 和 D）：</p>
+<p>使用公式 <span class="math inline">\(v&#39; = 0.8 Mv + 0.2(e_S/|S|) =
+0.8Mv + 0.1(e_B + e_D)\)</span></p>
+<p>迭代会偏向于提高 B 和 D 的 PageRank，以及与它们紧密相连的网页。</p>
+<h3 id="从文本推断主题">4.5 从文本推断主题</h3>
+<p><strong>基本思路</strong>：识别每个主题的特征词汇，根据网页文本对其分类。</p>
+<p><strong>步骤</strong>：</p>
+<ol type="1">
+<li><p><strong>提取特征词</strong>：对每个主题，计算其中文档中特定词汇出现的频率</p></li>
+<li><p><strong>识别主题特有词</strong>：选择在某主题中频率远高于一般背景的词</p></li>
+<li><p><strong>相似度计算</strong>：使用杰卡德相似度 (<strong>Jaccard
+Similarity</strong>) 等度量 <span class="math display">\[J(A, B) =
+\frac{|A \cap B|}{|A \cup B|}\]</span> 其中 <span
+class="math inline">\(A\)</span> 是网页的词集合，<span
+class="math inline">\(B\)</span> 是主题的特征词集合</p></li>
+<li><p><strong>页面分类</strong>：将网页分配给杰卡德相似度最高的主题</p></li>
+<li><p><strong>用户分类</strong>：推断用户兴趣为其浏览网页所属主题的加权组合</p></li>
+</ol>
+<hr />
+<h2 id="五链接垃圾和对抗">五、链接垃圾和对抗</h2>
+<h3 id="垃圾农场的架构">5.1 垃圾农场的架构</h3>
+<p><strong>链接垃圾</strong> (<strong>Link Spam</strong>)
+是指通过人为操纵链接结构来虚增网页 PageRank 的技术。</p>
+<p><strong>垃圾农场</strong> (<strong>Spam Farm</strong>) 结构： -
+<strong>目标页面</strong> <span
+class="math inline">\(t\)</span>：垃圾创建者想要提升排名的页面 -
+<strong>支持页面</strong> <span class="math inline">\(m\)</span>
+个：垃圾创建者创建的辅助页面 - <strong>链接策略</strong>： - 所有 <span
+class="math inline">\(m\)</span> 个支持页面都链接到目标页面 <span
+class="math inline">\(t\)</span> -
+支持页面之间可以链接，但所有出链最终都指向 <span
+class="math inline">\(t\)</span> -
+垃圾创建者利用可访问网页（如博客评论）来获得外部链接，指向支持页面或目标页面</p>
+<p><strong>外部贡献</strong>： - 设外部网页对目标页面的 PageRank 贡献为
+<span class="math inline">\(x\)</span> -
+不属于垃圾农场的网页提供的传入链接价值总和</p>
+<h3 id="垃圾农场的分析">5.2 垃圾农场的分析</h3>
+<p><strong>支持页面的 PageRank</strong>：</p>
+<p>每个支持页面 <span class="math inline">\(s_i\)</span> 的 PageRank
+来自： 1. 外部贡献通过 <span class="math inline">\(t\)</span> 的反馈：从
+<span class="math inline">\(t\)</span> 接收 <span
+class="math inline">\(m\)</span> 个支持页面的均匀分配 2. 传送贡献：<span
+class="math inline">\((1-\beta)/n\)</span></p>
+<p>计算得： <span class="math display">\[r_s = \frac{\beta y}{m} +
+\frac{1-\beta}{n}\]</span></p>
+<p>其中 <span class="math inline">\(y\)</span> 是目标页面的
+PageRank。</p>
+<p><strong>目标页面的 PageRank</strong>：</p>
+<p><span class="math display">\[y = x + \sum_{i=1}^{m} \beta r_s = x + m
+\cdot \beta \left(\frac{\beta y}{m} +
+\frac{1-\beta}{n}\right)\]</span></p>
+<p>化简： <span class="math display">\[y = x + \beta^2 y +
+\frac{m\beta(1-\beta)}{n}\]</span></p>
+<p><span class="math display">\[y(1 - \beta^2) = x +
+\frac{m\beta(1-\beta)}{n}\]</span></p>
+<p><span class="math display">\[y = \frac{x}{1-\beta^2} +
+\frac{m\beta(1-\beta)}{n(1-\beta^2)}\]</span></p>
+<p>定义放大因子 (<strong>Amplification Factor</strong>)： <span
+class="math display">\[A = \frac{1}{1-\beta^2}\]</span></p>
+<p>和系数： <span class="math display">\[c =
+\frac{\beta(1-\beta)}{1-\beta^2} = \frac{\beta}{1+\beta}\]</span></p>
+<p>则： <span class="math display">\[y = A \cdot x + c \cdot
+\frac{m}{n}\]</span></p>
+<p><strong>数值分析</strong>（<span class="math inline">\(\beta =
+0.85\)</span>）：</p>
+<p><span class="math display">\[A = \frac{1}{1-0.85^2} =
+\frac{1}{1-0.7225} = \frac{1}{0.2775} \approx 3.604\]</span></p>
+<p><span class="math display">\[c = \frac{0.85}{1.85} \approx
+0.459\]</span></p>
+<p><strong>结论</strong>： - 外部贡献 <span
+class="math inline">\(x\)</span> 被放大 <strong>360%</strong> -
+支持页面数量 <span class="math inline">\(m\)</span> 的贡献达到 <span
+class="math inline">\(0.459 \cdot m/n\)</span> -
+因此，通过创建足够多的支持页面并获得一点外部链接，可以大幅提升目标页面的排名</p>
+<h3 id="对抗链接垃圾的方法">5.3 对抗链接垃圾的方法</h3>
+<p><strong>方法 1：检测和删除垃圾农场结构</strong> -
+识别具有异常出链模式的页面集合（所有指向单一目标） -
+识别以同一组页面作为入链来源的页面 -
+检测已知垃圾域名和人工生成的内容特征</p>
+<p><strong>方法 2：修改 PageRank 定义</strong> -
+<strong>TrustRank</strong>：使用受信任网页的主题敏感 PageRank -
+<strong>Spam Mass</strong>：计算网页的垃圾度量</p>
+<h3 id="trustrank">5.4 TrustRank</h3>
+<p><strong>基本思想</strong>：受信任的网页不太可能链接到垃圾网页。</p>
+<p><strong>实现</strong>：使用主题敏感 PageRank，但传送集合 <span
+class="math inline">\(S\)</span> 选择为高信任网页：</p>
+<p><span class="math display">\[v&#39; = \beta M v + \frac{1-\beta}{|S|}
+e_S\]</span></p>
+<p><strong>信任集合的选择</strong>：</p>
+<ol type="1">
+<li><strong>人工精选</strong>：专家手工选择高质量网站（如权威学术网站）</li>
+<li><strong>域名控制</strong>：自动信任特定域名
+<ul>
+<li><code>.edu</code>（教育机构）</li>
+<li><code>.gov</code>（政府机构）</li>
+<li><code>.mil</code>（军事机构）</li>
+<li>国际等价物（如 <code>.ac.uk</code>, <code>.edu.au</code>）</li>
+</ul></li>
+</ol>
+<p><strong>直观解释</strong>： - 从受信任网页开始随机游走 -
+跟随链接时，优先访问受信任网页链接的目标 -
+垃圾网页通常不被受信任网页链接，所以获得低 TrustRank</p>
+<h3 id="垃圾质量度量">5.5 垃圾质量度量</h3>
+<p><strong>定义</strong>：对于网页 <span
+class="math inline">\(p\)</span>： <span
+class="math display">\[\text{Spam Mass}_p = \frac{r_p -
+t_p}{r_p}\]</span></p>
+<p>其中： - <span class="math inline">\(r_p\)</span>：标准 PageRank -
+<span class="math inline">\(t_p\)</span>：TrustRank</p>
+<p><strong>解释</strong>： - 负值或接近 0：高度可信，不太可能是垃圾 -
+接近 1：PageRank 远高于 TrustRank，强烈提示垃圾 - 中等值（如
+0.5-0.8）：可疑，需要进一步调查</p>
+<p><strong>过滤策略</strong>： - 垃圾质量 &gt;
+阈值的网页从搜索索引中删除或降低排名 -
+可基于页面内容和链接模式进一步验证</p>
+<hr />
+<h2 id="六hits-算法枢纽与权威">六、HITS 算法：枢纽与权威</h2>
+<h3 id="hits-算法的直观理解">6.1 HITS 算法的直观理解</h3>
+<p><strong>HITS</strong> (<strong>Hyperlink-Induced Topic
+Search</strong>)
+是另一种基于链接分析的页面排名算法，采用二维评分体系。</p>
+<p><strong>核心思想</strong>：互联网中存在两类重要网页： 1.
+<strong>权威页</strong>
+(<strong>Authorities</strong>)：包含某个主题相关的优质内容 2.
+<strong>枢纽页</strong>
+(<strong>Hubs</strong>)：汇聚指向权威页的大量链接（如目录、列表、综述页）</p>
+<p><strong>相互强化关系</strong>： - 好的枢纽页链接到许多好的权威页 -
+好的权威页被许多好的枢纽页链接 - 这形成相互递归的定义</p>
+<p><strong>示例</strong>： - 权威页：Apple、Amazon、Microsoft
+官方网站（技术公司主题） - 枢纽页："Top 10 Tech
+Companies"、科技行业目录、技术新闻聚合站点</p>
+<h3 id="枢纽和权威的形式化">6.2 枢纽和权威的形式化</h3>
+<p><strong>评分定义</strong>：</p>
+<p>每个网页 <span class="math inline">\(p\)</span> 获得两个评分： -
+<strong>枢纽性评分</strong> <span
+class="math inline">\(h_p\)</span>：页面作为枢纽的重要程度 -
+<strong>权威性评分</strong> <span
+class="math inline">\(a_p\)</span>：页面作为权威的重要程度</p>
+<p><strong>更新规则</strong>：相互强化</p>
+<p><span class="math display">\[h_p = \sum_{q: p \rightarrow q} a_q
+\quad \text{(枢纽性 = 所有被链接页的权威和)}\]</span></p>
+<p><span class="math display">\[a_p = \sum_{q: q \rightarrow p} h_q
+\quad \text{(权威性 = 所有链接源的枢纽和)}\]</span></p>
+<p><strong>矩阵形式</strong>：</p>
+<p>定义链接矩阵 <span class="math inline">\(L\)</span>（<span
+class="math inline">\(n \times n\)</span>）： <span
+class="math display">\[L_{ij} = \begin{cases} 1 &amp; \text{if page } i
+\text{ links to page } j \\ 0 &amp; \text{otherwise}
+\end{cases}\]</span></p>
+<p>定义向量 <span class="math inline">\(h = (h_1, \ldots,
+h_n)^T\)</span> 和 <span class="math inline">\(a = (a_1, \ldots,
+a_n)^T\)</span>，则： <span class="math display">\[h = La\]</span> <span
+class="math display">\[a = L^T h\]</span></p>
+<p>代入得特征向量方程： <span class="math display">\[h = LL^T h\]</span>
+<span class="math display">\[a = L^T L a\]</span></p>
+<p>因此： - <span class="math inline">\(h\)</span> 是矩阵 <span
+class="math inline">\(LL^T\)</span> 特征值为最大的特征向量 - <span
+class="math inline">\(a\)</span> 是矩阵 <span class="math inline">\(L^T
+L\)</span> 特征值为最大的特征向量</p>
+<h3 id="hits-算法的迭代过程">6.3 HITS 算法的迭代过程</h3>
+<p><strong>标准迭代算法</strong>：</p>
+<p>初始化：<span class="math inline">\(h^{(0)} = \mathbf{1}\)</span>（全
+1 向量）</p>
+<p>对于 <span class="math inline">\(k = 0, 1, 2, \ldots\)</span>： 1.
+<strong>权威更新</strong>：<span class="math inline">\(a^{(k+1)} = L^T
+h^{(k)}\)</span> 2. <strong>规范化</strong>：<span
+class="math inline">\(a^{(k+1)} := a^{(k+1)} /
+\|a^{(k+1)}\|_\infty\)</span>（使最大值为 1） 3.
+<strong>枢纽更新</strong>：<span class="math inline">\(h^{(k+1)} = L
+a^{(k+1)}\)</span> 4. <strong>规范化</strong>：<span
+class="math inline">\(h^{(k+1)} := h^{(k+1)} /
+\|h^{(k+1)}\|_\infty\)</span></p>
+<p><strong>收敛判定</strong>：当 <span class="math inline">\(\|h^{(k+1)}
+- h^{(k)}\| &lt; \epsilon\)</span> 且 <span
+class="math inline">\(\|a^{(k+1)} - a^{(k)}\| &lt; \epsilon\)</span>
+时停止。</p>
+<h3 id="hits-的具体例子">6.4 HITS 的具体例子</h3>
+<p><strong>示例 5.14-5.15：五节点图</strong></p>
+<p>假设有 5 个网页，链接关系为： - A → B, C - B → C - C → A, B, D - D →
+E - E → D</p>
+<p>链接矩阵 <span class="math inline">\(L\)</span>： <span
+class="math display">\[L = \begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 0 &amp; 1 &amp; 0
+\end{pmatrix}\]</span></p>
+<p><strong>第一次迭代</strong>（<span
+class="math inline">\(k=0\)</span>，初始 <span class="math inline">\(h =
+(1,1,1,1,1)^T\)</span>）：</p>
+<p>权威： <span class="math display">\[a^{(1)} = L^T h^{(0)} =
+\begin{pmatrix} 2 \\ 1 \\ 4 \\ 2 \\ 1 \end{pmatrix} \Rightarrow
+\text{规范化} \Rightarrow a^{(1)} = \begin{pmatrix} 0.5 \\ 0.25 \\ 1 \\
+0.5 \\ 0.25 \end{pmatrix}\]</span></p>
+<p>枢纽： <span class="math display">\[h^{(1)} = L a^{(1)} =
+\begin{pmatrix} 1 \\ 1.5 \\ 0.75 \\ 1.5 \\ 0.5 \end{pmatrix} \Rightarrow
+\text{规范化} \Rightarrow h^{(1)} = \begin{pmatrix} 2/3 \\ 1 \\ 0.5 \\ 1
+\\ 1/3 \end{pmatrix}\]</span></p>
+<p><strong>后续迭代</strong>继续执行，最终收敛到： <span
+class="math display">\[h^{(\infty)} = (1, 0.3583, 0, 0.7165,
+0)^T\]</span> <span class="math display">\[a^{(\infty)} = (0.2087, 1, 1,
+0.7913, 0)^T\]</span></p>
+<p><strong>解释</strong>： - B 和 C 是权威页（权威分别为 1 和 1） - A 和
+C 是枢纽页（枢纽分别为 1 和 0.7165） - D 和 E
+形成孤立的链接圈，几乎没有权威或枢纽性</p>
+<h3 id="hits-vs-pagerank">6.5 HITS vs PageRank</h3>
+<p><strong>主要区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>PageRank</th>
+<th>HITS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算方式</td>
+<td>全局，离线预计算</td>
+<td>查询相关，按需计算</td>
+</tr>
+<tr>
+<td>图要求</td>
+<td>需要处理死端和陷阱</td>
+<td>无需特殊处理</td>
+</tr>
+<tr>
+<td>评分维度</td>
+<td>单一（重要性）</td>
+<td>二维（枢纽+权威）</td>
+</tr>
+<tr>
+<td>应用场景</td>
+<td>通用网页排名</td>
+<td>特定查询的权威发现</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HITS 的优势</strong>： - 自然地区分不同类型的重要页面 -
+不需要税收方法处理陷阱 - 更能反映某特定主题的链接生态</p>
+<p><strong>HITS 的劣势</strong>： - 需要为每次查询计算，延迟高 -
+对于广泛查询结果可能过度分散 - 更易被链接操纵（相比 PageRank）</p>
+<h3 id="hits-的特征向量分析">6.6 HITS 的特征向量分析</h3>
+<p><strong>示例 5.16：解析求解</strong></p>
+<p>对于某些简单图，可以解析计算 <span
+class="math inline">\(LL^T\)</span> 和 <span
+class="math inline">\(L^TL\)</span> 的特征向量。</p>
+<p>考虑具体的 <span class="math inline">\(LL^T\)</span>
+矩阵，计算其特征多项式： <span class="math display">\[\det(LL^T -
+\lambda I) = 0\]</span></p>
+<p>对于小规模图，可能得到如： <span
+class="math display">\[\lambda_{\max} = \frac{5 + \sqrt{21}}{2} \approx
+4.791\]</span></p>
+<p>对应的特征向量即为收敛的枢纽评分向量。</p>
+<hr />
+<h2 id="七总结与应用">七、总结与应用</h2>
+<h3 id="链接分析的核心概念">7.1 链接分析的核心概念</h3>
+<p>链接分析为现代搜索引擎和网络分析提供了坚实的理论基础：</p>
+<ol type="1">
+<li><strong>PageRank</strong>
+通过随机游走和特征向量方法，从全局链接结构推导网页重要性</li>
+<li><strong>主题敏感 PageRank</strong>
+适应用户多样化需求，实现个性化搜索</li>
+<li><strong>TrustRank</strong>
+和垃圾质量度量提供了对抗链接操纵的防护</li>
+<li><strong>HITS</strong> 提供了补充的视角，区分权威和枢纽角色</li>
+</ol>
+<h3 id="实际应用">7.2 实际应用</h3>
+<p><strong>搜索引擎</strong>： - Google 的核心排名算法 -
+其他搜索引擎的类似方案</p>
+<p><strong>社交网络分析</strong>： - 识别影响力用户（权威） -
+识别信息传播中心（枢纽）</p>
+<p><strong>学术文献分析</strong>： - 识别高引论文（权威） -
+识别综述和综合论文（枢纽）</p>
+<p><strong>推荐系统</strong>： - 基于链接结构的相似性度量 -
+社交网络信任推断</p>
+<h3 id="当代挑战">7.3 当代挑战</h3>
+<p><strong>链接垃圾的演进</strong>： - 垃圾农场技术不断进化 -
+需要持续改进检测算法</p>
+<p><strong>大规模计算</strong>： - 互联网持续增长，矩阵规模数十亿 -
+分布式计算框架的优化至关重要</p>
+<p><strong>个性化与隐私</strong>： - 收集用户兴趣数据带来隐私问题 -
+需要平衡个性化推荐与用户隐私</p>
+<hr />
+<h2 id="术语汇总表">术语汇总表</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 43%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文术语</th>
+<th>English Term</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>链接分析</td>
+<td>Link Analysis</td>
+<td>通过网页链接结构评估重要性的方法</td>
+</tr>
+<tr>
+<td>页面排名</td>
+<td>PageRank</td>
+<td>Google 的核心算法，基于随机游走</td>
+</tr>
+<tr>
+<td>转移矩阵</td>
+<td>Transition Matrix</td>
+<td>表示网页链接关系的列随机矩阵</td>
+</tr>
+<tr>
+<td>随机游走</td>
+<td>Random Walk/Random Surfer</td>
+<td>模拟虚拟用户在网页间的浏览过程</td>
+</tr>
+<tr>
+<td>稳定分布</td>
+<td>Stationary Distribution</td>
+<td>随机游走过程收敛的概率分布</td>
+</tr>
+<tr>
+<td>特征向量</td>
+<td>Eigenvector</td>
+<td>转移矩阵特征值为 1 的向量</td>
+</tr>
+<tr>
+<td>死端</td>
+<td>Dead End</td>
+<td>没有出链的网页</td>
+</tr>
+<tr>
+<td>蜘蛛陷阱</td>
+<td>Spider Trap</td>
+<td>自我链接形成的陷阱，导致 PageRank 积累</td>
+</tr>
+<tr>
+<td>阻尼因子</td>
+<td>Damping Factor</td>
+<td>PageRank 公式中的参数 β</td>
+</tr>
+<tr>
+<td>传送方法</td>
+<td>Teleportation Method</td>
+<td>通过随机跳转解决陷阱问题的技术</td>
+</tr>
+<tr>
+<td>蝴蝶结结构</td>
+<td>Bow-Tie Structure</td>
+<td>真实网络的结构模式，包含 SCC 和多个分量</td>
+</tr>
+<tr>
+<td>强连通分量</td>
+<td>Strongly Connected Component (SCC)</td>
+<td>任意两页相互可达的最大子图</td>
+</tr>
+<tr>
+<td>稀疏表示</td>
+<td>Sparse Representation</td>
+<td>利用稀疏矩阵结构优化存储和计算</td>
+</tr>
+<tr>
+<td>主题敏感 PageRank</td>
+<td>Topic-Sensitive PageRank</td>
+<td>针对特定主题的偏向 PageRank</td>
+</tr>
+<tr>
+<td>传送集合</td>
+<td>Teleport Set</td>
+<td>主题敏感 PageRank 中的受限跳转目标</td>
+</tr>
+<tr>
+<td>链接垃圾</td>
+<td>Link Spam</td>
+<td>人为操纵链接结构来提升排名</td>
+</tr>
+<tr>
+<td>垃圾农场</td>
+<td>Spam Farm</td>
+<td>垃圾页面的组织结构</td>
+</tr>
+<tr>
+<td>TrustRank</td>
+<td>TrustRank</td>
+<td>从受信任页面出发的主题敏感 PageRank</td>
+</tr>
+<tr>
+<td>垃圾质量</td>
+<td>Spam Mass</td>
+<td>网页垃圾程度的度量指标</td>
+</tr>
+<tr>
+<td>HITS 算法</td>
+<td>HITS</td>
+<td>基于权威和枢纽的链接分析算法</td>
+</tr>
+<tr>
+<td>权威页</td>
+<td>Authorities</td>
+<td>包含高质量内容的网页</td>
+</tr>
+<tr>
+<td>枢纽页</td>
+<td>Hubs</td>
+<td>汇聚多个权威页链接的网页</td>
+</tr>
+<tr>
+<td>出度</td>
+<td>Out-Degree</td>
+<td>网页的出链数量</td>
+</tr>
+<tr>
+<td>入度</td>
+<td>In-Degree</td>
+<td>网页的入链数量</td>
+</tr>
+<tr>
+<td>列随机矩阵</td>
+<td>Column-Stochastic Matrix</td>
+<td>每列和为 1 的矩阵</td>
+</tr>
+<tr>
+<td>杰卡德相似度</td>
+<td>Jaccard Similarity</td>
+<td>两个集合的交集与并集的比值</td>
+</tr>
+<tr>
+<td>特征值</td>
+<td>Eigenvalue</td>
+<td>满足 Av = λv 的标量 λ</td>
+</tr>
+<tr>
+<td>迭代方法</td>
+<td>Iterative Method</td>
+<td>通过重复应用矩阵乘法求解 PageRank</td>
+</tr>
+<tr>
+<td>MapReduce</td>
+<td>MapReduce</td>
+<td>分布式计算框架</td>
+</tr>
+<tr>
+<td>分块矩阵</td>
+<td>Block Matrix</td>
+<td>将大矩阵分解为较小块的表示方法</td>
+</tr>
+<tr>
+<td>词汇特征</td>
+<td>Feature Words</td>
+<td>代表特定主题的特征词</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>版本信息</strong> - 教材版本：<em>Mining of Massive
+Datasets</em> (Version 3.0) - 笔记日期：2026-04-13 - 覆盖章节：Chapter 5
+- Link Analysis - 详细程度：深入讲解，包含所有公式和示例</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/PageRank/" rel="tag"><i class="fa fa-tag"></i> PageRank</a>
+              <a href="/tags/Link-Analysis/" rel="tag"><i class="fa fa-tag"></i> Link Analysis</a>
+              <a href="/tags/HITS/" rel="tag"><i class="fa fa-tag"></i> HITS</a>
+              <a href="/tags/Link-Spam/" rel="tag"><i class="fa fa-tag"></i> Link Spam</a>
+              <a href="/tags/TrustRank/" rel="tag"><i class="fa fa-tag"></i> TrustRank</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/40f4213c.html" rel="prev" title="每周科技速递 - 2026-04-13">
+                  <i class="fa fa-angle-left"></i> 每周科技速递 - 2026-04-13
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/815987d1.html" rel="next" title="COMP5313 - Chapter 14 Link Analysis and Web Search 链接分析与网络搜索">
+                  COMP5313 - Chapter 14 Link Analysis and Web Search 链接分析与网络搜索 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">208k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">12:37</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
