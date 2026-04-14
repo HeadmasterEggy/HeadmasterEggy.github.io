@@ -40,8 +40,9 @@
   .node { cursor: pointer; }
   .node circle { stroke: #000; stroke-width: 0.8px; }
   .node text { fill: #ddd; font-size: 10px; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
-  .link { stroke: #666; stroke-opacity: 0.3; fill: none; }
-  .link.highlighted { stroke: #8ab4f8; stroke-opacity: 0.8; }
+  .link { stroke: #555; stroke-opacity: 0.2; fill: none; }
+  .link.strong { stroke: #888; stroke-opacity: 0.55; }
+  .link.highlighted { stroke: #8ab4f8; stroke-opacity: 0.9; }
   .node.dimmed { opacity: 0.15; }
   .link.dimmed { stroke-opacity: 0.05; }
   #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #888; font-size: 14px; z-index: 999; }
@@ -126,13 +127,17 @@ function renderGraph(graph) {
   svg.call(zoom);
 
   var simulation = d3.forceSimulation(graph.nodes)
-    .force('link', d3.forceLink(graph.edges).id(function(d) { return d.id; }).distance(80).strength(0.4))
-    .force('charge', d3.forceManyBody().strength(-120))
+    .force('link', d3.forceLink(graph.edges).id(function(d) { return d.id; })
+      .distance(function(d) { return d.kind === 'link' ? 70 : 110; })
+      .strength(function(d) { return d.kind === 'link' ? 0.6 : 0.15; }))
+    .force('charge', d3.forceManyBody().strength(-140))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collide', d3.forceCollide().radius(function(d) { return 4 + Math.sqrt(d.degree) * 2; }));
 
   var link = g.append('g').selectAll('line').data(graph.edges).enter()
-    .append('line').attr('class', 'link').attr('stroke-width', 1);
+    .append('line')
+    .attr('class', function(d) { return 'link' + (d.kind === 'link' ? ' strong' : ''); })
+    .attr('stroke-width', function(d) { return d.kind === 'link' ? 1.4 : 0.7; });
 
   var node = g.append('g').selectAll('g').data(graph.nodes).enter()
     .append('g').attr('class', 'node')
