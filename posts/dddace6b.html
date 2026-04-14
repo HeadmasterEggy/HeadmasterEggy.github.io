@@ -30,7 +30,7 @@
 <meta property="og:description" content="对 Figure 5 使用 Girvan-Newman partitioning method，写出">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-26T07:38:15.872Z">
-<meta property="article:modified_time" content="2026-04-13T11:28:51.565Z">
+<meta property="article:modified_time" content="2026-04-14T10:55:07.273Z">
 <meta property="article:author" content="Joey">
 <meta name="twitter:card" content="summary">
 
@@ -124,7 +124,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">174</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">183</span></a></li>
   </ul>
 </nav>
 
@@ -165,18 +165,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">174</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -257,7 +257,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-13 11:28:51" itemprop="dateModified" datetime="2026-04-13T11:28:51Z">2026-04-13</time>
+      <time title="Modified: 2026-04-14 10:55:07" itemprop="dateModified" datetime="2026-04-14T10:55:07Z">2026-04-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -496,7 +496,7 @@ AC,\ AD,\ BC,\ BD
 <h2 id="python-验证代码">10. Python 验证代码</h2>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict, deque</span><br><span class="line"></span><br><span class="line">nodes = <span class="built_in">list</span>(<span class="string">&#x27;ABCDEFG&#x27;</span>)</span><br><span class="line">edges = [</span><br><span class="line">    (<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;C&#x27;</span>), (<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;D&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>), (<span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;D&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;E&#x27;</span>), (<span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;F&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;F&#x27;</span>), (<span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;G&#x27;</span>), (<span class="string">&#x27;F&#x27;</span>, <span class="string">&#x27;G&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">components</span>(<span class="params">nodes, edges</span>):</span><br><span class="line">    G = &#123;u: <span class="built_in">set</span>() <span class="keyword">for</span> u <span class="keyword">in</span> nodes&#125;</span><br><span class="line">    <span class="keyword">for</span> u, v <span class="keyword">in</span> edges:</span><br><span class="line">        G[u].add(v)</span><br><span class="line">        G[v].add(u)</span><br><span class="line"></span><br><span class="line">    seen = <span class="built_in">set</span>()</span><br><span class="line">    comps = []</span><br><span class="line">    <span class="keyword">for</span> u <span class="keyword">in</span> nodes:</span><br><span class="line">        <span class="keyword">if</span> u <span class="keyword">in</span> seen:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        q = [u]</span><br><span class="line">        seen.add(u)</span><br><span class="line">        comp = []</span><br><span class="line">        <span class="keyword">while</span> q:</span><br><span class="line">            x = q.pop()</span><br><span class="line">            comp.append(x)</span><br><span class="line">            <span class="keyword">for</span> y <span class="keyword">in</span> G[x]:</span><br><span class="line">                <span class="keyword">if</span> y <span class="keyword">not</span> <span class="keyword">in</span> seen:</span><br><span class="line">                    seen.add(y)</span><br><span class="line">                    q.append(y)</span><br><span class="line">        comps.append(<span class="built_in">tuple</span>(<span class="built_in">sorted</span>(comp)))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">tuple</span>(<span class="built_in">sorted</span>(comps))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edge_betweenness</span>(<span class="params">nodes, edges</span>):</span><br><span class="line">    G = &#123;u: <span class="built_in">set</span>() <span class="keyword">for</span> u <span class="keyword">in</span> nodes&#125;</span><br><span class="line">    <span class="keyword">for</span> u, v <span class="keyword">in</span> edges:</span><br><span class="line">        G[u].add(v)</span><br><span class="line">        G[v].add(u)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">all_shortest_paths</span>(<span class="params">s, t</span>):</span><br><span class="line">        q = deque([s])</span><br><span class="line">        dist = &#123;s: <span class="number">0</span>&#125;</span><br><span class="line">        parents = defaultdict(<span class="built_in">list</span>)</span><br><span class="line">        <span class="keyword">while</span> q:</span><br><span class="line">            u = q.popleft()</span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> G[u]:</span><br><span class="line">                <span class="keyword">if</span> v <span class="keyword">not</span> <span class="keyword">in</span> dist:</span><br><span class="line">                    dist[v] = dist[u] + <span class="number">1</span></span><br><span class="line">                    parents[v].append(u)</span><br><span class="line">                    q.append(v)</span><br><span class="line">                <span class="keyword">elif</span> dist[v] == dist[u] + <span class="number">1</span>:</span><br><span class="line">                    parents[v].append(u)</span><br><span class="line"></span><br><span class="line">        paths = []</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">backtrack</span>(<span class="params">x, path</span>):</span><br><span class="line">            <span class="keyword">if</span> x == s:</span><br><span class="line">                paths.append(<span class="built_in">list</span>(<span class="built_in">reversed</span>(path + [x])))</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> parents[x]:</span><br><span class="line">                backtrack(p, path + [x])</span><br><span class="line">        backtrack(t, [])</span><br><span class="line">        <span class="keyword">return</span> paths</span><br><span class="line"></span><br><span class="line">    score = defaultdict(<span class="built_in">float</span>)</span><br><span class="line">    <span class="keyword">for</span> i, s <span class="keyword">in</span> <span class="built_in">enumerate</span>(nodes):</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> nodes[i + <span class="number">1</span>:]:</span><br><span class="line">            paths = all_shortest_paths(s, t)</span><br><span class="line">            <span class="keyword">for</span> path <span class="keyword">in</span> paths:</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(path) - <span class="number">1</span>):</span><br><span class="line">                    e = <span class="built_in">tuple</span>(<span class="built_in">sorted</span>((path[j], path[j + <span class="number">1</span>])))</span><br><span class="line">                    score[e] += <span class="number">1</span> / <span class="built_in">len</span>(paths)</span><br><span class="line">    <span class="keyword">return</span> score</span><br><span class="line"></span><br><span class="line">cur_edges = edges[:]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Level 0:&#x27;</span>, components(nodes, cur_edges))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> level <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">    bet = edge_betweenness(nodes, cur_edges)</span><br><span class="line">    mx = <span class="built_in">max</span>(bet.values())</span><br><span class="line">    remove_edges = [e <span class="keyword">for</span> e, v <span class="keyword">in</span> bet.items() <span class="keyword">if</span> v == mx]</span><br><span class="line">    cur_edges = [e <span class="keyword">for</span> e <span class="keyword">in</span> cur_edges <span class="keyword">if</span> <span class="built_in">tuple</span>(<span class="built_in">sorted</span>(e)) <span class="keyword">not</span> <span class="keyword">in</span> remove_edges]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Level <span class="subst">&#123;level&#125;</span>:&#x27;</span>, components(nodes, cur_edges))</span><br></pre></td></tr></table></figure>
 <!-- 图谱链接（自动添加） -->
-<p>[[标签集合/COMP5313]]</p>
+<p><a href="/posts/75f831e0.html">COMP5313</a></p>
 
     </div>
 
@@ -552,14 +552,14 @@ AC,\ AD,\ BC,\ BD
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">375k</span>
+    <span title="Word count total">445k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">22:43</span>
+    <span title="Reading time total">27:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

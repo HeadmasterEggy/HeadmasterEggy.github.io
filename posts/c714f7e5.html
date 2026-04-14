@@ -29,11 +29,14 @@
 <meta property="og:site_name" content="Joey">
 <meta property="og:description" content="Chapter 4 - 使用 表征类模型（BERT&#x2F;特征抽取类）进行分类，使用 生成式模型进行分类">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/posts/%E2%80%9CAlthough%20both%20representation%20and%20generative%20models%20can%20be%20used%20for%20classification,%20their%20approaches%20differ.%E2%80%9D.png">
+<meta property="og:image" content="http://example.com/posts/The%20confusion%20matrix%20describes%20four%20types%20of%20predictions%20we%20can%20make..png">
 <meta property="article:published_time" content="2025-02-07T20:16:51.000Z">
-<meta property="article:modified_time" content="2025-02-15T09:36:59.114Z">
+<meta property="article:modified_time" content="2026-04-14T10:55:07.587Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="deepLearning">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/posts/%E2%80%9CAlthough%20both%20representation%20and%20generative%20models%20can%20be%20used%20for%20classification,%20their%20approaches%20differ.%E2%80%9D.png">
 
 
 <link rel="canonical" href="http://example.com/posts/c714f7e5.html">
@@ -125,7 +128,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">13</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">174</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">6</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">183</span></a></li>
   </ul>
 </nav>
 
@@ -168,18 +171,18 @@ Classification with Generative Models）</span></a><ol class="nav-child"><li cla
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">174</span>
+          <span class="site-state-item-count">183</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -260,7 +263,7 @@ Classification with Generative Models）</span></a><ol class="nav-child"><li cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-15 09:36:59" itemprop="dateModified" datetime="2025-02-15T09:36:59Z">2025-02-15</time>
+      <time title="Modified: 2026-04-14 10:55:07" itemprop="dateModified" datetime="2026-04-14T10:55:07Z">2026-04-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -299,8 +302,13 @@ Classification with Generative Models）</span></a><ol class="nav-child"><li cla
     
     <div class="post-body" itemprop="articleBody"><p>#deepLearning/llm/4</p>
 <h1 id="文本分类模型">文本分类模型</h1>
-<p>![[“Although both representation and generative models can be used
-for classification, their approaches differ.”.png]]</p>
+<figure>
+<img data-src="“Although%20both%20representation%20and%20generative%20models%20can%20be%20used%20for%20classification,%20their%20approaches%20differ.”.png"
+alt="“Although both representation and generative models can be used for classification, their approaches differ.”.png" />
+<figcaption aria-hidden="true">“Although both representation and
+generative models can be used for classification, their approaches
+differ.”.png</figcaption>
+</figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load our data</span></span><br><span class="line">data = load_dataset(<span class="string">&quot;rotten_tomatoes&quot;</span>)</span><br><span class="line">data</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line"><span class="comment"># 数据分为训练集、测试集和验证集</span></span><br><span class="line">DatasetDict(&#123;</span><br><span class="line">    train: Dataset(&#123;</span><br><span class="line">        features: [<span class="string">&#x27;text&#x27;</span>, <span class="string">&#x27;label&#x27;</span>],</span><br><span class="line">        num_rows: <span class="number">8530</span></span><br><span class="line">    &#125;)</span><br><span class="line">    validation: Dataset(&#123;</span><br><span class="line">        features: [<span class="string">&#x27;text&#x27;</span>, <span class="string">&#x27;label&#x27;</span>],</span><br><span class="line">        num_rows: <span class="number">1066</span></span><br><span class="line">    &#125;)</span><br><span class="line">    test: Dataset(&#123;</span><br><span class="line">        features: [<span class="string">&#x27;text&#x27;</span>, <span class="string">&#x27;label&#x27;</span>],</span><br><span class="line">        num_rows: <span class="number">1066</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 训练集的第一条和最后一条</span></span><br><span class="line">data[<span class="string">&quot;train&quot;</span>][<span class="number">0</span>, -<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&#x27;text&#x27;</span>: [</span><br><span class="line">        <span class="string">&#x27;the rock is destined to be the 21st century\&#x27;s new &quot; conan &quot; and that he\&#x27;s going to make a splash even greater than arnold schwarzenegger , jean-claud van damme or steven segal .&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;things really get weird , though not particularly scary : the movie is all portent and no content .&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;label&#x27;</span>: [<span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2
@@ -323,8 +331,12 @@ models）</h3>
 precision/recall/f1，再对所有类别的指标取简单平均。</li>
 <li>micro avg 先计算总体的TP、FP、FN等,然后再计算总体指标。</li>
 </ul>
-<p>![[The confusion matrix describes four types of predictions we can
-make..png]]</p>
+<figure>
+<img data-src="The%20confusion%20matrix%20describes%20four%20types%20of%20predictions%20we%20can%20make..png"
+alt="The confusion matrix describes four types of predictions we can make..png" />
+<figcaption aria-hidden="true">The confusion matrix describes four types
+of predictions we can make..png</figcaption>
+</figure>
 <h3 id="supervised-classification">Supervised Classification</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load model</span></span><br><span class="line">model = SentenceTransformer(<span class="string">&#x27;sentence-transformers/all-mpnet-base-v2&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Convert text to embeddings</span></span><br><span class="line">train_embeddings = model.encode(data[<span class="string">&quot;train&quot;</span>][<span class="string">&quot;text&quot;</span>], show_progress_bar=<span class="literal">True</span>)</span><br><span class="line">test_embeddings = model.encode(data[<span class="string">&quot;test&quot;</span>][<span class="string">&quot;text&quot;</span>], show_progress_bar=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train_embeddings.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">(<span class="number">8530</span>, <span class="number">768</span>)</span><br></pre></td></tr></table></figure>
@@ -344,7 +356,7 @@ Factorization）（通过把多个样本的特征融合，获得一个能够代�
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Create embeddings for our labels</span></span><br><span class="line">label_embeddings = model.encode([<span class="string">&quot;A negative review&quot;</span>,  <span class="string">&quot;A positive review&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find the best matching label for each document</span></span><br><span class="line">sim_matrix = cosine_similarity(test_embeddings, label_embeddings)</span><br><span class="line">y_pred = np.argmax(sim_matrix, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">evaluate_performance(data[<span class="string">&quot;test&quot;</span>][<span class="string">&quot;label&quot;</span>], y_pred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">                 precision    recall  f1-score   support</span><br><span class="line"></span><br><span class="line">Negative Review       <span class="number">0.78</span>      <span class="number">0.77</span>      <span class="number">0.78</span>       <span class="number">533</span></span><br><span class="line">Positive Review       <span class="number">0.77</span>      <span class="number">0.79</span>      <span class="number">0.78</span>       <span class="number">533</span></span><br><span class="line"></span><br><span class="line">       accuracy                           <span class="number">0.78</span>      <span class="number">1066</span></span><br><span class="line">      macro avg       <span class="number">0.78</span>      <span class="number">0.78</span>      <span class="number">0.78</span>      <span class="number">1066</span></span><br><span class="line">   weighted avg       <span class="number">0.78</span>      <span class="number">0.78</span>      <span class="number">0.78</span>      <span class="number">1066</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pipe(<span class="string">&quot;is the following sentence positice or negative? this movie is like eating a fly&#x27;s shit!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">[[&#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;negative&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.931709885597229</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;neutral&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.060942187905311584</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;positive&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.007347979582846165</span>&#125;]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pipe(<span class="string">&quot;is the following sentence positice or negative? this movie is like eating a fly&#x27;s shit!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># outputs:</span></span><br><span class="line">**&#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;negative&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.931709885597229</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;neutral&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.060942187905311584</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&#x27;label&#x27;</span>: <span class="string">&#x27;positive&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">0.007347979582846165</span>&#125;**</span><br></pre></td></tr></table></figure>
 <h2
 id="生成式模型文本分类text-classification-with-generative-models">生成式模型文本分类（Text
 Classification with Generative Models）</h2>
@@ -411,14 +423,14 @@ Classification with Generative Models）</h2>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">375k</span>
+    <span title="Word count total">445k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">22:43</span>
+    <span title="Reading time total">27:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
