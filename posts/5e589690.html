@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 5 Tutorial: Hub and Authority 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：理解 Hub and Authority 更新规则如何影响网页排名 依据教材 Networks, Crowds, and Markets 第 14 章   一、预备知识回顾 1.1 HITS 算法核心思想 Hu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Tutorial 05 - Hub and Authority 题解">
+<meta property="og:url" content="http://example.com/posts/5e589690.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 5 Tutorial: Hub and Authority 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：理解 Hub and Authority 更新规则如何影响网页排名 依据教材 Networks, Crowds, and Markets 第 14 章   一、预备知识回顾 1.1 HITS 算法核心思想 Hu">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-16T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-15T17:52:24.743Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="题解">
+<meta property="article:tag" content="Hub and Authority">
+<meta property="article:tag" content="HITS">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/5e589690.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/5e589690.html","path":"posts/5e589690.html","title":"COMP5313 Tutorial 05 - Hub and Authority 题解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Tutorial 05 - Hub and Authority 题解 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/5e589690.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">36</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">15</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">180</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#week-5-tutorial-hub-and-authority-%E9%A2%98%E8%A7%A3"><span class="nav-text">Week 5 Tutorial: Hub and
+Authority 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-text">一、预备知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hits-%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">1.1 HITS 算法核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E8%A7%84%E5%88%99update-rules"><span class="nav-text">1.2 更新规则（Update Rules）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-%E6%AD%A5%E8%BF%AD%E4%BB%A3%E4%B8%8E%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">1.3 k 步迭代与归一化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%BB%83%E4%B9%A0-1%E8%AE%A1%E7%AE%97%E6%9D%83%E5%A8%81%E5%88%86%E6%95%B0computing-authority-scores"><span class="nav-text">二、练习
+1：计算权威分数（Computing Authority Scores）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-text">2.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%A7%82%E5%AF%9F%E5%93%AA%E4%BA%9B%E5%88%86%E6%95%B0%E6%97%A0%E9%9C%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.2
+关键观察：哪些分数无需初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.3 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-1"><span class="nav-text">2.4 Round 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-2"><span class="nav-text">2.5 Round 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">2.6 归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E4%B8%8E%E7%BB%93%E8%AE%BA"><span class="nav-text">2.7 观察与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%83%E4%B9%A0-2%E5%88%9B%E5%BB%BA%E7%BD%91%E9%A1%B5creating-web-pages"><span class="nav-text">三、练习
+2：创建网页（Creating Web Pages）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-1"><span class="nav-text">3.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-1-%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">3.2 方案 1 的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-2-%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">3.3 方案 2 的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="nav-text">3.4 两方案对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%BB%83%E4%B9%A0-3%E5%88%9B%E5%BB%BA%E8%B6%85%E9%93%BE%E6%8E%A5creating-hyperlinks"><span class="nav-text">四、练习
+3：创建超链接（Creating Hyperlinks）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-2"><span class="nav-text">4.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.2 最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-1-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.3 Round 1 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-2-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.4 Round 2 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%90%8D%E9%AA%8C%E8%AF%81"><span class="nav-text">4.5 排名验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%90%A6%E8%AE%A9-x-%E6%8E%92%E7%AC%AC%E4%B8%80"><span class="nav-text">4.6 能否让 X 排第一？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%90%AF%E7%A4%BA"><span class="nav-text">4.7 核心启示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%BB%BC%E5%90%88%E6%80%BB%E7%BB%93"><span class="nav-text">五、综合总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-text">5.1 关键公式回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD"><span class="nav-text">5.2 练习经验教训</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E8%AF%BE%E7%A8%8B%E5%85%B6%E4%BB%96%E7%AB%A0%E8%8A%82%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">5.3 与课程其他章节的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">六、术语表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/5e589690.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Tutorial 05 - Hub and Authority 题解 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Tutorial 05 - Hub and Authority 题解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-16 00:00:00" itemprop="dateCreated datePublished" datetime="2026-04-16T00:00:00Z">2026-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-15 17:52:24" itemprop="dateModified" datetime="2026-04-15T17:52:24Z">2026-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="week-5-tutorial-hub-and-authority-题解">Week 5 Tutorial: Hub and
+Authority 题解</h1>
+<blockquote>
+<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026 主题：理解
+<strong>Hub and Authority</strong> 更新规则如何影响网页排名 依据教材
+<em>Networks, Crowds, and Markets</em> 第 14 章</p>
+</blockquote>
+<hr />
+<h2 id="一预备知识回顾">一、预备知识回顾</h2>
+<h3 id="hits-算法核心思想">1.1 HITS 算法核心思想</h3>
+<p><strong>Hubs and Authorities</strong>
+算法将网页的重要性分为两个互补维度：</p>
+<ul>
+<li><strong>权威（Authority）</strong>：内容上被认可为高质量信息来源的页面（如
+Cornell 主页之于查询 "Cornell"）</li>
+<li><strong>中枢（Hub）</strong>：本身不一定是权威，但指向许多权威页面的"列表型"页面（如"十大最佳新闻网站"）</li>
+</ul>
+<p>两者是<strong>相互递归定义（Mutually Recursive Definition）</strong>
+的：</p>
+<blockquote>
+<p>"好的中枢指向许多好的权威；好的权威被许多好的中枢指向。"</p>
+</blockquote>
+<h3 id="更新规则update-rules">1.2 更新规则（Update Rules）</h3>
+<p>每个页面 <span class="math inline">\(p\)</span> 维护两个分数 <span
+class="math inline">\(\text{auth}(p)\)</span> 和 <span
+class="math inline">\(\text{hub}(p)\)</span>，初始值均为 <span
+class="math inline">\(1\)</span>。</p>
+<p><strong>权威更新规则（Authority Update Rule）</strong>：</p>
+<p><span class="math display">\[\text{auth}(p) \leftarrow \sum_{q \to p}
+\text{hub}(q)\]</span></p>
+<p>即：页面 <span class="math inline">\(p\)</span> 的权威分数 = 所有指向
+<span class="math inline">\(p\)</span> 的页面 <span
+class="math inline">\(q\)</span> 的中枢分数之和。</p>
+<p><strong>中枢更新规则（Hub Update Rule）</strong>：</p>
+<p><span class="math display">\[\text{hub}(p) \leftarrow \sum_{p \to q}
+\text{auth}(q)\]</span></p>
+<p>即：页面 <span class="math inline">\(p\)</span> 的中枢分数 = <span
+class="math inline">\(p\)</span> 指向的所有页面 <span
+class="math inline">\(q\)</span> 的权威分数之和。</p>
+<h3 id="k-步迭代与归一化">1.3 k 步迭代与归一化</h3>
+<p><strong>k 步 Hub-Authority 计算（k-step Hub-Authority
+Computation）</strong>：</p>
+<ol type="1">
+<li>初始化所有 <span class="math inline">\(\text{auth}(p) =
+\text{hub}(p) = 1\)</span></li>
+<li>执行 <span class="math inline">\(k\)</span>
+轮迭代，每轮先后应用权威更新规则和中枢更新规则</li>
+<li>最后进行<strong>归一化（Normalization）</strong>：每个权威分数除以所有权威分数之和；每个中枢分数除以所有中枢分数之和</li>
+</ol>
+<hr />
+<h2 id="二练习-1计算权威分数computing-authority-scores">二、练习
+1：计算权威分数（Computing Authority Scores）</h2>
+<h3 id="题目描述">2.1 题目描述</h3>
+<p>在 Figure 1 的网页网络中，边如下： - <span class="math inline">\(C
+\to A\)</span>，<span class="math inline">\(D \to A\)</span>，<span
+class="math inline">\(E \to A\)</span> - <span class="math inline">\(E
+\to B\)</span>，<span class="math inline">\(F \to B\)</span></p>
+<p>即：<span class="math inline">\(A\)</span> 的入边来自 <span
+class="math inline">\(\{C, D, E\}\)</span>；<span
+class="math inline">\(B\)</span> 的入边来自 <span
+class="math inline">\(\{E, F\}\)</span>；<span class="math inline">\(C,
+D, E, F\)</span> 无入边。<span class="math inline">\(A, B\)</span>
+无出边。</p>
+<p>要求执行 <strong>k = 2</strong>
+步迭代，给出未归一化与归一化后的分数。</p>
+<h3 id="关键观察哪些分数无需初始化">2.2
+关键观察：哪些分数无需初始化</h3>
+<p>题目提示：<strong>不需要计算/初始化</strong> <span
+class="math inline">\(\text{hub}(A), \text{hub}(B), \text{auth}(C),
+\text{auth}(D), \text{auth}(E), \text{auth}(F)\)</span>。</p>
+<p><strong>原因分析</strong>： - <span class="math inline">\(A,
+B\)</span> 没有出边 → 中枢更新规则下 <span
+class="math inline">\(\text{hub}(A) = \text{hub}(B) =
+\sum_{\text{出邻居}} \text{auth}(\cdot) = 0\)</span>（空和） - <span
+class="math inline">\(C, D, E, F\)</span> 没有入边 → 权威更新规则下
+<span class="math inline">\(\text{auth}(X) = \sum_{\text{入邻居}}
+\text{hub}(\cdot) = 0\)</span></p>
+<p>所以这些分数在<strong>一轮迭代后即变为 0</strong>，后续恒为
+0，完全可以忽略。</p>
+<h3 id="初始化">2.3 初始化</h3>
+<p><span class="math display">\[\text{hub}(C) = \text{hub}(D) =
+\text{hub}(E) = \text{hub}(F) = 1\]</span></p>
+<h3 id="round-1">2.4 Round 1</h3>
+<p><strong>（a）权威更新</strong>：</p>
+<p><span class="math display">\[\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) = 1 + 1 + 1 = 3\]</span></p>
+<p><span class="math display">\[\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) = 1 + 1 = 2\]</span></p>
+<p><strong>（b）中枢更新</strong>：</p>
+<p><span class="math display">\[\text{hub}(C) = \text{auth}(A) =
+3\]</span></p>
+<p><span class="math display">\[\text{hub}(D) = \text{auth}(A) =
+3\]</span></p>
+<p><span class="math display">\[\text{hub}(E) = \text{auth}(A) +
+\text{auth}(B) = 3 + 2 = 5\]</span></p>
+<p><span class="math display">\[\text{hub}(F) = \text{auth}(B) =
+2\]</span></p>
+<p><strong>Round 1 结果</strong>： | 节点 | auth | hub |
+|------|------|-----| | A | 3 | — | | B | 2 | — | | C | — | 3 | | D | —
+| 3 | | E | — | 5 | | F | — | 2 |</p>
+<h3 id="round-2">2.5 Round 2</h3>
+<p><strong>（a）权威更新</strong>：</p>
+<p><span class="math display">\[\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) = 3 + 3 + 5 = 11\]</span></p>
+<p><span class="math display">\[\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) = 5 + 2 = 7\]</span></p>
+<p><strong>（b）中枢更新</strong>：</p>
+<p><span class="math display">\[\text{hub}(C) = \text{auth}(A) =
+11\]</span></p>
+<p><span class="math display">\[\text{hub}(D) = \text{auth}(A) =
+11\]</span></p>
+<p><span class="math display">\[\text{hub}(E) = \text{auth}(A) +
+\text{auth}(B) = 11 + 7 = 18\]</span></p>
+<p><span class="math display">\[\text{hub}(F) = \text{auth}(B) =
+7\]</span></p>
+<p><strong>Round 2 未归一化结果</strong>： | 节点 | auth | hub |
+|------|------|-----| | A | 11 | — | | B | 7 | — | | C | — | 11 | | D |
+— | 11 | | E | — | 18 | | F | — | 7 |</p>
+<h3 id="归一化">2.6 归一化</h3>
+<p><strong>权威归一化</strong>： 分母 <span class="math inline">\(=
+\text{auth}(A) + \text{auth}(B) = 11 + 7 = 18\)</span></p>
+<p><span class="math display">\[\widehat{\text{auth}}(A) =
+\frac{11}{18}, \quad \widehat{\text{auth}}(B) =
+\frac{7}{18}\]</span></p>
+<p><strong>中枢归一化</strong>： 分母 <span class="math inline">\(=
+\text{hub}(C) + \text{hub}(D) + \text{hub}(E) + \text{hub}(F) = 11 + 11
++ 18 + 7 = 47\)</span></p>
+<p><span class="math display">\[\widehat{\text{hub}}(C) =
+\widehat{\text{hub}}(D) = \frac{11}{47}, \quad \widehat{\text{hub}}(E) =
+\frac{18}{47}, \quad \widehat{\text{hub}}(F) = \frac{7}{47}\]</span></p>
+<h3 id="观察与结论">2.7 观察与结论</h3>
+<ul>
+<li><span class="math inline">\(E\)</span> 同时指向 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span> → <span
+class="math inline">\(E\)</span> 是最强中枢（<span
+class="math inline">\(\frac{18}{47}\)</span>）</li>
+<li><span class="math inline">\(A\)</span> 有 3 个中枢指向（<span
+class="math inline">\(C, D, E\)</span>）→ <span
+class="math inline">\(A\)</span> 的权威分数 <span
+class="math inline">\(\frac{11}{18} &gt; \frac{7}{18}\)</span></li>
+<li>每轮迭代后，<span class="math inline">\(A\)</span> 与 <span
+class="math inline">\(B\)</span>
+的权威比例逐渐稳定（即向<strong>主特征向量（Principal
+Eigenvector）</strong> 收敛）</li>
+</ul>
+<hr />
+<h2 id="三练习-2创建网页creating-web-pages">三、练习
+2：创建网页（Creating Web Pages）</h2>
+<h3 id="题目描述-1">3.1 题目描述</h3>
+<p>目标：新建页面 <span
+class="math inline">\(X\)</span>，尽可能获得高<strong>归一化权威分数</strong>。</p>
+<p>策略：同时新建 <span class="math inline">\(Y\)</span> 指向 <span
+class="math inline">\(X\)</span>。问题是 <span
+class="math inline">\(Y\)</span> 是否应同时指向其他强权威节点？</p>
+<p><strong>两种方案</strong>： 1. <strong>方案 1</strong>：<span
+class="math inline">\(Y \to X\)</span>，仅此一条出边 2. <strong>方案
+2</strong>：<span class="math inline">\(Y \to A\)</span>，<span
+class="math inline">\(Y \to B\)</span>，<span class="math inline">\(Y
+\to X\)</span></p>
+<h3 id="方案-1-的分析">3.2 方案 1 的分析</h3>
+<p><strong>新增节点和边</strong>：<span class="math inline">\(Y \to
+X\)</span>。<span class="math inline">\(X\)</span> 无出边。</p>
+<p><strong>需要初始化的中枢/权威</strong>：原网络的 <span
+class="math inline">\(\{C, D, E, F\}\)</span> 和新加入的 <span
+class="math inline">\(Y\)</span> → 共 5 个初始 hub = 1。</p>
+<p><strong>Round 1 权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = 3\)</span>（<span
+class="math inline">\(C, D, E\)</span> 指入）</li>
+<li><span class="math inline">\(\text{auth}(B) = 2\)</span>（<span
+class="math inline">\(E, F\)</span> 指入）</li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) =
+1\)</span>（仅 <span class="math inline">\(Y\)</span> 指入）</li>
+</ul>
+<p><strong>Round 1 中枢更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{hub}(C) = \text{hub}(D) =
+3\)</span></li>
+<li><span class="math inline">\(\text{hub}(E) = 5\)</span></li>
+<li><span class="math inline">\(\text{hub}(F) = 2\)</span></li>
+<li><span class="math inline">\(\text{hub}(Y) = \text{auth}(X) =
+1\)</span></li>
+</ul>
+<p><strong>Round 2 权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = 3 + 3 + 5 =
+11\)</span></li>
+<li><span class="math inline">\(\text{auth}(B) = 5 + 2 = 7\)</span></li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) =
+1\)</span></li>
+</ul>
+<p><strong>Round 2 中枢更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{hub}(C) = \text{hub}(D) =
+11\)</span></li>
+<li><span class="math inline">\(\text{hub}(E) = 18\)</span></li>
+<li><span class="math inline">\(\text{hub}(F) = 7\)</span></li>
+<li><span class="math inline">\(\text{hub}(Y) = \text{auth}(X) =
+1\)</span></li>
+</ul>
+<p><strong>观察</strong>：<span class="math inline">\(Y\)</span> 只指向
+<span class="math inline">\(X\)</span>，而 <span
+class="math inline">\(X\)</span>
+是一个<strong>新创建的孤立权威</strong>，权威分数永远 = <span
+class="math inline">\(\text{hub}(Y) = 1\)</span>。<span
+class="math inline">\(Y\)</span> 的中枢分数也永远 = <span
+class="math inline">\(\text{auth}(X) =
+1\)</span>。它们陷入"互相确认"的孤岛。</p>
+<p><strong>归一化</strong>： - 权威总和 = <span class="math inline">\(11
++ 7 + 1 = 19\)</span> - 中枢总和 = <span class="math inline">\(11 + 11 +
+18 + 7 + 1 = 48\)</span></p>
+<p><span class="math display">\[\widehat{\text{auth}}(X) = \frac{1}{19},
+\quad \widehat{\text{hub}}(Y) = \frac{1}{48}\]</span></p>
+<p><span class="math display">\[\widehat{\text{auth}}(A) =
+\frac{11}{19}, \quad \widehat{\text{auth}}(B) =
+\frac{7}{19}\]</span></p>
+<p><strong>结论</strong>：方案 1 下 <span
+class="math inline">\(X\)</span> 的归一化权威分数仅为 <span
+class="math inline">\(\frac{1}{19} \approx 0.053\)</span>。</p>
+<h3 id="方案-2-的分析">3.3 方案 2 的分析</h3>
+<p><strong>新增节点和边</strong>：<span class="math inline">\(Y \to
+A\)</span>，<span class="math inline">\(Y \to B\)</span>，<span
+class="math inline">\(Y \to X\)</span>。<span
+class="math inline">\(X\)</span> 无出边。</p>
+<p><strong>Round 1 权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) + \text{hub}(Y) = 1 + 1 + 1 + 1 =
+4\)</span></li>
+<li><span class="math inline">\(\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) + \text{hub}(Y) = 1 + 1 + 1 = 3\)</span></li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) =
+1\)</span></li>
+</ul>
+<p><strong>Round 1 中枢更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{hub}(C) = \text{auth}(A) =
+4\)</span></li>
+<li><span class="math inline">\(\text{hub}(D) = \text{auth}(A) =
+4\)</span></li>
+<li><span class="math inline">\(\text{hub}(E) = \text{auth}(A) +
+\text{auth}(B) = 4 + 3 = 7\)</span></li>
+<li><span class="math inline">\(\text{hub}(F) = \text{auth}(B) =
+3\)</span></li>
+<li><span class="math inline">\(\text{hub}(Y) = \text{auth}(A) +
+\text{auth}(B) + \text{auth}(X) = 4 + 3 + 1 = 8\)</span></li>
+</ul>
+<p><strong>Round 2 权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) + \text{hub}(Y) = 4 + 4 + 7 + 8 =
+23\)</span></li>
+<li><span class="math inline">\(\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) + \text{hub}(Y) = 7 + 3 + 8 = 18\)</span></li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) =
+8\)</span></li>
+</ul>
+<p><strong>Round 2 中枢更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{hub}(C) = \text{auth}(A) =
+23\)</span></li>
+<li><span class="math inline">\(\text{hub}(D) = \text{auth}(A) =
+23\)</span></li>
+<li><span class="math inline">\(\text{hub}(E) = \text{auth}(A) +
+\text{auth}(B) = 23 + 18 = 41\)</span></li>
+<li><span class="math inline">\(\text{hub}(F) = \text{auth}(B) =
+18\)</span></li>
+<li><span class="math inline">\(\text{hub}(Y) = \text{auth}(A) +
+\text{auth}(B) + \text{auth}(X) = 23 + 18 + 8 = 49\)</span></li>
+</ul>
+<p><strong>归一化</strong>： - 权威总和 = <span class="math inline">\(23
++ 18 + 8 = 49\)</span> - 中枢总和 = <span class="math inline">\(23 + 23
++ 41 + 18 + 49 = 154\)</span></p>
+<p><span class="math display">\[\widehat{\text{auth}}(A) =
+\frac{23}{49}, \quad \widehat{\text{auth}}(B) = \frac{18}{49}, \quad
+\widehat{\text{auth}}(X) = \frac{8}{49}\]</span></p>
+<p><span class="math display">\[\widehat{\text{hub}}(C) =
+\widehat{\text{hub}}(D) = \frac{23}{154}, \quad \widehat{\text{hub}}(E)
+= \frac{41}{154}, \quad \widehat{\text{hub}}(F) = \frac{18}{154}, \quad
+\widehat{\text{hub}}(Y) = \frac{49}{154}\]</span></p>
+<h3 id="两方案对比">3.4 两方案对比</h3>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 70%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr>
+<th>方案</th>
+<th><span class="math inline">\(\widehat{\text{auth}}(X)\)</span></th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方案 1</td>
+<td><span class="math inline">\(\frac{1}{19} \approx 0.053\)</span></td>
+<td><span class="math inline">\(Y\)</span> 只指向 <span
+class="math inline">\(X\)</span>，<span class="math inline">\(Y\)</span>
+本身被视为低质量中枢</td>
+</tr>
+<tr>
+<td>方案 2</td>
+<td><span class="math inline">\(\frac{8}{49} \approx 0.163\)</span></td>
+<td><span class="math inline">\(Y\)</span> 同时指向 <span
+class="math inline">\(A, B\)</span>，成为"高质量中枢"，再把自身权重传给
+<span class="math inline">\(X\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心洞见（Core Insight）</strong>：</p>
+<blockquote>
+<p>让推荐页面 <span class="math inline">\(Y\)</span>
+同时指向已有的强权威（如 <span class="math inline">\(A,
+B\)</span>），会让 <span class="math inline">\(Y\)</span>
+获得高中枢分数；这个高中枢分数随后通过 <span class="math inline">\(Y \to
+X\)</span> 的链接转化为 <span class="math inline">\(X\)</span>
+的高权威分数。</p>
+</blockquote>
+<p>这揭示了 <strong>HITS
+算法的一个关键特征</strong>：权威的提升不仅取决于被多少页面指向，更取决于指向者的<strong>中枢质量（Hub
+Quality）</strong>。</p>
+<hr />
+<h2 id="四练习-3创建超链接creating-hyperlinks">四、练习
+3：创建超链接（Creating Hyperlinks）</h2>
+<h3 id="题目描述-2">4.1 题目描述</h3>
+<p>创建 <strong>三个</strong> 新页面 <span class="math inline">\(X, Y,
+Z\)</span>，通过设计 <span class="math inline">\(Y\)</span> 和 <span
+class="math inline">\(Z\)</span> 的出边（<span
+class="math inline">\(X\)</span> 无出边），使得在 2 步 HITS
+计算后，按权威分数排名，<span class="math inline">\(X\)</span>
+位列<strong>第二</strong>。</p>
+<h3 id="最优策略">4.2 最优策略</h3>
+<p><strong>策略设计</strong>： - <span class="math inline">\(Y \to
+A\)</span>，<span class="math inline">\(Y \to X\)</span> - <span
+class="math inline">\(Z \to A\)</span>，<span class="math inline">\(Z
+\to X\)</span> - <span class="math inline">\(X\)</span> 无出边</p>
+<p>即 <span class="math inline">\(Y\)</span> 和 <span
+class="math inline">\(Z\)</span> 都同时指向 <span
+class="math inline">\(A\)</span>（最强权威）和 <span
+class="math inline">\(X\)</span>。</p>
+<p><strong>图示（Figure 3 对应）</strong>： <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Y</span> ---&gt; <span class="attribute">X</span></span><br><span class="line"><span class="attribute">Y</span> ---&gt; <span class="selector-tag">A</span></span><br><span class="line">Z ---&gt; <span class="attribute">X</span></span><br><span class="line">Z ---&gt; <span class="selector-tag">A</span></span><br><span class="line">C ---&gt; <span class="selector-tag">A</span></span><br><span class="line">D ---&gt; <span class="selector-tag">A</span></span><br><span class="line">E ---&gt; <span class="selector-tag">A</span></span><br><span class="line">E ---&gt; <span class="selector-tag">B</span></span><br><span class="line">F ---&gt; <span class="selector-tag">B</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="round-1-详细计算">4.3 Round 1 详细计算</h3>
+<p><strong>初始</strong>：<span class="math inline">\(\text{hub}(C) =
+\text{hub}(D) = \text{hub}(E) = \text{hub}(F) = \text{hub}(Y) =
+\text{hub}(Z) = 1\)</span></p>
+<p><strong>权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) + \text{hub}(Y) + \text{hub}(Z) =
+1+1+1+1+1 = 5\)</span></li>
+<li><span class="math inline">\(\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) = 1+1 = 2\)</span></li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) +
+\text{hub}(Z) = 1+1 = 2\)</span></li>
+</ul>
+<p><strong>中枢更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{hub}(C) = \text{auth}(A) =
+5\)</span></li>
+<li><span class="math inline">\(\text{hub}(D) = \text{auth}(A) =
+5\)</span></li>
+<li><span class="math inline">\(\text{hub}(E) = \text{auth}(A) +
+\text{auth}(B) = 5+2 = 7\)</span></li>
+<li><span class="math inline">\(\text{hub}(F) = \text{auth}(B) =
+2\)</span></li>
+<li><span class="math inline">\(\text{hub}(Y) = \text{auth}(A) +
+\text{auth}(X) = 5+2 = 7\)</span></li>
+<li><span class="math inline">\(\text{hub}(Z) = \text{auth}(A) +
+\text{auth}(X) = 5+2 = 7\)</span></li>
+</ul>
+<h3 id="round-2-详细计算">4.4 Round 2 详细计算</h3>
+<p><strong>权威更新</strong>：</p>
+<ul>
+<li><span class="math inline">\(\text{auth}(A) = \text{hub}(C) +
+\text{hub}(D) + \text{hub}(E) + \text{hub}(Y) + \text{hub}(Z) =
+5+5+7+7+7 = 31\)</span></li>
+<li><span class="math inline">\(\text{auth}(B) = \text{hub}(E) +
+\text{hub}(F) = 7+2 = 9\)</span></li>
+<li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) +
+\text{hub}(Z) = 7+7 = 14\)</span></li>
+</ul>
+<h3 id="排名验证">4.5 排名验证</h3>
+<p>Round 2 权威分数（未归一化）：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>auth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>31</td>
+</tr>
+<tr>
+<td>X</td>
+<td>14</td>
+</tr>
+<tr>
+<td>B</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<p><strong>排名</strong>：<span class="math inline">\(A &gt; X &gt;
+B\)</span> ✓</p>
+<p><span class="math inline">\(X\)</span>
+成功位列<strong>第二</strong>，超越了原网络中的 <span
+class="math inline">\(B\)</span>。</p>
+<h3 id="能否让-x-排第一">4.6 能否让 X 排第一？</h3>
+<p><strong>结论</strong>：<strong>不可能</strong>。</p>
+<p><strong>证明（引理：<span class="math inline">\(\text{auth}(X) \le
+\text{hub}(Y) + \text{hub}(Z)\)</span>）</strong>：</p>
+<p>由于 <span class="math inline">\(X\)</span> 只能通过 <span
+class="math inline">\(Y\)</span> 和 <span
+class="math inline">\(Z\)</span> 的链接获得权威（题目设 <span
+class="math inline">\(X\)</span> 无出边、且新增节点只有 <span
+class="math inline">\(Y, Z, X\)</span>），故 <span
+class="math display">\[\text{auth}(X) = \text{hub}(Y) \cdot \mathbb{1}[Y
+\to X] + \text{hub}(Z) \cdot \mathbb{1}[Z \to X] \le \text{hub}(Y) +
+\text{hub}(Z)\]</span></p>
+<p><strong>情况分析</strong>：</p>
+<p><strong>情况 a：<span class="math inline">\(Y, Z\)</span> 均不指向
+<span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span></strong> 则 <span
+class="math inline">\(\text{hub}(Y)\)</span> 和 <span
+class="math inline">\(\text{hub}(Z)\)</span> 只能通过指向 <span
+class="math inline">\(X\)</span> 获得权威贡献，类似练习 2 的方案
+1：<span class="math inline">\(\text{hub}(Y), \text{hub}(Z)\)</span>
+会停留在非常小的值（从 1 开始，只能通过 <span class="math inline">\(X
+\to\)</span> 的路径回传，而 <span class="math inline">\(X\)</span>
+无出边），因此 <span class="math inline">\(\text{auth}(X)\)</span>
+微不足道。</p>
+<p><strong>情况 b：<span class="math inline">\(Y, Z\)</span> 指向 <span
+class="math inline">\(A\)</span></strong> 此时 <span
+class="math inline">\(\text{hub}(Y) + \text{hub}(Z)\)</span> 对 <span
+class="math inline">\(\text{auth}(A)\)</span> 也有贡献，并且原网络中
+<span class="math inline">\(\text{hub}(C) + \text{hub}(D) +
+\text{hub}(E)\)</span> 也继续贡献 <span
+class="math inline">\(\text{auth}(A)\)</span>。故： <span
+class="math display">\[\text{auth}(A) \ge \text{hub}(Y) + \text{hub}(Z)
++ [\text{hub}(C) + \text{hub}(D) + \text{hub}(E)] \ge \text{auth}(X) +
+(\text{正值})\]</span> 因此 <span class="math inline">\(\text{auth}(A)
+&gt; \text{auth}(X)\)</span>，<span class="math inline">\(X\)</span>
+必不可能超越 <span class="math inline">\(A\)</span>。</p>
+<p><strong>情况 c：<span class="math inline">\(Y, Z\)</span> 指向 <span
+class="math inline">\(B\)</span></strong> 对称地，<span
+class="math inline">\(\text{auth}(B) \ge \text{hub}(Y) + \text{hub}(Z) +
+[\text{hub}(E) + \text{hub}(F)]\)</span>，<span
+class="math inline">\(X\)</span> 不可能超越 <span
+class="math inline">\(B\)</span>（至少在 <span class="math inline">\(Y,
+Z\)</span> 都同时指向 <span class="math inline">\(B\)</span> 和 <span
+class="math inline">\(X\)</span> 时）。</p>
+<p>综合三种情况：若 <span class="math inline">\(Y, Z\)</span> 同时指向
+<span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(X\)</span>，则 <span
+class="math inline">\(X\)</span> 最多排第二（低于 <span
+class="math inline">\(A\)</span>）；若指向 <span
+class="math inline">\(B\)</span> 和 <span
+class="math inline">\(X\)</span>，则 <span
+class="math inline">\(X\)</span> 最多排第二（低于 <span
+class="math inline">\(B\)</span>）。无论如何，<strong><span
+class="math inline">\(X\)</span> 最多排第二</strong>。</p>
+<h3 id="核心启示">4.7 核心启示</h3>
+<ul>
+<li><strong>对抗 HITS
+的难点</strong>：算法的相互递归结构使得"伪造中枢"和"伪造权威"之间存在内在张力</li>
+<li><strong>理论上的上界</strong>：<span
+class="math inline">\(X\)</span> 的权威分数受到 <span
+class="math inline">\(\text{hub}(Y) + \text{hub}(Z)\)</span>
+的限制；而要提升 <span class="math inline">\(\text{hub}(Y) +
+\text{hub}(Z)\)</span>，必须让它们指向 <span
+class="math inline">\(A\)</span> 或 <span
+class="math inline">\(B\)</span>，这同时也提升了 <span
+class="math inline">\(A\)</span> 或 <span
+class="math inline">\(B\)</span> 的权威分数</li>
+<li><strong>与 PageRank 的对比</strong>：PageRank
+通过出度<strong>均分</strong>权重的机制（一页的 PageRank
+被等分给所有出链），让"稀释"防御垃圾链接农场；HITS
+则通过双重推导的自洽性实现防御</li>
+</ul>
+<hr />
+<h2 id="五综合总结">五、综合总结</h2>
+<h3 id="关键公式回顾">5.1 关键公式回顾</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>规则</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>权威更新</td>
+<td><span class="math inline">\(\text{auth}(p) \leftarrow \sum_{q \to p}
+\text{hub}(q)\)</span></td>
+</tr>
+<tr>
+<td>中枢更新</td>
+<td><span class="math inline">\(\text{hub}(p) \leftarrow \sum_{p \to q}
+\text{auth}(q)\)</span></td>
+</tr>
+<tr>
+<td>权威归一化</td>
+<td><span class="math inline">\(\widehat{\text{auth}}(p) =
+\text{auth}(p) / \sum_q \text{auth}(q)\)</span></td>
+</tr>
+<tr>
+<td>中枢归一化</td>
+<td><span class="math inline">\(\widehat{\text{hub}}(p) = \text{hub}(p)
+/ \sum_q \text{hub}(q)\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="练习经验教训">5.2 练习经验教训</h3>
+<ol type="1">
+<li><strong>计算简化技巧</strong>：无出边节点的中枢分数恒为
+0；无入边节点的权威分数恒为 0。可在计算前剔除，减少工作量</li>
+<li><strong>相互递归是核心</strong>：中枢分数通过指向权威页面获得；权威分数通过被中枢指向获得</li>
+<li><strong>操纵 HITS
+的策略</strong>：新节点若想获得高权威，应让其推荐页同时指向已有强权威以提升推荐页的中枢质量</li>
+<li><strong>算法的局限</strong>：HITS
+存在被一定程度操纵的可能性，但其双重递归结构限制了单纯创建少数页面能获得的权威等级</li>
+</ol>
+<h3 id="与课程其他章节的联系">5.3 与课程其他章节的联系</h3>
+<ul>
+<li><strong>第 14.2 节（教材）</strong>：HITS 算法的基础理论来源</li>
+<li><strong>PageRank（第 14.3
+节）</strong>：另一种链接分析方法，采用"流体"模型而非双重递归</li>
+<li><strong>SEO 与游戏论（第 14.4
+节）</strong>：搜索引擎与网站作者之间的博弈——本练习就是一个微型 SEO
+攻防案例</li>
+</ul>
+<hr />
+<h2 id="六术语表">六、术语表</h2>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 43%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文术语</th>
+<th>English Term</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>权威</td>
+<td>Authority</td>
+<td>被认可的高质量信息来源页面</td>
+</tr>
+<tr>
+<td>中枢</td>
+<td>Hub</td>
+<td>指向许多权威的"列表型"页面</td>
+</tr>
+<tr>
+<td>权威更新规则</td>
+<td>Authority Update Rule</td>
+<td><span class="math inline">\(\text{auth}(p) \leftarrow \sum_{q \to p}
+\text{hub}(q)\)</span></td>
+</tr>
+<tr>
+<td>中枢更新规则</td>
+<td>Hub Update Rule</td>
+<td><span class="math inline">\(\text{hub}(p) \leftarrow \sum_{p \to q}
+\text{auth}(q)\)</span></td>
+</tr>
+<tr>
+<td>k 步 Hub-Authority 计算</td>
+<td>k-step Hub-Authority Computation</td>
+<td>执行 k 轮交替更新后归一化</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>Normalization</td>
+<td>除以分数总和使分数和为 1</td>
+</tr>
+<tr>
+<td>相互递归定义</td>
+<td>Mutually Recursive Definition</td>
+<td>两量彼此依对方定义</td>
+</tr>
+<tr>
+<td>主特征向量</td>
+<td>Principal Eigenvector</td>
+<td>对应最大特征值的特征向量，HITS 极限状态</td>
+</tr>
+<tr>
+<td>搜索引擎优化</td>
+<td>Search Engine Optimization (SEO)</td>
+<td>提升页面搜索排名的技术</td>
+</tr>
+<tr>
+<td>孤立权威</td>
+<td>Isolated Authority</td>
+<td>仅被一小群节点互指的孤岛权威</td>
+</tr>
+<tr>
+<td>权威上界引理</td>
+<td>Authority Upper Bound Lemma</td>
+<td><span class="math inline">\(\text{auth}(X) \le \sum_{Y \to X}
+\text{hub}(Y)\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>文档版本：2026-04-16 对应教材：Easley &amp; Kleinberg, <em>Networks,
+Crowds, and Markets</em>, 第 14 章</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Tutorial/" rel="tag"><i class="fa fa-tag"></i> Tutorial</a>
+              <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 题解</a>
+              <a href="/tags/Hub-and-Authority/" rel="tag"><i class="fa fa-tag"></i> Hub and Authority</a>
+              <a href="/tags/HITS/" rel="tag"><i class="fa fa-tag"></i> HITS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/344a1748.html" rel="prev" title="COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分">
+                  <i class="fa fa-angle-left"></i> COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/76a28bc6.html" rel="next" title="COMP5313 Tutorial 06 - PageRank 题解">
+                  COMP5313 Tutorial 06 - PageRank 题解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">429k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">25:59</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

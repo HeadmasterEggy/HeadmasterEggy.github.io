@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Chapter 3 Advanced Material: Betweenness Measures and Graph Partitioning（中介性度量与图划分）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分">
+<meta property="og:url" content="http://example.com/posts/344a1748.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Chapter 3 Advanced Material: Betweenness Measures and Graph Partitioning（中介性度量与图划分）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cam">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-15T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-15T04:27:11.093Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Networks">
+<meta property="article:tag" content="Graph Partitioning">
+<meta property="article:tag" content="Girvan-Newman">
+<meta property="article:tag" content="Betweenness">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/344a1748.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/344a1748.html","path":"posts/344a1748.html","title":"COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/344a1748.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">36</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">15</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">180</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-3-advanced-material-betweenness-measures-and-graph-partitioning%E4%B8%AD%E4%BB%8B%E6%80%A7%E5%BA%A6%E9%87%8F%E4%B8%8E%E5%9B%BE%E5%88%92%E5%88%86"><span class="nav-text">Chapter
+3 Advanced Material: Betweenness Measures and Graph
+Partitioning（中介性度量与图划分）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%BC%95%E8%A8%80%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81%E5%9B%BE%E5%88%92%E5%88%86graph-partitioning"><span class="nav-text">一、引言：为何需要图划分（Graph
+Partitioning）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#advanced-material-%E7%AB%A0%E8%8A%82%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="nav-text">1.1 Advanced Material
+章节的定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E9%A9%B1%E5%8A%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">1.2 两个驱动示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1%E7%89%A9%E7%90%86%E5%AD%A6%E5%AE%B6%E5%85%B1%E5%90%8C%E4%BD%9C%E8%80%85%E7%BD%91%E7%BB%9Cfigure-3.12"><span class="nav-text">示例
+1：物理学家共同作者网络（Figure 3.12）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2wayne-zachary-%E7%9A%84%E7%A9%BA%E6%89%8B%E9%81%93%E4%BF%B1%E4%B9%90%E9%83%A8karate-club-figure-3.13"><span class="nav-text">示例
+2：Wayne Zachary 的空手道俱乐部（Karate Club, Figure 3.13）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%88%92%E5%88%86%E9%97%AE%E9%A2%98%E7%9A%84%E6%AD%A3%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="nav-text">1.3 图划分问题的正式定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%9B%BE%E5%88%92%E5%88%86%E7%9A%84%E4%B8%A4%E7%B1%BB%E6%96%B9%E6%B3%95general-approaches-to-graph-partitioning"><span class="nav-text">二、图划分的两类方法（General
+Approaches to Graph Partitioning）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E8%A3%82%E5%BC%8F%E6%96%B9%E6%B3%95divisive-methods"><span class="nav-text">2.1 分裂式方法（Divisive
+Methods）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%BC%8F%E6%96%B9%E6%B3%95agglomerative-methods"><span class="nav-text">2.2 聚合式方法（Agglomerative
+Methods）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B5%8C%E5%A5%97%E7%BB%93%E6%9E%84%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7nested-regions"><span class="nav-text">2.3 嵌套结构的重要性（Nested
+Regions）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%B8%AD%E4%BB%8B%E6%80%A7%E7%9A%84%E6%A6%82%E5%BF%B5the-notion-of-betweenness"><span class="nav-text">三、中介性的概念（The
+Notion of Betweenness）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E5%8A%A8%E6%9C%BA"><span class="nav-text">3.1 问题的动机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E6%AD%A5%E6%83%B3%E6%B3%95%E4%B8%8E%E4%B8%8D%E8%B6%B3"><span class="nav-text">初步想法与不足：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%B5%81%E9%87%8F%E7%9A%84%E6%A6%82%E5%BF%B5traffic-on-the-network"><span class="nav-text">3.2
+网络流量的概念（Traffic on the Network）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%B5%81%E9%87%8F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-text">定义流量的方式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E4%B8%AD%E4%BB%8B%E6%80%A7%E7%9A%84%E5%AE%9A%E4%B9%89edge-betweenness"><span class="nav-text">3.3 边中介性的定义（Edge
+Betweenness）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97%E7%A4%BA%E4%BE%8Bfigure-3.14a"><span class="nav-text">3.4 详细计算示例（Figure
+3.14(a)）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-7-8-%E8%BE%B9%E7%9A%84%E4%B8%AD%E4%BB%8B%E6%80%A7"><span class="nav-text">计算 7-8 边的中介性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-3-7-%E8%BE%B9%E7%9A%84%E4%B8%AD%E4%BB%8B%E6%80%A7"><span class="nav-text">计算 3-7 边的中介性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-1-3-%E8%BE%B9%E7%9A%84%E4%B8%AD%E4%BB%8B%E6%80%A7"><span class="nav-text">计算 1-3 边的中介性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-1-2-%E8%BE%B9%E7%9A%84%E4%B8%AD%E4%BB%8B%E6%80%A7"><span class="nav-text">计算 1-2 边的中介性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E4%B8%AD%E4%BB%8B%E6%80%A7node-betweenness"><span class="nav-text">3.5 节点中介性（Node
+Betweenness）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bgirvan-newman-%E6%96%B9%E6%B3%95the-girvan-newman-algorithm"><span class="nav-text">四、Girvan-Newman
+方法（The Girvan-Newman Algorithm）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">4.1 算法核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-text">4.2 算法伪代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8E-figure-3.14a-%E7%9A%84%E6%AD%A5%E9%AA%A4%E6%BC%94%E7%A4%BAfigure-3.16"><span class="nav-text">4.3 应用于 Figure
+3.14(a) 的步骤演示（Figure 3.16）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#step-1%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%88%A0%E9%99%A4"><span class="nav-text">Step 1（第一次删除）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-2%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%88%A0%E9%99%A4"><span class="nav-text">Step 2（第二次删除）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-3-%E5%8F%8A%E4%BB%A5%E5%90%8E"><span class="nav-text">Step 3 及以后：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8E-figure-3.15-%E7%9A%84%E6%AD%A5%E9%AA%A4%E6%BC%94%E7%A4%BA"><span class="nav-text">4.4 应用于 Figure 3.15
+的步骤演示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#step-1"><span class="nav-text">Step 1：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-1%E4%BF%AE%E6%AD%A3"><span class="nav-text">Step 1（修正）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-2"><span class="nav-text">Step 2：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zachary-%E7%A9%BA%E6%89%8B%E9%81%93%E4%BF%B1%E4%B9%90%E9%83%A8%E7%9A%84%E9%AA%8C%E8%AF%81figure-3.13"><span class="nav-text">4.5 Zachary
+空手道俱乐部的验证（Figure 3.13）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#leskovec-%E7%AD%89%E4%BA%BA%E7%9A%84%E6%B7%B1%E5%85%A5%E5%8F%91%E7%8E%B0"><span class="nav-text">4.6 Leskovec 等人的深入发现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%AE%A1%E7%AE%97%E4%B8%AD%E4%BB%8B%E6%80%A7%E7%9A%84%E9%AB%98%E6%95%88%E7%AE%97%E6%B3%95computing-betweenness-values"><span class="nav-text">五、计算中介性的高效算法（Computing
+Betweenness Values）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-text">5.1 计算的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-bfs-%E7%9A%84%E4%B8%89%E6%AD%A5%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6"><span class="nav-text">5.2 基于 BFS 的三步计算框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-1bfs-%E5%88%86%E5%B1%82"><span class="nav-text">步骤 1：BFS 分层</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-2%E8%AE%A1%E6%95%B0%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84counting-shortest-paths"><span class="nav-text">5.3 步骤
+2：计数最短路径（Counting Shortest Paths）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-3%E7%A1%AE%E5%AE%9A%E6%B5%81%E9%87%8F%E5%80%BCdetermining-flow-values"><span class="nav-text">5.4 步骤
+3：确定流量值（Determining Flow Values）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE-3.19-%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AE%A1%E6%95%B0%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.5 图 3.19 的详细计数示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E9%A9%B1%E5%85%B3%E7%B3%BB%E7%A4%BA%E4%BE%8B"><span class="nav-text">前驱关系（示例）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E6%95%B0-sigmaa-v"><span class="nav-text">计算最短路径数 \(\sigma(A, v)\)：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%B5%81%E9%87%8F%E5%80%BC%E8%87%AA%E4%B8%8B%E8%80%8C%E4%B8%8A"><span class="nav-text">计算流量值（自下而上）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%B9%E4%B8%AD%E4%BB%8B%E6%80%A7%E7%9A%84%E7%B4%AF%E7%A7%AF"><span class="nav-text">边中介性的累积：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">5.6 算法的时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">5.7 扩展与优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E4%B8%AD%E4%BB%8B%E6%80%A7%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-text">节点中介性的计算：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E6%9D%83%E7%BD%91%E7%BB%9C"><span class="nav-text">加权网络：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E7%AE%97%E6%B3%95"><span class="nav-text">近似算法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A9%E5%B1%95%E5%B1%80%E9%99%90%E4%B8%8E%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-text">六、方法的扩展、局限与未来方向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B-girvan-newman-%E7%9A%84%E8%AE%A1%E7%AE%97%E5%BC%80%E9%94%80"><span class="nav-text">6.1 原始 Girvan-Newman
+的计算开销</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-text">6.2 大网络中的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%BF%E4%BB%A3%E5%92%8C%E6%94%B9%E8%BF%9B%E6%96%B9%E6%B3%95"><span class="nav-text">6.3 替代和改进方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%BC%8F%E6%96%B9%E6%B3%95agglomerative-approaches"><span class="nav-text">聚合式方法（Agglomerative
+Approaches）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E7%A4%BE%E5%8C%BA%E6%A3%80%E6%B5%8B"><span class="nav-text">局部社区检测：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0%E6%96%B9%E6%B3%95"><span class="nav-text">随机游走方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%B1%E6%96%B9%E6%B3%95spectral-methods"><span class="nav-text">谱方法（Spectral Methods）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B0%BA%E5%BA%A6%E5%92%8C%E5%B5%8C%E5%A5%97%E7%BB%93%E6%9E%84"><span class="nav-text">6.4 多尺度和嵌套结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%80%A7%E6%8C%87%E6%A0%87modularity"><span class="nav-text">6.5 模块性指标（Modularity）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E4%B8%8E%E7%AB%A0%E8%8A%82%E5%85%B6%E4%BB%96%E9%83%A8%E5%88%86%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">七、与章节其他部分的联系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-section-3.2%E5%B1%80%E9%83%A8%E6%A1%A5%E5%BC%B1%E8%81%94%E7%B3%BB%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">7.1 与 Section
+3.2（局部桥、弱联系）的联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-section-3.5%E7%BB%93%E6%9E%84%E6%B4%9E%E7%A4%BE%E4%BC%9A%E8%B5%84%E6%9C%AC%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">7.2 与 Section
+3.5（结构洞、社会资本）的联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E7%A4%BE%E4%BC%9A%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90%E5%92%8C%E7%BB%84%E7%BB%87%E7%A0%94%E7%A9%B6%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">7.3
+与社会网络分析和组织研究的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93%E8%A1%A8"><span class="nav-text">八、核心概念总结表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%80%9D%E8%80%83"><span class="nav-text">总结与思考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/344a1748.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-15 00:00:00 / Modified: 04:27:11" itemprop="dateCreated datePublished" datetime="2026-04-15T00:00:00Z">2026-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>9.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>34 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="chapter-3-advanced-material-betweenness-measures-and-graph-partitioning中介性度量与图划分">Chapter
+3 Advanced Material: Betweenness Measures and Graph
+Partitioning（中介性度量与图划分）</h1>
+<blockquote>
+<p>教材：<em>Networks, Crowds, and Markets: Reasoning about a Highly
+Connected World</em> 作者：David Easley &amp; Jon Kleinberg, Cambridge
+University Press, 2010 章节：Section 3.6（章末进阶内容）</p>
+</blockquote>
+<hr />
+<h2
+id="一引言为何需要图划分graph-partitioning">一、引言：为何需要图划分（Graph
+Partitioning）</h2>
+<h3 id="advanced-material-章节的定位">1.1 Advanced Material
+章节的定位</h3>
+<p>每章末的 <strong>Advanced Material（进阶内容）</strong>
+部分面向有兴趣深入研究的读者，提供本章核心概念的数学化和技术化扩展。第 3
+章前几节通过定性讨论介绍了网络中的"<strong>紧密相连区域（tightly-knit
+regions）</strong>"及其与边界的弱联系现象，但缺乏严格的数学定义和可操作的算法方法。</p>
+<p>Section 3.6 的目标是提供： -
+<strong>严格的量化方法</strong>，用于识别网络中的紧密相连区域 -
+<strong>图划分算法</strong>，将网络自动分解为区域，使得： -
+区域内节点高度互联 - 区域间连接稀疏 - 能够处理多层嵌套结构</p>
+<h3 id="两个驱动示例">1.2 两个驱动示例</h3>
+<h4 id="示例-1物理学家共同作者网络figure-3.12">示例
+1：物理学家共同作者网络（Figure 3.12）</h4>
+<p>该图基于实际的<strong>科学合著关系网络（co-authorship
+network）</strong>： - 节点代表物理学家 - 边表示共同发表过论文 -
+图中清晰可见<strong>多个紧密相连的簇（clusters）</strong>，代表不同研究领域或机构的研究小组
+-
+簇之间有<strong>稀疏的连接边</strong>，由跨领域合作或个别研究者的多学科活动形成
+- 直观上可识别出网络的"<strong>社区结构（community
+structure）</strong>"，但缺乏定量标准</p>
+<h4 id="示例-2wayne-zachary-的空手道俱乐部karate-club-figure-3.13">示例
+2：Wayne Zachary 的空手道俱乐部（Karate Club, Figure 3.13）</h4>
+<p>这是社交网络分析领域的<strong>经典数据集</strong>（Zachary 1977）： -
+节点数：34（俱乐部成员） - 边：基于俱乐部外各种社交活动的互动关系 -
+历史背景：1970 年代初，俱乐部会长（<strong>admin</strong>，节点
+34）与空手道教练（<strong>instructor</strong>，节点
+1）发生纠纷，导致俱乐部分裂成两个独立组织 -
+<strong>核心问题</strong>：能否<strong>仅从网络拓扑结构</strong>预测出这个实际发生的分裂？即，是否存在算法能自动识别出与真实分裂一致的两个派系？</p>
+<p>这个例子的重要性在于提供了<strong>ground
+truth</strong>（实际分裂结果），可用于验证图划分算法的有效性。</p>
+<h3 id="图划分问题的正式定义">1.3 图划分问题的正式定义</h3>
+<p><strong>问题陈述</strong>：给定图 <span class="math inline">\(G = (V,
+E)\)</span>，其中 <span class="math inline">\(|V| = n\)</span>，<span
+class="math inline">\(|E| = m\)</span>，求将顶点集 <span
+class="math inline">\(V\)</span> 分割为 <span
+class="math inline">\(k\)</span> 个不相交子集 <span
+class="math inline">\(C_1, C_2, \ldots, C_k\)</span>，使得：</p>
+<p><span class="math display">\[\text{cut}(C_1, C_2, \ldots, C_k) =
+\sum_{i=1}^{k-1} \sum_{j=i+1}^{k} |E(C_i, C_j)|\]</span></p>
+<p>最小化，其中 <span class="math inline">\(E(C_i, C_j)\)</span>
+表示连接 <span class="math inline">\(C_i\)</span> 和 <span
+class="math inline">\(C_j\)</span> 的边数（<strong>割集（cut
+set）</strong>）。</p>
+<p>然而，单纯最小化割集可能产生平衡差、信息量少的分割。更好的目标是找到<strong>自然的、嵌套的多层分割结构</strong>。</p>
+<hr />
+<h2
+id="二图划分的两类方法general-approaches-to-graph-partitioning">二、图划分的两类方法（General
+Approaches to Graph Partitioning）</h2>
+<h3 id="分裂式方法divisive-methods">2.1 分裂式方法（Divisive
+Methods）</h3>
+<p><strong>核心思想</strong>：自顶向下地递归分裂网络。</p>
+<p><strong>算法框架</strong>： 1.
+识别当前连通分量内的<strong>"跨区连接"（spanning
+links）</strong>——即连接两个紧密相连子区域的边 2.
+移除这些边，使网络分裂为多个分量，每个分量代表一个自然的区域 3.
+对每个新产生的分量递归执行相同过程 4.
+继续直至达到停止条件（如各分量内边数低于阈值，或节点数过少）</p>
+<p><strong>特点</strong>： - 自然揭示网络的<strong>嵌套分层结构</strong>
+- 每一步的移除产生一个层级的划分结果 - 本章介绍的 <strong>Girvan-Newman
+方法</strong> 就是典型的分裂式方法</p>
+<p><strong>视觉类比</strong>：想象从网络的"最脆弱"的跨区边开始，逐步剥离，好似剥洋葱。</p>
+<h3 id="聚合式方法agglomerative-methods">2.2 聚合式方法（Agglomerative
+Methods）</h3>
+<p><strong>核心思想</strong>：自底向上地递归合并相似节点。</p>
+<p><strong>算法框架</strong>： 1. 初始化：每个节点都是独立的"簇" 2.
+识别<strong>最相似的节点对或最相似的簇对</strong>（相似性通常基于它们的邻域结构或共同邻居数）
+3. 合并这两个簇 4. 重新计算相似性，继续合并 5.
+持续直至所有节点合并为一个簇</p>
+<p><strong>特点</strong>： - 产生一个<strong>层级聚类树（hierarchical
+clustering dendrogram）</strong> -
+可在树的任何高度"切割"以获得所需的分区数 -
+计算相似性时通常不需要重新计算所有边的指标（视方法而定）</p>
+<p><strong>视觉类比</strong>：自最紧密的小团体开始，逐步将相似的团体并入更大的社群。</p>
+<h3 id="嵌套结构的重要性nested-regions">2.3 嵌套结构的重要性（Nested
+Regions）</h3>
+<p><strong>现实观察</strong>（Figure
+3.14）：现实网络中的社区往往存在<strong>多层次、多尺度的嵌套结构</strong>：
+- 大的地理区域内包含更小的次区域 - 公司内的部门下还有更小的工作组 -
+学术合作网中，国家、大学、研究小组形成多层嵌套</p>
+<p><strong>数学表达</strong>：设 <span class="math inline">\(C_1, C_2,
+\ldots, C_k\)</span> 是某一层的划分，则对于层级中的上一层，可能存在划分
+<span class="math inline">\(D_1, D_2, \ldots, D_\ell\)</span>（<span
+class="math inline">\(\ell &lt; k\)</span>），使得每个 <span
+class="math inline">\(D_j\)</span> 是多个 <span
+class="math inline">\(C_i\)</span> 的并集。</p>
+<p><strong>图划分算法应产生的结果</strong>：不是单一的平面划分，而是一个<strong>树状的层级划分结构</strong>，称为
+<strong>dendrogram</strong>，可视化为二叉树，其中： -
+每个内部节点代表一个合并/分裂操作 - 叶子节点代表单个或少量原始节点 -
+树的高度反映了"社区的紧密程度"</p>
+<hr />
+<h2 id="三中介性的概念the-notion-of-betweenness">三、中介性的概念（The
+Notion of Betweenness）</h2>
+<h3 id="问题的动机">3.1 问题的动机</h3>
+<p>观察 Figure 3.14(a) 的网络图：直观上应该首先移除 <strong>7-8
+边</strong>以完成第一步分裂。但如何系统地识别这条"最重要"的边？</p>
+<h4 id="初步想法与不足">初步想法与不足：</h4>
+<p><strong>想法 1</strong>：移除 <strong>bridges（桥）</strong> 和
+<strong>local bridges（局部桥）</strong>（回顾 Section 3.2）。 -
+<strong>桥（bridge）</strong>：其删除后增加图的连通分量数的边 -
+<strong>局部桥（local bridge）</strong>：两端点在三角形中不相邻的边</p>
+<p><strong>不足之处</strong>： 1.
+若有多条桥或多条局部桥，不知道应该先移除哪一条 2. 在 Figure 3.15
+的网络中，<strong>没有任何局部桥</strong>——每条边都至少在一个三角形内——但网络仍有明显的两部分结构需要分离</p>
+<p><strong>想法 2</strong>：考虑节点对间的最短路径依赖关系。</p>
+<p>关键观察： -
+桥和局部桥之所以重要，是因为它们构成了不同部分节点间的<strong>必经之路</strong>
+-
+若要从左半部分的某节点到达右半部分的某节点，<strong>必须</strong>经过这条边
+- 如果没有这样的结构桥，路径虽然存在，但必须绕远路</p>
+<p>基于这个观察，我们需要一个更一般的概念，能够量化"<strong>一条边对网络流量的重要性</strong>"。</p>
+<h3 id="网络流量的概念traffic-on-the-network">3.2
+网络流量的概念（Traffic on the Network）</h3>
+<h4 id="定义流量的方式">定义流量的方式：</h4>
+<p>想象对图中<strong>每一对可达的节点</strong> <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span>，有<strong>一个单位的流体</strong>从
+<span class="math inline">\(A\)</span> 流向 <span
+class="math inline">\(B\)</span>（无论物理距离多远，"流体"按数学方式流动）。</p>
+<p><strong>流量分配规则</strong>：这个单位流体在 <span
+class="math inline">\(A\)</span> 到 <span
+class="math inline">\(B\)</span>
+的<strong>所有最短路径</strong>上<strong>均匀分配</strong>：</p>
+<p><span class="math display">\[\text{Flow}_{A \to B}(e) =
+\frac{1}{k(A,B)} \quad \text{（对每条最短路径上的边 } e
+\text{）}\]</span></p>
+<p>其中 <span class="math inline">\(k(A,B)\)</span> 是从 <span
+class="math inline">\(A\)</span> 到 <span
+class="math inline">\(B\)</span> 的最短路径数。</p>
+<p><strong>特殊情况</strong>： - 若 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span> 不在同一连通分量中，<span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span> 间没有任何流量 - 若 <span
+class="math inline">\(k(A,B) =
+1\)</span>（唯一最短路径），这条路径上的边各承载 1 单位流量 - 若 <span
+class="math inline">\(k(A,B) &gt;
+1\)</span>（多条最短路径），流量均摊</p>
+<h3 id="边中介性的定义edge-betweenness">3.3 边中介性的定义（Edge
+Betweenness）</h3>
+<p><strong>正式定义</strong>：</p>
+<p>边 <span class="math inline">\(e\)</span>
+的<strong>中介性（betweenness）</strong> 是所有节点对 <span
+class="math inline">\((A, B)\)</span> 通过 <span
+class="math inline">\(e\)</span> 的流量之和：</p>
+<p><span class="math display">\[B(e) = \sum_{A \neq B} \text{Flow}_{A
+\to B}(e)\]</span></p>
+<p><strong>直观意义</strong>： -
+中介性量化了边在网络信息流、资源转移等过程中的<strong>"枢纽地位"</strong>
+- 高中介性的边连接了网络的不同部分，是最稀缺的资源 -
+最高中介性的边往往是<strong>跨越社区边界</strong>的关键连接</p>
+<p><strong>单位</strong>：在无权图中，中介性通常是非负的有理数或整数（取决于最短路径数的结构）。</p>
+<h3 id="详细计算示例figure-3.14a">3.4 详细计算示例（Figure
+3.14(a)）</h3>
+<p>考虑 Figure 3.14(a) 中的网络。该图有两个清晰的部分： - 左半部分：节点
+1-7，形成较密集的结构 - 右半部分：节点 8-14，形成较密集的结构<br />
+- 连接边：仅 7-8 一条边</p>
+<h4 id="计算-7-8-边的中介性">计算 7-8 边的中介性：</h4>
+<p>所有从左半部分 {1,2,3,4,5,6,7} 到右半部分 {8,9,10,11,12,13,14}
+的路径<strong>必须经过 7-8 边</strong>。</p>
+<ul>
+<li>左半部分节点数：7</li>
+<li>右半部分节点数：7</li>
+<li>所有节点对 <span class="math inline">\((A, B)\)</span> 的组合，其中
+<span class="math inline">\(A\)</span> 在左，<span
+class="math inline">\(B\)</span> 在右：<span class="math inline">\(7
+\times 7 = 49\)</span></li>
+<li>每一对的最短路径数为 1（无其他替代路径）</li>
+<li>因此，<span class="math inline">\(B(7\text{-}8) = 49\)</span></li>
+</ul>
+<h4 id="计算-3-7-边的中介性">计算 3-7 边的中介性：</h4>
+<p>边 3-7 连接节点 3 和 7。哪些节点对的最短路径经过这条边？</p>
+<ul>
+<li>从节点 1, 2, 3 出发到节点 4,5,6,7,8,9,10,11,12,13,14 的某些对会使用
+3-7</li>
+<li>具体地，{1,2,3} 中的节点经 3-7 到达右半部分的所有节点</li>
+<li>计数：3 个节点 × 11 个目标节点（右半 7 个 + 左半 4 个）</li>
+<li>实际上，从左半到右半只有 3×7 = 21 对；从 {1,2,3} 内部到 {4,5,6,7}
+还有 3×4 = 12 对</li>
+<li>因此，<span class="math inline">\(B(3\text{-}7) = 21 + 12 =
+33\)</span></li>
+</ul>
+<p>对称地： - <span class="math inline">\(B(6\text{-}7) =
+33\)</span>（由于左半结构的对称性） - <span
+class="math inline">\(B(8\text{-}9) = 33\)</span> - <span
+class="math inline">\(B(8\text{-}12) = 33\)</span></p>
+<h4 id="计算-1-3-边的中介性">计算 1-3 边的中介性：</h4>
+<p>边 1-3 的中介性较低，因为： - 只有经过 1 且目标在 3
+的"右侧"的节点对才会使用它 - 由于 1 的度数低，相对较少的路径依赖于 1-3 -
+计算得 <span class="math inline">\(B(1\text{-}3) = 12\)</span></p>
+<p>类似地，由于结构对称性，多条边的中介性为 12。</p>
+<h4 id="计算-1-2-边的中介性">计算 1-2 边的中介性：</h4>
+<p>边 1-2 的中介性最低，因为： - 1 和 2 的距离为 1 - 只有以 1 或 2
+为源/目的地的流量会使用这条边 - <span
+class="math inline">\(B(1\text{-}2) = 1\)</span>（仅来自 1 到 2
+及反向的流量）</p>
+<p>类似地，{4-5, 10-11, 13-14} 等短连接的中介性都是 1。</p>
+<h4 id="小结">小结：</h4>
+<p>中介性最高的边 7-8（值为
+49）确实是<strong>跨越两个主要社区的唯一桥梁</strong>，符合直观预期。</p>
+<h3 id="节点中介性node-betweenness">3.5 节点中介性（Node
+Betweenness）</h3>
+<p>虽然本节重点是边中介性，但类似的定义也适用于节点：</p>
+<p><strong>节点中介性</strong>：经过节点 <span
+class="math inline">\(v\)</span> 的所有最短路径的总和（Linton Freeman
+最初定义）。</p>
+<ul>
+<li>高中介性的节点往往是网络的"枢纽"或"中介人（bridge person）"</li>
+<li>节点中介性在社会网络分析中用于识别<strong>影响力最大的个人</strong></li>
+<li>计算节点中介性时，需注意是否计入以该节点为源/目的地的路径</li>
+</ul>
+<hr />
+<h2
+id="四girvan-newman-方法the-girvan-newman-algorithm">四、Girvan-Newman
+方法（The Girvan-Newman Algorithm）</h2>
+<h3 id="算法核心思想">4.1 算法核心思想</h3>
+<p><strong>Girvan-Newman 分裂式算法</strong>（Girvan &amp; Newman,
+2002）基于以下原理：</p>
+<ol type="1">
+<li>计算网络中<strong>所有边</strong>的中介性</li>
+<li><strong>删除</strong>中介性最高的边（若多条并列，一起删除）；删除后网络可能分裂为多个连通分量，各分量代表找到的第一层社区</li>
+<li><strong>重新计算</strong>所有剩余边的中介性</li>
+<li>再次删除中介性最高的边</li>
+<li>重复步骤 3-4，直至所有边被删除</li>
+</ol>
+<p><strong>关键特性</strong>： -
+该方法<strong>自然地暴露嵌套结构</strong>——每个删除步骤产生一个层级的分割
+- 删除顺序反映了边的"社区间性"的强弱 - 最终产生的 dendrogram
+可用于在不同粒度选择最终的社区划分</p>
+<h3 id="算法伪代码">4.2 算法伪代码</h3>
+<figure class="highlight oxygene"><table><tr><td class="code"><pre><span class="line">Algorithm GIRVAN_NEWMAN(G = (V, E))</span><br><span class="line">Input: Graph G <span class="keyword">with</span> vertex <span class="keyword">set</span> V <span class="keyword">and</span> edge <span class="keyword">set</span> E</span><br><span class="line">Output: Dendrogram representing hierarchical community structure</span><br><span class="line"></span><br><span class="line">dendrogram ← <span class="keyword">empty</span> tree</span><br><span class="line">edges_removed_sequence ← []</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> E <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">empty</span> <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">each</span> edge e <span class="keyword">in</span> E <span class="keyword">do</span></span><br><span class="line">        compute_betweenness(e)  <span class="comment">// 重新计算 e 的中介性</span></span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">for</span></span><br><span class="line">    </span><br><span class="line">    e_max ← edge(s) <span class="keyword">with</span> maximum betweenness</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">remove</span> e_max <span class="keyword">from</span> E</span><br><span class="line">    edges_removed_sequence.append(e_max)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">record</span> current connected components <span class="keyword">in</span> dendrogram</span><br><span class="line">    </span><br><span class="line"><span class="keyword">end</span> <span class="keyword">while</span></span><br><span class="line"></span><br><span class="line">return dendrogram</span><br></pre></td></tr></table></figure>
+<h3 id="应用于-figure-3.14a-的步骤演示figure-3.16">4.3 应用于 Figure
+3.14(a) 的步骤演示（Figure 3.16）</h3>
+<h4 id="step-1第一次删除">Step 1（第一次删除）：</h4>
+<p>计算所有边的中介性（如前所述）： - 7-8：49（最高） - 3-7, 6-7, 8-9,
+8-12：33 - 其他：更低</p>
+<p><strong>删除 7-8 边</strong>： - 网络分裂为两个连通分量 - 分量
+1：{1,2,3,4,5,6,7}（7 个节点） - 分量 2：{8,9,10,11,12,13,14}（7
+个节点） - 第一级社区识别完成</p>
+<h4 id="step-2第二次删除">Step 2（第二次删除）：</h4>
+<p>对两个分量分别重新计算中介性：</p>
+<p><strong>在分量 1 中</strong>： - 之前被 7-8
+的流量分散的节点对现在直接相互连接 - 中介性最高的边变为 3-7, 6-7（均为
+33，因为已经消除了跨分量流量） - 实际上，在一个 7
+节点的小网络中，这两条边仍有相对高的中介性</p>
+<p><strong>在分量 2 中</strong>： - 类似地，8-9 和 8-12
+或其他边成为最高中介性的候选</p>
+<p><strong>假设删除</strong>：3-7, 6-7, 8-9, 8-12（假设并列最高） -
+这些边连接的是分别的"核心"与"外围" - 删除后进一步分裂</p>
+<h4 id="step-3-及以后">Step 3 及以后：</h4>
+<p>继续这个过程，三角形内部的边（如 3-4, 4-5
+等）因为有多条绕行路径，中介性较低，被保留更长时间。</p>
+<p>最终的 dendrogram 显示： - 最顶层：整个网络 - 次层：两个
+7-节点的主社区 - 更下层：每个主社区内的子结构</p>
+<h3 id="应用于-figure-3.15-的步骤演示">4.4 应用于 Figure 3.15
+的步骤演示</h3>
+<p>Figure 3.15 是一个更复杂的网络，其中： - 左侧 5 个节点
+{1,2,3,4,5}，形成紧密的连接 - 右侧 7 个节点
+{7,8,9,10,11,12,13}，形成紧密的连接 - 连接边：<strong>5-6 和
+6-7</strong>（通过中间节点 6）</p>
+<h4 id="step-1">Step 1：</h4>
+<p>计算所有边的中介性。关键的是 5-6 边（或 6-7 边）： - 从 {1,2,3,4,5}
+中的任何节点到 {7,8,9,10,11,12,13}
+中的任何节点，所有最短路径<strong>都必须经过中间节点 6</strong> - 经过
+5-6 边的流量：<span class="math inline">\(5 \times 7 = 35\)</span> -
+经过 6-7 边的流量：<span class="math inline">\(5 \times 7 = 35\)</span>
+- 经过 5-7 边的流量（间接连接）：取决于路由（假设 5-7 不直接相连）</p>
+<p><strong>计算精确值</strong>（假设图的具体结构）： - 若 5-7
+是直接边，则流量分摊于 {5-6-7} 和 {5-7} - 若 {1,2,3,4,5} 内部和
+{7,8,9,10,11,12,13} 内部都是全连接或接近全连接，则有多条最短路径 - 假设
+5-7 边的中介性为 25（详见下文）</p>
+<p><strong>删除 5-7 边</strong>（若其中介性最高）：分裂为两个分量。</p>
+<p>但根据教材，实际流程如下：</p>
+<h4 id="step-1修正">Step 1（修正）：</h4>
+<p>重新审视 Figure 3.15 的结构。若图具体如下（根据教材描述）： - 左簇
+{1,2,3,4,5}：这 5 个节点形成接近完全图的紧密连接 - 右簇
+{7,8,9,10,11,12,13}：7 个节点的紧密连接 - 中间节点 6 作为桥</p>
+<p>路径分析： - 从左簇任意节点 <span class="math inline">\(A\)</span>
+到右簇任意节点 <span class="math inline">\(B\)</span>，最短路径经过 6 -
+若左簇内部多条路径都能到达 5 或其他外围节点，且都通过
+6，则所有这些路径的"出口"都经过 5-6 - 类似地，6-7 是从 6
+进入右簇的"入口"</p>
+<p><strong>5-7 边（假设存在）的中介性计算</strong>： - 5-7 可能是 5
+到右簇的直接连接（local bridge） - 经过 5-7 的流量：所有以 5
+为源/目的地且目标在右簇（或反之）的节点对 - 假设 5
+是左簇的外围节点，到它的最短路径数相对较少 - 估计 <span
+class="math inline">\(B(5\text{-}7) =
+25\)</span>（具体数字取决于左簇内的精确拓扑）</p>
+<p><strong>第一步删除 5-7</strong>（中介性 25 最高）： -
+删除后，任何从左簇到右簇的路径必须使用 5-6-7 序列或其他中介路径</p>
+<h4 id="step-2">Step 2：</h4>
+<p>重新计算。原本经过 5-7 的流量现在必须重新路由： - 从左簇到右簇：改为
+5-6-7 路线 - 这增加了 5-6 和 6-7 的中介性</p>
+<p><strong>新的中介性计算</strong>（具体数字需根据完整网络拓扑）： -
+原本 5-6 的中介性：假设为 5（仅来自 5 周围节点的流量） - 删除 5-7
+后，5-6 的中介性增至 <span class="math inline">\(5 + 25 =
+30\)</span>（原有流量加上重新路由的流量） - 类似地，6-7 的中介性变为
+30</p>
+<p><strong>删除 5-6 和 6-7</strong>（现在中介性并列最高）： -
+网络分裂，左右两个簇完全分离</p>
+<p>这个例子展示了 Girvan-Newman
+方法的<strong>自适应性</strong>：删除一条边后，其他边的"重要性排名"会因流量重新分配而改变。</p>
+<h3 id="zachary-空手道俱乐部的验证figure-3.13">4.5 Zachary
+空手道俱乐部的验证（Figure 3.13）</h3>
+<p><strong>实验结果</strong>： - 该 34 节点网络在 Girvan-Newman
+算法下运行 - 当删除到第一次明显的两个分量分裂时，结果产生两个社群 -
+这两个社群与 1970 年实际发生的<strong>俱乐部分裂</strong> 高度吻合 - 34
+个成员中，33 个被正确分配到与其实际加入的派系相同的社群 - 仅有 1
+个成员（node 9）被错误分类</p>
+<p><strong>对 node 9 的解释</strong>（Zachary 本人提供）： - node 9
+是俱乐部的一个相对外围成员，与两位领导都有联系 - 当时 node 9
+离获得黑带认证仅剩 3 周时间 - 他倾向于跟随教练（node
+1）是为了完成认证，这是<strong>个人激励</strong>而非网络结构决定的 -
+这说明<strong>网络结构虽然强大，但并非完全决定性的</strong>——社会动因和个人利益也会影响真实选择</p>
+<p><strong>Zachary 的原始方法对比</strong>： - Zachary
+原始论文使用的方法：给网络的边赋予<strong>权重/强度值</strong>，基于社交互动的频繁程度
+- 然后使用<strong>最小割（minimum cut）</strong> 方法分离两位领导人 -
+Girvan-Newman
+使用的是<strong>拓扑结构和流量分析</strong>，不需要边权重</p>
+<h3 id="leskovec-等人的深入发现">4.6 Leskovec 等人的深入发现</h3>
+<p>后续研究（Leskovec et al., 2008）指出了 Girvan-Newman
+及其他图划分方法的一个重要限制：</p>
+<p><strong>观察</strong>： - 在<strong>小规模网络</strong>（~100-1000
+节点）上，图划分方法能找到与真实社区高度吻合的结果 -
+在<strong>大规模网络</strong>（超过几千节点）上，即使是真实的、经验验证的"社区"也很难从网络其他部分清晰"剥离"出来
+-
+换句话说，真实大网络的社区往往有<strong>分散的外围边界</strong>，而非清晰的割集</p>
+<p><strong>定量发现</strong>： -
+社群大小与其"与外界的连接密度"之间存在权衡 - 小的、紧密的社群容易被分离
+- 大的社群往往与其他社群有大量的跨界边，难以完全分离</p>
+<p><strong>启示</strong>： -
+图划分不是一个绝对的"找到正确答案"问题，而是一个<strong>多尺度</strong>、<strong>相对</strong>的问题
+- 同一网络在不同分辨率下可能有定性不同的社区结构 -
+选择多少个社区、社区大小的分布，都需要根据应用背景和分析目标来确定</p>
+<hr />
+<h2
+id="五计算中介性的高效算法computing-betweenness-values">五、计算中介性的高效算法（Computing
+Betweenness Values）</h2>
+<h3 id="计算的挑战">5.1 计算的挑战</h3>
+<p><strong>直接方法的复杂度</strong>： - 若直接列举所有节点对 <span
+class="math inline">\((A, B)\)</span>
+及它们的所有最短路径，在大网络中计算量巨大 - 节点对数：<span
+class="math inline">\(O(n^2)\)</span> -
+每对的最短路径数可能呈指数增长（完全图或高对称性网络） -
+总的直接枚举复杂度：<span class="math inline">\(O(n^2 \cdot
+\text{exponential paths})\)</span></p>
+<p><strong>高效方法的关键</strong>： -
+<strong>不显式枚举最短路径</strong>，而是通过<strong>累加和分解（aggregation
+and decomposition）</strong> 计算 -
+基于<strong>广度优先搜索（Breadth-First Search, BFS）</strong> 的框架 -
+对每个源节点进行一次 BFS，累计该源的所有流量贡献 -
+最后汇总所有源的贡献，得到每条边的总中介性</p>
+<h3 id="基于-bfs-的三步计算框架">5.2 基于 BFS 的三步计算框架</h3>
+<p>对每个源节点 <span
+class="math inline">\(s\)</span>，执行以下三步：</p>
+<h4 id="步骤-1bfs-分层">步骤 1：BFS 分层</h4>
+<p>从源节点 <span class="math inline">\(s\)</span>
+执行标准的广度优先搜索，将图的所有节点分配到"层（layers）"：</p>
+<p><span class="math display">\[\text{Layer}_d = \{v \in V :
+\text{dist}(s, v) = d\}\]</span></p>
+<p>其中 <span class="math inline">\(\text{dist}(s, v)\)</span> 是从
+<span class="math inline">\(s\)</span> 到 <span
+class="math inline">\(v\)</span> 的最短路径长度（边数）。</p>
+<p><strong>数据结构记录</strong>： - 每个节点的层号 <span
+class="math inline">\(d_v\)</span> -
+来自前一层（上一层）的邻接（<em>predecessors</em> 或
+<em>parents</em>）：即在 BFS 树中"上方"的节点 - <span
+class="math inline">\(\text{pred}(v) = \{u \in \text{Layer}_{d_v - 1} :
+(u,v) \in E\}\)</span></p>
+<p><strong>示例</strong>（Figure 3.18，从节点 A 出发）： - Layer 0：{A}
+- Layer 1：A 的所有邻接节点 - Layer 2：不在前两层，且与 Layer 1
+有边连接的节点 - ...以此类推，直至所有连通节点被分配</p>
+<h3 id="步骤-2计数最短路径counting-shortest-paths">5.3 步骤
+2：计数最短路径（Counting Shortest Paths）</h3>
+<p><strong>关键观察</strong>：</p>
+<p>从源 <span class="math inline">\(s\)</span> 到任意节点 <span
+class="math inline">\(v\)</span>
+的最短路径数可以<strong>递推计算</strong>：</p>
+<p><span class="math display">\[\sigma(s, v) = \sum_{u \in
+\text{pred}(v)} \sigma(s, u)\]</span></p>
+<p><strong>初始条件</strong>：<span class="math inline">\(\sigma(s, s) =
+1\)</span>（从 <span class="math inline">\(s\)</span> 到自己有一条长度为
+0 的路径）</p>
+<p><strong>逻辑</strong>： - <span class="math inline">\(s\)</span> 到
+<span class="math inline">\(v\)</span> 的最短路径必定经过 <span
+class="math inline">\(v\)</span> 的某个前驱节点 <span
+class="math inline">\(u\)</span>（即 <span
+class="math inline">\(u\)</span> 在 Layer <span
+class="math inline">\(d_v - 1\)</span> 且与 <span
+class="math inline">\(v\)</span> 相邻） - 从 <span
+class="math inline">\(s\)</span> 到 <span
+class="math inline">\(v\)</span> 的不同最短路径对应于从 <span
+class="math inline">\(s\)</span> 到 <span
+class="math inline">\(u\)</span> 的不同最短路径，然后加上边 <span
+class="math inline">\((u,v)\)</span> - 因此，<span
+class="math inline">\(\sigma(s, v)\)</span> 就是所有 <span
+class="math inline">\(\sigma(s, u)\)</span> 的和</p>
+<p><strong>计算顺序</strong>： - 从 Layer 0 开始，按层递推（从上到下） -
+对 Layer 1 中的节点，<span class="math inline">\(\sigma(s, v) =
+1\)</span>（因为它们的前驱只有 <span
+class="math inline">\(s\)</span>，且 <span
+class="math inline">\(\sigma(s,s) = 1\)</span>） - 对 Layer 2
+中的节点，根据前驱累加 - ...以此类推</p>
+<h3 id="步骤-3确定流量值determining-flow-values">5.4 步骤
+3：确定流量值（Determining Flow Values）</h3>
+<p>这是最微妙的一步。我们需要<strong>自下而上地</strong>（从远离源的节点开始）确定每条边携带的流量。</p>
+<p><strong>流量的传播</strong>： - 对每个节点 <span
+class="math inline">\(v\)</span>，维护一个"<strong>流量累积器</strong>"
+<span class="math inline">\(\delta(s, v)\)</span>，表示从 <span
+class="math inline">\(s\)</span> 经过 <span
+class="math inline">\(v\)</span> 前往更远节点的单位流量 -
+初始化：对于最远层（距离最大）的节点 <span
+class="math inline">\(v\)</span>，<span class="math inline">\(\delta(s,
+v) = 1\)</span>（目标节点本身产生 1 单位流量） - 然后自下而上地回传</p>
+<p><strong>流量回传公式</strong>：</p>
+<p>对于节点 <span class="math inline">\(v\)</span> 的每条前驱边 <span
+class="math inline">\((u, v)\)</span>（即从 <span
+class="math inline">\(u\)</span> 到 <span
+class="math inline">\(v\)</span> 的边，<span
+class="math inline">\(u\)</span> 在前一层）：</p>
+<p><span class="math display">\[\text{Flow}_{s}(u, v) = \frac{\sigma(s,
+u)}{\sigma(s, v)} \cdot \delta(s, v)\]</span></p>
+<p>以及：</p>
+<p><span class="math display">\[\delta(s, u) = \sum_{v : (u,v) \in E,
+d_v = d_u + 1} \text{Flow}_s(u, v)\]</span></p>
+<p>（即，<span class="math inline">\(u\)</span> 累积来自所有后继节点
+<span class="math inline">\(v\)</span> 的流量）</p>
+<p><strong>直观理解</strong>： - 从 <span
+class="math inline">\(v\)</span> 出发到更远节点的每一单位流量，在返回
+<span class="math inline">\(v\)</span>
+的所有前驱时，<strong>按最短路径数的比例分摊</strong> - 若有 <span
+class="math inline">\(k\)</span> 条不同的最短路径从 <span
+class="math inline">\(u\)</span> 到 <span
+class="math inline">\(v\)</span>，且 <span
+class="math inline">\(v\)</span> 有 <span
+class="math inline">\(m\)</span>
+单位流量需要传回上层，则每条路径（即每个 <span
+class="math inline">\(u\)</span>）承担 <span
+class="math inline">\(m/k\)</span> 单位 -
+这确保了流量守恒和合理的分摊</p>
+<h3 id="图-3.19-的详细计数示例">5.5 图 3.19 的详细计数示例</h3>
+<p>考虑一个 11 节点的图，从节点 A 执行 BFS（Figure 3.19）：</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line">图的结构（示例）：</span><br><span class="line"><span class="selector-tag">Layer</span> <span class="number">0</span>: <span class="selector-tag">A</span></span><br><span class="line"><span class="selector-tag">Layer</span> <span class="number">1</span>: <span class="selector-tag">B</span>, <span class="selector-tag">C</span>, <span class="selector-tag">D</span>, <span class="selector-tag">E</span>（<span class="number">4</span> 个节点，都直接连 <span class="selector-tag">A</span>）</span><br><span class="line"><span class="selector-tag">Layer</span> <span class="number">2</span>: <span class="selector-tag">F</span>, <span class="selector-tag">G</span>, <span class="selector-tag">H</span>（<span class="number">3</span> 个节点）</span><br><span class="line"><span class="selector-tag">Layer</span> <span class="number">3</span>: <span class="selector-tag">I</span>, <span class="selector-tag">J</span>（<span class="number">2</span> 个节点）</span><br><span class="line"><span class="selector-tag">Layer</span> <span class="number">4</span>: <span class="selector-tag">K</span>（<span class="number">1</span> 个节点）</span><br></pre></td></tr></table></figure>
+<h4 id="前驱关系示例">前驱关系（示例）：</h4>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">B</span>: <span class="built_in">pred</span>(B) = &#123;<span class="selector-tag">A</span>&#125;</span><br><span class="line">C: <span class="built_in">pred</span>(C) = &#123;<span class="selector-tag">A</span>&#125;</span><br><span class="line">D: <span class="built_in">pred</span>(D) = &#123;<span class="selector-tag">A</span>&#125;</span><br><span class="line">E: <span class="built_in">pred</span>(E) = &#123;<span class="selector-tag">A</span>&#125;</span><br><span class="line">F: <span class="built_in">pred</span>(F) = &#123;<span class="selector-tag">B</span>, C&#125;         // F 从 <span class="selector-tag">B</span> 和 C 都能到达，距离相同</span><br><span class="line"><span class="selector-tag">G</span>: <span class="built_in">pred</span>(G) = &#123;D&#125;</span><br><span class="line">H: <span class="built_in">pred</span>(H) = &#123;D, E&#125;</span><br><span class="line"><span class="selector-tag">I</span>: <span class="built_in">pred</span>(I) = &#123;F, <span class="selector-tag">G</span>&#125;</span><br><span class="line">J: <span class="built_in">pred</span>(J) = &#123;<span class="selector-tag">G</span>, H&#125;</span><br><span class="line">K: <span class="built_in">pred</span>(K) = &#123;<span class="selector-tag">I</span>, J&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="计算最短路径数-sigmaa-v">计算最短路径数 <span
+class="math inline">\(\sigma(A, v)\)</span>：</h4>
+<p><strong>初始</strong>：<span class="math inline">\(\sigma(A, A) =
+1\)</span></p>
+<p><strong>Layer 1</strong>： - <span class="math inline">\(\sigma(A, B)
+= \sigma(A, A) = 1\)</span> - <span class="math inline">\(\sigma(A, C) =
+1\)</span> - <span class="math inline">\(\sigma(A, D) = 1\)</span> -
+<span class="math inline">\(\sigma(A, E) = 1\)</span></p>
+<p><strong>Layer 2</strong>： - <span class="math inline">\(\sigma(A, F)
+= \sigma(A, B) + \sigma(A, C) = 1 + 1 = 2\)</span> - <span
+class="math inline">\(\sigma(A, G) = \sigma(A, D) = 1\)</span> - <span
+class="math inline">\(\sigma(A, H) = \sigma(A, D) + \sigma(A, E) = 1 + 1
+= 2\)</span></p>
+<p><strong>Layer 3</strong>： - <span class="math inline">\(\sigma(A, I)
+= \sigma(A, F) + \sigma(A, G) = 2 + 1 = 3\)</span> - <span
+class="math inline">\(\sigma(A, J) = \sigma(A, G) + \sigma(A, H) = 1 + 2
+= 3\)</span></p>
+<p><strong>Layer 4</strong>： - <span class="math inline">\(\sigma(A, K)
+= \sigma(A, I) + \sigma(A, J) = 3 + 3 = 6\)</span></p>
+<p><strong>结果总结</strong>： - 从 A 到 K 有 6 条不同的最短路径！ -
+这反映了多条并行的最短路径结构</p>
+<h4 id="计算流量值自下而上">计算流量值（自下而上）：</h4>
+<p><strong>初始化</strong>（最远节点）： - <span
+class="math inline">\(\delta(A, K) = 1\)</span></p>
+<p><strong>Layer 4 → Layer 3</strong>（K 的回传）：</p>
+<p>K 有两个前驱：I 和 J</p>
+<p><span class="math display">\[\text{Flow}_A(I, K) = \frac{\sigma(A,
+I)}{\sigma(A, K)} \cdot \delta(A, K) = \frac{3}{6} \cdot 1 =
+\frac{1}{2}\]</span></p>
+<p><span class="math display">\[\text{Flow}_A(J, K) = \frac{\sigma(A,
+J)}{\sigma(A, K)} \cdot \delta(A, K) = \frac{3}{6} \cdot 1 =
+\frac{1}{2}\]</span></p>
+<p><strong>Layer 3 处的流量累积</strong>： - <span
+class="math inline">\(\delta(A, I) = 1 + \text{Flow}_A(I, K) = 1 +
+\frac{1}{2} = \frac{3}{2}\)</span>（I 本身流量 1，加上来自 K 的 1/2） -
+<span class="math inline">\(\delta(A, J) = 1 + \text{Flow}_A(J, K) = 1 +
+\frac{1}{2} = \frac{3}{2}\)</span></p>
+<p><strong>Layer 3 → Layer 2</strong>（I 和 J 的回传）：</p>
+<p>I 的前驱：F 和 G</p>
+<p><span class="math display">\[\text{Flow}_A(F, I) = \frac{\sigma(A,
+F)}{\sigma(A, I)} \cdot \delta(A, I) = \frac{2}{3} \cdot \frac{3}{2} =
+1\]</span></p>
+<p><span class="math display">\[\text{Flow}_A(G, I) = \frac{\sigma(A,
+G)}{\sigma(A, I)} \cdot \delta(A, I) = \frac{1}{3} \cdot \frac{3}{2} =
+\frac{1}{2}\]</span></p>
+<p>J 的前驱：G 和 H</p>
+<p><span class="math display">\[\text{Flow}_A(G, J) = \frac{\sigma(A,
+G)}{\sigma(A, J)} \cdot \delta(A, J) = \frac{1}{3} \cdot \frac{3}{2} =
+\frac{1}{2}\]</span></p>
+<p><span class="math display">\[\text{Flow}_A(H, J) = \frac{\sigma(A,
+H)}{\sigma(A, J)} \cdot \delta(A, J) = \frac{2}{3} \cdot \frac{3}{2} =
+1\]</span></p>
+<p><strong>Layer 2 处的流量累积</strong>： - <span
+class="math inline">\(\delta(A, F) = 1 + 1 = 2\)</span>（自身 1 + 来自 I
+的 1） - <span class="math inline">\(\delta(A, G) = 1 + \frac{1}{2} +
+\frac{1}{2} = 2\)</span>（自身 1 + 来自 I 的 1/2 + 来自 J 的 1/2） -
+<span class="math inline">\(\delta(A, H) = 1 + 1 = 2\)</span>（自身 1 +
+来自 J 的 1）</p>
+<p><strong>Layer 2 → Layer 1</strong>：</p>
+<p>F 的前驱：B 和 C</p>
+<p><span class="math display">\[\text{Flow}_A(B, F) = \frac{\sigma(A,
+B)}{\sigma(A, F)} \cdot \delta(A, F) = \frac{1}{2} \cdot 2 =
+1\]</span></p>
+<p><span class="math display">\[\text{Flow}_A(C, F) = \frac{\sigma(A,
+C)}{\sigma(A, F)} \cdot \delta(A, F) = \frac{1}{2} \cdot 2 =
+1\]</span></p>
+<p>G 的前驱：D</p>
+<p><span class="math display">\[\text{Flow}_A(D, G) = \frac{\sigma(A,
+D)}{\sigma(A, G)} \cdot \delta(A, G) = \frac{1}{1} \cdot 2 =
+2\]</span></p>
+<p>H 的前驱：D 和 E</p>
+<p><span class="math display">\[\text{Flow}_A(D, H) = \frac{\sigma(A,
+D)}{\sigma(A, H)} \cdot \delta(A, H) = \frac{1}{2} \cdot 2 =
+1\]</span></p>
+<p><span class="math display">\[\text{Flow}_A(E, H) = \frac{\sigma(A,
+E)}{\sigma(A, H)} \cdot \delta(A, H) = \frac{1}{2} \cdot 2 =
+1\]</span></p>
+<p><strong>Layer 1 处的流量累积</strong>： - <span
+class="math inline">\(\delta(A, B) = 1 + 1 = 2\)</span> - <span
+class="math inline">\(\delta(A, C) = 1 + 1 = 2\)</span> - <span
+class="math inline">\(\delta(A, D) = 1 + 2 + 1 = 4\)</span> - <span
+class="math inline">\(\delta(A, E) = 1 + 1 = 2\)</span></p>
+<p>（注意：这些 <span class="math inline">\(\delta\)</span>
+值不再用于进一步回传，因为 A 是源点，但它们记录了该节点的"依赖性"）</p>
+<h4 id="边中介性的累积">边中介性的累积：</h4>
+<p>对每条边 <span class="math inline">\((u,
+v)\)</span>，跨<strong>所有</strong>源节点 <span
+class="math inline">\(s\)</span> 求和 <span
+class="math inline">\(\text{Flow}_s(u, v)\)</span>，并除以 2（因为每对
+<span class="math inline">\((s, t)\)</span> 被计算了两次：一次从 <span
+class="math inline">\(s\)</span>，一次从 <span
+class="math inline">\(t\)</span>）：</p>
+<p><span class="math display">\[B(e) = \frac{1}{2} \sum_{s}
+\text{Flow}_s(e)\]</span></p>
+<h3 id="算法的时间复杂度">5.6 算法的时间复杂度</h3>
+<p><strong>单源 BFS 的复杂度</strong>：<span class="math inline">\(O(n +
+m)\)</span>（标准 BFS）</p>
+<p><strong>计数最短路径的复杂度</strong>：<span
+class="math inline">\(O(n + m)\)</span>（随 BFS 进行）</p>
+<p><strong>流量回传的复杂度</strong>：<span class="math inline">\(O(n +
+m)\)</span>（每条边最多处理常数次）</p>
+<p><strong>总复杂度</strong>（对所有 <span
+class="math inline">\(n\)</span> 个源节点）：<span
+class="math inline">\(O(n(n + m)) = O(n^2 + nm)\)</span></p>
+<p>对于： - 稠密图（<span class="math inline">\(m \approx
+n^2\)</span>）：<span
+class="math inline">\(O(n^3)\)</span>（过高，不实用于大网络） -
+稀疏图（<span class="math inline">\(m \approx n\)</span>）：<span
+class="math inline">\(O(n^2)\)</span>（更可接受，但仍需在中等规模网络上）</p>
+<p>这是一个<strong>显著的改进</strong>，相比于显式枚举所有最短路径。</p>
+<h3 id="扩展与优化">5.7 扩展与优化</h3>
+<h4 id="节点中介性的计算">节点中介性的计算：</h4>
+<p>在流量回传过程中，可以同时追踪每个节点被经过的次数，得到节点中介性。</p>
+<h4 id="加权网络">加权网络：</h4>
+<p>若边有权重，"最短路径"改为"最小权重路径"，BFS 改为 Dijkstra
+算法。</p>
+<h4 id="近似算法">近似算法：</h4>
+<p>对于超大规模网络（数百万节点），完整计算仍然过慢。研究者开发了基于<strong>随机抽样</strong>的中介性近似方法，在牺牲精度的前提下大幅加速。</p>
+<hr />
+<h2 id="六方法的扩展局限与未来方向">六、方法的扩展、局限与未来方向</h2>
+<h3 id="原始-girvan-newman-的计算开销">6.1 原始 Girvan-Newman
+的计算开销</h3>
+<p><strong>每轮重新计算的成本</strong>： -
+每次删除一条或多条边后，网络拓扑改变 -
+需要对所有源节点重新执行一遍中介性计算 - 删除过程中最多进行 <span
+class="math inline">\(|E|\)</span> 轮迭代</p>
+<p><strong>总体复杂度</strong>： - 若有 <span
+class="math inline">\(m\)</span> 条边，每轮计算成本 <span
+class="math inline">\(O(n^2 + nm)\)</span>（如上所述） - 总成本：<span
+class="math inline">\(O(m \cdot (n^2 + nm)) = O(m \cdot n^2)\)</span>
+或更高（对稠密图） - 对中等规模网络（~1000-10000 节点，10000-100000
+边）可行，但对更大网络不实用</p>
+<p><strong>实践中的优化</strong>： - 仅重新计算受删除影响的子网络 -
+使用增量算法避免完全重计算 - 但即使有优化，原始方法的可扩展性仍有限</p>
+<h3 id="大网络中的挑战">6.2 大网络中的挑战</h3>
+<p><strong>计算瓶颈</strong>： -
+对百万级节点的网络（如社交媒体、互联网拓扑），原始 Girvan-Newman
+在实际中计算不可行 - 研究者转向更高效的替代方法</p>
+<p><strong>社区结构的粗粒度性</strong>： - Leskovec
+等人的发现表明，大网络中"真实社区"的边界往往模糊 -
+完全的分离可能不存在或不有意义 -
+图划分的结果对参数、初始化、算法细节敏感</p>
+<h3 id="替代和改进方法">6.3 替代和改进方法</h3>
+<h4 id="聚合式方法agglomerative-approaches">聚合式方法（Agglomerative
+Approaches）：</h4>
+<ul>
+<li>如 <strong>Fast Modularity Optimization</strong>（Newman &amp;
+Girvan, 2006）</li>
+<li>直接优化<strong>模块性指标（modularity
+metric）</strong>，评估社区紧密程度相对于随机预期的偏离</li>
+<li>在大网络上更高效</li>
+</ul>
+<h4 id="局部社区检测">局部社区检测：</h4>
+<ul>
+<li>从单个节点或小种子集出发，贪心扩展到相邻节点</li>
+<li>不需要全局计算，适合大网络</li>
+<li>如 <strong>Local Spectral Clustering</strong>（Spielman &amp; Teng,
+2013）</li>
+</ul>
+<h4 id="随机游走方法">随机游走方法：</h4>
+<ul>
+<li>基于<strong>随机游走</strong> 或<strong>强化学习</strong>的思想</li>
+<li>如
+<strong>DeepWalk</strong>、<strong>Node2Vec</strong>（虽然主要用于节点嵌入，也可用于社区检测）</li>
+</ul>
+<h4 id="谱方法spectral-methods">谱方法（Spectral Methods）：</h4>
+<ul>
+<li>基于图的<strong>Laplacian 矩阵</strong>的特征向量</li>
+<li>如<strong>谱聚类（Spectral Clustering）</strong></li>
+<li>理论基础扎实，计算复杂度 <span
+class="math inline">\(O(n^3)\)</span>（特征分解），但可高效近似</li>
+</ul>
+<h3 id="多尺度和嵌套结构">6.4 多尺度和嵌套结构</h3>
+<p><strong>当代的洞察</strong>： -
+社区检测不是<strong>单一的、绝对的任务</strong>，而是<strong>多分辨率的、相对的观点</strong>
+- 同一网络可在不同"放大倍数"下暴露不同的社区结构 -
+<strong>最优的社区数</strong>可能不存在；而是一系列嵌套的替代分割</p>
+<p><strong>分辨率参数</strong>： - 现代方法（如 <strong>Louvain
+算法</strong>）引入分辨率参数，允许用户在不同粒度间切换 -
+低分辨率：大社区（宏观视角） - 高分辨率：小社区（微观视角）</p>
+<h3 id="模块性指标modularity">6.5 模块性指标（Modularity）</h3>
+<p><strong>定义</strong>：模块性 <span class="math inline">\(Q\)</span>
+衡量实际社区结构与随机网络模型的偏离程度。</p>
+<p><span class="math display">\[Q = \frac{1}{2m} \sum_{ij} \left[ A_{ij}
+- \frac{k_i k_j}{2m} \right] \delta(c_i, c_j)\]</span></p>
+<p>其中： - <span
+class="math inline">\(A_{ij}\)</span>：邻接矩阵元素（实际边的存在） -
+<span class="math inline">\(k_i, k_j\)</span>：节点 <span
+class="math inline">\(i, j\)</span> 的度数 - <span
+class="math inline">\(\delta(c_i, c_j)\)</span>：指示函数（若 <span
+class="math inline">\(c_i = c_j\)</span>，值为 1，否则为 0） - <span
+class="math inline">\(m\)</span>：总边数</p>
+<p><strong>解释</strong>： - 第一项：实际存在的同社区边数 -
+第二项：在配置模型（节点度数相同但随机连接）中的期望同社区边数 -
+差异越大，社区划分越"真实"和"有意义"</p>
+<p><strong>范围</strong>：<span class="math inline">\(Q \in [-1,
+1]\)</span>，通常 <span class="math inline">\(Q &gt; 0.3\)</span>
+被认为表明显著的社区结构。</p>
+<hr />
+<h2 id="七与章节其他部分的联系">七、与章节其他部分的联系</h2>
+<h3 id="与-section-3.2局部桥弱联系的联系">7.1 与 Section
+3.2（局部桥、弱联系）的联系</h3>
+<p><strong>回顾</strong>（Section 3.2）： - <strong>局部桥（local
+bridge）</strong>：两端点没有共同邻居的边 -
+<strong>弱联系假说</strong>：信息和机会往往通过弱关系（如局部桥）传播 -
+<strong>社会资本</strong>：处于局部桥位置的个人可获得信息优势</p>
+<p><strong>关系</strong>： -
+局部桥往往具有<strong>高的边中介性</strong>，因为它们是连接不同社区的关键
+- 但并非所有高中介性边都是局部桥（在没有局部桥的网络中仍有高中介性边，如
+Figure 3.15） -
+<strong>中介性是局部桥概念的推广</strong>：在没有明显的三角形或局部桥的网络中，中介性仍能识别关键边</p>
+<h3 id="与-section-3.5结构洞社会资本的联系">7.2 与 Section
+3.5（结构洞、社会资本）的联系</h3>
+<p><strong>结构洞（Structural Holes）</strong>： - Burt
+的理论强调，占据不同社群之间"洞（hole）"的个人拥有信息优势和影响力 -
+这样的个人充当"中介人"，桥接隔离的信息流</p>
+<p><strong>联系</strong>： -
+<strong>高中介性的节点</strong>往往占据结构洞 - Girvan-Newman
+等图划分算法识别出的社区边界往往对应于<strong>结构洞的位置</strong> -
+删除高中介性的节点往往会增加网络的分裂，反映了结构洞对网络连通性的关键作用</p>
+<p><strong>应用含义</strong>： -
+在组织中识别出结构洞占据者（高中介性节点） -
+这些个人对创新、资源流动和跨部门协调特别重要 -
+但同时，他们的"中介地位"可能使其成为权力变化中的关键目标</p>
+<h3 id="与社会网络分析和组织研究的应用">7.3
+与社会网络分析和组织研究的应用</h3>
+<p><strong>实证应用</strong>：</p>
+<ol type="1">
+<li><strong>企业组织中的团队识别</strong>：
+<ul>
+<li>利用 Girvan-Newman 等方法自动识别组织内的自然分组</li>
+<li>相比于正式的组织结构图（往往滞后于实际合作网络）更新</li>
+</ul></li>
+<li><strong>在线社区的演化分析</strong>：
+<ul>
+<li>跟踪社区随时间的形成、分裂、合并</li>
+<li>理解社群的成长和衰落</li>
+</ul></li>
+<li><strong>信息传播和谣言控制</strong>：
+<ul>
+<li>识别关键节点和边，理解信息如何在社区间流动</li>
+<li>设计干预策略（如目标化接种或内容审核）</li>
+</ul></li>
+<li><strong>犯罪网络和恐怖网络的分析</strong>：
+<ul>
+<li>执法机构使用图划分识别帮派、犯罪组织的内部结构</li>
+<li>识别关键人物（高中介性）以进行破坏</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="八核心概念总结表">八、核心概念总结表</h2>
+<p>下表总结了本节的关键概念和术语：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文术语</th>
+<th>English Term</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图划分</td>
+<td>Graph Partitioning</td>
+<td>将网络分解为紧密相连的子图，子图间连接稀疏的任务</td>
+</tr>
+<tr>
+<td>紧密相连区域</td>
+<td>Tightly-knit Regions</td>
+<td>内部高度互联的节点子集</td>
+</tr>
+<tr>
+<td>分裂式方法</td>
+<td>Divisive Method</td>
+<td>自顶向下递归删除边以分裂网络的方法</td>
+</tr>
+<tr>
+<td>聚合式方法</td>
+<td>Agglomerative Method</td>
+<td>自底向上递归合并节点以形成社区的方法</td>
+</tr>
+<tr>
+<td>层级聚类树</td>
+<td>Dendrogram</td>
+<td>表示递归划分/合并过程的树状结构</td>
+</tr>
+<tr>
+<td>中介性（边）</td>
+<td>Edge Betweenness</td>
+<td>一条边承载的通过它的所有节点对的流量之和</td>
+</tr>
+<tr>
+<td>中介性（节点）</td>
+<td>Node Betweenness</td>
+<td>一个节点在最短路径中被经过的频率</td>
+</tr>
+<tr>
+<td>最短路径</td>
+<td>Shortest Path</td>
+<td>两节点间最少边数的路径</td>
+</tr>
+<tr>
+<td>最短路径数</td>
+<td>Shortest Path Count</td>
+<td>从源到目的地的不同最短路径的条数</td>
+</tr>
+<tr>
+<td>流量分配</td>
+<td>Flow Distribution</td>
+<td>在最短路径上均匀分配流量的规则</td>
+</tr>
+<tr>
+<td>Girvan-Newman 方法</td>
+<td>Girvan-Newman Algorithm</td>
+<td>迭代删除最高中介性边的图划分算法</td>
+</tr>
+<tr>
+<td>广度优先搜索</td>
+<td>Breadth-First Search (BFS)</td>
+<td>从源节点逐层遍历图的搜索算法</td>
+</tr>
+<tr>
+<td>前驱/父节点</td>
+<td>Predecessor / Parent Node</td>
+<td>BFS 树中位于上一层且有边相连的节点</td>
+</tr>
+<tr>
+<td>后继/子节点</td>
+<td>Successor / Child Node</td>
+<td>BFS 树中位于下一层且有边相连的节点</td>
+</tr>
+<tr>
+<td>流量回传</td>
+<td>Flow Propagation / Backtracking</td>
+<td>自下而上地从叶节点向源节点累积流量的过程</td>
+</tr>
+<tr>
+<td>局部桥</td>
+<td>Local Bridge</td>
+<td>两端点无共同邻居的边</td>
+</tr>
+<tr>
+<td>社区结构</td>
+<td>Community Structure</td>
+<td>网络中高度互联的节点簇</td>
+</tr>
+<tr>
+<td>社区检测</td>
+<td>Community Detection</td>
+<td>识别网络社区结构的算法过程</td>
+</tr>
+<tr>
+<td>模块性</td>
+<td>Modularity</td>
+<td>评估社区划分质量的指标，范围 [-1, 1]</td>
+</tr>
+<tr>
+<td>配置模型</td>
+<td>Configuration Model</td>
+<td>保持节点度数但随机重连接的网络模型</td>
+</tr>
+<tr>
+<td>随机游走</td>
+<td>Random Walk</td>
+<td>从节点出发，随机选择邻接点移动的过程</td>
+</tr>
+<tr>
+<td>谱方法</td>
+<td>Spectral Method</td>
+<td>基于图 Laplacian 矩阵特征向量的方法</td>
+</tr>
+<tr>
+<td>结构洞</td>
+<td>Structural Hole</td>
+<td>不同社群之间的"缝隙"，占据者拥有信息优势</td>
+</tr>
+<tr>
+<td>割集</td>
+<td>Cut Set</td>
+<td>连接两个子图的所有边的集合</td>
+</tr>
+<tr>
+<td>最小割</td>
+<td>Minimum Cut</td>
+<td>大小最小的割集</td>
+</tr>
+<tr>
+<td>连通分量</td>
+<td>Connected Component</td>
+<td>网络中最大的连通子图</td>
+</tr>
+<tr>
+<td>空手道俱乐部</td>
+<td>Karate Club</td>
+<td>Zachary 的经典社交网络数据集</td>
+</tr>
+<tr>
+<td>共同作者网络</td>
+<td>Co-authorship Network</td>
+<td>以科学家为节点，共同发表论文为边的网络</td>
+</tr>
+<tr>
+<td>多分辨率</td>
+<td>Multi-resolution</td>
+<td>在不同粒度观察网络的能力</td>
+</tr>
+<tr>
+<td>分辨率参数</td>
+<td>Resolution Parameter</td>
+<td>控制社区检测粒度的可调参数</td>
+</tr>
+<tr>
+<td>Louvain 算法</td>
+<td>Louvain Algorithm</td>
+<td>高效的模块性优化社区检测算法</td>
+</tr>
+<tr>
+<td>边权重</td>
+<td>Edge Weight</td>
+<td>边的强度或重要性数值</td>
+</tr>
+<tr>
+<td>加权网络</td>
+<td>Weighted Network</td>
+<td>边带有权重的图</td>
+</tr>
+<tr>
+<td>Dijkstra 算法</td>
+<td>Dijkstra Algorithm</td>
+<td>计算加权图最短路径的算法</td>
+</tr>
+<tr>
+<td>近似算法</td>
+<td>Approximation Algorithm</td>
+<td>在精度和速度间做出权衡的算法</td>
+</tr>
+<tr>
+<td>随机抽样</td>
+<td>Random Sampling</td>
+<td>从大规模问题中抽取代表样本的技术</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="总结与思考">总结与思考</h2>
+<p>本章 Advanced Material 部分详细阐述了如下要点：</p>
+<ol type="1">
+<li><p><strong>图划分的必要性</strong>：网络中的社区结构是普遍现象，需要严格的数学方法来识别</p></li>
+<li><p><strong>中介性概念的强大</strong>：通过流量模型，中介性推广了桥和局部桥的概念，适用于更一般的网络</p></li>
+<li><p><strong>Girvan-Newman
+方法的优雅性</strong>：迭代删除最高中介性边，自然暴露嵌套的社区结构，并在真实数据（如
+Zachary 空手道俱乐部）上验证有效</p></li>
+<li><p><strong>高效计算的关键</strong>：基于 BFS
+的流量计算避免了显式枚举最短路径的指数成本，使得中等规模网络的分析变得可行</p></li>
+<li><p><strong>现实的复杂性</strong>：大规模网络的社区往往边界模糊，完美的分离可能不存在；分析应在多个分辨率下进行</p></li>
+<li><p><strong>理论与实践的连系</strong>：结构洞、弱联系、社会资本等定性概念在这里得到量化和算法化</p></li>
+</ol>
+<p>这些洞察对于理解现代网络分析、社交媒体监控、企业组织、信息流传播等众多领域都有深远的影响。</p>
+<hr />
+<p><strong>参考资源与进一步阅读</strong>：</p>
+<ul>
+<li>Girvan, M., &amp; Newman, M. E. (2002). Community structure in
+social and biological networks. PNAS, 99(12), 7821-7826.</li>
+<li>Newman, M. E. (2004). Fast algorithm for detecting community
+structure in networks. Physical Review E, 69(6), 066133.</li>
+<li>Zachary, W. W. (1977). An information flow model for conflict and
+fission in small groups. Journal of Anthropological Research, 33(4),
+452-473.</li>
+<li>Leskovec, J., Lang, K. J., Dasgupta, A., &amp; Mahoney, M. W.
+(2008). Statistical properties of community structure in large social
+and information networks. WWW 2008.</li>
+</ul>
+<hr />
+<p><strong>文档生成时间</strong>：2026-04-15<br />
+<strong>教材</strong>：Easley, D., &amp; Kleinberg, J. (2010).
+<em>Networks, Crowds, and Markets</em>. Cambridge University
+Press.<br />
+<strong>章节</strong>：Section 3.6 Advanced Material</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Networks/" rel="tag"><i class="fa fa-tag"></i> Networks</a>
+              <a href="/tags/Graph-Partitioning/" rel="tag"><i class="fa fa-tag"></i> Graph Partitioning</a>
+              <a href="/tags/Girvan-Newman/" rel="tag"><i class="fa fa-tag"></i> Girvan-Newman</a>
+              <a href="/tags/Betweenness/" rel="tag"><i class="fa fa-tag"></i> Betweenness</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/16d693d8.html" rel="prev" title="Network Science - Chapter 9 Communities 社群结构（9.1-9.4）">
+                  <i class="fa fa-angle-left"></i> Network Science - Chapter 9 Communities 社群结构（9.1-9.4）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5e589690.html" rel="next" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
+                  COMP5313 Tutorial 05 - Hub and Authority 题解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">429k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">25:59</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

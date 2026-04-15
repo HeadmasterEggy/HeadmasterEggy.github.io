@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 6 Tutorial: PageRank 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：PageRank 的定义与计算 依据教材 Networks, Crowds, and Markets（Easley &amp; Kleinberg）第 14.3 节   一、预备知识回顾 1.1 基本 PageRank 更新规则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Tutorial 06 - PageRank 题解">
+<meta property="og:url" content="http://example.com/posts/76a28bc6.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 6 Tutorial: PageRank 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：PageRank 的定义与计算 依据教材 Networks, Crowds, and Markets（Easley &amp; Kleinberg）第 14.3 节   一、预备知识回顾 1.1 基本 PageRank 更新规则">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-16T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-15T17:58:49.958Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="PageRank">
+<meta property="article:tag" content="题解">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/76a28bc6.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/76a28bc6.html","path":"posts/76a28bc6.html","title":"COMP5313 Tutorial 06 - PageRank 题解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Tutorial 06 - PageRank 题解 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/76a28bc6.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">36</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">15</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">180</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#week-6-tutorial-pagerank-%E9%A2%98%E8%A7%A3"><span class="nav-text">Week 6 Tutorial: PageRank
+题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-text">一、预备知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC-pagerank-%E6%9B%B4%E6%96%B0%E8%A7%84%E5%88%99basic-pagerank-update-rule"><span class="nav-text">1.1 基本
+PageRank 更新规则（Basic PageRank Update Rule）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E8%A1%A1-pagerank-%E5%80%BCequilibrium-pagerank"><span class="nav-text">1.2 均衡 PageRank
+值（Equilibrium PageRank）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%A9%E6%94%BE-pagerankscaled-pagerank"><span class="nav-text">1.3 缩放 PageRank（Scaled
+PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%BB%83%E4%B9%A0-1%E5%9F%BA%E6%9C%AC-pagerank-%E5%80%BC%E8%AE%A1%E7%AE%97"><span class="nav-text">二、练习 1：基本 PageRank
+值计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#figure-1a%E4%B8%89%E8%8A%82%E7%82%B9%E5%9B%BE"><span class="nav-text">2.1 Figure 1(a)：三节点图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E8%A1%A1%E9%AA%8C%E8%AF%81"><span class="nav-text">2.2 均衡验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#figure-1b%E7%A7%BB%E9%99%A4-b-to-a-%E5%90%8E"><span class="nav-text">2.3 Figure 1(b)：移除 \(b \to a\) 后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1%E8%A7%A3%E9%87%8A"><span class="nav-text">2.4 现象解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%83%E4%B9%A0-2%E5%9D%87%E8%A1%A1%E5%80%BC%E9%AA%8C%E8%AF%81"><span class="nav-text">三、练习 2：均衡值验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#figure-2a%E5%85%AD%E8%8A%82%E7%82%B9%E5%AF%B9%E7%A7%B0%E5%9B%BE"><span class="nav-text">3.1 Figure 2(a)：六节点对称图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#figure-2b%E5%85%AD%E8%8A%82%E7%82%B9%E5%9B%BE"><span class="nav-text">3.2 Figure 2(b)：六节点图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%9D%87%E8%A1%A1%E5%80%BC"><span class="nav-text">3.3 求解正确的均衡值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%BB%83%E4%B9%A0-3scaled-pagerank-%E5%80%BCalpha-45"><span class="nav-text">四、练习 3：Scaled PageRank
+值（\(\alpha &#x3D; 4&#x2F;5\)）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%AE%BE%E7%BD%AE"><span class="nav-text">4.1 问题设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scaled-%E6%9B%B4%E6%96%B0%E6%96%B9%E7%A8%8B"><span class="nav-text">4.2 Scaled 更新方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%90%E6%AD%A5%E6%B1%82%E8%A7%A3"><span class="nav-text">4.3 逐步求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81-v_b"><span class="nav-text">4.4 验证 \(v_b\)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scaled-pagerank-%E6%9C%80%E7%BB%88%E5%80%BC"><span class="nav-text">4.5 Scaled PageRank 最终值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%9F%BA%E6%9C%AC-pagerank"><span class="nav-text">4.6 对比基本 PageRank</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%BB%BC%E5%90%88%E6%80%BB%E7%BB%93"><span class="nav-text">五、综合总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F"><span class="nav-text">5.1 关键公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%9D%87%E8%A1%A1%E5%80%BC%E7%9A%84%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B"><span class="nav-text">5.2 验证均衡值的标准流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%BB%E7%AB%AF%E4%B8%8E%E9%99%B7%E9%98%B1%E7%9A%84%E5%AF%B9%E7%AD%96"><span class="nav-text">5.3 死端与陷阱的对策</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-hits-%E5%AF%B9%E6%AF%94"><span class="nav-text">5.4 与 HITS 对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">六、术语表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/76a28bc6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Tutorial 06 - PageRank 题解 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Tutorial 06 - PageRank 题解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-16 00:00:00" itemprop="dateCreated datePublished" datetime="2026-04-16T00:00:00Z">2026-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-15 17:58:49" itemprop="dateModified" datetime="2026-04-15T17:58:49Z">2026-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="week-6-tutorial-pagerank-题解">Week 6 Tutorial: PageRank
+题解</h1>
+<blockquote>
+<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026
+主题：PageRank 的定义与计算 依据教材 <em>Networks, Crowds, and
+Markets</em>（Easley &amp; Kleinberg）第 14.3 节</p>
+</blockquote>
+<hr />
+<h2 id="一预备知识回顾">一、预备知识回顾</h2>
+<h3 id="基本-pagerank-更新规则basic-pagerank-update-rule">1.1 基本
+PageRank 更新规则（Basic PageRank Update Rule）</h3>
+<p>网络有 <span class="math inline">\(n\)</span> 个节点，所有节点初始
+PageRank 值为 <span class="math inline">\(1/n\)</span>。</p>
+<p><strong>更新规则</strong>： &gt; 每个页面将其当前 PageRank
+<strong>均等地</strong>（equally）分给每条出链（out-going
+link），送给其指向的页面。若某页面没有出链，则把自己的 PageRank
+全部传给自己（即保留不变）。</p>
+<p><strong>数学形式</strong>： <span class="math display">\[v&#39;_i =
+\sum_{j \to i} \frac{v_j}{d_j^{out}}\]</span> 其中 <span
+class="math inline">\(d_j^{out}\)</span> 为节点 <span
+class="math inline">\(j\)</span> 的出度；若 <span
+class="math inline">\(d_j^{out}=0\)</span> 则 <span
+class="math inline">\(v&#39;_j = v_j\)</span>（保留自身）。</p>
+<p><strong>矩阵形式</strong>：<span class="math inline">\(v&#39; = M
+v\)</span>，其中 <span class="math inline">\(M\)</span>
+是列随机的转移矩阵（column-stochastic transition matrix）。</p>
+<h3 id="均衡-pagerank-值equilibrium-pagerank">1.2 均衡 PageRank
+值（Equilibrium PageRank）</h3>
+<p><strong>均衡条件</strong>： <span class="math display">\[v =
+Mv\]</span></p>
+<p>即再次应用更新规则时所有分数不变。同时有 <span
+class="math inline">\(\sum_i v_i = 1\)</span>（归一化条件）。</p>
+<h3 id="缩放-pagerankscaled-pagerank">1.3 缩放 PageRank（Scaled
+PageRank）</h3>
+<p>为避免 <strong>Spider Trap</strong>（自环陷阱）和 <strong>Dead
+End</strong>（死端）问题，引入缩放因子 <span
+class="math inline">\(\alpha \in (0, 1)\)</span>（常用 <span
+class="math inline">\(0.8 \sim 0.9\)</span>）。</p>
+<p><strong>缩放更新规则</strong>： <span class="math display">\[v&#39; =
+\alpha M v + \frac{1-\alpha}{n} \mathbf{e}\]</span></p>
+<p>其中 <span class="math inline">\(\mathbf{e}\)</span> 是全 1
+向量。<strong>直观解释</strong>：以概率 <span
+class="math inline">\(\alpha\)</span> 跟随链接浏览，以概率 <span
+class="math inline">\(1-\alpha\)</span> 随机跳转到任意节点。</p>
+<hr />
+<h2 id="二练习-1基本-pagerank-值计算">二、练习 1：基本 PageRank
+值计算</h2>
+<h3 id="figure-1a三节点图">2.1 Figure 1(a)：三节点图</h3>
+<p><strong>图结构</strong>：节点 <span class="math inline">\(\{a, b,
+c\}\)</span>，边集： - <span class="math inline">\(a \to
+b\)</span>，<span class="math inline">\(b \to a\)</span>（双向） - <span
+class="math inline">\(a \to c\)</span> - <span class="math inline">\(c
+\to b\)</span> - <span class="math inline">\(c \to
+c\)</span>（自环）</p>
+<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
+|------|------|----------| | <span class="math inline">\(a\)</span> | 2
+| <span class="math inline">\(b, c\)</span> | | <span
+class="math inline">\(b\)</span> | 1 | <span
+class="math inline">\(a\)</span> | | <span
+class="math inline">\(c\)</span> | 2 | <span class="math inline">\(b,
+c\)</span> |</p>
+<p><strong>建立均衡方程</strong> <span class="math inline">\(v =
+Mv\)</span>：</p>
+<p><span class="math display">\[v_a = \frac{v_b}{1} = v_b\]</span></p>
+<p><span class="math display">\[v_b = \frac{v_a}{2} +
+\frac{v_c}{2}\]</span></p>
+<p><span class="math display">\[v_c = \frac{v_a}{2} +
+\frac{v_c}{2}\]</span></p>
+<p><strong>归一化条件</strong>：<span class="math inline">\(v_a + v_b +
+v_c = 1\)</span>。</p>
+<p><strong>求解</strong>：</p>
+<p>从第三式：<span class="math inline">\(v_c - \frac{v_c}{2} =
+\frac{v_a}{2}\)</span>，即 <span class="math inline">\(\frac{v_c}{2} =
+\frac{v_a}{2}\)</span>，故 <span class="math inline">\(v_c =
+v_a\)</span>。</p>
+<p>代入第二式：<span class="math inline">\(v_b = \frac{v_a}{2} +
+\frac{v_a}{2} = v_a\)</span>。</p>
+<p>结合归一化：<span class="math inline">\(3v_a = 1\)</span>，即 <span
+class="math inline">\(v_a = \frac{1}{3}\)</span>。</p>
+<p><strong>均衡值</strong>： <span class="math display">\[\boxed{v_a =
+v_b = v_c = \frac{1}{3}}\]</span></p>
+<h3 id="均衡验证">2.2 均衡验证</h3>
+<p>应用一次更新规则：</p>
+<ul>
+<li><strong><span class="math inline">\(a\)</span> 接收</strong>：<span
+class="math inline">\(b\)</span> 的全部 PR = <span
+class="math inline">\(\frac{1}{3}\)</span> → <span
+class="math inline">\(v&#39;_a = \frac{1}{3}\)</span> ✓</li>
+<li><strong><span class="math inline">\(b\)</span> 接收</strong>：<span
+class="math inline">\(a\)</span> 的一半 <span
+class="math inline">\(\frac{1}{6}\)</span> + <span
+class="math inline">\(c\)</span> 的一半 <span
+class="math inline">\(\frac{1}{6}\)</span> → <span
+class="math inline">\(v&#39;_b = \frac{1}{3}\)</span> ✓</li>
+<li><strong><span class="math inline">\(c\)</span> 接收</strong>：<span
+class="math inline">\(a\)</span> 的一半 <span
+class="math inline">\(\frac{1}{6}\)</span> + <span
+class="math inline">\(c\)</span> 的一半 <span
+class="math inline">\(\frac{1}{6}\)</span> → <span
+class="math inline">\(v&#39;_c = \frac{1}{3}\)</span> ✓</li>
+</ul>
+<p>三个值均未改变 → 确实是均衡值。</p>
+<h3 id="figure-1b移除-b-to-a-后">2.3 Figure 1(b)：移除 <span
+class="math inline">\(b \to a\)</span> 后</h3>
+<p><strong>关键变化</strong>：<span class="math inline">\(b\)</span>
+失去唯一的出链 → <span class="math inline">\(b\)</span>
+变为<strong>死端（Dead End）</strong>。</p>
+<p>按照 Easley-Kleinberg 约定："若一页面无出链，则将自身 PR
+全部传给自己"。</p>
+<p><strong>新的转移矩阵</strong>列（列 = 源节点，行 = 目标节点）： <span
+class="math display">\[M = \begin{pmatrix} 0 &amp; 0 &amp; 0 \\ 1/2
+&amp; 1 &amp; 1/2 \\ 1/2 &amp; 0 &amp; 1/2 \end{pmatrix}\]</span></p>
+<p>（列序 <span class="math inline">\(a, b, c\)</span>；<span
+class="math inline">\(b\)</span> 列为 <span class="math inline">\((0, 1,
+0)^T\)</span> 表示"传给自己"）</p>
+<p><strong>均衡方程</strong>： <span class="math display">\[v_a =
+0\]</span> <span class="math display">\[v_b = \frac{v_a}{2} + v_b +
+\frac{v_c}{2}\]</span> <span class="math display">\[v_c = \frac{v_a}{2}
++ \frac{v_c}{2}\]</span></p>
+<p><strong>求解</strong>：</p>
+<p>由 <span class="math inline">\(v_a = 0\)</span>：代入第三式 <span
+class="math inline">\(v_c = \frac{v_c}{2}\)</span>，得 <span
+class="math inline">\(v_c = 0\)</span>。</p>
+<p>由归一化：<span class="math inline">\(v_b = 1 - 0 - 0 =
+1\)</span>。</p>
+<p><strong>均衡值</strong>： <span class="math display">\[\boxed{v_a =
+0,\quad v_b = 1,\quad v_c = 0}\]</span></p>
+<h3 id="现象解释">2.4 现象解释</h3>
+<ul>
+<li><span class="math inline">\(a\)</span> 无人指向 → PR 被"耗尽"为
+0</li>
+<li><span class="math inline">\(c\)</span> 虽有自环，但也指向 <span
+class="math inline">\(b\)</span>；PR 逐步流失到 <span
+class="math inline">\(b\)</span></li>
+<li><span class="math inline">\(b\)</span> 作为死端"吸收"所有 PR →
+最终全部聚集</li>
+</ul>
+<p><strong>这是基本 PageRank
+的固有缺陷</strong>：少数结构（死端/陷阱）会"吸走"整个网络的
+PR。<strong>Scaled PageRank</strong>（见练习
+3）通过引入"随机跳转"解决此问题。</p>
+<hr />
+<h2 id="三练习-2均衡值验证">三、练习 2：均衡值验证</h2>
+<h3 id="figure-2a六节点对称图">3.1 Figure 2(a)：六节点对称图</h3>
+<p><strong>图结构</strong>（节点 <span class="math inline">\(\{A, B, C,
+D, E, G\}\)</span>）：</p>
+<p>边集（根据图中箭头）： - <span class="math inline">\(A \to
+D\)</span>，<span class="math inline">\(A \to G\)</span> - <span
+class="math inline">\(D \to B\)</span>，<span class="math inline">\(G
+\to C\)</span> - <span class="math inline">\(B \to E\)</span>，<span
+class="math inline">\(C \to E\)</span> - <span class="math inline">\(E
+\to A\)</span></p>
+<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
+|------|------|----------| | <span class="math inline">\(A\)</span> | 2
+| <span class="math inline">\(D, G\)</span> | | <span
+class="math inline">\(B\)</span> | 1 | <span
+class="math inline">\(E\)</span> | | <span
+class="math inline">\(C\)</span> | 1 | <span
+class="math inline">\(E\)</span> | | <span
+class="math inline">\(D\)</span> | 1 | <span
+class="math inline">\(B\)</span> | | <span
+class="math inline">\(E\)</span> | 1 | <span
+class="math inline">\(A\)</span> | | <span
+class="math inline">\(G\)</span> | 1 | <span
+class="math inline">\(C\)</span> |</p>
+<p><strong>提议值</strong>：<span class="math inline">\(v_A = v_E =
+\frac{1}{4}\)</span>，<span class="math inline">\(v_B = v_C = v_D = v_G
+= \frac{1}{8}\)</span>。</p>
+<p><strong>验证 <span class="math inline">\(v =
+Mv\)</span></strong>：</p>
+<p><span class="math display">\[v_A = v_E = \frac{1}{4} \quad
+✓\]</span></p>
+<p><span class="math display">\[v_D = \frac{v_A}{2} = \frac{1}{8} \quad
+✓\]</span></p>
+<p><span class="math display">\[v_G = \frac{v_A}{2} = \frac{1}{8} \quad
+✓\]</span></p>
+<p><span class="math display">\[v_B = v_D = \frac{1}{8} \quad
+✓\]</span></p>
+<p><span class="math display">\[v_C = v_G = \frac{1}{8} \quad
+✓\]</span></p>
+<p><span class="math display">\[v_E = v_B + v_C = \frac{1}{8} +
+\frac{1}{8} = \frac{1}{4} \quad ✓\]</span></p>
+<p><strong>总和验证</strong>：<span class="math inline">\(\frac{1}{4} +
+4 \times \frac{1}{8} + \frac{1}{4} = \frac{1}{4} + \frac{1}{2} +
+\frac{1}{4} = 1\)</span> ✓</p>
+<p><strong>结论</strong>：✅ <strong>提议值是正确的均衡值</strong>。</p>
+<p><strong>结构洞见</strong>：这是一个"双层菱形"结构——<span
+class="math inline">\(A\)</span> 将 PR 均分到左右两臂 (<span
+class="math inline">\(A \to D \to B \to E\)</span> 与 <span
+class="math inline">\(A \to G \to C \to E\)</span>)，两臂在 <span
+class="math inline">\(E\)</span> 合流，再回到 <span
+class="math inline">\(A\)</span>。对称性保证了 <span
+class="math inline">\(D=G\)</span>、<span
+class="math inline">\(B=C\)</span>。</p>
+<h3 id="figure-2b六节点图">3.2 Figure 2(b)：六节点图</h3>
+<p><strong>图结构</strong>（节点 <span class="math inline">\(\{A, B, C,
+D, E, F\}\)</span>）：</p>
+<p>边集（根据图中箭头）： - <span class="math inline">\(A \to
+C\)</span>，<span class="math inline">\(A \to D\)</span> - <span
+class="math inline">\(B \to D\)</span>，<span class="math inline">\(B
+\to E\)</span> - <span class="math inline">\(C \to D\)</span>，<span
+class="math inline">\(C \to F\)</span> - <span class="math inline">\(D
+\to F\)</span> - <span class="math inline">\(E \to D\)</span>，<span
+class="math inline">\(E \to F\)</span> - <span class="math inline">\(F
+\to A\)</span>，<span class="math inline">\(F \to B\)</span></p>
+<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
+|------|------|----------------| | <span
+class="math inline">\(A\)</span> | 2 | <span class="math inline">\(C,
+D\)</span> | | <span class="math inline">\(B\)</span> | 2 | <span
+class="math inline">\(D, E\)</span> | | <span
+class="math inline">\(C\)</span> | 2 | <span class="math inline">\(D,
+F\)</span> | | <span class="math inline">\(D\)</span> | 1 | <span
+class="math inline">\(F\)</span> | | <span
+class="math inline">\(E\)</span> | 2 | <span class="math inline">\(D,
+F\)</span> | | <span class="math inline">\(F\)</span> | 2 | <span
+class="math inline">\(A, B\)</span> |</p>
+<p><strong>提议值</strong>：<span class="math inline">\(v_A = v_B =
+0.15\)</span>，<span class="math inline">\(v_C = v_E =
+0.10\)</span>，<span class="math inline">\(v_D = 0.20\)</span>，<span
+class="math inline">\(v_F = 0.30\)</span>。</p>
+<p><strong>逐项验证 <span class="math inline">\(v =
+Mv\)</span></strong>：</p>
+<ul>
+<li><span class="math inline">\(v_A = \frac{v_F}{2} = \frac{0.30}{2} =
+0.15\)</span> ✓</li>
+<li><span class="math inline">\(v_B = \frac{v_F}{2} = 0.15\)</span>
+✓</li>
+<li><span class="math inline">\(v_C = \frac{v_A}{2} = \frac{0.15}{2} =
+0.075\)</span> ❌ （提议值 <span
+class="math inline">\(0.10\)</span>）</li>
+</ul>
+<p><strong><span class="math inline">\(C\)</span>
+不满足均衡条件！</strong></p>
+<p><strong>结论</strong>：❌
+<strong>提议值不是正确的均衡值</strong>。</p>
+<h3 id="求解正确的均衡值">3.3 求解正确的均衡值</h3>
+<p>建立完整方程组：</p>
+<p><span class="math display">\[v_A = \frac{v_F}{2}\]</span></p>
+<p><span class="math display">\[v_B = \frac{v_F}{2}\]</span></p>
+<p><span class="math display">\[v_C = \frac{v_A}{2}\]</span></p>
+<p><span class="math display">\[v_D = \frac{v_A}{2} + \frac{v_B}{2} +
+\frac{v_C}{2} + \frac{v_E}{2}\]</span></p>
+<p><span class="math display">\[v_E = \frac{v_B}{2}\]</span></p>
+<p><span class="math display">\[v_F = \frac{v_C}{2} + v_D +
+\frac{v_E}{2}\]</span></p>
+<p><strong>代入消元</strong>：</p>
+<p><span class="math inline">\(v_A = v_B = \frac{v_F}{2}\)</span></p>
+<p><span class="math inline">\(v_C = \frac{v_A}{2} =
+\frac{v_F}{4}\)</span></p>
+<p><span class="math inline">\(v_E = \frac{v_B}{2} =
+\frac{v_F}{4}\)</span></p>
+<p><span class="math inline">\(v_D = \frac{v_F}{4} + \frac{v_F}{4} +
+\frac{v_F}{8} + \frac{v_F}{8} = \frac{v_F}{2} + \frac{v_F}{4} =
+\frac{3v_F}{4}\)</span></p>
+<p><strong>验证 <span class="math inline">\(v_F\)</span> 方程</strong>：
+<span class="math display">\[v_F = \frac{v_C}{2} + v_D + \frac{v_E}{2} =
+\frac{v_F}{8} + \frac{3v_F}{4} + \frac{v_F}{8} = \frac{v_F}{4} +
+\frac{3v_F}{4} = v_F \quad ✓\]</span></p>
+<p>系统自洽，利用归一化条件求 <span class="math inline">\(v_F\)</span>：
+<span class="math display">\[v_A + v_B + v_C + v_D + v_E + v_F =
+1\]</span></p>
+<p><span class="math display">\[\frac{v_F}{2} + \frac{v_F}{2} +
+\frac{v_F}{4} + \frac{3v_F}{4} + \frac{v_F}{4} + v_F = 1\]</span></p>
+<p><span class="math display">\[v_F\left(1 + \frac{1}{4} + \frac{3}{4} +
+\frac{1}{4} + 1\right) = 1\]</span></p>
+<p><span class="math display">\[v_F \cdot \frac{13}{4} = 1 \quad
+\Rightarrow \quad v_F = \frac{4}{13}\]</span></p>
+<p><strong>正确的均衡 PageRank 值</strong>：</p>
+<p><span class="math display">\[\boxed{v_A = v_B = \frac{2}{13}, \quad
+v_C = v_E = \frac{1}{13}, \quad v_D = \frac{3}{13}, \quad v_F =
+\frac{4}{13}}\]</span></p>
+<p><strong>数值对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>提议值</th>
+<th>正确值</th>
+<th>十进制</th>
+<th>差异</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0.15</td>
+<td><span class="math inline">\(2/13\)</span></td>
+<td>≈ 0.154</td>
+<td>+0.004</td>
+</tr>
+<tr>
+<td>B</td>
+<td>0.15</td>
+<td><span class="math inline">\(2/13\)</span></td>
+<td>≈ 0.154</td>
+<td>+0.004</td>
+</tr>
+<tr>
+<td>C</td>
+<td>0.10</td>
+<td><span class="math inline">\(1/13\)</span></td>
+<td>≈ 0.077</td>
+<td>−0.023</td>
+</tr>
+<tr>
+<td>D</td>
+<td>0.20</td>
+<td><span class="math inline">\(3/13\)</span></td>
+<td>≈ 0.231</td>
+<td>+0.031</td>
+</tr>
+<tr>
+<td>E</td>
+<td>0.10</td>
+<td><span class="math inline">\(1/13\)</span></td>
+<td>≈ 0.077</td>
+<td>−0.023</td>
+</tr>
+<tr>
+<td>F</td>
+<td>0.30</td>
+<td><span class="math inline">\(4/13\)</span></td>
+<td>≈ 0.308</td>
+<td>+0.008</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：提议值虽然总和为 1，但<strong>不满足</strong>
+<span class="math inline">\(v = Mv\)</span>。特别是 <span
+class="math inline">\(v_C = 0.10\)</span> 远偏离正确的 <span
+class="math inline">\(0.077\)</span>。</p>
+<hr />
+<h2 id="四练习-3scaled-pagerank-值alpha-45">四、练习 3：Scaled PageRank
+值（<span class="math inline">\(\alpha = 4/5\)</span>）</h2>
+<h3 id="问题设置">4.1 问题设置</h3>
+<p>回到 Figure 1(b)（即 <span class="math inline">\(b\)</span>
+为死端的图），计算 <span class="math inline">\(\alpha =
+\frac{4}{5}\)</span> 的 Scaled PageRank。</p>
+<p><strong>网络参数</strong>：<span class="math inline">\(n =
+3\)</span>，<span class="math inline">\(\alpha = 4/5\)</span>，<span
+class="math inline">\(1 - \alpha = 1/5\)</span>。</p>
+<p><strong>每节点跳转值</strong>：<span
+class="math inline">\(\frac{1-\alpha}{n} = \frac{1/5}{3} =
+\frac{1}{15}\)</span>。</p>
+<h3 id="scaled-更新方程">4.2 Scaled 更新方程</h3>
+<p><span class="math display">\[v&#39;_i = \alpha \cdot (Mv)_i +
+\frac{1-\alpha}{n}\]</span></p>
+<p>具体写出：</p>
+<p><span class="math display">\[v_a = \alpha \cdot 0 + \frac{1}{15} =
+\frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_b = \alpha \left( \frac{v_a}{2} + v_b
++ \frac{v_c}{2} \right) + \frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_c = \alpha \left( \frac{v_a}{2} +
+\frac{v_c}{2} \right) + \frac{1}{15}\]</span></p>
+<h3 id="逐步求解">4.3 逐步求解</h3>
+<p><strong>（1）先求 <span class="math inline">\(v_a\)</span></strong>：
+<span class="math display">\[v_a = \frac{1}{15}\]</span></p>
+<p><strong>（2）求 <span
+class="math inline">\(v_c\)</span></strong>（只与 <span
+class="math inline">\(v_a, v_c\)</span> 相关）：</p>
+<p><span class="math display">\[v_c = \frac{4}{5}\left(\frac{1}{30} +
+\frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_c = \frac{4}{150} + \frac{2}{5}v_c +
+\frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_c = \frac{4}{150} + \frac{10}{150} +
+\frac{2}{5}v_c\]</span></p>
+<p><span class="math display">\[v_c - \frac{2}{5}v_c =
+\frac{14}{150}\]</span></p>
+<p><span class="math display">\[\frac{3}{5}v_c =
+\frac{7}{75}\]</span></p>
+<p><span class="math display">\[v_c = \frac{7}{75} \cdot \frac{5}{3} =
+\frac{35}{225} = \frac{7}{45}\]</span></p>
+<p><strong>（3）由归一化求 <span
+class="math inline">\(v_b\)</span></strong>：</p>
+<p><span class="math display">\[v_b = 1 - v_a - v_c = 1 - \frac{1}{15} -
+\frac{7}{45} = \frac{45 - 3 - 7}{45} = \frac{35}{45} =
+\frac{7}{9}\]</span></p>
+<h3 id="验证-v_b">4.4 验证 <span class="math inline">\(v_b\)</span></h3>
+<p><span class="math display">\[v_b = \frac{4}{5}\left(\frac{v_a}{2} +
+v_b + \frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
+<p>代入 <span class="math inline">\(v_a = \frac{1}{15}\)</span>，<span
+class="math inline">\(v_c = \frac{7}{45}\)</span>，<span
+class="math inline">\(v_b = \frac{7}{9}\)</span>：</p>
+<p><span class="math display">\[\frac{v_a}{2} = \frac{1}{30}, \quad
+\frac{v_c}{2} = \frac{7}{90}\]</span></p>
+<p>通分到 <span class="math inline">\(/90\)</span>： <span
+class="math display">\[\frac{v_a}{2} = \frac{3}{90}, \quad v_b =
+\frac{70}{90}, \quad \frac{v_c}{2} = \frac{7}{90}\]</span></p>
+<p><span class="math display">\[\frac{v_a}{2} + v_b + \frac{v_c}{2} =
+\frac{3 + 70 + 7}{90} = \frac{80}{90} = \frac{8}{9}\]</span></p>
+<p><span class="math display">\[v_b = \frac{4}{5} \cdot \frac{8}{9} +
+\frac{1}{15} = \frac{32}{45} + \frac{3}{45} = \frac{35}{45} =
+\frac{7}{9} \quad ✓\]</span></p>
+<h3 id="scaled-pagerank-最终值">4.5 Scaled PageRank 最终值</h3>
+<p><span class="math display">\[\boxed{v_a = \frac{1}{15}, \quad v_b =
+\frac{7}{9} = \frac{35}{45}, \quad v_c = \frac{7}{45}}\]</span></p>
+<p><strong>十进制</strong>： - <span class="math inline">\(v_a \approx
+0.067\)</span> - <span class="math inline">\(v_b \approx 0.778\)</span>
+- <span class="math inline">\(v_c \approx 0.156\)</span></p>
+<h3 id="对比基本-pagerank">4.6 对比基本 PageRank</h3>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>Basic PR</th>
+<th>Scaled PR (<span class="math inline">\(\alpha = 4/5\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(a\)</span></td>
+<td>0</td>
+<td><span class="math inline">\(1/15 \approx 0.067\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(b\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(7/9 \approx 0.778\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(c\)</span></td>
+<td>0</td>
+<td><span class="math inline">\(7/45 \approx 0.156\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>观察与解释</strong>： 1. <strong>Basic PR</strong> 下 <span
+class="math inline">\(b\)</span> 吸收了全部 PR，<span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(c\)</span> 被"饿死"为 0 2. <strong>Scaled
+PR</strong> 通过随机跳转机制，让每个节点至少保留 <span
+class="math inline">\(1/15\)</span> 的基础流量 3. <span
+class="math inline">\(b\)</span> 仍然最高（作为"汇"），但不再独占；<span
+class="math inline">\(c\)</span> 由于自环得以保留更多 PR；<span
+class="math inline">\(a\)</span> 由于无入链仍最低 4. <span
+class="math inline">\(\alpha\)</span> 越小，越接近均匀分布（<span
+class="math inline">\(1/n\)</span>）；<span
+class="math inline">\(\alpha\)</span> 越大，越接近基本 PageRank</p>
+<hr />
+<h2 id="五综合总结">五、综合总结</h2>
+<h3 id="关键公式">5.1 关键公式</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>类型</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic Update Rule</td>
+<td><span class="math inline">\(v&#39; =
+Mv\)</span>，死端"传给自己"</td>
+</tr>
+<tr>
+<td>Equilibrium Condition</td>
+<td><span class="math inline">\(v = Mv\)</span> 且 <span
+class="math inline">\(\sum v_i = 1\)</span></td>
+</tr>
+<tr>
+<td>Scaled Update Rule</td>
+<td><span class="math inline">\(v&#39; = \alpha M v +
+\frac{1-\alpha}{n}\mathbf{e}\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="验证均衡值的标准流程">5.2 验证均衡值的标准流程</h3>
+<ol type="1">
+<li><strong>确定边结构</strong>：读图列出出度和出链目标</li>
+<li><strong>写转移矩阵</strong>：列 = 源节点，每列和为 1</li>
+<li><strong>建立方程</strong> <span class="math inline">\(v =
+Mv\)</span></li>
+<li><strong>代入提议值</strong>：逐项检验是否相等</li>
+<li><strong>若失败</strong>：联立求解，用归一化定唯一解</li>
+</ol>
+<h3 id="死端与陷阱的对策">5.3 死端与陷阱的对策</h3>
+<ul>
+<li><strong>Basic PageRank</strong> 对死端/陷阱敏感：PR
+被少数节点吸收</li>
+<li><strong>Scaled PageRank</strong> 引入随机跳转：所有节点都保留至少
+<span class="math inline">\((1-\alpha)/n\)</span> 的流量</li>
+<li>实际搜索引擎通常取 <span class="math inline">\(\alpha =
+0.85\)</span>（即 <span class="math inline">\(s = 0.85\)</span>）</li>
+</ul>
+<h3 id="与-hits-对比">5.4 与 HITS 对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>PageRank</th>
+<th>HITS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心概念</td>
+<td>单一重要性分数</td>
+<td>权威 + 中枢双分数</td>
+</tr>
+<tr>
+<td>更新模型</td>
+<td>流体/随机游走</td>
+<td>相互递归</td>
+</tr>
+<tr>
+<td>死端处理</td>
+<td>需 Scaled 修正</td>
+<td>无此问题</td>
+</tr>
+<tr>
+<td>查询相关</td>
+<td>查询无关（预计算）</td>
+<td>查询相关（原始版本）</td>
+</tr>
+<tr>
+<td>收敛性</td>
+<td>强连通或 Scaled 时保证</td>
+<td>矩阵 <span class="math inline">\(LL^T\)</span> 保证</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六术语表">六、术语表</h2>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 43%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文术语</th>
+<th>English Term</th>
+<th>简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本 PageRank</td>
+<td>Basic PageRank</td>
+<td>最简单的 PageRank 定义，无缩放因子</td>
+</tr>
+<tr>
+<td>均衡 PageRank</td>
+<td>Equilibrium PageRank</td>
+<td>满足 <span class="math inline">\(v = Mv\)</span> 的稳定分布</td>
+</tr>
+<tr>
+<td>缩放 PageRank</td>
+<td>Scaled PageRank</td>
+<td>引入随机跳转概率的 PageRank</td>
+</tr>
+<tr>
+<td>缩放因子</td>
+<td>Scaling Factor <span class="math inline">\(\alpha\)</span> / <span
+class="math inline">\(s\)</span></td>
+<td>跟随链接的概率，<span class="math inline">\(1-\alpha\)</span>
+为随机跳转</td>
+</tr>
+<tr>
+<td>转移矩阵</td>
+<td>Transition Matrix <span class="math inline">\(M\)</span></td>
+<td>描述 PR 流动的列随机矩阵</td>
+</tr>
+<tr>
+<td>列随机矩阵</td>
+<td>Column-Stochastic Matrix</td>
+<td>每列之和为 1 的非负矩阵</td>
+</tr>
+<tr>
+<td>死端</td>
+<td>Dead End</td>
+<td>无出链的节点，会吸走 PR</td>
+</tr>
+<tr>
+<td>自环陷阱</td>
+<td>Spider Trap</td>
+<td>有出链但永远回不到图外的子图</td>
+</tr>
+<tr>
+<td>随机跳转</td>
+<td>Teleportation / Random Jump</td>
+<td>Scaled PR 中以 <span class="math inline">\(1-\alpha\)</span>
+概率跳到随机节点</td>
+</tr>
+<tr>
+<td>主特征向量</td>
+<td>Principal Eigenvector</td>
+<td>对应特征值 1 的向量，即均衡 PR</td>
+</tr>
+<tr>
+<td>出度</td>
+<td>Out-degree</td>
+<td>节点发出的链接数</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>Normalization</td>
+<td>让所有 PR 之和为 1</td>
+</tr>
+<tr>
+<td>均匀分布</td>
+<td>Uniform Distribution</td>
+<td>每节点 <span class="math inline">\(1/n\)</span>，<span
+class="math inline">\(\alpha \to 0\)</span> 时的极限</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>文档版本：2026-04-16 对应教材：Easley &amp; Kleinberg, <em>Networks,
+Crowds, and Markets</em>, 第 14.3 节</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Tutorial/" rel="tag"><i class="fa fa-tag"></i> Tutorial</a>
+              <a href="/tags/PageRank/" rel="tag"><i class="fa fa-tag"></i> PageRank</a>
+              <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 题解</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/5e589690.html" rel="prev" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
+                  <i class="fa fa-angle-left"></i> COMP5313 Tutorial 05 - Hub and Authority 题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/9eda2d3a.html" rel="next" title="COMP5313 考试 Cheatsheet（六大模块速查）">
+                  COMP5313 考试 Cheatsheet（六大模块速查） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">429k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">25:59</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
