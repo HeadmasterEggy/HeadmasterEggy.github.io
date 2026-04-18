@@ -83,15 +83,23 @@ for abbr, tags in post_tags.items():
         tag_to_posts.setdefault(t, set()).add(abbr)
 
 for tag, abbrs in tag_to_posts.items():
-    if len(abbrs) < 2 or len(abbrs) > 20:
+    if len(abbrs) < 2:
         continue
     abbrs = sorted(abbrs)
-    for i, a in enumerate(abbrs):
-        for b in abbrs[i+1:]:
-            key = (a, b)
+    # 小 tag 保持全连接，大 tag 用链式弱连接避免出现大量孤点/爆图
+    if len(abbrs) <= 20:
+        for i, a in enumerate(abbrs):
+            for b in abbrs[i+1:]:
+                key = (a, b)
+                if key in edge_set: continue
+                edge_set.add(key)
+                edges.append({'source': a, 'target': b, 'weight': 1, 'kind': 'tag:' + tag})
+    else:
+        for a, b in zip(abbrs, abbrs[1:]):
+            key = tuple(sorted([a, b]))
             if key in edge_set: continue
             edge_set.add(key)
-            edges.append({'source': a, 'target': b, 'weight': 1, 'kind': 'tag:' + tag})
+            edges.append({'source': a, 'target': b, 'weight': 0.5, 'kind': 'tag-chain:' + tag})
 
 tag_edge_count = len(edges) - link_edge_count
 
@@ -102,15 +110,24 @@ for abbr, p in posts.items():
 
 cat_edge_count = 0
 for cat, abbrs in cat_to_posts.items():
-    if len(abbrs) < 2 or len(abbrs) > 15:
+    if len(abbrs) < 2:
         continue
     abbrs = sorted(abbrs)
-    for i, a in enumerate(abbrs):
-        for b in abbrs[i+1:]:
-            key = (a, b)
+    # 小分类全连接，大分类链式连接，防止大课内笔记全部掉成孤点
+    if len(abbrs) <= 15:
+        for i, a in enumerate(abbrs):
+            for b in abbrs[i+1:]:
+                key = (a, b)
+                if key in edge_set: continue
+                edge_set.add(key)
+                edges.append({'source': a, 'target': b, 'weight': 1, 'kind': 'category:' + cat})
+                cat_edge_count += 1
+    else:
+        for a, b in zip(abbrs, abbrs[1:]):
+            key = tuple(sorted([a, b]))
             if key in edge_set: continue
             edge_set.add(key)
-            edges.append({'source': a, 'target': b, 'weight': 1, 'kind': 'category:' + cat})
+            edges.append({'source': a, 'target': b, 'weight': 0.5, 'kind': 'category-chain:' + cat})
             cat_edge_count += 1
 
 categories = sorted(set(p['category'] for p in posts.values()))
