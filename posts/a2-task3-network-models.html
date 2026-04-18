@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Assignment 2 Task 3 网络模型（ER&#x2F;WS&#x2F;BA）分析与比较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Assignment 2 - Task 3 题解">
+<meta property="og:url" content="http://example.com/posts/a2-task3-network-models.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Assignment 2 Task 3 网络模型（ER&#x2F;WS&#x2F;BA）分析与比较">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-19T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-18T15:06:29.402Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Assignment">
+<meta property="article:tag" content="题解">
+<meta property="article:tag" content="Network Models">
+<meta property="article:tag" content="Erdos-Renyi">
+<meta property="article:tag" content="Watts-Strogatz">
+<meta property="article:tag" content="Barabasi-Albert">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/a2-task3-network-models.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/a2-task3-network-models.html","path":"posts/a2-task3-network-models.html","title":"COMP5313 Assignment 2 - Task 3 题解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Assignment 2 - Task 3 题解 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/a2-task3-network-models.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">73</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">157</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#assignment-2---task-3network-models"><span class="nav-text">Assignment 2 - Task
+3：Network Models</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%90%86%E8%A7%A3"><span class="nav-text">题目理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5%E5%9B%9E%E9%A1%BE"><span class="nav-text">关键概念回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#erd%C5%91s-r%C3%A9nyi-er-%E6%A8%A1%E5%9E%8B-gn-p"><span class="nav-text">1. Erdős-Rényi (ER) 模型 \(G(n, p)\)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#watts-strogatz-ws-%E6%A8%A1%E5%9E%8B"><span class="nav-text">2. Watts-Strogatz (WS) 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#barab%C3%A1si-albert-ba-%E6%A8%A1%E5%9E%8B"><span class="nav-text">3. Barabási-Albert (BA) 模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%AE%9E%E7%8E%B0"><span class="nav-text">Python 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C%E7%94%9F%E6%88%90"><span class="nav-text">基础网络生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E7%89%B9%E5%BE%81%E8%AE%A1%E7%AE%97"><span class="nav-text">统计特征计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%A6%E5%88%86%E5%B8%83%E5%88%86%E6%9E%90"><span class="nav-text">度分布分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ba-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%B9%82%E5%BE%8B%E9%AA%8C%E8%AF%81"><span class="nav-text">BA 模型的幂律验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ws-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%B0%8F%E4%B8%96%E7%95%8C%E7%89%B9%E6%80%A7"><span class="nav-text">WS 模型的小世界特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-text">网络可视化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E9%AA%8C%E8%AF%81"><span class="nav-text">理论验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81-1-er-%E7%BD%91%E7%BB%9C%E7%9A%84%E7%9B%B8%E5%8F%98"><span class="nav-text">验证 1: ER 网络的相变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81-2-ba-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BA%A6%E5%88%86%E5%B8%83%E5%B9%82%E5%BE%8B"><span class="nav-text">验证 2: BA 模型的度分布幂律</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%9E%E9%AA%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">完整实验流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E5%88%86%E8%A6%81%E7%82%B9"><span class="nav-text">评分要点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/a2-task3-network-models.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Assignment 2 - Task 3 题解 | Joey">
+      <meta itemprop="description" content="Assignment 2 Task 3 网络模型（ER/WS/BA）分析与比较">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Assignment 2 - Task 3 题解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-19 01:00:00" itemprop="dateCreated datePublished" datetime="2026-04-19T01:00:00Z">2026-04-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-18 15:06:29" itemprop="dateModified" datetime="2026-04-18T15:06:29Z">2026-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Assignment 2 Task 3 网络模型（ER/WS/BA）分析与比较</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="assignment-2---task-3network-models">Assignment 2 - Task
+3：Network Models</h1>
+<h2 id="题目理解">题目理解</h2>
+<p>Task 3 要求实现并分析三种经典网络模型： 1. <strong>Erdős-Rényi (ER)
+模型</strong>：随机网络 2. <strong>Watts-Strogatz (WS)
+模型</strong>：小世界网络 3. <strong>Barabási-Albert (BA)
+模型</strong>：无标度网络</p>
+<p><strong>核心目标：</strong> - 实现三种网络的生成算法 -
+分析度分布、聚类系数、平均路径长度等统计特征 -
+与真实网络进行对比，验证理论预测 - 可视化网络结构特征</p>
+<hr />
+<h2 id="关键概念回顾">关键概念回顾</h2>
+<h3 id="erdős-rényi-er-模型-gn-p">1. Erdős-Rényi (ER) 模型 <span
+class="math inline">\(G(n, p)\)</span></h3>
+<p><strong>定义：</strong> <span class="math inline">\(n\)</span>
+个节点，每对节点以概率 <span class="math inline">\(p\)</span>
+独立连边。</p>
+<p><strong>性质：</strong> - <strong>度分布</strong>：二项分布 <span
+class="math inline">\(\binom{n-1}{k} p^k
+(1-p)^{n-1-k}\)</span>，近似泊松分布（<span
+class="math inline">\(n\)</span> 大时） -
+<strong>聚类系数</strong>：<span class="math inline">\(C = p =
+\frac{\langle k \rangle}{n-1}\)</span> -
+<strong>平均路径长度</strong>：<span class="math inline">\(L \sim
+\frac{\ln n}{\ln \langle k \rangle}\)</span> -
+<strong>巨分量</strong>：当 <span class="math inline">\(\langle k
+\rangle &gt; 1\)</span>（即 <span class="math inline">\(p &gt;
+\frac{1}{n}\)</span>）时出现</p>
+<p><strong>相变现象：</strong> - <span class="math inline">\(p &lt;
+\frac{1}{n}\)</span>：网络由孤立小分量组成 - <span
+class="math inline">\(p = \frac{1}{n}\)</span>：临界阈值，出现巨分量 -
+<span class="math inline">\(p &gt; \frac{\ln
+n}{n}\)</span>：网络几乎必然连通</p>
+<h3 id="watts-strogatz-ws-模型">2. Watts-Strogatz (WS) 模型</h3>
+<p><strong>定义：</strong> 从规则格点开始，以概率 <span
+class="math inline">\(p\)</span> 重新连边。</p>
+<p><strong>算法：</strong> 1. 创建 <span
+class="math inline">\(n\)</span> 个节点的环，每个节点连 <span
+class="math inline">\(k\)</span> 个最近邻居 2. 以概率 <span
+class="math inline">\(p\)</span>
+将每条边的一个端点随机重连到另一节点</p>
+<p><strong>性质：</strong> - <strong>聚类系数</strong>：<span
+class="math inline">\(C(p) \approx
+\frac{3(k-2)}{4(k-1)}(1-p)^3\)</span>（高聚类） -
+<strong>平均路径长度</strong>：<span class="math inline">\(L(p)\)</span>
+随 <span class="math inline">\(p\)</span> 增加快速下降（小世界特性） -
+<strong>度分布</strong>：近似泊松，集中在 <span
+class="math inline">\(k\)</span> 附近</p>
+<h3 id="barabási-albert-ba-模型">3. Barabási-Albert (BA) 模型</h3>
+<p><strong>定义：</strong> 优先连接（Preferential Attachment）模型。</p>
+<p><strong>算法：</strong> 1. 从 <span
+class="math inline">\(m_0\)</span> 个节点开始 2.
+每次添加一个新节点，连接 <span class="math inline">\(m\)</span> 条边 3.
+连接到现有节点 <span class="math inline">\(i\)</span> 的概率：<span
+class="math inline">\(\Pi(k_i) = \frac{k_i}{\sum_j k_j}\)</span></p>
+<p><strong>性质：</strong> - <strong>度分布</strong>：幂律分布 <span
+class="math inline">\(P(k) \sim k^{-\gamma}\)</span>，<span
+class="math inline">\(\gamma = 3\)</span> -
+<strong>聚类系数</strong>：<span class="math inline">\(C \sim \frac{(\ln
+N)^2}{N}\)</span>（随 <span class="math inline">\(N\)</span> 缓慢减小）
+- <strong>平均路径长度</strong>：<span class="math inline">\(L \sim
+\frac{\ln N}{\ln \ln N}\)</span>（超小世界） -
+<strong>无标度特性</strong>：缺乏特征尺度，存在高度数枢纽节点（hub）</p>
+<hr />
+<h2 id="python-实现">Python 实现</h2>
+<h3 id="基础网络生成">基础网络生成</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==================== ER Model ====================</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_er</span>(<span class="params">n, p, seed=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Erdős-Rényi 随机网络 G(n, p)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> nx.erdos_renyi_graph(n, p, seed=seed)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==================== WS Model ====================</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_ws</span>(<span class="params">n, k, p, seed=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Watts-Strogatz 小世界网络</span></span><br><span class="line"><span class="string">    n: 节点数</span></span><br><span class="line"><span class="string">    k: 每个节点的邻居数（必须为偶数）</span></span><br><span class="line"><span class="string">    p: 重连概率</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> nx.watts_strogatz_graph(n, k, p, seed=seed)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==================== BA Model ====================</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_ba</span>(<span class="params">n, m, seed=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Barabási-Albert 无标度网络</span></span><br><span class="line"><span class="string">    n: 最终节点数</span></span><br><span class="line"><span class="string">    m: 每个新节点连接的边数</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> nx.barabasi_albert_graph(n, m, seed=seed)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义 BA 实现（用于理解算法细节）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_ba_custom</span>(<span class="params">n, m, seed=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    手动实现 BA 模型，展示优先连接机制</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> seed <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        np.random.seed(seed)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 初始完全图 K_m</span></span><br><span class="line">    G = nx.complete_graph(m)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 逐步添加节点</span></span><br><span class="line">    <span class="keyword">for</span> new_node <span class="keyword">in</span> <span class="built_in">range</span>(m, n):</span><br><span class="line">        <span class="comment"># 计算现有节点的度</span></span><br><span class="line">        degrees = np.array([G.degree(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(new_node)])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 优先连接概率</span></span><br><span class="line">        probs = degrees / degrees.<span class="built_in">sum</span>()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 选择 m 个目标节点（无放回）</span></span><br><span class="line">        targets = np.random.choice(new_node, size=m, replace=<span class="literal">False</span>, p=probs)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 添加边</span></span><br><span class="line">        <span class="keyword">for</span> target <span class="keyword">in</span> targets:</span><br><span class="line">            G.add_edge(new_node, target)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> G</span><br></pre></td></tr></table></figure>
+<h3 id="统计特征计算">统计特征计算</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_network_stats</span>(<span class="params">G, name=<span class="string">&quot;Network&quot;</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算网络的核心统计特征</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    n = G.number_of_nodes()</span><br><span class="line">    m = G.number_of_edges()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 基础统计</span></span><br><span class="line">    degrees = [d <span class="keyword">for</span> n, d <span class="keyword">in</span> G.degree()]</span><br><span class="line">    avg_degree = np.mean(degrees)</span><br><span class="line">    max_degree = <span class="built_in">max</span>(degrees)</span><br><span class="line">    min_degree = <span class="built_in">min</span>(degrees)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 聚类系数</span></span><br><span class="line">    avg_clustering = nx.average_clustering(G)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 平均路径长度（仅对连通分量计算）</span></span><br><span class="line">    <span class="keyword">if</span> nx.is_connected(G):</span><br><span class="line">        avg_path_length = nx.average_shortest_path_length(G)</span><br><span class="line">        diameter = nx.diameter(G)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 取最大连通分量</span></span><br><span class="line">        largest_cc = <span class="built_in">max</span>(nx.connected_components(G), key=<span class="built_in">len</span>)</span><br><span class="line">        subgraph = G.subgraph(largest_cc)</span><br><span class="line">        avg_path_length = nx.average_shortest_path_length(subgraph)</span><br><span class="line">        diameter = nx.diameter(subgraph)</span><br><span class="line">    </span><br><span class="line">    stats = &#123;</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: name,</span><br><span class="line">        <span class="string">&#x27;n_nodes&#x27;</span>: n,</span><br><span class="line">        <span class="string">&#x27;n_edges&#x27;</span>: m,</span><br><span class="line">        <span class="string">&#x27;avg_degree&#x27;</span>: avg_degree,</span><br><span class="line">        <span class="string">&#x27;max_degree&#x27;</span>: max_degree,</span><br><span class="line">        <span class="string">&#x27;min_degree&#x27;</span>: min_degree,</span><br><span class="line">        <span class="string">&#x27;density&#x27;</span>: nx.density(G),</span><br><span class="line">        <span class="string">&#x27;clustering&#x27;</span>: avg_clustering,</span><br><span class="line">        <span class="string">&#x27;avg_path_length&#x27;</span>: avg_path_length,</span><br><span class="line">        <span class="string">&#x27;diameter&#x27;</span>: diameter,</span><br><span class="line">        <span class="string">&#x27;degrees&#x27;</span>: degrees</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> stats</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compare_models</span>(<span class="params">n=<span class="number">1000</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    生成三种网络并比较统计特征</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 参数设置（保证可比性，平均度约为 4）</span></span><br><span class="line">    p_er = <span class="number">4</span> / (n - <span class="number">1</span>)  <span class="comment"># ER: &lt;k&gt; = (n-1)p = 4</span></span><br><span class="line">    k_ws = <span class="number">4</span>            <span class="comment"># WS: 每个节点连 4 个邻居</span></span><br><span class="line">    p_ws = <span class="number">0.1</span>          <span class="comment"># WS: 10% 重连</span></span><br><span class="line">    m_ba = <span class="number">2</span>            <span class="comment"># BA: 每个新节点连 2 条边 -&gt; &lt;k&gt; = 2m = 4</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 生成网络</span></span><br><span class="line">    G_er = generate_er(n, p_er, seed=<span class="number">42</span>)</span><br><span class="line">    G_ws = generate_ws(n, k_ws, p_ws, seed=<span class="number">42</span>)</span><br><span class="line">    G_ba = generate_ba(n, m_ba, seed=<span class="number">42</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算统计</span></span><br><span class="line">    stats_er = compute_network_stats(G_er, <span class="string">&quot;ER&quot;</span>)</span><br><span class="line">    stats_ws = compute_network_stats(G_ws, <span class="string">&quot;WS&quot;</span>)</span><br><span class="line">    stats_ba = compute_network_stats(G_ba, <span class="string">&quot;BA&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 打印对比表</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Metric&#x27;</span>:&lt;<span class="number">20</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;ER&#x27;</span>:&gt;<span class="number">12</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;WS&#x27;</span>:&gt;<span class="number">12</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;BA&#x27;</span>:&gt;<span class="number">12</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    metrics = [</span><br><span class="line">        (<span class="string">&#x27;Nodes&#x27;</span>, <span class="string">&#x27;n_nodes&#x27;</span>, <span class="string">&#x27;&#123;:.0f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Edges&#x27;</span>, <span class="string">&#x27;n_edges&#x27;</span>, <span class="string">&#x27;&#123;:.0f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Avg Degree&#x27;</span>, <span class="string">&#x27;avg_degree&#x27;</span>, <span class="string">&#x27;&#123;:.2f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Max Degree&#x27;</span>, <span class="string">&#x27;max_degree&#x27;</span>, <span class="string">&#x27;&#123;:.0f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Clustering&#x27;</span>, <span class="string">&#x27;clustering&#x27;</span>, <span class="string">&#x27;&#123;:.4f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Avg Path Len&#x27;</span>, <span class="string">&#x27;avg_path_length&#x27;</span>, <span class="string">&#x27;&#123;:.2f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Diameter&#x27;</span>, <span class="string">&#x27;diameter&#x27;</span>, <span class="string">&#x27;&#123;:.0f&#125;&#x27;</span>),</span><br><span class="line">        (<span class="string">&#x27;Density&#x27;</span>, <span class="string">&#x27;density&#x27;</span>, <span class="string">&#x27;&#123;:.5f&#125;&#x27;</span>)</span><br><span class="line">    ]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> label, key, fmt <span class="keyword">in</span> metrics:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;label:&lt;<span class="number">20</span>&#125;</span> <span class="subst">&#123;fmt.<span class="built_in">format</span>(stats_er[key]):&gt;<span class="number">12</span>&#125;</span> &quot;</span></span><br><span class="line">              <span class="string">f&quot;<span class="subst">&#123;fmt.<span class="built_in">format</span>(stats_ws[key]):&gt;<span class="number">12</span>&#125;</span> <span class="subst">&#123;fmt.<span class="built_in">format</span>(stats_ba[key]):&gt;<span class="number">12</span>&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> stats_er, stats_ws, stats_ba</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行对比</span></span><br><span class="line">stats_er, stats_ws, stats_ba = compare_models(n=<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="度分布分析">度分布分析</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">plot_degree_distribution</span>(<span class="params">stats_list, names, colors, figsize=(<span class="params"><span class="number">15</span>, <span class="number">5</span></span>)</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    绘制度分布对比（线性坐标和对数坐标）</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=figsize)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> idx, (stats, name, color) <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">zip</span>(stats_list, names, colors)):</span><br><span class="line">        degrees = stats[<span class="string">&#x27;degrees&#x27;</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算度分布</span></span><br><span class="line">        degree_counts = Counter(degrees)</span><br><span class="line">        k_values = <span class="built_in">sorted</span>(degree_counts.keys())</span><br><span class="line">        p_k = [degree_counts[k] / <span class="built_in">len</span>(degrees) <span class="keyword">for</span> k <span class="keyword">in</span> k_values]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 子图 1: 线性坐标</span></span><br><span class="line">        axes[<span class="number">0</span>].plot(k_values, p_k, <span class="string">&#x27;o-&#x27;</span>, color=color, label=name, alpha=<span class="number">0.7</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 子图 2: 对数坐标（适合 ER/WS）</span></span><br><span class="line">        axes[<span class="number">1</span>].semilogy(k_values, p_k, <span class="string">&#x27;o-&#x27;</span>, color=color, label=name, alpha=<span class="number">0.7</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 子图 3: 双对数坐标（适合 BA 的幂律）</span></span><br><span class="line">        <span class="comment"># 过滤掉 0 值</span></span><br><span class="line">        k_filtered = [k <span class="keyword">for</span> k, p <span class="keyword">in</span> <span class="built_in">zip</span>(k_values, p_k) <span class="keyword">if</span> p &gt; <span class="number">0</span>]</span><br><span class="line">        p_filtered = [p <span class="keyword">for</span> p <span class="keyword">in</span> p_k <span class="keyword">if</span> p &gt; <span class="number">0</span>]</span><br><span class="line">        axes[<span class="number">2</span>].loglog(k_filtered, p_filtered, <span class="string">&#x27;o&#x27;</span>, color=color, label=name, alpha=<span class="number">0.7</span>)</span><br><span class="line">    </span><br><span class="line">    axes[<span class="number">0</span>].set_xlabel(<span class="string">&#x27;Degree $k$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">0</span>].set_ylabel(<span class="string">&#x27;$P(k)$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">0</span>].set_title(<span class="string">&#x27;Linear Scale&#x27;</span>)</span><br><span class="line">    axes[<span class="number">0</span>].legend()</span><br><span class="line">    axes[<span class="number">0</span>].grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    axes[<span class="number">1</span>].set_xlabel(<span class="string">&#x27;Degree $k$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">1</span>].set_ylabel(<span class="string">&#x27;$P(k)$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">1</span>].set_title(<span class="string">&#x27;Semi-log Scale&#x27;</span>)</span><br><span class="line">    axes[<span class="number">1</span>].legend()</span><br><span class="line">    axes[<span class="number">1</span>].grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    axes[<span class="number">2</span>].set_xlabel(<span class="string">&#x27;Degree $k$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">2</span>].set_ylabel(<span class="string">&#x27;$P(k)$&#x27;</span>)</span><br><span class="line">    axes[<span class="number">2</span>].set_title(<span class="string">&#x27;Log-log Scale&#x27;</span>)</span><br><span class="line">    axes[<span class="number">2</span>].legend()</span><br><span class="line">    axes[<span class="number">2</span>].grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.savefig(<span class="string">&#x27;degree_distribution_comparison.png&#x27;</span>, dpi=<span class="number">300</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行度分布对比</span></span><br><span class="line">plot_degree_distribution(</span><br><span class="line">    [stats_er, stats_ws, stats_ba],</span><br><span class="line">    [<span class="string">&#x27;ER&#x27;</span>, <span class="string">&#x27;WS&#x27;</span>, <span class="string">&#x27;BA&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="ba-模型的幂律验证">BA 模型的幂律验证</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fit_power_law</span>(<span class="params">degrees, xmin=<span class="number">1</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    拟合幂律分布，估计指数 gamma</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 筛选大于 xmin 的度值</span></span><br><span class="line">    filtered = [d <span class="keyword">for</span> d <span class="keyword">in</span> degrees <span class="keyword">if</span> d &gt;= xmin]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 最大似然估计</span></span><br><span class="line">    n = <span class="built_in">len</span>(filtered)</span><br><span class="line">    gamma = <span class="number">1</span> + n / <span class="built_in">sum</span>(np.log(d / (xmin - <span class="number">0.5</span>)) <span class="keyword">for</span> d <span class="keyword">in</span> filtered)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> gamma</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_ba_power_law</span>(<span class="params">G, n_bins=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    可视化 BA 网络的幂律特性</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    degrees = [d <span class="keyword">for</span> n, d <span class="keyword">in</span> G.degree()]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算度分布</span></span><br><span class="line">    degree_counts = Counter(degrees)</span><br><span class="line">    k_values = np.array(<span class="built_in">sorted</span>(degree_counts.keys()))</span><br><span class="line">    p_k = np.array([degree_counts[k] <span class="keyword">for</span> k <span class="keyword">in</span> k_values]) / <span class="built_in">len</span>(degrees)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 拟合幂律</span></span><br><span class="line">    gamma_fit = fit_power_law(degrees, xmin=<span class="number">5</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Fitted power-law exponent: γ = <span class="subst">&#123;gamma_fit:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Theoretical value: γ = 3.00&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 绘制</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">7</span>))</span><br><span class="line">    plt.loglog(k_values, p_k, <span class="string">&#x27;bo&#x27;</span>, alpha=<span class="number">0.6</span>, label=<span class="string">&#x27;Data&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 理论曲线</span></span><br><span class="line">    k_theory = np.logspace(np.log10(<span class="built_in">min</span>(k_values[k_values &gt; <span class="number">0</span>])), </span><br><span class="line">                          np.log10(<span class="built_in">max</span>(k_values)), <span class="number">100</span>)</span><br><span class="line">    <span class="comment"># 归一化常数</span></span><br><span class="line">    C = p_k[<span class="number">0</span>] * k_values[<span class="number">0</span>]**gamma_fit</span><br><span class="line">    p_theory = C * k_theory**(-gamma_fit)</span><br><span class="line">    plt.loglog(k_theory, p_theory, <span class="string">&#x27;r--&#x27;</span>, linewidth=<span class="number">2</span>, </span><br><span class="line">              label=<span class="string">f&#x27;Fit: $P(k) \\sim k^&#123;&#123;-<span class="subst">&#123;gamma_fit:<span class="number">.2</span>f&#125;</span>&#125;&#125;$&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 理论值 γ=3</span></span><br><span class="line">    C3 = p_k[<span class="number">0</span>] * k_values[<span class="number">0</span>]**<span class="number">3</span></span><br><span class="line">    p_theory_3 = C3 * k_theory**(-<span class="number">3</span>)</span><br><span class="line">    plt.loglog(k_theory, p_theory_3, <span class="string">&#x27;g:&#x27;</span>, linewidth=<span class="number">2</span>, </span><br><span class="line">              label=<span class="string">&#x27;Theory: $P(k) \\sim k^&#123;-3&#125;$&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Degree $k$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;$P(k)$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;BA Model: Power-Law Degree Distribution&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    plt.legend(fontsize=<span class="number">11</span>)</span><br><span class="line">    plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.savefig(<span class="string">&#x27;ba_power_law.png&#x27;</span>, dpi=<span class="number">300</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试不同规模的 BA 网络</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> [<span class="number">500</span>, <span class="number">1000</span>, <span class="number">5000</span>]:</span><br><span class="line">    G = generate_ba(n, m=<span class="number">2</span>, seed=<span class="number">42</span>)</span><br><span class="line">    gamma = fit_power_law([d <span class="keyword">for</span> _, d <span class="keyword">in</span> G.degree()], xmin=<span class="number">5</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;n=<span class="subst">&#123;n:5d&#125;</span>: γ = <span class="subst">&#123;gamma:<span class="number">.3</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="ws-模型的小世界特性">WS 模型的小世界特性</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">analyze_ws_transition</span>(<span class="params">n=<span class="number">1000</span>, k=<span class="number">10</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    分析 WS 模型从规则到随机的过渡</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p_values = np.logspace(-<span class="number">4</span>, <span class="number">0</span>, <span class="number">50</span>)  <span class="comment"># 0.0001 到 1</span></span><br><span class="line">    </span><br><span class="line">    C_values = []  <span class="comment"># 聚类系数</span></span><br><span class="line">    L_values = []  <span class="comment"># 平均路径长度</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> p_values:</span><br><span class="line">        G = generate_ws(n, k, p, seed=<span class="number">42</span>)</span><br><span class="line">        C = nx.average_clustering(G)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算最大连通分量的平均路径长度</span></span><br><span class="line">        largest_cc = <span class="built_in">max</span>(nx.connected_components(G), key=<span class="built_in">len</span>)</span><br><span class="line">        subgraph = G.subgraph(largest_cc)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(largest_cc) &gt; <span class="number">1</span>:</span><br><span class="line">            L = nx.average_shortest_path_length(subgraph)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            L = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        C_values.append(C)</span><br><span class="line">        L_values.append(L)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 归一化（相对于 p=0 的值）</span></span><br><span class="line">    C_0 = C_values[<span class="number">0</span>] <span class="keyword">if</span> C_values[<span class="number">0</span>] &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line">    L_0 = L_values[<span class="number">0</span>] <span class="keyword">if</span> L_values[<span class="number">0</span>] &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    C_normalized = [c / C_0 <span class="keyword">for</span> c <span class="keyword">in</span> C_values]</span><br><span class="line">    L_normalized = [l / L_0 <span class="keyword">for</span> l <span class="keyword">in</span> L_values]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 绘图</span></span><br><span class="line">    fig, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">14</span>, <span class="number">5</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 左图：归一化值</span></span><br><span class="line">    ax1.semilogx(p_values, C_normalized, <span class="string">&#x27;o-&#x27;</span>, color=<span class="string">&#x27;#3498db&#x27;</span>, </span><br><span class="line">                label=<span class="string">&#x27;C(p) / C(0)&#x27;</span>, markersize=<span class="number">4</span>)</span><br><span class="line">    ax1.semilogx(p_values, L_normalized, <span class="string">&#x27;s-&#x27;</span>, color=<span class="string">&#x27;#e74c3c&#x27;</span>, </span><br><span class="line">                label=<span class="string">&#x27;L(p) / L(0)&#x27;</span>, markersize=<span class="number">4</span>)</span><br><span class="line">    ax1.axvline(x=<span class="number">0.1</span>, color=<span class="string">&#x27;gray&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, alpha=<span class="number">0.5</span>, label=<span class="string">&#x27;p=0.1&#x27;</span>)</span><br><span class="line">    ax1.set_xlabel(<span class="string">&#x27;Rewiring probability $p$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax1.set_ylabel(<span class="string">&#x27;Normalized value&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax1.set_title(<span class="string">&#x27;WS Model: Small-World Transition&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    ax1.legend()</span><br><span class="line">    ax1.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 右图：C/L 比值（小世界区域）</span></span><br><span class="line">    ratio = [c / l <span class="keyword">if</span> l &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> c, l <span class="keyword">in</span> <span class="built_in">zip</span>(C_normalized, L_normalized)]</span><br><span class="line">    ax2.semilogx(p_values, ratio, <span class="string">&#x27;^-&#x27;</span>, color=<span class="string">&#x27;#2ecc71&#x27;</span>, markersize=<span class="number">4</span>)</span><br><span class="line">    ax2.axvline(x=<span class="number">0.1</span>, color=<span class="string">&#x27;gray&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">    ax2.set_xlabel(<span class="string">&#x27;Rewiring probability $p$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax2.set_ylabel(<span class="string">&#x27;C(p)/L(p) relative to p=0&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax2.set_title(<span class="string">&#x27;Small-World Region (high C, low L)&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    ax2.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.savefig(<span class="string">&#x27;ws_small_world_transition.png&#x27;</span>, dpi=<span class="number">300</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行分析</span></span><br><span class="line">analyze_ws_transition(n=<span class="number">1000</span>, k=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="网络可视化">网络可视化</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">visualize_networks</span>(<span class="params">n=<span class="number">100</span>, save_path=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    可视化三种网络的结构对比</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 参数</span></span><br><span class="line">    p_er = <span class="number">4</span> / (n - <span class="number">1</span>)</span><br><span class="line">    k_ws = <span class="number">4</span></span><br><span class="line">    p_ws = <span class="number">0.1</span></span><br><span class="line">    m_ba = <span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 生成网络</span></span><br><span class="line">    G_er = generate_er(n, p_er, seed=<span class="number">42</span>)</span><br><span class="line">    G_ws = generate_ws(n, k_ws, p_ws, seed=<span class="number">42</span>)</span><br><span class="line">    G_ba = generate_ba(n, m_ba, seed=<span class="number">42</span>)</span><br><span class="line">    </span><br><span class="line">    networks = [</span><br><span class="line">        (G_er, <span class="string">&#x27;Erdős-Rényi\nRandom Network&#x27;</span>, <span class="string">&#x27;#3498db&#x27;</span>),</span><br><span class="line">        (G_ws, <span class="string">&#x27;Watts-Strogatz\nSmall-World Network&#x27;</span>, <span class="string">&#x27;#2ecc71&#x27;</span>),</span><br><span class="line">        (G_ba, <span class="string">&#x27;Barabási-Albert\nScale-Free Network&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>)</span><br><span class="line">    ]</span><br><span class="line">    </span><br><span class="line">    fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=(<span class="number">18</span>, <span class="number">6</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> idx, (G, title, color) <span class="keyword">in</span> <span class="built_in">enumerate</span>(networks):</span><br><span class="line">        ax = axes[idx]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 布局</span></span><br><span class="line">        <span class="keyword">if</span> idx == <span class="number">2</span>:  <span class="comment"># BA 用 spring layout 更好展示 hub 结构</span></span><br><span class="line">            pos = nx.spring_layout(G, seed=<span class="number">42</span>, k=<span class="number">0.5</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            pos = nx.spring_layout(G, seed=<span class="number">42</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 节点大小根据度调整</span></span><br><span class="line">        degrees = <span class="built_in">dict</span>(G.degree())</span><br><span class="line">        node_sizes = [degrees[node] * <span class="number">30</span> + <span class="number">50</span> <span class="keyword">for</span> node <span class="keyword">in</span> G.nodes()]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 绘制</span></span><br><span class="line">        nx.draw_networkx_nodes(G, pos, node_size=node_sizes, </span><br><span class="line">                             node_color=color, alpha=<span class="number">0.7</span>, ax=ax)</span><br><span class="line">        nx.draw_networkx_edges(G, pos, alpha=<span class="number">0.3</span>, width=<span class="number">0.8</span>, ax=ax)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 统计</span></span><br><span class="line">        stats_text = <span class="string">f&quot;N=<span class="subst">&#123;G.number_of_nodes()&#125;</span>, E=<span class="subst">&#123;G.number_of_edges()&#125;</span>\n&quot;</span></span><br><span class="line">        stats_text += <span class="string">f&quot;⟨k⟩=<span class="subst">&#123;np.mean(<span class="built_in">list</span>(degrees.values())):<span class="number">.1</span>f&#125;</span>\n&quot;</span></span><br><span class="line">        stats_text += <span class="string">f&quot;C=<span class="subst">&#123;nx.average_clustering(G):<span class="number">.3</span>f&#125;</span>&quot;</span></span><br><span class="line">        </span><br><span class="line">        ax.set_title(title, fontsize=<span class="number">14</span>, pad=<span class="number">10</span>)</span><br><span class="line">        ax.text(<span class="number">0.5</span>, <span class="number">0.02</span>, stats_text, transform=ax.transAxes, </span><br><span class="line">               ha=<span class="string">&#x27;center&#x27;</span>, fontsize=<span class="number">10</span>, </span><br><span class="line">               bbox=<span class="built_in">dict</span>(boxstyle=<span class="string">&#x27;round&#x27;</span>, facecolor=<span class="string">&#x27;white&#x27;</span>, alpha=<span class="number">0.8</span>))</span><br><span class="line">        ax.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    <span class="keyword">if</span> save_path:</span><br><span class="line">        plt.savefig(save_path, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成可视化</span></span><br><span class="line">visualize_networks(n=<span class="number">100</span>, save_path=<span class="string">&#x27;network_models_visualization.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="理论验证">理论验证</h2>
+<h3 id="验证-1-er-网络的相变">验证 1: ER 网络的相变</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">verify_er_phase_transition</span>(<span class="params">n=<span class="number">1000</span>, n_p=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    验证 ER 网络的连通性相变</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p_values = np.linspace(<span class="number">0</span>, <span class="number">0.01</span>, n_p)  <span class="comment"># 关注临界区域</span></span><br><span class="line">    </span><br><span class="line">    largest_cc_sizes = []</span><br><span class="line">    avg_path_lengths = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> p_values:</span><br><span class="line">        G = generate_er(n, p, seed=<span class="number">42</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 最大连通分量大小</span></span><br><span class="line">        largest_cc = <span class="built_in">max</span>(nx.connected_components(G), key=<span class="built_in">len</span>)</span><br><span class="line">        largest_cc_sizes.append(<span class="built_in">len</span>(largest_cc) / n)  <span class="comment"># 占比</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 平均路径长度（在最大分量上）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(largest_cc) &gt; <span class="number">1</span>:</span><br><span class="line">            subgraph = G.subgraph(largest_cc)</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                L = nx.average_shortest_path_length(subgraph)</span><br><span class="line">                avg_path_lengths.append(L)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                avg_path_lengths.append(np.nan)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            avg_path_lengths.append(np.nan)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 绘图</span></span><br><span class="line">    fig, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">14</span>, <span class="number">5</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 理论临界值 p_c = 1/n</span></span><br><span class="line">    p_c = <span class="number">1</span> / n</span><br><span class="line">    </span><br><span class="line">    ax1.plot(p_values, largest_cc_sizes, <span class="string">&#x27;b-&#x27;</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">    ax1.axvline(x=p_c, color=<span class="string">&#x27;r&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, label=<span class="string">f&#x27;$p_c = 1/n = <span class="subst">&#123;p_c:<span class="number">.4</span>f&#125;</span>$&#x27;</span>)</span><br><span class="line">    ax1.set_xlabel(<span class="string">&#x27;$p$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax1.set_ylabel(<span class="string">&#x27;Fraction of nodes in largest component&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax1.set_title(<span class="string">&#x27;ER Network: Phase Transition&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    ax1.legend()</span><br><span class="line">    ax1.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    ax2.plot(p_values, avg_path_lengths, <span class="string">&#x27;g-&#x27;</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">    ax2.axvline(x=p_c, color=<span class="string">&#x27;r&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, label=<span class="string">f&#x27;$p_c = <span class="subst">&#123;p_c:<span class="number">.4</span>f&#125;</span>$&#x27;</span>)</span><br><span class="line">    ax2.set_xlabel(<span class="string">&#x27;$p$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax2.set_ylabel(<span class="string">&#x27;Average path length&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    ax2.set_title(<span class="string">&#x27;Average Path Length near Critical Point&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    ax2.legend()</span><br><span class="line">    ax2.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    </span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.savefig(<span class="string">&#x27;er_phase_transition.png&#x27;</span>, dpi=<span class="number">300</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">verify_er_phase_transition(n=<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="验证-2-ba-模型的度分布幂律">验证 2: BA 模型的度分布幂律</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">verify_ba_degree_distribution</span>(<span class="params">n=<span class="number">10000</span>, m=<span class="number">2</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    详细验证 BA 模型的度分布</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    G = generate_ba(n, m, seed=<span class="number">42</span>)</span><br><span class="line">    degrees = [d <span class="keyword">for</span> _, d <span class="keyword">in</span> G.degree()]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 累积分布函数 (CDF)</span></span><br><span class="line">    degree_counts = Counter(degrees)</span><br><span class="line">    k_values = <span class="built_in">sorted</span>(degree_counts.keys())</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># P(K &gt; k)</span></span><br><span class="line">    cdf_complement = []</span><br><span class="line">    total = <span class="built_in">len</span>(degrees)</span><br><span class="line">    cumulative = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">reversed</span>(k_values):</span><br><span class="line">        cumulative += degree_counts[k]</span><br><span class="line">        cdf_complement.append((k, cumulative / total))</span><br><span class="line">    cdf_complement.reverse()</span><br><span class="line">    </span><br><span class="line">    k_ccdf, p_ccdf = <span class="built_in">zip</span>(*cdf_complement)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 线性回归估计幂律指数</span></span><br><span class="line">    log_k = np.log(k_ccdf[<span class="number">10</span>:<span class="number">100</span>])  <span class="comment"># 避开低度噪声和高度截断</span></span><br><span class="line">    log_p = np.log(p_ccdf[<span class="number">10</span>:<span class="number">100</span>])</span><br><span class="line">    slope, intercept, r_value, _, _ = stats.linregress(log_k, log_p)</span><br><span class="line">    </span><br><span class="line">    gamma_estimated = -slope + <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Estimated γ from CCDF slope: <span class="subst">&#123;gamma_estimated:<span class="number">.3</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;R² = <span class="subst">&#123;r_value**<span class="number">2</span>:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 绘图</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">7</span>))</span><br><span class="line">    plt.loglog(k_ccdf, p_ccdf, <span class="string">&#x27;bo&#x27;</span>, alpha=<span class="number">0.5</span>, label=<span class="string">&#x27;Empirical CCDF&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 拟合线</span></span><br><span class="line">    k_fit = np.logspace(np.log10(<span class="built_in">min</span>(k_ccdf)), np.log10(<span class="built_in">max</span>(k_ccdf)), <span class="number">100</span>)</span><br><span class="line">    p_fit = np.exp(intercept) * k_fit**slope</span><br><span class="line">    plt.loglog(k_fit, p_fit, <span class="string">&#x27;r--&#x27;</span>, linewidth=<span class="number">2</span>, </span><br><span class="line">              label=<span class="string">f&#x27;Fit: slope = <span class="subst">&#123;slope:<span class="number">.2</span>f&#125;</span>, γ = <span class="subst">&#123;gamma_estimated:<span class="number">.2</span>f&#125;</span>&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 理论线 γ=3</span></span><br><span class="line">    k_theory = np.logspace(np.log10(<span class="number">5</span>), np.log10(<span class="number">200</span>), <span class="number">100</span>)</span><br><span class="line">    C_theory = p_ccdf[<span class="number">5</span>] * k_ccdf[<span class="number">5</span>]**<span class="number">2</span>  <span class="comment"># 归一化</span></span><br><span class="line">    p_theory = C_theory * k_theory**(-<span class="number">2</span>)  <span class="comment"># CCDF slope = -(γ-1) = -2</span></span><br><span class="line">    plt.loglog(k_theory, p_theory, <span class="string">&#x27;g:&#x27;</span>, linewidth=<span class="number">2</span>, label=<span class="string">&#x27;Theory (γ=3)&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Degree $k$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;$P(K &gt; k)$&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;BA Model: Cumulative Degree Distribution&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">    plt.legend(fontsize=<span class="number">11</span>)</span><br><span class="line">    plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.savefig(<span class="string">&#x27;ba_ccdf.png&#x27;</span>, dpi=<span class="number">300</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">verify_ba_degree_distribution(n=<span class="number">10000</span>, m=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="完整实验流程">完整实验流程</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">run_complete_experiment</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    运行完整的 Task 3 实验</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;COMP5313 Assignment 2 - Task 3: Network Models&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 1. 生成网络</span></span><br><span class="line">    n = <span class="number">1000</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n[1] Generating networks with n=<span class="subst">&#123;n&#125;</span>...&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    G_er = generate_er(n, p=<span class="number">4</span>/(n-<span class="number">1</span>), seed=<span class="number">42</span>)</span><br><span class="line">    G_ws = generate_ws(n, k=<span class="number">4</span>, p=<span class="number">0.1</span>, seed=<span class="number">42</span>)</span><br><span class="line">    G_ba = generate_ba(n, m=<span class="number">2</span>, seed=<span class="number">42</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;    ER:  Random network generated&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;    WS:  Small-world network generated&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;    BA:  Scale-free network generated&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 计算统计特征</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[2] Computing network statistics...&quot;</span>)</span><br><span class="line">    stats_er = compute_network_stats(G_er, <span class="string">&quot;ER&quot;</span>)</span><br><span class="line">    stats_ws = compute_network_stats(G_ws, <span class="string">&quot;WS&quot;</span>)</span><br><span class="line">    stats_ba = compute_network_stats(G_ba, <span class="string">&quot;BA&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 生成对比表</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[3] Comparison Table:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">70</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Metric&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;ER&#x27;</span>:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;WS&#x27;</span>:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;<span class="string">&#x27;BA&#x27;</span>:&gt;<span class="number">14</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">70</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Nodes&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;n_nodes&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;n_nodes&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;n_nodes&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Edges&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;n_edges&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;n_edges&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;n_edges&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Avg Degree&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;avg_degree&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;avg_degree&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;avg_degree&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Clustering Coeff&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;clustering&#x27;</span>]:&gt;<span class="number">14.4</span>f&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;clustering&#x27;</span>]:&gt;<span class="number">14.4</span>f&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;clustering&#x27;</span>]:&gt;<span class="number">14.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Avg Path Length&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;avg_path_length&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;avg_path_length&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;avg_path_length&#x27;</span>]:&gt;<span class="number">14.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;<span class="string">&#x27;Max Degree&#x27;</span>:&lt;<span class="number">25</span>&#125;</span> <span class="subst">&#123;stats_er[<span class="string">&#x27;max_degree&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ws[<span class="string">&#x27;max_degree&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span> <span class="subst">&#123;stats_ba[<span class="string">&#x27;max_degree&#x27;</span>]:&gt;<span class="number">14</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">70</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 4. 生成可视化</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[4] Generating visualizations...&quot;</span>)</span><br><span class="line">    visualize_networks(n=<span class="number">100</span>, save_path=<span class="string">&#x27;network_models.png&#x27;</span>)</span><br><span class="line">    plot_degree_distribution([stats_er, stats_ws, stats_ba], </span><br><span class="line">                            [<span class="string">&#x27;ER&#x27;</span>, <span class="string">&#x27;WS&#x27;</span>, <span class="string">&#x27;BA&#x27;</span>],</span><br><span class="line">                            [<span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 5. BA 幂律验证</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[5] Verifying BA power-law distribution...&quot;</span>)</span><br><span class="line">    plot_ba_power_law(G_ba)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 6. WS 小世界验证</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[6] Analyzing WS small-world transition...&quot;</span>)</span><br><span class="line">    analyze_ws_transition(n=<span class="number">1000</span>, k=<span class="number">10</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 7. 保存结果</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[7] Saving results...&quot;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;task3_results.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&quot;COMP5313 Assignment 2 - Task 3 Results\n&quot;</span>)</span><br><span class="line">        f.write(<span class="string">&quot;=&quot;</span> * <span class="number">50</span> + <span class="string">&quot;\n\n&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> name, stats <span class="keyword">in</span> [(<span class="string">&#x27;ER&#x27;</span>, stats_er), (<span class="string">&#x27;WS&#x27;</span>, stats_ws), (<span class="string">&#x27;BA&#x27;</span>, stats_ba)]:</span><br><span class="line">            f.write(<span class="string">f&quot;<span class="subst">&#123;name&#125;</span> Model:\n&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> key, value <span class="keyword">in</span> stats.items():</span><br><span class="line">                <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;degrees&#x27;</span>, <span class="string">&#x27;name&#x27;</span>]:</span><br><span class="line">                    f.write(<span class="string">f&quot;  <span class="subst">&#123;key&#125;</span>: <span class="subst">&#123;value&#125;</span>\n&quot;</span>)</span><br><span class="line">            f.write(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Experiment complete! Check generated files:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;  - network_models.png&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;  - degree_distribution_comparison.png&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;  - ba_power_law.png&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;  - ws_small_world_transition.png&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;  - task3_results.txt&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    run_complete_experiment()</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="评分要点">评分要点</h2>
+<table>
+<thead>
+<tr>
+<th>评分项</th>
+<th>权重</th>
+<th>检查点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>算法实现</td>
+<td>25%</td>
+<td>ER/WS/BA 正确实现，参数可调</td>
+</tr>
+<tr>
+<td>度分布分析</td>
+<td>25%</td>
+<td>正确计算、可视化、理论对比</td>
+</tr>
+<tr>
+<td>统计特征</td>
+<td>20%</td>
+<td>聚类系数、路径长度等完整分析</td>
+</tr>
+<tr>
+<td>理论验证</td>
+<td>20%</td>
+<td>幂律验证、相变分析、小世界特性</td>
+</tr>
+<tr>
+<td>报告质量</td>
+<td>10%</td>
+<td>图表清晰、解释充分</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键理论点：</strong> - ER: 相变现象 <span
+class="math inline">\(p_c = 1/n\)</span> - WS: 小世界区域 <span
+class="math inline">\(0.01 &lt; p &lt; 0.1\)</span> - BA: 幂律分布 <span
+class="math inline">\(P(k) \sim k^{-3}\)</span>，优先连接机制</p>
+<hr />
+<p><strong>Last Updated:</strong> 2026-04-19<br />
+<strong>Status:</strong> ✅ Complete</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Assignment/" rel="tag"><i class="fa fa-tag"></i> Assignment</a>
+              <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 题解</a>
+              <a href="/tags/Network-Models/" rel="tag"><i class="fa fa-tag"></i> Network Models</a>
+              <a href="/tags/Erdos-Renyi/" rel="tag"><i class="fa fa-tag"></i> Erdos-Renyi</a>
+              <a href="/tags/Watts-Strogatz/" rel="tag"><i class="fa fa-tag"></i> Watts-Strogatz</a>
+              <a href="/tags/Barabasi-Albert/" rel="tag"><i class="fa fa-tag"></i> Barabasi-Albert</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/a2-task2-community-detection.html" rel="prev" title="COMP5313 Assignment 2 - Task 2 题解">
+                  <i class="fa fa-angle-left"></i> COMP5313 Assignment 2 - Task 2 题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">463k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">28:03</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

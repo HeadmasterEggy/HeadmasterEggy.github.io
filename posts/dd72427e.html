@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5270 Assignment 2 Problem 2(e) 题解，解释如何用条件期望方法对 MaxCut 进行去随机化，原理与实验结果分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5270 Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut">
+<meta property="og:url" content="http://example.com/posts/dd72427e.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5270 Assignment 2 Problem 2(e) 题解，解释如何用条件期望方法对 MaxCut 进行去随机化，原理与实验结果分析。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-18T15:14:23.431Z">
+<meta property="article:modified_time" content="2026-04-18T15:14:23.432Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="MaxCut">
+<meta property="article:tag" content="Derandomization">
+<meta property="article:tag" content="Conditional Expectation">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/dd72427e.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/dd72427e.html","path":"posts/dd72427e.html","title":"COMP5270 Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5270 Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/dd72427e.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">73</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">157</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5270-assignment-2-problem-2e-%E5%9F%BA%E4%BA%8E%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84-maxcut"><span class="nav-text">COMP5270
+Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%96%B9%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">条件期望方法的核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#maxcut-%E4%B8%8A%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%B3%95"><span class="nav-text">MaxCut 上的条件期望法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA%E9%A1%B6%E7%82%B9%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E8%AE%A1%E7%AE%97"><span class="nav-text">单个顶点的条件期望计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E6%9C%89%E6%95%88"><span class="nav-text">为什么这个方法有效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-text">与哈希函数去随机化的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F"><span class="nav-text">实验结果的预期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-text">参考实现思路</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/dd72427e.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5270 Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut | Joey">
+      <meta itemprop="description" content="COMP5270 Assignment 2 Problem 2(e) 题解，解释如何用条件期望方法对 MaxCut 进行去随机化，原理与实验结果分析。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5270 Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-18 15:14:23" itemprop="dateCreated datePublished" datetime="2026-04-18T15:14:23Z">2026-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5270/" itemprop="url" rel="index"><span itemprop="name">COMP5270</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5270 Assignment 2 Problem 2(e) 题解，解释如何用条件期望方法对 MaxCut 进行去随机化，原理与实验结果分析。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="comp5270-assignment-2-problem-2e-基于条件期望去随机化的-maxcut">COMP5270
+Assignment 2 Problem 2(e), 基于条件期望去随机化的 MaxCut</h1>
+<h2 id="中文题目">中文题目</h2>
+<p>实现基于条件期望（method of conditional
+expectations）的去随机化近似算法求 MaxCut。对于 <span
+class="math inline">\(n=2\)</span> 到 <span
+class="math inline">\(100\)</span>，在 <span
+class="math inline">\(K_n\)</span> 和 <span
+class="math inline">\(C_n\)</span> 上运行，记录结果并评论。</p>
+<h2 id="原题">原题</h2>
+<blockquote>
+<p>Implement the derandomised approximation algorithm for MaxCut based
+on the method of conditional expectations...</p>
+</blockquote>
+<h2 id="知识点">知识点</h2>
+<ul>
+<li>条件期望（conditional expectation）</li>
+<li>去随机化（derandomization）</li>
+<li>Yen's algorithm / method of conditional expectations</li>
+<li>贪心消减（deterministic rounding）</li>
+</ul>
+<hr />
+<h2 id="条件期望方法的核心思想">条件期望方法的核心思想</h2>
+<p><strong>Method of Conditional
+Expectations</strong>（条件期望法）是一种通用的去随机化技术。它的基本框架是：</p>
+<ol type="1">
+<li><strong>定义随机变量</strong>：先考虑一个随机算法产生的目标值（如割大小）<span
+class="math inline">\(X\)</span></li>
+<li><strong>计算期望</strong>：<span
+class="math inline">\(\mathbb{E}[X]\)</span> 是某个容易计算的值（如
+<span class="math inline">\(|E|/2\)</span>）</li>
+<li><strong>逐步固定随机比特</strong>：按顺序遍历每个顶点，每次选择让条件期望更大的那半边</li>
+</ol>
+<p>具体到 MaxCut 问题，我们按顺序决定每个顶点的分配。</p>
+<hr />
+<h2 id="maxcut-上的条件期望法">MaxCut 上的条件期望法</h2>
+<p>设图的顶点顺序为 <span class="math inline">\(v_1, v_2, \dots,
+v_n\)</span>。对每个顶点，我们依次决定它进入 <span
+class="math inline">\(S\)</span> 还是 <span
+class="math inline">\(T\)</span>。</p>
+<p>当决定 <span class="math inline">\(v_i\)</span> 的分配时，之前的顶点
+<span class="math inline">\(v_1,\dots,v_{i-1}\)</span>
+已经分配好了，我们<strong>在已知这些信息条件下</strong>，计算 <span
+class="math inline">\(v_i\)</span> 进入 <span
+class="math inline">\(S\)</span> 或 <span
+class="math inline">\(T\)</span>
+时的<strong>条件期望割大小</strong>，选择条件期望更大的那个。</p>
+<h3 id="单个顶点的条件期望计算">单个顶点的条件期望计算</h3>
+<p>设已确定分配的顶点集合为 <span
+class="math inline">\(A\)</span>，未确定的为 <span
+class="math inline">\(B\)</span>。对于一条连接 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span> 的边，它被割开的概率取决于 <span
+class="math inline">\(B\)</span> 中顶点如何分配。</p>
+<p>更精确的框架是：当我们决定 <span class="math inline">\(v_i\)</span>
+的值时，考虑两种选择的条件期望：</p>
+<ul>
+<li><span class="math inline">\(v_i \to S\)</span> 时的期望割大小</li>
+<li><span class="math inline">\(v_i \to T\)</span> 时的期望割大小</li>
+</ul>
+<p>选择期望更大的那个。由于期望的线性性，这个计算在每一步都是可以高效进行的。</p>
+<hr />
+<h2 id="为什么这个方法有效">为什么这个方法有效</h2>
+<p>关键不等式是：<strong>无论我们选择哪一半，条件期望都至少和原来的（全）期望一样大</strong>。</p>
+<p>形式化地，设 <span class="math inline">\(X\)</span> 是随机变量，<span
+class="math inline">\(E\)</span> 是某个事件（比如"随机比特的前 <span
+class="math inline">\(i-1\)</span> 个已固定"），则：</p>
+<p><span class="math display">\[
+\max(\mathbb{E}[X \mid E, v_i\to S], \mathbb{E}[X \mid E, v_i\to T])
+\geq \mathbb{E}[X \mid E].
+\]</span></p>
+<p>如果我们从 <span class="math inline">\(\mathbb{E}[X]\)</span>
+开始，然后<strong>沿着每一步都选择不降低条件期望的方向</strong>，最终得到的值至少是原始期望值，即：</p>
+<p><span class="math display">\[
+\text{最终割大小} \geq \mathbb{E}[\text{割大小}] = \frac{1}{2}|E|.
+\]</span></p>
+<p>所以这个确定性算法<strong>保证至少达到最优割的一半</strong>，与随机版本有相同的近似保证。</p>
+<hr />
+<h2 id="与哈希函数去随机化的比较">与哈希函数去随机化的比较</h2>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>哈希函数法</th>
+<th>条件期望法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否确定性</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>近似比保证</td>
+<td><span class="math inline">\(\geq 1/2\)</span></td>
+<td><span class="math inline">\(\geq 1/2\)</span></td>
+</tr>
+<tr>
+<td>实际效果</td>
+<td>通常更好</td>
+<td>通常达到最优</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>需要枚举哈希函数</td>
+<td>逐顶点贪心</td>
+</tr>
+<tr>
+<td>时间复杂度</td>
+<td><span class="math inline">\(O(n^2 \cdot
+\text{哈希空间})\)</span></td>
+<td><span class="math inline">\(O(n^2)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>在本题的实验中，两种方法在 <span class="math inline">\(K_n\)</span>
+和 <span class="math inline">\(C_n\)</span>
+上都达到了最优值，但这是因为这两类图的结构比较特殊。在更一般的图上，两种方法的效果可能不同。</p>
+<hr />
+<h2 id="实验结果的预期">实验结果的预期</h2>
+<p>与 Problem 2(d) 完全一样：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均值</td>
+<td>最优割值</td>
+</tr>
+<tr>
+<td>最小/最大值</td>
+<td>与平均值相同</td>
+</tr>
+<tr>
+<td>标准差</td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>原因相同：这是一个确定性算法，没有随机性，所以在同样输入下每次运行结果完全一样。</p>
+<hr />
+<h2 id="参考实现思路">参考实现思路</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">maxcut_conditionalexpect</span>(<span class="params">G</span>):</span><br><span class="line">    vertices = G.list_vertices()</span><br><span class="line">    assignment = &#123;&#125;  <span class="comment"># 0 = S, 1 = T</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> vertices:</span><br><span class="line">        <span class="comment"># 计算如果 v 进入 S 的条件期望</span></span><br><span class="line">        cut_if_S = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u, w <span class="keyword">in</span> G.list_edges()</span><br><span class="line">                        <span class="keyword">if</span> (u == v <span class="keyword">and</span> assignment.get(w, <span class="literal">None</span>) == <span class="number">1</span>) <span class="keyword">or</span></span><br><span class="line">                           (w == v <span class="keyword">and</span> assignment.get(u, <span class="literal">None</span>) == <span class="number">1</span>))</span><br><span class="line">        <span class="comment"># 粗略计算：比较 v 的邻居中已分配到 T 的数量和已分配到 S 的数量</span></span><br><span class="line">        neighbors_in_T = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">1</span>)</span><br><span class="line">        neighbors_in_S = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 选择割边贡献更大的那一侧</span></span><br><span class="line">        assignment[v] = <span class="number">0</span> <span class="keyword">if</span> neighbors_in_T &gt;= neighbors_in_S <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算最终割大小</span></span><br><span class="line">    cut_size = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u, w <span class="keyword">in</span> G.list_edges()</span><br><span class="line">                   <span class="keyword">if</span> assignment[u] != assignment[w])</span><br><span class="line">    <span class="keyword">return</span> cut_size</span><br></pre></td></tr></table></figure>
+<p>实际实现可能需要根据具体 API
+调整，关键是按顺序处理每个顶点，在已知前面分配结果的情况下，选择让当前条件期望更大的那侧。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithms/" rel="tag"><i class="fa fa-tag"></i> Algorithms</a>
+              <a href="/tags/MaxCut/" rel="tag"><i class="fa fa-tag"></i> MaxCut</a>
+              <a href="/tags/Derandomization/" rel="tag"><i class="fa fa-tag"></i> Derandomization</a>
+              <a href="/tags/Conditional-Expectation/" rel="tag"><i class="fa fa-tag"></i> Conditional Expectation</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c39c79d1.html" rel="prev" title="COMP5270 Assignment 2 Problem 2(d), 基于哈希函数去随机化的 MaxCut">
+                  <i class="fa fa-angle-left"></i> COMP5270 Assignment 2 Problem 2(d), 基于哈希函数去随机化的 MaxCut
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/Infinity.html" rel="next" title="COMP5270 Assignment 2 Problem 2(f), 三种 MaxCut 算法运行时间比较">
+                  COMP5270 Assignment 2 Problem 2(f), 三种 MaxCut 算法运行时间比较 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">463k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">28:03</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

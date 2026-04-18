@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5270 Assignment 2 Problem 2(b) 题解，说明如何用邻接表模型生成完全图 K_n 和环图 C_n，并解释两种图的结构特点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5270 Assignment 2 Problem 2(b), 生成 Kn 完全图和 Cn 环图">
+<meta property="og:url" content="http://example.com/posts/f2029741.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5270 Assignment 2 Problem 2(b) 题解，说明如何用邻接表模型生成完全图 K_n 和环图 C_n，并解释两种图的结构特点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-18T15:12:35.066Z">
+<meta property="article:modified_time" content="2026-04-18T15:12:35.066Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Graph Theory">
+<meta property="article:tag" content="Data Structures">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/f2029741.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/f2029741.html","path":"posts/f2029741.html","title":"COMP5270 Assignment 2 Problem 2(b), 生成 Kn 完全图和 Cn 环图"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5270 Assignment 2 Problem 2(b), 生成 Kn 完全图和 Cn 环图 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/f2029741.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">73</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">157</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5270-assignment-2-problem-2b-%E7%94%9F%E6%88%90-k%E2%82%99-%E5%AE%8C%E5%85%A8%E5%9B%BE%E5%92%8C-c%E2%82%99-%E7%8E%AF%E5%9B%BE"><span class="nav-text">COMP5270
+Assignment 2 Problem 2(b), 生成 Kₙ 完全图和 Cₙ 环图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">核心思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E5%9B%BE-k_n"><span class="nav-text">完全图 \(K_n\)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%9B%BE-c_n"><span class="nav-text">环图 \(C_n\)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0"><span class="nav-text">参考实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%9B%BE%E5%9C%A8%E5%90%8E%E7%BB%AD%E9%97%AE%E9%A2%98%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-text">两种图在后续问题中的角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">容易错的地方</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/f2029741.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5270 Assignment 2 Problem 2(b), 生成 Kn 完全图和 Cn 环图 | Joey">
+      <meta itemprop="description" content="COMP5270 Assignment 2 Problem 2(b) 题解，说明如何用邻接表模型生成完全图 K_n 和环图 C_n，并解释两种图的结构特点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5270 Assignment 2 Problem 2(b), 生成 Kn 完全图和 Cn 环图
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-04-18 15:12:35" itemprop="dateCreated datePublished" datetime="2026-04-18T15:12:35Z">2026-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5270/" itemprop="url" rel="index"><span itemprop="name">COMP5270</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>705</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5270 Assignment 2 Problem 2(b) 题解，说明如何用邻接表模型生成完全图 K_n 和环图 C_n，并解释两种图的结构特点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="comp5270-assignment-2-problem-2b-生成-kₙ-完全图和-cₙ-环图">COMP5270
+Assignment 2 Problem 2(b), 生成 Kₙ 完全图和 Cₙ 环图</h1>
+<h2 id="中文题目">中文题目</h2>
+<p>实现两个函数：输入 <span class="math inline">\(n\)</span>，返回 (1)
+<span class="math inline">\(n\)</span> 个顶点的完全图 <span
+class="math inline">\(K_n\)</span>；(2) <span
+class="math inline">\(n\)</span> 个顶点的环图 <span
+class="math inline">\(C_n\)</span>。</p>
+<h2 id="原题">原题</h2>
+<blockquote>
+<p>Implement two functions returning, on input <span
+class="math inline">\(n\)</span>, (1) the complete graph <span
+class="math inline">\(K_n\)</span> on <span
+class="math inline">\(n\)</span> vertices; (2) the cycle graph <span
+class="math inline">\(C_n\)</span> on <span
+class="math inline">\(n\)</span> vertices.</p>
+</blockquote>
+<h2 id="知识点">知识点</h2>
+<ul>
+<li>完全图（complete graph）</li>
+<li>环图（cycle graph）</li>
+<li>邻接表（adjacency list）</li>
+<li>图的 API 设计</li>
+</ul>
+<hr />
+<h2 id="核心思路">核心思路</h2>
+<p>这道题是整个 Assignment 2 的基础设施题。后续所有 MaxCut
+实验都依赖这两个函数生成的图，所以理解它们的结构很重要。</p>
+<h3 id="完全图-k_n">完全图 <span class="math inline">\(K_n\)</span></h3>
+<p>完全图 <span class="math inline">\(K_n\)</span>
+是任意两个不同顶点之间都有一条边的图。对角化来说：</p>
+<ul>
+<li><strong>顶点</strong>：<span class="math inline">\(n\)</span>
+个，通常编号为 <span class="math inline">\(0,1,\dots,n-1\)</span></li>
+<li><strong>边</strong>：共 <span class="math inline">\(\binom{n}{2} =
+\frac{n(n-1)}{2}\)</span> 条</li>
+<li><strong>度数</strong>：每个顶点的度数为 <span
+class="math inline">\(n-1\)</span></li>
+</ul>
+<p>实现方式是两层循环：外层遍历所有顶点，内层从该顶点的下一个顶点开始，遍历到最后一个顶点，每对顶点插入一条边。</p>
+<h3 id="环图-c_n">环图 <span class="math inline">\(C_n\)</span></h3>
+<p>环图 <span class="math inline">\(C_n\)</span> 是 <span
+class="math inline">\(n\)</span>
+个顶点排成一个环，每相邻两个顶点之间有一条边，首尾顶点也相连：</p>
+<ul>
+<li><strong>顶点</strong>：<span class="math inline">\(n\)</span>
+个，编号 <span class="math inline">\(0,1,\dots,n-1\)</span></li>
+<li><strong>边</strong>：共 <span class="math inline">\(n\)</span>
+条，恰好每个顶点度数为 <span class="math inline">\(2\)</span></li>
+<li><strong>结构</strong>：视觉上是一个环</li>
+</ul>
+<p>实现方式是连接 <span class="math inline">\((0,1), (1,2), \dots, (n-2,
+n-1)\)</span>，最后 <span class="math inline">\((n-1, 0)\)</span>
+形成闭环。</p>
+<hr />
+<h2 id="参考实现">参考实现</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> graph <span class="keyword">import</span> Graph</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">complete_graph</span>(<span class="params">n</span>):</span><br><span class="line">    G = Graph()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_vertex(i)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, n):</span><br><span class="line">            G.insert_edge(i, j)</span><br><span class="line">    <span class="keyword">return</span> G</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cycle_graph</span>(<span class="params">n</span>):</span><br><span class="line">    G = Graph()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_vertex(i)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_edge(i, (i + <span class="number">1</span>) % n)</span><br><span class="line">    <span class="keyword">return</span> G</span><br></pre></td></tr></table></figure>
+<p>注意： - 完全图的双层循环中，内层从 <code>i + 1</code>
+开始，避免重复插入同一条边（因为 Graph API 的 <code>insert_edge</code>
+会把 <span class="math inline">\((u,v)\)</span> 和 <span
+class="math inline">\((v,u)\)</span> 当作同一条边） - 环图用
+<code>(i + 1) % n</code> 自动处理 <span
+class="math inline">\(n-1\)</span> 到 <span
+class="math inline">\(0\)</span> 的回边，这是 Python
+里写环结构的常用技巧</p>
+<hr />
+<h2 id="两种图在后续问题中的角色">两种图在后续问题中的角色</h2>
+<table>
+<thead>
+<tr>
+<th>图</th>
+<th><span class="math inline">\(K_n\)</span> 的特点</th>
+<th><span class="math inline">\(C_n\)</span> 的特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>边数</td>
+<td><span class="math inline">\(\Theta(n^2)\)</span></td>
+<td><span class="math inline">\(\Theta(n)\)</span></td>
+</tr>
+<tr>
+<td>每个顶点度</td>
+<td><span class="math inline">\(n-1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>MaxCut 最优值</td>
+<td><span class="math inline">\(\lfloor n^2/4 \rfloor\)</span></td>
+<td><span class="math inline">\(n\)</span> 或 <span
+class="math inline">\(n-1\)</span></td>
+</tr>
+<tr>
+<td>随机算法效果</td>
+<td>接近最优，方差小</td>
+<td>约 <span class="math inline">\(n/2\)</span>，方差较大</td>
+</tr>
+</tbody>
+</table>
+<p>这两个图是后续实验的基准测试用例，分别代表稠密图和稀疏图两种极端情况。</p>
+<hr />
+<h2 id="容易错的地方">容易错的地方</h2>
+<ol type="1">
+<li><strong>完全图循环边界</strong>：内层从 <code>i + 1</code>
+开始，不是 <code>0</code>。否则会重复插入边或者漏掉某些边对。</li>
+<li><strong>环图的首尾连接</strong>：最后一条边 <code>(n-1, 0)</code>
+容易忘掉，用取模技巧可以自动覆盖。</li>
+<li><strong>Graph API 的语义</strong>：<code>insert_edge(u, v)</code>
+会同时在邻接表中加入 <code>u -&gt; v</code> 和
+<code>v -&gt; u</code>，不需要手动处理无向边的双向插入。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithms/" rel="tag"><i class="fa fa-tag"></i> Algorithms</a>
+              <a href="/tags/Graph-Theory/" rel="tag"><i class="fa fa-tag"></i> Graph Theory</a>
+              <a href="/tags/Data-Structures/" rel="tag"><i class="fa fa-tag"></i> Data Structures</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/206f9d02.html" rel="prev" title="COMP5270 Lecture Summary, Week 1 to Week 7">
+                  <i class="fa fa-angle-left"></i> COMP5270 Lecture Summary, Week 1 to Week 7
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/1afffe68.html" rel="next" title="COMP5270 Assignment 2 Problem 2(c), 随机化 MaxCut 算法">
+                  COMP5270 Assignment 2 Problem 2(c), 随机化 MaxCut 算法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">463k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">28:03</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
