@@ -113,6 +113,22 @@
     transform: translateY(-1px);
   }
 
+  .btn.primary {
+    width: 100%;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    border-color: rgba(196, 181, 253, 0.4);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(124, 58, 237, 0.24);
+  }
+
+  .btn.primary:hover,
+  .btn.primary.active {
+    background: linear-gradient(135deg, #9a6bff, #8b5cf6);
+    border-color: rgba(216, 180, 254, 0.5);
+  }
+
   .search-row {
     display: flex;
     gap: 10px;
@@ -174,12 +190,108 @@
     flex-direction: column;
     gap: 14px;
     z-index: 12;
+    max-height: calc(100vh - 36px);
+    overflow-y: auto;
+    padding-right: 4px;
   }
 
+  .settings,
   .details,
   .legend {
     position: static;
     padding: 16px;
+  }
+
+  .settings-group + .settings-group {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .settings-heading {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .setting-block + .setting-block {
+    margin-top: 12px;
+  }
+
+  .setting-row,
+  .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+
+  .setting-row span:first-child,
+  .switch-row span:first-child {
+    color: var(--muted);
+  }
+
+  .setting-value {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
+
+  .range-input {
+    width: 100%;
+    margin: 0;
+    accent-color: #8b5cf6;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .switch-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: 0.18s ease;
+  }
+
+  .switch-slider::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    transition: 0.18s ease;
+  }
+
+  .switch input:checked + .switch-slider {
+    background: rgba(139, 92, 246, 0.6);
+    border-color: rgba(167, 139, 250, 0.55);
+  }
+
+  .switch input:checked + .switch-slider::before {
+    transform: translateX(18px);
   }
 
   .section-title {
@@ -490,6 +602,68 @@
     <div id="details-body" class="detail-empty">点一个节点，我会在这里显示它的标题、路径、标签、相邻节点和跳转入口。</div>
   </section>
 
+  <section class="panel settings">
+    <div class="section-title">
+      <h3>图谱控制</h3>
+      <span class="hint">实时生效</span>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-heading">外观</div>
+
+      <div class="setting-block">
+        <label class="switch-row" for="setting-arrows">
+          <span>箭头</span>
+          <span class="switch">
+            <input type="checkbox" id="setting-arrows">
+            <span class="switch-slider"></span>
+          </span>
+        </label>
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>文本透明度</span><span class="setting-value" id="setting-text-opacity-value"></span></div>
+        <input class="range-input" id="setting-text-opacity" type="range" min="0" max="100" step="1">
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>节点大小</span><span class="setting-value" id="setting-node-scale-value"></span></div>
+        <input class="range-input" id="setting-node-scale" type="range" min="60" max="180" step="1">
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>连线粗细</span><span class="setting-value" id="setting-line-width-value"></span></div>
+        <input class="range-input" id="setting-line-width" type="range" min="50" max="220" step="1">
+      </div>
+
+      <button class="btn primary" id="animate-btn" type="button">播放动画</button>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-heading">力度</div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>图谱向心力</span><span class="setting-value" id="setting-center-strength-value"></span></div>
+        <input class="range-input" id="setting-center-strength" type="range" min="0" max="35" step="1">
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>节点间的排斥力</span><span class="setting-value" id="setting-charge-strength-value"></span></div>
+        <input class="range-input" id="setting-charge-strength" type="range" min="40" max="420" step="10">
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>相连节点间的吸引力</span><span class="setting-value" id="setting-link-strength-value"></span></div>
+        <input class="range-input" id="setting-link-strength" type="range" min="10" max="140" step="5">
+      </div>
+
+      <div class="setting-block">
+        <div class="setting-row"><span>连线长度</span><span class="setting-value" id="setting-link-distance-value"></span></div>
+        <input class="range-input" id="setting-link-distance" type="range" min="45" max="160" step="5">
+      </div>
+    </div>
+  </section>
+
   <section class="panel legend">
     <div class="section-title">
       <h3>分类筛选</h3>
@@ -505,13 +679,35 @@
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
+const DEFAULT_SETTINGS = {
+  arrows: false,
+  textOpacity: 88,
+  nodeScale: 100,
+  lineWidth: 100,
+  centerStrength: 12,
+  chargeStrength: 130,
+  linkStrength: 78,
+  linkDistance: 82
+};
+
+function loadSavedSettings() {
+  try {
+    const raw = window.localStorage.getItem('joey-graph-settings');
+    if (!raw) return { ...DEFAULT_SETTINGS };
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+  } catch (e) {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
 const state = {
   hiddenCategories: new Set(),
   showHelpers: true,
   showLabels: false,
   selectedId: null,
   hoveredId: null,
-  searchQuery: ''
+  searchQuery: '',
+  settings: loadSavedSettings()
 };
 
 function truncate(text, n) {
@@ -569,6 +765,19 @@ function renderGraph(graph) {
     .attr('height', window.innerHeight);
   svg.selectAll('*').remove();
 
+  const defs = svg.append('defs');
+  defs.append('marker')
+    .attr('id', 'arrowhead')
+    .attr('viewBox', '0 -5 10 10')
+    .attr('refX', 11)
+    .attr('refY', 0)
+    .attr('markerWidth', 6)
+    .attr('markerHeight', 6)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M0,-5L10,0L0,5')
+    .attr('fill', 'rgba(143,171,214,0.78)');
+
   const root = svg.append('g');
   const linkLayer = root.append('g');
   const nodeLayer = root.append('g');
@@ -578,19 +787,24 @@ function renderGraph(graph) {
   });
   svg.call(zoom);
 
+  const linkForce = d3.forceLink(graph.edges).id(d => d.id);
+  const chargeForce = d3.forceManyBody();
+  const collideForce = d3.forceCollide();
+  const xForce = d3.forceX(window.innerWidth / 2);
+  const yForce = d3.forceY(window.innerHeight / 2);
+
   const simulation = d3.forceSimulation(graph.nodes)
-    .force('link', d3.forceLink(graph.edges)
-      .id(d => d.id)
-      .distance(d => d.kind === 'hub' ? 72 : 108)
-      .strength(d => d.kind === 'hub' ? 0.28 : 0.52))
-    .force('charge', d3.forceManyBody().strength(d => d.type === 'hub' ? -170 : -240))
-    .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2))
-    .force('collide', d3.forceCollide().radius(d => nodeRadius(d) + 14))
+    .force('link', linkForce)
+    .force('charge', chargeForce)
+    .force('x', xForce)
+    .force('y', yForce)
+    .force('collide', collideForce)
     .alpha(0.9);
 
   function nodeRadius(d) {
+    const scale = state.settings.nodeScale / 100;
     const base = d.type === 'hub' ? 11 : 5;
-    return base + Math.min(11, Math.sqrt(d.degree || 0) * 1.8);
+    return (base + Math.min(11, Math.sqrt(d.degree || 0) * 1.8)) * scale;
   }
 
   const link = linkLayer.selectAll('line')
@@ -644,30 +858,21 @@ function renderGraph(graph) {
       }));
 
   node.append('circle')
-    .attr('class', 'ring')
-    .attr('r', d => nodeRadius(d) + 6);
+    .attr('class', 'ring');
 
   node.each(function(d) {
     const g = d3.select(this);
-    const radius = nodeRadius(d);
     const color = categoryColor[d.category] || '#9fb0ca';
 
     if (d.type === 'hub') {
       g.append('rect')
         .attr('class', 'core')
-        .attr('x', -radius * 1.1)
-        .attr('y', -radius * 0.72)
-        .attr('rx', 12)
-        .attr('ry', 12)
-        .attr('width', radius * 2.2)
-        .attr('height', radius * 1.44)
         .attr('fill', color)
         .attr('stroke', 'rgba(255,255,255,0.22)')
         .attr('stroke-width', 1.3);
     } else {
       g.append('circle')
         .attr('class', 'core')
-        .attr('r', radius)
         .attr('fill', color)
         .attr('stroke', 'rgba(255,255,255,0.18)')
         .attr('stroke-width', 1.15);
@@ -676,9 +881,78 @@ function renderGraph(graph) {
 
   node.append('text')
     .attr('class', 'node-label')
-    .attr('x', d => nodeRadius(d) + 8)
     .attr('y', 4)
     .text(d => truncate(d.title, 20));
+
+  function saveSettings() {
+    try {
+      window.localStorage.setItem('joey-graph-settings', JSON.stringify(state.settings));
+    } catch (e) {}
+  }
+
+  function updateNodeGeometry() {
+    node.select('.ring').attr('r', d => nodeRadius(d) + 6);
+    node.each(function(d) {
+      const g = d3.select(this);
+      const radius = nodeRadius(d);
+      const core = g.select('.core');
+      if (d.type === 'hub') {
+        core
+          .attr('x', -radius * 1.1)
+          .attr('y', -radius * 0.72)
+          .attr('rx', 12)
+          .attr('ry', 12)
+          .attr('width', radius * 2.2)
+          .attr('height', radius * 1.44);
+      } else {
+        core.attr('r', radius);
+      }
+    });
+    node.select('.node-label')
+      .attr('x', d => nodeRadius(d) + 8)
+      .style('opacity', state.settings.textOpacity / 100);
+  }
+
+  function updateControlValues() {
+    const map = {
+      'setting-text-opacity-value': state.settings.textOpacity + '%',
+      'setting-node-scale-value': state.settings.nodeScale + '%',
+      'setting-line-width-value': state.settings.lineWidth + '%',
+      'setting-center-strength-value': (state.settings.centerStrength / 200).toFixed(2),
+      'setting-charge-strength-value': state.settings.chargeStrength,
+      'setting-link-strength-value': (state.settings.linkStrength / 100).toFixed(2),
+      'setting-link-distance-value': state.settings.linkDistance + '%'
+    };
+    Object.entries(map).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    });
+  }
+
+  function applySettings(reheat = true) {
+    const distanceScale = state.settings.linkDistance / 100;
+    const strengthScale = state.settings.linkStrength / 100;
+    const lineScale = state.settings.lineWidth / 100;
+    const center = state.settings.centerStrength / 200;
+
+    linkForce
+      .distance(d => (d.kind === 'hub' ? 58 : 86) * distanceScale)
+      .strength(d => (d.kind === 'hub' ? 0.65 : 0.85) * strengthScale);
+    chargeForce.strength(d => -state.settings.chargeStrength * (d.type === 'hub' ? 0.82 : 1));
+    collideForce.radius(d => nodeRadius(d) + 10);
+    xForce.x(window.innerWidth / 2).strength(center);
+    yForce.y(window.innerHeight / 2).strength(center);
+
+    updateNodeGeometry();
+    link
+      .attr('stroke-width', d => (d.kind === 'hub' ? 1.2 : 1.45) * lineScale)
+      .attr('marker-end', state.settings.arrows ? 'url(#arrowhead)' : null);
+
+    updateControlValues();
+    saveSettings();
+    refreshLabels();
+    if (reheat) simulation.alpha(0.42).restart();
+  }
 
   svg.on('click', () => {
     state.selectedId = null;
@@ -941,6 +1215,39 @@ function renderGraph(graph) {
     refreshLabels();
   });
 
+  const settingsBindings = [
+    ['setting-arrows', 'arrows', 'checked'],
+    ['setting-text-opacity', 'textOpacity', 'value'],
+    ['setting-node-scale', 'nodeScale', 'value'],
+    ['setting-line-width', 'lineWidth', 'value'],
+    ['setting-center-strength', 'centerStrength', 'value'],
+    ['setting-charge-strength', 'chargeStrength', 'value'],
+    ['setting-link-strength', 'linkStrength', 'value'],
+    ['setting-link-distance', 'linkDistance', 'value']
+  ];
+
+  settingsBindings.forEach(([id, key, prop]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (prop === 'checked') {
+      el.checked = !!state.settings[key];
+    } else {
+      el.value = state.settings[key];
+    }
+    el.addEventListener(prop === 'checked' ? 'change' : 'input', () => {
+      state.settings[key] = prop === 'checked' ? el.checked : Number(el.value);
+      applySettings();
+      refreshStyles();
+    });
+  });
+
+  const animateBtn = document.getElementById('animate-btn');
+  animateBtn.addEventListener('click', () => {
+    animateBtn.classList.add('active');
+    simulation.alpha(0.95).restart();
+    setTimeout(() => animateBtn.classList.remove('active'), 900);
+  });
+
   const search = document.getElementById('search');
   search.addEventListener('input', function() {
     state.searchQuery = this.value.trim().toLowerCase();
@@ -964,11 +1271,13 @@ function renderGraph(graph) {
 
   window.addEventListener('resize', () => {
     svg.attr('width', window.innerWidth).attr('height', window.innerHeight);
-    simulation.force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2)).alpha(0.18).restart();
+    applySettings(false);
+    simulation.alpha(0.18).restart();
   });
 
   renderLegend();
   updateDetails(null);
+  applySettings(false);
   refreshStyles();
   setTimeout(() => fitView(), 650);
 }
