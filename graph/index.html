@@ -3,249 +3,985 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>关系图谱 | Joey</title>
+<title>知识图谱 | Joey</title>
 <meta name="pjax" content="false">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; color: #e0e0e0; }
-  #graph { width: 100%; height: 100vh; cursor: grab; display: block; }
+  :root {
+    --bg: #07111f;
+    --bg-2: #0e1b2f;
+    --panel: rgba(9, 19, 35, 0.78);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text: #eef4ff;
+    --muted: #9fb0ca;
+    --soft: #6f84a8;
+    --accent: #73b5ff;
+    --accent-2: #89f0d0;
+    --danger: #ff9a9a;
+    --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(98, 166, 255, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(103, 247, 205, 0.12), transparent 26%),
+      radial-gradient(circle at bottom center, rgba(124, 99, 255, 0.12), transparent 28%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, black 25%, transparent 85%);
+    opacity: 0.28;
+  }
+
+  #graph {
+    width: 100%;
+    height: 100vh;
+    display: block;
+    cursor: grab;
+  }
   #graph:active { cursor: grabbing; }
-  .controls {
-    position: fixed; top: 20px; left: 20px; background: rgba(40,40,40,0.95); padding: 16px; border-radius: 8px;
-    backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-width: 280px; z-index: 10;
+
+  .panel {
+    position: fixed;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: var(--shadow);
+    z-index: 12;
   }
-  .controls h2 { font-size: 16px; margin-bottom: 10px; color: #fff; }
-  .controls p { font-size: 12px; color: #aaa; line-height: 1.5; margin-bottom: 8px; }
-  .stats { font-size: 12px; color: #888; margin-top: 8px; }
-  .search { width: 100%; padding: 6px 10px; background: #222; border: 1px solid #444; border-radius: 4px; color: #fff; font-size: 13px; margin-top: 8px; }
+
+  .topbar {
+    top: 18px;
+    left: 18px;
+    width: min(420px, calc(100vw - 36px));
+    padding: 18px 18px 16px;
+  }
+
+  .topbar h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.01em;
+  }
+
+  .subtext {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .btn {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.18s ease;
+  }
+
+  .btn:hover,
+  .btn.active {
+    background: rgba(115, 181, 255, 0.14);
+    border-color: rgba(115, 181, 255, 0.35);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .search-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    align-items: center;
+  }
+
+  .search {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    padding: 11px 14px;
+    font-size: 14px;
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  .search:focus {
+    border-color: rgba(115, 181, 255, 0.45);
+    box-shadow: 0 0 0 4px rgba(115, 181, 255, 0.12);
+  }
+
+  .quick-stats {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat {
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat .label {
+    display: block;
+    color: var(--soft);
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .stat .value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .right-stack {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: min(340px, calc(100vw - 36px));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 12;
+  }
+
+  .details,
   .legend {
-    position: fixed; top: 20px; right: 20px; background: rgba(40,40,40,0.95); padding: 12px; border-radius: 8px;
-    backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto; z-index: 10;
+    position: static;
+    padding: 16px;
   }
-  .legend h3 { font-size: 13px; margin-bottom: 8px; color: #fff; }
-  .legend-item { display: flex; align-items: center; font-size: 12px; margin-bottom: 4px; cursor: pointer; padding: 3px 6px; border-radius: 3px; user-select: none; color: #e0e0e0; }
-  .legend-item:hover { background: rgba(255,255,255,0.08); }
-  .legend-item.muted { opacity: 0.4; }
-  .legend-swatch { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; flex-shrink: 0; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .section-title h2,
+  .section-title h3 {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .hint {
+    color: var(--soft);
+    font-size: 12px;
+  }
+
+  .detail-empty {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .node-title {
+    margin: 0 0 10px;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #dce7ff;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .excerpt {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .detail-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .detail-line span:first-child {
+    color: var(--soft);
+    flex-shrink: 0;
+  }
+
+  .detail-line span:last-child {
+    color: var(--text);
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .neighbors {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 180px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .neighbor {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: #e8efff;
+    border-radius: 12px;
+    padding: 7px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .neighbor:hover { border-color: rgba(115, 181, 255, 0.35); background: rgba(115, 181, 255, 0.12); }
+
+  .legend-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 240px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 8px 10px;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+  }
+
+  .legend-item:hover { background: rgba(255,255,255,0.07); }
+  .legend-item.muted { opacity: 0.42; }
+
+  .legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .footer-link {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #dce7ff;
+    z-index: 12;
+  }
+
+  .footer-link:hover { color: #fff; }
+
   .tooltip {
-    position: fixed; background: rgba(20,20,20,0.95); padding: 8px 12px; border-radius: 4px;
-    font-size: 13px; color: #fff; pointer-events: none; z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5); max-width: 300px;
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    display: none;
+    min-width: 180px;
+    max-width: 320px;
+    background: rgba(8, 14, 26, 0.92);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    border-radius: 14px;
+    padding: 10px 12px;
+    color: #f2f6ff;
+    font-size: 12px;
   }
-  .back-link {
-    position: fixed; bottom: 20px; left: 20px; background: rgba(40,40,40,0.95); padding: 8px 14px;
-    border-radius: 6px; color: #8ab4f8; text-decoration: none; font-size: 13px; z-index: 10;
+
+  .tooltip strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
   }
-  .back-link:hover { background: rgba(60,60,60,0.95); }
+
+  .tooltip .mini {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
   .node { cursor: pointer; }
-  .node circle { stroke: #000; stroke-width: 0.8px; }
-  .node text { fill: #ddd; font-size: 10px; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
-  .link { stroke: #555; stroke-opacity: 0.2; fill: none; }
-  .link.strong { stroke: #888; stroke-opacity: 0.55; }
-  .link.highlighted { stroke: #8ab4f8; stroke-opacity: 0.9; }
-  .node.dimmed { opacity: 0.15; }
-  .link.dimmed { stroke-opacity: 0.05; }
-  #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #888; font-size: 14px; z-index: 999; }
+  .node .core { filter: drop-shadow(0 0 10px rgba(115, 181, 255, 0.08)); }
+  .node .ring {
+    opacity: 0;
+    stroke: rgba(255,255,255,0.55);
+    stroke-width: 1.2px;
+    fill: none;
+  }
+  .node.selected .ring,
+  .node.hovered .ring { opacity: 1; }
+  .node.dimmed { opacity: 0.12; }
+  .node.search-hit .core { filter: drop-shadow(0 0 14px rgba(115, 181, 255, 0.42)); }
+
+  .node-label {
+    fill: rgba(239, 245, 255, 0.92);
+    font-size: 11px;
+    pointer-events: none;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.85);
+  }
+
+  .link {
+    stroke: rgba(143, 171, 214, 0.18);
+    stroke-width: 1.2px;
+    fill: none;
+  }
+  .link.hub {
+    stroke: rgba(109, 230, 201, 0.18);
+    stroke-dasharray: 4 4;
+  }
+  .link.highlighted {
+    stroke: rgba(127, 191, 255, 0.92);
+    stroke-width: 2.1px;
+    stroke-dasharray: none;
+  }
+  .link.dimmed { opacity: 0.05; }
+
+  #loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    z-index: 99;
+    background: radial-gradient(circle at center, rgba(14, 27, 47, 0.9), rgba(7, 17, 31, 0.98));
+  }
+
+  .spinner {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.12);
+    border-top-color: rgba(115, 181, 255, 0.8);
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 900px) {
+    .topbar {
+      width: calc(100vw - 24px);
+      left: 12px;
+      right: 12px;
+      top: 12px;
+      padding: 14px;
+    }
+    .right-stack {
+      top: auto;
+      right: 12px;
+      left: 12px;
+      bottom: 64px;
+      width: auto;
+      max-height: 42vh;
+      overflow: auto;
+    }
+    .quick-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .footer-link { left: 12px; bottom: 12px; }
+  }
 </style>
 </head>
 <body>
-
-<!-- PJAX break-out: if this page gets loaded inside another page, force full reload -->
 <script>
-(function() {
-  // If we're loaded via PJAX or the DOM is not what we expect, force a full page reload
+(function () {
   try {
     if (window.top !== window.self) {
-      // Inside iframe, break out
       window.top.location.href = window.location.href;
       return;
     }
-    // If NEXT theme elements exist in parent, we're being injected — force reload
     if (document.querySelector('.site-brand-container, #sidebar, .main-inner')) {
       window.location.replace(window.location.href + '?_=' + Date.now());
-      return;
     }
   } catch (e) {}
 })();
 </script>
 
-<div id="loading">正在加载图谱数据…</div>
-
-<div class="controls" style="display:none;" id="controls-box">
-  <h2>🕸️ 关系图谱</h2>
-  <p>展示所有笔记之间的链接关系。拖拽节点、滚轮缩放、点击跳转文章。</p>
-  <input type="text" class="search" placeholder="搜索文章..." id="search">
-  <div class="stats" id="stats"></div>
+<div id="loading">
+  <div class="spinner"></div>
+  <div>正在构建知识图谱…</div>
 </div>
 
-<div class="legend" id="legend" style="display:none;">
-  <h3>分类</h3>
+<section class="panel topbar" id="controls-box" style="display:none;">
+  <h1>🕸️ 知识图谱</h1>
+  <div class="subtext">按 Obsidian 的思路展示真实笔记链接。实线是正文直连，虚线是标签集合 / 思维导图这类辅助节点。</div>
+
+  <div class="toolbar">
+    <button class="btn" id="fit-btn">适配视图</button>
+    <button class="btn" id="reset-btn">重置缩放</button>
+    <button class="btn" id="helper-btn">隐藏辅助节点</button>
+    <button class="btn" id="labels-btn">显示全部标题</button>
+  </div>
+
+  <div class="search-row">
+    <input id="search" class="search" type="text" placeholder="搜索文章、标签、路径，回车跳到第一个结果">
+  </div>
+
+  <div class="quick-stats" id="quick-stats"></div>
+</section>
+
+<div class="right-stack" id="right-stack" style="display:none;">
+  <section class="panel details">
+    <div class="section-title">
+      <h2>当前节点</h2>
+      <span class="hint">单击查看，双击打开</span>
+    </div>
+    <div id="details-body" class="detail-empty">点一个节点，我会在这里显示它的标题、路径、标签、相邻节点和跳转入口。</div>
+  </section>
+
+  <section class="panel legend">
+    <div class="section-title">
+      <h3>分类筛选</h3>
+      <span class="hint" id="visible-stats">0 / 0</span>
+    </div>
+    <div class="legend-grid" id="legend-items"></div>
+  </section>
 </div>
 
-<a href="/" class="back-link" data-no-pjax="true">← 返回首页</a>
-
+<a class="panel footer-link" href="/" data-no-pjax="true">← 返回首页</a>
 <svg id="graph"></svg>
-<div class="tooltip" id="tooltip" style="display:none;"></div>
+<div class="tooltip" id="tooltip"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
-function initGraph() {
-  if (typeof d3 === 'undefined') {
-    document.getElementById('loading').textContent = '加载 D3 失败，请检查网络';
-    return;
-  }
+const state = {
+  hiddenCategories: new Set(),
+  showHelpers: true,
+  showLabels: false,
+  selectedId: null,
+  hoveredId: null,
+  searchQuery: ''
+};
 
-  fetch('/graph/data.json')
-    .then(function(r) {
+function truncate(text, n) {
+  if (!text) return '';
+  return text.length > n ? text.slice(0, n) + '…' : text;
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function typeLabel(type) {
+  if (type === 'collection') return '标签集合';
+  if (type === 'map') return '思维导图';
+  return '笔记';
+}
+
+function buildGraph() {
+  fetch('./data.json')
+    .then(r => {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
-    .then(function(graph) {
-      renderGraph(graph);
-    })
-    .catch(function(err) {
-      document.getElementById('loading').textContent = '加载图谱数据失败：' + err.message;
+    .then(graph => renderGraph(graph))
+    .catch(err => {
+      const loading = document.getElementById('loading');
+      loading.innerHTML = '<div>加载图谱失败</div><div style="color:#7f8da7;font-size:12px;">' + escapeHtml(err.message) + '</div>';
     });
 }
 
 function renderGraph(graph) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('controls-box').style.display = 'block';
-  document.getElementById('legend').style.display = 'block';
+  document.getElementById('right-stack').style.display = 'flex';
 
-  var palette = ['#8ab4f8','#81c995','#fdd663','#f28b82','#c58af9','#78d9ec','#ffa877','#a2d9a0','#f7b6d2','#b4a7d6','#ffb2b2','#a0c4ff','#caffbf','#ffd6a5'];
-  var catColor = {};
-  graph.categories.forEach(function(c, i) { catColor[c] = palette[i % palette.length]; });
+  const palette = ['#7bb8ff','#8be6cd','#ffcc73','#ff9f9f','#bda1ff','#78d8ff','#ffd1a8','#9be1a0','#f3b4d9','#b4c2ff','#9af0ff','#ffc4c4','#d0f4de','#f8d39b','#d6c2ff'];
+  const categoryColor = {};
+  graph.categories.forEach((cat, i) => categoryColor[cat] = palette[i % palette.length]);
 
-  var width = window.innerWidth;
-  var height = window.innerHeight;
-  var svg = d3.select('#graph').attr('width', width).attr('height', height);
+  const byId = new Map(graph.nodes.map(n => [n.id, n]));
+  const neighbors = new Map(graph.nodes.map(n => [n.id, new Set()]));
+  graph.edges.forEach(ed => {
+    neighbors.get(ed.source).add(ed.target);
+    neighbors.get(ed.target).add(ed.source);
+  });
+
+  const svg = d3.select('#graph')
+    .attr('width', window.innerWidth)
+    .attr('height', window.innerHeight);
   svg.selectAll('*').remove();
-  var g = svg.append('g');
 
-  var zoom = d3.zoom().scaleExtent([0.1, 5]).on('zoom', function(e) { g.attr('transform', e.transform); });
+  const root = svg.append('g');
+  const linkLayer = root.append('g');
+  const nodeLayer = root.append('g');
+
+  const zoom = d3.zoom().scaleExtent([0.16, 4]).on('zoom', (event) => {
+    root.attr('transform', event.transform);
+  });
   svg.call(zoom);
 
-  var simulation = d3.forceSimulation(graph.nodes)
-    .force('link', d3.forceLink(graph.edges).id(function(d) { return d.id; })
-      .distance(function(d) { return d.kind === 'link' ? 70 : 110; })
-      .strength(function(d) { return d.kind === 'link' ? 0.6 : 0.15; }))
-    .force('charge', d3.forceManyBody().strength(-140))
-    .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collide', d3.forceCollide().radius(function(d) { return 4 + Math.sqrt(d.degree) * 2; }));
+  const simulation = d3.forceSimulation(graph.nodes)
+    .force('link', d3.forceLink(graph.edges)
+      .id(d => d.id)
+      .distance(d => d.kind === 'hub' ? 72 : 108)
+      .strength(d => d.kind === 'hub' ? 0.28 : 0.52))
+    .force('charge', d3.forceManyBody().strength(d => d.type === 'note' ? -240 : -130))
+    .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2))
+    .force('collide', d3.forceCollide().radius(d => nodeRadius(d) + 14))
+    .alpha(0.9);
 
-  var link = g.append('g').selectAll('line').data(graph.edges).enter()
+  function nodeRadius(d) {
+    const base = d.type === 'note' ? 5 : d.type === 'collection' ? 8 : 7;
+    return base + Math.min(11, Math.sqrt(d.degree || 0) * 1.8);
+  }
+
+  const link = linkLayer.selectAll('line')
+    .data(graph.edges)
+    .enter()
     .append('line')
-    .attr('class', function(d) { return 'link' + (d.kind === 'link' ? ' strong' : ''); })
-    .attr('stroke-width', function(d) { return d.kind === 'link' ? 1.4 : 0.7; });
+    .attr('class', d => 'link ' + d.kind);
 
-  var node = g.append('g').selectAll('g').data(graph.nodes).enter()
-    .append('g').attr('class', 'node')
+  const node = nodeLayer.selectAll('g')
+    .data(graph.nodes)
+    .enter()
+    .append('g')
+    .attr('class', 'node')
+    .on('mouseenter', (event, d) => {
+      state.hoveredId = d.id;
+      d3.select(event.currentTarget).classed('hovered', true);
+      showTooltip(event, d);
+      refreshStyles();
+    })
+    .on('mousemove', (event, d) => showTooltip(event, d))
+    .on('mouseleave', (event) => {
+      state.hoveredId = null;
+      d3.select(event.currentTarget).classed('hovered', false);
+      hideTooltip();
+      refreshStyles();
+    })
+    .on('click', (event, d) => {
+      event.stopPropagation();
+      state.selectedId = d.id;
+      updateDetails(d);
+      refreshStyles();
+    })
+    .on('dblclick', (event, d) => {
+      event.stopPropagation();
+      if (d.url) window.location.href = d.url;
+    })
     .call(d3.drag()
-      .on('start', function(e, d) { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-      .on('drag', function(e, d) { d.fx = e.x; d.fy = e.y; })
-      .on('end', function(e, d) { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+      .on('start', (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.25).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', (event, d) => {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }));
 
   node.append('circle')
-    .attr('r', function(d) { return 4 + Math.sqrt(d.degree) * 1.5; })
-    .attr('fill', function(d) { return catColor[d.category] || '#888'; });
+    .attr('class', 'ring')
+    .attr('r', d => nodeRadius(d) + 6);
+
+  node.each(function(d) {
+    const g = d3.select(this);
+    const radius = nodeRadius(d);
+    const color = categoryColor[d.category] || '#9fb0ca';
+
+    if (d.type === 'collection') {
+      g.append('rect')
+        .attr('class', 'core')
+        .attr('x', -radius)
+        .attr('y', -radius * 0.7)
+        .attr('rx', 10)
+        .attr('ry', 10)
+        .attr('width', radius * 2)
+        .attr('height', radius * 1.4)
+        .attr('fill', color)
+        .attr('stroke', 'rgba(255,255,255,0.18)')
+        .attr('stroke-width', 1.2);
+    } else if (d.type === 'map') {
+      g.append('path')
+        .attr('class', 'core')
+        .attr('d', d3.symbol().type(d3.symbolDiamond).size((radius * 2.4) ** 2 / 2)())
+        .attr('fill', color)
+        .attr('stroke', 'rgba(255,255,255,0.18)')
+        .attr('stroke-width', 1.2);
+    } else {
+      g.append('circle')
+        .attr('class', 'core')
+        .attr('r', radius)
+        .attr('fill', color)
+        .attr('stroke', 'rgba(255,255,255,0.18)')
+        .attr('stroke-width', 1.15);
+    }
+  });
 
   node.append('text')
-    .attr('dx', function(d) { return 6 + Math.sqrt(d.degree) * 1.5; })
-    .attr('dy', 3)
-    .text(function(d) { return d.title.length > 20 ? d.title.slice(0, 20) + '…' : d.title; });
+    .attr('class', 'node-label')
+    .attr('x', d => nodeRadius(d) + 8)
+    .attr('y', 4)
+    .text(d => truncate(d.title, 20));
 
-  var tooltip = d3.select('#tooltip');
-  node.on('mouseenter', function(e, d) {
-    tooltip.style('display', 'block')
-      .style('left', (e.clientX + 10) + 'px')
-      .style('top', (e.clientY + 10) + 'px')
-      .html('<strong>' + d.title + '</strong><br><span style="color:#aaa">' + d.category + ' · ' + d.degree + ' 连接</span>');
-    var connected = new Set([d.id]);
-    graph.edges.forEach(function(ed) {
-      var s = ed.source.id || ed.source, t = ed.target.id || ed.target;
-      if (s === d.id) connected.add(t);
-      if (t === d.id) connected.add(s);
-    });
-    node.classed('dimmed', function(n) { return !connected.has(n.id); });
-    link.classed('dimmed', function(ed) {
-      var s = ed.source.id || ed.source, t = ed.target.id || ed.target;
-      return !(s === d.id || t === d.id);
-    }).classed('highlighted', function(ed) {
-      var s = ed.source.id || ed.source, t = ed.target.id || ed.target;
-      return s === d.id || t === d.id;
-    });
-  }).on('mousemove', function(e) {
-    tooltip.style('left', (e.clientX + 10) + 'px').style('top', (e.clientY + 10) + 'px');
-  }).on('mouseleave', function() {
-    tooltip.style('display', 'none');
-    node.classed('dimmed', false);
-    link.classed('dimmed', false).classed('highlighted', false);
-  }).on('click', function(e, d) {
-    window.location.href = d.url;
+  svg.on('click', () => {
+    state.selectedId = null;
+    updateDetails(null);
+    refreshStyles();
   });
 
-  simulation.on('tick', function() {
-    link.attr('x1', function(d) { return d.source.x; })
-        .attr('y1', function(d) { return d.source.y; })
-        .attr('x2', function(d) { return d.target.x; })
-        .attr('y2', function(d) { return d.target.y; });
-    node.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
   });
 
-  var hidden = new Set();
-  var legend = d3.select('#legend');
-  legend.selectAll('.legend-item').remove();
-  graph.categories.forEach(function(cat) {
-    var count = graph.nodes.filter(function(n) { return n.category === cat; }).length;
-    var item = legend.append('div').attr('class', 'legend-item').attr('data-cat', cat);
-    item.append('span').attr('class', 'legend-swatch').style('background', catColor[cat]);
-    item.append('span').text(cat + ' (' + count + ')');
-    item.on('click', function() {
-      if (hidden.has(cat)) hidden.delete(cat); else hidden.add(cat);
-      d3.select(this).classed('muted', hidden.has(cat));
-      node.style('display', function(n) { return hidden.has(n.category) ? 'none' : null; });
-      link.style('display', function(ed) {
-        var s = ed.source.category || (graph.nodes.find(function(n){return n.id===(ed.source.id||ed.source);})||{}).category;
-        var t = ed.target.category || (graph.nodes.find(function(n){return n.id===(ed.target.id||ed.target);})||{}).category;
-        return hidden.has(s) || hidden.has(t) ? 'none' : null;
+  function isNodeVisible(n) {
+    if (!state.showHelpers && n.type !== 'note') return false;
+    if (state.hiddenCategories.has(n.category)) return false;
+    return true;
+  }
+
+  function isLinkVisible(ed) {
+    const s = typeof ed.source === 'object' ? ed.source : byId.get(ed.source);
+    const t = typeof ed.target === 'object' ? ed.target : byId.get(ed.target);
+    return isNodeVisible(s) && isNodeVisible(t);
+  }
+
+  function focusSet() {
+    const anchor = state.selectedId || state.hoveredId;
+    if (anchor) {
+      const set = new Set([anchor]);
+      neighbors.get(anchor).forEach(id => set.add(id));
+      return set;
+    }
+    if (state.searchQuery) {
+      const q = state.searchQuery;
+      const set = new Set();
+      graph.nodes.forEach(n => {
+        const hay = [n.title, n.path, n.category].concat(n.tags || []).join(' ').toLowerCase();
+        if (hay.includes(q)) set.add(n.id);
+      });
+      return set;
+    }
+    return null;
+  }
+
+  function refreshLabels() {
+    const anchor = state.selectedId;
+    const near = anchor ? new Set([anchor, ...neighbors.get(anchor)]) : null;
+    node.selectAll('.node-label')
+      .style('display', d => {
+        if (!isNodeVisible(d)) return 'none';
+        if (state.showLabels) return null;
+        if (d.type !== 'note') return null;
+        if (near && near.has(d.id)) return null;
+        if ((d.degree || 0) >= 6) return null;
+        return 'none';
+      });
+  }
+
+  function refreshStats() {
+    const visibleNodes = graph.nodes.filter(isNodeVisible);
+    const visibleEdges = graph.edges.filter(isLinkVisible);
+    const helperVisible = visibleNodes.filter(n => n.type !== 'note').length;
+    const stats = [
+      { label: '节点', value: visibleNodes.length },
+      { label: '连接', value: visibleEdges.length },
+      { label: '正文', value: visibleNodes.filter(n => n.type === 'note').length },
+      { label: '辅助', value: helperVisible }
+    ];
+    document.getElementById('quick-stats').innerHTML = stats.map(item => `
+      <div class="stat">
+        <span class="label">${item.label}</span>
+        <span class="value">${item.value}</span>
+      </div>
+    `).join('');
+    document.getElementById('visible-stats').textContent = visibleNodes.length + ' / ' + graph.nodes.length;
+  }
+
+  function refreshStyles() {
+    const focus = focusSet();
+
+    node
+      .style('display', d => isNodeVisible(d) ? null : 'none')
+      .classed('selected', d => d.id === state.selectedId)
+      .classed('search-hit', d => !!state.searchQuery && !state.selectedId && [d.title, d.path, d.category].concat(d.tags || []).join(' ').toLowerCase().includes(state.searchQuery))
+      .classed('dimmed', d => {
+        if (!isNodeVisible(d)) return false;
+        if (!focus) return false;
+        return !focus.has(d.id);
+      });
+
+    link
+      .style('display', d => isLinkVisible(d) ? null : 'none')
+      .classed('highlighted', d => {
+        const s = d.source.id || d.source;
+        const t = d.target.id || d.target;
+        const anchor = state.selectedId || state.hoveredId;
+        return !!anchor && (s === anchor || t === anchor);
+      })
+      .classed('dimmed', d => {
+        if (!isLinkVisible(d)) return false;
+        if (!focus) return false;
+        const s = d.source.id || d.source;
+        const t = d.target.id || d.target;
+        return !(focus.has(s) && focus.has(t));
+      });
+
+    refreshLabels();
+    refreshStats();
+  }
+
+  function renderLegend() {
+    const legend = d3.select('#legend-items');
+    legend.selectAll('*').remove();
+    graph.categories.forEach(cat => {
+      const count = graph.nodes.filter(n => n.category === cat).length;
+      const item = legend.append('div').attr('class', 'legend-item');
+      item.classed('muted', state.hiddenCategories.has(cat));
+      item.html(`<span class="legend-swatch" style="background:${categoryColor[cat] || '#9fb0ca'}"></span><span>${escapeHtml(cat)} (${count})</span>`);
+      item.on('click', () => {
+        if (state.hiddenCategories.has(cat)) state.hiddenCategories.delete(cat);
+        else state.hiddenCategories.add(cat);
+        renderLegend();
+        refreshStyles();
       });
     });
-  });
+  }
 
-  document.getElementById('stats').textContent = graph.nodes.length + ' 节点 · ' + graph.edges.length + ' 连接';
-
-  var searchInput = document.getElementById('search');
-  searchInput.addEventListener('input', function() {
-    var q = this.value.toLowerCase().trim();
-    if (!q) {
-      node.classed('dimmed', false);
-      link.classed('dimmed', false);
+  function updateDetails(nodeData) {
+    const body = document.getElementById('details-body');
+    if (!nodeData) {
+      body.className = 'detail-empty';
+      body.innerHTML = '点一个节点，我会在这里显示它的标题、路径、标签、相邻节点和跳转入口。';
       return;
     }
-    var matched = new Set();
-    graph.nodes.forEach(function(n) {
-      if (n.title.toLowerCase().includes(q)) matched.add(n.id);
+
+    const near = [...neighbors.get(nodeData.id)]
+      .map(id => byId.get(id))
+      .filter(Boolean)
+      .sort((a, b) => (b.degree || 0) - (a.degree || 0) || a.title.localeCompare(b.title, 'zh-CN'));
+
+    const chips = [
+      `<span class="chip">${typeLabel(nodeData.type)}</span>`,
+      `<span class="chip">${escapeHtml(nodeData.category)}</span>`,
+      `<span class="chip">${nodeData.degree} 条连接</span>`
+    ].concat((nodeData.tags || []).slice(0, 6).map(tag => `<span class="chip">#${escapeHtml(tag)}</span>`));
+
+    const actions = nodeData.url
+      ? `<div class="detail-actions"><button class="btn active" id="open-node-btn">打开文章</button><button class="btn" id="focus-node-btn">聚焦周边</button></div>`
+      : `<div class="detail-actions"><button class="btn" id="focus-node-btn">聚焦周边</button><span class="chip">这个节点只用于图谱辅助，没有单独页面</span></div>`;
+
+    body.className = '';
+    body.innerHTML = `
+      <h3 class="node-title">${escapeHtml(nodeData.title)}</h3>
+      <div class="meta-row">${chips.join('')}</div>
+      <div class="excerpt">${escapeHtml(nodeData.excerpt || '这条笔记没有可提取的正文摘要。')}</div>
+      ${actions}
+      <div class="detail-line"><span>路径</span><span>${escapeHtml(nodeData.path)}</span></div>
+      <div class="detail-line"><span>一级目录</span><span>${escapeHtml(nodeData.folder || '根目录')}</span></div>
+      <div class="detail-line"><span>发布状态</span><span>${nodeData.published ? '已发布' : '仅图谱节点'}</span></div>
+      <div class="detail-line"><span>相邻节点</span><span>${near.length}</span></div>
+      <div class="neighbors" id="neighbors-box"></div>
+    `;
+
+    const neighborsBox = document.getElementById('neighbors-box');
+    near.slice(0, 20).forEach(item => {
+      const el = document.createElement('button');
+      el.className = 'neighbor';
+      el.textContent = item.title;
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.selectedId = item.id;
+        updateDetails(item);
+        centerOnNode(item);
+        refreshStyles();
+      });
+      neighborsBox.appendChild(el);
     });
-    node.classed('dimmed', function(n) { return !matched.has(n.id); });
-    link.classed('dimmed', function(ed) {
-      var s = ed.source.id || ed.source, t = ed.target.id || ed.target;
-      return !(matched.has(s) && matched.has(t));
-    });
+
+    const focusBtn = document.getElementById('focus-node-btn');
+    if (focusBtn) {
+      focusBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        centerOnNode(nodeData);
+      });
+    }
+
+    const openBtn = document.getElementById('open-node-btn');
+    if (openBtn) {
+      openBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = nodeData.url;
+      });
+    }
+  }
+
+  function showTooltip(event, d) {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.display = 'block';
+    tooltip.style.left = (event.clientX + 12) + 'px';
+    tooltip.style.top = (event.clientY + 12) + 'px';
+    tooltip.innerHTML = `
+      <strong>${escapeHtml(d.title)}</strong>
+      <div class="mini">${escapeHtml(typeLabel(d.type))} · ${escapeHtml(d.category)} · ${d.degree} 条连接</div>
+      <div class="mini" style="margin-top:6px;">${escapeHtml(truncate(d.excerpt || d.path, 90))}</div>
+    `;
+  }
+
+  function hideTooltip() {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.display = 'none';
+  }
+
+  function centerOnNode(nodeData) {
+    const scale = 1.2;
+    const transform = d3.zoomIdentity
+      .translate(window.innerWidth / 2 - nodeData.x * scale, window.innerHeight / 2 - nodeData.y * scale)
+      .scale(scale);
+    svg.transition().duration(550).call(zoom.transform, transform);
+  }
+
+  function fitView() {
+    const visible = graph.nodes.filter(isNodeVisible);
+    if (!visible.length) return;
+    const minX = d3.min(visible, d => d.x || 0);
+    const maxX = d3.max(visible, d => d.x || 0);
+    const minY = d3.min(visible, d => d.y || 0);
+    const maxY = d3.max(visible, d => d.y || 0);
+    const width = Math.max(220, maxX - minX);
+    const height = Math.max(220, maxY - minY);
+    const scale = Math.min(1.6, Math.max(0.22, 0.85 / Math.max(width / window.innerWidth, height / window.innerHeight)));
+    const tx = window.innerWidth / 2 - (minX + width / 2) * scale;
+    const ty = window.innerHeight / 2 - (minY + height / 2) * scale;
+    svg.transition().duration(550).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+  }
+
+  document.getElementById('fit-btn').addEventListener('click', () => fitView());
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    svg.transition().duration(450).call(zoom.transform, d3.zoomIdentity);
+  });
+  document.getElementById('helper-btn').addEventListener('click', (e) => {
+    state.showHelpers = !state.showHelpers;
+    e.currentTarget.classList.toggle('active', !state.showHelpers);
+    e.currentTarget.textContent = state.showHelpers ? '隐藏辅助节点' : '显示辅助节点';
+    if (state.selectedId && !isNodeVisible(byId.get(state.selectedId))) {
+      state.selectedId = null;
+      updateDetails(null);
+    }
+    refreshStyles();
+    setTimeout(fitView, 60);
+  });
+  document.getElementById('labels-btn').addEventListener('click', (e) => {
+    state.showLabels = !state.showLabels;
+    e.currentTarget.classList.toggle('active', state.showLabels);
+    e.currentTarget.textContent = state.showLabels ? '隐藏部分标题' : '显示全部标题';
+    refreshLabels();
   });
 
-  window.addEventListener('resize', function() {
-    var w = window.innerWidth, h = window.innerHeight;
-    svg.attr('width', w).attr('height', h);
-    simulation.force('center', d3.forceCenter(w / 2, h / 2)).alpha(0.3).restart();
+  const search = document.getElementById('search');
+  search.addEventListener('input', function() {
+    state.searchQuery = this.value.trim().toLowerCase();
+    refreshStyles();
   });
+  search.addEventListener('keydown', function(event) {
+    if (event.key !== 'Enter') return;
+    const q = this.value.trim().toLowerCase();
+    if (!q) return;
+    const target = graph.nodes.find(n => {
+      const hay = [n.title, n.path, n.category].concat(n.tags || []).join(' ').toLowerCase();
+      return hay.includes(q) && isNodeVisible(n);
+    });
+    if (target) {
+      state.selectedId = target.id;
+      updateDetails(target);
+      centerOnNode(target);
+      refreshStyles();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    svg.attr('width', window.innerWidth).attr('height', window.innerHeight);
+    simulation.force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2)).alpha(0.18).restart();
+  });
+
+  renderLegend();
+  updateDetails(null);
+  refreshStyles();
+  setTimeout(() => fitView(), 650);
 }
 
-// Run now if DOM is already ready, otherwise wait
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initGraph);
+  document.addEventListener('DOMContentLoaded', buildGraph);
 } else {
-  initGraph();
+  buildGraph();
 }
 </script>
 </body>
