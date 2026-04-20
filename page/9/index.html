@@ -449,7 +449,7 @@ v_k\)</span>，每对相邻有边</li>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/5e589690.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/76a28bc6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -467,7 +467,7 @@ v_k\)</span>，每对相邻有边</li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/5e589690.html" class="post-title-link" itemprop="url">COMP5313 Tutorial 05 - Hub and Authority 题解</a>
+          <a href="/posts/76a28bc6.html" class="post-title-link" itemprop="url">COMP5313 Tutorial 06 - PageRank 题解</a>
         </h2>
 
         <div class="post-meta-container">
@@ -485,7 +485,7 @@ v_k\)</span>，每对相邻有边</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-15 17:52:24" itemprop="dateModified" datetime="2026-04-15T17:52:24Z">2026-04-15</time>
+      <time title="Modified: 2026-04-15 17:58:49" itemprop="dateModified" datetime="2026-04-15T17:58:49Z">2026-04-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -508,14 +508,14 @@ v_k\)</span>，每对相邻有边</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.4k</span>
+      <span>2.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>12 mins.</span>
+      <span>9 mins.</span>
     </span>
 </div>
 
@@ -526,32 +526,33 @@ v_k\)</span>，每对相邻有边</li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="week-5-tutorial-hub-and-authority-题解">Week 5 Tutorial: Hub and
-Authority 题解</h1>
+          <h1 id="week-6-tutorial-pagerank-题解">Week 6 Tutorial: PageRank
+题解</h1>
 <blockquote>
-<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026 主题：理解
-<strong>Hub and Authority</strong> 更新规则如何影响网页排名 依据教材
-<em>Networks, Crowds, and Markets</em> 第 14 章</p>
+<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026
+主题：PageRank 的定义与计算 依据教材 <em>Networks, Crowds, and
+Markets</em>（Easley &amp; Kleinberg）第 14.3 节</p>
 </blockquote>
 <hr>
 <h2 id="一预备知识回顾">一、预备知识回顾</h2>
-<h3 id="hits-算法核心思想">1.1 HITS 算法核心思想</h3>
-<p><strong>Hubs and Authorities</strong>
-算法将网页的重要性分为两个互补维度：</p>
-<ul>
-<li><strong>权威（Authority）</strong>：内容上被认可为高质量信息来源的页面（如
-Cornell 主页之于查询 "Cornell"）</li>
-<li><strong>中枢（Hub）</strong>：本身不一定是权威，但指向许多权威页面的"列表型"页面（如"十大最佳新闻网站"）</li>
-</ul>
-<p>两者是<strong>相互递归定义（Mutually Recursive Definition）</strong>
-的：</p>
-<blockquote>
-<p>"好的中枢指向许多好的权威；好的权威被许多好的中枢指向。"</p>
-</blockquote>
-<h3 id="更新规则update-rules">1.2 更新规则（Update Rules）</h3>
+<h3 id="基本-pagerank-更新规则basic-pagerank-update-rule">1.1 基本
+PageRank 更新规则（Basic PageRank Update Rule）</h3>
+<p>网络有 <span class="math inline">\(n\)</span> 个节点，所有节点初始
+PageRank 值为 <span class="math inline">\(1/n\)</span>。</p>
+<p><strong>更新规则</strong>： &gt; 每个页面将其当前 PageRank
+<strong>均等地</strong>（equally）分给每条出链（out-going
+link），送给其指向的页面。若某页面没有出链，则把自己的 PageRank
+全部传给自己（即保留不变）。</p>
+<p><strong>数学形式</strong>： <span class="math display">\[v&#39;_i =
+\sum_{j \to i} \frac{v_j}{d_j^{out}}\]</span> 其中 <span class="math inline">\(d_j^{out}\)</span> 为节点 <span class="math inline">\(j\)</span> 的出度；若 <span class="math inline">\(d_j^{out}=0\)</span> 则 <span class="math inline">\(v&#39;_j = v_j\)</span>（保留自身）。</p>
+<p><strong>矩阵形式</strong>：<span class="math inline">\(v&#39; = M
+v\)</span>，其中 <span class="math inline">\(M\)</span>
+是列随机的转移矩阵（column-stochastic transition matrix）。</p>
+<h3 id="均衡-pagerank-值equilibrium-pagerank">1.2 均衡 PageRank
+值（Equilibrium PageRank）</h3>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/posts/5e589690.html#more" rel="contents">
+              <a class="btn" href="/posts/76a28bc6.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
