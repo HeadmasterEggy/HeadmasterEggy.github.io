@@ -22,20 +22,20 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="Week 6 Tutorial: PageRank 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：PageRank 的定义与计算 依据教材 Networks, Crowds, and Markets（Easley &amp; Kleinberg）第 14.3 节   一、预备知识回顾 1.1 基本 PageRank 更新规则">
+    <meta name="description" content="COMP5313 Week 6 Tutorial PageRank 题解，系统整理 Basic PageRank 更新规则、均衡 PageRank 与 Scaled PageRank（解决 Spider Trap 与 Dead End），并针对多张示例图求解均衡方程，给出完整计算步骤与结果。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COMP5313 Tutorial 06 - PageRank 题解">
 <meta property="og:url" content="http://example.com/posts/76a28bc6.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="Week 6 Tutorial: PageRank 题解  课程：COMP5313&#x2F;COMP4313 — Large Scale Networks, S1 2026 主题：PageRank 的定义与计算 依据教材 Networks, Crowds, and Markets（Easley &amp; Kleinberg）第 14.3 节   一、预备知识回顾 1.1 基本 PageRank 更新规则">
+<meta property="og:description" content="COMP5313 Week 6 Tutorial PageRank 题解，系统整理 Basic PageRank 更新规则、均衡 PageRank 与 Scaled PageRank（解决 Spider Trap 与 Dead End），并针对多张示例图求解均衡方程，给出完整计算步骤与结果。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-16T00:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-15T17:58:49.958Z">
+<meta property="article:modified_time" content="2026-04-20T14:42:44.026Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
 <meta property="article:tag" content="Tutorial">
-<meta property="article:tag" content="PageRank">
 <meta property="article:tag" content="题解">
+<meta property="article:tag" content="PageRank">
 <meta name="twitter:card" content="summary">
 
 
@@ -244,7 +244,7 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="COMP5313 Tutorial 06 - PageRank 题解 | Joey">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="COMP5313 Week 6 Tutorial PageRank 题解，系统整理 Basic PageRank 更新规则、均衡 PageRank 与 Scaled PageRank（解决 Spider Trap 与 Dead End），并针对多张示例图求解均衡方程，给出完整计算步骤与结果。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -266,7 +266,7 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-15 17:58:49" itemprop="dateModified" datetime="2026-04-15T17:58:49Z">2026-04-15</time>
+      <time title="Modified: 2026-04-20 14:42:44" itemprop="dateModified" datetime="2026-04-20T14:42:44Z">2026-04-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -274,11 +274,7 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
         </span>
     </span>
 
@@ -300,6 +296,7 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
     </span>
 </div>
 
+            <div class="post-description">COMP5313 Week 6 Tutorial PageRank 题解，系统整理 Basic PageRank 更新规则、均衡 PageRank 与 Scaled PageRank（解决 Spider Trap 与 Dead End），并针对多张示例图求解均衡方程，给出完整计算步骤与结果。</div>
         </div>
       </header>
 
@@ -934,21 +931,21 @@ Crowds, and Markets</em>, 第 14.3 节</p>
           <div class="post-tags">
               <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
               <a href="/tags/Tutorial/" rel="tag"><i class="fa fa-tag"></i> Tutorial</a>
-              <a href="/tags/PageRank/" rel="tag"><i class="fa fa-tag"></i> PageRank</a>
               <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 题解</a>
+              <a href="/tags/PageRank/" rel="tag"><i class="fa fa-tag"></i> PageRank</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/5e589690.html" rel="prev" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
-                  <i class="fa fa-angle-left"></i> COMP5313 Tutorial 05 - Hub and Authority 题解
+                <a href="/posts/8fb0c31c.html" rel="prev" title="每日科技速递 - 2026-04-15">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-04-15
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/c104b4f8.html" rel="next" title="COMP5313 考试 Cheatsheet（六大模块复习）">
-                  COMP5313 考试 Cheatsheet（六大模块复习） <i class="fa fa-angle-right"></i>
+                <a href="/posts/5e589690.html" rel="next" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
+                  COMP5313 Tutorial 05 - Hub and Authority 题解 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
