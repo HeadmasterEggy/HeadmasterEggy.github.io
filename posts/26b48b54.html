@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Simon 等人 2026 年的立场论文《There Will Be a Scientific Theory of Deep Learning》，系统梳理了正在浮现的&quot;学习力学&quot;（learning mechanics）。本篇精读把全文 25 页拆成五条证据、七条期望、与机制可解释性的关系、对质疑的回应、十大开放方向，并附带我自己的解读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026-04-25-深度学习会有一门科学理论吗？《There Will Be a Scientific Theory of Deep Learning》论文精读">
+<meta property="og:url" content="http://example.com/posts/26b48b54.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Simon 等人 2026 年的立场论文《There Will Be a Scientific Theory of Deep Learning》，系统梳理了正在浮现的&quot;学习力学&quot;（learning mechanics）。本篇精读把全文 25 页拆成五条证据、七条期望、与机制可解释性的关系、对质疑的回应、十大开放方向，并附带我自己的解读。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-25T04:13:23.009Z">
+<meta property="article:modified_time" content="2026-04-25T04:17:48.594Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="深度学习理论">
+<meta property="article:tag" content="learning mechanics">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="机制可解释性">
+<meta property="article:tag" content="缩放律">
+<meta property="article:tag" content="NTK">
+<meta property="article:tag" content="edge of stability">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/26b48b54.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/26b48b54.html","path":"posts/26b48b54.html","title":"2026-04-25-深度学习会有一门科学理论吗？《There Will Be a Scientific Theory of Deep Learning》论文精读"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2026-04-25-深度学习会有一门科学理论吗？《There Will Be a Scientific Theory of Deep Learning》论文精读 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/26b48b54.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">80</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">163</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="nav-text">一句话总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87"><span class="nav-text">一、为什么要写这篇论文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E7%8A%B6%E6%9C%80%E5%BC%BA%E5%A4%A7%E4%BD%86%E6%9C%80%E7%A5%9E%E7%A7%98%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-text">1.1 现状：最强大但最神秘的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%8B%E5%9C%BA%E5%AE%A3%E8%A8%80"><span class="nav-text">1.2 立场宣言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8A%9B%E5%AD%A6%E8%BF%99%E4%B8%AA%E5%90%8D%E5%AD%97%E6%9C%80%E8%B4%B4%E5%88%87"><span class="nav-text">1.3 为什么&quot;力学&quot;这个名字最贴切</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%BA%94%E6%9D%A1%E8%AF%81%E6%8D%AE%E5%8A%9B%E5%AD%A6%E6%AD%A3%E5%9C%A8%E6%B5%AE%E7%8E%B0"><span class="nav-text">二、五条证据：力学正在浮现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%A3%E6%9E%90%E8%AE%BE%E5%AE%9Asolvable-settings"><span class="nav-text">2.1 可解析设定（solvable
+settings）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%8A%E7%9A%84%E7%BA%BF%E6%80%A7%E5%8C%96%E6%B7%B1%E5%BA%A6%E7%BA%BF%E6%80%A7%E7%BD%91%E7%BB%9C"><span class="nav-text">数据上的线性化：深度线性网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%B8%8A%E7%9A%84%E7%BA%BF%E6%80%A7%E5%8C%96ntk-%E4%B8%8E%E6%A0%B8%E5%9B%9E%E5%BD%92"><span class="nav-text">参数上的线性化：NTK 与核回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E5%A4%9A%E6%8C%87%E6%A0%87%E6%A8%A1%E5%9E%8B%E4%B8%8E-glm"><span class="nav-text">单&#x2F;多指标模型与 GLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E6%9E%81%E9%99%90%E6%8F%AD%E7%A4%BA%E6%A0%B9%E6%9C%AC%E8%A1%8C%E4%B8%BA"><span class="nav-text">2.2 简化极限：揭示根本行为</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lazy-kernel-linearized-%E5%8C%BA%E9%97%B4"><span class="nav-text">Lazy &#x2F; Kernel &#x2F; Linearized
+区间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rich-mean-field-feature-learning-%E5%8C%BA%E9%97%B4"><span class="nav-text">Rich &#x2F; Mean-field &#x2F;
+Feature-learning 区间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%BC%A0%E5%9B%BE%E7%9B%B8%E5%90%8C%E7%BD%91%E7%BB%9C%E4%B8%8D%E5%90%8C%E5%8C%BA%E9%97%B4"><span class="nav-text">一张图：相同网络，不同区间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E9%99%90%E6%B7%B1%E5%BA%A6%E6%9E%81%E9%99%90%E4%B8%8E%E5%85%B6%E4%BB%96"><span class="nav-text">无限深度极限与其他</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E5%8C%96%E5%81%87%E8%AE%BEdiscretization-hypothesis"><span class="nav-text">离散化假设（Discretization
+Hypothesis）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%BB%8F%E9%AA%8C%E5%BE%8B%E5%A4%8D%E6%9D%82%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BC%80%E6%99%AE%E5%8B%92%E5%AE%9A%E5%BE%8B"><span class="nav-text">2.3
+简单经验律：复杂系统的&quot;开普勒定律&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BC%A9%E6%94%BE%E5%BE%8Bneural-scaling-laws"><span class="nav-text">神经缩放律（Neural Scaling
+Laws）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%B3%E5%AE%9A%E6%80%A7%E8%BE%B9%E7%BC%98edge-of-stability"><span class="nav-text">稳定性边缘（Edge of
+Stability）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E5%9D%8D%E5%A1%8Cneural-collapse"><span class="nav-text">神经坍塌（Neural Collapse）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%89%B9%E5%BE%81-ansatzneural-feature-ansatz"><span class="nav-text">神经特征 Ansatz（Neural
+Feature Ansatz）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B5%81%E5%AE%88%E6%81%92%E5%BE%8B"><span class="nav-text">梯度流守恒律</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E7%90%86%E8%AE%BA%E5%AE%B6%E7%9A%84%E5%90%AF%E7%A4%BA"><span class="nav-text">给理论家的启示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E5%8F%82%E6%95%B0%E5%8F%AF%E8%A7%A3%E8%80%A6"><span class="nav-text">2.4 超参数可解耦</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8%E8%B6%85%E5%8F%82%E6%95%B0linear-scaling-rule"><span class="nav-text">优化器超参数：linear scaling
+rule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E6%9B%B2%E7%8E%87%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-text">隐式曲率正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%CE%BCp%E5%8F%AF%E8%BF%81%E7%A7%BB%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="nav-text">μP：可迁移的学习率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%82%E7%8E%B0%E8%B1%A1%E4%B8%8D%E5%90%8C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E5%88%B0%E7%9B%B8%E4%BC%BC%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="nav-text">2.5
+普适现象：不同系统学到相似的东西</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%82%E7%9A%84%E5%BD%92%E7%BA%B3%E5%81%8F%E7%BD%AE"><span class="nav-text">普适的归纳偏置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E6%99%AE%E9%80%82%E7%BB%93%E6%9E%84"><span class="nav-text">数据的普适结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%99%AE%E9%80%82%E6%80%A7"><span class="nav-text">表示的普适性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%8A%9B%E5%AD%A6%E7%9A%84%E4%B8%83%E6%9D%A1%E6%9C%9F%E6%9C%9Bseven-desiderata"><span class="nav-text">三、力学的七条期望（Seven
+Desiderata）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%BA%E4%BB%80%E4%B9%88-learning-mechanics-%E9%87%8D%E8%A6%81"><span class="nav-text">四、为什么 learning mechanics
+重要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%91%E5%AD%A6%E5%B1%82%E9%9D%A2"><span class="nav-text">4.1 科学层面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E5%B1%82%E9%9D%A2"><span class="nav-text">4.2 实践层面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E5%B1%82%E9%9D%A2"><span class="nav-text">4.3 安全层面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94learning-mechanics-%E4%B8%8E%E6%9C%BA%E5%88%B6%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E7%9A%84%E5%85%B3%E7%B3%BBsection-3.1"><span class="nav-text">五、Learning
+Mechanics 与机制可解释性的关系（Section 3.1）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E5%90%84%E8%87%AA%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">5.1 两者各自做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E8%B4%A1%E7%8C%AE"><span class="nav-text">5.2 双向贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E5%8A%9B%E5%AD%A6-%E6%9C%BA%E5%88%B6%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7"><span class="nav-text">学习力学 → 机制可解释性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%BA%E5%88%B6%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7-%E5%AD%A6%E4%B9%A0%E5%8A%9B%E5%AD%A6"><span class="nav-text">机制可解释性 → 学习力学</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%AF%B9%E5%B8%B8%E8%A7%81%E8%B4%A8%E7%96%91%E7%9A%84%E5%9B%9E%E5%BA%94section-4"><span class="nav-text">六、对常见质疑的回应（Section
+4）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E5%8D%81%E5%B9%B4%E9%83%BD%E6%B2%A1%E6%89%BE%E5%88%B0%E8%BF%98%E4%BC%9A%E6%9C%89%E5%90%97"><span class="nav-text">6.1 &quot;几十年都没找到，还会有吗？&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E8%83%BD%E8%A7%A3%E7%9A%84%E9%83%BD%E5%A4%AA%E5%88%9D%E7%BA%A7%E8%BF%9C%E4%B8%8D%E5%A4%9F-llm"><span class="nav-text">6.2 &quot;现在能解的都太初级，远不够
+LLM&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%B1%82%E8%A1%8C%E4%B8%BA%E6%89%8D%E9%87%8D%E8%A6%81%E5%BE%AE%E8%A7%82%E7%90%86%E8%AE%BA%E7%9C%8B%E4%B8%8D%E8%A7%81"><span class="nav-text">6.3
+&quot;高层行为才重要，微观理论看不见&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E8%A6%81%E7%9A%84%E6%98%AF%E6%95%B0%E6%8D%AE%E7%90%86%E8%AE%BA%E4%B8%8D%E6%98%AF%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA"><span class="nav-text">6.4
+&quot;我们要的是数据理论，不是网络理论&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ai-%E4%BC%9A%E5%85%88%E4%BA%8E%E4%BA%BA%E7%B1%BB%E7%90%86%E8%A7%A3%E8%87%AA%E5%B7%B1"><span class="nav-text">6.5 &quot;AI 会先于人类理解自己&quot;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E5%8D%81%E5%A4%A7%E5%BC%80%E6%94%BE%E6%96%B9%E5%90%91section-5"><span class="nav-text">七、十大开放方向（Section 5）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E6%B7%B1-%E9%9D%9E%E7%BA%BF%E6%80%A7%E7%9A%84%E5%8F%AF%E8%A7%A3%E6%A8%A1%E5%9E%8B"><span class="nav-text">1️⃣ 真正&quot;深 + 非线性&quot;的可解模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E7%84%B6%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E7%90%86%E8%AE%BA"><span class="nav-text">2️⃣ 自然数据结构的理论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%98%AF%E5%90%A6%E9%9A%90%E5%BC%8F%E6%9C%80%E5%B0%8F%E5%8C%96%E6%9F%90%E7%A7%8D%E5%8A%9F%E8%83%BD%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">3️⃣
+深度学习是否隐式最小化某种&quot;功能复杂度&quot;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%BD%A2%E5%BC%8F%E5%8C%96%E5%AE%9A%E4%B9%89%E7%89%B9%E5%BE%81"><span class="nav-text">4️⃣ 如何形式化定义&quot;特征&quot;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E9%99%90%E7%BD%91%E7%BB%9C%E6%98%AF%E5%90%A6%E5%B0%B1%E6%98%AF%E6%97%A0%E9%99%90%E6%9E%81%E9%99%90%E7%9A%84%E7%A6%BB%E6%95%A3%E5%8C%96%E8%BF%91%E4%BC%BC"><span class="nav-text">5️⃣
+有限网络是否就是无限极限的离散化近似</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%BD%E5%90%A6%E6%B6%88%E9%99%A4%E6%89%80%E6%9C%89%E8%B6%85%E5%8F%82%E6%95%B0"><span class="nav-text">6️⃣ 能否消除所有超参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%BD%E5%90%A6%E5%85%88%E9%AA%8C%E9%A2%84%E6%B5%8B%E7%BC%A9%E6%94%BE%E5%BE%8B%E6%8C%87%E6%95%B0"><span class="nav-text">7️⃣ 能否先验预测缩放律指数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E6%9B%B2%E7%8E%87%E4%B8%8E%E6%9E%B6%E6%9E%84%E7%89%B9%E5%BE%81%E6%B3%9B%E5%8C%96%E7%9A%84%E8%80%A6%E5%90%88"><span class="nav-text">8️⃣
+损失曲率与架构、特征、泛化的耦合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E9%80%A0%E5%B0%B1%E4%BA%86%E5%A5%BD%E7%9A%84%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">9️⃣ 什么造就了好的优化器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E7%A4%BA%E6%99%AE%E9%80%82%E6%80%A7%E7%9A%84%E7%B2%BE%E7%A1%AE%E7%89%88%E6%9C%AC"><span class="nav-text">🔟 表示普适性的精确版本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E7%BB%99%E5%85%A5%E9%97%A8%E8%80%85%E7%9A%84%E5%BB%BA%E8%AE%AEsection-6"><span class="nav-text">八、给入门者的建议（Section 6）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%88%91%E7%9A%84%E5%87%A0%E7%82%B9%E6%84%9F%E5%8F%97"><span class="nav-text">九、我的几点感受</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E4%B8%80%E6%AC%A1%E8%8C%83%E5%BC%8F%E5%A3%B0%E6%98%8E"><span class="nav-text">9.1 这是一次&quot;范式声明&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9B%E5%AD%A6%E8%BF%99%E4%B8%AA%E6%AF%94%E5%96%BB%E9%9D%9E%E5%B8%B8%E8%B4%B4%E5%88%87"><span class="nav-text">9.2 &quot;力学&quot;这个比喻非常贴切</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9B%E5%AD%A6-%E6%9C%BA%E5%88%B6%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E7%9A%84%E5%90%88%E4%BD%9C%E6%9C%80%E5%80%BC%E5%BE%97%E6%9C%9F%E5%BE%85"><span class="nav-text">9.3 力学 ↔︎
+机制可解释性的合作最值得期待</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%88%A4%E5%88%AB%E7%90%86%E8%AE%BA%E7%9C%9F%E5%81%87%E7%9A%84%E7%A1%AC%E6%8C%87%E6%A0%87%E5%85%88%E9%AA%8C%E9%A2%84%E6%B5%8B%E7%BC%A9%E6%94%BE%E5%BE%8B%E6%8C%87%E6%95%B0"><span class="nav-text">9.4
+一个判别理论真假的硬指标：先验预测缩放律指数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/26b48b54.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2026-04-25-深度学习会有一门科学理论吗？《There Will Be a Scientific Theory of Deep Learning》论文精读 | Joey">
+      <meta itemprop="description" content="Simon 等人 2026 年的立场论文《There Will Be a Scientific Theory of Deep Learning》，系统梳理了正在浮现的"学习力学"（learning mechanics）。本篇精读把全文 25 页拆成五条证据、七条期望、与机制可解释性的关系、对质疑的回应、十大开放方向，并附带我自己的解读。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2026-04-25-深度学习会有一门科学理论吗？《There Will Be a Scientific Theory of Deep Learning》论文精读
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-25 04:13:23 / Modified: 04:17:48" itemprop="dateCreated datePublished" datetime="2026-04-25T04:13:23Z">2026-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>7.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>29 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Simon 等人 2026 年的立场论文《There Will Be a Scientific Theory of Deep Learning》，系统梳理了正在浮现的"学习力学"（learning mechanics）。本篇精读把全文 25 页拆成五条证据、七条期望、与机制可解释性的关系、对质疑的回应、十大开放方向，并附带我自己的解读。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一句话总结">一句话总结</h2>
+<p><strong>深度学习正在从"试错炼金术"过渡为一门真正的科学。作者把这门正在浮现的学科命名为
+<em>learning mechanics</em>（学习力学）：它类比物理学中的经典 / 连续 /
+统计 /
+量子力学，从第一性原理出发，对训练过程的动力学、隐藏表示、最终权重以及测试性能给出可证伪的、平均情形下的定量预测，而不是经典学习理论那种最坏情况下的数学界。</strong></p>
+<blockquote>
+<p>"This paper makes the case that, yes, there will be a scientific
+theory of deep learning; that we can see pieces of this theory starting
+to emerge; and that this theory will take the form of a
+<em>mechanics</em> of the learning process."</p>
+</blockquote>
+<p>这是论文开篇就放在加粗框里的总论点，几乎可以理解为这篇 25
+页文章的"立场宣言"。</p>
+<hr />
+<h2 id="一为什么要写这篇论文">一、为什么要写这篇论文</h2>
+<h3 id="现状最强大但最神秘的方法">1.1 现状：最强大但最神秘的方法</h3>
+<p>深度学习是机器学习里最强大、最有商业价值，但同时<strong>最不被理解</strong>的成员。模型在跑，scaling
+law 在跑，LLM
+已经具备超人类能力，但我们对训练过程的理解几乎是经验式的：</p>
+<ul>
+<li>训练方法（Adam、residual、layer norm、warmup、cosine
+schedule……）多半靠<strong>试错和工程直觉</strong>而不是第一性原理；</li>
+<li>进入 LLM、Diffusion
+时代，谜团反而比十年前<strong>更深</strong>——更大的模型、更多的涌现、更少的解释；</li>
+<li>经典 PAC
+学习理论无法解释<strong>过参数化</strong>网络为何还能泛化（参数数量远超样本数，按经典理论应当过拟合）；</li>
+<li>经典优化理论给的是<strong>凸</strong>函数的端到端保证，神经网络是高度非凸的。</li>
+</ul>
+<p>经典学习理论 +
+经典优化理论解释的是"简单、凸、稀疏"的模型；而真实的神经网络是"复杂、非凸、过参数化"的——而且<strong>实际表现远好于这些理论的预测</strong>。</p>
+<h3 id="立场宣言">1.2 立场宣言</h3>
+<p>作者的态度非常明确：</p>
+<blockquote>
+<p>"We should approach this task as scientists, embracing empirics,
+seeking unifying principles, and identifying recurring motifs."</p>
+</blockquote>
+<p>也就是说：<strong>该领域的下一阶段，应该更像物理学的发展史，而不像数学的公理化构造。</strong></p>
+<p>物理学家研究的是力如何决定物体在物理空间中的运动；深度学习研究的，是梯度如何决定模型在<strong>参数空间</strong>中的离散运动。两者的核心都是
+<strong>运动 + 相互作用</strong>，所以"力学"这个比喻是恰当的。</p>
+<h3 id="为什么力学这个名字最贴切">1.3 为什么"力学"这个名字最贴切</h3>
+<p>文章 Section 1.1 专门讨论了这个比喻：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>物理学</th>
+<th>深度学习</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物体在空间中的连续运动</td>
+<td>模型在参数空间中的离散更新</td>
+</tr>
+<tr>
+<td>力 = 组件之间的相互作用</td>
+<td>梯度 = 参数 / 数据 / 任务 / 学习规则之间的相互作用</td>
+</tr>
+<tr>
+<td>力由场调和</td>
+<td>梯度由损失函数调和</td>
+</tr>
+<tr>
+<td>系统稳定在势能局部极小</td>
+<td>网络收敛到损失景观局部极小</td>
+</tr>
+<tr>
+<td>任何力学分支都依赖<strong>可解模型</strong></td>
+<td>深度线性网络、kernel regression、多指标模型</td>
+</tr>
+<tr>
+<td>连续 / 统计力学使用<strong>简化极限</strong></td>
+<td>无限宽 / 深、惰性 vs. 富足</td>
+</tr>
+<tr>
+<td>物理系统有<strong>特征参数</strong>（耦合常数、特征尺度）</td>
+<td>神经网络有<strong>超参数</strong>（学习率、宽度等）</td>
+</tr>
+<tr>
+<td>物理充满<strong>普适现象</strong></td>
+<td>不同架构 / 数据集学出相似表示</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"All considered, the emerging science shares deep similarities with
+established branches of mechanics. By analogy to classical, continuum,
+statistical, and quantum mechanics, we suggest the intended theory be
+called <em>learning mechanics</em>."</p>
+</blockquote>
+<h2 id="二五条证据力学正在浮现">二、五条证据：力学正在浮现</h2>
+<p>文章最核心的部分是 Section
+2，给出五条独立的证据，每一条都对应物理学里一个已经成熟的范式。这是一张让人印象深刻的对照表（论文
+Table 1）：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>维度</th>
+<th>深度学习中的例子</th>
+<th>物理学中的例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.1 可解析设定</td>
+<td>deep linear networks, kernel regression, multi-index models</td>
+<td>简谐振子、氢原子、Ising 模型</td>
+</tr>
+<tr>
+<td>2.2 简化极限</td>
+<td>lazy vs. rich, width/depth → ∞, small initialization</td>
+<td>热力学极限、经典极限 ℏ→0、流体极限</td>
+</tr>
+<tr>
+<td>2.3 简单经验律</td>
+<td>neural scaling laws, edge of stability, neural feature ansatz</td>
+<td>Kepler、Snell、Boyle、Hooke、Newton、Faraday、Ohm、Poiseuille、Planck、Hubble
+等</td>
+</tr>
+<tr>
+<td>2.4 系统参数</td>
+<td>step size as sharpness regularization, μP, width-scaling</td>
+<td>量纲分析、无量纲化、混沌/有序判据</td>
+</tr>
+<tr>
+<td>2.5 普适现象</td>
+<td>不同架构/数据下相似的归纳偏置和表示</td>
+<td>临界现象、重整化群流</td>
+</tr>
+</tbody>
+</table>
+<p>下面把这五条逐个展开。</p>
+<h3 id="可解析设定solvable-settings">2.1 可解析设定（solvable
+settings）</h3>
+<blockquote>
+<p>"A reliable way to build scientific understanding in complex systems
+is to study pared-down yet representative settings in which quantitative
+calculations are possible."</p>
+</blockquote>
+<p>物理学的进步往往从一个"能解出来"的简化模型开始：简谐振子、氢原子之于经典/量子力学，Ising
+模型之于统计力学。深度学习也已经积累了一批这样的"基石模型"。</p>
+<h4 id="数据上的线性化深度线性网络">数据上的线性化：深度线性网络</h4>
+<p>把所有非线性激活函数去掉：</p>
+<p><span class="math display">\[
+f(\mathbf{x}; \boldsymbol{\theta}) = W_L W_{L-1} \cdots W_1 \mathbf{x}
+\]</span></p>
+<p>输入是线性的，但<strong>对参数仍然高度非线性</strong>。Saxe 等人 2014
+的经典工作证明了：在白化输入和任务对齐初始化下，奇异值动力学解耦为独立的伯努利
+ODE，<strong>每个奇异模式按照其奇异值大小依次被网络学到</strong>——大的先学，小的后学。</p>
+<p>这一现象后来被推广到<strong>贪婪低秩偏好（greedy low-rank
+bias）</strong>：网络倾向于先学习低秩、信号清晰的成分，再学噪声。这被认为是深度网络泛化能力的来源之一。</p>
+<h4 id="参数上的线性化ntk-与核回归">参数上的线性化：NTK 与核回归</h4>
+<p>在初始化点 <span class="math inline">\(\boldsymbol{\theta}_0\)</span>
+处对网络做一阶 Taylor 展开：</p>
+<p><span class="math display">\[
+f_\text{lin}(\mathbf{x}; \boldsymbol{\theta}) = f(\mathbf{x};
+\boldsymbol{\theta}_0) + \nabla_{\boldsymbol{\theta}} f(\mathbf{x};
+\boldsymbol{\theta}_0)^\top (\boldsymbol{\theta} -
+\boldsymbol{\theta}_0)
+\]</span></p>
+<p>这就是<strong>线性化网络</strong>——对参数线性，对数据仍非线性。它的训练动力学等价于带
+<strong>神经正切核（NTK）</strong> 的核岭回归：</p>
+<p><span class="math display">\[
+K_\text{NTK}(\mathbf{x}, \mathbf{x}&#39;) = \nabla_{\boldsymbol{\theta}}
+f(\mathbf{x}; \boldsymbol{\theta}_0)^\top \nabla_{\boldsymbol{\theta}}
+f(\mathbf{x}&#39;; \boldsymbol{\theta}_0)
+\]</span></p>
+<p>NTK
+视角的强大之处在于：可以<strong>精确预测</strong>线性化网络在任意目标函数
+<span class="math inline">\(f^*\)</span>
+上的期望泛化误差，这是教科书上鲜有的"端到端定量预测"。</p>
+<p>但这也是它的局限：NTK
+完全看不到<strong>特征学习</strong>——隐藏表示在训练中不会改变。这正是为什么需要下面
+2.2 的另一极限。</p>
+<h4 id="单多指标模型与-glm">单/多指标模型与 GLM</h4>
+<p>输入是高斯，目标是低维投影的非线性函数：</p>
+<p><span class="math display">\[
+y = g(\mathbf{w}^{*\top} \mathbf{x}) + \text{noise}
+\]</span></p>
+<p>在这种结构化任务上，浅层非线性网络<strong>可证明地优于核方法</strong>——因为它们能学到投影方向
+<span class="math inline">\(\mathbf{w}^*\)</span>，而 NTK
+的特征是固定的。这是过去三年统计物理 +
+深度学习交叉里出产最丰的领域之一。</p>
+<h3 id="简化极限揭示根本行为">2.2 简化极限：揭示根本行为</h3>
+<p>现代神经网络是几千亿参数互相耦合的复杂系统，逐参数追踪没有意义。统计物理的经验是：<strong>极限往往让事情变简单</strong>——理想气体定律
+<span class="math inline">\(PV = nRT\)</span>
+是无穷多粒子极限下的精确等式，但被广泛用来描述有限的真实气体。</p>
+<p>深度学习里最重要的极限是 <strong>width →
+∞</strong>，但这个极限的取法<strong>不唯一</strong>，给出的物理图像也截然不同。</p>
+<h4 id="lazy-kernel-linearized-区间">Lazy / Kernel / Linearized
+区间</h4>
+<p>最早的无限宽工作发现：把每层参数按 <span
+class="math inline">\(\text{width}^{-1/2}\)</span> 缩小（LeCun
+初始化），保证激活既不爆炸也不消失。这时网络在训练过程中<strong>几乎不动</strong>——权重的相对变化趋于
+0。</p>
+<p>但奇妙的是，这些"几乎不动"的小变化累积起来，仍然能让输出函数发生 O(1)
+的变化。这就是 <strong>lazy / NTK 区间</strong>：</p>
+<ul>
+<li>训练动力学 = 核岭回归；</li>
+<li>隐藏特征<strong>不学习</strong>——网络只是用初始随机特征做线性回归。</li>
+</ul>
+<h4 id="rich-mean-field-feature-learning-区间">Rich / Mean-field /
+Feature-learning 区间</h4>
+<p>核区间的"特征不学"显然不像我们看到的真实深度学习。怎么修正？</p>
+<p>把<strong>输出层权重</strong>额外缩小一个 <span
+class="math inline">\(\text{width}^{-1}\)</span>（而不是 <span
+class="math inline">\(\text{width}^{-1/2}\)</span>）。这样初始函数变成
+0，但每一步梯度<strong>强迫权重必须改变 O(1)</strong> 才能产生输出。</p>
+<p>Mei、Rotskoff &amp; Vanden-Eijnden、Chizat &amp; Bach 等独立给出这个
+<strong>mean-field</strong> 极限。Yang &amp; Hu 的 Tensor Programs
+把它推广到任意深度——这就是后来著名的 <strong>μP（Maximal Update
+Parameterization）</strong>。</p>
+<p>在 rich 区间：</p>
+<ul>
+<li>隐藏特征<strong>真的会演化</strong>，神经元会专门化；</li>
+<li>在低维子空间任务中，第一层权重会<strong>集中到任务相关方向</strong>；</li>
+<li>表现出贪婪低秩偏好——简单成分先学。</li>
+</ul>
+<h4 id="一张图相同网络不同区间">一张图：相同网络，不同区间</h4>
+<p>论文 Figure 2 是一个非常直观的实验：同一个 200 神经元的两层 ReLU
+学生网络，去拟合一个三神经元教师。</p>
+<p><span class="math display">\[
+\hat{f}(\mathbf{x}) = \frac{\alpha}{n} \sum_{i=1}^n a_i
+\,\text{ReLU}(\mathbf{w}_i^\top \mathbf{x})
+\]</span></p>
+<p>只调输出乘子 <span class="math inline">\(\alpha\)</span>：</p>
+<ul>
+<li><span class="math inline">\(\alpha = 0.1\)</span>（小）：rich
+模式——学生权重大幅迁移并聚拢到教师特征方向；</li>
+<li><span class="math inline">\(\alpha = 30\)</span>（大）：lazy
+模式——学生权重几乎不动，但损失也下降。</li>
+</ul>
+<p><strong>两者都能拟合训练数据，但学到了完全不同的东西。</strong>这是过去三年深度学习理论里最重要的概念之一。</p>
+<h4 id="无限深度极限与其他">无限深度极限与其他</h4>
+<p>类似地，对深度做极限：每层缩放 <span
+class="math inline">\(\text{depth}^{-1}\)</span>
+给出<strong>平滑残差流</strong>（类似 Neural ODE）；缩放 <span
+class="math inline">\(\text{depth}^{-1/2}\)</span>
+给出<strong>随机扩散残差流</strong>（类似 SDE）。Transformer 还有 head
+数、KV 维度、context 长度、MoE 专家数等多个可极限化的轴。</p>
+<h4 id="离散化假设discretization-hypothesis">离散化假设（Discretization
+Hypothesis）</h4>
+<p>这是 Section 2.2 提出的一个<strong>纲领性信念</strong>：</p>
+<blockquote>
+<p>"Most practical neural networks can be understood as noisy, finite
+approximations to models of infinite size."</p>
+</blockquote>
+<p>类比就像数值求解
+PDE：你把空间和时间网格化，得到一个有限差分方程；网格越细，离 PDE
+越近。深度学习里，宽度、深度、step size、batch size、dataset size
+都可能是这种"离散化误差"的来源。</p>
+<p>如果这个假设成立——而它至今没有被精确表述或证明——那么<strong>学习率/宽度/深度都不是独立变量</strong>，而是同一个连续极限的不同截断。这会极大简化整个理论的形式。</p>
+<h3 id="简单经验律复杂系统的开普勒定律">2.3
+简单经验律：复杂系统的"开普勒定律"</h3>
+<p>科学史上很多定律先有经验，再有理论：开普勒定律先于牛顿引力，玻意耳定律先于动理论，普朗克黑体律先于量子理论。深度学习里也已经积累了相当数量的"经验定律"。</p>
+<h4 id="神经缩放律neural-scaling-laws">神经缩放律（Neural Scaling
+Laws）</h4>
+<p>Kaplan 等 2020、Hestness 等 2017
+的著名结果：在某个架构家族内，<strong>测试损失关于算力 <span
+class="math inline">\(C\)</span>、数据量 <span
+class="math inline">\(D\)</span>、参数量 <span
+class="math inline">\(N\)</span> 都是漂亮的幂律</strong>：</p>
+<p><span class="math display">\[
+L(C) \approx (C / 2.3 \times 10^8)^{-0.050}
+\]</span> <span class="math display">\[
+L(D) \approx (D / 5.4 \times 10^{13})^{-0.095}
+\]</span> <span class="math display">\[
+L(N) \approx (N / 8.8 \times 10^{13})^{-0.076}
+\]</span></p>
+<p>这些指数 0.05、0.076、0.095
+<strong>没有简单的有理数解释</strong>——不是 1/2 或 1/3
+那种来自维度计数的数字。它们大概率与数据流形维度、特征叠加、任务结构有关，但<strong>至今没有任何理论能从架构
++ 数据 + 优化器 a priori
+推导出这些数字</strong>。预测出这些指数被列为开放方向 7。</p>
+<h4 id="稳定性边缘edge-of-stability">稳定性边缘（Edge of
+Stability）</h4>
+<p>Cohen 等 2021 的发现：使用学习率 <span
+class="math inline">\(\eta\)</span> 做全批 GD 时，损失 Hessian
+的最大特征值（<strong>sharpness</strong> <span
+class="math inline">\(\lambda_\max\)</span>）经历两个相位：</p>
+<ol type="1">
+<li><strong>Progressive sharpening</strong>：缓慢上升；</li>
+<li><strong>Edge of stability</strong>：在 <span
+class="math inline">\(\lambda_\max \approx 2/\eta\)</span>
+附近震荡。</li>
+</ol>
+<p>这个 <span class="math inline">\(2/\eta\)</span>
+不是巧合：在凸优化中，<span class="math inline">\(2/\eta\)</span> 是 GD
+不发散的临界点。也就是说，<strong>GD
+会自动把自己驱赶到稳定性边缘</strong>——它的训练轨迹不是平滑下山，而是"在悬崖边走"。</p>
+<p>后续工作（Damian、Cohen、Li
+等）已经把这种轨迹分解为<strong>平滑的、时间平均的梯度流 +
+不稳定方向上的震荡</strong>——这是少数有定量预测精度的非线性训练动力学结果。</p>
+<h4 id="神经坍塌neural-collapse">神经坍塌（Neural Collapse）</h4>
+<p>Papyan 等 2020：把分类网络训练到 0
+损失之后，末层隐藏特征会<strong>坍塌为一个正则单纯形</strong>——</p>
+<ul>
+<li>同类样本的特征聚集到类均值；</li>
+<li>不同类的均值彼此<strong>等距且对称</strong>。</li>
+</ul>
+<p>后续证明：这是交叉熵 +
+弱权重衰减下的能量极小构型。这就像晶体生长——最终结构只由能量函数决定，而不依赖训练路径。</p>
+<h4 id="神经特征-ansatzneural-feature-ansatz">神经特征 Ansatz（Neural
+Feature Ansatz）</h4>
+<p>Radhakrishnan 等 2024：训练后第一层权重的 Gram 矩阵 <span
+class="math inline">\(W_1^\top W_1\)</span>
+与<strong>输入梯度外积的均值</strong>成正比：</p>
+<p><span class="math display">\[
+W_1^\top W_1 \propto \mathbb{E}_{\mathbf{x} \sim
+\mathcal{P}_\text{data}} [\nabla_\mathbf{x} f(\mathbf{x};
+\boldsymbol{\theta}) \nabla_\mathbf{x} f(\mathbf{x};
+\boldsymbol{\theta})^\top]
+\]</span></p>
+<p>这是一个非常强的经验律：网络的第一层权重并不是任意的，而是<strong>直接编码了梯度结构</strong>。这个公式在更深层也近似成立。</p>
+<h4 id="梯度流守恒律">梯度流守恒律</h4>
+<p>线性网络中相邻层的协方差/Gram 矩阵差 <span
+class="math inline">\(W_\ell W_\ell^\top - W_{\ell+1}^\top
+W_{\ell+1}\)</span>
+在梯度流下守恒。这在非线性网络中推广为<strong>Noether
+原理</strong>：</p>
+<ul>
+<li>ReLU 网络的尺度对称性；</li>
+<li>BatchNorm 之前的层尺度对称性；</li>
+<li>Softmax 之前的 logits 平移对称性；</li>
+<li>Attention 中 K/Q 矩阵的旋转对称性。</li>
+</ul>
+<p>每一种对称性都对应一个守恒量——<strong>这就是深度学习的"角动量守恒"</strong>。</p>
+<h4 id="给理论家的启示">给理论家的启示</h4>
+<blockquote>
+<p>"Most macroscopic statistics <em>don't</em> obey a simple and general
+mathematical law — or at least don't seem to until plotted against the
+right quantity."</p>
+</blockquote>
+<p>这是 Section 2.3
+末尾我最喜欢的一句话。意思是：经验律不是随便看就能看见的——你必须<strong>找到对的坐标轴</strong>，才能让
+power-law 浮现。Kepler
+之所以能写下椭圆律，是因为他先弄清楚了用什么测量。深度学习里也一样——找到对的"温度/压力"才能看到对的"理想气体律"。</p>
+<h3 id="超参数可解耦">2.4 超参数可解耦</h3>
+<p>深度学习的超参数极多：学习率、batch
+size、动量、初始化方差、宽度、深度。文章指出，过去几年理论界终于开始<strong>系统性地解耦它们</strong>，并且数学结果非常实用。</p>
+<h4 id="优化器超参数linear-scaling-rule">优化器超参数：linear scaling
+rule</h4>
+<p>SGD 的关键不变性：同时把 <span class="math inline">\(\eta\)</span> 和
+batch size <span class="math inline">\(B\)</span>
+加倍、把步数减半，<strong>轨迹几乎不变</strong>。这就是 Goyal 等 2017 的
+<strong>linear scaling rule</strong>：</p>
+<p><span class="math display">\[
+\eta \cdot B = \text{const}
+\]</span></p>
+<p>这条规则可以用 SDE 视角解释：SGD 是某个底层 SDE
+的离散化，它的"温度"由 <span class="math inline">\(\eta/B\)</span>
+决定。Malladi 等把它推广到自适应优化器，得到 <span
+class="math inline">\(\eta \propto \sqrt{B}\)</span>。</p>
+<h4 id="隐式曲率正则化">隐式曲率正则化</h4>
+<p>经验上：大学习率 + 小 batch 在训练后期<strong>自动压低
+Hessian</strong>——损失景观变得更平坦。理论上有几个互补的解释：</p>
+<ul>
+<li>Blanc 等 2020：标签噪声 SGD 等价于在原损失上加曲率惩罚；</li>
+<li>Damian 等：Edge of Stability 下的震荡等价于对三阶曲率的反馈；</li>
+<li>Cohen 等 2025：full-batch 全过程都可以用
+<strong>曲率惩罚梯度流</strong> 准确建模。</li>
+</ul>
+<p>也就是说：<strong>优化器的"隐式效应"很大程度上等价于显式地加上一个曲率正则项</strong>。这是一个非常优美的统一图景。</p>
+<h4 id="μp可迁移的学习率">μP：可迁移的学习率</h4>
+<p>最实用的结果：Yang &amp; Hu 2021 在 Tensor Programs
+框架下证明，存在一种参数化（<strong>μP</strong>）使得最优学习率在不同宽度下<strong>几乎不变</strong>。</p>
+<p>论文 Figure 5 对比了同样的 Transformer 在 standard parameterization
+与 μP 下训练 WikiText-2：</p>
+<ul>
+<li>standard：宽度从 128 → 8192，最优 <span class="math inline">\(\log_2
+\eta\)</span> 漂移了 6 个数量级；</li>
+<li>μP：最优 <span class="math inline">\(\log_2 \eta\)</span>
+几乎水平。</li>
+</ul>
+<p>实际意义：<strong>先在便宜的小模型上调好超参数，然后零成本迁移到生产规模的大模型</strong>。这是过去几年深度学习理论里<strong>实践影响最大的成果</strong>之一。</p>
+<p>后续工作把这套思路推广到<strong>深度缩放</strong>（Yang、Bordelon、Dey
+2025），让 ResNet 也能 hyperparameter transfer。</p>
+<h3 id="普适现象不同系统学到相似的东西">2.5
+普适现象：不同系统学到相似的东西</h3>
+<blockquote>
+<p>"Universal behavior across systems can be understood with the
+<em>renormalization group</em> — a technique which formalizes the idea
+that, as one examines a system from a more and more zoomed-out
+perspective, most details 'wash out' and only a handful of aggregate
+effects remain important."</p>
+</blockquote>
+<p>这是统计物理的核心思想：当你把临界系统逐步粗粒化，只有少数"算子"保留，大多数细节"洗掉"。深度学习里<strong>也观察到同样的现象</strong>。</p>
+<h4 id="普适的归纳偏置">普适的归纳偏置</h4>
+<ul>
+<li>CNN 与 Transformer 在视觉任务上 <strong>匹配 compute、数据、训练
+recipe 后性能等价</strong>；</li>
+<li>三种 Diffusion
+模型（DDPM、一致性模型、U-ViT）在<strong>同一噪声种子</strong>下生成几乎完全相同的图片（论文
+Figure 6a）。</li>
+</ul>
+<p>这强烈暗示：<strong>架构差异</strong>只是表面，真正的学习偏置由数据 +
+优化器 + 损失共同决定。</p>
+<h4 id="数据的普适结构">数据的普适结构</h4>
+<p>No Free Lunch
+告诉我们：在完全任意数据上不存在通用的学习器。所以深度学习一定是在<strong>利用真实数据的某种共同结构</strong>：</p>
+<ul>
+<li>图像、音频信号有 power-law 谱、稀疏性、多尺度结构；</li>
+<li>文本符合 Zipf 律；</li>
+<li>自然信号有可被 wavelet 表示的层级组合性。</li>
+</ul>
+<p>这些共同结构是为什么"一个 Transformer +
+SGD"能跨模态工作的根本原因。</p>
+<h4 id="表示的普适性">表示的普适性</h4>
+<p>Bansal 等、Huh 等的"Platonic Representation
+Hypothesis"：<strong>不同模型——甚至不同模态——随着规模增长，内部表示越来越像</strong>。论文
+Figure 6b：DINOv2
+视觉模型与不同规模语言模型的表示相似度，<strong>随语言模型性能线性增长</strong>。</p>
+<p>这意味着：</p>
+<blockquote>
+<p>"If the internal structure of trained neural networks primarily
+reflects the structure of data, then in studying neural networks we may
+ultimately be studying the structure of data and its generating
+processes."</p>
+</blockquote>
+<p>也就是说——<strong>研究神经网络，最终可能是在研究世界本身的统计结构</strong>。</p>
+<h2 id="三力学的七条期望seven-desiderata">三、力学的七条期望（Seven
+Desiderata）</h2>
+<p>作者明确写下他们想要的"learning
+mechanics"应该满足的七条标准，以避免把这门学科变成另一个"无用但漂亮的形式系统"：</p>
+<ol type="1">
+<li><strong>Fundamental（基础性）</strong>：从神经网络训练的第一性原理出发推演；中间假设可以用，但必须最终能被解释；</li>
+<li><strong>Mathematical（数学性）</strong>：必须能给出<strong>无歧义的定量陈述</strong>——不能是一门定性科学；</li>
+<li><strong>Predictive（可预测性）</strong>：每一项发展都要有<strong>可重复的实验验证</strong>；</li>
+<li><strong>Comprehensive（全面性）</strong>：覆盖训练过程、隐藏表示、最终权重和性能——但<strong>不试图描述一切</strong>。"全分辨率的世界地图和世界本身一样大，因此毫无用处。"</li>
+<li><strong>Intuitive（直观性）</strong>：追求<strong>简单深刻的洞察</strong>，而不是技术复杂性；</li>
+<li><strong>Useful（有用性）</strong>：能服务于实际深度学习工程——大幅减少调参、指导数据集设计、为
+AI safety 提供基础；</li>
+<li><strong>Humble（谦逊性）</strong>：明确自己适用的范围，越界就承认它会失效。"每一门物理学都有它的失效区。"</li>
+</ol>
+<p>这七条非常物理学家。第 4 和第 7
+条尤其重要——作者明确反对"覆盖一切"的雄心，承认会有大量实际场景这门学科<strong>说不上话</strong>——这是科学的姿态而不是数学的姿态。</p>
+<h2 id="四为什么-learning-mechanics-重要">四、为什么 learning mechanics
+重要</h2>
+<p>文章 Section 1.2 把动机分成三类：</p>
+<h3 id="科学层面">4.1 科学层面</h3>
+<blockquote>
+<p>"Technology has often preceded scientific theory, as was the case
+with steam engines' role in motivating thermodynamics... A similar story
+played out in flight."</p>
+</blockquote>
+<p>蒸汽机推动了热力学，飞机推动了空气动力学，<strong>深度学习有可能推动一门关于"学习"本身的物理学</strong>。如果神经网络与生物大脑共享某些深层学习原理，那么这门学科的产出会反哺神经科学和认知科学。</p>
+<h3 id="实践层面">4.2 实践层面</h3>
+<p>成熟的深度学习理论可以替代大量试错——文中已有先例：</p>
+<ul>
+<li>经验缩放律 → 指导算力 / 数据 / 参数预算分配；</li>
+<li>μP → 跨宽度的学习率迁移；</li>
+<li>NTK → 数据归因（influence functions）；</li>
+<li>理论驱动的优化器（Muon 等）。</li>
+</ul>
+<p>这些都还是"局部理论"，但已经在产生工程价值。</p>
+<h3 id="安全层面">4.3 安全层面</h3>
+<blockquote>
+<p>"It is difficult to regulate a technology that we cannot clearly
+describe."</p>
+</blockquote>
+<p>监管必须基于<strong>对系统的清楚描述</strong>。一门定量的、可解释的学习理论是
+AI safety 工作的基础设施——尤其是与 mechanistic interpretability
+联手时。</p>
+<h2
+id="五learning-mechanics-与机制可解释性的关系section-3.1">五、Learning
+Mechanics 与机制可解释性的关系（Section 3.1）</h2>
+<p>这是论文我个人觉得最有启发性的一节。作者用了一个非常漂亮的类比：</p>
+<blockquote>
+<p><strong>"Where mechanistic interpretability aims to be the biology of
+deep learning, learning mechanics should aspire to be its
+physics."</strong></p>
+</blockquote>
+<h3 id="两者各自做什么">5.1 两者各自做什么</h3>
+<ul>
+<li><strong>机制可解释性（mech
+interp）</strong>：识别训练好的网络内部的"特征 / 电路 /
+算法"——是关于"网络在做什么"的逆向工程，定性、依赖人类判断；</li>
+<li><strong>学习力学</strong>：从数学第一原理出发，推导训练<strong>为什么</strong>会产生这些结构——定量、可证伪。</li>
+</ul>
+<h3 id="双向贡献">5.2 双向贡献</h3>
+<h4 id="学习力学-机制可解释性">学习力学 → 机制可解释性</h4>
+<p>学习力学可以<strong>形式化机制可解释性的核心假设</strong>。这些假设至今很多还是"工作信念"：</p>
+<ul>
+<li><strong>Linear
+representability</strong>：特征对应于激活空间的线性方向（Mikolov 等 2013
+起）；</li>
+<li><strong>Locality</strong>：特征 / 电路定位在特定子组件上；</li>
+<li><strong>Sparsity</strong>：每个特征只在小部分输入上激活；</li>
+<li><strong>Compositionality</strong>：复杂表示由简单子机制组合而成。</li>
+</ul>
+<p>学习力学的任务，是回答这些假设<strong>何时成立、何时失败、为什么</strong>。</p>
+<p>进一步——学习力学应该<strong>解释机制如何在训练中涌现</strong>。已有进展：</p>
+<ul>
+<li>Induction head 的形成相变（Olsson 等）；</li>
+<li>Grokking 与突现（Nanda、Gopalani、Park 等）；</li>
+<li>电路形成的相变；</li>
+<li>线性网络中"由懒到富"的精确动力学（Dominé 等 2025）。</li>
+</ul>
+<blockquote>
+<p>"Nothing in biology makes sense except in the light of
+evolution."（Dobzhansky） 类似地，"Nothing in trained networks makes
+sense except in the light of the processes that give rise to them."</p>
+</blockquote>
+<h4 id="机制可解释性-学习力学">机制可解释性 → 学习力学</h4>
+<p>反过来，mech interp
+给学习力学<strong>提供经验目标</strong>。深度学习理论历来用过简化的数据模型（高斯输入、随机标签等），离实际很远；mech
+interp 在真实大模型上发现的现象（induction head、Fourier
+特征、grokking、特征叠加），<strong>给理论提供了具体可建模的目标</strong>。</p>
+<p>最近几条由 mech interp 驱动的理论工作：</p>
+<ul>
+<li>In-context learning 中 induction head 的涌现（Bietti、Nichani、Reddy
+2023-2024）；</li>
+<li>模算术任务中的 Fourier 特征（Morwani、Kunin、Marchetti
+2023-2026）；</li>
+<li>数据相关性结构如何决定学到的几何（Engels、Prieto、Karkada
+2024-2026）。</li>
+</ul>
+<h2 id="六对常见质疑的回应section-4">六、对常见质疑的回应（Section
+4）</h2>
+<p>作者用了一整节回应五个常见的质疑：</p>
+<h3 id="几十年都没找到还会有吗">6.1 "几十年都没找到，还会有吗？"</h3>
+<p>回应：</p>
+<ul>
+<li>现在有了<strong>前所未有的实证基础</strong>——表示普适性、edge of
+stability、scaling law 都是过去 5 年才出现的；</li>
+<li>领域<strong>变得更大</strong>——物理、统计、神经科学的人才都涌入；</li>
+<li>历史上<strong>任何主要科学的成熟都用了几十年</strong>，不必气馁。</li>
+</ul>
+<h3 id="现在能解的都太初级远不够-llm">6.2 "现在能解的都太初级，远不够
+LLM"</h3>
+<p>回应：</p>
+<ul>
+<li>"局部理论"本身就有用——周期表是<strong>先于</strong>量子化学的；</li>
+<li>深度学习也能积累<strong>一批小定理</strong>：缩放律的部分预测、μP
+的精确数学、NTK-based 数据归因、理论驱动的优化器；</li>
+<li>这些不是终极理论，但已经在帮上忙了。</li>
+</ul>
+<h3 id="高层行为才重要微观理论看不见">6.3
+"高层行为才重要，微观理论看不见"</h3>
+<p>回应：作者承认要研究三个层次，并把它们对应到 Marr 的三层：</p>
+<ul>
+<li><strong>学习力学（physics）</strong> → 训练动力学；</li>
+<li><strong>机制可解释性（biology）</strong> → 网络如何工作；</li>
+<li><strong>模型心理学（psychology）</strong> →
+模型的能力、个性、目标。</li>
+</ul>
+<p>三者<strong>互补</strong>，不可替代。</p>
+<h3 id="我们要的是数据理论不是网络理论">6.4
+"我们要的是数据理论，不是网络理论"</h3>
+<p>回应：是的，但<strong>数据理论本身就是 learning mechanics
+的一部分</strong>——见开放方向 2。</p>
+<h3 id="ai-会先于人类理解自己">6.5 "AI 会先于人类理解自己"</h3>
+<p>回应：</p>
+<ul>
+<li>即使如此，理论今天<strong>已经有用</strong>；</li>
+<li>突破最可能来自<strong>人 + AI 协作</strong>，而不是 AI 单干；</li>
+<li>AI safety 需要<strong>人类可读</strong>的理论。</li>
+</ul>
+<h2 id="七十大开放方向section-5">七、十大开放方向（Section 5）</h2>
+<p>这是论文最实用、也最像研究路线图的一节。作者明确说：这是希望未来十年能被
+learning mechanics 解决的问题。</p>
+<h4 id="真正深-非线性的可解模型">1️⃣ 真正"深 + 非线性"的可解模型</h4>
+<p>现状：deep linear 抓住参数非线性，kernel
+抓住数据非线性，<strong>两者兼具的工具还不存在</strong>。能否构造一类同时刻画
+feature learning、深度作用、optimization
+现象、以及现代架构创新（normalization、residual、self-attention、gated
+nonlinearity）的可解模型？</p>
+<h4 id="自然数据结构的理论">2️⃣ 自然数据结构的理论</h4>
+<p>模型大概是从数据中提取了一组"充分统计量"。这些统计量是什么？它们如何进入模型？在不同训练阶段是否变化？能否用带可拟合参数的模型来描述真实数据集？</p>
+<h4 id="深度学习是否隐式最小化某种功能复杂度">3️⃣
+深度学习是否隐式最小化某种"功能复杂度"</h4>
+<p>直觉：同样在零损失流形上，训练偏好"简单函数"。问题是：<strong>简单是什么意思？</strong>Kolmogorov
+复杂度？最大间隔？范数？电路复杂度？mech interp
+发现的稀疏字典是不是这种最小化的解？</p>
+<h4 id="如何形式化定义特征">4️⃣ 如何形式化定义"特征"</h4>
+<p>mech interp 反复使用 <strong>feature / circuit / mechanism</strong>
+这些词，但它们<strong>没有严格的数学定义</strong>。能否给出 linear
+representability、locality、sparsity、compositionality
+的精确表述，并从中导出可证伪的预测？</p>
+<h4 id="有限网络是否就是无限极限的离散化近似">5️⃣
+有限网络是否就是无限极限的离散化近似</h4>
+<p>也就是把 Discretization Hypothesis
+<strong>变精确</strong>。宽度、深度、学习率、batch size
+是不是都可以这么理解？连续极限到底是什么样子？</p>
+<h4 id="能否消除所有超参数">6️⃣ 能否消除所有超参数</h4>
+<p>μP
+已经表明很多超参数是"假自由度"，可以通过正确参数化吸收。<strong>能否走到尽头？</strong>消除所有超参数后，剩下什么？</p>
+<h4 id="能否先验预测缩放律指数">7️⃣ 能否先验预测缩放律指数</h4>
+<p>我们能拟合 0.076 这个数字，但<strong>没有任何理论能从 architecture +
+data + optimizer a priori
+推导出它</strong>。这是衡量任何理论是否真"work"的最严苛检验。</p>
+<h4 id="损失曲率与架构特征泛化的耦合">8️⃣
+损失曲率与架构、特征、泛化的耦合</h4>
+<p>经验上：优化器隐式压低 Hessian → 提高泛化。但<strong>为什么会
+progressive
+sharpening？</strong>为什么曲率正则又能提高泛化？这与架构、数据有什么关系？</p>
+<h4 id="什么造就了好的优化器">9️⃣ 什么造就了好的优化器</h4>
+<p>为什么 Adam、Muon 在 LLM 上稳定胜过
+SGD？自适应预条件如何与架构、损失景观相互作用？能否给出预测哪个优化器适合什么任务的原则？</p>
+<h4 id="表示普适性的精确版本">🔟 表示普适性的精确版本</h4>
+<p>不同种子、不同架构、不同数据训练出来的大模型为何学到相似表示？精确化这个观察会让我们对"为这一个模型建立的理论是否能迁移到其他模型"非常有信心。</p>
+<blockquote>
+<p>配套讨论平台：<span class="exturl" data-url="aHR0cHM6Ly9sZWFybmluZ21lY2hhbmljcy5wdWIvb3BlbnF1ZXN0aW9ucw==">learningmechanics.pub/openquestions<i class="fa fa-external-link-alt"></i></span></p>
+</blockquote>
+<h2 id="八给入门者的建议section-6">八、给入门者的建议（Section 6）</h2>
+<p>最后一节是写给想进入这个领域的年轻研究者的，浓缩成六条原则：</p>
+<ol type="1">
+<li><strong>多做实验</strong>：深度学习实验成本极低、周转极快——这是它相比传统物理学的巨大优势，要充分利用；</li>
+<li><strong>简单与洞察 &gt;
+技术复杂度</strong>：会议系统倾向奖励"难懂的定理"，但<strong>真正有影响力的理论是简单的</strong>；</li>
+<li><strong>看重科学理解，而不是
+SOTA</strong>：跑分游戏交给应用科学。基础科学的目标是理解，不是刷榜；</li>
+<li><strong>不要孤军奋战</strong>：去看 Physics Meets ML / Physics of
+Learning 系列，去导师/合作者那里讨论；</li>
+<li><strong>早期多尝试不同问题</strong>：开放问题太多，没人能一上来就找对。换问题不丢人；</li>
+<li><strong>投资底层工具</strong>：随机矩阵、统计物理、经典优化、信息论、小波、图模型——这些"老派"工具在
+learning mechanics 里有大量未被利用的潜力。</li>
+</ol>
+<h2 id="九我的几点感受">九、我的几点感受</h2>
+<p>读完整篇文章，我有四点比较强烈的感受：</p>
+<h3 id="这是一次范式声明">9.1 这是一次"范式声明"</h3>
+<p>作者对"理论"的定义不是数学定理（worst-case
+bound），而是物理意义上的可证伪定律（average-case
+prediction）。这其实是过去十年深度学习理论领域<strong>自身定位的一次切换</strong>——从"证明界"切换到"刻画规律"。把这件事写成宣言、给出名字（learning
+mechanics）、立下七条原则、列出十大问题——这是一篇<strong>学科诞生书</strong>。</p>
+<h3 id="力学这个比喻非常贴切">9.2 "力学"这个比喻非常贴切</h3>
+<p>物理学的成熟也不是从一开始就有相对论和量子场论，而是从开普勒、胡克、波义耳、欧姆这些<strong>经验律</strong>一条一条长出来的。</p>
+<p>回头看 deep learning：</p>
+<ul>
+<li>Kaplan scaling law ↔︎ Kepler 的行星椭圆律；</li>
+<li>edge of stability ↔︎ Hooke 的弹性定律；</li>
+<li>neural collapse ↔︎ 晶体学的对称性结论；</li>
+<li>μP ↔︎ 流体力学的 Reynolds 数；</li>
+<li>platonic representation ↔︎ 临界现象的普适类。</li>
+</ul>
+<p>我们正处在<strong>经验律积累的中段</strong>，距离统一理论可能还有十几二十年——但这是一条已经看得见路径的发展轨道。</p>
+<h3 id="力学-机制可解释性的合作最值得期待">9.3 力学 ↔︎
+机制可解释性的合作最值得期待</h3>
+<p>这是论文最具战略眼光的一段。机制可解释性这两年发现了一批"显微镜下的现象"（induction
+head、特征叠加、稀疏字典分解），但缺一个<strong>关于这些机制如何在训练中涌现</strong>的动力学理论。这正是
+learning mechanics 应该填补的位置。</p>
+<p>我个人猜测：未来五年，最有突破的工作会出现在 <strong>mech interp
+提供观测、learning mechanics
+提供解释模型</strong>的接口处——就像分子生物学和物理化学的合流催生了结构生物学一样。</p>
+<h3 id="一个判别理论真假的硬指标先验预测缩放律指数">9.4
+一个判别理论真假的硬指标：先验预测缩放律指数</h3>
+<p>如果某个理论能告诉你："给我这个数据集 + 这个架构 + 这个优化器，我预测
+power-law 指数是 0.078"——而你测出来真是 0.076 或
+0.080——那它就值得被相信。在那之前，所有的"理论"都还停留在解释的层面，距离物理学定义的"理论"还有距离。</p>
+<p>这是 learning mechanics
+的"水星近日点进动"——能否做出<strong>当时无法用其他方法做出的具体数值预测</strong>。</p>
+<h2 id="总结">总结</h2>
+<p>如果说过去十年深度学习的口号是 <strong>"More is
+different"</strong>（涌现），那么下一个十年的科学议程，可能就是这篇论文倡导的：</p>
+<blockquote>
+<p><strong>搞清楚为什么会涌现，并把它写成方程。</strong></p>
+</blockquote>
+<p>这篇 25
+页论文不是一篇技术论文，而是一篇<strong>学科建设书</strong>——它给出领域名字、原则、地图、议程和入门指南。对于任何想认真理解深度学习"为什么
+work"的人，都值得反复读。</p>
+<hr />
+<p><strong>论文信息</strong></p>
+<ul>
+<li>标题：There Will Be a Scientific Theory of Deep Learning</li>
+<li>作者：Jamie Simon, Daniel Kunin, Alexander Atanasov, Enric
+Boix-Adserà, Blake Bordelon, Jeremy Cohen, Nikhil Ghosh, Florentin Guth,
+Arthur Jacot, Mason Kamb, Dhruva Karkada, Eric J. Michaud, Berkan
+Ottlik, Joseph Turnbull</li>
+<li>来源：arXiv:2604.21691v1 [stat.ML]，2026 年 4 月 23 日</li>
+<li>配套材料：<span class="exturl" data-url="aHR0cHM6Ly9sZWFybmluZ21lY2hhbmljcy5wdWI=">learningmechanics.pub<i class="fa fa-external-link-alt"></i></span></li>
+<li>通讯：james.simon@berkeley.edu</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/" rel="tag"><i class="fa fa-tag"></i> 深度学习理论</a>
+              <a href="/tags/learning-mechanics/" rel="tag"><i class="fa fa-tag"></i> learning mechanics</a>
+              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 神经网络</a>
+              <a href="/tags/%E6%9C%BA%E5%88%B6%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7/" rel="tag"><i class="fa fa-tag"></i> 机制可解释性</a>
+              <a href="/tags/%E7%BC%A9%E6%94%BE%E5%BE%8B/" rel="tag"><i class="fa fa-tag"></i> 缩放律</a>
+              <a href="/tags/NTK/" rel="tag"><i class="fa fa-tag"></i> NTK</a>
+              <a href="/tags/edge-of-stability/" rel="tag"><i class="fa fa-tag"></i> edge of stability</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/d39aa049.html" rel="prev" title="每日科技速递 - 2026-04-24">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-04-24
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/a49d90df.html" rel="next" title="每日科技速递 - 2026-04-25">
+                  每日科技速递 - 2026-04-25 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">501k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">30:22</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
