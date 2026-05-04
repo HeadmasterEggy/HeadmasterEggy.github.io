@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 9 Lecture 深度总结：Security Management Part 2（安全管理第二部分）。涵盖数据生命周期（6阶段安全控制）、CIA三元组应用、数据隐私框架（APPs&#x2F;GDPR&#x2F;NSW隐私法）、治理框架（NIST CSF&#x2F;GDPR）、网络安全（7大领域&#x2F;通用实践&#x2F;标准）、PCI DSS与HIPAA合规要求、STRIDE威胁建模、事件响应计划（IRP）生命周期、灾难恢复计划（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO5990-Week9-Lecture-Summary">
+<meta property="og:url" content="http://example.com/posts/9b3e7c45.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 9 Lecture 深度总结：Security Management Part 2（安全管理第二部分）。涵盖数据生命周期（6阶段安全控制）、CIA三元组应用、数据隐私框架（APPs&#x2F;GDPR&#x2F;NSW隐私法）、治理框架（NIST CSF&#x2F;GDPR）、网络安全（7大领域&#x2F;通用实践&#x2F;标准）、PCI DSS与HIPAA合规要求、STRIDE威胁建模、事件响应计划（IRP）生命周期、灾难恢复计划（">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-01T06:22:53.313Z">
+<meta property="article:modified_time" content="2026-05-01T06:22:53.316Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="INFO5990">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/9b3e7c45.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/9b3e7c45.html","path":"posts/9b3e7c45.html","title":"INFO5990-Week9-Lecture-Summary"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO5990-Week9-Lecture-Summary | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/9b3e7c45.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">81</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">164</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9C%AC%E5%91%A8%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-text">一、本周整体框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cdata-lifecycle-security%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="nav-text">二、Data Lifecycle
+&amp; Security（数据生命周期与安全）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84-6-%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-text">2.1 数据生命周期的 6 个阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cia-%E4%B8%89%E5%85%83%E7%BB%84%E5%9C%A8%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">2.2 CIA
+三元组在数据生命周期中的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89data-privacy-frameworks%E6%95%B0%E6%8D%AE%E9%9A%90%E7%A7%81%E6%A1%86%E6%9E%B6"><span class="nav-text">三、Data Privacy
+Frameworks（数据隐私框架）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#australian-privacy-principles-apps"><span class="nav-text">3.1 Australian Privacy
+Principles (APPs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gdprgeneral-data-protection-regulation"><span class="nav-text">3.2 GDPR（General Data
+Protection Regulation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nsw-privacy-laws"><span class="nav-text">3.3 NSW Privacy Laws</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E7%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%AF%B9%E7%85%A7"><span class="nav-text">3.4 隐私问题与解决方案对照</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bgovernance-frameworks-for-information-security%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">四、Governance
+Frameworks for Information Security（信息安全治理框架）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nist-cybersecurity-framework-csf"><span class="nav-text">4.1 NIST Cybersecurity
+Framework (CSF)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#framework-core-5-%E5%A4%A7%E5%8A%9F%E8%83%BD"><span class="nav-text">4.1.1 Framework Core — 5 大功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#implementation-tiers-4-%E4%B8%AA%E6%88%90%E7%86%9F%E5%BA%A6%E7%BA%A7%E5%88%AB"><span class="nav-text">4.1.2 Implementation Tiers
+— 4 个成熟度级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#profiles"><span class="nav-text">4.1.3 Profiles</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gdpr-%E4%BD%9C%E4%B8%BA%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">4.2 GDPR 作为治理框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94cybersecurity%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8"><span class="nav-text">五、Cybersecurity（网络安全）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-text">5.1 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%9A%84-7-%E5%A4%A7%E9%A2%86%E5%9F%9F"><span class="nav-text">5.2 网络安全的 7 大领域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5"><span class="nav-text">5.3 常见网络安全实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86"><span class="nav-text">5.4 网络安全标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADpci-dss-%E4%B8%8E-hipaa"><span class="nav-text">六、PCI DSS 与 HIPAA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pci-dss%E6%94%AF%E4%BB%98%E5%8D%A1%E8%A1%8C%E4%B8%9A%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86"><span class="nav-text">6.1 PCI
+DSS（支付卡行业数据安全标准）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hipaa%E5%81%A5%E5%BA%B7%E4%BF%9D%E9%99%A9%E5%8F%AF%E6%90%BA%E5%B8%A6%E6%80%A7%E4%B8%8E%E8%B4%A3%E4%BB%BB%E6%B3%95%E6%A1%88"><span class="nav-text">6.2
+HIPAA（健康保险可携带性与责任法案）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83threat-modelling-stride%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1"><span class="nav-text">七、Threat Modelling —
+STRIDE（威胁建模）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1"><span class="nav-text">7.1 什么是威胁建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stride-%E6%A1%86%E6%9E%B6"><span class="nav-text">7.2 STRIDE 框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABincident-response-plan-irp%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E8%AE%A1%E5%88%92"><span class="nav-text">八、Incident Response
+Plan (IRP)（事件响应计划）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%9B%AE%E6%A0%87"><span class="nav-text">8.1 定义与目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9Fincident-response-lifecycle"><span class="nav-text">8.2
+事件响应生命周期（Incident Response Lifecycle）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-1preparation%E5%87%86%E5%A4%87"><span class="nav-text">阶段 1：Preparation（准备）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-2identification%E8%AF%86%E5%88%AB"><span class="nav-text">阶段 2：Identification（识别）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-3containment%E9%81%8F%E5%88%B6"><span class="nav-text">阶段 3：Containment（遏制）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-4eradication%E6%A0%B9%E9%99%A4"><span class="nav-text">阶段 4：Eradication（根除）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-5recovery%E6%81%A2%E5%A4%8D"><span class="nav-text">阶段 5：Recovery（恢复）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5-6lessons-learned%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD"><span class="nav-text">阶段 6：Lessons
+Learned（经验教训）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9Ddisaster-recovery-plan-drp%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E8%AE%A1%E5%88%92"><span class="nav-text">九、Disaster Recovery
+Plan (DRP)（灾难恢复计划）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%9B%AE%E6%A0%87-1"><span class="nav-text">9.1 定义与目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E7%AD%96%E7%95%A5"><span class="nav-text">9.2 灾难恢复策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#irp-%E4%B8%8E-drp-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">9.3 IRP 与 DRP 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81business-continuity-plan-bcp%E4%B8%9A%E5%8A%A1%E8%BF%9E%E7%BB%AD%E6%80%A7%E8%AE%A1%E5%88%92"><span class="nav-text">十、Business
+Continuity Plan (BCP)（业务连续性计划）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%9B%AE%E6%A0%87-2"><span class="nav-text">10.1 定义与目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bcp-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">10.2 BCP 生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bcp-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">10.3 BCP 最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#irp-vs-drp-vs-bcp-%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB"><span class="nav-text">10.4 IRP vs DRP vs BCP 三者关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80modern-it-security%E7%8E%B0%E4%BB%A3it%E5%AE%89%E5%85%A8"><span class="nav-text">十一、Modern IT
+Security（现代IT安全）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-text">11.1 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3it%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98"><span class="nav-text">11.2 现代IT安全挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B"><span class="nav-text">11.3 云部署模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9E%8B"><span class="nav-text">11.4 云服务模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E5%92%8C%E8%99%9A%E6%8B%9F%E5%8C%96%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E5%85%A8"><span class="nav-text">11.5 云和虚拟化环境的安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E7%8E%AF%E5%A2%83%E5%AE%89%E5%85%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">11.6 云环境安全最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8Ccase-study-cloudsafe-corp%E6%A1%88%E4%BE%8B%E7%A0%94%E7%A9%B6"><span class="nav-text">十二、Case Study:
+CloudSafe Corp（案例研究）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">12.1 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6"><span class="nav-text">12.2 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81"><span class="nav-text">12.3 当前状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E8%AE%A8%E8%AE%BA%E9%A2%98"><span class="nav-text">12.4 案例讨论题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%89end-of-lecture-questions%E8%AF%BE%E5%90%8E%E5%A4%8D%E4%B9%A0%E9%97%AE%E9%A2%98"><span class="nav-text">十三、End of Lecture
+Questions（课后复习问题）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%9B%9B%E8%80%83%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8quick-reference"><span class="nav-text">十四、考试速查表（Quick
+Reference）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">数据生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E7%A7%81%E6%A1%86%E6%9E%B6"><span class="nav-text">隐私框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nist-csf"><span class="nav-text">NIST CSF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86-1"><span class="nav-text">网络安全标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stride-%E5%A8%81%E8%83%81%E6%A8%A1%E5%9E%8B"><span class="nav-text">STRIDE 威胁模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#irp-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">IRP 生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#drp-%E6%81%A2%E5%A4%8D%E7%AD%96%E7%95%A5"><span class="nav-text">DRP 恢复策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bcp-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F-1"><span class="nav-text">BCP 生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#irp-vs-drp-vs-bcp"><span class="nav-text">IRP vs DRP vs BCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E6%A8%A1%E5%9E%8B"><span class="nav-text">云模型</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">81</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/9b3e7c45.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO5990-Week9-Lecture-Summary | Joey">
+      <meta itemprop="description" content="Week 9 Lecture 深度总结：Security Management Part 2（安全管理第二部分）。涵盖数据生命周期（6阶段安全控制）、CIA三元组应用、数据隐私框架（APPs/GDPR/NSW隐私法）、治理框架（NIST CSF/GDPR）、网络安全（7大领域/通用实践/标准）、PCI DSS与HIPAA合规要求、STRIDE威胁建模、事件响应计划（IRP）生命周期、灾难恢复计划（DRP）策略、业务连续性计划（BCP）生命周期、现代IT安全挑战（云/远程工作/Shadow IT）、云部署与服务模型、云环境安全最佳实践、CloudSafe Corp案例研究。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO5990-Week9-Lecture-Summary
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-01 06:22:53" itemprop="dateCreated datePublished" datetime="2026-05-01T06:22:53Z">2026-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/INFO5990/" itemprop="url" rel="index"><span itemprop="name">INFO5990</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>23 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Week 9 Lecture 深度总结：Security Management Part 2（安全管理第二部分）。涵盖数据生命周期（6阶段安全控制）、CIA三元组应用、数据隐私框架（APPs/GDPR/NSW隐私法）、治理框架（NIST CSF/GDPR）、网络安全（7大领域/通用实践/标准）、PCI DSS与HIPAA合规要求、STRIDE威胁建模、事件响应计划（IRP）生命周期、灾难恢复计划（DRP）策略、业务连续性计划（BCP）生命周期、现代IT安全挑战（云/远程工作/Shadow IT）、云部署与服务模型、云环境安全最佳实践、CloudSafe Corp案例研究。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一本周整体框架">一、本周整体框架</h2>
+<p>Week 9 Lecture 围绕 <strong>Security Management Part
+2（安全管理第二部分）</strong> 展开，是 Week 8
+信息安全基础的延伸和深化，重点从"概念"转向"实践"——如何通过框架、标准、计划和技术手段来<strong>系统性地保护组织的数据和IT基础设施</strong>。</p>
+<p>整体结构分为以下几个模块：</p>
+<ol type="1">
+<li><strong>Data Lifecycle &amp;
+Security</strong>（数据生命周期与安全）</li>
+<li><strong>Data Privacy Frameworks</strong>（数据隐私框架）</li>
+<li><strong>Governance Frameworks for Information
+Security</strong>（信息安全治理框架）</li>
+<li><strong>Cybersecurity</strong>（网络安全：领域、实践、标准）</li>
+<li><strong>Threat Modelling — STRIDE</strong>（威胁建模 — STRIDE
+框架）</li>
+<li><strong>Incident Response Plan (IRP)</strong>（事件响应计划）</li>
+<li><strong>Disaster Recovery Plan (DRP)</strong>（灾难恢复计划）</li>
+<li><strong>Business Continuity Plan
+(BCP)</strong>（业务连续性计划）</li>
+<li><strong>Modern IT Security</strong>（现代IT安全挑战与云安全）</li>
+<li><strong>Case Study: CloudSafe Corp</strong>（案例研究）</li>
+</ol>
+<p>核心逻辑链：</p>
+<blockquote>
+<p>数据从创建到销毁的<strong>每个阶段</strong>都面临安全威胁 →
+需要<strong>隐私框架</strong>保护个人数据 →
+需要<strong>治理框架</strong>（NIST、GDPR）指导安全策略 →
+需要<strong>网络安全标准</strong>（ISO 27001、PCI DSS、HIPAA）确保合规 →
+需要<strong>威胁建模</strong>（STRIDE）预判攻击 →
+需要<strong>IRP/DRP/BCP</strong>三层计划应对事件、灾难和业务中断 →
+在<strong>云和远程工作</strong>环境下，这些挑战进一步加剧。</p>
+</blockquote>
+<hr />
+<h2 id="二data-lifecycle-security数据生命周期与安全">二、Data Lifecycle
+&amp; Security（数据生命周期与安全）</h2>
+<h3 id="数据生命周期的-6-个阶段">2.1 数据生命周期的 6 个阶段</h3>
+<p>数据从产生到最终销毁，经历一个完整的生命周期。<strong>每个阶段都需要相应的安全控制</strong>来保护数据的机密性、完整性和可用性。</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>阶段</th>
+<th>英文</th>
+<th>关键活动</th>
+<th>安全控制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Creation / Collection</strong></td>
+<td>数据的产生或采集（用户输入、传感器、交易记录等）</td>
+<td>数据分类（Data Classification）、访问控制（Access
+Controls）、加密（Encryption）、合规管理（Compliance）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Storage</strong></td>
+<td>数据存储于数据库、云端、本地服务器等</td>
+<td>静态加密（Encryption at Rest）、冗余备份（Redundancy &amp;
+Backups）、访问控制、数据完整性检查</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Usage / Processing</strong></td>
+<td>数据被应用程序读取、分析、转换</td>
+<td>基于角色的访问控制（RBAC）、审计日志（Audit
+Logging）、数据脱敏（Data Masking）、DLP（数据丢失防护）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Sharing / Distribution</strong></td>
+<td>数据在组织内部或外部传输共享</td>
+<td>传输加密（Encryption in Transit / TLS）、安全API、数据共享协议（Data
+Sharing Agreements）、DLP</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Archival</strong></td>
+<td>不再活跃使用的数据被长期保存</td>
+<td>归档加密、保留策略（Retention
+Policies）、合规审计、安全离线存储</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Destruction / Disposal</strong></td>
+<td>数据被永久删除或销毁</td>
+<td>安全擦除（Secure
+Erasure）、物理销毁（Shredding/Degaussing）、销毁证书（Certificates of
+Destruction）、合规验证</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cia-三元组在数据生命周期中的应用">2.2 CIA
+三元组在数据生命周期中的应用</h3>
+<p>CIA 三元组（Confidentiality, Integrity,
+Availability）是信息安全的核心原则，贯穿数据生命周期的每一个阶段：</p>
+<ul>
+<li><strong>Confidentiality（机密性）</strong>：确保只有授权人员能够访问数据。手段包括加密、访问控制、数据分类。</li>
+<li><strong>Integrity（完整性）</strong>：确保数据在整个生命周期中不被未授权篡改。手段包括哈希校验、审计日志、版本控制。</li>
+<li><strong>Availability（可用性）</strong>：确保授权用户在需要时能够访问数据。手段包括冗余备份、灾难恢复、负载均衡。</li>
+</ul>
+<hr />
+<h2 id="三data-privacy-frameworks数据隐私框架">三、Data Privacy
+Frameworks（数据隐私框架）</h2>
+<h3 id="australian-privacy-principles-apps">3.1 Australian Privacy
+Principles (APPs)</h3>
+<p><strong>APPs</strong> 是澳大利亚《隐私法 1988（Privacy Act
+1988）》下的 <strong>13
+项原则</strong>，规范组织如何收集、使用、披露和存储个人信息。</p>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>原则编号</th>
+<th>名称</th>
+<th>核心要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>APP 1</td>
+<td>Open and transparent management</td>
+<td>公开透明地管理个人信息</td>
+</tr>
+<tr>
+<td>APP 2</td>
+<td>Anonymity and pseudonymity</td>
+<td>允许个人匿名或使用化名</td>
+</tr>
+<tr>
+<td>APP 3</td>
+<td>Collection of solicited personal information</td>
+<td>仅收集必要的个人信息</td>
+</tr>
+<tr>
+<td>APP 4</td>
+<td>Dealing with unsolicited personal information</td>
+<td>妥善处理主动收到的个人信息</td>
+</tr>
+<tr>
+<td>APP 5</td>
+<td>Notification of collection</td>
+<td>告知个人信息被收集的事实</td>
+</tr>
+<tr>
+<td>APP 6</td>
+<td>Use or disclosure</td>
+<td>仅用于收集目的或相关目的</td>
+</tr>
+<tr>
+<td>APP 7</td>
+<td>Direct marketing</td>
+<td>限制直接营销使用</td>
+</tr>
+<tr>
+<td>APP 8</td>
+<td>Cross-border disclosure</td>
+<td>跨境披露需确保同等保护</td>
+</tr>
+<tr>
+<td>APP 9</td>
+<td>Adoption, use or disclosure of government identifiers</td>
+<td>限制使用政府标识符</td>
+</tr>
+<tr>
+<td>APP 10</td>
+<td>Quality of personal information</td>
+<td>确保信息准确、最新、完整</td>
+</tr>
+<tr>
+<td>APP 11</td>
+<td>Security of personal information</td>
+<td>采取合理措施保护信息安全</td>
+</tr>
+<tr>
+<td>APP 12</td>
+<td>Access to personal information</td>
+<td>个人有权访问自己的信息</td>
+</tr>
+<tr>
+<td>APP 13</td>
+<td>Correction of personal information</td>
+<td>个人有权更正不准确的信息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gdprgeneral-data-protection-regulation">3.2 GDPR（General Data
+Protection Regulation）</h3>
+<p>GDPR 是<strong>欧盟</strong>于 2018 年 5
+月生效的数据保护法规，适用于所有处理欧盟居民个人数据的组织（无论组织位于何处）。</p>
+<p><strong>GDPR 的 7 大原则：</strong></p>
+<ol type="1">
+<li><strong>Lawfulness, Fairness, and
+Transparency</strong>（合法、公平、透明）</li>
+<li><strong>Purpose
+Limitation</strong>（目的限制）——数据仅用于指定目的</li>
+<li><strong>Data
+Minimisation</strong>（数据最小化）——仅收集必要数据</li>
+<li><strong>Accuracy</strong>（准确性）——保持数据准确和最新</li>
+<li><strong>Storage Limitation</strong>（存储限制）——不超期保留数据</li>
+<li><strong>Integrity and
+Confidentiality</strong>（完整性与保密性）——确保数据安全</li>
+<li><strong>Accountability</strong>（问责制）——组织必须能够证明其合规性</li>
+</ol>
+<p><strong>GDPR 赋予个人的权利：</strong></p>
+<ul>
+<li>访问权（Right of Access）</li>
+<li>更正权（Right to Rectification）</li>
+<li>被遗忘权/删除权（Right to Erasure / Right to be Forgotten）</li>
+<li>限制处理权（Right to Restrict Processing）</li>
+<li>数据可携带权（Right to Data Portability）</li>
+<li>反对权（Right to Object）</li>
+<li>自动化决策相关权利（Rights related to Automated
+Decision-Making）</li>
+</ul>
+<h3 id="nsw-privacy-laws">3.3 NSW Privacy Laws</h3>
+<p>新南威尔士州的隐私法以 <strong>PPIP Act 1998（Privacy and Personal
+Information Protection Act 1998）</strong> 为核心，规范 NSW
+公共部门对个人信息的处理方式。</p>
+<h3 id="隐私问题与解决方案对照">3.4 隐私问题与解决方案对照</h3>
+<table>
+<thead>
+<tr>
+<th>隐私问题/风险</th>
+<th>解决方案/控制措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未经授权的数据访问</td>
+<td>访问控制、加密、MFA</td>
+</tr>
+<tr>
+<td>数据泄露</td>
+<td>DLP、事件响应计划、加密</td>
+</tr>
+<tr>
+<td>过度收集个人数据</td>
+<td>数据最小化原则、隐私影响评估</td>
+</tr>
+<tr>
+<td>跨境数据传输风险</td>
+<td>数据主权控制、合规审查</td>
+</tr>
+<tr>
+<td>缺乏透明度</td>
+<td>隐私政策、数据收集通知</td>
+</tr>
+<tr>
+<td>第三方数据共享</td>
+<td>数据处理协议、供应商审计</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="四governance-frameworks-for-information-security信息安全治理框架">四、Governance
+Frameworks for Information Security（信息安全治理框架）</h2>
+<p>本节介绍四个关键的信息安全治理框架：ITIL、COBIT（已在 Week 6
+详细讲解）、NIST CSF 和 GDPR。</p>
+<h3 id="nist-cybersecurity-framework-csf">4.1 NIST Cybersecurity
+Framework (CSF)</h3>
+<p><strong>NIST CSF</strong> 由美国国家标准与技术研究院（National
+Institute of Standards and
+Technology）开发，是一个<strong>基于风险的网络安全框架</strong>，为组织提供管理和降低网络安全风险的通用语言和方法。</p>
+<h4 id="framework-core-5-大功能">4.1.1 Framework Core — 5 大功能</h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>英文</th>
+<th>核心目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>识别</strong></td>
+<td>Identify</td>
+<td>了解组织的资产、风险、治理需求</td>
+</tr>
+<tr>
+<td><strong>保护</strong></td>
+<td>Protect</td>
+<td>实施保障措施以保护关键服务</td>
+</tr>
+<tr>
+<td><strong>检测</strong></td>
+<td>Detect</td>
+<td>开发活动来识别安全事件的发生</td>
+</tr>
+<tr>
+<td><strong>响应</strong></td>
+<td>Respond</td>
+<td>开发活动来应对已检测到的安全事件</td>
+</tr>
+<tr>
+<td><strong>恢复</strong></td>
+<td>Recover</td>
+<td>开发活动来恢复因安全事件受损的能力或服务</td>
+</tr>
+</tbody>
+</table>
+<h4 id="implementation-tiers-4-个成熟度级别">4.1.2 Implementation Tiers
+— 4 个成熟度级别</h4>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tier 1</td>
+<td><strong>Partial</strong></td>
+<td>临时性的、被动的安全实践</td>
+</tr>
+<tr>
+<td>Tier 2</td>
+<td><strong>Risk Informed</strong></td>
+<td>有一定的风险意识，但未组织级别统一</td>
+</tr>
+<tr>
+<td>Tier 3</td>
+<td><strong>Repeatable</strong></td>
+<td>正式化的、一致的安全策略和流程</td>
+</tr>
+<tr>
+<td>Tier 4</td>
+<td><strong>Adaptive</strong></td>
+<td>基于经验和预测指标，持续改进和适应</td>
+</tr>
+</tbody>
+</table>
+<h4 id="profiles">4.1.3 Profiles</h4>
+<p>Profiles 是组织将 Framework Core
+与其<strong>业务需求、风险承受能力和资源</strong>进行定制化对齐的工具。通过比较"当前状态
+Profile"和"目标状态 Profile"，组织可以识别安全改进的优先事项。</p>
+<h3 id="gdpr-作为治理框架">4.2 GDPR 作为治理框架</h3>
+<p>GDPR
+不仅是隐私法规，也可作为信息安全治理框架来指导组织的安全策略（详见第三节）。</p>
+<hr />
+<h2 id="五cybersecurity网络安全">五、Cybersecurity（网络安全）</h2>
+<h3 id="定义">5.1 定义</h3>
+<p>Cybersecurity（网络安全）是指保护计算机、网络、程序和数据免受未经授权的访问、攻击或损坏的实践。它与
+CIA 三元组紧密对齐。</p>
+<h3 id="网络安全的-7-大领域">5.2 网络安全的 7 大领域</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>领域</th>
+<th>英文</th>
+<th>核心关注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络安全</td>
+<td><strong>Network Security</strong></td>
+<td>保护网络基础设施免受入侵和攻击</td>
+</tr>
+<tr>
+<td>应用安全</td>
+<td><strong>Application Security</strong></td>
+<td>确保软件应用在开发和部署中的安全</td>
+</tr>
+<tr>
+<td>信息安全</td>
+<td><strong>Information Security</strong></td>
+<td>保护数据的机密性、完整性和可用性</td>
+</tr>
+<tr>
+<td>运营安全</td>
+<td><strong>Operational Security (OPSEC)</strong></td>
+<td>保护日常运营流程和敏感信息</td>
+</tr>
+<tr>
+<td>端点安全</td>
+<td><strong>Endpoint Security</strong></td>
+<td>保护终端设备（笔记本、手机、IoT）</td>
+</tr>
+<tr>
+<td>云安全</td>
+<td><strong>Cloud Security</strong></td>
+<td>保护云环境中的数据和应用</td>
+</tr>
+<tr>
+<td>身份与访问管理</td>
+<td><strong>Identity &amp; Access Management (IAM)</strong></td>
+<td>管理用户身份和访问权限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="常见网络安全实践">5.3 常见网络安全实践</h3>
+<ul>
+<li><strong>强密码 + 多因素认证（MFA）</strong>：防止未经授权的访问</li>
+<li><strong>定期打补丁（Patching）</strong>：修复已知漏洞</li>
+<li><strong>防火墙 / VPN / 入侵检测系统（IDS）</strong>：网络层保护</li>
+<li><strong>加密（Encryption）</strong>：保护静态和传输中的数据</li>
+<li><strong>员工安全培训</strong>：应对钓鱼和社会工程攻击</li>
+<li><strong>事件响应计划（IRP）</strong>：确保快速有效地应对安全事件</li>
+<li><strong>监控和审计日志（Monitoring &amp; Audit
+Logs）</strong>：持续监控异常行为</li>
+</ul>
+<h3 id="网络安全标准">5.4 网络安全标准</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>标准</th>
+<th>全称</th>
+<th>核心关注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ISO/IEC 27001</strong></td>
+<td>Information Security Management Systems</td>
+<td>建立、实施和持续改进信息安全管理体系（ISMS）</td>
+</tr>
+<tr>
+<td><strong>NIST CSF</strong></td>
+<td>Cybersecurity Framework</td>
+<td>基于风险的网络安全管理（详见 4.1）</td>
+</tr>
+<tr>
+<td><strong>PCI DSS</strong></td>
+<td>Payment Card Industry Data Security Standard</td>
+<td>保护支付卡数据安全</td>
+</tr>
+<tr>
+<td><strong>HIPAA</strong></td>
+<td>Health Insurance Portability and Accountability Act</td>
+<td>保护医疗健康信息（ePHI）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六pci-dss-与-hipaa">六、PCI DSS 与 HIPAA</h2>
+<h3 id="pci-dss支付卡行业数据安全标准">6.1 PCI
+DSS（支付卡行业数据安全标准）</h3>
+<p><strong>PCI DSS</strong> 由 PCI 安全标准委员会（PCI Security
+Standards Council）制定，该委员会由 Visa、MasterCard、American
+Express、Discover 和 JCB 五大支付品牌创立。</p>
+<p><strong>PCI DSS 的 6 大要求：</strong></p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>编号</th>
+<th>要求</th>
+<th>核心内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Build and Maintain a Secure Network</strong></td>
+<td>安装和维护防火墙，不使用供应商默认密码</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Protect Cardholder Data</strong></td>
+<td>保护存储的持卡人数据，加密传输</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Maintain a Vulnerability Management Program</strong></td>
+<td>使用并定期更新防病毒软件，开发和维护安全系统</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Implement Strong Access Control Measures</strong></td>
+<td>限制对持卡人数据的访问，分配唯一ID</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Regularly Monitor and Test Networks</strong></td>
+<td>追踪和监控所有网络资源和持卡人数据的访问</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Maintain an Information Security Policy</strong></td>
+<td>维护信息安全政策</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hipaa健康保险可携带性与责任法案">6.2
+HIPAA（健康保险可携带性与责任法案）</h3>
+<p><strong>HIPAA</strong>
+是美国联邦法律，旨在保护<strong>电子受保护健康信息（ePHI）</strong>。适用于<strong>覆盖实体（Covered
+Entities）</strong>和<strong>业务伙伴（Business
+Associates）</strong>。</p>
+<p><strong>违规后果：</strong> 每次违规 $100 至 $50,000，年度最高 $1.5
+million。</p>
+<p><strong>HIPAA 的 3 类保障措施：</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>类型</th>
+<th>英文</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>管理保障</td>
+<td><strong>Administrative Safeguards</strong></td>
+<td>安全管理流程、人员安全、培训、应急计划</td>
+</tr>
+<tr>
+<td>物理保障</td>
+<td><strong>Physical Safeguards</strong></td>
+<td>设施访问控制、工作站安全、设备和媒体控制</td>
+</tr>
+<tr>
+<td>技术保障</td>
+<td><strong>Technical Safeguards</strong></td>
+<td>访问控制、审计控制、完整性控制、传输安全</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七threat-modelling-stride威胁建模">七、Threat Modelling —
+STRIDE（威胁建模）</h2>
+<h3 id="什么是威胁建模">7.1 什么是威胁建模</h3>
+<p><strong>Threat Modelling</strong>
+是一种<strong>结构化方法</strong>，用于识别和优先排序安全威胁。其核心目标是在攻击发生<strong>之前</strong>就预见和防范潜在的攻击向量。</p>
+<h3 id="stride-框架">7.2 STRIDE 框架</h3>
+<p><strong>STRIDE</strong> 是微软开发的威胁建模框架，定义了 6
+种威胁类型及其对应的缓解策略：</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>威胁类型</th>
+<th>英文</th>
+<th>描述</th>
+<th>缓解策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>欺骗</td>
+<td><strong>Spoofing</strong></td>
+<td>冒充其他用户或系统</td>
+<td>强认证（MFA、数字证书）</td>
+</tr>
+<tr>
+<td>篡改</td>
+<td><strong>Tampering</strong></td>
+<td>未经授权修改数据或代码</td>
+<td>完整性检查（哈希、数字签名、输入验证）</td>
+</tr>
+<tr>
+<td>否认</td>
+<td><strong>Repudiation</strong></td>
+<td>否认执行了某项操作</td>
+<td>审计日志、数字签名、时间戳</td>
+</tr>
+<tr>
+<td>信息泄露</td>
+<td><strong>Information Disclosure</strong></td>
+<td>敏感信息被未授权方获取</td>
+<td>加密、访问控制、DLP</td>
+</tr>
+<tr>
+<td>拒绝服务</td>
+<td><strong>Denial of Service (DoS)</strong></td>
+<td>使系统或服务不可用</td>
+<td>速率限制、负载均衡、冗余、CDN</td>
+</tr>
+<tr>
+<td>权限提升</td>
+<td><strong>Elevation of Privilege</strong></td>
+<td>获取高于授权级别的权限</td>
+<td>最小权限原则、RBAC、输入验证</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="八incident-response-plan-irp事件响应计划">八、Incident Response
+Plan (IRP)（事件响应计划）</h2>
+<h3 id="定义与目标">8.1 定义与目标</h3>
+<p><strong>IRP</strong>
+是一种<strong>结构化方法</strong>，用于检测、响应和从网络安全事件中恢复。</p>
+<p><strong>IRP 的三大目标：</strong> 1.
+<strong>减少影响</strong>（Reduce Impact）——最小化安全事件造成的损害 2.
+<strong>确保业务连续性</strong>（Ensure Business
+Continuity）——在事件期间维持运营 3.
+<strong>改进未来安全</strong>（Improve Future
+Security）——从事件中学习并加强防御</p>
+<h3 id="事件响应生命周期incident-response-lifecycle">8.2
+事件响应生命周期（Incident Response Lifecycle）</h3>
+<p>IRP 包含 <strong>6 个阶段</strong>：</p>
+<h4 id="阶段-1preparation准备">阶段 1：Preparation（准备）</h4>
+<ul>
+<li>制定安全政策和程序</li>
+<li>组建<strong>事件响应团队（IRT）</strong></li>
+<li>部署监控工具和通信系统</li>
+<li>定期进行安全培训和演练</li>
+</ul>
+<h4 id="阶段-2identification识别">阶段 2：Identification（识别）</h4>
+<ul>
+<li>尽早<strong>检测安全事件</strong></li>
+<li>确定事件的<strong>范围、类型和严重程度</strong></li>
+<li>使用 SIEM、IDS、日志分析等工具</li>
+</ul>
+<h4 id="阶段-3containment遏制">阶段 3：Containment（遏制）</h4>
+<ul>
+<li><strong>短期遏制（Short-term）</strong>：采取立即措施阻止事件扩散（如隔离受感染系统）</li>
+<li><strong>长期遏制（Long-term）</strong>：在维持业务运营的同时实施修复措施</li>
+</ul>
+<h4 id="阶段-4eradication根除">阶段 4：Eradication（根除）</h4>
+<ul>
+<li><strong>彻底移除</strong>事件的根本原因</li>
+<li>清除恶意软件、修复漏洞、更新安全配置</li>
+</ul>
+<h4 id="阶段-5recovery恢复">阶段 5：Recovery（恢复）</h4>
+<ul>
+<li>将受影响的系统和服务<strong>恢复到正常运营</strong>状态</li>
+<li>确保系统<strong>功能完整、安全且经过验证</strong></li>
+<li>监控系统是否有<strong>残余威胁或反复出现的问题</strong></li>
+</ul>
+<h4 id="阶段-6lessons-learned经验教训">阶段 6：Lessons
+Learned（经验教训）</h4>
+<ul>
+<li>进行<strong>事后回顾（Post-Incident Review）</strong></li>
+<li>识别做得好的地方和需要改进的地方</li>
+<li>发现政策或技术中的<strong>差距（Gaps）</strong></li>
+<li>更新 <strong>IRP、安全控制和员工培训</strong></li>
+<li>记录发现以用于<strong>监管和审计目的</strong></li>
+</ul>
+<hr />
+<h2 id="九disaster-recovery-plan-drp灾难恢复计划">九、Disaster Recovery
+Plan (DRP)（灾难恢复计划）</h2>
+<h3 id="定义与目标-1">9.1 定义与目标</h3>
+<p><strong>DRP</strong>
+是一个文档化的、结构化的方法，概述组织如何在<strong>破坏性事件</strong>（如网络攻击、硬件故障、自然灾害、人为错误）发生后恢复
+IT 系统、数据和运营。</p>
+<p><strong>DRP 的目标：</strong> -
+<strong>最小化停机时间</strong>和数据丢失 -
+<strong>确保业务连续性</strong> - 保护关键系统和资源 -
+满足<strong>监管和合同要求</strong></p>
+<h3 id="灾难恢复策略">9.2 灾难恢复策略</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 33%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>策略</th>
+<th>描述</th>
+<th>恢复速度</th>
+<th>成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cold Site</strong></td>
+<td>预备好基础设施的物理场所，灾难时需要安装设备</td>
+<td>最慢</td>
+<td>最低</td>
+</tr>
+<tr>
+<td><strong>Warm Site</strong></td>
+<td>部分配备的备份站点，服务器和数据需要配置</td>
+<td>中等</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>Hot Site</strong></td>
+<td>完全运行的镜像环境，可立即接管</td>
+<td>最快</td>
+<td>最高</td>
+</tr>
+<tr>
+<td><strong>Cloud-Based DR / DRaaS</strong></td>
+<td>将系统/数据复制到云端，实现快速恢复</td>
+<td>快</td>
+<td>灵活</td>
+</tr>
+<tr>
+<td><strong>Backup and Restore</strong></td>
+<td>定期备份存储在异地，恢复较慢但成本效益好</td>
+<td>慢</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<h3 id="irp-与-drp-的区别">9.3 IRP 与 DRP 的区别</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 43%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>维度</th>
+<th>DRP（灾难恢复计划）</th>
+<th>IRP（事件响应计划）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>焦点</strong></td>
+<td>灾难后恢复 IT 系统、数据和运营</td>
+<td>检测、遏制和缓解网络安全事件</td>
+</tr>
+<tr>
+<td><strong>目标</strong></td>
+<td>最小化停机时间和数据丢失</td>
+<td>最小化损害并遏制威胁</td>
+</tr>
+<tr>
+<td><strong>范围</strong></td>
+<td>IT 基础设施、应用、备份</td>
+<td>安全事件、数据泄露、攻击</td>
+</tr>
+<tr>
+<td><strong>时机</strong></td>
+<td>灾难发生<strong>之后</strong>的恢复</td>
+<td>事件<strong>期间</strong>和<strong>之后</strong>立即响应</td>
+</tr>
+<tr>
+<td><strong>DRP 最佳实践</strong></td>
+<td>至少每年测试一次；使用冗余和故障转移机制；维护清晰文档；确保法规合规；与
+IRP 和 BCP 对齐</td>
+<td>保持计划与时俱进；定期演练和桌面推演；使用自动化监控和告警；应用最小权限原则；维护异地备份；整合威胁情报</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="十business-continuity-plan-bcp业务连续性计划">十、Business
+Continuity Plan (BCP)（业务连续性计划）</h2>
+<h3 id="定义与目标-2">10.1 定义与目标</h3>
+<p><strong>BCP</strong>
+是一个<strong>主动策略和文档化计划</strong>，确保组织在<strong>破坏性事件期间和之后</strong>都能继续运行核心业务。</p>
+<p><strong>BCP 的目标：</strong> -
+在中断期间维持<strong>关键业务功能</strong> -
+最小化<strong>财务、运营和声誉影响</strong> -
+确保<strong>员工、客户和利益相关者的信心</strong> - 补充 DRP 对 IT
+系统的恢复</p>
+<h3 id="bcp-生命周期">10.2 BCP 生命周期</h3>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>阶段</th>
+<th>英文</th>
+<th>核心活动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Project Initiation and Management</strong></td>
+<td>确定目标、范围和资源</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Business Impact Analysis (BIA)</strong></td>
+<td>识别关键功能并确定恢复优先级</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Risk Assessment</strong></td>
+<td>评估威胁和脆弱性</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Strategy Development</strong></td>
+<td>为关键流程定义恢复策略</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Plan Development</strong></td>
+<td>记录程序、角色和资源</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Testing and Exercises</strong></td>
+<td>进行演练以验证计划的有效性</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Maintenance and Continuous Improvement</strong></td>
+<td>根据经验教训和业务变化更新计划</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bcp-最佳实践">10.3 BCP 最佳实践</h3>
+<ul>
+<li>将 BCP 与 <strong>DRP 和 IRP 对齐</strong>，形成完整的韧性策略</li>
+<li>识别和保护<strong>关键资源</strong>（人员、技术、设施、供应商）</li>
+<li>确保<strong>沟通计划</strong>经过测试且可访问</li>
+<li>定期进行<strong>审计和计划更新</strong></li>
+<li>使用<strong>云服务和远程能力</strong>提高灵活性</li>
+<li>获得<strong>领导层支持</strong>以加快危机决策</li>
+</ul>
+<h3 id="irp-vs-drp-vs-bcp-三者关系">10.4 IRP vs DRP vs BCP 三者关系</h3>
+<blockquote>
+<p><strong>IRP</strong>
+负责<strong>"事件发生时怎么办"</strong>（检测、遏制、根除）
+<strong>DRP</strong>
+负责<strong>"灾难后怎么恢复IT"</strong>（系统、数据、基础设施的恢复）
+<strong>BCP</strong>
+负责<strong>"如何在中断期间继续运营"</strong>（保持核心业务功能不中断）</p>
+</blockquote>
+<p>三者相互补充，共同构成组织的<strong>完整韧性战略</strong>。</p>
+<hr />
+<h2 id="十一modern-it-security现代it安全">十一、Modern IT
+Security（现代IT安全）</h2>
+<h3 id="概述">11.1 概述</h3>
+<p>现代威胁正在<strong>快速演变</strong>，经常同时针对人员、技术和流程。安全不再仅仅是
+IT
+部门的责任，而需要<strong>全组织范围的方法</strong>。关键是采用<strong>主动的、分层的防御</strong>策略，并整合网络安全框架和标准。</p>
+<h3 id="现代it安全挑战">11.2 现代IT安全挑战</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>挑战</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>云采用风险</strong></td>
+<td>分布式劳动力和 BYOD 增加了攻击面；配置错误、共享责任混乱、API
+漏洞</td>
+</tr>
+<tr>
+<td><strong>远程工作安全</strong></td>
+<td>不安全的家庭网络、个人设备缺少企业安全控制</td>
+</tr>
+<tr>
+<td><strong>Shadow IT</strong></td>
+<td>员工未经 IT 部门批准使用未授权的应用或云服务</td>
+</tr>
+</tbody>
+</table>
+<h3 id="云部署模型">11.3 云部署模型</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>模型</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Public Cloud</strong></td>
+<td>第三方通过互联网提供的服务，共享基础设施</td>
+<td>AWS, Microsoft Azure, Google Cloud</td>
+</tr>
+<tr>
+<td><strong>Private Cloud</strong></td>
+<td>专属于单个组织的云基础设施，更多控制和安全</td>
+<td>VMware vSphere, OpenStack</td>
+</tr>
+<tr>
+<td><strong>Hybrid Cloud</strong></td>
+<td>结合公有云和私有云，灵活分配工作负载</td>
+<td>本地 + Azure/AWS 集成</td>
+</tr>
+<tr>
+<td><strong>Community Cloud</strong></td>
+<td>特定行业或群体共享的基础设施</td>
+<td>政府或医疗联盟云</td>
+</tr>
+</tbody>
+</table>
+<h3 id="云服务模型">11.4 云服务模型</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>模型</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IaaS</strong>（Infrastructure as a Service）</td>
+<td>提供虚拟化计算资源（服务器、存储、网络）</td>
+<td>AWS EC2, Google Compute Engine</td>
+</tr>
+<tr>
+<td><strong>PaaS</strong>（Platform as a Service）</td>
+<td>提供应用开发和部署平台</td>
+<td>Google App Engine, Microsoft Azure App Service</td>
+</tr>
+<tr>
+<td><strong>SaaS</strong>（Software as a Service）</td>
+<td>提供完全托管的软件，通过网页访问</td>
+<td>Microsoft 365, Salesforce, Zoom</td>
+</tr>
+<tr>
+<td><strong>FaaS / Serverless</strong>（Function as a Service）</td>
+<td>无需管理服务器即可运行代码，事件触发</td>
+<td>AWS Lambda, Azure Functions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="云和虚拟化环境的安全">11.5 云和虚拟化环境的安全</h3>
+<p>云和虚拟化带来了灵活性和可扩展性，但也引入了<strong>新的安全挑战</strong>。安全必须覆盖公有、私有和混合环境中的基础设施、平台、应用和数据。</p>
+<p><strong>新兴安全技术：</strong> - <strong>零信任架构（Zero Trust
+Architecture）</strong>："永不信任，始终验证" -
+<strong>容器安全（Container Security）</strong>：保护 Kubernetes 和
+Docker 环境 - <strong>云工作负载保护平台（CWPP）</strong>：监控
+VM、容器和无服务器工作负载 - <strong>AI 驱动的威胁检测（AI-Driven Threat
+Detection）</strong>：检测云流量中的异常行为</p>
+<h3 id="云环境安全最佳实践">11.6 云环境安全最佳实践</h3>
+<ul>
+<li><strong>保护 Hypervisor</strong> — 仅授权人员访问，定期打补丁</li>
+<li><strong>加密数据</strong> — 静态、传输中和备份时都加密</li>
+<li><strong>强身份管理</strong> — RBAC、MFA、SSO</li>
+<li><strong>监控日志和网络流量</strong> — 集中化日志、SIEM 集成</li>
+<li><strong>微分段（Micro-Segmentation）</strong> —
+限制虚拟网络中的横向移动</li>
+<li><strong>定期漏洞评估</strong> — 扫描 VM、容器和云工作负载</li>
+<li><strong>安全配置</strong> — 遵循供应商推荐的安全基线（CIS
+基准）</li>
+<li><strong>自动化安全工具</strong> — 使用 CSPM 和容器安全解决方案</li>
+</ul>
+<hr />
+<h2 id="十二case-study-cloudsafe-corp案例研究">十二、Case Study:
+CloudSafe Corp（案例研究）</h2>
+<h3 id="背景">12.1 背景</h3>
+<p><strong>CloudSafe Corp</strong> 是一家中型公司，为医疗保健提供商提供
+<strong>SaaS 解决方案</strong>。公司最近将 70%
+的应用迁移到<strong>混合云模型</strong>，同时将敏感的患者记录保留在<strong>私有云</strong>中。员工远程工作，通过
+Slack、Microsoft Teams 和云存储进行协作。</p>
+<h3 id="事件">12.2 事件</h3>
+<p>IT
+团队在某天早上检测到异常活动：一种<strong>勒索软件变种</strong>加密了公有云中的多台生产服务器。多名员工报告无法访问共享文件。攻击似乎通过<strong>针对远程员工的钓鱼邮件</strong>进入，利用了<strong>薄弱的
+MFA 实施</strong>。部分托管 SaaS 应用的虚拟机离线，影响了服务交付。</p>
+<h3 id="当前状态">12.3 当前状态</h3>
+<ul>
+<li>私有云数据安全，但部分混合云服务中断</li>
+<li>事件响应已部分执行，但部分团队对职责不清晰</li>
+<li>客户报告了服务中断，媒体关注度上升</li>
+</ul>
+<h3 id="案例讨论题">12.4 案例讨论题</h3>
+<ol type="1">
+<li>识别<strong>至少三个安全失败点</strong>导致了此次勒索软件攻击</li>
+<li>解释<strong>混合云部署模型</strong>如何影响了此次事件的影响</li>
+<li>CloudSafe Corp
+应立即采取哪些<strong>事件响应步骤</strong>来遏制勒索软件</li>
+<li>建议<strong>备份和灾难恢复策略</strong>以最小化停机时间</li>
+<li>讨论<strong>身份和访问管理（IAM）</strong>在防止类似攻击中的作用</li>
+<li>设计一个 CloudSafe Corp
+勒索软件爆发期间的<strong>高层事件响应检查清单</strong></li>
+</ol>
+<hr />
+<h2 id="十三end-of-lecture-questions课后复习问题">十三、End of Lecture
+Questions（课后复习问题）</h2>
+<ol type="1">
+<li><strong>描述数据生命周期，并解释为什么每个阶段都需要保护。</strong>
+<ul>
+<li>数据生命周期包含 6 个阶段：创建/收集 → 存储 → 使用/处理 → 共享/分发
+→ 归档 →
+销毁/处置。每个阶段都面临不同的安全威胁（如创建阶段需要分类和访问控制，存储阶段需要加密和备份，销毁阶段需要安全擦除），因此每个阶段都需要相应的安全控制来保护
+CIA 三元组。</li>
+</ul></li>
+<li><strong>NIST 和 GDPR 框架在安全管理中有什么区别？</strong>
+<ul>
+<li>NIST CSF
+是美国开发的<strong>自愿性网络安全框架</strong>，提供基于风险的 5
+功能（Identify、Protect、Detect、Respond、Recover）方法论，侧重技术安全管理。GDPR
+是欧盟的<strong>强制性数据保护法规</strong>，侧重个人数据隐私权利和组织合规义务，违规有严厉罚款。NIST
+关注"如何做好安全"，GDPR 关注"如何保护数据隐私"。</li>
+</ul></li>
+<li><strong>列出保护组织免受威胁的常见网络安全实践。</strong>
+<ul>
+<li>强密码 +
+MFA、定期打补丁、防火墙/VPN/IDS、加密、员工安全培训、事件响应计划、监控和审计日志。</li>
+</ul></li>
+<li><strong>解释事件响应、灾难恢复和业务连续性计划之间的区别。</strong>
+<ul>
+<li>IRP 关注安全事件的检测、遏制和缓解（事件期间）；DRP 关注灾难后 IT
+系统的恢复（事后恢复）；BCP
+关注在中断期间维持核心业务运营（业务持续）。三者互补，共同构成组织韧性。</li>
+</ul></li>
+<li><strong>主要的云部署模型和服务模型是什么？它们有何不同？</strong>
+<ul>
+<li>部署模型：Public Cloud（共享基础设施）、Private
+Cloud（专属组织）、Hybrid Cloud（公私结合）、Community
+Cloud（行业共享）。服务模型：IaaS（基础设施即服务）、PaaS（平台即服务）、SaaS（软件即服务）、FaaS（函数即服务/无服务器）。从
+IaaS 到 SaaS，用户的管理责任递减，服务商的管理责任递增。</li>
+</ul></li>
+<li><strong>列举至少三个由云采用和远程工作引入的现代IT安全挑战。</strong>
+<ul>
+<li>云采用风险（配置错误、共享责任混乱、API漏洞）；远程工作安全（不安全的家庭网络、缺少企业安全控制的个人设备）；Shadow
+IT（员工使用未经批准的应用和云服务）。</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="十四考试速查表quick-reference">十四、考试速查表（Quick
+Reference）</h2>
+<h3 id="数据生命周期">数据生命周期</h3>
+<p>Creation → Storage → Usage → Sharing → Archival →
+Destruction（每阶段都需 CIA 保护）</p>
+<h3 id="隐私框架">隐私框架</h3>
+<ul>
+<li><strong>APPs</strong>：澳大利亚 13 项原则，Privacy Act 1988</li>
+<li><strong>GDPR</strong>：欧盟 7 大原则 + 个人数据权利，2018
+年生效</li>
+<li><strong>PPIP Act 1998</strong>：NSW 公共部门隐私</li>
+</ul>
+<h3 id="nist-csf">NIST CSF</h3>
+<p>5 功能：Identify → Protect → Detect → Respond → Recover 4
+Tiers：Partial → Risk Informed → Repeatable → Adaptive</p>
+<h3 id="网络安全标准-1">网络安全标准</h3>
+<ul>
+<li>ISO 27001 = ISMS</li>
+<li>NIST CSF = 基于风险的框架</li>
+<li>PCI DSS = 支付卡安全（6 要求）</li>
+<li>HIPAA = 医疗数据保护（3 类保障）</li>
+</ul>
+<h3 id="stride-威胁模型">STRIDE 威胁模型</h3>
+<p>S = Spoofing → 强认证 T = Tampering → 完整性检查 R = Repudiation →
+审计日志 I = Information Disclosure → 加密 D = Denial of Service →
+冗余/限流 E = Elevation of Privilege → 最小权限</p>
+<h3 id="irp-生命周期">IRP 生命周期</h3>
+<p>Preparation → Identification → Containment → Eradication → Recovery →
+Lessons Learned</p>
+<h3 id="drp-恢复策略">DRP 恢复策略</h3>
+<p>Cold Site（最慢最便宜） → Warm Site → Hot Site（最快最贵） →
+Cloud-Based DR / DRaaS</p>
+<h3 id="bcp-生命周期-1">BCP 生命周期</h3>
+<p>Initiation → BIA → Risk Assessment → Strategy → Plan Development →
+Testing → Maintenance</p>
+<h3 id="irp-vs-drp-vs-bcp">IRP vs DRP vs BCP</h3>
+<ul>
+<li>IRP = 事件期间的响应（安全事件）</li>
+<li>DRP = 灾难后的IT恢复</li>
+<li>BCP = 中断期间的业务持续</li>
+</ul>
+<h3 id="云模型">云模型</h3>
+<ul>
+<li>部署：Public / Private / Hybrid / Community</li>
+<li>服务：IaaS / PaaS / SaaS / FaaS</li>
+<li>安全技术：Zero Trust、Container Security、CWPP、AI Threat
+Detection</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO5990/" rel="tag"><i class="fa fa-tag"></i> INFO5990</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/1b27d846.html" rel="prev" title="大门口的噪吸蜜鸟：Victoria Park 的下午">
+                  <i class="fa fa-angle-left"></i> 大门口的噪吸蜜鸟：Victoria Park 的下午
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">508k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">30:48</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
