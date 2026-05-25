@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 09 讲课总结，整理 information cascade、herding experiment、Bayes rule、general cascade model、级联条件与考点重点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 09 Information Cascades 讲课总结">
+<meta property="og:url" content="http://example.com/posts/1934f3f4.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 09 讲课总结，整理 information cascade、herding experiment、Bayes rule、general cascade model、级联条件与考点重点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.657Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Information Cascades">
+<meta property="article:tag" content="Bayes Rule">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/1934f3f4.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/1934f3f4.html","path":"posts/1934f3f4.html","title":"COMP5313 Week 09 Information Cascades 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 09 Information Cascades 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/1934f3f4.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-week-09-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93information-cascades"><span class="nav-text">COMP5313 Week 09
+讲课总结：Information Cascades</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E4%B8%BB%E9%A2%98"><span class="nav-text">1. 本讲主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#imitation-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%8E%9F%E5%9B%A0"><span class="nav-text">2. Imitation 的两种原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anderson-holt-herding-experiment"><span class="nav-text">3. Anderson-Holt Herding
+Experiment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E4%B8%A4%E4%B8%AA%E4%BA%BA%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E4%BF%A1%E6%81%AF"><span class="nav-text">4. 前两个人如何传递信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cascade-%E4%BD%95%E6%97%B6%E5%BC%80%E5%A7%8B"><span class="nav-text">5. Cascade 何时开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bayes-rule-%E5%A4%8D%E4%B9%A0"><span class="nav-text">6. Bayes Rule 复习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urn-%E4%BE%8B%E5%AD%90%E7%9A%84-bayes-%E8%AE%A1%E7%AE%97"><span class="nav-text">7. Urn 例子的 Bayes 计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#general-cascade-model"><span class="nav-text">8. General Cascade Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#general-model-%E7%9A%84%E5%86%B3%E7%AD%96%E8%A7%84%E5%88%99"><span class="nav-text">9. General Model 的决策规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cascade-%E6%A6%82%E7%8E%87%E8%B6%8B%E8%BF%91-1"><span class="nav-text">10. Cascade 概率趋近 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">11. 考点重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1934f3f4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 09 Information Cascades 讲课总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 09 讲课总结，整理 information cascade、herding experiment、Bayes rule、general cascade model、级联条件与考点重点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 09 Information Cascades 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 09 讲课总结，整理 information cascade、herding experiment、Bayes rule、general cascade model、级联条件与考点重点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5313-week-09-讲课总结information-cascades">COMP5313 Week 09
+讲课总结：Information Cascades</h1>
+<h2 id="本讲主题">1. 本讲主题</h2>
+<p>本讲进入 network dynamics。老师讲 information cascade：</p>
+<blockquote>
+<p>人们按顺序决策，后面的人能看到前面人的行动，但看不到前面人的私人信息。当公共行动信息足够强时，后面的人会忽略自己的私人信号，直接模仿前人。</p>
+</blockquote>
+<p>重点是理解 cascade 什么时候开始，以及如何用 Bayes rule 做判断。</p>
+<h2 id="imitation-的两种原因">2. Imitation 的两种原因</h2>
+<p>老师区分了两类模仿：</p>
+<ul>
+<li><strong>Informational
+effects</strong>：别人可能掌握了我不知道的信息，所以我跟随他们。</li>
+<li><strong>Direct-benefit / network
+effects</strong>：别人使用某东西会直接提高我使用它的收益，比如传真机、社交软件。</li>
+</ul>
+<p>本讲关注 informational effects。</p>
+<h2 id="anderson-holt-herding-experiment">3. Anderson-Holt Herding
+Experiment</h2>
+<p>实验设定：</p>
+<ul>
+<li>有两个 urn 状态，概率各为 <span
+class="math inline">\(1/2\)</span>。</li>
+<li>一个 urn 多数红球：2 红 1 蓝。</li>
+<li>另一个 urn 多数蓝球：2 蓝 1 红。</li>
+<li>学生按顺序抽球，抽完放回。</li>
+<li>每个学生只看到自己的球色和前面学生的猜测，看不到前面学生的球色。</li>
+<li>目标是猜 urn 的多数颜色。</li>
+</ul>
+<h2 id="前两个人如何传递信息">4. 前两个人如何传递信息</h2>
+<p>第一个人：</p>
+<ul>
+<li>只知道自己的信号。</li>
+<li>抽到红就猜红，抽到蓝就猜蓝。</li>
+<li>因此第一个人的行动完全透露自己的私人信号。</li>
+</ul>
+<p>第二个人：</p>
+<ul>
+<li>看到第一个人的行动。</li>
+<li>再结合自己的信号。</li>
+<li>如果两个信号一致，直接跟随一致方向。</li>
+<li>如果冲突，老师默认按自己的信号或 tie-breaking
+处理，所以第二个人的行动仍可透露信息。</li>
+</ul>
+<h2 id="cascade-何时开始">5. Cascade 何时开始</h2>
+<p>如果前两个人都猜蓝：</p>
+<ul>
+<li>第三个人即使抽到红，也会猜蓝。</li>
+<li>因为两个蓝信号的公共证据压过一个红信号。</li>
+<li>从第三个人开始，后面的人无法再从行动中推断私人信号。</li>
+</ul>
+<p>这就是 information cascade。</p>
+<p>错误级联也可能发生：</p>
+<ul>
+<li>真实 urn 多数红。</li>
+<li>但前两个人都抽到蓝。</li>
+<li>之后所有人都可能跟着猜蓝。</li>
+</ul>
+<h2 id="bayes-rule-复习">6. Bayes Rule 复习</h2>
+<p>条件概率：</p>
+<p>[ P(AB)= ]</p>
+<p>Bayes rule：</p>
+<p>[ P(AB)= ]</p>
+<p>老师用 spam 例子说明：</p>
+<ul>
+<li>prior 和 likelihood 结合后得到 posterior。</li>
+<li>决策要基于 posterior，而不是单独看某个词出现概率。</li>
+</ul>
+<h2 id="urn-例子的-bayes-计算">7. Urn 例子的 Bayes 计算</h2>
+<p>如果第一个人抽到蓝：</p>
+<p>[ P()= ]</p>
+<p>所以第一个人猜蓝。</p>
+<p>如果已经观察到两个蓝信号，第三个人自己抽到红，仍然有：</p>
+<p>[ P(B,B,R)&gt; ]</p>
+<p>因此第三个人理性地猜蓝。</p>
+<p>重点：级联不是非理性行为，而是在给定信息下的理性推断。</p>
+<h2 id="general-cascade-model">8. General Cascade Model</h2>
+<p>老师把 urn 例子推广为一般模型：</p>
+<ul>
+<li>世界状态：Good <span class="math inline">\(G\)</span> 或 Bad <span
+class="math inline">\(B\)</span>。</li>
+<li>prior：<span class="math inline">\(P(G)=p\)</span>。</li>
+<li>动作：accept 或 reject。</li>
+<li>接受 good 得正收益 <span
+class="math inline">\(v_G&gt;0\)</span>。</li>
+<li>接受 bad 得负收益 <span
+class="math inline">\(v_B&lt;0\)</span>。</li>
+<li>reject 收益为 0。</li>
+<li>每个人收到私人信号：High 或 Low。</li>
+<li>信号准确率 <span class="math inline">\(q&gt;1/2\)</span>：</li>
+</ul>
+<p>[ P(HG)=q,P(LB)=q ]</p>
+<p>初始 expected payoff 设为 0，因此只需比较 posterior 是否高于
+prior。</p>
+<h2 id="general-model-的决策规则">9. General Model 的决策规则</h2>
+<p>设到目前为止已经透露的信息中：</p>
+<ul>
+<li>high signals 数量为 <span class="math inline">\(a\)</span>。</li>
+<li>low signals 数量为 <span class="math inline">\(b\)</span>。</li>
+</ul>
+<p>决策规则：</p>
+<ul>
+<li>如果 <span class="math inline">\(a&gt;b\)</span>，accept。</li>
+<li>如果 <span class="math inline">\(b&gt;a\)</span>，reject。</li>
+<li>如果 <span class="math inline">\(a=b\)</span>，无差异，按
+tie-breaking。</li>
+</ul>
+<p>当行动差距不超过 1 时，后续行动还能透露私人信号。</p>
+<p>当差距达到 2 时：</p>
+<ul>
+<li>cascade 开始。</li>
+<li>后续所有人忽略自己的私人信号。</li>
+<li>后续行动不再提供新信息。</li>
+</ul>
+<h2 id="cascade-概率趋近-1">10. Cascade 概率趋近 1</h2>
+<p>老师最后强调结论：</p>
+<blockquote>
+<p>当人数足够多时，发生 cascade 的概率趋近 1。</p>
+</blockquote>
+<p>直觉证明：</p>
+<ul>
+<li>如果出现连续 3 个相同信号，一定会触发 cascade。</li>
+<li>不出现连续 3 个相同信号的概率会随着人数增加而趋近 0。</li>
+<li>因此 cascade 最终几乎必然发生。</li>
+</ul>
+<p>老师说详细证明不是重点，重点是理解结论和条件概率计算。</p>
+<h2 id="考点重点">11. 考点重点</h2>
+<ul>
+<li>会定义 information cascade。</li>
+<li>会解释为什么 cascade 中后面的人忽略私人信号。</li>
+<li>会区分 informational effects 和 direct-benefit effects。</li>
+<li>会用 urn/herding experiment 说明级联如何开始。</li>
+<li>会用 Bayes rule 计算 posterior。</li>
+<li>会说出 general model 中 <span class="math inline">\(a&gt;b\)</span>
+accept，<span class="math inline">\(b&gt;a\)</span> reject。</li>
+<li>会说出差距达到 2 时 cascade takes over。</li>
+<li>知道人数增长时 cascade 概率趋近 1。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Information-Cascades/" rel="tag"><i class="fa fa-tag"></i> Information Cascades</a>
+              <a href="/tags/Bayes-Rule/" rel="tag"><i class="fa fa-tag"></i> Bayes Rule</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/32a9fbe.html" rel="prev" title="COMP5313 Week 10 Power Law 与 Small World 讲课总结">
+                  <i class="fa fa-angle-left"></i> COMP5313 Week 10 Power Law 与 Small World 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/ed58b4a7.html" rel="next" title="COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结">
+                  COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

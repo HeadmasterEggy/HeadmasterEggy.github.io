@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 08 讲课总结，整理 label propagation、Correct and Smooth、PPR&#x2F;APPNP、SGC 与 feature propagation 的考点重点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结">
+<meta property="og:url" content="http://example.com/posts/ed58b4a7.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 08 讲课总结，整理 label propagation、Correct and Smooth、PPR&#x2F;APPNP、SGC 与 feature propagation 的考点重点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.659Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Label Propagation">
+<meta property="article:tag" content="Graph Neural Networks">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/ed58b4a7.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/ed58b4a7.html","path":"posts/ed58b4a7.html","title":"COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/ed58b4a7.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-week-08-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93label-propagation-%E4%B8%8E-feature-propagation"><span class="nav-text">COMP5313
+Week 08 讲课总结：Label Propagation 与 Feature Propagation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E4%B8%BB%E9%A2%98"><span class="nav-text">1. 本讲主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gnn-%E4%B8%8E-node-classification-%E5%9B%9E%E9%A1%BE"><span class="nav-text">2. GNN 与 Node Classification
+回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simple-label-propagation"><span class="nav-text">3. Simple Label Propagation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%81%87%E8%AE%BEhomophily"><span class="nav-text">核心假设：Homophily</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E7%B1%BB%E8%AE%BE%E5%AE%9A"><span class="nav-text">二分类设定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label-propagation-%E4%B8%8E-pagerank-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">4. Label Propagation 与
+PageRank 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%88%86%E7%B1%BB%E4%B8%8E-one-hot-label-matrix"><span class="nav-text">5. 多分类与 One-hot Label
+Matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#correct-and-smooth%E6%8A%8A-label-propagation-%E4%BD%9C%E4%B8%BA-post-processing"><span class="nav-text">6.
+Correct and Smooth：把 Label Propagation 作为 Post-processing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1%E8%AE%AD%E7%BB%83-base-predictor"><span class="nav-text">Step 1：训练 base predictor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2%E5%BE%97%E5%88%B0-soft-labels"><span class="nav-text">Step 2：得到 soft labels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3correct"><span class="nav-text">Step 3：Correct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-4smooth"><span class="nav-text">Step 4：Smooth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-gnn-%E4%B8%AD%E4%BD%BF%E7%94%A8-label-pagerank-style-propagation"><span class="nav-text">7. 在 GNN 中使用
+Label &#x2F; PageRank-style Propagation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ppnp-appnp-%E9%AB%98%E5%B1%82%E6%80%9D%E8%B7%AF"><span class="nav-text">PPNP &#x2F; APPNP 高层思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pprgo-%E9%AB%98%E5%B1%82%E6%80%9D%E8%B7%AF"><span class="nav-text">8. PPRGo 高层思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feature-propagation%E4%BC%A0%E6%92%AD%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81"><span class="nav-text">9. Feature
+Propagation：传播输入特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sgcsimplifying-graph-convolutional-network"><span class="nav-text">SGC：Simplifying
+Graph Convolutional Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agpapproximate-graph-propagation"><span class="nav-text">AGP：Approximate Graph
+Propagation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">10. 考点重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/ed58b4a7.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 08 讲课总结，整理 label propagation、Correct and Smooth、PPR/APPNP、SGC 与 feature propagation 的考点重点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 08 讲课总结，整理 label propagation、Correct and Smooth、PPR/APPNP、SGC 与 feature propagation 的考点重点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="comp5313-week-08-讲课总结label-propagation-与-feature-propagation">COMP5313
+Week 08 讲课总结：Label Propagation 与 Feature Propagation</h1>
+<blockquote>
+<p>本讲重点不是新 GNN 架构，而是把 label propagation / feature
+propagation 这类组合式思想和 GNN 结合。老师明确说 exact formulas
+不重要，重点是 high-level ideas 和怎么使用。</p>
+</blockquote>
+<h2 id="本讲主题">1. 本讲主题</h2>
+<p>老师说本讲有四个主线：</p>
+<ol type="1">
+<li>没有 node features 时，只用 label propagation 做 node
+classification。</li>
+<li>把 label propagation 作为 post-processing，提高已有模型预测。</li>
+<li>把 label propagation / PageRank-style propagation 放进 GNN。</li>
+<li>不传播 label，而是传播 node features，作为 preprocessing
+提升效率。</li>
+</ol>
+<p>这些思想都和 Week 06 的 PageRank / Personalized PageRank 很像。</p>
+<h2 id="gnn-与-node-classification-回顾">2. GNN 与 Node Classification
+回顾</h2>
+<p>输入设定：</p>
+<ul>
+<li>无向图 <span class="math inline">\(G=(V,E)\)</span>。</li>
+<li>邻接矩阵 <span class="math inline">\(A\)</span>。</li>
+<li>节点特征矩阵 <span class="math inline">\(X \in \mathbb{R}^{n \times
+q}\)</span>。</li>
+<li>只有一部分节点有 ground-truth labels。</li>
+<li>目标：预测其他节点的 label。</li>
+</ul>
+<p>GNN 的基本思想是 neighbourhood aggregation：预测节点 <span
+class="math inline">\(u\)</span> 时，不只用 <span
+class="math inline">\(u\)</span> 自己的
+feature，也用邻居、邻居的邻居等局部结构信息。</p>
+<h2 id="simple-label-propagation">3. Simple Label Propagation</h2>
+<h3 id="核心假设homophily">核心假设：Homophily</h3>
+<p>label propagation 基于同质性假设：</p>
+<blockquote>
+<p>边连接的两个节点通常属于相同类别或有相似特征。</p>
+</blockquote>
+<p>也就是说，如果两个节点相连，它们的 label probability 应该相近。</p>
+<h3 id="二分类设定">二分类设定</h3>
+<p>假设每个节点属于 class 1 或 class 0。用 <span
+class="math inline">\(p_v\)</span> 表示节点 <span
+class="math inline">\(v\)</span> 属于 class 1 的概率。</p>
+<p>初始化：</p>
+<ul>
+<li>已知 class 1 的训练节点：<span
+class="math inline">\(p_v=1\)</span></li>
+<li>已知 class 0 的训练节点：<span
+class="math inline">\(p_v=0\)</span></li>
+<li>未标注节点：<span class="math inline">\(p_v=0.5\)</span></li>
+</ul>
+<p>更新规则：</p>
+<p>[ p_v^{(k)}=_{uN(v)}p_u^{(k-1)} ]</p>
+<p>也就是：节点 <span class="math inline">\(v\)</span> 新一轮的概率 =
+上一轮邻居概率的平均。</p>
+<p>停止条件：</p>
+<ul>
+<li>迭代到收敛；或</li>
+<li>达到最大迭代次数。</li>
+</ul>
+<p>最终预测：</p>
+<ul>
+<li>若 <span class="math inline">\(p_v&gt;0.5\)</span>，预测 class
+1。</li>
+<li>若 <span class="math inline">\(p_v&lt;0.5\)</span>，预测 class
+0。</li>
+<li>若相等，可以任意选一个，说明很难区分。</li>
+</ul>
+<h2 id="label-propagation-与-pagerank-的区别">4. Label Propagation 与
+PageRank 的区别</h2>
+<p>老师明确比较了它和 Basic PageRank。</p>
+<p>相似点：</p>
+<ul>
+<li>都是 iterative update。</li>
+<li>都用上一轮的邻居信息更新当前值。</li>
+<li>每轮更新时只使用 <span class="math inline">\(k-1\)</span>
+轮结果，所以更新顺序不影响结果。</li>
+</ul>
+<p>关键区别是 normalisation：</p>
+<ul>
+<li>Label Propagation 是 <strong>pull average</strong>： [
+p_v^{(k)}=_{uN(v)}p_u^{(k-1)} ] 用目标节点 <span
+class="math inline">\(v\)</span> 的度数做平均。</li>
+<li>PageRank 是 <strong>push flow</strong>： [ PR_v^{(k)}=_{uv} ]
+每个源节点 <span class="math inline">\(u\)</span>
+把自己的分数按自己的出度分出去。</li>
+</ul>
+<p>这是 Week 08 的一个非常明确考点。</p>
+<h2 id="多分类与-one-hot-label-matrix">5. 多分类与 One-hot Label
+Matrix</h2>
+<p>如果有 <span class="math inline">\(C\)</span>
+个类别，通常为每个节点维护 <span class="math inline">\(C\)</span>
+个概率，而不是只维护一个概率。</p>
+<p>label matrix 每一行对应一个节点，每一列对应一个类别。</p>
+<p>one-hot encoding：</p>
+<ul>
+<li>属于 class 1：<span class="math inline">\((1,0,0)\)</span></li>
+<li>属于 class 2：<span class="math inline">\((0,1,0)\)</span></li>
+<li>属于 class 3：<span class="math inline">\((0,0,1)\)</span></li>
+</ul>
+<p>老师说理论推导里会出现 Laplacian、trace、矩阵逆等公式，但 exact
+formulas 不需要背。</p>
+<p>需要理解两个 high-level constraints：</p>
+<ul>
+<li><strong>Smoothness</strong>：相连节点的预测结果应该相似。</li>
+<li><strong>Fitting</strong>：预测结果不要离已知 ground-truth labels
+太远。</li>
+</ul>
+<h2 id="correct-and-smooth把-label-propagation-作为-post-processing">6.
+Correct and Smooth：把 Label Propagation 作为 Post-processing</h2>
+<p>老师讲了一个方法：先用任意 base predictor，再用 label propagation
+修正结果。</p>
+<p>base predictor 可以是：</p>
+<ul>
+<li>MLP</li>
+<li>GNN</li>
+<li>其他分类模型</li>
+</ul>
+<h3 id="step-1训练-base-predictor">Step 1：训练 base predictor</h3>
+<p>先用原来的训练集训练一个模型。</p>
+<h3 id="step-2得到-soft-labels">Step 2：得到 soft labels</h3>
+<p>模型对每个节点输出 class probabilities，这些预测概率叫 <strong>soft
+labels</strong>。</p>
+<h3 id="step-3correct">Step 3：Correct</h3>
+<p>在训练节点上计算 prediction error：</p>
+<p>[ =- ]</p>
+<p>未标注节点 error 初始化为 0。</p>
+<p>然后把这些 error 沿图做 label propagation / diffusion。</p>
+<p>直觉：如果一个节点预测有偏差，它邻居的预测也可能有类似偏差。</p>
+<p>得到 diffused errors 后，把它加回 soft labels，得到 corrected soft
+labels。</p>
+<h3 id="step-4smooth">Step 4：Smooth</h3>
+<p>把训练节点重新 reset 为 ground truth labels，然后再沿图传播 corrected
+labels。</p>
+<p>直觉：相邻节点倾向同类，所以让 corrected labels 在图上平滑。</p>
+<p>最终预测时比较各类别分数大小。老师提到 smoothing
+后的两个“概率”不一定严格加和为 1；如果要当作概率分布，可以再
+normalize，但分类时直接比较大小即可。</p>
+<h2 id="在-gnn-中使用-label-pagerank-style-propagation">7. 在 GNN 中使用
+Label / PageRank-style Propagation</h2>
+<p>普通 GNN 的限制：</p>
+<ul>
+<li><span class="math inline">\(K\)</span> 层 GNN 只用 <span
+class="math inline">\(K\)</span>-hop neighbours。</li>
+<li><span class="math inline">\(K\)</span> 小：看到的信息范围有限。</li>
+<li><span class="math inline">\(K\)</span> 大：容易
+over-smoothing，节点表示变得过于相似，难以区分。</li>
+</ul>
+<p>老师讲了用 Personalized PageRank 思想缓解这个问题：</p>
+<ul>
+<li>对节点 <span
+class="math inline">\(u\)</span>，聚合全图其他节点的信息。</li>
+<li>权重由 Personalized PageRank 决定。</li>
+<li>和 <span class="math inline">\(u\)</span> 更相关的节点权重大。</li>
+</ul>
+<h3 id="ppnp-appnp-高层思路">PPNP / APPNP 高层思路</h3>
+<p>PPNP 使用 PPR matrix 做传播，但直接矩阵逆太贵。</p>
+<p>APPNP 使用近似迭代：</p>
+<ol type="1">
+<li>先用 MLP 对每个节点做预测。</li>
+<li>此时还没有用图结构。</li>
+<li>再用 PageRank-style propagation 把预测标签沿图传播 <span
+class="math inline">\(K\)</span> 步。</li>
+<li>得到最终预测。</li>
+</ol>
+<p>这可以理解成把 PPR / Scaled PageRank 的传播思想放进 GNN。</p>
+<h2 id="pprgo-高层思路">8. PPRGo 高层思路</h2>
+<p>老师提到 PPR matrix 在大图上通常是 dense 的，即使原图很 sparse，PPR
+中很多节点对也有非零相似度。</p>
+<p>因此不能完整存储 PPR matrix。</p>
+<p>PPRGo 的想法：</p>
+<ul>
+<li>预先计算 PPR matrix 的 sparse approximation。</li>
+<li>每行只保留最重要的若干 entries。</li>
+<li>训练时直接使用这个预计算传播矩阵，减少每次 forward/backward
+的开销。</li>
+</ul>
+<p>具体 forward push 近似细节不需要作为重点。</p>
+<h2 id="feature-propagation传播输入特征">9. Feature
+Propagation：传播输入特征</h2>
+<p>最后一部分不是传播 label，而是传播 input node features。</p>
+<h3 id="sgcsimplifying-graph-convolutional-network">SGC：Simplifying
+Graph Convolutional Network</h3>
+<p>老师说 GCN 训练慢，层数越多：</p>
+<ul>
+<li>参数越多。</li>
+<li>训练涉及的节点范围随 <span class="math inline">\(K\)</span>
+增大。</li>
+<li>实践中 <span class="math inline">\(K\)</span> 通常只取
+1、2、3。</li>
+</ul>
+<p>SGC 的想法：</p>
+<ul>
+<li>去掉非线性 activation。</li>
+<li>多层 GCN 就变成对输入特征的线性传播。</li>
+<li>可以先预计算传播后的特征： [ A^K X ]</li>
+<li>然后再在这些特征上训练普通分类器 / MLP。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>propagation 没有可训练参数。</li>
+<li>可以作为 preprocessing。</li>
+<li>不需要 GPU 也能预计算。</li>
+<li>实践中很多分类任务表现不错。</li>
+</ul>
+<h3 id="agpapproximate-graph-propagation">AGP：Approximate Graph
+Propagation</h3>
+<p>SGC 只取一个传播长度 <span class="math inline">\(K\)</span>
+的项。</p>
+<p>AGP 更一般：对不同长度的传播结果做 weighted sum。</p>
+<p>直觉：</p>
+<ul>
+<li>不同传播长度代表不同范围的 neighbourhood 信息。</li>
+<li>AGP 用权重组合多个传播长度。</li>
+<li>精确公式不重要，理解它是 generalized feature propagation 即可。</li>
+</ul>
+<h2 id="考点重点">10. 考点重点</h2>
+<ul>
+<li>Label propagation 基于 homophily。</li>
+<li>会写 simple label propagation 更新式： [
+p_v^{(k)}=_{uN(v)}p_u^{(k-1)} ]</li>
+<li>知道 label propagation 和 PageRank 的区别：LP
+按目标节点度数取邻居平均；PageRank 按源节点出度分流。</li>
+<li>知道更新顺序不重要，因为第 <span class="math inline">\(k\)</span>
+轮只用第 <span class="math inline">\(k-1\)</span> 轮的值。</li>
+<li>知道 multi-class 用 one-hot / probability vector。</li>
+<li>理解 smoothness 和 fitting 两个 high-level
+constraints，不背矩阵推导。</li>
+<li>知道 Correct and Smooth：先预测 soft labels，再传播 errors 做
+correction，再传播 labels 做 smoothing。</li>
+<li>知道 GNN 的 <span class="math inline">\(K\)</span>-hop 限制和
+over-smoothing。</li>
+<li>知道 APPNP 用 PageRank-style propagation 传播 MLP 输出。</li>
+<li>知道 SGC 是 feature propagation：先传播特征，再训练分类器。</li>
+<li>exact formulas、Laplacian 推导、matrix inverse、forward push
+细节不是重点。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Label-Propagation/" rel="tag"><i class="fa fa-tag"></i> Label Propagation</a>
+              <a href="/tags/Graph-Neural-Networks/" rel="tag"><i class="fa fa-tag"></i> Graph Neural Networks</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/1934f3f4.html" rel="prev" title="COMP5313 Week 09 Information Cascades 讲课总结">
+                  <i class="fa fa-angle-left"></i> COMP5313 Week 09 Information Cascades 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/35a12907.html" rel="next" title="COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结">
+                  COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

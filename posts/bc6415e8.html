@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 11 讲课总结，整理 lookup problem、distributed hash table、Chord ring、finger table、consistent hashing 与 CAN 的考点重点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结">
+<meta property="og:url" content="http://example.com/posts/bc6415e8.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 11 讲课总结，整理 lookup problem、distributed hash table、Chord ring、finger table、consistent hashing 与 CAN 的考点重点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.657Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Distributed Hash Table">
+<meta property="article:tag" content="Consistent Hashing">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/bc6415e8.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/bc6415e8.html","path":"posts/bc6415e8.html","title":"COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/bc6415e8.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-week-11-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93distributed-hash-table-%E4%B8%8E-consistent-hashing"><span class="nav-text">COMP5313
+Week 11 讲课总结：Distributed Hash Table 与 Consistent Hashing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E4%B8%BB%E9%A2%98"><span class="nav-text">1. 本讲主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lookup-problem"><span class="nav-text">2. Lookup Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hash-table-%E5%9B%9E%E9%A1%BE"><span class="nav-text">3. Hash Table 回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#distributed-hash-table-dht"><span class="nav-text">4. Distributed Hash Table, DHT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chord-consistent-hashing-ring"><span class="nav-text">5. Chord &#x2F; Consistent Hashing
+Ring</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-%E5%88%86%E9%85%8D%E8%A7%84%E5%88%99"><span class="nav-text">6. Key 分配规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#naive-ring-lookup"><span class="nav-text">7. Naive Ring Lookup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finger-table"><span class="nav-text">8. Finger Table</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chord-lookup-%E8%A7%84%E5%88%99"><span class="nav-text">9. Chord Lookup 规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chord-%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">10. Chord 复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#can-content-addressable-network"><span class="nav-text">11. CAN: Content Addressable
+Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#can-routing"><span class="nav-text">12. CAN Routing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">13. 考点重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/bc6415e8.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 11 讲课总结，整理 lookup problem、distributed hash table、Chord ring、finger table、consistent hashing 与 CAN 的考点重点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 11 讲课总结，整理 lookup problem、distributed hash table、Chord ring、finger table、consistent hashing 与 CAN 的考点重点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="comp5313-week-11-讲课总结distributed-hash-table-与-consistent-hashing">COMP5313
+Week 11 讲课总结：Distributed Hash Table 与 Consistent Hashing</h1>
+<blockquote>
+<p>老师明确说 P2P 系统介绍部分是 optional，用来引出 lookup
+problem。下面只保留 lookup、DHT、Chord/consistent hashing 和 CAN
+的重点。</p>
+</blockquote>
+<h2 id="本讲主题">1. 本讲主题</h2>
+<p>本讲把 Week 10 的 decentralized search 思想放到分布式系统中：</p>
+<blockquote>
+<p>在没有中心服务器的系统里，给定一个 file
+key，如何用局部邻居信息找到负责存储它的 computer node？</p>
+</blockquote>
+<p>这个问题叫 lookup problem。</p>
+<h2 id="lookup-problem">2. Lookup Problem</h2>
+<p>系统中有很多计算机节点，每个节点只知道少数邻居。</p>
+<p>目标：</p>
+<ul>
+<li>给定 key。</li>
+<li>找到负责这个 key 的 computer。</li>
+<li>全过程不能依赖中心服务器。</li>
+<li>路径要短，消息数量要少。</li>
+</ul>
+<p>这和 Milgram / decentralized search
+类似：每一步只把请求转给一个合适邻居。</p>
+<h2 id="hash-table-回顾">3. Hash Table 回顾</h2>
+<p>普通 hash table 存 key-value pairs。</p>
+<p>操作：</p>
+<ul>
+<li><code>put(key, value)</code>：插入。</li>
+<li><code>get(key)</code>：按 key 查找 value。</li>
+</ul>
+<p>hash function：</p>
+<p>[ h(k) ]</p>
+<p>把 key 映射到 bucket。</p>
+<h2 id="distributed-hash-table-dht">4. Distributed Hash Table, DHT</h2>
+<p>DHT 是把 hash table 分布存到多台机器上。</p>
+<p>核心区别：</p>
+<ul>
+<li>普通 hash table 只要找 bucket。</li>
+<li>DHT 还要先找哪台 computer 负责这个 key。</li>
+</ul>
+<p>因此 DHT 需要额外操作：</p>
+<ul>
+<li><code>lookup(key)</code>：返回负责该 key 的 computer node。</li>
+</ul>
+<p>然后再在那台机器上执行 <code>get(key)</code>。</p>
+<h2 id="chord-consistent-hashing-ring">5. Chord / Consistent Hashing
+Ring</h2>
+<p>老师重点讲 ring structure。</p>
+<p>设 ID 和 key 都用 <span class="math inline">\(m\)</span> bits
+表示，因此 ID space 大小是：</p>
+<p>[ 2^m ]</p>
+<p>做法：</p>
+<ul>
+<li>把 computer IDs hash 到同一个 circular identifier space。</li>
+<li>把 file keys 也 hash 到同一个 space。</li>
+<li>IDs 按顺时针递增排列成 ring。</li>
+</ul>
+<h2 id="key-分配规则">6. Key 分配规则</h2>
+<p>文件 key <span class="math inline">\(k\)</span> 存在：</p>
+<blockquote>
+<p>顺时针方向第一个 ID 不小于 <span class="math inline">\(k\)</span> 的
+node 上。</p>
+</blockquote>
+<p>这个 node 叫 key <span class="math inline">\(k\)</span> 的 successor
+/ responsible node。</p>
+<p>如果没有正好等于 <span class="math inline">\(k\)</span> 的
+node，就存到下一个更大的 node。</p>
+<p>这个规则的好处是：</p>
+<ul>
+<li>每个 key 有唯一负责节点。</li>
+<li>新节点加入或旧节点离开时，主要影响邻近区间。</li>
+<li>这就是 consistent hashing 的核心直觉。</li>
+</ul>
+<h2 id="naive-ring-lookup">7. Naive Ring Lookup</h2>
+<p>如果每个 node 只知道 successor：</p>
+<ul>
+<li>查询只能顺时针一个个往后传。</li>
+<li>最坏情况要走过几乎所有 nodes。</li>
+</ul>
+<p>时间复杂度：</p>
+<p>[ O(n) ]</p>
+<p>其中 <span class="math inline">\(n\)</span> 是参与系统的 computer
+数量。</p>
+<h2 id="finger-table">8. Finger Table</h2>
+<p>为了加速 lookup，每个 node 维护 finger table。</p>
+<p>node <span class="math inline">\(i\)</span> 的第 <span
+class="math inline">\(j\)</span> 个 finger 指向负责以下 key 的
+node：</p>
+<p>[ i+2<sup>{j-1}\pmod{2</sup>m} ]</p>
+<p>其中 <span class="math inline">\(j=1,\dots,m\)</span>。</p>
+<p>直觉：</p>
+<ul>
+<li>finger table 提供不同尺度的跳跃边。</li>
+<li>距离有 <span class="math inline">\(1,2,4,8,\dots\)</span>
+这些量级。</li>
+<li>类似 Week 10 中不同距离尺度的 weak ties。</li>
+</ul>
+<h2 id="chord-lookup-规则">9. Chord Lookup 规则</h2>
+<p>老师总结为：</p>
+<blockquote>
+<p>Go as far as possible, but never pass the target.</p>
+</blockquote>
+<p>查找 key <span class="math inline">\(k\)</span> 时：</p>
+<ol type="1">
+<li>如果 <span class="math inline">\(k\)</span> 在当前 node 和 successor
+之间，交给 successor。</li>
+<li>否则，在 finger table 中选择不超过 <span
+class="math inline">\(k\)</span> 的最大 ID。</li>
+<li>把请求转给该 node。</li>
+<li>重复直到找到 responsible node。</li>
+</ol>
+<p>做题时要能根据 ring 和 finger table 走出 lookup path。</p>
+<h2 id="chord-复杂度">10. Chord 复杂度</h2>
+<p>每一步大致把到目标的距离减半。</p>
+<p>因此 lookup message 数：</p>
+<p>[ O(n) ]</p>
+<p>每个 node 存储：</p>
+<ul>
+<li>finger table，大小约 <span class="math inline">\(m\)</span>。</li>
+<li>若干 successors / predecessors 用于处理 join、leave、failure。</li>
+</ul>
+<p>空间复杂度：</p>
+<p>[ O(n) ]</p>
+<p>因为 <span class="math inline">\(m\)</span> 与 <span
+class="math inline">\(\log n\)</span> 同量级。</p>
+<h2 id="can-content-addressable-network">11. CAN: Content Addressable
+Network</h2>
+<p>老师最后讲了 CAN 作为另一种 DHT。</p>
+<p>设 key 和 node ID 是 <span class="math inline">\(d\)</span>
+维空间中的点，例如二维 <span
+class="math inline">\([0,1]\times[0,1]\)</span>。</p>
+<p>做法：</p>
+<ul>
+<li>整个空间被划分为 zones。</li>
+<li>每个 node 负责一个 zone。</li>
+<li>key 落在哪个 zone，就由对应 node 负责。</li>
+<li>新 node 加入时，随机选点并分裂已有 zone。</li>
+</ul>
+<h2 id="can-routing">12. CAN Routing</h2>
+<p>每个 node 只知道相邻 zones 的 nodes。</p>
+<p>查找时：</p>
+<ul>
+<li>目标是 key 所在的空间坐标。</li>
+<li>当前 node 选择欧氏距离目标最近的邻居。</li>
+<li>一步步 greedy routing 到负责 zone。</li>
+</ul>
+<p>复杂度：</p>
+<ul>
+<li>二维时大约 <span class="math inline">\(O(\sqrt n)\)</span>。</li>
+<li><span class="math inline">\(d\)</span> 维时 lookup 大约 <span
+class="math inline">\(O(d n^{1/d})\)</span>。</li>
+<li>每个 node 维护邻居数量约 <span
+class="math inline">\(O(d)\)</span>。</li>
+</ul>
+<p>老师说 CAN 细节不需要过深，重点知道复杂度和思想。</p>
+<h2 id="考点重点">13. 考点重点</h2>
+<ul>
+<li>知道 P2P intro 是背景，核心是 lookup problem。</li>
+<li>会解释 DHT 比普通 hash table 多了 <code>lookup(key)</code>。</li>
+<li>会说明 consistent hashing ring：nodes 和 keys hash 到同一 circular
+ID space。</li>
+<li>会用 successor rule 判断 key 存在哪个 node。</li>
+<li>会构造或使用 finger table。</li>
+<li>会按 “go as far as possible, but never pass target” 走 Chord lookup
+path。</li>
+<li>记住 Chord lookup 时间 <span class="math inline">\(O(\log
+n)\)</span>，每节点空间 <span class="math inline">\(O(\log
+n)\)</span>。</li>
+<li>知道 CAN 用 <span class="math inline">\(d\)</span> 维 zones，routing
+走最近邻，时间约 <span
+class="math inline">\(O(dn^{1/d})\)</span>，空间约 <span
+class="math inline">\(O(d)\)</span>。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Distributed-Hash-Table/" rel="tag"><i class="fa fa-tag"></i> Distributed Hash Table</a>
+              <a href="/tags/Consistent-Hashing/" rel="tag"><i class="fa fa-tag"></i> Consistent Hashing</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c96a21de.html" rel="prev" title="COMP5313 Week 12 Project Presentations 讲课总结">
+                  <i class="fa fa-angle-left"></i> COMP5313 Week 12 Project Presentations 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/32a9fbe.html" rel="next" title="COMP5313 Week 10 Power Law 与 Small World 讲课总结">
+                  COMP5313 Week 10 Power Law 与 Small World 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

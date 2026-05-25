@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 12 讲课总结，整理 assignment 2 展示中出现的网络分析主题、常用方法和对复习有帮助的观察。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 12 Project Presentations 讲课总结">
+<meta property="og:url" content="http://example.com/posts/c96a21de.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 12 讲课总结，整理 assignment 2 展示中出现的网络分析主题、常用方法和对复习有帮助的观察。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.658Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Project Presentation">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/c96a21de.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/c96a21de.html","path":"posts/c96a21de.html","title":"COMP5313 Week 12 Project Presentations 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 12 Project Presentations 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/c96a21de.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-week-12-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93project-presentations"><span class="nav-text">COMP5313 Week 12
+讲课总结：Project Presentations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E4%B8%BB%E9%A2%98"><span class="nav-text">1. 本讲主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hugging-face-ai-ecosystem"><span class="nav-text">2. Hugging Face AI Ecosystem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zelda-open-world-poi-network"><span class="nav-text">3. Zelda Open-world POI
+Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#online-retail-co-purchase-network"><span class="nav-text">4. Online Retail Co-purchase
+Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netflix-actor-network"><span class="nav-text">5. Netflix Actor Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#europe-electricity-price-network"><span class="nav-text">6. Europe Electricity Price
+Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#football-passing-network"><span class="nav-text">7. Football Passing Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#submarine-cable-network"><span class="nav-text">8. Submarine Cable Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iot-sensor-network"><span class="nav-text">9. IoT Sensor Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#internet-trade-nba-airport-blockchain-dblp"><span class="nav-text">10. Internet &#x2F; Trade
+&#x2F; NBA &#x2F; Airport &#x2F; Blockchain &#x2F; DBLP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E5%A4%8D%E4%B9%A0%E6%9C%89%E7%94%A8%E7%9A%84%E5%85%B1%E6%80%A7"><span class="nav-text">11. 对复习有用的共性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">12. 考点重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/c96a21de.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 12 Project Presentations 讲课总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 12 讲课总结，整理 assignment 2 展示中出现的网络分析主题、常用方法和对复习有帮助的观察。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 12 Project Presentations 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 12 讲课总结，整理 assignment 2 展示中出现的网络分析主题、常用方法和对复习有帮助的观察。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5313-week-12-讲课总结project-presentations">COMP5313 Week 12
+讲课总结：Project Presentations</h1>
+<blockquote>
+<p>本讲主要播放 Assignment 2
+项目展示。老师说明展示选择只基于主题，不代表成绩高低。本周没有新增理论考点，主要用于看课程方法如何应用到真实数据。</p>
+</blockquote>
+<h2 id="本讲主题">1. 本讲主题</h2>
+<p>本讲通过多个项目展示说明：</p>
+<ul>
+<li>图建模可以应用到 AI
+模型生态、游戏地图、零售、影视演员、能源市场、足球传球、海底光缆、IoT、互联网、贸易、NBA、机场、区块链、学术合作等场景。</li>
+<li>常用方法反复出现：centrality、community
+detection、PageRank、betweenness、degree、modularity、robustness /
+removal analysis。</li>
+<li>好项目通常把 research question、graph construction、metric choice
+和结论对应起来。</li>
+</ul>
+<h2 id="hugging-face-ai-ecosystem">2. Hugging Face AI Ecosystem</h2>
+<p>项目把 Hugging Face 模型生态建成网络：</p>
+<ul>
+<li>节点来自 models、tasks、libraries、authors。</li>
+<li>研究模型供给是否集中。</li>
+<li>比较 download popularity 和 structural importance。</li>
+<li>使用 PageRank、betweenness、weighted degree、community
+structure。</li>
+<li>结论是下载量不一定等于结构重要性，某些 library / author
+是隐藏桥梁。</li>
+</ul>
+<h2 id="zelda-open-world-poi-network">3. Zelda Open-world POI
+Network</h2>
+<p>项目把游戏中的 points of interest 建成动态路径网络：</p>
+<ul>
+<li>节点是交互对象。</li>
+<li>分层：teleportation、service hub、functional target、micro
+reward。</li>
+<li>研究游戏世界是否像一个软推荐网络，引导玩家路径。</li>
+<li>观察不同 persona / stage 下的中心节点变化。</li>
+</ul>
+<h2 id="online-retail-co-purchase-network">4. Online Retail Co-purchase
+Network</h2>
+<p>项目用 UK online retail 交易数据：</p>
+<ul>
+<li>产品是节点。</li>
+<li>同一 invoice 中共同出现的产品连边。</li>
+<li>边权可以用 co-occurrence count / lift。</li>
+<li>用 Louvain / Leiden 发现 product communities。</li>
+<li>用 centrality / participation coefficient 找 bridge products。</li>
+</ul>
+<p>重点观察：community 可能反映使用场景，而不只是商品目录类别。</p>
+<h2 id="netflix-actor-network">5. Netflix Actor Network</h2>
+<p>项目构建演员共演网络：</p>
+<ul>
+<li>演员是节点。</li>
+<li>共演关系是边。</li>
+<li>比较 degree centrality 和 betweenness centrality。</li>
+<li>targeted removal 高 betweenness 演员会更明显破坏跨社区连接。</li>
+</ul>
+<p>重点观察：高 degree 代表局部活跃，高 betweenness
+代表桥接作用，两者不等价。</p>
+<h2 id="europe-electricity-price-network">6. Europe Electricity Price
+Network</h2>
+<p>项目分析欧洲电力批发价格：</p>
+<ul>
+<li>节点是 bidding zones。</li>
+<li>边表示价格联动或相似性。</li>
+<li>用 connectivity、Louvain、partition
+similarity、PageRank、betweenness。</li>
+<li>比较 2022 前后结构变化。</li>
+</ul>
+<p>重点观察：密度下降、fragmentation 上升、community
+更分裂，说明市场结构发生变化。</p>
+<h2 id="football-passing-network">7. Football Passing Network</h2>
+<p>项目把足球传球建成 directed / weighted network：</p>
+<ul>
+<li>球员是节点。</li>
+<li>传球是边。</li>
+<li>degree centrality 衡量参与度和控球量。</li>
+<li>betweenness centrality 找 transition pivot / bridge player。</li>
+</ul>
+<p>重点观察：普通数据可能只看传球次数，网络指标能发现结构性桥梁角色。</p>
+<h2 id="submarine-cable-network">8. Submarine Cable Network</h2>
+<p>项目分析全球海底光缆：</p>
+<ul>
+<li>国家或 landing points 是节点。</li>
+<li>海底光缆连接是边。</li>
+<li>用 community
+detection、dependence、exclusion、betweenness、eigenvector
+centrality。</li>
+<li>研究结构性 transit authority 和 bargaining power。</li>
+</ul>
+<p>重点观察：地理社区明显，少数 transit hubs 影响跨区域连接。</p>
+<h2 id="iot-sensor-network">9. IoT Sensor Network</h2>
+<p>项目用 Intel Berkeley Lab sensor dataset：</p>
+<ul>
+<li>传感器是节点。</li>
+<li>环境读数相似性形成 weighted edges。</li>
+<li>用 modularity 发现 sensor communities。</li>
+<li>用 degree、weighted degree、PageRank、betweenness 找 bridge
+sensors。</li>
+</ul>
+<p>重点观察：环境相似性可以解释部分 sensor community。</p>
+<h2 id="internet-trade-nba-airport-blockchain-dblp">10. Internet / Trade
+/ NBA / Airport / Blockchain / DBLP</h2>
+<p>后续展示反复出现类似图分析框架：</p>
+<ul>
+<li>Internet structure：国家或网络实体的连通性与 resiliency。</li>
+<li>Australia trade network：PageRank 和集中度衡量贸易依赖。</li>
+<li>NBA mobility network：球员流动连接球队，用 centrality 和 community
+detection 分析 league structure。</li>
+<li>Airport network：degree 找 direct route hubs，betweenness
+找跨区域中转机场，community detection 找区域团簇。</li>
+<li>Bitcoin / peeling chain：centrality 和 community detection 分析
+illicit transactions 是否位于核心或边缘。</li>
+<li>DBLP co-authorship：作者合作网络，用 Louvain、betweenness
+找研究社区和跨领域 bridge authors。</li>
+</ul>
+<h2 id="对复习有用的共性">11. 对复习有用的共性</h2>
+<p>这些项目虽然不是新理论，但能帮助复习：</p>
+<ul>
+<li>先定义节点和边，边权必须有清楚含义。</li>
+<li>degree 高不一定 betweenness 高。</li>
+<li>PageRank 衡量结构重要性，不等同于原始 popularity。</li>
+<li>Louvain / modularity 常用于 community detection。</li>
+<li>targeted removal 可检验网络脆弱性。</li>
+<li>projection graph 会简化真实关系，也可能夸大连接。</li>
+<li>图指标要和 research question 对应，否则只是堆指标。</li>
+</ul>
+<h2 id="考点重点">12. 考点重点</h2>
+<ul>
+<li>本周没有新增公式或算法考点。</li>
+<li>需要吸收的是应用套路：graph construction → metric choice → result
+interpretation。</li>
+<li>复习时不用背每个项目细节，但要会解释为什么某个指标适合某个问题。</li>
+<li>特别注意 degree、betweenness、PageRank、modularity
+在项目中的不同含义。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Project-Presentation/" rel="tag"><i class="fa fa-tag"></i> Project Presentation</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/daily-2026-05-14.html" rel="prev" title="每日科技速递 - 2026-05-14">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-05-14
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/bc6415e8.html" rel="next" title="COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结">
+                  COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

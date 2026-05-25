@@ -22,27 +22,33 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="&gt; 教材：Mining of Massive Datasets">
+    <meta name="description" content="MMDS Chapter 5: Link Analysis（链接分析）  教材：Mining of Massive Datasets 作者：Jure Leskovec, Anand Rajaraman, Jeffrey D. Ullman   一、概述与背景 链接分析 (Link Analysis) 是大规模网络数据挖掘中的核心主题之一。本章深入探讨如何利用网页之间的链接关系来评估网页的重要性，这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MMDS Chapter 5: Link Analysis（链接分析）">
-<meta property="og:url" content="http://example.com/posts/1e725d59.html">
+<meta property="og:title" content="COMP5313 - MMDS Chapter 5 Link Analysis 链接分析">
+<meta property="og:url" content="http://example.com/posts/fd354148.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="&gt; 教材：Mining of Massive Datasets">
+<meta property="og:description" content="MMDS Chapter 5: Link Analysis（链接分析）  教材：Mining of Massive Datasets 作者：Jure Leskovec, Anand Rajaraman, Jeffrey D. Ullman   一、概述与背景 链接分析 (Link Analysis) 是大规模网络数据挖掘中的核心主题之一。本章深入探讨如何利用网页之间的链接关系来评估网页的重要性，这">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-04-13T11:10:16.382Z">
-<meta property="article:modified_time" content="2026-04-20T14:42:00.675Z">
+<meta property="article:published_time" content="2026-04-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.651Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="HITS">
+<meta property="article:tag" content="Mining of Massive Datasets">
+<meta property="article:tag" content="Link Analysis">
+<meta property="article:tag" content="PageRank">
+<meta property="article:tag" content="Link Spam">
+<meta property="article:tag" content="TrustRank">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/posts/1e725d59.html">
+<link rel="canonical" href="http://example.com/posts/fd354148.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/1e725d59.html","path":"posts/1e725d59.html","title":"MMDS Chapter 5: Link Analysis（链接分析）"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/fd354148.html","path":"posts/fd354148.html","title":"COMP5313 - MMDS Chapter 5 Link Analysis 链接分析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>MMDS Chapter 5: Link Analysis（链接分析） | Joey</title>
+<title>COMP5313 - MMDS Chapter 5 Link Analysis 链接分析 | Joey</title>
   
 
 
@@ -81,7 +87,7 @@
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/1e725d59.html"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/fd354148.html"}</script>
   <script src="/js/third-party/quicklink.js" defer></script>
 
   <noscript>
@@ -125,7 +131,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">82</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">173</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
   </ul>
 </nav>
 
@@ -167,18 +173,18 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">173</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -223,7 +229,7 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1e725d59.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/fd354148.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -236,12 +242,12 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="MMDS Chapter 5: Link Analysis（链接分析） | Joey">
-      <meta itemprop="description" content="> 教材：Mining of Massive Datasets">
+      <meta itemprop="name" content="COMP5313 - MMDS Chapter 5 Link Analysis 链接分析 | Joey">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MMDS Chapter 5: Link Analysis（链接分析）
+          COMP5313 - MMDS Chapter 5 Link Analysis 链接分析
         </h1>
 
         <div class="post-meta-container">
@@ -252,14 +258,14 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2026-04-13 11:10:16" itemprop="dateCreated datePublished" datetime="2026-04-13T11:10:16Z">2026-04-13</time>
+      <time title="Created: 2026-04-13 00:00:00" itemprop="dateCreated datePublished" datetime="2026-04-13T00:00:00Z">2026-04-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-20 14:42:00" itemprop="dateModified" datetime="2026-04-20T14:42:00Z">2026-04-20</time>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -267,7 +273,11 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
         </span>
     </span>
 
@@ -278,18 +288,17 @@ Analysis（链接分析）</span></a><ol class="nav-child"><li class="nav-item n
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>6.6k</span>
+      <span>8k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>24 mins.</span>
+      <span>29 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">> 教材：Mining of Massive Datasets</div>
         </div>
       </header>
 
@@ -353,20 +362,64 @@ Matrix</strong>）：</p>
 class="math inline">\(j\)</span> 的出链数。矩阵 <span
 class="math inline">\(M\)</span> 是列随机的
 (<strong>Column-Stochastic</strong>)，即每列的和为 1。</p>
-<p><strong>示例 5.1：四节点网络</strong></p>
-<p>考虑有向图：<span class="math inline">\(A \rightarrow
-B\)</span>，<span class="math inline">\(B \rightarrow C\)</span>，<span
-class="math inline">\(C \rightarrow A, B\)</span>，<span
-class="math inline">\(D \rightarrow C, D\)</span></p>
-<p>各页面出度：<span class="math inline">\(d_A=1, d_B=1, d_C=2,
+<p><strong>理解要点</strong>：<span
+class="math inline">\(M_{ij}\)</span> 表示"从页面 <span
+class="math inline">\(j\)</span> 跳到页面 <span
+class="math inline">\(i\)</span> 的概率"。注意是<strong>列 <span
+class="math inline">\(j\)</span> → 行 <span
+class="math inline">\(i\)</span></strong>，不是行 →
+列。矩阵的<strong>每一列对应一个"出发页面"</strong>，这一列里哪些行是非零的，取决于这个页面链接到了谁。每个页面把自己的
+PageRank 均分给所有出链目标，所以每列的和为 1。</p>
+<p><strong>示例 5.1：四节点网络（教材 Figure 5.1）</strong></p>
+<p>有向图的边为：<span class="math inline">\(A \rightarrow B, C,
+D\)</span>，<span class="math inline">\(B \rightarrow A,
+D\)</span>，<span class="math inline">\(C \rightarrow A\)</span>，<span
+class="math inline">\(D \rightarrow B, C\)</span></p>
+<p>即：A 链接到其他三个页面；B 链接到 A 和 D；C 只链接到 A；D 链接到 B
+和 C。</p>
+<p>各页面出度：<span class="math inline">\(d_A=3, d_B=2, d_C=1,
 d_D=2\)</span></p>
-<p>转移矩阵为：</p>
+<p><strong>逐列填写转移矩阵</strong>（每一列描述的是"站在该页面上，下一步去哪"）：</p>
+<ul>
+<li><strong>第 1 列（从 A 出发）</strong>：A 链接到 B、C、D，出度为
+3。所以 <span class="math inline">\(M_{B,A} = 1/3\)</span>，<span
+class="math inline">\(M_{C,A} = 1/3\)</span>，<span
+class="math inline">\(M_{D,A} = 1/3\)</span>。这一列是 <span
+class="math inline">\((0, 1/3, 1/3, 1/3)^T\)</span></li>
+<li><strong>第 2 列（从 B 出发）</strong>：B 链接到 A 和 D，出度为
+2。所以 <span class="math inline">\(M_{A,B} = 1/2\)</span>，<span
+class="math inline">\(M_{D,B} = 1/2\)</span>。这一列是 <span
+class="math inline">\((1/2, 0, 0, 1/2)^T\)</span></li>
+<li><strong>第 3 列（从 C 出发）</strong>：C 只链接到 A，出度为 1。所以
+<span class="math inline">\(M_{A,C} = 1\)</span>。这一列是 <span
+class="math inline">\((1, 0, 0, 0)^T\)</span></li>
+<li><strong>第 4 列（从 D 出发）</strong>：D 链接到 B 和 C，出度为
+2。所以 <span class="math inline">\(M_{B,D} = 1/2\)</span>，<span
+class="math inline">\(M_{C,D} = 1/2\)</span>。这一列是 <span
+class="math inline">\((0, 1/2, 1/2, 0)^T\)</span></li>
+</ul>
+<p>拼起来得到转移矩阵（行列顺序均为 A, B, C, D）：</p>
 <p><span class="math display">\[M = \begin{pmatrix}
-0 &amp; 0 &amp; 1/2 &amp; 0 \\
-1 &amp; 0 &amp; 0 &amp; 0 \\
-0 &amp; 1 &amp; 0 &amp; 1/2 \\
-0 &amp; 0 &amp; 1/2 &amp; 1/2
+0 &amp; 1/2 &amp; 1 &amp; 0 \\
+1/3 &amp; 0 &amp; 0 &amp; 1/2 \\
+1/3 &amp; 0 &amp; 0 &amp; 1/2 \\
+1/3 &amp; 1/2 &amp; 0 &amp; 0
 \end{pmatrix}\]</span></p>
+<p><strong>验证</strong>：如果当前概率分布是 <span
+class="math inline">\(v = (1/4, 1/4, 1/4, 1/4)^T\)</span>，则一步之后在
+A 的概率为：</p>
+<p><span class="math display">\[v&#39;_A = M_{A,A} \cdot v_A + M_{A,B}
+\cdot v_B + M_{A,C} \cdot v_C + M_{A,D} \cdot v_D = 0 \cdot \frac{1}{4}
++ \frac{1}{2} \cdot \frac{1}{4} + 1 \cdot \frac{1}{4} + 0 \cdot
+\frac{1}{4} = \frac{3}{8} = \frac{9}{24}\]</span></p>
+<p>含义：B 和 C 都能跳到 A。B 有 <span
+class="math inline">\(1/4\)</span> 的概率被访问、跳到 A 的概率 <span
+class="math inline">\(1/2\)</span>，贡献 <span
+class="math inline">\(1/8\)</span>；C 有 <span
+class="math inline">\(1/4\)</span> 的概率被访问、跳到 A 的概率 <span
+class="math inline">\(1\)</span>，贡献 <span
+class="math inline">\(1/4\)</span>。合计 <span class="math inline">\(1/8
++ 1/4 = 3/8\)</span></p>
 <h4 id="随机游走模型">2.2.3 随机游走模型</h4>
 <p><strong>随机游走</strong> (<strong>Random Walk/Random
 Surfer</strong>) 的过程： 1. 初始时，游走者从 <span
@@ -394,8 +447,17 @@ class="math inline">\(M\)</span> 的特征值为 1
 <p><strong>示例 5.2：计算四节点网络的 PageRank</strong></p>
 <p>从 <span class="math inline">\(v_0 = (1/4, 1/4, 1/4, 1/4)^T\)</span>
 开始迭代：</p>
-<p><span class="math display">\[v_1 = M v_0 = \begin{pmatrix} 1/8 \\ 1/4
-\\ 3/8 \\ 1/4 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[v_0 = \begin{pmatrix} 1/4 \\ 1/4 \\ 1/4
+\\ 1/4 \end{pmatrix} \rightarrow v_1 = \begin{pmatrix} 9/24 \\ 5/24 \\
+5/24 \\ 5/24 \end{pmatrix} \rightarrow v_2 = \begin{pmatrix} 15/48 \\
+11/48 \\ 11/48 \\ 11/48 \end{pmatrix} \rightarrow \cdots \rightarrow v =
+\begin{pmatrix} 3/9 \\ 2/9 \\ 2/9 \\ 2/9 \end{pmatrix}\]</span></p>
+<p>注意 B、C、D 的概率始终相同（因为它们在 <span
+class="math inline">\(M\)</span> 中对应的行完全一样），所以只需解 <span
+class="math inline">\(v_A = 3/2 \cdot v_B\)</span> 加上 <span
+class="math inline">\(v_A + 3v_B = 1\)</span> 即可得到 <span
+class="math inline">\(v_A = 3/9 = 1/3\)</span>，<span
+class="math inline">\(v_B = v_C = v_D = 2/9\)</span></p>
 <p>继续迭代直到收敛，最终稳定分布为： <span class="math display">\[v =
 \left(\frac{3}{9}, \frac{2}{9}, \frac{2}{9},
 \frac{2}{9}\right)^T\]</span></p>
@@ -439,19 +501,35 @@ class="math inline">\(r_q\)</span> 是 <span
 class="math inline">\(q\)</span> 的 PageRank，<span
 class="math inline">\(d_q\)</span> 是 <span
 class="math inline">\(q\)</span> 的出度。</p>
-<p><strong>示例 5.4：多级死端</strong></p>
-<p>如果移除 C 的出链使其成为死端，这进而可能使 B 也成为死端（如果 B
-只链接到 C）。需要逐级处理： 1. 第一级：删除 E（初始死端） 2.
-第二级：删除 C（删除 E 后成为死端） 3. 在简化图上计算 PageRank 4. 按
-C、E 的顺序恢复</p>
+<p><strong>示例 5.4：多级死端（教材 Figure 5.4）</strong></p>
+<p>在示例 5.3 的基础上（C 的出链 <span class="math inline">\(C
+\rightarrow A\)</span> 已被移除），给 C 添加一个后继节点 E（<span
+class="math inline">\(C \rightarrow E\)</span>），但 E
+没有任何出链，是初始死端。</p>
+<p>递归删除过程： 1. <strong>第一级</strong>：E 没有出链，是死端 → 删除
+E 及其入边 <span class="math inline">\(C \rightarrow E\)</span> 2.
+<strong>第二级</strong>：C 原来唯一的出链就是 <span
+class="math inline">\(C \rightarrow E\)</span>，现在被删了，C 也变成死端
+→ 删除 C 3. 此时剩下 A、B、D（它们都有出链），在简化图（Figure
+5.5）上计算 PageRank：<span class="math inline">\(v_A = 2/9, v_B = 4/9,
+v_D = 3/9\)</span> 4. <strong>恢复 C</strong>：C 的前驱是 A 和 D。A 有 3
+条出链（A→B,C,D），D 有 2 条出链（D→B,C）。所以 <span
+class="math inline">\(r_C = \frac{1}{3} \times \frac{2}{9} + \frac{1}{2}
+\times \frac{3}{9} = \frac{2}{27} + \frac{1}{6} = \frac{13}{54}\)</span>
+5. <strong>恢复 E</strong>：E 的唯一前驱是 C，C 只有 1
+条出链（C→E），所以 <span class="math inline">\(r_E = r_C =
+\frac{13}{54}\)</span></p>
 <h3 id="蜘蛛陷阱与税收方法">2.5 蜘蛛陷阱与税收方法</h3>
 <p><strong>蜘蛛陷阱</strong> (<strong>Spider Trap</strong>)
 是指一组网页，其中所有出链都指向组内网页，与其他网络部分无连接。</p>
 <p><strong>问题</strong>： - 随机游走者一旦进入陷阱，永远无法离开 - 所有
 PageRank 最终聚集在陷阱中的网页 - 其他网页的 PageRank 趋向于 0</p>
-<p><strong>示例 5.5</strong>：如果 D 有自环（D
-指向自己）且没有其他出链，在收敛后： <span class="math display">\[v
-\rightarrow (0, 0, 0, 1)^T\]</span></p>
+<p><strong>示例 5.5（教材 Figure 5.6）</strong>：将示例 5.1 中 C
+的出链从 <span class="math inline">\(C \rightarrow A\)</span> 改为 <span
+class="math inline">\(C \rightarrow C\)</span>（自环），使 C
+成为一个单节点蜘蛛陷阱。在收敛后： <span class="math display">\[v
+\rightarrow (0, 0, 1, 0)^T\]</span> 所有 PageRank 全部聚集到
+C，因为一旦随机游走者到达 C，就再也出不去了。</p>
 <p><strong>解决方案：税收方法</strong> (<strong>Taxation
 Method</strong>) 或 <strong>传送方法</strong> (<strong>Teleportation
 Method</strong>)</p>
@@ -465,12 +543,13 @@ Factor</strong>) - <span class="math inline">\(e\)</span> 是全 1 向量 -
 class="math inline">\(\beta\)</span> 执行随机游走的标准步骤（跟随出链）
 - 以概率 <span class="math inline">\(1-\beta\)</span>
 进行"传送"，均匀随机跳转到任意网页 - 传送相当于在键盘上随机输入 URL</p>
-<p><strong>示例 5.6</strong>：使用 <span class="math inline">\(\beta =
-0.8\)</span> 和 D 的自环</p>
+<p><strong>示例 5.6（教材 Example 5.6）</strong>：使用 <span
+class="math inline">\(\beta = 0.8\)</span> 和 C 的自环（Figure 5.6
+的图）</p>
 <p>迭代过程会收敛到： <span class="math display">\[v = (15/148, 19/148,
 95/148, 19/148)^T\]</span></p>
-<p>虽然 D 仍然获得最高 PageRank，但不再是全部（95/148 ≈
-0.642），其他网页也获得合理的分值。</p>
+<p>虽然 C 仍然获得最高 PageRank（95/148 ≈
+0.642，因为它是蜘蛛陷阱），但税收方法使得其他网页也获得了合理的分值。</p>
 <h3 id="在搜索引擎中使用-pagerank">2.6 在搜索引擎中使用 PageRank</h3>
 <p><strong>Google 搜索引擎的排名因素</strong>： - Google 使用 250+
 种排名属性和信号 - PageRank 是其中重要的一个，但不是唯一决定因素</p>
@@ -506,8 +585,43 @@ class="math inline">\(d_j\)</span>、该列非零元素的行号列表</li>
 </ul></li>
 </ol>
 <p><strong>示例 5.7：列表表示</strong></p>
-<p>对于示例 5.1 的矩阵，按列表示为：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">列<span class="number">1</span>: 出度=<span class="number">1</span>, 目标=&#123;<span class="number">2</span>&#125;</span><br><span class="line">列<span class="number">2</span>: 出度=<span class="number">1</span>, 目标=&#123;<span class="number">3</span>&#125;</span><br><span class="line">列<span class="number">3</span>: 出度=<span class="number">2</span>, 目标=&#123;<span class="number">1</span>,<span class="number">4</span>&#125;</span><br><span class="line">列<span class="number">4</span>: 出度=<span class="number">2</span>, 目标=&#123;<span class="number">3</span>,<span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>对于示例 5.1 的图（A→B,C,D; B→A,D; C→A;
+D→B,C），按列（即按源节点）表示为：</p>
+<table>
+<thead>
+<tr>
+<th>源节点</th>
+<th>出度</th>
+<th>目标节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>3</td>
+<td>B, C, D</td>
+</tr>
+<tr>
+<td>B</td>
+<td>2</td>
+<td>A, D</td>
+</tr>
+<tr>
+<td>C</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>D</td>
+<td>2</td>
+<td>B, C</td>
+</tr>
+</tbody>
+</table>
+<p>例如，A 的出度为 3，后继节点为 B、C、D，因此矩阵 <span
+class="math inline">\(M\)</span> 的第 A 列中，A 行为 0（A
+不在目标列表中），B、C、D 行各为 <span
+class="math inline">\(1/3\)</span>。</p>
 <p>这种表示紧凑且便于计算 <span class="math inline">\(v&#39; =
 Mv\)</span>：对每列 <span class="math inline">\(j\)</span>，将 <span
 class="math inline">\(v_j/d_j\)</span> 添加到对应的行中。</p>
@@ -634,11 +748,27 @@ v_{topic_i}\]</span></p>
 class="math inline">\(i\)</span> 的权重，<span
 class="math inline">\(\sum w_i = 1\)</span>。</p>
 <p><strong>示例 5.10</strong>：</p>
-<p>设有 4 个网页，传送集合 <span class="math inline">\(S = \{B,
-D\}\)</span>（网页 B 和 D）：</p>
-<p>使用公式 <span class="math inline">\(v&#39; = 0.8 Mv + 0.2(e_S/|S|) =
-0.8Mv + 0.1(e_B + e_D)\)</span></p>
-<p>迭代会偏向于提高 B 和 D 的 PageRank，以及与它们紧密相连的网页。</p>
+<p>使用示例 5.1 的图（A→B,C,D; B→A,D; C→A; D→B,C），<span
+class="math inline">\(\beta = 0.8\)</span>，传送集合 <span
+class="math inline">\(S = \{B, D\}\)</span>。</p>
+<p><span class="math inline">\(\beta M\)</span> 矩阵为： <span
+class="math display">\[\beta M = \begin{pmatrix}
+0 &amp; 2/5 &amp; 4/5 &amp; 0 \\
+4/15 &amp; 0 &amp; 0 &amp; 2/5 \\
+4/15 &amp; 0 &amp; 0 &amp; 2/5 \\
+4/15 &amp; 2/5 &amp; 0 &amp; 0
+\end{pmatrix}\]</span></p>
+<p>传送向量 <span class="math inline">\((1-\beta) e_S / |S| = 0.2 \cdot
+e_S / 2 = (0, 1/10, 0, 1/10)^T\)</span></p>
+<p>迭代公式：<span class="math inline">\(v&#39; = \beta M v + (0, 1/10,
+0, 1/10)^T\)</span></p>
+<p>从 <span class="math inline">\(v_0 = (0, 1/2, 0,
+1/2)^T\)</span>（初始集中在传送集合上）开始迭代，收敛到：</p>
+<p><span class="math display">\[v^{(\infty)} = \left(\frac{54}{210},
+\frac{59}{210}, \frac{38}{210}, \frac{59}{210}\right)^T\]</span></p>
+<p>与标准 PageRank（示例 5.2 中 A 获得最高 PR = 3/9）相比，这里 B 和 D
+获得了更高的 PageRank（59/210 ≈ 0.281 &gt; 54/210 ≈
+0.257），因为随机冲浪者更频繁地传送到 B 和 D。</p>
 <h3 id="从文本推断主题">4.5 从文本推断主题</h3>
 <p><strong>基本思路</strong>：识别每个主题的特征词汇，根据网页文本对其分类。</p>
 <p><strong>步骤</strong>：</p>
@@ -662,12 +792,12 @@ class="math inline">\(B\)</span> 是主题的特征词集合</p></li>
 <strong>目标页面</strong> <span
 class="math inline">\(t\)</span>：垃圾创建者想要提升排名的页面 -
 <strong>支持页面</strong> <span class="math inline">\(m\)</span>
-个：垃圾创建者创建的辅助页面 - <strong>链接策略</strong>： - 所有 <span
-class="math inline">\(m\)</span> 个支持页面都链接到目标页面 <span
-class="math inline">\(t\)</span> -
-支持页面之间可以链接，但所有出链最终都指向 <span
-class="math inline">\(t\)</span> -
-垃圾创建者利用可访问网页（如博客评论）来获得外部链接，指向支持页面或目标页面</p>
+个：垃圾创建者创建的辅助页面 - <strong>链接策略</strong>： - 目标页面
+<span class="math inline">\(t\)</span> 链接到所有 <span
+class="math inline">\(m\)</span> 个支持页面 -
+每个支持页面仅链接到目标页面 <span
+class="math inline">\(t\)</span>（回链） -
+垃圾创建者利用可访问网页（如博客评论）来获得外部链接，指向目标页面</p>
 <p><strong>外部贡献</strong>： - 设外部网页对目标页面的 PageRank 贡献为
 <span class="math inline">\(x\)</span> -
 不属于垃圾农场的网页提供的传入链接价值总和</p>
@@ -813,34 +943,54 @@ class="math inline">\(\|a^{(k+1)} - a^{(k)}\| &lt; \epsilon\)</span>
 时停止。</p>
 <h3 id="hits-的具体例子">6.4 HITS 的具体例子</h3>
 <p><strong>示例 5.14-5.15：五节点图</strong></p>
-<p>假设有 5 个网页，链接关系为： - A → B, C - B → C - C → A, B, D - D →
-E - E → D</p>
-<p>链接矩阵 <span class="math inline">\(L\)</span>： <span
-class="math display">\[L = \begin{pmatrix}
-0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
-1 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+<p>假设有 5 个网页（A, B, C, D, E），链接关系为： - A → B, C, D - B → A,
+D - C → E - D → B, C - E 无出链</p>
+<p>注意：死端（E）和蜘蛛陷阱不会阻止 HITS
+迭代收敛到有意义的向量，因此无需对图进行"税收"或其他特殊处理。</p>
+<p>链接矩阵 <span class="math inline">\(L\)</span>（<span
+class="math inline">\(L_{ij} = 1\)</span> 表示页面 <span
+class="math inline">\(i\)</span> 链接到页面 <span
+class="math inline">\(j\)</span>）： <span class="math display">\[L =
+\begin{pmatrix}
+0 &amp; 1 &amp; 1 &amp; 1 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}\]</span></p>
+<p>转置矩阵 <span class="math inline">\(L^T\)</span>（<span
+class="math inline">\(L^T_{ij} = 1\)</span> 表示页面 <span
+class="math inline">\(j\)</span> 链接到页面 <span
+class="math inline">\(i\)</span>）： <span class="math display">\[L^T =
+\begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
 1 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 1 &amp; 0 &amp; 1 \\
-0 &amp; 0 &amp; 0 &amp; 1 &amp; 0
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 0
 \end{pmatrix}\]</span></p>
 <p><strong>第一次迭代</strong>（<span
 class="math inline">\(k=0\)</span>，初始 <span class="math inline">\(h =
 (1,1,1,1,1)^T\)</span>）：</p>
-<p>权威： <span class="math display">\[a^{(1)} = L^T h^{(0)} =
-\begin{pmatrix} 2 \\ 1 \\ 4 \\ 2 \\ 1 \end{pmatrix} \Rightarrow
-\text{规范化} \Rightarrow a^{(1)} = \begin{pmatrix} 0.5 \\ 0.25 \\ 1 \\
-0.5 \\ 0.25 \end{pmatrix}\]</span></p>
-<p>枢纽： <span class="math display">\[h^{(1)} = L a^{(1)} =
-\begin{pmatrix} 1 \\ 1.5 \\ 0.75 \\ 1.5 \\ 0.5 \end{pmatrix} \Rightarrow
-\text{规范化} \Rightarrow h^{(1)} = \begin{pmatrix} 2/3 \\ 1 \\ 0.5 \\ 1
-\\ 1/3 \end{pmatrix}\]</span></p>
+<p>权威： <span class="math display">\[a = L^T h^{(0)} = \begin{pmatrix}
+0+1+0+0+0 \\ 1+0+0+1+0 \\ 1+0+0+1+0 \\ 1+1+0+0+0 \\ 0+0+1+0+0
+\end{pmatrix} = \begin{pmatrix} 1 \\ 2 \\ 2 \\ 2 \\ 1 \end{pmatrix}
+\Rightarrow \text{规范化（除以最大值 2）} \Rightarrow a^{(1)} =
+\begin{pmatrix} 1/2 \\ 1 \\ 1 \\ 1 \\ 1/2 \end{pmatrix}\]</span></p>
+<p>枢纽： <span class="math display">\[h = L a^{(1)} = \begin{pmatrix}
+0+1+1+1+0 \\ 1/2+0+0+1+0 \\ 0+0+0+0+1/2 \\ 0+1+1+0+0 \\ 0+0+0+0+0
+\end{pmatrix} = \begin{pmatrix} 3 \\ 3/2 \\ 1/2 \\ 2 \\ 0 \end{pmatrix}
+\Rightarrow \text{规范化（除以最大值 3）} \Rightarrow h^{(1)} =
+\begin{pmatrix} 1 \\ 1/2 \\ 1/6 \\ 2/3 \\ 0 \end{pmatrix}\]</span></p>
 <p><strong>后续迭代</strong>继续执行，最终收敛到： <span
 class="math display">\[h^{(\infty)} = (1, 0.3583, 0, 0.7165,
 0)^T\]</span> <span class="math display">\[a^{(\infty)} = (0.2087, 1, 1,
 0.7913, 0)^T\]</span></p>
-<p><strong>解释</strong>： - B 和 C 是权威页（权威分别为 1 和 1） - A 和
-C 是枢纽页（枢纽分别为 1 和 0.7165） - D 和 E
-形成孤立的链接圈，几乎没有权威或枢纽性</p>
+<p><strong>解释</strong>： - B 和 C 是最大的权威页（权威值均为
+1），因为它们被最大的两个枢纽 A 和 D 链接 - A 是最大的枢纽页（枢纽值为
+1），因为它链接到三个最大的权威 B、C、D - D 是第二大枢纽（枢纽值
+0.7165），因为它链接到 B 和 C - E 的枢纽值为 0（无出链），C
+的枢纽值也趋向 0（C 仅链接到 E，而 E 的权威值为 0）</p>
 <h3 id="hits-vs-pagerank">6.5 HITS vs PageRank</h3>
 <p><strong>主要区别</strong>：</p>
 <table>
@@ -880,16 +1030,45 @@ C 是枢纽页（枢纽分别为 1 和 0.7165） - D 和 E
 对于广泛查询结果可能过度分散 - 更易被链接操纵（相比 PageRank）</p>
 <h3 id="hits-的特征向量分析">6.6 HITS 的特征向量分析</h3>
 <p><strong>示例 5.16：解析求解</strong></p>
-<p>对于某些简单图，可以解析计算 <span
-class="math inline">\(LL^T\)</span> 和 <span
-class="math inline">\(L^TL\)</span> 的特征向量。</p>
-<p>考虑具体的 <span class="math inline">\(LL^T\)</span>
-矩阵，计算其特征多项式： <span class="math display">\[\det(LL^T -
-\lambda I) = 0\]</span></p>
-<p>对于小规模图，可能得到如： <span
-class="math display">\[\lambda_{\max} = \frac{5 + \sqrt{21}}{2} \approx
-4.791\]</span></p>
-<p>对应的特征向量即为收敛的枢纽评分向量。</p>
+<p>对于示例 5.14 的图，可以解析计算 <span
+class="math inline">\(LL^T\)</span> 的特征向量（即枢纽向量 <span
+class="math inline">\(h\)</span>）。</p>
+<p>首先计算 <span class="math inline">\(LL^T\)</span>（其中 <span
+class="math inline">\((LL^T)_{ij}\)</span> 等于节点 <span
+class="math inline">\(i\)</span> 和 <span
+class="math inline">\(j\)</span> 的共同后继数量）：</p>
+<p><span class="math display">\[LL^T = \begin{pmatrix}
+3 &amp; 1 &amp; 0 &amp; 2 &amp; 0 \\
+1 &amp; 2 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+2 &amp; 0 &amp; 0 &amp; 2 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}\]</span></p>
+<p>设 <span class="math inline">\(\nu = 1/(\lambda\mu)\)</span>，令
+<span class="math inline">\(h\)</span> 的各分量为 <span
+class="math inline">\(a, b, c, d, e\)</span>，则方程 <span
+class="math inline">\(h = \nu \cdot LL^T h\)</span> 给出：</p>
+<p><span class="math display">\[\nu a = 3a + b + 2d, \quad \nu b = a +
+2b, \quad \nu c = c, \quad \nu d = 2a + 2d, \quad \nu e = 0\]</span></p>
+<p>由 <span class="math inline">\(\nu e = 0\)</span> 知 <span
+class="math inline">\(e = 0\)</span>；由 <span class="math inline">\(\nu
+c = c\)</span> 知 <span class="math inline">\(c = 0\)</span>（因为 <span
+class="math inline">\(\nu \neq 1\)</span>）。</p>
+<p>从 <span class="math inline">\(b\)</span> 的方程得 <span
+class="math inline">\(b = a/(\nu - 2)\)</span>，从 <span
+class="math inline">\(d\)</span> 的方程得 <span class="math inline">\(d
+= 2a/(\nu - 2)\)</span>。</p>
+<p>代入 <span class="math inline">\(a\)</span> 的方程：<span
+class="math inline">\(\nu a = 3a + a/(\nu-2) + 4a/(\nu-2) = a(3 +
+5/(\nu-2))\)</span></p>
+<p>化简得 <span class="math inline">\(\nu^2 - 5\nu + 1 =
+0\)</span>，解为：</p>
+<p><span class="math display">\[\nu_{\max} = \frac{5 + \sqrt{21}}{2}
+\approx 4.791\]</span></p>
+<p>设 <span class="math inline">\(a = 1\)</span>，则 <span
+class="math inline">\(b = 1/(\nu-2) \approx 0.3583\)</span>，<span
+class="math inline">\(d = 2/(\nu-2) \approx
+0.7165\)</span>，与迭代收敛结果一致。</p>
 <hr />
 <h2 id="七总结与应用">七、总结与应用</h2>
 <h3 id="链接分析的核心概念">7.1 链接分析的核心概念</h3>
@@ -1106,19 +1285,25 @@ Datasets</em> (Version 3.0) - 笔记日期：2026-04-13 - 覆盖章节：Chapter
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/HITS/" rel="tag"><i class="fa fa-tag"></i> HITS</a>
+              <a href="/tags/Mining-of-Massive-Datasets/" rel="tag"><i class="fa fa-tag"></i> Mining of Massive Datasets</a>
+              <a href="/tags/Link-Analysis/" rel="tag"><i class="fa fa-tag"></i> Link Analysis</a>
+              <a href="/tags/PageRank/" rel="tag"><i class="fa fa-tag"></i> PageRank</a>
+              <a href="/tags/Link-Spam/" rel="tag"><i class="fa fa-tag"></i> Link Spam</a>
+              <a href="/tags/TrustRank/" rel="tag"><i class="fa fa-tag"></i> TrustRank</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/a9d1e3aa.html" rel="prev" title="Chapter 14: Link Analysis and Web Search（链接分析与网络搜索）">
-                  <i class="fa fa-angle-left"></i> Chapter 14: Link Analysis and Web Search（链接分析与网络搜索）
+                <a href="/posts/e111eb33.html" rel="prev" title="COMP5313-Ch05-PositiveAndNegativeRelationships">
+                  <i class="fa fa-angle-left"></i> COMP5313-Ch05-PositiveAndNegativeRelationships
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/f8b7f38a.html" rel="next" title="每日科技速递 - 2026-04-14">
-                  每日科技速递 - 2026-04-14 <i class="fa fa-angle-right"></i>
+                <a href="/posts/186b93b7.html" rel="next" title="COMP5313-Ch09-Auctions">
+                  COMP5313-Ch09-Auctions <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -1154,14 +1339,14 @@ Datasets</em> (Version 3.0) - 笔记日期：2026-04-13 - 覆盖章节：Chapter
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">532k</span>
+    <span title="Word count total">564k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">32:13</span>
+    <span title="Reading time total">34:10</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

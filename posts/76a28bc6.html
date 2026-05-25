@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5313 Week 6 Tutorial PageRank 题解，系统整理 Basic PageRank 更新规则、均衡 PageRank 与 Scaled PageRank（解决 Spider Trap 与 Dead End），并针对多张示例图求解均衡方程，给出完整计算步骤与结果。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-16T00:00:00.000Z">
-<meta property="article:modified_time" content="2026-05-04T09:34:56.104Z">
+<meta property="article:modified_time" content="2026-05-24T06:28:49.108Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5313">
 <meta property="article:tag" content="PageRank">
@@ -126,7 +126,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">82</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">173</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
   </ul>
 </nav>
 
@@ -172,18 +172,18 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">173</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -264,7 +264,7 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-05-04 09:34:56" itemprop="dateModified" datetime="2026-05-04T09:34:56Z">2026-05-04</time>
+      <time title="Modified: 2026-05-24 06:28:49" itemprop="dateModified" datetime="2026-05-24T06:28:49Z">2026-05-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -283,14 +283,14 @@ PageRank）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>2.6k</span>
+      <span>3k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>9 mins.</span>
+      <span>11 mins.</span>
     </span>
 </div>
 
@@ -351,150 +351,241 @@ class="math inline">\(1-\alpha\)</span> 随机跳转到任意节点。</p>
 <h3 id="figure-1a三节点图">2.1 Figure 1(a)：三节点图</h3>
 <p><strong>图结构</strong>：节点 <span class="math inline">\(\{a, b,
 c\}\)</span>，边集： - <span class="math inline">\(a \to
-b\)</span>，<span class="math inline">\(b \to a\)</span>（双向） - <span
-class="math inline">\(a \to c\)</span> - <span class="math inline">\(c
-\to b\)</span> - <span class="math inline">\(c \to
-c\)</span>（自环）</p>
-<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
-|------|------|----------| | <span class="math inline">\(a\)</span> | 2
-| <span class="math inline">\(b, c\)</span> | | <span
-class="math inline">\(b\)</span> | 1 | <span
-class="math inline">\(a\)</span> | | <span
-class="math inline">\(c\)</span> | 2 | <span class="math inline">\(b,
-c\)</span> |</p>
+a\)</span>（自环），<span class="math inline">\(a \to b\)</span>，<span
+class="math inline">\(a \to c\)</span> - <span class="math inline">\(b
+\to a\)</span>，<span class="math inline">\(b \to c\)</span> - <span
+class="math inline">\(c \to b\)</span> - <span class="math inline">\(c
+\to c\)</span>（自环）</p>
+<p><strong>出度</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>出度</th>
+<th>出链目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(a\)</span></td>
+<td>3</td>
+<td><span class="math inline">\(a, b, c\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(b\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(a, c\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(c\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(b, c\)</span></td>
+</tr>
+</tbody>
+</table>
 <p><strong>建立均衡方程</strong> <span class="math inline">\(v =
 Mv\)</span>：</p>
-<p><span class="math display">\[v_a = \frac{v_b}{1} = v_b\]</span></p>
-<p><span class="math display">\[v_b = \frac{v_a}{2} +
+<p><span class="math display">\[v_a = \frac{v_a}{3} +
+\frac{v_b}{2}\]</span></p>
+<p><span class="math display">\[v_b = \frac{v_a}{3} +
 \frac{v_c}{2}\]</span></p>
-<p><span class="math display">\[v_c = \frac{v_a}{2} +
+<p><span class="math display">\[v_c = \frac{v_a}{3} + \frac{v_b}{2} +
 \frac{v_c}{2}\]</span></p>
 <p><strong>归一化条件</strong>：<span class="math inline">\(v_a + v_b +
 v_c = 1\)</span>。</p>
 <p><strong>求解</strong>：</p>
-<p>从第三式：<span class="math inline">\(v_c - \frac{v_c}{2} =
-\frac{v_a}{2}\)</span>，即 <span class="math inline">\(\frac{v_c}{2} =
-\frac{v_a}{2}\)</span>，故 <span class="math inline">\(v_c =
-v_a\)</span>。</p>
-<p>代入第二式：<span class="math inline">\(v_b = \frac{v_a}{2} +
-\frac{v_a}{2} = v_a\)</span>。</p>
-<p>结合归一化：<span class="math inline">\(3v_a = 1\)</span>，即 <span
-class="math inline">\(v_a = \frac{1}{3}\)</span>。</p>
+<p>由第一式： <span class="math display">\[v_a - \frac{v_a}{3} =
+\frac{v_b}{2} \quad \Rightarrow \quad \frac{2v_a}{3} = \frac{v_b}{2}
+\quad \Rightarrow \quad v_b = \frac{4v_a}{3}\]</span></p>
+<p>由第三式： <span class="math display">\[v_c - \frac{v_c}{2} =
+\frac{v_a}{3} + \frac{v_b}{2} \quad \Rightarrow \quad v_c =
+\frac{2v_a}{3} + v_b\]</span></p>
+<p>代入 <span class="math inline">\(v_b = \frac{4v_a}{3}\)</span>，得：
+<span class="math display">\[v_c = \frac{2v_a}{3} + \frac{4v_a}{3} =
+2v_a\]</span></p>
+<p>结合归一化： <span class="math display">\[v_a + \frac{4v_a}{3} + 2v_a
+= 1 \quad \Rightarrow \quad \frac{13v_a}{3} = 1 \quad \Rightarrow \quad
+v_a = \frac{3}{13}\]</span></p>
+<p>因此 <span class="math inline">\(v_b = \frac{4}{13}\)</span>，<span
+class="math inline">\(v_c = \frac{6}{13}\)</span>。</p>
 <p><strong>均衡值</strong>： <span class="math display">\[\boxed{v_a =
-v_b = v_c = \frac{1}{3}}\]</span></p>
+\frac{3}{13},\quad v_b = \frac{4}{13},\quad v_c =
+\frac{6}{13}}\]</span></p>
 <h3 id="均衡验证">2.2 均衡验证</h3>
 <p>应用一次更新规则：</p>
 <ul>
 <li><strong><span class="math inline">\(a\)</span> 接收</strong>：<span
-class="math inline">\(b\)</span> 的全部 PR = <span
-class="math inline">\(\frac{1}{3}\)</span> → <span
-class="math inline">\(v&#39;_a = \frac{1}{3}\)</span> ✓</li>
+class="math inline">\(a\)</span> 的三分之一 <span
+class="math inline">\(\frac{1}{13}\)</span> + <span
+class="math inline">\(b\)</span> 的一半 <span
+class="math inline">\(\frac{2}{13}\)</span> → <span
+class="math inline">\(v&#39;_a = \frac{3}{13}\)</span> ✓</li>
 <li><strong><span class="math inline">\(b\)</span> 接收</strong>：<span
-class="math inline">\(a\)</span> 的一半 <span
-class="math inline">\(\frac{1}{6}\)</span> + <span
+class="math inline">\(a\)</span> 的三分之一 <span
+class="math inline">\(\frac{1}{13}\)</span> + <span
 class="math inline">\(c\)</span> 的一半 <span
-class="math inline">\(\frac{1}{6}\)</span> → <span
-class="math inline">\(v&#39;_b = \frac{1}{3}\)</span> ✓</li>
+class="math inline">\(\frac{3}{13}\)</span> → <span
+class="math inline">\(v&#39;_b = \frac{4}{13}\)</span> ✓</li>
 <li><strong><span class="math inline">\(c\)</span> 接收</strong>：<span
-class="math inline">\(a\)</span> 的一半 <span
-class="math inline">\(\frac{1}{6}\)</span> + <span
+class="math inline">\(a\)</span> 的三分之一 <span
+class="math inline">\(\frac{1}{13}\)</span> + <span
+class="math inline">\(b\)</span> 的一半 <span
+class="math inline">\(\frac{2}{13}\)</span> + <span
 class="math inline">\(c\)</span> 的一半 <span
-class="math inline">\(\frac{1}{6}\)</span> → <span
-class="math inline">\(v&#39;_c = \frac{1}{3}\)</span> ✓</li>
+class="math inline">\(\frac{3}{13}\)</span> → <span
+class="math inline">\(v&#39;_c = \frac{6}{13}\)</span> ✓</li>
 </ul>
 <p>三个值均未改变 → 确实是均衡值。</p>
 <h3 id="figure-1b移除-b-to-a-后">2.3 Figure 1(b)：移除 <span
 class="math inline">\(b \to a\)</span> 后</h3>
-<p><strong>关键变化</strong>：<span class="math inline">\(b\)</span>
-失去唯一的出链 → <span class="math inline">\(b\)</span>
-变为<strong>死端（Dead End）</strong>。</p>
-<p>按照 Easley-Kleinberg 约定："若一页面无出链，则将自身 PR
-全部传给自己"。</p>
+<p><strong>关键变化</strong>：移除 <span class="math inline">\(b \to
+a\)</span> 后，<span class="math inline">\(b\)</span> 仍有出链 <span
+class="math inline">\(b \to c\)</span>，所以它<strong>不是死端（Dead
+End）</strong>。图中 <span class="math inline">\(\{b,c\}\)</span>
+形成闭合部分：PageRank 一旦从 <span class="math inline">\(a\)</span>
+流入 <span class="math inline">\(b,c\)</span>，就不会再回到 <span
+class="math inline">\(a\)</span>。</p>
+<p>新的边集： - <span class="math inline">\(a \to a\)</span>，<span
+class="math inline">\(a \to b\)</span>，<span class="math inline">\(a
+\to c\)</span> - <span class="math inline">\(b \to c\)</span> - <span
+class="math inline">\(c \to b\)</span>，<span class="math inline">\(c
+\to c\)</span></p>
 <p><strong>新的转移矩阵</strong>列（列 = 源节点，行 = 目标节点）： <span
-class="math display">\[M = \begin{pmatrix} 0 &amp; 0 &amp; 0 \\ 1/2
-&amp; 1 &amp; 1/2 \\ 1/2 &amp; 0 &amp; 1/2 \end{pmatrix}\]</span></p>
-<p>（列序 <span class="math inline">\(a, b, c\)</span>；<span
-class="math inline">\(b\)</span> 列为 <span class="math inline">\((0, 1,
-0)^T\)</span> 表示"传给自己"）</p>
+class="math display">\[M = \begin{pmatrix} 1/3 &amp; 0 &amp; 0 \\ 1/3
+&amp; 0 &amp; 1/2 \\ 1/3 &amp; 1 &amp; 1/2 \end{pmatrix}\]</span></p>
+<p>（列序 <span class="math inline">\(a, b, c\)</span>）</p>
 <p><strong>均衡方程</strong>： <span class="math display">\[v_a =
-0\]</span> <span class="math display">\[v_b = \frac{v_a}{2} + v_b +
-\frac{v_c}{2}\]</span> <span class="math display">\[v_c = \frac{v_a}{2}
-+ \frac{v_c}{2}\]</span></p>
+\frac{v_a}{3}\]</span> <span class="math display">\[v_b = \frac{v_a}{3}
++ \frac{v_c}{2}\]</span> <span class="math display">\[v_c =
+\frac{v_a}{3} + v_b + \frac{v_c}{2}\]</span></p>
 <p><strong>求解</strong>：</p>
-<p>由 <span class="math inline">\(v_a = 0\)</span>：代入第三式 <span
-class="math inline">\(v_c = \frac{v_c}{2}\)</span>，得 <span
-class="math inline">\(v_c = 0\)</span>。</p>
-<p>由归一化：<span class="math inline">\(v_b = 1 - 0 - 0 =
-1\)</span>。</p>
+<p>由第一式： <span class="math display">\[v_a = \frac{v_a}{3} \quad
+\Rightarrow \quad v_a = 0\]</span></p>
+<p>代入第二式： <span class="math display">\[v_b =
+\frac{v_c}{2}\]</span></p>
+<p>结合归一化： <span class="math display">\[v_b + v_c = 1,\quad v_b =
+\frac{v_c}{2}\]</span></p>
+<p>因此： <span class="math display">\[\frac{3v_c}{2} = 1 \quad
+\Rightarrow \quad v_c = \frac{2}{3},\quad v_b = \frac{1}{3}\]</span></p>
 <p><strong>均衡值</strong>： <span class="math display">\[\boxed{v_a =
-0,\quad v_b = 1,\quad v_c = 0}\]</span></p>
+0,\quad v_b = \frac{1}{3},\quad v_c = \frac{2}{3}}\]</span></p>
 <h3 id="现象解释">2.4 现象解释</h3>
 <ul>
-<li><span class="math inline">\(a\)</span> 无人指向 → PR 被"耗尽"为
-0</li>
-<li><span class="math inline">\(c\)</span> 虽有自环，但也指向 <span
-class="math inline">\(b\)</span>；PR 逐步流失到 <span
-class="math inline">\(b\)</span></li>
-<li><span class="math inline">\(b\)</span> 作为死端"吸收"所有 PR →
-最终全部聚集</li>
+<li><span class="math inline">\(a\)</span>
+只有自环作为入链，但每轮会把一部分 PR 分给 <span
+class="math inline">\(b,c\)</span>；均衡时必须满足 <span
+class="math inline">\(v_a = v_a/3\)</span>，所以 <span
+class="math inline">\(v_a = 0\)</span></li>
+<li><span class="math inline">\(b,c\)</span> 形成闭合子图：<span
+class="math inline">\(b \to c\)</span>，<span class="math inline">\(c
+\to b,c\)</span>，PageRank 进入后不会回到 <span
+class="math inline">\(a\)</span></li>
+<li><span class="math inline">\(c\)</span> 同时接收 <span
+class="math inline">\(b\)</span> 的全部 PR 和自己的部分 PR，因此最终高于
+<span class="math inline">\(b\)</span></li>
 </ul>
-<p><strong>这是基本 PageRank
-的固有缺陷</strong>：少数结构（死端/陷阱）会"吸走"整个网络的
-PR。<strong>Scaled PageRank</strong>（见练习
-3）通过引入"随机跳转"解决此问题。</p>
+<p><strong>这是基本 PageRank 在非强连通图上的典型现象</strong>：PageRank
+会集中到闭合连通部分，其他节点可能降为 0。<strong>Scaled
+PageRank</strong>（见练习 3）通过引入"随机跳转"解决此问题。</p>
 <hr />
 <h2 id="三练习-2均衡值验证">三、练习 2：均衡值验证</h2>
 <h3 id="figure-2a六节点对称图">3.1 Figure 2(a)：六节点对称图</h3>
 <p><strong>图结构</strong>（节点 <span class="math inline">\(\{A, B, C,
 D, E, G\}\)</span>）：</p>
 <p>边集（根据图中箭头）： - <span class="math inline">\(A \to
-D\)</span>，<span class="math inline">\(A \to G\)</span> - <span
-class="math inline">\(D \to B\)</span>，<span class="math inline">\(G
-\to C\)</span> - <span class="math inline">\(B \to E\)</span>，<span
-class="math inline">\(C \to E\)</span> - <span class="math inline">\(E
-\to A\)</span></p>
-<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
-|------|------|----------| | <span class="math inline">\(A\)</span> | 2
-| <span class="math inline">\(D, G\)</span> | | <span
-class="math inline">\(B\)</span> | 1 | <span
-class="math inline">\(E\)</span> | | <span
-class="math inline">\(C\)</span> | 1 | <span
-class="math inline">\(E\)</span> | | <span
-class="math inline">\(D\)</span> | 1 | <span
-class="math inline">\(B\)</span> | | <span
-class="math inline">\(E\)</span> | 1 | <span
-class="math inline">\(A\)</span> | | <span
-class="math inline">\(G\)</span> | 1 | <span
-class="math inline">\(C\)</span> |</p>
+B\)</span>，<span class="math inline">\(A \to C\)</span> - <span
+class="math inline">\(B \to D\)</span>，<span class="math inline">\(B
+\to E\)</span> - <span class="math inline">\(C \to E\)</span>，<span
+class="math inline">\(C \to G\)</span> - <span class="math inline">\(D
+\to A\)</span>，<span class="math inline">\(E \to A\)</span>，<span
+class="math inline">\(G \to A\)</span></p>
+<p><strong>出度</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>出度</th>
+<th>出链目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(A\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(B, C\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(B\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(D, E\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(E, G\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(D\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(A\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(E\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(A\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(G\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(A\)</span></td>
+</tr>
+</tbody>
+</table>
 <p><strong>提议值</strong>：<span class="math inline">\(v_A = v_E =
 \frac{1}{4}\)</span>，<span class="math inline">\(v_B = v_C = v_D = v_G
 = \frac{1}{8}\)</span>。</p>
 <p><strong>验证 <span class="math inline">\(v =
 Mv\)</span></strong>：</p>
-<p><span class="math display">\[v_A = v_E = \frac{1}{4} \quad
-✓\]</span></p>
-<p><span class="math display">\[v_D = \frac{v_A}{2} = \frac{1}{8} \quad
-✓\]</span></p>
-<p><span class="math display">\[v_G = \frac{v_A}{2} = \frac{1}{8} \quad
-✓\]</span></p>
-<p><span class="math display">\[v_B = v_D = \frac{1}{8} \quad
-✓\]</span></p>
-<p><span class="math display">\[v_C = v_G = \frac{1}{8} \quad
-✓\]</span></p>
-<p><span class="math display">\[v_E = v_B + v_C = \frac{1}{8} +
-\frac{1}{8} = \frac{1}{4} \quad ✓\]</span></p>
-<p><strong>总和验证</strong>：<span class="math inline">\(\frac{1}{4} +
-4 \times \frac{1}{8} + \frac{1}{4} = \frac{1}{4} + \frac{1}{2} +
-\frac{1}{4} = 1\)</span> ✓</p>
-<p><strong>结论</strong>：✅ <strong>提议值是正确的均衡值</strong>。</p>
-<p><strong>结构洞见</strong>：这是一个"双层菱形"结构——<span
-class="math inline">\(A\)</span> 将 PR 均分到左右两臂 (<span
-class="math inline">\(A \to D \to B \to E\)</span> 与 <span
-class="math inline">\(A \to G \to C \to E\)</span>)，两臂在 <span
-class="math inline">\(E\)</span> 合流，再回到 <span
-class="math inline">\(A\)</span>。对称性保证了 <span
-class="math inline">\(D=G\)</span>、<span
-class="math inline">\(B=C\)</span>。</p>
+<p><span class="math display">\[v_B = \frac{v_A}{2} = \frac{1}{8} \quad
+\text{成立}\]</span></p>
+<p><span class="math display">\[v_C = \frac{v_A}{2} = \frac{1}{8} \quad
+\text{成立}\]</span></p>
+<p><span class="math display">\[v_D = \frac{v_B}{2} = \frac{1}{16} \ne
+\frac{1}{8} \quad \text{不成立}\]</span></p>
+<p>因此提议值<strong>不是</strong>均衡值。</p>
+<p>建立完整方程组：</p>
+<p><span class="math display">\[v_A = v_D + v_E + v_G\]</span></p>
+<p><span class="math display">\[v_B = \frac{v_A}{2}\]</span></p>
+<p><span class="math display">\[v_C = \frac{v_A}{2}\]</span></p>
+<p><span class="math display">\[v_D = \frac{v_B}{2}\]</span></p>
+<p><span class="math display">\[v_E = \frac{v_B}{2} +
+\frac{v_C}{2}\]</span></p>
+<p><span class="math display">\[v_G = \frac{v_C}{2}\]</span></p>
+<p>代入消元：</p>
+<p><span class="math display">\[v_B = v_C = \frac{v_A}{2}\]</span></p>
+<p><span class="math display">\[v_D = v_G = \frac{v_A}{4}\]</span></p>
+<p><span class="math display">\[v_E = \frac{v_A}{4} + \frac{v_A}{4} =
+\frac{v_A}{2}\]</span></p>
+<p>利用归一化条件：</p>
+<p><span class="math display">\[v_A + \frac{v_A}{2} + \frac{v_A}{2} +
+\frac{v_A}{4} + \frac{v_A}{2} + \frac{v_A}{4} = 1\]</span></p>
+<p><span class="math display">\[3v_A = 1 \quad \Rightarrow \quad v_A =
+\frac{1}{3}\]</span></p>
+<p><strong>正确的均衡 PageRank 值</strong>：</p>
+<p><span class="math display">\[\boxed{v_A = \frac{1}{3},\quad v_B = v_C
+= v_E = \frac{1}{6},\quad v_D = v_G = \frac{1}{12}}\]</span></p>
+<p><strong>结构洞见</strong>：<span class="math inline">\(A\)</span> 将
+PR 均分给 <span class="math inline">\(B,C\)</span>，<span
+class="math inline">\(B,C\)</span> 再向下游分流；<span
+class="math inline">\(D,E,G\)</span> 都回到 <span
+class="math inline">\(A\)</span>。其中 <span
+class="math inline">\(E\)</span> 同时接收 <span
+class="math inline">\(B,C\)</span> 的贡献，所以 <span
+class="math inline">\(E\)</span> 与 <span
+class="math inline">\(B,C\)</span> 同为 <span
+class="math inline">\(\frac{1}{6}\)</span>，而 <span
+class="math inline">\(D,G\)</span> 只有单侧贡献，各为 <span
+class="math inline">\(\frac{1}{12}\)</span>。</p>
 <h3 id="figure-2b六节点图">3.2 Figure 2(b)：六节点图</h3>
 <p><strong>图结构</strong>（节点 <span class="math inline">\(\{A, B, C,
 D, E, F\}\)</span>）：</p>
@@ -506,17 +597,48 @@ class="math inline">\(C \to F\)</span> - <span class="math inline">\(D
 \to F\)</span> - <span class="math inline">\(E \to D\)</span>，<span
 class="math inline">\(E \to F\)</span> - <span class="math inline">\(F
 \to A\)</span>，<span class="math inline">\(F \to B\)</span></p>
-<p><strong>出度</strong>： | 节点 | 出度 | 出链目标 |
-|------|------|----------------| | <span
-class="math inline">\(A\)</span> | 2 | <span class="math inline">\(C,
-D\)</span> | | <span class="math inline">\(B\)</span> | 2 | <span
-class="math inline">\(D, E\)</span> | | <span
-class="math inline">\(C\)</span> | 2 | <span class="math inline">\(D,
-F\)</span> | | <span class="math inline">\(D\)</span> | 1 | <span
-class="math inline">\(F\)</span> | | <span
-class="math inline">\(E\)</span> | 2 | <span class="math inline">\(D,
-F\)</span> | | <span class="math inline">\(F\)</span> | 2 | <span
-class="math inline">\(A, B\)</span> |</p>
+<p><strong>出度</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>出度</th>
+<th>出链目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(A\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(C, D\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(B\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(D, E\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(D, F\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(D\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(F\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(E\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(D, F\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(F\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(A, B\)</span></td>
+</tr>
+</tbody>
+</table>
 <p><strong>提议值</strong>：<span class="math inline">\(v_A = v_B =
 0.15\)</span>，<span class="math inline">\(v_C = v_E =
 0.10\)</span>，<span class="math inline">\(v_D = 0.20\)</span>，<span
@@ -558,7 +680,7 @@ class="math inline">\(0.10\)</span>）</li>
 <p><strong>验证 <span class="math inline">\(v_F\)</span> 方程</strong>：
 <span class="math display">\[v_F = \frac{v_C}{2} + v_D + \frac{v_E}{2} =
 \frac{v_F}{8} + \frac{3v_F}{4} + \frac{v_F}{8} = \frac{v_F}{4} +
-\frac{3v_F}{4} = v_F \quad ✓\]</span></p>
+\frac{3v_F}{4} = v_F \quad \text{成立}\]</span></p>
 <p>系统自洽，利用归一化条件求 <span class="math inline">\(v_F\)</span>：
 <span class="math display">\[v_A + v_B + v_C + v_D + v_E + v_F =
 1\]</span></p>
@@ -636,9 +758,9 @@ class="math inline">\(0.077\)</span>。</p>
 <h2 id="四练习-3scaled-pagerank-值alpha-45">四、练习 3：Scaled PageRank
 值（<span class="math inline">\(\alpha = 4/5\)</span>）</h2>
 <h3 id="问题设置">4.1 问题设置</h3>
-<p>回到 Figure 1(b)（即 <span class="math inline">\(b\)</span>
-为死端的图），计算 <span class="math inline">\(\alpha =
-\frac{4}{5}\)</span> 的 Scaled PageRank。</p>
+<p>回到 Figure 1(b)（移除 <span class="math inline">\(b \to a\)</span>
+后的图），计算 <span class="math inline">\(\alpha = \frac{4}{5}\)</span>
+的 Scaled PageRank。</p>
 <p><strong>网络参数</strong>：<span class="math inline">\(n =
 3\)</span>，<span class="math inline">\(\alpha = 4/5\)</span>，<span
 class="math inline">\(1 - \alpha = 1/5\)</span>。</p>
@@ -649,57 +771,70 @@ class="math inline">\(\frac{1-\alpha}{n} = \frac{1/5}{3} =
 <p><span class="math display">\[v&#39;_i = \alpha \cdot (Mv)_i +
 \frac{1-\alpha}{n}\]</span></p>
 <p>具体写出：</p>
-<p><span class="math display">\[v_a = \alpha \cdot 0 + \frac{1}{15} =
+<p><span class="math display">\[v_a = \alpha \cdot \frac{v_a}{3} +
 \frac{1}{15}\]</span></p>
-<p><span class="math display">\[v_b = \alpha \left( \frac{v_a}{2} + v_b
-+ \frac{v_c}{2} \right) + \frac{1}{15}\]</span></p>
-<p><span class="math display">\[v_c = \alpha \left( \frac{v_a}{2} +
+<p><span class="math display">\[v_b = \alpha \left( \frac{v_a}{3} +
 \frac{v_c}{2} \right) + \frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_c = \alpha \left( \frac{v_a}{3} + v_b
++ \frac{v_c}{2} \right) + \frac{1}{15}\]</span></p>
 <h3 id="逐步求解">4.3 逐步求解</h3>
 <p><strong>（1）先求 <span class="math inline">\(v_a\)</span></strong>：
-<span class="math display">\[v_a = \frac{1}{15}\]</span></p>
-<p><strong>（2）求 <span
-class="math inline">\(v_c\)</span></strong>（只与 <span
-class="math inline">\(v_a, v_c\)</span> 相关）：</p>
-<p><span class="math display">\[v_c = \frac{4}{5}\left(\frac{1}{30} +
-\frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
-<p><span class="math display">\[v_c = \frac{4}{150} + \frac{2}{5}v_c +
+<span class="math display">\[v_a = \frac{4}{5}\cdot\frac{v_a}{3} +
 \frac{1}{15}\]</span></p>
-<p><span class="math display">\[v_c = \frac{4}{150} + \frac{10}{150} +
-\frac{2}{5}v_c\]</span></p>
-<p><span class="math display">\[v_c - \frac{2}{5}v_c =
-\frac{14}{150}\]</span></p>
-<p><span class="math display">\[\frac{3}{5}v_c =
-\frac{7}{75}\]</span></p>
-<p><span class="math display">\[v_c = \frac{7}{75} \cdot \frac{5}{3} =
-\frac{35}{225} = \frac{7}{45}\]</span></p>
-<p><strong>（3）由归一化求 <span
-class="math inline">\(v_b\)</span></strong>：</p>
-<p><span class="math display">\[v_b = 1 - v_a - v_c = 1 - \frac{1}{15} -
-\frac{7}{45} = \frac{45 - 3 - 7}{45} = \frac{35}{45} =
-\frac{7}{9}\]</span></p>
+<p><span class="math display">\[v_a - \frac{4v_a}{15} =
+\frac{1}{15}\]</span></p>
+<p><span class="math display">\[\frac{11v_a}{15} = \frac{1}{15} \quad
+\Rightarrow \quad v_a = \frac{1}{11}\]</span></p>
+<p><strong>（2）用 <span class="math inline">\(v_b\)</span> 方程表示
+<span class="math inline">\(v_b\)</span></strong>：</p>
+<p><span class="math display">\[v_b = \frac{4}{5}\left(\frac{1}{33} +
+\frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_b = \frac{4}{165} + \frac{2v_c}{5} +
+\frac{1}{15}\]</span></p>
+<p><span class="math display">\[v_b = \frac{1}{11} +
+\frac{2v_c}{5}\]</span></p>
+<p><strong>（3）由归一化求 <span class="math inline">\(v_c,
+v_b\)</span></strong>：</p>
+<p><span class="math display">\[v_b + v_c = 1 - v_a =
+\frac{10}{11}\]</span></p>
+<p>代入 <span class="math inline">\(v_b = \frac{1}{11} +
+\frac{2v_c}{5}\)</span>：</p>
+<p><span class="math display">\[\frac{1}{11} + \frac{2v_c}{5} + v_c =
+\frac{10}{11}\]</span></p>
+<p><span class="math display">\[\frac{7v_c}{5} = \frac{9}{11} \quad
+\Rightarrow \quad v_c = \frac{45}{77}\]</span></p>
+<p><span class="math display">\[v_b = \frac{10}{11} - \frac{45}{77} =
+\frac{25}{77}\]</span></p>
 <h3 id="验证-v_b">4.4 验证 <span class="math inline">\(v_b\)</span></h3>
-<p><span class="math display">\[v_b = \frac{4}{5}\left(\frac{v_a}{2} +
+<p><span class="math display">\[v_b = \frac{4}{5}\left(\frac{v_a}{3} +
+\frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
+<p>代入 <span class="math inline">\(v_a = \frac{1}{11}\)</span>，<span
+class="math inline">\(v_c = \frac{45}{77}\)</span>：</p>
+<p><span class="math display">\[\frac{v_a}{3} = \frac{1}{33}, \quad
+\frac{v_c}{2} = \frac{45}{154}\]</span></p>
+<p>通分到 <span class="math inline">\(/462\)</span>： <span
+class="math display">\[\frac{v_a}{3} = \frac{14}{462}, \quad
+\frac{v_c}{2} = \frac{135}{462}\]</span></p>
+<p><span class="math display">\[\frac{v_a}{3} + \frac{v_c}{2} =
+\frac{149}{462}\]</span></p>
+<p><span class="math display">\[v_b = \frac{4}{5}\cdot\frac{149}{462} +
+\frac{1}{15} = \frac{298}{1155} + \frac{77}{1155} = \frac{375}{1155} =
+\frac{25}{77} \quad \text{成立}\]</span></p>
+<p>同理验证 <span class="math inline">\(v_c\)</span>：</p>
+<p><span class="math display">\[v_c = \frac{4}{5}\left(\frac{v_a}{3} +
 v_b + \frac{v_c}{2}\right) + \frac{1}{15}\]</span></p>
-<p>代入 <span class="math inline">\(v_a = \frac{1}{15}\)</span>，<span
-class="math inline">\(v_c = \frac{7}{45}\)</span>，<span
-class="math inline">\(v_b = \frac{7}{9}\)</span>：</p>
-<p><span class="math display">\[\frac{v_a}{2} = \frac{1}{30}, \quad
-\frac{v_c}{2} = \frac{7}{90}\]</span></p>
-<p>通分到 <span class="math inline">\(/90\)</span>： <span
-class="math display">\[\frac{v_a}{2} = \frac{3}{90}, \quad v_b =
-\frac{70}{90}, \quad \frac{v_c}{2} = \frac{7}{90}\]</span></p>
-<p><span class="math display">\[\frac{v_a}{2} + v_b + \frac{v_c}{2} =
-\frac{3 + 70 + 7}{90} = \frac{80}{90} = \frac{8}{9}\]</span></p>
-<p><span class="math display">\[v_b = \frac{4}{5} \cdot \frac{8}{9} +
-\frac{1}{15} = \frac{32}{45} + \frac{3}{45} = \frac{35}{45} =
-\frac{7}{9} \quad ✓\]</span></p>
+<p><span class="math display">\[\frac{v_a}{3} + v_b + \frac{v_c}{2} =
+\frac{1}{33} + \frac{25}{77} + \frac{45}{154} =
+\frac{299}{462}\]</span></p>
+<p><span class="math display">\[v_c = \frac{4}{5}\cdot\frac{299}{462} +
+\frac{1}{15} = \frac{1196}{2310} + \frac{154}{2310} = \frac{1350}{2310}
+= \frac{45}{77} \quad \text{成立}\]</span></p>
 <h3 id="scaled-pagerank-最终值">4.5 Scaled PageRank 最终值</h3>
-<p><span class="math display">\[\boxed{v_a = \frac{1}{15}, \quad v_b =
-\frac{7}{9} = \frac{35}{45}, \quad v_c = \frac{7}{45}}\]</span></p>
+<p><span class="math display">\[\boxed{v_a = \frac{1}{11}, \quad v_b =
+\frac{25}{77}, \quad v_c = \frac{45}{77}}\]</span></p>
 <p><strong>十进制</strong>： - <span class="math inline">\(v_a \approx
-0.067\)</span> - <span class="math inline">\(v_b \approx 0.778\)</span>
-- <span class="math inline">\(v_c \approx 0.156\)</span></p>
+0.091\)</span> - <span class="math inline">\(v_b \approx 0.325\)</span>
+- <span class="math inline">\(v_c \approx 0.584\)</span></p>
 <h3 id="对比基本-pagerank">4.6 对比基本 PageRank</h3>
 <table>
 <thead>
@@ -713,31 +848,28 @@ class="math display">\[\frac{v_a}{2} = \frac{3}{90}, \quad v_b =
 <tr>
 <td><span class="math inline">\(a\)</span></td>
 <td>0</td>
-<td><span class="math inline">\(1/15 \approx 0.067\)</span></td>
+<td><span class="math inline">\(1/11 \approx 0.091\)</span></td>
 </tr>
 <tr>
 <td><span class="math inline">\(b\)</span></td>
-<td>1</td>
-<td><span class="math inline">\(7/9 \approx 0.778\)</span></td>
+<td><span class="math inline">\(1/3 \approx 0.333\)</span></td>
+<td><span class="math inline">\(25/77 \approx 0.325\)</span></td>
 </tr>
 <tr>
 <td><span class="math inline">\(c\)</span></td>
-<td>0</td>
-<td><span class="math inline">\(7/45 \approx 0.156\)</span></td>
+<td><span class="math inline">\(2/3 \approx 0.667\)</span></td>
+<td><span class="math inline">\(45/77 \approx 0.584\)</span></td>
 </tr>
 </tbody>
 </table>
 <p><strong>观察与解释</strong>： 1. <strong>Basic PR</strong> 下 <span
-class="math inline">\(b\)</span> 吸收了全部 PR，<span
-class="math inline">\(a\)</span> 和 <span
-class="math inline">\(c\)</span> 被"饿死"为 0 2. <strong>Scaled
-PR</strong> 通过随机跳转机制，让每个节点至少保留 <span
-class="math inline">\(1/15\)</span> 的基础流量 3. <span
-class="math inline">\(b\)</span> 仍然最高（作为"汇"），但不再独占；<span
-class="math inline">\(c\)</span> 由于自环得以保留更多 PR；<span
-class="math inline">\(a\)</span> 由于无入链仍最低 4. <span
-class="math inline">\(\alpha\)</span> 越小，越接近均匀分布（<span
-class="math inline">\(1/n\)</span>）；<span
+class="math inline">\(a\)</span> 因无法从 <span
+class="math inline">\(b,c\)</span> 获得回流而降为 0 2. <strong>Scaled
+PR</strong> 通过随机跳转机制，让 <span class="math inline">\(a\)</span>
+重新获得正的 PageRank 3. <span class="math inline">\(c\)</span>
+仍然最高，因为它接收 <span class="math inline">\(b\)</span> 的全部
+PR，同时保留自己的部分 PR 4. <span class="math inline">\(\alpha\)</span>
+越小，越接近均匀分布（<span class="math inline">\(1/n\)</span>）；<span
 class="math inline">\(\alpha\)</span> 越大，越接近基本 PageRank</p>
 <hr />
 <h2 id="五综合总结">五、综合总结</h2>
@@ -935,13 +1067,13 @@ Crowds, and Markets</em>, 第 14.3 节</p>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/5e589690.html" rel="prev" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
-                  <i class="fa fa-angle-left"></i> COMP5313 Tutorial 05 - Hub and Authority 题解
+                <a href="/posts/8fb0c31c.html" rel="prev" title="每日科技速递 - 2026-04-15">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-04-15
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/c104b4f8.html" rel="next" title="COMP5313 考试 Cheatsheet（六大模块复习）">
-                  COMP5313 考试 Cheatsheet（六大模块复习） <i class="fa fa-angle-right"></i>
+                <a href="/posts/5e589690.html" rel="next" title="COMP5313 Tutorial 05 - Hub and Authority 题解">
+                  COMP5313 Tutorial 05 - Hub and Authority 题解 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -977,14 +1109,14 @@ Crowds, and Markets</em>, 第 14.3 节</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">532k</span>
+    <span title="Word count total">564k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">32:13</span>
+    <span title="Reading time total">34:10</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

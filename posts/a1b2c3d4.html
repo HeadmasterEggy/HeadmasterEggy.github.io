@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5270 Assignment 3 题解，补全 Euclidean LSH 证明中被&quot;猫咪打翻咖啡&quot;损坏的 15 处缺失表达式，含完整证明推导、答案汇总与关键知识点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5270 Assignment 3 题解 — Euclidean LSH 证明修复">
+<meta property="og:url" content="http://example.com/posts/a1b2c3d4.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5270 Assignment 3 题解，补全 Euclidean LSH 证明中被&quot;猫咪打翻咖啡&quot;损坏的 15 处缺失表达式，含完整证明推导、答案汇总与关键知识点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-11T11:22:39.508Z">
+<meta property="article:modified_time" content="2026-05-11T11:22:39.509Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Randomized-Algorithms">
+<meta property="article:tag" content="LSH">
+<meta property="article:tag" content="Locality-Sensitive-Hashing">
+<meta property="article:tag" content="Euclidean-Space">
+<meta property="article:tag" content="Gaussian-Projections">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/a1b2c3d4.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/a1b2c3d4.html","path":"posts/a1b2c3d4.html","title":"COMP5270 Assignment 3 题解 — Euclidean LSH 证明修复"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5270 Assignment 3 题解 — Euclidean LSH 证明修复 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/a1b2c3d4.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5270-assignment-3-%E9%A2%98%E8%A7%A3-euclidean-lsh-%E8%AF%81%E6%98%8E%E4%BF%AE%E5%A4%8D"><span class="nav-text">COMP5270
+Assignment 3 题解 — Euclidean LSH 证明修复</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%9A%E7%90%86%E4%B8%8E%E8%AF%81%E6%98%8E%E5%90%AB-15-%E4%B8%AA%E7%AD%94%E6%A1%88"><span class="nav-text">完整定理与证明（含 15 个答案）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F-1"><span class="nav-text">观察 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F-2"><span class="nav-text">观察 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%AF%E5%88%86%E6%AD%A5%E9%AA%A4"><span class="nav-text">积分步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#f-%E7%9A%84%E5%8D%95%E8%B0%83%E6%80%A7"><span class="nav-text">\(f\) 的单调性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E8%AF%81%E6%98%8E"><span class="nav-text">完成证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E7%AD%94%E6%A1%88%E6%B1%87%E6%80%BB%E8%A1%A8"><span class="nav-text">15 个答案汇总表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">关键知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lsh-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%B9%89"><span class="nav-text">LSH 的核心定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sensitivity-%E5%8F%82%E6%95%B0"><span class="nav-text">Sensitivity 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gaussian-p-stable-lsh-%E5%8E%9F%E7%90%86"><span class="nav-text">Gaussian (p-stable) LSH 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-f-%E5%BF%85%E9%A1%BB%E9%80%92%E5%A2%9E%E7%AC%AC-12-%E7%A9%BA"><span class="nav-text">为什么 \(f\) 必须递增（第 12 空）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1"><span class="nav-text">常见陷阱</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/a1b2c3d4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5270 Assignment 3 题解 — Euclidean LSH 证明修复 | Joey">
+      <meta itemprop="description" content="COMP5270 Assignment 3 题解，补全 Euclidean LSH 证明中被"猫咪打翻咖啡"损坏的 15 处缺失表达式，含完整证明推导、答案汇总与关键知识点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5270 Assignment 3 题解 — Euclidean LSH 证明修复
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-11 11:22:39" itemprop="dateCreated datePublished" datetime="2026-05-11T11:22:39Z">2026-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5270/" itemprop="url" rel="index"><span itemprop="name">COMP5270</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5270 Assignment 3 题解，补全 Euclidean LSH 证明中被"猫咪打翻咖啡"损坏的 15 处缺失表达式，含完整证明推导、答案汇总与关键知识点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5270-assignment-3-题解-euclidean-lsh-证明修复">COMP5270
+Assignment 3 题解 — Euclidean LSH 证明修复</h1>
+<blockquote>
+<p>这是一道关于 Euclidean 空间 Locality-Sensitive Hashing (LSH)
+的完整证明题。故事背景是"猫咪打翻咖啡，损坏了笔记本"，需要补全证明中的
+15 处缺失单词或表达式。No justification is needed。</p>
+</blockquote>
+<hr />
+<h2 id="完整定理与证明含-15-个答案">完整定理与证明（含 15 个答案）</h2>
+<p><strong>Theorem 1.</strong> 考虑哈希族 <span
+class="math inline">\(\mathcal{H}_w = \{h_{g,u} : \mathbb{R}^d \to
+\mathbb{N}\}_{g\in\mathbb{R}^d, u\in(0,1)}\)</span>，其中</p>
+<p><span class="math display">\[h_{g,u}(x) = \left\lfloor \frac{\langle
+x, g \rangle}{w} + u \right\rfloor\]</span></p>
+<p><span class="math inline">\(w &gt; 0\)</span> 是待选参数。从 <span
+class="math inline">\(\mathcal{H}_w\)</span>
+中抽取函数的方式为：独立抽取 <span class="math inline">\(G \sim
+\mathcal{N}(0, I_d)\)</span> 和 <span class="math inline">\(U \sim
+\text{Unif}(0, 1)\)</span>，返回 <span
+class="math inline">\(h_{G,U}\)</span>。</p>
+<p>则对任意 <span class="math inline">\(C &gt; 1\)</span> 和 <span
+class="math inline">\(r &gt; 0\)</span>，设 <span
+class="math inline">\(w = \boxed{2C^2 r}\)</span>，<span
+class="math inline">\(\mathcal{H}_w\)</span> 是一个 <span
+class="math inline">\((r, C, p, q)\)</span>-LSH 族，其 sensitivity
+参数满足 <span class="math inline">\(\rho \leq
+\boxed{1/C}\)</span>，其中</p>
+<p><span class="math display">\[p = f(2C^2), \quad q = f(2C), \quad f(x)
+= x \cdot \sqrt{\frac{2}{\pi}} \int_0^1 e^{-\frac{x^2 t^2}{2}} (1 - t)
+\, dt\]</span></p>
+<p><strong>证明.</strong> 固定 <span class="math inline">\(C &gt;
+1\)</span>，<span class="math inline">\(r &gt; 0\)</span>，<span
+class="math inline">\(w\)</span> 如上。分析 <span
+class="math inline">\(\Pr_{G,U} [h_{G,U}(x) = h_{G,U}(y)]\)</span>，对
+<span class="math inline">\(x, y \in \mathbb{R}^d\)</span>，当 (1) <span
+class="math inline">\(\|x - y\|_2 \leq \boxed{r}\)</span> 和 (2) <span
+class="math inline">\(\|x - y\|_2 \geq C \cdot \boxed{r}\)</span> 时。令
+<span class="math inline">\(\delta := x - y\)</span>。</p>
+<h3 id="观察-1">观察 1</h3>
+<p>若 <span class="math inline">\(|\langle \delta, g \rangle| \geq
+w\)</span>，则 <span class="math inline">\(\boxed{h_{g,u}(x)} \neq
+h_{g,u}(y)\)</span> 对所有 <span class="math inline">\(u \in
+(0,1)\)</span> 成立。</p>
+<p><em>理由：</em> <span class="math inline">\(|(\langle x,g\rangle/w +
+u) - (\langle y,g\rangle/w + u)| = |\langle\delta,g\rangle|/w \geq
+1\)</span>，故取整后不等。</p>
+<h3 id="观察-2">观察 2</h3>
+<p>若 <span class="math inline">\(|\langle \delta, g \rangle| &lt;
+w\)</span>，则 <span class="math inline">\(\Pr_{U} [h_{g,U}(x) \neq
+h_{g,U}(y)] = \boxed{|\langle \delta, g \rangle| / w}\)</span>。</p>
+<p><em>理由：</em> 令 <span class="math inline">\(a = \langle
+x,g\rangle/w \leq \langle y,g\rangle/w = b\)</span>，<span
+class="math inline">\(k \leq b &lt; k+1\)</span>。由于 <span
+class="math inline">\(b-a &lt; 1\)</span>，只有两种情况：</p>
+<p><strong>Case 1:</strong> <span class="math inline">\(k \leq a \leq b
+&lt; k+1\)</span></p>
+<p><span class="math display">\[\Pr[h_{g,U}(x) \neq h_{g,U}(y)] =
+\Pr[a+U &lt; k+1, b+U \geq k+1] = \Pr[k+1-b \leq U &lt; k+1-a] =
+\boxed{b - a}\]</span></p>
+<p><strong>Case 2:</strong> <span class="math inline">\(a &lt; k &lt; b
+&lt; k+1\)</span>。<span class="math inline">\(\lfloor a+U\rfloor &lt;
+\lfloor b+U\rfloor\)</span> 当且仅当 <span class="math inline">\(U &lt;
+k-a\)</span> 或</p>
+<p><span class="math display">\[U \geq \max(k+1-b, k-a) =
+\boxed{k+1-b}\]</span></p>
+<p>（因 <span class="math inline">\(k+1-b = k-a+1-(b-a) \geq
+k-a\)</span>）。于是</p>
+<p><span class="math display">\[\Pr = (k-a) + (1-(k+1-b)) = b -
+a\]</span></p>
+<p>结论得证，因为 <span class="math inline">\(b-a =
+\langle\delta,g\rangle/w\)</span>。</p>
+<h3 id="积分步骤">积分步骤</h3>
+<p>调用熟知事实：<span class="math inline">\(G \sim \mathcal{N}(0,
+I_d)\)</span>，则 <span class="math inline">\(\langle \delta, G \rangle
+\sim \mathcal{N}(0, \sigma^2)\)</span>，方差 <span
+class="math inline">\(\sigma^2 = \boxed{\|\delta\|^2}\)</span>。令 <span
+class="math inline">\(z := \langle\delta,g\rangle\)</span>，积分得：</p>
+<p><span class="math display">\[\Pr_{G,U}[h_{G,U}(x) = h_{G,U}(y)] =
+\frac{1}{\sqrt{2\pi\sigma^2}} \int_{-\boxed{w}}^{\boxed{w}}
+e^{-\frac{z^2}{2\sigma^2}} \left(1 - \boxed{\frac{|z|}{w}}\right)
+dz\]</span></p>
+<p><span class="math display">\[= \frac{1}{\sigma} \sqrt{\frac{2}{\pi}}
+\int_0^w e^{-\frac{(z/\sigma)^2}{2}} \left(1 - \frac{z}{w}\right) dz =
+\frac{w}{\sigma} \sqrt{\frac{2}{\pi}} \int_0^1 e^{-\frac{(w/\sigma)^2
+t^2}{2}} (1 - t) \, dt\]</span></p>
+<h3 id="f-的单调性"><span class="math inline">\(f\)</span> 的单调性</h3>
+<p><span class="math inline">\(f(x) = x \sqrt{\frac{2}{\pi}} \int_0^1
+e^{-\frac{x^2 t^2}{2}} (1-t) dt\)</span>。</p>
+<p>数值验证 <span class="math inline">\(f\)</span> 在 <span
+class="math inline">\(x &gt; 0\)</span> 上的单调性：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(x\)</span></th>
+<th><span class="math inline">\(f(x)\)</span></th>
+<th>趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>0.040</td>
+<td></td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>0.195</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>0.369</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>0.610</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>5.0</td>
+<td>0.840</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>10.0</td>
+<td>0.920</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>50.0</td>
+<td>0.984</td>
+<td>↑</td>
+</tr>
+<tr>
+<td>100.0</td>
+<td>0.992</td>
+<td>↑</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(f\)</span> 在 <span
+class="math inline">\(x &gt; 0\)</span> 上单调 <span
+class="math inline">\(\boxed{\text{inc}}\)</span>reasing（<strong>递增</strong>，从
+<span class="math inline">\(0\)</span> 增到 <span
+class="math inline">\(1\)</span>）。</p>
+<blockquote>
+<p>⚠️ 此空容易写成 "dec"（decreasing）。但从数值验证可见 <span
+class="math inline">\(f\)</span>
+递增，且<strong>必须递增</strong>才能使后续不等式方向正确（见下文）。</p>
+</blockquote>
+<h3 id="完成证明">完成证明</h3>
+<p>令 <span class="math inline">\(p = f(2C^2)\)</span>，<span
+class="math inline">\(q = f(2C)\)</span>，回顾 <span
+class="math inline">\(w = 2C^2 r\)</span>：</p>
+<ul>
+<li><p>若 <span class="math inline">\(\sigma = \|x-y\|_2 \leq
+r\)</span>（近点）：<span class="math inline">\(w/\sigma \geq
+w/r\)</span>，<span class="math inline">\(f\)</span>
+<strong>递增</strong> <span class="math inline">\(\implies\)</span></p>
+<p><span class="math display">\[\Pr[h_{G,U}(x) = h_{G,U}(y)] =
+f(w/\sigma) \;\boxed{\geq}\; f(w/r) = p\]</span></p></li>
+<li><p>若 <span class="math inline">\(\sigma = \|x-y\|_2 \geq C \cdot
+r\)</span>（远点）：<span class="math inline">\(w/\sigma \leq
+w/(Cr)\)</span>，<span class="math inline">\(f\)</span>
+<strong>递增</strong> <span class="math inline">\(\implies\)</span></p>
+<p><span class="math display">\[\Pr[h_{G,U}(x) = h_{G,U}(y)] =
+f(w/\sigma) \;\boxed{\leq}\; f(w/(Cr)) = q\]</span></p></li>
+</ul>
+<p>因此 <span class="math inline">\(\mathcal{H}_w\)</span> 是 <span
+class="math inline">\((r, C, p, q)\)</span>-LSH 族，其 <span
+class="math inline">\(\boxed{\text{sensitivity}}\)</span> 参数为</p>
+<p><span class="math display">\[\rho = \frac{\log
+\frac{1}{f(2C^2)}}{\log \frac{1}{f(2C)}}\]</span></p>
+<p>最后只需证明 <span class="math inline">\(\rho \leq
+1/C\)</span>——可通过 Taylor 展开验证：<span class="math inline">\(C \to
+\infty\)</span> 时 <span class="math inline">\(\rho = \frac{1}{C} +
+O\left(\frac{1}{C^2}\right)\)</span>。证毕。</p>
+<hr />
+<h2 id="个答案汇总表">15 个答案汇总表</h2>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 25%" />
+<col style="width: 19%" />
+<col style="width: 25%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>上下文</th>
+<th>答案</th>
+<th>所在页</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>$w = $</td>
+<td><span class="math inline">\(2C^2 r\)</span></td>
+<td>P1</td>
+<td>Gaussian LSH 的 standard bandwidth 设置</td>
+</tr>
+<tr>
+<td>2</td>
+<td>$$</td>
+<td><span class="math inline">\(1/C\)</span></td>
+<td>P1</td>
+<td>sensitivity 参数的目标上界</td>
+</tr>
+<tr>
+<td>3</td>
+<td>$|x-y|_2 $</td>
+<td><span class="math inline">\(r\)</span></td>
+<td>P1</td>
+<td>近点距离阈值</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="math inline">\(\|x-y\|_2 \geq C \cdot\)</span></td>
+<td><span class="math inline">\(r\)</span></td>
+<td>P1</td>
+<td>远点距离阈值，放大了 <span class="math inline">\(C\)</span> 倍</td>
+</tr>
+<tr>
+<td>5</td>
+<td>then <span class="math inline">\(\_\_ \neq h_{g,u}(y)\)</span></td>
+<td><span class="math inline">\(h_{g,u}(x)\)</span></td>
+<td>P1</td>
+<td>观察 1：投影差 <span class="math inline">\(\geq w\)</span>
+时二者恒不等</td>
+</tr>
+<tr>
+<td>6</td>
+<td>$= $</td>
+<td><span
+class="math inline">\(\|\langle\delta,g\rangle\|/w\)</span></td>
+<td>P1</td>
+<td>观察 2：冲突概率</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Case 1: <span class="math inline">\(=\)</span></td>
+<td><span class="math inline">\(b-a\)</span></td>
+<td>P2</td>
+<td><span class="math inline">\(\Pr[k+1-b \leq U &lt; k+1-a] =
+b-a\)</span></td>
+</tr>
+<tr>
+<td>8</td>
+<td><span class="math inline">\(\max(k+1-b, k-a)=\)</span></td>
+<td><span class="math inline">\(k+1-b\)</span></td>
+<td>P2</td>
+<td>因 <span class="math inline">\(b-a&lt;1\)</span>，<span
+class="math inline">\(k+1-b \geq k-a\)</span></td>
+</tr>
+<tr>
+<td>9</td>
+<td>方差</td>
+<td><span class="math inline">\(\|\delta\|^2\)</span></td>
+<td>P2</td>
+<td><span class="math inline">\(\langle\delta,G\rangle \sim
+\mathcal{N}(0,\|\delta\|^2)\)</span></td>
+</tr>
+<tr>
+<td>10</td>
+<td><span class="math inline">\(\int_{-\_\_}^{\_\_}\)</span> 上限</td>
+<td><span class="math inline">\(w\)</span></td>
+<td>P2</td>
+<td>被积函数积分上限</td>
+</tr>
+<tr>
+<td>11</td>
+<td><span class="math inline">\(1 - \_\_\)</span></td>
+<td><span class="math inline">\(\|z\|/w\)</span></td>
+<td>P2</td>
+<td>被积函数中的减项</td>
+</tr>
+<tr>
+<td>12</td>
+<td>monotonically <span class="math inline">\(\_\_\)</span>reasing</td>
+<td><strong>inc</strong></td>
+<td>P2</td>
+<td><span class="math inline">\(f\)</span> 递增（0→1），非递减</td>
+</tr>
+<tr>
+<td>13</td>
+<td><span class="math inline">\(f(w/\sigma)\)</span> <span
+class="math inline">\(\_\_\)</span> <span
+class="math inline">\(f(w/r)\)</span></td>
+<td><span class="math inline">\(\geq\)</span></td>
+<td>P2</td>
+<td>近点：<span class="math inline">\(w/\sigma \geq w/r\)</span>，<span
+class="math inline">\(f\)</span>↑</td>
+</tr>
+<tr>
+<td>14</td>
+<td><span class="math inline">\(f(w/\sigma)\)</span> <span
+class="math inline">\(\_\_\)</span> <span
+class="math inline">\(f(w/(Cr))\)</span></td>
+<td><span class="math inline">\(\leq\)</span></td>
+<td>P3</td>
+<td>远点：<span class="math inline">\(w/\sigma \leq
+w/(Cr)\)</span>，<span class="math inline">\(f\)</span>↑</td>
+</tr>
+<tr>
+<td>15</td>
+<td>with <span class="math inline">\(\_\_\)</span> parameter</td>
+<td><strong>sensitivity</strong></td>
+<td>P3</td>
+<td><span class="math inline">\(\rho\)</span> 的标准名称</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="关键知识点">关键知识点</h2>
+<h3 id="lsh-的核心定义">LSH 的核心定义</h3>
+<p><span class="math inline">\((r, C, p, q)\)</span>-LSH 族需要满足： -
+若 <span class="math inline">\(\|x-y\| \leq r\)</span>，则 <span
+class="math inline">\(\Pr[h(x)=h(y)] \geq p\)</span>（近点高概率碰撞） -
+若 <span class="math inline">\(\|x-y\| \geq Cr\)</span>，则 <span
+class="math inline">\(\Pr[h(x)=h(y)] \leq q\)</span>（远点低概率碰撞） -
+并且 <span class="math inline">\(p &gt;
+q\)</span>，保证可以区分远近点</p>
+<h3 id="sensitivity-参数">Sensitivity 参数</h3>
+<p><span class="math display">\[\rho =
+\frac{\log(1/p)}{\log(1/q)}\]</span></p>
+<p>是衡量 LSH 族查询效率的核心指标。<span
+class="math inline">\(\rho\)</span> 越小，查询效率越高。对 Euclidean
+LSH，目标 <span class="math inline">\(\rho \leq 1/C\)</span>。</p>
+<h3 id="gaussian-p-stable-lsh-原理">Gaussian (p-stable) LSH 原理</h3>
+<ol type="1">
+<li><strong>p-stable 分布性质</strong>：高斯分布是 2-stable，即 <span
+class="math inline">\(\langle x, G \rangle - \langle y, G \rangle =
+\langle x-y, G \rangle \sim \mathcal{N}(0, \|x-y\|^2)\)</span></li>
+<li><strong>哈希构造</strong>：<span class="math inline">\(h_{g,u}(x) =
+\lfloor \langle x,g\rangle/w + u \rfloor\)</span>，其中 <span
+class="math inline">\(g\)</span> 是高斯向量，<span
+class="math inline">\(u\)</span> 是随机偏移</li>
+<li><strong><span class="math inline">\(w\)</span>
+的选择</strong>：<span class="math inline">\(w = 2C^2 r\)</span> 使
+<span class="math inline">\(p = f(2C^2)\)</span>、<span
+class="math inline">\(q = f(2C)\)</span> 独立于 <span
+class="math inline">\(r\)</span></li>
+</ol>
+<h3 id="为什么-f-必须递增第-12-空">为什么 <span
+class="math inline">\(f\)</span> 必须递增（第 12 空）</h3>
+<p><span class="math display">\[\sigma \leq r \implies w/\sigma \geq w/r
+\xrightarrow{f \uparrow} f(w/\sigma) \geq f(w/r) = p\]</span> <span
+class="math display">\[\sigma \geq Cr \implies w/\sigma \leq w/(Cr)
+\xrightarrow{f \uparrow} f(w/\sigma) \leq f(w/(Cr)) = q\]</span></p>
+<p>如果 <span class="math inline">\(f\)</span>
+是递减的，则两条不等号方向全部反转，与 LSH 定义矛盾。数值验证也确认
+<span class="math inline">\(f(0)=0\)</span>，<span
+class="math inline">\(f(\infty)=1\)</span>，单调递增。</p>
+<h3 id="常见陷阱">常见陷阱</h3>
+<ul>
+<li><strong>"dec" vs "inc"</strong>：第 12 空 "monotonically ___reasing"
+看起来很暧昧，但从数学自洽性可确定必须是 "inc"（increasing）</li>
+<li><strong>积分上下限</strong>：利用 <span
+class="math inline">\(\int_{-w}^{w} = 2\int_0^{w}\)</span>
+的对称性，积分变量替换 <span class="math inline">\(t = z/w\)</span> 得到
+<span class="math inline">\(f(w/\sigma)\)</span></li>
+<li><strong>冲突 vs 不冲突</strong>：观察 2 给出的是 <span
+class="math inline">\(\Pr[\text{不等}]\)</span>，最终需要的是 <span
+class="math inline">\(\Pr[\text{相等}] = 1 - \cdots\)</span>
+的简化形式</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Randomized-Algorithms/" rel="tag"><i class="fa fa-tag"></i> Randomized-Algorithms</a>
+              <a href="/tags/LSH/" rel="tag"><i class="fa fa-tag"></i> LSH</a>
+              <a href="/tags/Locality-Sensitive-Hashing/" rel="tag"><i class="fa fa-tag"></i> Locality-Sensitive-Hashing</a>
+              <a href="/tags/Euclidean-Space/" rel="tag"><i class="fa fa-tag"></i> Euclidean-Space</a>
+              <a href="/tags/Gaussian-Projections/" rel="tag"><i class="fa fa-tag"></i> Gaussian-Projections</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2669b578.html" rel="prev" title="INFO5995-A2-Task5-修复建议与缓解措施模板">
+                  <i class="fa fa-angle-left"></i> INFO5995-A2-Task5-修复建议与缓解措施模板
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/daily-2026-05-14.html" rel="next" title="每日科技速递 - 2026-05-14">
+                  每日科技速递 - 2026-05-14 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

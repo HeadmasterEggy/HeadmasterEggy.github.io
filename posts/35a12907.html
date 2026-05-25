@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 07 讲课总结，整理图机器学习任务、图数据难点、node classification、neighbourhood aggregation、GCN、GraphSAGE、GIN 与 graph embedding 的考点重点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结">
+<meta property="og:url" content="http://example.com/posts/35a12907.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 07 讲课总结，整理图机器学习任务、图数据难点、node classification、neighbourhood aggregation、GCN、GraphSAGE、GIN 与 graph embedding 的考点重点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-25T11:13:54.656Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Graph Machine Learning">
+<meta property="article:tag" content="GNN">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/35a12907.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/35a12907.html","path":"posts/35a12907.html","title":"COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/35a12907.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">112</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">193</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5313-week-07-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93graph-machine-learning-%E4%B8%8E-gnn"><span class="nav-text">COMP5313
+Week 07 讲课总结：Graph Machine Learning 与 GNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%AE%B2%E4%B8%BB%E9%A2%98"><span class="nav-text">1. 本讲主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%85%B8%E5%9E%8B%E4%BB%BB%E5%8A%A1"><span class="nav-text">2. 图机器学习的典型任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#node-classification"><span class="nav-text">Node Classification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#link-prediction"><span class="nav-text">Link Prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#community-detection"><span class="nav-text">Community Detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#graph-similarity"><span class="nav-text">Graph Similarity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#graph-classification"><span class="nav-text">Graph Classification</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%A4%84%E7%90%86%E5%9B%BE%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-text">3. 传统机器学习处理图的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E6%95%B0%E6%8D%AE%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9A%BE%E5%A4%84%E7%90%86"><span class="nav-text">4. 图数据为什么难处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-classification-%E7%9A%84%E8%BE%93%E5%85%A5%E8%AE%BE%E5%AE%9A"><span class="nav-text">5. Node Classification
+的输入设定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA-naive-approaches"><span class="nav-text">6. 两个 naive approaches</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1%E5%BF%BD%E7%95%A5%E5%9B%BE%E7%BB%93%E6%9E%84"><span class="nav-text">方法 1：忽略图结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-2%E6%8A%8A%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E5%92%8C%E7%89%B9%E5%BE%81%E6%8B%BC%E8%B5%B7%E6%9D%A5"><span class="nav-text">方法
+2：把邻接矩阵和特征拼起来</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gnn-%E7%9A%84%E6%A0%B8%E5%BF%83neighbourhood-aggregation"><span class="nav-text">7. GNN
+的核心：Neighbourhood Aggregation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcngraph-convolutional-network"><span class="nav-text">8. GCN：Graph Convolutional
+Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gcn-%E4%B8%BA%E4%BB%80%E4%B9%88-scalable"><span class="nav-text">GCN 为什么 scalable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graphsage"><span class="nav-text">9. GraphSAGE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gingraph-isomorphism-network"><span class="nav-text">10. GIN：Graph Isomorphism
+Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graph-embedding-%E4%B8%8E-graph-classification"><span class="nav-text">11. Graph Embedding 与
+Graph Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">12. 考点重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">193</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/35a12907.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 07 讲课总结，整理图机器学习任务、图数据难点、node classification、neighbourhood aggregation、GCN、GraphSAGE、GIN 与 graph embedding 的考点重点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 07 Graph Machine Learning 与 GNN 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-05-25 11:13:54" itemprop="dateModified" datetime="2026-05-25T11:13:54Z">2026-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 07 讲课总结，整理图机器学习任务、图数据难点、node classification、neighbourhood aggregation、GCN、GraphSAGE、GIN 与 graph embedding 的考点重点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5313-week-07-讲课总结graph-machine-learning-与-gnn">COMP5313
+Week 07 讲课总结：Graph Machine Learning 与 GNN</h1>
+<blockquote>
+<p>本讲前半段机器学习 / 深度学习背景，老师明确说是 optional、not in
+assessment。下面只整理图机器学习和 GNN 的可考重点。</p>
+</blockquote>
+<h2 id="本讲主题">1. 本讲主题</h2>
+<p>从 Week 07 开始进入 <strong>machine learning on
+graphs</strong>。核心思想是：</p>
+<ul>
+<li>图结构本身是离散的，不方便直接喂给普通机器学习模型。</li>
+<li>需要把节点、边、子图或整张图映射到连续向量空间。</li>
+<li>如果把节点映射成向量，就是 <strong>node embedding</strong>。</li>
+<li>好的 embedding 应该保留图结构：原图中接近或相似的节点，在 embedding
+space 中也应该接近。</li>
+</ul>
+<p>老师用 karate club 图说明：社区结构在图上明显，在二维 embedding
+中也能形成相近的 cluster。</p>
+<h2 id="图机器学习的典型任务">2. 图机器学习的典型任务</h2>
+<p>老师按预测对象层级讲了几类任务。</p>
+<h3 id="node-classification">Node Classification</h3>
+<p>预测单个节点的类别。</p>
+<p>例子：citation network
+中，每个节点是一篇论文，边是引用关系；任务是预测论文主题，比如
+CS、physics 等。</p>
+<h3 id="link-prediction">Link Prediction</h3>
+<p>预测两个节点之间是否应该存在边，或未来是否会形成边。</p>
+<p>老师提到这和之前 link formation 的 common-neighbour heuristic
+有联系，但这里用机器学习方法。更典型的应用是 <strong>knowledge graph
+completion</strong>：预测两个实体之间是否存在某种关系。</p>
+<h3 id="community-detection">Community Detection</h3>
+<p>把图中的节点分成社区。老师说这通常是 unsupervised learning，因为没有
+ground-truth label。</p>
+<h3 id="graph-similarity">Graph Similarity</h3>
+<p>衡量两张图有多相似。可以先得到图之间的 similarity matrix，再用传统
+clustering 方法。</p>
+<h3 id="graph-classification">Graph Classification</h3>
+<p>预测整张图的类别。</p>
+<p>例子：分子可以建模为图，任务是预测某个 molecule 是否 toxic。</p>
+<h2 id="传统机器学习处理图的流程">3. 传统机器学习处理图的流程</h2>
+<p>传统流程需要 <strong>feature engineering</strong>：</p>
+<ol type="1">
+<li>从原始图手工构造 feature matrix。</li>
+<li>每一行表示一个节点。</li>
+<li>每一列表示一个 feature。</li>
+<li>feature 可以是 PageRank、degree、clustering coefficient 等。</li>
+<li>得到 feature matrix 后，用普通 ML 模型做分类或回归。</li>
+</ol>
+<p>问题是：一旦构造完 feature
+matrix，图结构本身通常就被丢掉了。模型只看节点特征，不再直接看边。</p>
+<h2 id="图数据为什么难处理">4. 图数据为什么难处理</h2>
+<p>老师强调 graph data 和 image / sequence data 不一样：</p>
+<ul>
+<li>不同图可以有不同数量的节点。</li>
+<li>同一张图中，不同节点的 degree 不同。</li>
+<li>图没有固定 node ordering。</li>
+<li>图没有固定 reference point。</li>
+<li>CNN / RNN 不能直接套到一般图上。</li>
+</ul>
+<p>所以需要专门的 graph neural network。</p>
+<h2 id="node-classification-的输入设定">5. Node Classification
+的输入设定</h2>
+<p>对节点分类任务，输入通常包括：</p>
+<ul>
+<li>图 <span class="math inline">\(G=(V,E)\)</span>。</li>
+<li>邻接矩阵 <span class="math inline">\(A\)</span>。</li>
+<li>节点特征矩阵 <span class="math inline">\(X \in \mathbb{R}^{n \times
+q}\)</span>。</li>
+<li>一部分节点有 ground-truth labels，构成 training set。</li>
+<li>其他节点 label 未知，需要预测。</li>
+<li>如果有 <span class="math inline">\(C\)</span> 个类别，label 通常用
+one-hot encoding 表示。</li>
+</ul>
+<p>这里 <span class="math inline">\(n\)</span> 是节点数，<span
+class="math inline">\(q\)</span> 是每个节点的初始 feature
+dimension。</p>
+<h2 id="两个-naive-approaches">6. 两个 naive approaches</h2>
+<h3 id="方法-1忽略图结构">方法 1：忽略图结构</h3>
+<p>只使用节点特征 <span class="math inline">\(X\)</span>，直接套普通 ML
+模型。</p>
+<p>老师说：如果节点特征本身信息很强，这个方法可能也能表现不错。例如论文文本内容已经足够判断主题。但一般来说，加入
+graph structure 会更好。</p>
+<h3 id="方法-2把邻接矩阵和特征拼起来">方法
+2：把邻接矩阵和特征拼起来</h3>
+<p>把 adjacency matrix <span class="math inline">\(A\)</span> 和 feature
+matrix <span class="math inline">\(X\)</span>
+concatenate，作为模型输入。</p>
+<p>问题：</p>
+<ul>
+<li>输入层大小至少和节点数 <span class="math inline">\(n\)</span>
+相关。</li>
+<li>大图中 <span class="math inline">\(n\)</span>
+可以是百万级，无法扩展。</li>
+<li>模型不容易泛化到不同大小的图。</li>
+</ul>
+<h2 id="gnn-的核心neighbourhood-aggregation">7. GNN
+的核心：Neighbourhood Aggregation</h2>
+<p>GNN 的核心思想是：预测节点 <span class="math inline">\(u\)</span>
+时，不只用 <span class="math inline">\(u\)</span> 自己的
+feature，还用邻居甚至 <span class="math inline">\(K\)</span>-hop
+邻居的信息。</p>
+<p>直觉：</p>
+<ul>
+<li>1 层 GNN 使用 1-hop neighbours。</li>
+<li>2 层 GNN 使用 2-hop neighbours。</li>
+<li><span class="math inline">\(K\)</span> 层 GNN 使用 <span
+class="math inline">\(K\)</span>-hop neighbourhood。</li>
+</ul>
+<p>计算图可以看成从目标节点出发的 BFS tree。</p>
+<p>每一层大致做两件事：</p>
+<ol type="1">
+<li><strong>Aggregate</strong>：聚合邻居上一层的 representation。</li>
+<li><strong>Combine</strong>：把聚合来的 message 和节点自己的上一层
+representation 结合。</li>
+</ol>
+<h2 id="gcngraph-convolutional-network">8. GCN：Graph Convolutional
+Network</h2>
+<p>GCN 是老师讲的第一个基本 GNN。</p>
+<p>核心流程：</p>
+<ul>
+<li>第 0 层表示就是输入特征： [ h_u^{(0)}=x_u ]</li>
+<li>第 <span class="math inline">\(k\)</span> 层中，节点 <span
+class="math inline">\(u\)</span>
+的表示来自邻居和自身上一层表示的加权聚合。</li>
+<li>通常给每个节点加
+self-loop，这样节点自己的上一层表示也参与更新。</li>
+<li>聚合后做 linear transformation，再做 nonlinear activation。</li>
+</ul>
+<p>标准矩阵形式可以写成：</p>
+<p>[ H^{(k)}=(D^{-1/2}AD<sup>{-1/2}H</sup>{(k-1)}W^{(k)}) ]</p>
+<p>其中 <span class="math inline">\(\tilde A=A+I\)</span>，表示加
+self-loop 后的邻接矩阵。</p>
+<h3 id="gcn-为什么-scalable">GCN 为什么 scalable</h3>
+<p>老师重点解释了它为什么比 naive concatenate 方法好：</p>
+<ul>
+<li>同一层所有节点共享同一个 weight matrix <span
+class="math inline">\(W^{(k)}\)</span>。</li>
+<li>参数数量不依赖节点总数 <span class="math inline">\(n\)</span>。</li>
+<li>每层基本是在边上传播一次，复杂度约为 <span
+class="math inline">\(O(|E|)\)</span>。</li>
+<li>可以泛化到 unseen nodes：新节点加入后，只要构造它的 computation
+graph，就能用已有参数预测。</li>
+</ul>
+<h2 id="graphsage">9. GraphSAGE</h2>
+<p>GraphSAGE 是另一个 GNN 架构。区别主要在 aggregation 和 combine
+的设计。</p>
+<p>老师讲了几种 aggregator：</p>
+<ul>
+<li>mean aggregator：直接取邻居表示平均。</li>
+<li>transform 后再 aggregate：先对邻居表示做变换，再 mean / max。</li>
+<li>LSTM aggregator：随机打乱邻居顺序后用 LSTM 聚合。</li>
+</ul>
+<p>GraphSAGE 的 combine 通常是把节点自己的表示和邻居 message
+<strong>concatenate</strong> 起来。</p>
+<h2 id="gingraph-isomorphism-network">10. GIN：Graph Isomorphism
+Network</h2>
+<p>GIN 的 aggregation 用 <strong>sum</strong>。</p>
+<p>老师强调：sum 比 mean / max 更 expressive。</p>
+<p>直觉：</p>
+<ul>
+<li>mean 可能无法区分“一个红 + 一个蓝”和“两个红 + 两个蓝”这类
+multiset。</li>
+<li>max 只看最大值，也会丢掉数量信息。</li>
+<li>sum 能保留更多 multiset 信息，所以表达能力更强。</li>
+</ul>
+<p>GIN combine 后会接一个 MLP，老师提到即使把 <span
+class="math inline">\(\epsilon\)</span> 设为 0，表现也可以很好。</p>
+<h2 id="graph-embedding-与-graph-classification">11. Graph Embedding 与
+Graph Classification</h2>
+<p>前面主要是 node embedding：每个节点一个向量。</p>
+<p>有些任务需要整张图一个向量，也就是 <strong>graph
+embedding</strong>。</p>
+<p>常见做法很简单：</p>
+<ol type="1">
+<li>先计算每个节点的 embedding。</li>
+<li>对所有节点 embedding 做 sum 或 mean。</li>
+<li>得到整张图的 representation。</li>
+<li>再用普通 ML 模型做 graph classification。</li>
+</ol>
+<p>例子：分子图分类，预测 molecule 是否 toxic。</p>
+<h2 id="考点重点">12. 考点重点</h2>
+<ul>
+<li>知道 graph ML 的目标：把图中的节点 / 边 / 子图 /
+整图映射到连续向量空间。</li>
+<li>会区分 node classification、link prediction、community
+detection、graph similarity、graph classification。</li>
+<li>知道传统 graph ML 依赖 feature engineering。</li>
+<li>知道图数据难点：无固定大小、无固定 ordering、degree 不同。</li>
+<li>知道 naive approaches 的问题：忽略图结构；或输入维度依赖 <span
+class="math inline">\(n\)</span>，无法扩展。</li>
+<li>理解 neighbourhood aggregation：<span
+class="math inline">\(K\)</span> 层 GNN 看 <span
+class="math inline">\(K\)</span>-hop neighbours。</li>
+<li>知道 GCN 加 self-loop，并通过邻居聚合更新表示。</li>
+<li>知道 GNN 参数共享：参数数量不依赖节点数，训练大图才可行。</li>
+<li>知道 GraphSAGE 的 aggregate/combine 思路。</li>
+<li>知道 GIN 使用 sum aggregator，sum 比 mean/max 更 expressive。</li>
+<li>知道 graph embedding 通常可以由 node embeddings 做 sum/mean
+得到。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Graph-Machine-Learning/" rel="tag"><i class="fa fa-tag"></i> Graph Machine Learning</a>
+              <a href="/tags/GNN/" rel="tag"><i class="fa fa-tag"></i> GNN</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/ed58b4a7.html" rel="prev" title="COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结">
+                  <i class="fa fa-angle-left"></i> COMP5313 Week 08 Label Propagation 与 Feature Propagation 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/660d419.html" rel="next" title="COMP5313 Week 06 PageRank 讲课总结">
+                  COMP5313 Week 06 PageRank 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">564k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">34:10</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
