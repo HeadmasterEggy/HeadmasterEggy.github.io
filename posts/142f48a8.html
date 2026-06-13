@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="探讨信息级联（羊群效应）的形成机制——人们如何在序贯决策中理性地放弃自身私有信息、转而模仿前人的选择，并用贝叶斯法则建立数学模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chapter 16: Information Cascades（信息级联）">
+<meta property="og:url" content="http://example.com/posts/142f48a8.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="探讨信息级联（羊群效应）的形成机制——人们如何在序贯决策中理性地放弃自身私有信息、转而模仿前人的选择，并用贝叶斯法则建立数学模型">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-02T14:23:10.707Z">
+<meta property="article:modified_time" content="2026-06-02T14:23:10.709Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/142f48a8.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/142f48a8.html","path":"posts/142f48a8.html","title":"Chapter 16: Information Cascades（信息级联）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Chapter 16: Information Cascades（信息级联） | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/142f48a8.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-16-information-cascades%E4%BF%A1%E6%81%AF%E7%BA%A7%E8%81%94"><span class="nav-text">Chapter 16: Information
+Cascades（信息级联）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%A7%88"><span class="nav-text">本章概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B7%9F%E9%9A%8F%E4%BA%BA%E7%BE%A4%E4%BF%A1%E6%81%AF%E7%BA%A7%E8%81%94%E7%9A%84%E7%9B%B4%E8%A7%89section-16.1-following-the-crowd"><span class="nav-text">一、跟随人群：信息级联的直觉（Section
+16.1: Following the Crowd）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A4%90%E5%8E%85%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">1.1 餐厅的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%BA%A7%E8%81%94%E5%8F%91%E7%94%9F%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-text">1.2 信息级联发生的条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#milgram-%E7%9A%84%E6%8A%AC%E5%A4%B4%E7%9C%8B%E5%A4%A9%E5%AE%9E%E9%AA%8C"><span class="nav-text">1.3 Milgram 的&quot;抬头看天&quot;实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%95%88%E5%BA%94-vs-%E7%9B%B4%E6%8E%A5%E6%94%B6%E7%9B%8A%E6%95%88%E5%BA%94"><span class="nav-text">1.4 信息效应 vs 直接收益效应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%BE%8A%E7%BE%A4%E5%AE%9E%E9%AA%8Csection-16.2-a-simple-herding-experiment"><span class="nav-text">二、一个简单的羊群实验（Section
+16.2: A Simple Herding Experiment）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-text">2.1 实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%90%E4%BD%8D%E5%AD%A6%E7%94%9F%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">2.2 逐位学生的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%8F%AD%E7%A4%BA%E7%9A%84%E4%B8%89%E6%9D%A1%E4%B8%80%E8%88%AC%E5%8E%9F%E5%88%99"><span class="nav-text">2.3 实验揭示的三条一般原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E5%88%99%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E4%B8%8B%E7%9A%84%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8Bsection-16.3-bayes-rule"><span class="nav-text">三、贝叶斯法则：不确定性下的决策模型（Section
+16.3: Bayes&#39; Rule）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F"><span class="nav-text">3.1 条件概率与贝叶斯公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E4%B8%80%E7%9B%AE%E5%87%BB%E8%80%85%E8%AF%81%E8%AF%8Deyewitness-testimony"><span class="nav-text">3.2
+例一：目击者证词（Eyewitness Testimony）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E4%BA%8C%E5%9E%83%E5%9C%BE%E9%82%AE%E4%BB%B6%E8%BF%87%E6%BB%A4spam-filtering"><span class="nav-text">3.3 例二：垃圾邮件过滤（Spam
+Filtering）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E5%88%99%E5%9C%A8%E7%BD%90%E5%AD%90%E5%AE%9E%E9%AA%8C%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8section-16.4"><span class="nav-text">四、贝叶斯法则在罐子实验中的应用（Section
+16.4）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%BD%8D%E5%AD%A6%E7%94%9F%E6%8A%BD%E5%88%B0%E8%93%9D"><span class="nav-text">4.1 第一位学生抽到蓝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E4%BD%8D%E5%AD%A6%E7%94%9F%E7%BA%A7%E8%81%94%E5%BD%A2%E6%88%90"><span class="nav-text">4.2 第三位学生：级联形成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E9%80%9A%E7%94%A8%E7%9A%84%E7%BA%A7%E8%81%94%E6%A8%A1%E5%9E%8Bsection-16.5-a-simple-general-cascade-model"><span class="nav-text">五、一个简单通用的级联模型（Section
+16.5: A Simple, General Cascade Model）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%89%E4%B8%AA%E8%A6%81%E7%B4%A0"><span class="nav-text">5.1 模型的三个要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8D%95%E4%B8%AA%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%86%B3%E7%AD%96"><span class="nav-text">5.2 基于单个信号的决策</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%A4%9A%E4%B8%AA%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%86%B3%E7%AD%96%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8"><span class="nav-text">5.3
+基于多个信号的决策：多数投票</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%BA%8F%E8%B4%AF%E5%86%B3%E7%AD%96%E4%B8%8E%E7%BA%A7%E8%81%94section-16.6-sequential-decision-making-and-cascades"><span class="nav-text">六、序贯决策与级联（Section
+16.6: Sequential Decision-Making and Cascades）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%87%A0%E4%B8%AA%E4%BA%BA%E7%9A%84%E6%8E%A8%E7%90%86"><span class="nav-text">6.1 前几个人的推理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A7%E8%81%94%E7%9A%84%E4%B8%80%E8%88%AC%E6%9D%A1%E4%BB%B6"><span class="nav-text">6.2 级联的一般条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A7%E8%81%94%E5%87%A0%E4%B9%8E%E5%BF%85%E7%84%B6%E5%8F%91%E7%94%9F"><span class="nav-text">6.3 级联几乎必然发生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%8E%A8%E5%B9%BF"><span class="nav-text">6.4 模型的推广</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E7%BA%A7%E8%81%94%E7%9A%84%E5%90%AF%E7%A4%BAsection-16.7-lessons-from-cascades"><span class="nav-text">七、级联的启示（Section
+16.7: Lessons from Cascades）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E7%BE%A4%E4%BD%93%E6%99%BA%E6%85%A7%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-text">7.1 与&quot;群体智慧&quot;的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%AE%9E%E5%BA%94%E7%94%A8"><span class="nav-text">7.2 现实应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%9C%AC%E7%AB%A0%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-text">八、本章核心要点总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E7%AB%A0%E7%BB%83%E4%B9%A0section-16.8-exercises%E6%A6%82%E8%A7%88"><span class="nav-text">九、本章练习（Section
+16.8: Exercises）概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E8%8B%B1%E6%96%87%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8"><span class="nav-text">中英文术语对照表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/142f48a8.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Chapter 16: Information Cascades（信息级联） | Joey">
+      <meta itemprop="description" content="探讨信息级联（羊群效应）的形成机制——人们如何在序贯决策中理性地放弃自身私有信息、转而模仿前人的选择，并用贝叶斯法则建立数学模型">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chapter 16: Information Cascades（信息级联）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-06-02 14:23:10" itemprop="dateCreated datePublished" datetime="2026-06-02T14:23:10Z">2026-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>7.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>27 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">探讨信息级联（羊群效应）的形成机制——人们如何在序贯决策中理性地放弃自身私有信息、转而模仿前人的选择，并用贝叶斯法则建立数学模型</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="chapter-16-information-cascades信息级联">Chapter 16: Information
+Cascades（信息级联）</h1>
+<blockquote>
+<p>教材：<em>Networks, Crowds, and Markets: Reasoning about a Highly
+Connected World</em> 作者：David Easley &amp; Jon Kleinberg, Cambridge
+University Press, 2010</p>
+</blockquote>
+<hr />
+<h2 id="本章概览">本章概览</h2>
+<p>本章研究一个核心问题：当人们通过网络相互连接时，一个人的决策如何影响他人。重点在于揭示一个看似反直觉的现象——在很多情境下，<strong>即使个体自身的私有信息指向另一种选择，模仿他人的决策仍然是理性的</strong>。这种现象被称为<strong>羊群效应（Herding）</strong>或<strong>信息级联（Information
+Cascade）</strong>。</p>
+<p>本章的逻辑主线是：先用直观的例子（餐厅、抬头看天）建立直觉，再用一个可控的<strong>罐子实验（Urn
+Experiment）</strong>精确刻画级联如何形成，接着引入<strong>贝叶斯法则（Bayes'
+Rule）</strong>作为不确定性下决策的数学工具，最后建立一个<strong>通用级联模型</strong>并推导出关键结论：随着人数趋于无穷，级联几乎必然发生。</p>
+<hr />
+<h2
+id="一跟随人群信息级联的直觉section-16.1-following-the-crowd">一、跟随人群：信息级联的直觉（Section
+16.1: Following the Crowd）</h2>
+<h3 id="餐厅的例子">1.1 餐厅的例子</h3>
+<p>设想你来到一个陌生的城镇选择餐厅。基于自己事先的调研，你本打算去餐厅
+A。但到达后你发现 A 空无一人，而隔壁的餐厅 B 几乎座无虚席。</p>
+<p>如果你相信其他食客和你口味相似、并且他们也各自掌握一些关于餐厅好坏的信息，那么<strong>加入
+B
+的人群反而是理性的</strong>。原因在于：每位食客都获得了关于哪家餐厅更好的<strong>独立但不完美的信息（independent
+but imperfect information）</strong>。当 B
+已经聚集了很多食客时，从他们的选择中可以推断出的信息，可能比你自己的私有信息更强。此时无视自己的私有信息、加入人群是合理的。</p>
+<p>这种现象就是<strong>羊群效应</strong>或<strong>信息级联</strong>。这一术语和例子来自
+Banerjee 的工作，同期 Bikhchandani、Hirshleifer 和 Welch
+也独立发展了这一概念。</p>
+<h3 id="信息级联发生的条件">1.2 信息级联发生的条件</h3>
+<p>粗略地说，信息级联在以下条件下有可能出现：</p>
+<ul>
+<li>人们<strong>序贯地（sequentially）</strong>做决策；</li>
+<li>后来者能<strong>观察到</strong>前人的行动；</li>
+<li>后来者从这些行动中<strong>推断</strong>前人所掌握的信息。</li>
+</ul>
+<p>在餐厅例子中，最先到达的食客选择了
+B，这一行动向后来者传递了信息。当人们<strong>放弃自己的信息、转而依赖对前人行动的推断</strong>时，级联就形成了。</p>
+<p>关键洞见在于：级联中的个体虽然在模仿他人，但<strong>这并非盲目的模仿</strong>，而是从有限信息中得出理性推断的结果。当然，模仿也可能源于单纯的从众社会压力，而不存在任何信息层面的原因，二者有时很难区分。</p>
+<h3 id="milgram-的抬头看天实验">1.3 Milgram 的"抬头看天"实验</h3>
+<p>20 世纪 60 年代，Milgram、Bickman 和 Berkowitz
+做过一个著名实验：让规模从 1 人到 15
+人不等的小组站在街角抬头望天，观察有多少路人会停下来跟着看。</p>
+<ul>
+<li>只有 <strong>1 人</strong>抬头时，几乎没有路人停下；</li>
+<li><strong>5 人</strong>抬头时，停下的路人增多，但大多数仍然无视；</li>
+<li><strong>15 人</strong>抬头时，<strong>45%
+的路人</strong>停下来跟着抬头看天。</li>
+</ul>
+<p>实验者将此解释为<strong>从众的社会力量（social force for
+conformity）</strong>随群体增大而增强。但另一种解释正是信息级联：起初路人没有理由抬头（没有任何私有或公开信息提示有必要），但随着越来越多人抬头，后来的路人<strong>理性地</strong>推断那些抬头的人或许知道某些自己不知道的事情，于是也跟着抬头。</p>
+<p>信息级联可以解释社会中许多类型的模仿：时尚与潮流、给热门候选人投票、畅销书榜单的自我强化效应、技术选择的扩散，乃至犯罪与政治运动的局部聚集性。</p>
+<h3 id="信息效应-vs-直接收益效应">1.4 信息效应 vs 直接收益效应</h3>
+<p>模仿他人还存在另一类<strong>本质不同</strong>的理性原因——<strong>直接收益效应（Direct-Benefit
+Effects）</strong>。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>信息效应（Informational Effects）</th>
+<th>直接收益效应（Direct-Benefit Effects）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>他人行动的作用</td>
+<td>通过改变你的<strong>信息</strong>间接影响你</td>
+<td><strong>直接</strong>改变你的<strong>收益（payoff）</strong></td>
+</tr>
+<tr>
+<td>典型例子</td>
+<td>餐厅、抬头看天、罐子实验</td>
+<td>传真机、操作系统、社交网络</td>
+</tr>
+<tr>
+<td>机制</td>
+<td>从他人选择中推断隐藏信息</td>
+<td>与他人选择兼容本身就带来价值</td>
+</tr>
+</tbody>
+</table>
+<p>以<strong>传真机</strong>为例：如果没有别人拥有传真机，它就毫无用处。因此购买决策中，别人是否拥有传真机至关重要——不仅因为他们的选择传递了信息，更因为他们<strong>直接影响</strong>了产品对你的价值。操作系统、社交网络等具有"用户越多越有用"特性的技术同理。</p>
+<p>许多决策同时包含两种效应，有时它们甚至相互冲突：当你为了进一家热门餐厅而排很长的队时，你是在让模仿带来的<strong>信息收益</strong>压过排队造成的<strong>直接不便</strong>。本章建模信息效应，下一章建模直接收益效应。</p>
+<hr />
+<h2
+id="二一个简单的羊群实验section-16.2-a-simple-herding-experiment">二、一个简单的羊群实验（Section
+16.2: A Simple Herding Experiment）</h2>
+<p>为了精确说明级联如何运作，本节介绍 Anderson 和 Holt
+设计的罐子实验。它捕捉了级联的四个基本要素：</p>
+<ol type="a">
+<li>存在一个需要做出的<strong>决策</strong>（如是否采用新技术、是否去新餐厅）；</li>
+<li>人们<strong>序贯地</strong>决策，每个人能观察到先行者的选择；</li>
+<li>每个人拥有一些指导决策的<strong>私有信息</strong>；</li>
+<li>一个人无法直接观察他人的私有信息，但能从他人的行动中<strong>推断</strong>。</li>
+</ol>
+<h3 id="实验设置">2.1 实验设置</h3>
+<p>实验在教室中进行，参与者是一大群学生：</p>
+<ul>
+<li>讲台上放一个罐子，内有 <strong>3 颗弹珠</strong>；</li>
+<li>有 <strong>50%</strong>
+概率罐子是"<strong>多数红（majority-red）</strong>"——两红一蓝；</li>
+<li>有 <strong>50%</strong>
+概率罐子是"<strong>多数蓝（majority-blue）</strong>"——两蓝一红；</li>
+<li>学生逐一上前，<strong>抽出一颗弹珠看颜色后放回</strong>（不展示给他人）；</li>
+<li>学生随后<strong>公开宣布</strong>自己的猜测（多数红还是多数蓝）；</li>
+<li>猜对者最终获得金钱奖励，猜错者一无所获。</li>
+</ul>
+<p><strong>关键在于公开宣布</strong>：尚未轮到的学生看不到前人抽到的颜色，但能听到前人的猜测。这与餐厅例子完全对应——你看不到前人读过的评论，但能看到他们选了哪家餐厅。</p>
+<h3 id="逐位学生的分析">2.2 逐位学生的分析</h3>
+<p>假设所有学生都能基于已听到的信息进行正确推理。</p>
+<p><strong>第一位学生</strong>：遵循简单规则——看到红就猜多数红，看到蓝就猜多数蓝。因此<strong>他的猜测完美地传递了他所看到的颜色</strong>。</p>
+<p><strong>第二位学生</strong>：若她抽到的颜色与第一位宣布的相同，直接猜该颜色；若不同（如第一位猜蓝、她抽到红），她相当于"抽了两次"——一蓝一红，处于无差异状态，此时约定她<strong>按自己抽到的颜色打破平局</strong>。无论哪种情况，她的猜测<strong>同样完美传递了她看到的颜色</strong>。</p>
+<p><strong>第三位学生（关键转折）</strong>： -
+若前两位猜测相反，第三位直接猜自己看到的颜色（作为平局的打破者）； -
+若<strong>前两位猜测相同</strong>（如都是蓝），而第三位抽到红——由于前两位的猜测传递了真实信息，第三位相当于看到"蓝、蓝、红"三次抽取。基于这一信息，他应当<strong>忽略自己的私有信息（红），猜测多数蓝</strong>。</p>
+<p>更一般地：<strong>当前两位猜测相同，第三位无论抽到什么颜色都应猜测该颜色</strong>。其余同学只能听到他的猜测，看不到他抽到的颜色。<strong>此时信息级联开始了</strong>。</p>
+<p><strong>第四位及之后</strong>：第四位听到连续三个"蓝"。她知道前两位传递了真实信息，而第三位无论看到什么都会猜蓝——因此<strong>第三位的猜测不传递任何信息</strong>。于是第四位面临与第三位完全相同的处境，无论抽到什么都应猜蓝。这将一直延续下去：<strong>只要前两位猜了蓝，后续所有人都会猜蓝</strong>（红的情况完全对称）。</p>
+<h3 id="实验揭示的三条一般原则">2.3 实验揭示的三条一般原则</h3>
+<p><strong>原则一：级联极易发生。</strong>
+在合适的结构条件下，一大群完全理性的人做出完全相同的猜测，这种"奇异"的一致行为很容易出现。</p>
+<p><strong>原则二：级联可能导致非最优结果。</strong>
+设罐子实际为多数红。第一位抽到蓝的概率是 <span
+class="math inline">\(\frac{1}{3}\)</span>，第二位抽到蓝的概率也是 <span
+class="math inline">\(\frac{1}{3}\)</span>，两者独立，故二者都抽到蓝的概率为：</p>
+<p><span class="math display">\[\Pr[\text{前两位都抽到蓝}] = \frac{1}{3}
+\times \frac{1}{3} = \frac{1}{9}\]</span></p>
+<p>此时前两位都猜蓝，后续所有人都跟着猜蓝——<strong>全部猜错</strong>。这
+<span class="math inline">\(\frac{1}{9}\)</span>
+的全体性错误概率<strong>不会因参与人数增多而减小</strong>，因为在理性决策下，无论群体多大，只要前两位猜蓝，所有人都会猜蓝。</p>
+<p><strong>原则三：级联本质上是脆弱的（fragile）。</strong> 设 100
+人的班级中前两位猜蓝、后续都在猜蓝。若第 50、51
+位都抽到红并"作弊"直接展示弹珠，级联就被打破了：第 52 位现在掌握 4
+条真实信息（第 1、2、50、51
+位的颜色），两蓝两红，她应基于自己的抽取打破平局。</p>
+<p><strong>脆弱性的本质</strong>：所有人都知道前面 49
+个"蓝"的猜测背后只有极少的信息支撑，因此<strong>少量新信息的注入就能轻易推翻它</strong>——即便级联已持续很久。</p>
+<hr />
+<h2
+id="三贝叶斯法则不确定性下的决策模型section-16.3-bayes-rule">三、贝叶斯法则：不确定性下的决策模型（Section
+16.3: Bayes' Rule）</h2>
+<p>要为级联建立数学模型，必须能在"观察到某些信息"的条件下确定事件的概率。这就需要<strong>条件概率</strong>和<strong>贝叶斯法则</strong>。</p>
+<h3 id="条件概率与贝叶斯公式">3.1 条件概率与贝叶斯公式</h3>
+<p>给定事件 <span class="math inline">\(A\)</span>，记其发生概率为 <span
+class="math inline">\(\Pr[A]\)</span>。两个事件 <span
+class="math inline">\(A\)</span>、<span class="math inline">\(B\)</span>
+同时发生记为交集 <span class="math inline">\(A \cap
+B\)</span>。<strong>在 <span class="math inline">\(B\)</span>
+已发生的条件下 <span class="math inline">\(A\)</span>
+的条件概率</strong>定义为：</p>
+<p><span class="math display">\[\Pr[A \mid B] = \frac{\Pr[A \cap
+B]}{\Pr[B]}\]</span></p>
+<p>同理 <span class="math inline">\(\Pr[B \mid A] = \dfrac{\Pr[A \cap
+B]}{\Pr[A]}\)</span>。由于 <span class="math inline">\(A \cap B\)</span>
+与 <span class="math inline">\(B \cap A\)</span>
+是同一集合，两式联立可得：</p>
+<p><span class="math display">\[\Pr[A \mid B] \cdot \Pr[B] = \Pr[A \cap
+B] = \Pr[B \mid A] \cdot \Pr[A]\]</span></p>
+<p>两边除以 <span
+class="math inline">\(\Pr[B]\)</span>，得到<strong>贝叶斯法则（Bayes'
+Rule）</strong>：</p>
+<p><span class="math display">\[\boxed{\Pr[A \mid B] = \frac{\Pr[A]
+\cdot \Pr[B \mid A]}{\Pr[B]}}\]</span></p>
+<p>相关术语：</p>
+<ul>
+<li><strong>先验概率（Prior Probability）</strong> <span
+class="math inline">\(\Pr[A]\)</span>：在不知道 <span
+class="math inline">\(B\)</span> 是否发生时，对 <span
+class="math inline">\(A\)</span> 概率的理解；</li>
+<li><strong>后验概率（Posterior Probability）</strong> <span
+class="math inline">\(\Pr[A \mid B]\)</span>：在已知 <span
+class="math inline">\(B\)</span> 发生后，对 <span
+class="math inline">\(A\)</span> 概率的更新理解。</li>
+</ul>
+<p>贝叶斯法则的核心思想，就是用观察到的证据 <span
+class="math inline">\(B\)</span> 把先验更新为后验。</p>
+<h3 id="例一目击者证词eyewitness-testimony">3.2
+例一：目击者证词（Eyewitness Testimony）</h3>
+<p>某城市 80% 的出租车是黑色，20%
+是黄色。一起肇事逃逸事故的目击者称肇事车是<strong>黄色</strong>。目击证词不完美：黄车被正确指认为黄的概率是
+80%，黑车被正确指认为黑的概率也是
+80%。问：<strong>在目击者说是黄色的条件下，车真是黄色的概率是多少？</strong></p>
+<p>记 <span class="math inline">\(Y\)</span> 为黄、<span
+class="math inline">\(B\)</span> 为黑，求 <span
+class="math inline">\(\Pr[\text{true}=Y \mid
+\text{report}=Y]\)</span>。已知：</p>
+<ul>
+<li><span class="math inline">\(\Pr[\text{report}=Y \mid \text{true}=Y]
+= 0.8\)</span>（证词准确率）</li>
+<li><span class="math inline">\(\Pr[\text{true}=Y] =
+0.2\)</span>（黄车先验频率）</li>
+</ul>
+<p>分母用全概率展开（黄车被报成黄 + 黑车被报成黄）：</p>
+<p><span class="math display">\[\Pr[\text{report}=Y] = 0.2 \times 0.8 +
+0.8 \times 0.2 = 0.16 + 0.16 = 0.32\]</span></p>
+<p>代入贝叶斯法则：</p>
+<p><span class="math display">\[\Pr[\text{true}=Y \mid \text{report}=Y]
+= \frac{0.2 \times 0.8}{0.32} = \frac{0.16}{0.32} = 0.5\]</span></p>
+<p><strong>结论</strong>：即使目击者说是黄色，车实际上是黄是黑的可能性<strong>各占一半</strong>。由于黑车本身远多于黄车（0.8
+vs
+0.2），证词虽然显著改变了我们的信念，但还不足以让我们相信车更可能是黄色。这提醒我们：<strong>先验概率不可忽视</strong>。</p>
+<h3 id="例二垃圾邮件过滤spam-filtering">3.3 例二：垃圾邮件过滤（Spam
+Filtering）</h3>
+<p>贝叶斯法则是第一代垃圾邮件过滤器的核心思想。设一封邮件主题含短语"check
+this out"，求它是垃圾邮件的概率。已知：</p>
+<ul>
+<li><span class="math inline">\(\Pr[\text{spam}] =
+0.4\)</span>（垃圾邮件先验）</li>
+<li><span class="math inline">\(\Pr[\text{&quot;check this out&quot;}
+\mid \text{spam}] = 0.01\)</span></li>
+<li><span class="math inline">\(\Pr[\text{&quot;check this out&quot;}
+\mid \text{not spam}] = 0.004\)</span></li>
+</ul>
+<p>分母：<span class="math inline">\(\Pr[\text{&quot;check this
+out&quot;}] = 0.4 \times 0.01 + 0.6 \times 0.004 = 0.004 + 0.0024 =
+0.0064\)</span></p>
+<p><span class="math display">\[\Pr[\text{spam} \mid \text{&quot;check
+this out&quot;}] = \frac{0.4 \times 0.01}{0.0064} = \frac{0.004}{0.0064}
+= \frac{5}{8} = 0.625\]</span></p>
+<p><strong>结论</strong>：尽管垃圾邮件不到总量的一半，但含有"check this
+out"的邮件更可能是垃圾邮件。这个短语是一个<strong>弱信号（weak
+signal）</strong>。实际的过滤器会综合大量信号（正文词、主题词、发件人特征等），把每个信号给出的估计组合起来形成总体判断。</p>
+<hr />
+<h2
+id="四贝叶斯法则在罐子实验中的应用section-16.4">四、贝叶斯法则在罐子实验中的应用（Section
+16.4）</h2>
+<p>现在用贝叶斯法则严格证明 2.2
+节中学生的推理。每个学生本质上都在估计"给定所见所闻，罐子是多数蓝的条件概率"。她应在以下条件下猜多数蓝：</p>
+<p><span class="math display">\[\Pr[\text{majority-blue} \mid
+\text{所见所闻}] &gt; \frac{1}{2}\]</span></p>
+<p>实验设置给出的已知量：</p>
+<p><span class="math display">\[\Pr[\text{majority-blue}] =
+\Pr[\text{majority-red}] = \frac{1}{2}, \qquad \Pr[\text{blue} \mid
+\text{majority-blue}] = \Pr[\text{red} \mid \text{majority-red}] =
+\frac{2}{3}\]</span></p>
+<h3 id="第一位学生抽到蓝">4.1 第一位学生抽到蓝</h3>
+<p><span class="math display">\[\Pr[\text{majority-blue} \mid
+\text{blue}] = \frac{\Pr[\text{majority-blue}] \cdot \Pr[\text{blue}
+\mid \text{majority-blue}]}{\Pr[\text{blue}]}\]</span></p>
+<p>分子 <span class="math inline">\(= \frac{1}{2} \times \frac{2}{3} =
+\frac{1}{3}\)</span>；分母由对称性 <span
+class="math inline">\(\Pr[\text{blue}] = \frac{1}{2} \times \frac{2}{3}
++ \frac{1}{2} \times \frac{1}{3} = \frac{1}{2}\)</span>。</p>
+<p><span class="math display">\[\Pr[\text{majority-blue} \mid
+\text{blue}] = \frac{1/3}{1/2} = \frac{2}{3} &gt;
+\frac{1}{2}\]</span></p>
+<p>因此第一位看到蓝就该猜多数蓝，且猜对概率为 <span
+class="math inline">\(\frac{2}{3}\)</span>。</p>
+<h3 id="第三位学生级联形成">4.2 第三位学生：级联形成</h3>
+<p>假设前两位都猜蓝，第三位抽到红。由于前两位传递了真实信息，第三位知道三次抽取为"蓝、蓝、红"，需要求
+<span class="math inline">\(\Pr[\text{majority-blue} \mid \text{blue,
+blue, red}]\)</span>。</p>
+<p>由抽取独立性：</p>
+<p><span class="math display">\[\Pr[\text{blue, blue, red} \mid
+\text{majority-blue}] = \frac{2}{3} \times \frac{2}{3} \times
+\frac{1}{3} = \frac{4}{27}\]</span></p>
+<p><span class="math display">\[\Pr[\text{blue, blue, red} \mid
+\text{majority-red}] = \frac{1}{3} \times \frac{1}{3} \times \frac{2}{3}
+= \frac{2}{27}\]</span></p>
+<p>分母：<span class="math inline">\(\Pr[\text{blue, blue, red}] =
+\frac{1}{2} \times \frac{4}{27} + \frac{1}{2} \times \frac{2}{27} =
+\frac{6}{54} = \frac{1}{9}\)</span></p>
+<p><span class="math display">\[\Pr[\text{majority-blue} \mid
+\text{blue, blue, red}] = \frac{\frac{1}{2} \times
+\frac{4}{27}}{\frac{1}{9}} = \frac{2}{3} &gt; \frac{1}{2}\]</span></p>
+<p>因此第三位应猜多数蓝——<strong>忽略自己看到的红，服从已听到的两个蓝</strong>。这从数学上证实了
+2.2
+节的直觉。此后所有学生掌握与第三位相同的信息，都会做相同计算，形成<strong>蓝色猜测的信息级联</strong>。</p>
+<hr />
+<h2
+id="五一个简单通用的级联模型section-16.5-a-simple-general-cascade-model">五、一个简单通用的级联模型（Section
+16.5: A Simple, General Cascade Model）</h2>
+<p>罐子实验是一个具体隐喻。本节建立一个<strong>通用模型</strong>，刻画"人们序贯决策、结合自身私有信息与对前人行动的观察"的一般情形。核心结论是：贝叶斯法则预测，<strong>随着人数趋于无穷，级联形成的概率趋于
+1</strong>。</p>
+<h3 id="模型的三个要素">5.1 模型的三个要素</h3>
+<p>人们编号为 <span class="math inline">\(1, 2, 3,
+\dots\)</span>，依次在<strong>接受（accept）</strong>与<strong>拒绝（reject）</strong>之间做选择。</p>
+<p><strong>要素一：世界状态（States of the World）。</strong>
+在任何人决策前，世界被随机置于两种状态之一：</p>
+<ul>
+<li>状态 <span
+class="math inline">\(G\)</span>（Good）：接受是个好主意，先验概率 <span
+class="math inline">\(\Pr[G] = p\)</span>；</li>
+<li>状态 <span
+class="math inline">\(B\)</span>（Bad）：接受是个坏主意，先验概率 <span
+class="math inline">\(\Pr[B] = 1 - p\)</span>。</li>
+</ul>
+<p>个体无法观察到世界状态，只能通过观察去推断。</p>
+<p><strong>要素二：收益（Payoffs）。</strong> 拒绝的收益固定为
+0。接受的收益取决于状态：好主意时为正数 <span class="math inline">\(v_g
+&gt; 0\)</span>，坏主意时为负数 <span class="math inline">\(v_b &lt;
+0\)</span>。并假设在没有额外信息时接受的期望收益为零：</p>
+<p><span class="math display">\[v_g \, p + v_b \, (1-p) = 0\]</span></p>
+<p>即在获得信息前，接受与拒绝的期望收益相同。</p>
+<p><strong>要素三：信号（Signals）。</strong>
+每个个体在决策前获得一个私有信号，建模其私有信息。信号有两种——<strong>高信号
+<span
+class="math inline">\(H\)</span></strong>（暗示接受是好主意）和<strong>低信号
+<span
+class="math inline">\(L\)</span></strong>（暗示接受是坏主意）。信号不完美但有用：</p>
+<p><span class="math display">\[\Pr[H \mid G] = q &gt; \tfrac{1}{2},
+\quad \Pr[L \mid G] = 1 - q; \qquad \Pr[L \mid B] = q, \quad \Pr[H \mid
+B] = 1 - q\]</span></p>
+<table>
+<thead>
+<tr>
+<th>信号  状态</th>
+<th><span class="math inline">\(B\)</span>（坏）</th>
+<th><span class="math inline">\(G\)</span>（好）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(L\)</span>（低）</td>
+<td><span class="math inline">\(q\)</span></td>
+<td><span class="math inline">\(1 - q\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(H\)</span>（高）</td>
+<td><span class="math inline">\(1 - q\)</span></td>
+<td><span class="math inline">\(q\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>与罐子实验的对应</strong>：两种世界状态对应"多数蓝/多数红"罐子；"接受"对应猜"多数蓝"；私有信号是抽到的颜色（蓝=高信号）；先验
+<span class="math inline">\(p = \frac{1}{2}\)</span>，<span
+class="math inline">\(q = \frac{2}{3}\)</span>。</p>
+<h3 id="基于单个信号的决策">5.2 基于单个信号的决策</h3>
+<p>个体收到高信号后，用贝叶斯法则更新对 <span
+class="math inline">\(G\)</span> 的估计：</p>
+<p><span class="math display">\[\Pr[G \mid H] = \frac{\Pr[G] \cdot \Pr[H
+\mid G]}{\Pr[H]} = \frac{pq}{pq + (1-p)(1-q)} &gt; p\]</span></p>
+<p>（不等式成立是因为分母 <span class="math inline">\(pq + (1-p)(1-q)
+&lt; pq + (1-p)q = q\)</span>。）</p>
+<p>直觉很清楚：高信号在好状态下更可能出现，所以收到高信号会<strong>提高</strong>对"接受是好主意"的估计，期望收益从
+0
+变为正数，因此<strong>应当接受</strong>。对称地，收到低信号应当拒绝。</p>
+<h3 id="基于多个信号的决策多数投票">5.3
+基于多个信号的决策：多数投票</h3>
+<p>设个体收到一串独立信号 <span class="math inline">\(S\)</span>，含
+<span class="math inline">\(a\)</span> 个高信号、<span
+class="math inline">\(b\)</span> 个低信号。由独立性：</p>
+<p><span class="math display">\[\Pr[S \mid G] = q^a (1-q)^b, \qquad
+\Pr[S \mid B] = (1-q)^a q^b\]</span></p>
+<p><span class="math display">\[\Pr[G \mid S] = \frac{p \, q^a
+(1-q)^b}{p \, q^a (1-q)^b + (1-p)(1-q)^a q^b}\]</span></p>
+<p>将后验与先验 <span class="math inline">\(p\)</span> 比较，可得：</p>
+<table>
+<thead>
+<tr>
+<th>信号构成</th>
+<th>后验与先验关系</th>
+<th>决策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(a &gt; b\)</span>（高信号更多）</td>
+<td><span class="math inline">\(\Pr[G \mid S] &gt; p\)</span></td>
+<td>接受</td>
+</tr>
+<tr>
+<td><span class="math inline">\(a &lt; b\)</span>（低信号更多）</td>
+<td><span class="math inline">\(\Pr[G \mid S] &lt; p\)</span></td>
+<td>拒绝</td>
+</tr>
+<tr>
+<td><span class="math inline">\(a = b\)</span>（相等）</td>
+<td><span class="math inline">\(\Pr[G \mid S] = p\)</span></td>
+<td>无差异</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心结论</strong>：在这个简单设定下，个体的最优决策等价于对所收到信号的<strong>多数投票（majority
+vote）</strong>——高信号多则接受，低信号多则拒绝，相等则无差异。</p>
+<hr />
+<h2
+id="六序贯决策与级联section-16.6-sequential-decision-making-and-cascades">六、序贯决策与级联（Section
+16.6: Sequential Decision-Making and Cascades）</h2>
+<p>现在考虑个体依次决策的情形：每个人能看到前人的<strong>接受/拒绝决策</strong>，但<strong>看不到他们的私有信号</strong>。</p>
+<h3 id="前几个人的推理">6.1 前几个人的推理</h3>
+<ul>
+<li><strong>第 1 人</strong>：仅依据自己的私有信号决策。</li>
+<li><strong>第 2 人</strong>：知道第 1
+人的决策揭示了其信号，相当于自己拿到两个信号。若相同则容易决策；若不同则无差异，约定<strong>遵循自己的信号</strong>。无论如何，第
+2 人都在遵循自己的信号。</li>
+<li><strong>第 3
+人</strong>：知道前两人都按各自信号行动，相当于拥有三个独立信号，按多数信号决策。
+<ul>
+<li>若前两人决策<strong>相反</strong>（信号相反），第 3
+人用自己的信号打破平局——其决策仍揭示了自己的信号，后人可继续利用；</li>
+<li>若前两人决策<strong>相同</strong>（信号相同），第 3
+人无论自己信号如何都跟随——其决策<strong>不揭示任何信号信息</strong>，后人将处于和第
+3 人完全相同的处境。<strong>此时级联开始</strong>。</li>
+</ul></li>
+</ul>
+<h3 id="级联的一般条件">6.2 级联的一般条件</h3>
+<p>考虑第 <span class="math inline">\(N\)</span>
+人，假设她之前的所有人都遵循了自己的信号（接受数与拒绝数反映了高/低信号数），有三种情况：</p>
+<ul>
+<li><strong>接受数 = 拒绝数</strong>：第 <span
+class="math inline">\(N\)</span>
+人的信号作为平局打破者，她遵循自己的信号；</li>
+<li><strong>接受数与拒绝数相差
+1</strong>：自己的信号要么使她无差异、要么强化多数，无论如何她遵循自己的信号；</li>
+<li><strong>接受数与拒绝数相差 ≥
+2</strong>：无论她的信号如何，都无法压倒先前的多数，于是她<strong>跟随多数、忽略自己的信号</strong>。而且第
+<span class="math inline">\(N+1\)</span>、<span
+class="math inline">\(N+2\)</span>
+人都知道她忽略了自己的信号，从而处于与她相同的处境——<strong>级联就此开始并永远持续</strong>。</li>
+</ul>
+<p><strong>级联开始的判据</strong>可总结为：</p>
+<blockquote>
+<p>只要"接受数 − 拒绝数"的差落在 <span class="math inline">\([-1,
++1]\)</span>
+内，每个人都在遵循自己的私有信号；一旦该差的绝对值<strong>达到
+2</strong>，级联接管一切，之后所有人永远跟随多数。</p>
+</blockquote>
+<p>下图（教材 Figure 16.3）将"接受数 −
+拒绝数"随决策推进的轨迹画成随机游走：每次决策上下移动一格，一旦轨迹<strong>逃离零附近
+<span class="math inline">\([-1, +1]\)</span>
+的窄带</strong>、离开横轴至少两步，级联便开始并永远运行。</p>
+<h3 id="级联几乎必然发生">6.3 级联几乎必然发生</h3>
+<p>可以证明：随着人数 <span class="math inline">\(N \to
+\infty\)</span>，级联形成的概率趋于 1。</p>
+<p><strong>论证</strong>：在人们仍遵循自己信号的阶段，只要<strong>连续三人收到相同信号</strong>，级联必定开始（这是充分条件，并非必要）。将前
+<span class="math inline">\(N\)</span> 人按每三人分组（1,2,3 / 4,5,6 /
+…），任一组三人信号全部相同的概率为 <span class="math inline">\(q^3 +
+(1-q)^3\)</span>。则<strong>没有任何一组三人信号全同</strong>的概率为：</p>
+<p><span class="math display">\[\left(1 - q^3 - (1-q)^3\right)^{N/3}
+\xrightarrow{N \to \infty} 0\]</span></p>
+<p>因此级联形成的概率趋于 1。<strong>在极限意义下，级联几乎必然（almost
+surely）发生</strong>。</p>
+<h3 id="模型的推广">6.4 模型的推广</h3>
+<p>这是一个极简模型。更一般的版本中，人们可能只看到部分前人的决策、不同信号携带的信息量不等、不同人收益不同——这些变体分析起来更复杂，级联判据也未必如此简单。但<strong>定性结论是相似的</strong>：当人们能看到他人做什么、却看不到他人知道什么时，先有一段人们依赖自身信息的时期，随后群体可能<strong>翻转（tip）</strong>进入一种状态——人们仍然完全理性，却开始忽略自己的信息、跟随人群。</p>
+<hr />
+<h2
+id="七级联的启示section-16.7-lessons-from-cascades">七、级联的启示（Section
+16.7: Lessons from Cascades）</h2>
+<p>通用模型强化了 2.3 节的三条观察：</p>
+<p><strong>(i) 级联可能是错的（Cascades can be wrong）。</strong>
+若接受实际是坏主意，但前两人恰好都收到高信号，接受的级联会立即形成——尽管这对整个群体是错误选择。</p>
+<p><strong>(ii) 级联可能建立在极少的信息之上（based on very little
+information）。</strong>
+级联一旦开始，人们就忽略私有信息，因此只有<strong>级联前</strong>收集到的信息真正影响了群体行为。如果级联在大群体中很快形成，那么群体中集体掌握的绝大部分私有信息<strong>根本没有被利用</strong>。</p>
+<p><strong>(iii) 级联是脆弱的（fragile）。</strong>
+正因为级联基于很少的信息，它既容易开始、也容易停止。掌握<strong>略优信息</strong>的人就能推翻长期存在的级联。例如，级联进行中若有人获得两个低信号（加上能推断的先前信号后高低相等），他会因无差异而按自己的低信号拒绝；一个所有人都能看到的<strong>公开信号（public
+signal）</strong>也有同样效果——下一个决策者相当于收到两个信号。</p>
+<h3 id="与群体智慧的对比">7.1 与"群体智慧"的对比</h3>
+<p>这一结论与 James Surowiecki 在《群体的智慧》（<em>The Wisdom of
+Crowds</em>）中的论点形成有趣对照。Surowiecki
+指出，许多人<strong>独立猜测</strong>时，他们猜测的平均值往往出奇地准确（如罐中糖豆数、牛的体重）。</p>
+<p><strong>关键区别在于是否独立</strong>：群体智慧依赖于个体<strong>各自拥有私有信息、且互不知晓地独立猜测</strong>。而一旦人们<strong>序贯猜测、并能观察先前的猜测</strong>，就回到了级联设定，平均猜测便没有理由准确。Surowiecki
+本人也将级联列为"跟随人群"的一项警示。</p>
+<blockquote>
+<p><strong>本章最重要的教训</strong>：从人群的行为中推断"最佳行动方案"时务必谨慎——<strong>即便每个人都理性、且都采取相同行动，人群仍可能是错的</strong>。</p>
+</blockquote>
+<h3 id="现实应用">7.2 现实应用</h3>
+<p><strong>委员会决策。</strong> 一个招聘委员会绕桌依次表态支持候选人 A
+还是 B。若成员都假设彼此洞察力相当，少数人先支持 A
+就可能引发级联，使原本倾向 B 的人也转向
+A。这未必是从众的社会压力，而可能是<strong>理性</strong>的——你假设先发言者掌握着与你质量相当的信息。这揭示了<strong>让专家协作、相互启发</strong>与<strong>让专家独立形成判断</strong>之间的内在张力。可能的对策：强制专家先<strong>独立</strong>做出初步判断，再进入协作与共识阶段；以及让信息特别可靠的人<strong>更晚</strong>发言可能更有价值。</p>
+<p><strong>营销。</strong>
+商家利用级联为新产品<strong>启动购买级联</strong>：若能诱使最初一批人采用，后来者可能跟着采用——即便该产品并不更好、甚至更差。这在后来的消费者<strong>能看到采用决策、却看不到早期顾客的满意度</strong>时最有效。反过来，如果早期顾客的<strong>收益/满意度统计</strong>对外公开，就能帮助阻止坏选择的级联。</p>
+<hr />
+<h2 id="八本章核心要点总结">八、本章核心要点总结</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>主题</th>
+<th>核心结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>级联的定义</td>
+<td>人们序贯决策、能观察前人行动；当个体放弃私有信息、转而依据对前人行动的推断时，级联发生</td>
+</tr>
+<tr>
+<td>理性本质</td>
+<td>级联中的模仿是<strong>理性推断</strong>的结果，而非盲从（尽管社会从众压力也可能产生相似表象）</td>
+</tr>
+<tr>
+<td>两类效应</td>
+<td><strong>信息效应</strong>（间接改变信息）vs
+<strong>直接收益效应</strong>（直接改变收益）</td>
+</tr>
+<tr>
+<td>数学工具</td>
+<td><strong>贝叶斯法则</strong> <span class="math inline">\(\Pr[A\mid B]
+= \dfrac{\Pr[A]\Pr[B\mid A]}{\Pr[B]}\)</span>，用观察更新先验为后验</td>
+</tr>
+<tr>
+<td>多信号决策</td>
+<td>等价于对信号的<strong>多数投票</strong></td>
+</tr>
+<tr>
+<td>级联判据</td>
+<td>当"接受数 − 拒绝数"绝对值 <span class="math inline">\(\geq
+2\)</span> 时级联开始，之后所有人永远跟随多数</td>
+</tr>
+<tr>
+<td>渐近结论</td>
+<td><span class="math inline">\(N \to \infty\)</span> 时级联形成概率
+<span class="math inline">\(\to 1\)</span>（几乎必然发生）</td>
+</tr>
+<tr>
+<td>三大特性</td>
+<td>级联<strong>可能出错</strong>、<strong>基于极少信息</strong>、<strong>本质脆弱</strong></td>
+</tr>
+<tr>
+<td>核心警示</td>
+<td>即使人人理性且行动一致，人群仍可能错误——慎从人群</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="九本章练习section-16.8-exercises概览">九、本章练习（Section
+16.8: Exercises）概览</h2>
+<p>教材在本章末提供了 5 道练习，主要考察以下方向：</p>
+<ol type="1">
+<li><strong>仅观察直接邻居的级联</strong>：若个体 <span
+class="math inline">\(i\)</span> 只能看到 <span
+class="math inline">\(i-1\)</span>
+的行动（而非全部前人），分析级联是否仍能形成、个体能从邻居行动中推断出什么。</li>
+<li><strong>公开收益信息的影响</strong>：若每个人除了观察前人行动外，还被告知前人采用新技术后获得的<strong>实际收益</strong>，分析这如何影响坏技术级联的形成与持续。</li>
+<li><strong>具体概率计算（<span class="math inline">\(p=1/2,\
+q=3/4\)</span>）</strong>：计算第一人选择接受/拒绝的概率、前两人四种选择组合的概率，以及第三人决策时出现接受/拒绝级联的概率。</li>
+<li><strong>错误级联的概率与打破（<span class="math inline">\(p=1/2,\
+q=2/3\)</span>）</strong>：在一个
+R-级联中，计算它是错误级联的概率；分析向第 9 人询问其信号后第 10、11
+人应如何决策。</li>
+<li><strong>招聘决策的案例分析</strong>：用级联原理解释委员会绕桌表态导致的招聘失误。</li>
+</ol>
+<p>这些练习的共同主线是：用贝叶斯法则定量分析级联的<strong>形成条件</strong>、<strong>正确/错误概率</strong>，以及<strong>信息结构变化</strong>（如公开收益、改变观察范围）对级联的影响。</p>
+<hr />
+<p><strong>文档完成时间</strong>：2026年6月3日
+<strong>适用课程</strong>：COMP5313 - Networks, Crowds, and Markets
+<strong>涵盖范围</strong>：第16章 信息级联（Sections 16.1–16.8）</p>
+<h2 id="中英文术语对照表">中英文术语对照表</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>中文</th>
+<th>English</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>信息级联</td>
+<td>Information Cascade</td>
+<td>人们放弃私有信息、依据对前人行动的推断而决策的现象</td>
+</tr>
+<tr>
+<td>羊群效应</td>
+<td>Herding</td>
+<td>信息级联的别称，强调群体的趋同行为</td>
+</tr>
+<tr>
+<td>序贯决策</td>
+<td>Sequential Decision-Making</td>
+<td>人们一个接一个地做决策，后人可观察前人</td>
+</tr>
+<tr>
+<td>私有信息</td>
+<td>Private Information</td>
+<td>个体独有、他人无法直接观察的信息</td>
+</tr>
+<tr>
+<td>私有信号</td>
+<td>Private Signal</td>
+<td>模型中刻画私有信息的高（H）/低（L）信号</td>
+</tr>
+<tr>
+<td>高信号 / 低信号</td>
+<td>High / Low Signal</td>
+<td>分别暗示接受是好主意 / 坏主意</td>
+</tr>
+<tr>
+<td>信息效应</td>
+<td>Informational Effects</td>
+<td>他人行动通过改变你的信息间接影响你</td>
+</tr>
+<tr>
+<td>直接收益效应</td>
+<td>Direct-Benefit Effects</td>
+<td>他人选择直接改变你的收益（如网络效应）</td>
+</tr>
+<tr>
+<td>贝叶斯法则</td>
+<td>Bayes' Rule</td>
+<td>用观察证据把先验概率更新为后验概率的公式</td>
+</tr>
+<tr>
+<td>条件概率</td>
+<td>Conditional Probability</td>
+<td>在某事件已发生条件下另一事件的概率</td>
+</tr>
+<tr>
+<td>先验概率</td>
+<td>Prior Probability</td>
+<td>未观察证据前对事件概率的判断</td>
+</tr>
+<tr>
+<td>后验概率</td>
+<td>Posterior Probability</td>
+<td>观察证据后更新的事件概率</td>
+</tr>
+<tr>
+<td>世界状态</td>
+<td>States of the World</td>
+<td>模型中"好主意 G / 坏主意 B"的隐藏状态</td>
+</tr>
+<tr>
+<td>收益</td>
+<td>Payoff</td>
+<td>决策带来的回报，接受好/坏主意分别为 <span
+class="math inline">\(v_g&gt;0\)</span> / <span
+class="math inline">\(v_b&lt;0\)</span></td>
+</tr>
+<tr>
+<td>多数投票</td>
+<td>Majority Vote</td>
+<td>多信号下的最优决策规则：高信号多则接受</td>
+</tr>
+<tr>
+<td>罐子实验</td>
+<td>Urn Experiment</td>
+<td>Anderson 与 Holt 设计的红蓝弹珠羊群实验</td>
+</tr>
+<tr>
+<td>群体的智慧</td>
+<td>The Wisdom of Crowds</td>
+<td>Surowiecki 的著作，强调独立猜测的聚合准确性</td>
+</tr>
+<tr>
+<td>脆弱性</td>
+<td>Fragility</td>
+<td>级联因信息基础薄弱而易被少量新信息推翻的性质</td>
+</tr>
+<tr>
+<td>公开信号</td>
+<td>Public Signal</td>
+<td>所有人都能观察到的信号，可打破级联</td>
+</tr>
+<tr>
+<td>翻转</td>
+<td>Tipping</td>
+<td>群体从依赖自身信息转为跟随人群的临界转变</td>
+</tr>
+<tr>
+<td>Milgram 抬头实验</td>
+<td>Milgram Sky-Gazing Experiment</td>
+<td>验证从众/级联的街角抬头看天实验</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/5dc2b058.html" rel="prev" title="COMP5270 Assignment 1 中文题解">
+                  <i class="fa fa-angle-left"></i> COMP5270 Assignment 1 中文题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5c1d7c92.html" rel="next" title="COMP5313 - Chapter 20 The Small-World Phenomenon 小世界现象">
+                  COMP5313 - Chapter 20 The Small-World Phenomenon 小世界现象 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

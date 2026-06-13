@@ -22,18 +22,19 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="从全集 $\{1,2,\dots,n\}$ 的所有子集中，独立且均匀随机地选出两个集合 $S$ 和">
+    <meta name="description" content="COMP5270 Assignment 1 marked solutions 中文题解，覆盖随机集合、离散随机比特、balls into bins 和星形图采样。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2026-03-20-COMP5270-Assignment-1-中文题解">
+<meta property="og:title" content="COMP5270 Assignment 1 中文题解">
 <meta property="og:url" content="http://example.com/posts/5dc2b058.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="从全集 $\{1,2,\dots,n\}$ 的所有子集中，独立且均匀随机地选出两个集合 $S$ 和">
+<meta property="og:description" content="COMP5270 Assignment 1 marked solutions 中文题解，覆盖随机集合、离散随机比特、balls into bins 和星形图采样。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/posts/Figure%201%20The%20star%20graph%20on%20n%20=%2010%20vertices..png">
-<meta property="article:published_time" content="2026-04-14T10:15:32.709Z">
-<meta property="article:modified_time" content="2026-04-20T14:42:00.664Z">
+<meta property="article:published_time" content="2026-06-02T11:53:00.681Z">
+<meta property="article:modified_time" content="2026-06-02T11:53:34.554Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5270">
+<meta property="article:tag" content="Assignment">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/posts/Figure%201%20The%20star%20graph%20on%20n%20=%2010%20vertices..png">
 
@@ -41,10 +42,10 @@
 <link rel="canonical" href="http://example.com/posts/5dc2b058.html">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/5dc2b058.html","path":"posts/5dc2b058.html","title":"2026-03-20-COMP5270-Assignment-1-中文题解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/5dc2b058.html","path":"posts/5dc2b058.html","title":"COMP5270 Assignment 1 中文题解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>2026-03-20-COMP5270-Assignment-1-中文题解 | Joey</title>
+<title>COMP5270 Assignment 1 中文题解 | Joey</title>
   
 
 
@@ -127,7 +128,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">144</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">195</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
   </ul>
 </nav>
 
@@ -152,14 +153,15 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-1%E9%9A%8F%E6%9C%BA%E9%9B%86%E5%90%88%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%A6%82%E7%8E%87"><span class="nav-text">Problem 1：随机集合的两个概率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">涉及知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%AE%BA%E8%AF%81"><span class="nav-text">详细论证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82-prs-subseteq-t"><span class="nav-text">(1) 求 \(\Pr[S
-\subseteq T]\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82-prs-cup-t-12dotsn"><span class="nav-text">(2) 求 \(\Pr[S
-\cup T &#x3D; \{1,2,\dots,n\}]\)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="nav-text">一句话总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2%E6%9E%81%E5%B0%8F%E9%94%99%E8%AF%AF%E6%A6%82%E7%8E%87%E6%98%AF%E5%90%A6%E6%84%8F%E5%91%B3%E7%9D%80%E7%AE%97%E6%B3%95%E5%BF%85%E7%84%B6%E6%AD%A3%E7%A1%AE"><span class="nav-text">Problem
-2：极小错误概率是否意味着算法必然正确？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0-1"><span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-1"><span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-text">涉及知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%AE%BA%E8%AF%81-1"><span class="nav-text">详细论证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-1"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93-1"><span class="nav-text">一句话总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-3%E6%9C%80%E5%A4%A7%E8%A3%85%E8%BD%BD%E9%87%8F%E7%9A%84%E6%9C%9F%E6%9C%9B%E8%87%B3%E5%B0%91%E4%B8%BA-4-%E6%97%B6m-%E9%9C%80%E8%A6%81%E5%A4%9A%E5%A4%A7"><span class="nav-text">Problem
-3：最大装载量的期望至少为 4 时，\(m\)
-需要多大？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0-2"><span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E6%8A%8A%E9%A2%98%E7%9B%AE%E7%BF%BB%E6%88%90%E4%BA%BA%E8%AF%9D"><span class="nav-text">先把题目翻成人话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-2"><span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E7%9F%A5%E8%AF%86%E7%82%B9-2"><span class="nav-text">涉及知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%AE%BA%E8%AF%81-2"><span class="nav-text">详细论证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-2"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93-2"><span class="nav-text">一句话总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-4%E6%98%9F%E5%BD%A2%E5%9B%BE%E4%B8%8A%E8%BF%99%E4%B8%AA%E9%87%87%E6%A0%B7%E7%AE%97%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E4%B8%8D%E5%87%86"><span class="nav-text">Problem
-4：星形图上，这个采样算法为什么可能不准？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0-3"><span class="nav-text">题目概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E6%8A%8A%E8%BF%99%E9%A2%98%E7%9A%84%E6%A0%B8%E5%BF%83%E6%83%B3%E6%B3%95%E8%AE%B2%E6%B8%85%E6%A5%9A"><span class="nav-text">先把这题的核心想法讲清楚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E7%9F%A5%E8%AF%86%E7%82%B9%E7%99%BD%E8%AF%9D%E7%89%88"><span class="nav-text">涉及知识点（白话版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E9%A2%98%E8%A7%A3"><span class="nav-text">详细题解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E6%98%9F%E5%BD%A2%E5%9B%BE%E7%9A%84%E5%B9%B3%E5%9D%87%E5%BA%A6%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91"><span class="nav-text">(a) 星形图的平均度数是多少？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E5%A6%82%E6%9E%9C%E6%8A%BD%E5%88%B0%E7%9A%84-k-%E4%B8%AA%E7%82%B9%E5%85%A8%E6%98%AF%E5%8F%B6%E5%AD%90%E7%AE%97%E6%B3%95%E8%BE%93%E5%87%BA%E4%BB%80%E4%B9%88"><span class="nav-text">(b) 如果抽到的 \(k\) 个点全是叶子，算法输出什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-%E6%8A%BD%E5%88%B0%E7%9A%84-k-%E4%B8%AA%E7%82%B9%E5%85%A8%E6%98%AF%E5%8F%B6%E5%AD%90%E7%9A%84%E6%A6%82%E7%8E%87%E6%98%AF%E5%A4%9A%E5%B0%91"><span class="nav-text">(c) 抽到的 \(k\) 个点全是叶子的概率是多少？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#d-%E4%B8%BA%E4%BA%86%E8%AE%A9%E7%AE%97%E6%B3%95%E8%87%B3%E5%B0%91%E6%9C%89-99-%E7%9A%84%E6%A6%82%E7%8E%87%E5%A4%9F%E5%87%86k-%E8%A6%81%E5%A4%9A%E5%A4%A7"><span class="nav-text">(d) 为了让算法至少有
-99% 的概率够准，\(k\) 要多大？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%E6%B1%87%E6%80%BB"><span class="nav-text">结论汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a"><span class="nav-text">(a)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b"><span class="nav-text">(b)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c"><span class="nav-text">(c)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#d"><span class="nav-text">(d)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93-3"><span class="nav-text">一句话总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E5%A4%8D%E4%B9%A0%E8%BF%99%E4%BB%BD%E4%BD%9C%E4%B8%9A%E8%80%83%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-text">总复习：这份作业考了什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%90%8E%E9%9D%A2%E8%A6%81%E8%BD%AC%E6%88%90%E6%8F%90%E4%BA%A4%E7%89%88%E6%88%91%E5%BB%BA%E8%AE%AE%E4%BD%A0%E8%BF%99%E6%A0%B7%E5%81%9A"><span class="nav-text">如果后面要转成提交版，我建议你这样做</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-1-%E9%9A%8F%E6%9C%BA%E9%9B%86%E5%90%88%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%A6%82%E7%8E%87"><span class="nav-text">Problem 1: 随机集合的两个概率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3"><span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E8%AE%A1%E7%AE%97-prssubseteq-t"><span class="nav-text">(a) 计算 \(\Pr[S\subseteq T]\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E8%AE%A1%E7%AE%97-prscup-tu"><span class="nav-text">(b) 计算 \(\Pr[S\cup
+T&#x3D;U]\)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E9%A2%98%E7%94%A8%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">本题用到的知识点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2-%E6%9E%81%E5%B0%8F%E9%94%99%E8%AF%AF%E6%A6%82%E7%8E%87%E6%98%AF%E5%90%A6%E6%84%8F%E5%91%B3%E7%9D%80%E7%AE%97%E6%B3%95%E5%BF%85%E7%84%B6%E6%AD%A3%E7%A1%AE"><span class="nav-text">Problem 2:
+极小错误概率是否意味着算法必然正确</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-1"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3-1"><span class="nav-text">题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-1"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E9%A2%98%E7%94%A8%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-text">本题用到的知识点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-3-%E6%9C%80%E5%A4%A7%E8%A3%85%E8%BD%BD%E9%87%8F%E6%9C%9F%E6%9C%9B%E8%87%B3%E5%B0%91%E4%B8%BA-4-%E6%97%B6m-%E9%9C%80%E8%A6%81%E5%A4%9A%E5%A4%A7"><span class="nav-text">Problem 3:
+最大装载量期望至少为 4 时，\(m\)
+需要多大</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-2"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3-2"><span class="nav-text">题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-2"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E9%A2%98%E7%94%A8%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9-2"><span class="nav-text">本题用到的知识点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-4-%E6%98%9F%E5%BD%A2%E5%9B%BE%E4%B8%8A%E7%9A%84%E5%B9%B3%E5%9D%87%E5%BA%A6%E9%87%87%E6%A0%B7%E7%AE%97%E6%B3%95"><span class="nav-text">Problem 4:
+星形图上的平均度采样算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-3"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-%E6%98%9F%E5%BD%A2%E5%9B%BE%E7%9A%84%E5%B9%B3%E5%9D%87%E5%BA%A6%E6%95%B0"><span class="nav-text">(a) 星形图的平均度数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E5%A6%82%E6%9E%9C%E6%8A%BD%E5%88%B0%E7%9A%84-k-%E4%B8%AA%E9%A1%B6%E7%82%B9%E5%85%A8%E6%98%AF-leaves%E7%AE%97%E6%B3%95%E8%BE%93%E5%87%BA%E4%BB%80%E4%B9%88"><span class="nav-text">(b) 如果抽到的
+\(k\) 个顶点全是
+leaves，算法输出什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-k-%E6%AC%A1%E6%8A%BD%E6%A0%B7%E5%85%A8%E9%83%A8%E6%8A%BD%E5%88%B0-leaves-%E7%9A%84%E6%A6%82%E7%8E%87"><span class="nav-text">(c) \(k\) 次抽样全部抽到 leaves 的概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-%E4%B8%BA%E4%BA%86%E4%BB%A5%E8%87%B3%E5%B0%91-99-%E6%A6%82%E7%8E%87%E5%BE%97%E5%88%B0-1.1-%E5%80%8D%E4%BB%A5%E5%86%85%E4%BC%B0%E8%AE%A1k-%E9%9C%80%E8%A6%81%E5%A4%9A%E5%A4%A7"><span class="nav-text">(d)
+为了以至少 99% 概率得到 1.1 倍以内估计，\(k\) 需要多大</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-3"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E9%A2%98%E7%94%A8%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9-3"><span class="nav-text">本题用到的知识点</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -174,18 +176,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">215</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">154</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -243,12 +245,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="2026-03-20-COMP5270-Assignment-1-中文题解 | Joey">
-      <meta itemprop="description" content="从全集 $\{1,2,\dots,n\}$ 的所有子集中，独立且均匀随机地选出两个集合 $S$ 和">
+      <meta itemprop="name" content="COMP5270 Assignment 1 中文题解 | Joey">
+      <meta itemprop="description" content="COMP5270 Assignment 1 marked solutions 中文题解，覆盖随机集合、离散随机比特、balls into bins 和星形图采样。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          2026-03-20-COMP5270-Assignment-1-中文题解
+          COMP5270 Assignment 1 中文题解
         </h1>
 
         <div class="post-meta-container">
@@ -258,15 +260,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2026-04-14 10:15:32" itemprop="dateCreated datePublished" datetime="2026-04-14T10:15:32Z">2026-04-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-20 14:42:00" itemprop="dateModified" datetime="2026-04-20T14:42:00Z">2026-04-20</time>
+      <time title="Created: 2026-06-02 11:53:00 / Modified: 11:53:34" itemprop="dateCreated datePublished" datetime="2026-06-02T11:53:00Z">2026-06-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -285,578 +281,526 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.9k</span>
+      <span>2.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>14 mins.</span>
+      <span>9 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">从全集 $\{1,2,\dots,n\}$ 的所有子集中，独立且均匀随机地选出两个集合 $S$ 和</div>
+            <div class="post-description">COMP5270 Assignment 1 marked solutions 中文题解，覆盖随机集合、离散随机比特、balls into bins 和星形图采样。</div>
         </div>
       </header>
 
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="problem-1随机集合的两个概率">Problem 1：随机集合的两个概率</h2>
-<h3 id="题目概述">题目概述</h3>
-<p>从全集 <span class="math inline">\(\{1,2,\dots,n\}\)</span>
-的所有子集中，独立且均匀随机地选出两个集合 <span
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><strong>来源</strong>: Assignment 1 (Marked) Solutions.pdf<br />
+<strong>主题</strong>: random subsets, randomized algorithms, balls into
+bins, empirical average via vertex sampling</p>
+</blockquote>
+<p>这份作业是 short-answer
+assignment，官方答案本身很短。下面保留必要推导，把每一步为什么成立写清楚，但删掉和题解无关的复习建议、提交建议和重复铺垫。</p>
+<hr />
+<h2 id="problem-1-随机集合的两个概率">Problem 1: 随机集合的两个概率</h2>
+<h3 id="题目">题目</h3>
+<p>从全集</p>
+<p><span class="math display">\[
+U=\{1,2,\dots,n\}
+\]</span></p>
+<p>的所有 <span class="math inline">\(2^n\)</span>
+个子集中，独立且均匀随机地选择两个集合 <span
 class="math inline">\(S\)</span> 和 <span
 class="math inline">\(T\)</span>。求：</p>
 <ol type="1">
-<li><span class="math inline">\(\Pr[S \subseteq T]\)</span></li>
-<li><span class="math inline">\(\Pr[S \cup T =
-\{1,2,\dots,n\}]\)</span></li>
+<li><span class="math inline">\(\Pr[S\subseteq T]\)</span>；</li>
+<li><span class="math inline">\(\Pr[S\cup T=U]\)</span>。</li>
 </ol>
-<h3 id="解题思路">解题思路</h3>
-<p>这道题最关键的观察是：</p>
-<ul>
-<li>对每个元素 <span class="math inline">\(i\)</span> 而言，是否属于
-<span class="math inline">\(S\)</span> 是独立的 Bernoulli<span
-class="math inline">\((1/2)\)</span>；</li>
-<li>是否属于 <span class="math inline">\(T\)</span> 也是独立的
-Bernoulli<span class="math inline">\((1/2)\)</span>；</li>
-<li>因此对每个元素 <span class="math inline">\(i\)</span>，它在 <span
-class="math inline">\((S,T)\)</span> 中的状态共有四种，而且等可能：
-<span class="math display">\[
-00,\ 01,\ 10,\ 11.
-\]</span></li>
-</ul>
-<p>所以问题可以转化为：<strong>对每个元素分别看它是否满足条件，再利用元素之间的独立性，把单元素概率乘起来。</strong></p>
-<h3 id="涉及知识点">涉及知识点</h3>
-<ul>
-<li>均匀随机子集的含义</li>
-<li>独立性</li>
-<li>按元素分解事件</li>
-<li>乘法原理 / 独立事件概率相乘</li>
-</ul>
-<h3 id="详细论证">详细论证</h3>
-<h4 id="求-prs-subseteq-t">(1) 求 <span class="math inline">\(\Pr[S
-\subseteq T]\)</span></h4>
-<p>事件 <span class="math inline">\(S \subseteq T\)</span>
-的含义是：如果某个元素在 <span class="math inline">\(S\)</span>
-中，那么它一定也在 <span class="math inline">\(T\)</span> 中。</p>
-<p>对某个固定元素 <span
-class="math inline">\(i\)</span>，四种情况分别是：</p>
-<ul>
-<li><span class="math inline">\(00\)</span>：不在 <span
-class="math inline">\(S\)</span>，也不在 <span
-class="math inline">\(T\)</span></li>
-<li><span class="math inline">\(01\)</span>：不在 <span
-class="math inline">\(S\)</span>，在 <span
-class="math inline">\(T\)</span></li>
-<li><span class="math inline">\(10\)</span>：在 <span
-class="math inline">\(S\)</span>，不在 <span
-class="math inline">\(T\)</span></li>
-<li><span class="math inline">\(11\)</span>：在 <span
-class="math inline">\(S\)</span>，也在 <span
-class="math inline">\(T\)</span></li>
-</ul>
-<p>其中唯一会破坏 <span class="math inline">\(S \subseteq T\)</span>
-的情况是： <span class="math display">\[
-10.
-\]</span> 因为这表示 <span class="math inline">\(i \in S\)</span> 但
-<span class="math inline">\(i \notin T\)</span>。</p>
-<p>所以，对单个元素来说，它“满足 <span class="math inline">\(S \subseteq
-T\)</span> 要求”的概率是： <span class="math display">\[
-1-\frac14 = \frac34.
+<h3 id="题解">题解</h3>
+<p>均匀随机选择一个子集的意思是：对每个元素 <span
+class="math inline">\(i\in
+U\)</span>，它是否进入该集合可以看成一次独立的 Bernoulli<span
+class="math inline">\((1/2)\)</span> 选择。</p>
+<p>因为 <span class="math inline">\(S\)</span> 和 <span
+class="math inline">\(T\)</span> 是独立选出的，所以对固定元素 <span
+class="math inline">\(i\)</span>，它在 <span
+class="math inline">\((S,T)\)</span>
+中的状态一共有四种，并且等概率：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">状态</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">概率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(00\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(i\notin S,\
+i\notin T\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(1/4\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(01\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(i\notin S,\
+i\in T\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(1/4\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(10\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(i\in S,\
+i\notin T\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(1/4\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(11\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(i\in S,\ i\in
+T\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(1/4\)</span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="a-计算-prssubseteq-t">(a) 计算 <span
+class="math inline">\(\Pr[S\subseteq T]\)</span></h4>
+<p><span class="math inline">\(S\subseteq T\)</span> 的意思是：</p>
+<blockquote>
+<p>只要某个元素在 <span class="math inline">\(S\)</span>
+里，它就必须也在 <span class="math inline">\(T\)</span> 里。</p>
+</blockquote>
+<p>对一个固定元素 <span class="math inline">\(i\)</span>
+来说，唯一会破坏 <span class="math inline">\(S\subseteq T\)</span>
+的状态是</p>
+<p><span class="math display">\[
+10,
 \]</span></p>
-<p>又因为不同元素之间是独立的，所以全部 <span
-class="math inline">\(n\)</span> 个元素都满足要求的概率为： <span
-class="math display">\[
-\Pr[S \subseteq T] = \left(\frac34\right)^n.
+<p>也就是 <span class="math inline">\(i\in S\)</span> 但 <span
+class="math inline">\(i\notin T\)</span>。</p>
+<p>因此单个元素不破坏条件的概率是</p>
+<p><span class="math display">\[
+1-\frac14=\frac34.
 \]</span></p>
-<h4 id="求-prs-cup-t-12dotsn">(2) 求 <span class="math inline">\(\Pr[S
-\cup T = \{1,2,\dots,n\}]\)</span></h4>
-<p>事件 <span class="math inline">\(S \cup T = \{1,2,\dots,n\}\)</span>
-的含义是：全集中的每个元素都至少出现在 <span
-class="math inline">\(S\)</span> 或 <span
-class="math inline">\(T\)</span> 中一次。</p>
-<p>对某个固定元素 <span
-class="math inline">\(i\)</span>，唯一会破坏这个条件的情况是： <span
-class="math display">\[
+<p>不同元素之间的选择相互独立，所以 <span
+class="math inline">\(n\)</span> 个元素全部不破坏条件的概率是</p>
+<p><span class="math display">\[
+\Pr[S\subseteq T]
+=\left(\frac34\right)^n.
+\]</span></p>
+<h4 id="b-计算-prscup-tu">(b) 计算 <span class="math inline">\(\Pr[S\cup
+T=U]\)</span></h4>
+<p><span class="math inline">\(S\cup T=U\)</span> 的意思是：</p>
+<blockquote>
+<p>每个元素至少出现在 <span class="math inline">\(S\)</span> 或 <span
+class="math inline">\(T\)</span> 中的一个集合里。</p>
+</blockquote>
+<p>对固定元素 <span class="math inline">\(i\)</span>
+来说，唯一会破坏这个条件的状态是</p>
+<p><span class="math display">\[
 00,
-\]</span> 即它既不在 <span class="math inline">\(S\)</span> 中，也不在
-<span class="math inline">\(T\)</span> 中。</p>
-<p>因此，对单个元素来说，它满足“属于 <span class="math inline">\(S \cup
-T\)</span>”的概率为： <span class="math display">\[
-1-\frac14 = \frac34.
 \]</span></p>
-<p>再由元素独立性可得： <span class="math display">\[
-\Pr[S \cup T = \{1,2,\dots,n\}] = \left(\frac34\right)^n.
+<p>也就是 <span class="math inline">\(i\notin S\)</span> 且 <span
+class="math inline">\(i\notin T\)</span>。</p>
+<p>因此单个元素满足 union 条件的概率也是</p>
+<p><span class="math display">\[
+1-\frac14=\frac34.
+\]</span></p>
+<p>同样由元素之间的独立性，</p>
+<p><span class="math display">\[
+\Pr[S\cup T=U]
+=\left(\frac34\right)^n.
 \]</span></p>
 <h3 id="结论">结论</h3>
 <p><span class="math display">\[
-\boxed{\Pr[S \subseteq T] = \left(\frac34\right)^n}
+\boxed{\Pr[S\subseteq T]=\left(\frac34\right)^n}
 \]</span></p>
 <p><span class="math display">\[
-\boxed{\Pr[S \cup T = \{1,2,\dots,n\}] = \left(\frac34\right)^n}
+\boxed{\Pr[S\cup T=U]=\left(\frac34\right)^n}
 \]</span></p>
-<h3 id="一句话总结">一句话总结</h3>
-<p>这道题的核心是：<strong>把全集中的每个元素单独拿出来分析，找到“坏情况”只有
-1 种，因此单元素成功概率都是 <span
-class="math inline">\(3/4\)</span>，最后利用独立性得到 <span
-class="math inline">\((3/4)^n\)</span>。</strong></p>
+<h3 id="本题用到的知识点">本题用到的知识点</h3>
+<ul>
+<li>均匀随机子集：每个元素独立地以概率 <span
+class="math inline">\(1/2\)</span> 被选入集合。</li>
+<li>独立性：<span class="math inline">\(S\)</span> 和 <span
+class="math inline">\(T\)</span>
+独立，且不同元素的选择也可以逐元素相乘。</li>
+<li>按元素分解事件：把集合事件拆成每个元素的局部状态。</li>
+<li>补集思想：先找唯一的坏状态，再用 <span
+class="math inline">\(1-\Pr[\text{bad}]\)</span>。</li>
+<li>乘法原理：<span class="math inline">\(n\)</span>
+个独立元素都满足条件时，概率为单元素概率的 <span
+class="math inline">\(n\)</span> 次方。</li>
+</ul>
 <hr />
-<h2 id="problem-2极小错误概率是否意味着算法必然正确">Problem
-2：极小错误概率是否意味着算法必然正确？</h2>
-<h3 id="题目概述-1">题目概述</h3>
-<p>算法 <span class="math inline">\(A\)</span> 在每个输入 <span
-class="math inline">\(x\)</span> 上使用 <span
-class="math inline">\(r\)</span>
-个随机比特，并且输出错误答案的概率至多为 <span class="math display">\[
-\frac{9}{10}\cdot 2^{-r}.
-\]</span> 问：算法是否实际上对所有输入都以概率 1 正确？</p>
-<h3 id="解题思路-1">解题思路</h3>
-<p>这题的关键不在于概率计算技巧，而在于理解：</p>
-<ul>
-<li>算法只使用 <span class="math inline">\(r\)</span> 个随机比特；</li>
-<li>所以总共只有 <span class="math inline">\(2^r\)</span>
-种可能的随机串；</li>
-<li>每种随机串出现的概率都是 <span
-class="math inline">\(1/2^r\)</span>；</li>
-<li>因此错误概率一定是某个整数倍的 <span
-class="math inline">\(1/2^r\)</span>。</li>
-</ul>
-<p>而题目给出的上界却是 <span class="math display">\[
+<h2 id="problem-2-极小错误概率是否意味着算法必然正确">Problem 2:
+极小错误概率是否意味着算法必然正确</h2>
+<h3 id="题目-1">题目</h3>
+<p>算法 <span class="math inline">\(A\)</span> 对每个输入 <span
+class="math inline">\(x\)</span> 使用 <span
+class="math inline">\(r\)</span> 个随机
+bit。若它输出错误答案的概率至多为</p>
+<p><span class="math display">\[
 \frac{9}{10}\cdot 2^{-r},
-\]</span> 这比 <span class="math inline">\(1\cdot 2^{-r}\)</span>
-还小。既然错误概率必须是“以 <span class="math inline">\(1/2^r\)</span>
-为单位”的整数倍，那么它不可能是一个严格介于 <span
-class="math inline">\(0\)</span> 和 <span
-class="math inline">\(1/2^r\)</span> 之间的值；唯一可能就是 0。</p>
-<h3 id="涉及知识点-1">涉及知识点</h3>
-<ul>
-<li>随机算法的样本空间大小</li>
-<li>离散概率</li>
-<li>概率是等概率原子事件个数的倍数</li>
-<li>整数约束</li>
-</ul>
-<h3 id="详细论证-1">详细论证</h3>
-<p>固定任意一个输入 <span class="math inline">\(x\)</span>。</p>
-<p>由于算法使用 <span class="math inline">\(r\)</span>
-个随机比特，因此随机性完全由一个长度为 <span
-class="math inline">\(r\)</span> 的比特串决定。这样的比特串一共有：
-<span class="math display">\[
+\]</span></p>
+<p>问：算法是否在所有输入上都以概率 <span
+class="math inline">\(1\)</span> 正确？</p>
+<h3 id="题解-1">题解</h3>
+<p>答案是 <strong>是的</strong>。</p>
+<p>固定任意输入 <span class="math inline">\(x\)</span>。算法只使用 <span
+class="math inline">\(r\)</span> 个随机 bit，所以它的随机性完全由长度为
+<span class="math inline">\(r\)</span> 的 bit string 决定。</p>
+<p>长度为 <span class="math inline">\(r\)</span> 的 bit string
+一共有</p>
+<p><span class="math display">\[
 2^r
-\]</span> 种。</p>
-<p>设其中有 <span class="math inline">\(k\)</span>
-个随机串会导致算法在输入 <span class="math inline">\(x\)</span>
-上输出错误答案，那么错误概率就是： <span class="math display">\[
-\Pr[\text{error on }x] = \frac{k}{2^r},
-\]</span> 其中 <span class="math inline">\(k\)</span>
-是一个非负整数。</p>
-<p>题目又告诉我们： <span class="math display">\[
-\frac{k}{2^r} \le \frac{9}{10}\cdot 2^{-r}.
-\]</span> 两边同乘 <span class="math inline">\(2^r\)</span>，得到：
-<span class="math display">\[
-k \le \frac{9}{10}.
 \]</span></p>
-<p>但是 <span class="math inline">\(k\)</span>
-是一个非负整数，因此只能是： <span class="math display">\[
-k=0.
+<p>种，并且每一种出现的概率都是</p>
+<p><span class="math display">\[
+2^{-r}.
 \]</span></p>
-<p>这意味着：<strong>根本不存在任何随机串会让算法出错。</strong></p>
-<p>由于输入 <span class="math inline">\(x\)</span>
-是任意固定的，所以这个结论对所有输入都成立。于是算法在每个输入上都必定输出正确答案，也就是：
-<span class="math display">\[
-\Pr[\text{algorithm correct on input }x]=1.
+<p>设在输入 <span class="math inline">\(x\)</span>
+上，会导致错误输出的随机串数量为 <span
+class="math inline">\(b_x\)</span>。因为 <span
+class="math inline">\(b_x\)</span>
+是随机串的个数，所以它必须是非负整数。</p>
+<p>算法在输入 <span class="math inline">\(x\)</span>
+上的错误概率就是</p>
+<p><span class="math display">\[
+\Pr[\text{error on }x]
+=\frac{b_x}{2^r}.
 \]</span></p>
+<p>题目给出</p>
+<p><span class="math display">\[
+\frac{b_x}{2^r}
+\le
+\frac{9}{10}\cdot 2^{-r}.
+\]</span></p>
+<p>两边同时乘以 <span class="math inline">\(2^r\)</span>，得到</p>
+<p><span class="math display">\[
+b_x\le \frac{9}{10}.
+\]</span></p>
+<p>但 <span class="math inline">\(b_x\)</span>
+是非负整数，所以只能是</p>
+<p><span class="math display">\[
+b_x=0.
+\]</span></p>
+<p>这说明：在这个固定输入 <span class="math inline">\(x\)</span>
+上，没有任何随机串会让算法输出错误答案。</p>
+<p>由于 <span class="math inline">\(x\)</span>
+是任意输入，所以这个结论对所有输入都成立。因此算法在所有输入上都以概率
+<span class="math inline">\(1\)</span> 正确。</p>
 <h3 id="结论-1">结论</h3>
 <p><span class="math display">\[
-\boxed{\text{Yes, the algorithm is correct on every input with
+\boxed{\text{Yes. The algorithm is correct on every input with
 probability }1.}
 \]</span></p>
-<h3 id="一句话总结-1">一句话总结</h3>
-<p>因为错误概率必须是 <span class="math inline">\(1/2^r\)</span>
-的整数倍，而题目给的上界却小于最小正倍数 <span
-class="math inline">\(1/2^r\)</span>，所以错误概率只能是 0。</p>
+<h3 id="本题用到的知识点-1">本题用到的知识点</h3>
+<ul>
+<li>随机 bit 的样本空间大小：<span class="math inline">\(r\)</span>
+个随机 bit 对应 <span class="math inline">\(2^r\)</span>
+个等概率随机串。</li>
+<li>离散概率粒度：错误概率必须是 <span
+class="math inline">\(2^{-r}\)</span> 的整数倍。</li>
+<li>整数约束：若非负整数 <span class="math inline">\(b_x\le
+0.9\)</span>，则 <span class="math inline">\(b_x=0\)</span>。</li>
+<li>固定输入分析：先固定任意 <span
+class="math inline">\(x\)</span>，证明该输入上永不出错，再推广到所有输入。</li>
+</ul>
 <hr />
-<h2 id="problem-3最大装载量的期望至少为-4-时m-需要多大">Problem
-3：最大装载量的期望至少为 4 时，<span class="math inline">\(m\)</span>
-需要多大？</h2>
-<h3 id="题目概述-2">题目概述</h3>
-<p>把 <span class="math inline">\(m\)</span> 个球独立且均匀地扔到 <span
-class="math inline">\(n\)</span>
-个桶里。问：为了让<strong>最大装载量</strong>（maximum
-load）的期望至少为 4，<span class="math inline">\(m\)</span>
-至少需要多大？要求用 <span class="math inline">\(\Omega(\cdot)\)</span>
-表示。</p>
-<h3 id="先把题目翻成人话">先把题目翻成人话</h3>
-<p>“最大装载量至少为 4” 的意思，其实就是：</p>
-<blockquote>
-<p>开始出现某个桶里有 4 个球。</p>
-</blockquote>
-<p>所以这题本质上是在问：</p>
-<blockquote>
-<p>需要扔多少个球，才会比较明显地出现“4 个球撞进同一个桶”的现象？</p>
-</blockquote>
-<p>这和 birthday paradox 的思路有点像，只不过 birthday paradox
-关心的是“2 个撞在一起”，而这里关心的是“4 个撞在一起”。</p>
-<h3 id="解题思路-2">解题思路</h3>
-<p>最大值通常不好直接算，所以我们换个角度：</p>
-<ul>
-<li>如果最大装载量至少为 4，说明<strong>至少有一个桶装了 4
-个球</strong>；</li>
-<li>那我们不妨先研究：<strong>有多少个桶会装到 4 个球？</strong></li>
-<li>如果这种桶的期望数量已经达到常数量级（比如大约 1
-个），那就说明“出现四球桶”已经不是很稀有了；</li>
-<li>这时最大装载量就会进入 4 这个量级。</li>
-</ul>
-<p>所以核心做法是：</p>
-<ol type="1">
-<li>先看一个固定桶装到 4 个球的概率；</li>
-<li>再乘上 <span
-class="math inline">\(n\)</span>，估计所有桶里这样的桶有多少个；</li>
-<li>让这个数量达到常数量级，就得到阈值。</li>
-</ol>
-<h3 id="涉及知识点-2">涉及知识点</h3>
-<ul>
-<li>balls into bins 模型</li>
-<li>二项分布 / 稀有事件估计</li>
-<li>期望的线性性</li>
-<li>阈值分析（threshold phenomenon）</li>
-<li>渐近记号 <span class="math inline">\(\Omega, \Theta\)</span></li>
-</ul>
-<h3 id="详细论证-2">详细论证</h3>
-<p>设某个固定桶中的球数为 <span class="math inline">\(X\)</span>，则
-<span class="math display">\[
-X \sim \mathrm{Bin}\left(m,\frac1n\right).
+<h2 id="problem-3-最大装载量期望至少为-4-时m-需要多大">Problem 3:
+最大装载量期望至少为 4 时，<span class="math inline">\(m\)</span>
+需要多大</h2>
+<h3 id="题目-2">题目</h3>
+<p>把 <span class="math inline">\(m\)</span> 个球独立且均匀地扔进 <span
+class="math inline">\(n\)</span> 个箱子。问：为了让 <strong>expected
+maximum load</strong> 至少为 <span
+class="math inline">\(4\)</span>，<span class="math inline">\(m\)</span>
+在 <span class="math inline">\(\Omega(\cdot)\)</span>
+记号下至少需要多大？</p>
+<p>官方答案是：</p>
+<p><span class="math display">\[
+m=\Omega(n^{3/4}).
 \]</span></p>
-<p>也就是说，每个球都有 <span class="math inline">\(1/n\)</span>
-的概率落进这个桶。</p>
-<p>现在我们想知道：这个固定桶装到 4 个球的概率有多大？</p>
-<p>先看“恰好装到 4 个球”的概率： <span class="math display">\[
-\Pr[X=4] =
-\binom{m}{4}\left(\frac1n\right)^4\left(1-\frac1n\right)^{m-4}.
+<p>下面解释这个量级为什么是 <span
+class="math inline">\(n^{3/4}\)</span>。</p>
+<h3 id="题解-2">题解</h3>
+<p>令 <span class="math inline">\(L\)</span> 表示最大装载量：</p>
+<p><span class="math display">\[
+L=\max_{1\le j\le n}\{\text{第 }j\text{ 个箱子里的球数}\}.
 \]</span></p>
-<p>这里要特别区分两个事件：</p>
-<ul>
-<li><span
-class="math inline">\(X=4\)</span>：这个桶<strong>恰好</strong>收到 4
-个球；</li>
-<li><span class="math inline">\(X\ge
-4\)</span>：这个桶<strong>至少</strong>收到 4 个球。</li>
-</ul>
-<p>上面的公式算的是 <span
-class="math inline">\(X=4\)</span>，所以它的含义是：</p>
-<ol type="1">
-<li>先从 <span class="math inline">\(m\)</span> 个球里选出 4 个；</li>
-<li>这 4 个球都进入这个桶，每个概率都是 <span
-class="math inline">\(1/n\)</span>；</li>
-<li>其余 <span class="math inline">\(m-4\)</span>
-个球都不进入这个桶，每个概率都是 <span
-class="math inline">\(1-1/n\)</span>。</li>
-</ol>
-<p>也就是说，“剩下的球不进这个桶”这句话并不是多余条件，而是因为我们现在算的是<strong>恰好
-4 个球进入该桶</strong>，不是“至少 4 个球进入该桶”。</p>
-<p>那为什么这里先算 <span
-class="math inline">\(X=4\)</span>，而不是直接算 <span
-class="math inline">\(X\ge 4\)</span>？</p>
-<p>因为题目只关心量级。直接计算 <span class="math inline">\(X\ge
-4\)</span> 会更麻烦，而 <span class="math inline">\(X=4\)</span>
-已经足够帮助我们判断：什么时候开始出现“四球桶”这个现象。</p>
-<p>由于题目只关心渐近量级，所以我们不用纠结常数，只看主导部分。上式的量级是：
-<span class="math display">\[
-\Pr[X=4] = \Theta\left(\frac{m^4}{n^4}\right).
+<p>若 <span class="math inline">\(L\ge
+4\)</span>，说明至少有一个箱子收到了至少 <span
+class="math inline">\(4\)</span>
+个球。为了估计这个现象什么时候开始出现，可以先看“四个指定球落进同一个箱子”的概率。</p>
+<p>任取 <span class="math inline">\(4\)</span>
+个球。第一个球落到哪里不重要；之后另外 <span
+class="math inline">\(3\)</span>
+个球都必须落到第一个球所在的同一个箱子。每个球命中该箱子的概率是 <span
+class="math inline">\(1/n\)</span>，所以这 <span
+class="math inline">\(4\)</span> 个球同箱的概率是</p>
+<p><span class="math display">\[
+\frac{1}{n^3}.
 \]</span></p>
-<p>这表示：</p>
-<blockquote>
-<p>一个固定桶“恰好成为四球桶”的概率，大约由 <span
-class="math inline">\(m^4/n^4\)</span> 控制。</p>
-</blockquote>
-<p>接下来考虑全部 <span class="math inline">\(n\)</span> 个桶。</p>
-<p>设 <span class="math inline">\(Y\)</span> 表示“装到 4
-个球的桶”的个数，那么由期望的线性性可得： <span class="math display">\[
-\mathbb E[Y] = n \cdot
-\Theta\left(\frac{m^4}{n^4}\right)=\Theta\left(\frac{m^4}{n^3}\right).
+<p>从 <span class="math inline">\(m\)</span> 个球中选出 <span
+class="math inline">\(4\)</span> 个球有</p>
+<p><span class="math display">\[
+\binom{m}{4}
 \]</span></p>
-<p>这一步非常关键，因为它告诉我们：</p>
-<blockquote>
-<p>系统里“四球桶”的总规模，大约由 <span
-class="math inline">\(m^4/n^3\)</span> 决定。</p>
-</blockquote>
-<p>现在分两种情况理解：</p>
-<ul>
-<li>如果 <span class="math display">\[
+<p>种选择。因此“四球同箱组”的期望数量大约是</p>
+<p><span class="math display">\[
+\binom{m}{4}\frac{1}{n^3}
+=\Theta\left(\frac{m^4}{n^3}\right).
+\]</span></p>
+<p>如果</p>
+<p><span class="math display">\[
 \frac{m^4}{n^3}=o(1),
-\]</span> 那么四球桶的期望个数趋于
-0，说明大多数时候根本不会出现这样的桶；</li>
-<li>既然连“四球桶”通常都没有，那最大装载量当然还很难达到 4。</li>
+\]</span></p>
+<p>那么四球同箱现象的期望数量趋于 <span
+class="math inline">\(0\)</span>。更严格地说，对任意 <span
+class="math inline">\(t\ge4\)</span>，</p>
+<p><span class="math display">\[
+\Pr[L\ge t]
+\le
+n\binom{m}{t}\left(\frac1n\right)^t
+=O\left(\frac{m^t}{n^{t-1}}\right),
+\]</span></p>
+<p>因为可以先选一个箱子，再选 <span class="math inline">\(t\)</span>
+个球要求它们全部落入该箱子。于是</p>
+<p><span class="math display">\[
+\mathbb E[L]
+=\sum_{t\ge1}\Pr[L\ge t]
+\le
+3+\sum_{t\ge4}O\left(\frac{m^t}{n^{t-1}}\right).
+\]</span></p>
+<p>当 <span class="math inline">\(m=o(n^{3/4})\)</span> 时，右侧从 <span
+class="math inline">\(t=4\)</span> 开始的尾和是 <span
+class="math inline">\(o(1)\)</span>，所以</p>
+<p><span class="math display">\[
+\mathbb E[L]\le 3+o(1),
+\]</span></p>
+<p>不可能达到至少 <span class="math inline">\(4\)</span>。</p>
+<p>因此，要让最大装载量的期望达到 <span
+class="math inline">\(4\)</span>，至少需要让四球碰撞数量达到常数量级：</p>
+<p><span class="math display">\[
+\frac{m^4}{n^3}=\Omega(1).
+\]</span></p>
+<p>解这个不等式：</p>
+<p><span class="math display">\[
+m^4=\Omega(n^3),
+\]</span></p>
+<p>所以</p>
+<p><span class="math display">\[
+m=\Omega(n^{3/4}).
+\]</span></p>
+<p>也可以把它理解成 birthday paradox 的高阶版本：</p>
+<ul>
+<li>2 个球撞进同一个箱子的阈值是 <span
+class="math inline">\(n^{1/2}\)</span>；</li>
+<li>3 个球撞进同一个箱子的阈值是 <span
+class="math inline">\(n^{2/3}\)</span>；</li>
+<li>4 个球撞进同一个箱子的阈值是 <span
+class="math inline">\(n^{3/4}\)</span>。</li>
 </ul>
-<p>所以，想让最大装载量进入 4
-这个量级，至少要让“四球桶的期望个数”不再趋于
-0，而是达到常数量级，也就是要求： <span class="math display">\[
-\frac{m^4}{n^3} = \Theta(1).
-\]</span></p>
-<p>解这个式子： <span class="math display">\[
-m^4 = \Theta(n^3),
-\]</span> 因此 <span class="math display">\[
-m = \Theta(n^{3/4}).
-\]</span></p>
-<p>题目只要求用 <span class="math inline">\(\Omega(\cdot)\)</span>
-表示必要规模，所以最终答案写成： <span class="math display">\[
-\boxed{m = \Omega(n^{3/4})}.
-\]</span></p>
 <h3 id="结论-2">结论</h3>
 <p><span class="math display">\[
-\boxed{m = \Omega(n^{3/4})}
+\boxed{m=\Omega(n^{3/4})}
 \]</span></p>
-<h3 id="一句话总结-2">一句话总结</h3>
-<p>这题的关键是：<strong>先不直接算最大值，而是先问“什么时候开始出现某个桶里有
-4 个球”。这个现象的阈值正好是 <span class="math inline">\(m \approx
-n^{3/4}\)</span>。</strong></p>
+<h3 id="本题用到的知识点-2">本题用到的知识点</h3>
+<ul>
+<li>Balls into bins 模型：<span class="math inline">\(m\)</span>
+个球独立均匀投进 <span class="math inline">\(n\)</span> 个箱子。</li>
+<li>Maximum load：最大装载量至少为 <span
+class="math inline">\(4\)</span> 等价于出现某个箱子有至少 <span
+class="math inline">\(4\)</span> 个球。</li>
+<li>高阶碰撞计数：用 <span class="math inline">\(4\)</span>
+个球同箱的期望数量判断阈值。</li>
+<li>期望线性性：把所有 <span class="math inline">\(4\)</span>-tuple
+的碰撞 indicator 加起来。</li>
+<li>渐近记号：由 <span
+class="math inline">\(\frac{m^4}{n^3}=\Omega(1)\)</span> 推出 <span
+class="math inline">\(m=\Omega(n^{3/4})\)</span>。</li>
+</ul>
 <hr />
-<h2 id="problem-4星形图上这个采样算法为什么可能不准">Problem
-4：星形图上，这个采样算法为什么可能不准？</h2>
+<h2 id="problem-4-星形图上的平均度采样算法">Problem 4:
+星形图上的平均度采样算法</h2>
 <figure>
 <img data-src="Figure%201%20The%20star%20graph%20on%20n%20=%2010%20vertices..png"
 alt="Figure 1 The star graph on n = 10 vertices..png" />
 <figcaption aria-hidden="true">Figure 1 The star graph on n = 10
 vertices..png</figcaption>
 </figure>
-<h3 id="题目概述-3">题目概述</h3>
-<p>这张图是一个星形图 <span class="math inline">\(G^\star\)</span>：</p>
+<h3 id="题目-3">题目</h3>
+<p>令 <span class="math inline">\(G^\star\)</span> 是 <span
+class="math inline">\(n\)</span> 个顶点的 star graph：</p>
 <ul>
-<li>有 1 个中心点；</li>
-<li>有 <span class="math inline">\(n-1\)</span> 个叶子点；</li>
-<li>中心点连着所有叶子点；</li>
-<li>叶子点之间没有边。</li>
+<li>一个中心点连接所有其他 <span class="math inline">\(n-1\)</span>
+个点；</li>
+<li>其他 <span class="math inline">\(n-1\)</span> 个点是 leaves；</li>
+<li>leaves 之间没有边。</li>
 </ul>
-<p>所以：</p>
-<ul>
-<li>中心点的度数是 <span class="math inline">\(n-1\)</span>；</li>
-<li>每个叶子点的度数都是 1。</li>
-</ul>
-<p>算法的做法很简单：</p>
+<p>算法做的是 vertex sampling：</p>
 <ol type="1">
-<li>随机选 <span class="math inline">\(k\)</span> 个点；</li>
-<li>看这些点的度数；</li>
-<li>把这些度数取平均，作为图的平均度数估计值。</li>
+<li>均匀随机抽取 <span class="math inline">\(k\)</span> 个顶点 <span
+class="math inline">\(v_1,\dots,v_k\)</span>；</li>
+<li>查询这些顶点的度数 <span
+class="math inline">\(d_{v_1},\dots,d_{v_k}\)</span>；</li>
+<li>输出经验平均值</li>
 </ol>
-<p>题目要你分析：当输入是星形图时，这个算法会发生什么。</p>
-<h3 id="先把这题的核心想法讲清楚">先把这题的核心想法讲清楚</h3>
-<p>这题最关键的地方是：</p>
-<blockquote>
-<p>这张图非常“不平均”。</p>
-</blockquote>
-<p>因为：</p>
-<ul>
-<li>大部分点都是叶子，度数只有 1；</li>
-<li>只有一个中心点，度数特别大，是 <span
-class="math inline">\(n-1\)</span>。</li>
-</ul>
-<p>所以如果你随机抽点：</p>
-<ul>
-<li><strong>很大概率会抽到叶子</strong>；</li>
-<li><strong>很小概率才会抽到中心点</strong>。</li>
-</ul>
-<p>这就会导致一个问题：</p>
-<blockquote>
-<p>如果你一直没抽到中心点，你看到的度数几乎全是
-1，最后平均出来也会很接近 1。</p>
-</blockquote>
-<p>但真实的平均度数其实不是 1，而是接近 2。</p>
-<p>所以这题其实是在说明：</p>
-<blockquote>
-<p>这个算法在星形图上可能会低估真实平均度数。</p>
-</blockquote>
-<hr />
-<h3 id="涉及知识点白话版">涉及知识点（白话版）</h3>
-<ul>
-<li>平均度数：所有点的度数加起来，再除以点的总数</li>
-<li>随机采样：每次随机选一个点</li>
-<li>独立：每次采样互不影响</li>
-<li>概率连乘：连续 <span class="math inline">\(k\)</span>
-次都发生同一件事，就把概率乘起来</li>
-</ul>
-<hr />
-<h3 id="详细题解">详细题解</h3>
-<h4 id="a-星形图的平均度数是多少">(a) 星形图的平均度数是多少？</h4>
-<p>先看整张图里所有点的度数总和。</p>
-<ul>
-<li>1 个中心点，度数是 <span class="math inline">\(n-1\)</span></li>
-<li><span class="math inline">\(n-1\)</span> 个叶子点，每个度数是 1</li>
-</ul>
-<p>所以总度数是： <span class="math display">\[
-(n-1) + (n-1) = 2(n-1).
+<p><span class="math display">\[
+\hat d=\frac1k\sum_{i=1}^k d_{v_i}.
 \]</span></p>
-<p>图里一共有 <span class="math inline">\(n\)</span>
-个点，所以平均度数就是： <span class="math display">\[
-\bar d(G^\star)=\frac{2(n-1)}{n}=2-\frac{2}{n}.
+<p>题目要求分析该算法在 star graph 上的行为。</p>
+<h3 id="a-星形图的平均度数">(a) 星形图的平均度数</h3>
+<p>Star graph 有</p>
+<p><span class="math display">\[
+m=n-1
 \]</span></p>
-<p>所以答案是： <span class="math display">\[
-\boxed{\bar d(G^\star)=2-\frac{2}{n}}.
+<p>条边。由 Handshaking Lemma，所有顶点度数之和是</p>
+<p><span class="math display">\[
+2m=2(n-1).
 \]</span></p>
-<h4 id="b-如果抽到的-k-个点全是叶子算法输出什么">(b) 如果抽到的 <span
-class="math inline">\(k\)</span> 个点全是叶子，算法输出什么？</h4>
-<p>如果抽到的全是叶子，那么这些点的度数全都是 1。</p>
-<p>也就是说，算法看到的是： <span class="math display">\[
-1,1,1,\dots,1.
+<p>因此平均度数是</p>
+<p><span class="math display">\[
+\bar d(G^\star)
+=\frac{2(n-1)}{n}
+=2-\frac2n.
 \]</span></p>
-<p>这些数的平均值当然还是 1，所以输出就是： <span
-class="math display">\[
-\boxed{\hat d = 1}.
+<p>所以</p>
+<p><span class="math display">\[
+\boxed{\bar d(G^\star)=2-\frac2n}.
 \]</span></p>
-<h4 id="c-抽到的-k-个点全是叶子的概率是多少">(c) 抽到的 <span
-class="math inline">\(k\)</span> 个点全是叶子的概率是多少？</h4>
-<p>图里总共有 <span class="math inline">\(n\)</span> 个点，其中叶子有
-<span class="math inline">\(n-1\)</span> 个。</p>
-<p>所以一次随机抽点，抽到叶子的概率是： <span class="math display">\[
-\frac{n-1}{n}.
+<h3 id="b-如果抽到的-k-个顶点全是-leaves算法输出什么">(b) 如果抽到的
+<span class="math inline">\(k\)</span> 个顶点全是
+leaves，算法输出什么</h3>
+<p>每个 leaf 的度数都是 <span class="math inline">\(1\)</span>。</p>
+<p>如果 <span class="math inline">\(k\)</span> 次抽样全部抽到
+leaves，那么算法看到的度数序列是</p>
+<p><span class="math display">\[
+1,1,\dots,1.
 \]</span></p>
-<p>如果抽 <span class="math inline">\(k\)</span>
-次，而且每次都独立，那么“每次都抽到叶子”的概率就是： <span
-class="math display">\[
-\left(\frac{n-1}{n}\right)^k.
+<p>因此经验平均值是</p>
+<p><span class="math display">\[
+\hat d
+=\frac1k\sum_{i=1}^k 1
+=1.
 \]</span></p>
-<p>所以答案是： <span class="math display">\[
-\boxed{\left(\frac{n-1}{n}\right)^k}.
+<p>所以</p>
+<p><span class="math display">\[
+\boxed{\hat d=1}.
 \]</span></p>
-<h4 id="d-为了让算法至少有-99-的概率够准k-要多大">(d) 为了让算法至少有
-99% 的概率够准，<span class="math inline">\(k\)</span> 要多大？</h4>
-<p>这一问最容易卡住的地方，是题目里的：</p>
-<blockquote>
-<p>within a factor 1.1</p>
-</blockquote>
-<p>它的意思是：估计值不能和真实值差太多。</p>
-<p>如果真实值是 <span class="math inline">\(d\)</span>，估计值是 <span
-class="math inline">\(\hat d\)</span>，那么“within a factor 1.1”表示：
-<span class="math display">\[
-\frac{d}{1.1} \le \hat d \le 1.1d.
+<h3 id="c-k-次抽样全部抽到-leaves-的概率">(c) <span
+class="math inline">\(k\)</span> 次抽样全部抽到 leaves 的概率</h3>
+<p>Star graph 一共有 <span class="math inline">\(n\)</span> 个顶点，其中
+<span class="math inline">\(n-1\)</span> 个是 leaves。</p>
+<p>一次均匀随机顶点查询抽到 leaf 的概率是</p>
+<p><span class="math display">\[
+\frac{n-1}{n}
+=1-\frac1n.
 \]</span></p>
-<p>也就是说：</p>
-<ul>
-<li>估计值不能太小；</li>
-<li>也不能太大；</li>
-<li>它必须落在真值附近的一个允许范围内。</li>
-</ul>
-<p>现在回到这道题。</p>
-<p>真实平均度数是： <span class="math display">\[
-d = 2-\frac{2}{n}.
-\]</span> 这个值当 <span class="math inline">\(n\)</span> 较大时很接近
-2。</p>
-<p>如果算法抽到的全是叶子，那么算法输出的是： <span
-class="math display">\[
-\hat d=1.
+<p><span class="math inline">\(k\)</span> 次抽样相互独立，所以全部抽到
+leaves 的概率是</p>
+<p><span class="math display">\[
+\left(\frac{n-1}{n}\right)^k
+=\left(1-\frac1n\right)^k.
 \]</span></p>
-<p>现在要判断：1 算不算“够接近真实值”？</p>
-<p>如果真实值接近 2，那么 factor 1.1 允许的范围大约是： <span
-class="math display">\[
-\frac{2}{1.1} \le \hat d \le 1.1\cdot 2,
-\]</span> 也就是大约 <span class="math display">\[
-1.82 \le \hat d \le 2.2.
+<p>所以</p>
+<p><span class="math display">\[
+\boxed{\Pr[\text{all }k\text{ samples are leaves}]
+=\left(1-\frac1n\right)^k}.
 \]</span></p>
-<p>但是算法输出的是 1，而 1 明显比 1.82
-还小，所以它<strong>不在允许范围内</strong>。</p>
-<p>这说明：</p>
-<blockquote>
-<p>只要“全抽到叶子”发生，算法这一次就会失败。</p>
-</blockquote>
-<p>因此，如果题目要求算法至少有 99% 的概率成功，那么失败概率最多只能是
-1%，也就是 0.01。</p>
-<p>而我们在 (c) 中已经算过，“全抽到叶子”的概率是： <span
-class="math display">\[
-\left(\frac{n-1}{n}\right)^k.
+<h3 id="d-为了以至少-99-概率得到-1.1-倍以内估计k-需要多大">(d)
+为了以至少 99% 概率得到 1.1 倍以内估计，<span
+class="math inline">\(k\)</span> 需要多大</h3>
+<p>真实平均度数是</p>
+<p><span class="math display">\[
+\bar d(G^\star)=2-\frac2n.
 \]</span></p>
-<p>所以必须有： <span class="math display">\[
-\left(\frac{n-1}{n}\right)^k \le 0.01.
+<p>当 <span class="math inline">\(n\ge 3\)</span> 时，</p>
+<p><span class="math display">\[
+1 &lt; \frac{2-\frac2n}{1.1}.
 \]</span></p>
-<p>接下来题目只要求量级，不要求精确常数，所以我们不必真的解出一个很精细的
-<span class="math inline">\(k\)</span>，只需要判断它大概有多大。</p>
-<p>因为 <span class="math display">\[
-\frac{n-1}{n}=1-\frac1n,
-\]</span> 所以左边就是 <span class="math display">\[
+<p>所以如果算法输出 <span class="math inline">\(\hat
+d=1\)</span>，它就低于真实平均度数的 <span
+class="math inline">\(1/1.1\)</span> 倍，不是 within a factor <span
+class="math inline">\(1.1\)</span> 的好估计。</p>
+<p>也就是说，只要 <span class="math inline">\(k\)</span> 次抽样全部抽到
+leaves，算法就会失败。</p>
+<p>由 (c)，这个失败事件的概率是</p>
+<p><span class="math display">\[
 \left(1-\frac1n\right)^k.
 \]</span></p>
-<p>这种式子要降到一个固定的小常数（例如 0.01），通常需要 <span
-class="math inline">\(k\)</span> 和 <span
-class="math inline">\(n\)</span> 在同一个量级。直观上说：</p>
-<ul>
-<li>如果 <span class="math inline">\(k\)</span>
-太小，你几乎一直都在抽叶子；</li>
-<li>只有当 <span class="math inline">\(k\)</span> 增长到和 <span
-class="math inline">\(n\)</span>
-一样大时，你才比较有机会抽到那个唯一的中心点。</li>
-</ul>
-<p>所以结论是： <span class="math display">\[
-k=\Theta(n).
-\]</span></p>
-<p>题目只要求写 big-Omega，因此最后写成： <span class="math display">\[
-\boxed{k=\Omega(n)}.
-\]</span></p>
-<hr />
-<h3 id="结论汇总">结论汇总</h3>
-<h4 id="a">(a)</h4>
+<p>要让算法在每个图上都以至少 <span class="math inline">\(99\%\)</span>
+的概率成功，在 star graph
+这个输入上也必须成功。因此失败概率至少要被压到常数 <span
+class="math inline">\(0.01\)</span> 以下：</p>
 <p><span class="math display">\[
-\boxed{\bar d(G^\star)=2-\frac{2}{n}}
+\left(1-\frac1n\right)^k\le 0.01.
 \]</span></p>
-<h4 id="b">(b)</h4>
+<p>这个不等式说明 <span class="math inline">\(k\)</span> 必须和 <span
+class="math inline">\(n\)</span> 同阶。更具体地，用近似</p>
 <p><span class="math display">\[
-\boxed{\hat d=1}
+\left(1-\frac1n\right)^k\approx e^{-k/n},
 \]</span></p>
-<h4 id="c">(c)</h4>
+<p>若要 <span class="math inline">\(e^{-k/n}\le
+0.01\)</span>，就需要</p>
 <p><span class="math display">\[
-\boxed{\left(\frac{n-1}{n}\right)^k}
+k\ge n\ln 100.
 \]</span></p>
-<h4 id="d">(d)</h4>
+<p>因此在 big-Omega 记号下，</p>
+<p><span class="math display">\[
+k=\Omega(n).
+\]</span></p>
+<p>官方答案也可以用 Bernoulli inequality 表达同样的必要性：</p>
+<p><span class="math display">\[
+\left(1-\frac1n\right)^k
+\ge
+1-\frac{k}{n}.
+\]</span></p>
+<p>如果 <span class="math inline">\(k=o(n)\)</span>，那么 <span
+class="math inline">\(1-k/n\to 1\)</span>，算法会以很高概率只看到
+leaves，从而输出错误的估计。</p>
+<h3 id="结论-3">结论</h3>
+<p><span class="math display">\[
+\boxed{\bar d(G^\star)=2-\frac2n}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{\hat d=1\text{ if all sampled vertices are leaves}}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{\Pr[\text{all sampled vertices are leaves}]
+=\left(1-\frac1n\right)^k}
+\]</span></p>
 <p><span class="math display">\[
 \boxed{k=\Omega(n)}
 \]</span></p>
-<h3 id="一句话总结-3">一句话总结</h3>
-<p>这题想说明的是：<strong>如果一张图里“重要的点”太少，而你又只是随机抽点，那么你很容易一直抽不到那个关键点，最后算出来的结果就会偏小。</strong></p>
-<hr />
-<h2 id="总复习这份作业考了什么">总复习：这份作业考了什么？</h2>
-<p>这四题背后的核心能力主要是：</p>
-<ol type="1">
-<li><strong>按元素/按对象分解概率事件</strong>
+<h3 id="本题用到的知识点-3">本题用到的知识点</h3>
 <ul>
-<li>Problem 1 是典型代表；</li>
-<li>把复杂集合事件拆成单元素条件，再用独立性乘起来。</li>
-</ul></li>
-<li><strong>理解离散随机算法的随机空间</strong>
-<ul>
-<li>Problem 2 本质不是复杂概率，而是“错误概率的离散粒度”。</li>
-</ul></li>
-<li><strong>掌握 balls-into-bins 的阈值分析思路</strong>
-<ul>
-<li>Problem 3 训练的是渐近量级判断，而不是精确常数。</li>
-</ul></li>
-<li><strong>识别采样算法在最坏情况输入上的失败模式</strong>
-<ul>
-<li>Problem 4 通过 star graph
-说明：一个估计算法即使在很多图上好用，也可能在特殊图上失效。</li>
-</ul></li>
-</ol>
-<hr />
-<h2
-id="如果后面要转成提交版我建议你这样做">如果后面要转成提交版，我建议你这样做</h2>
-<ol type="1">
-<li><strong>提交版用英文写</strong>，更符合课程环境；</li>
-<li><strong>每题压缩到 4--8 行</strong>，不要保留太多解释性语言；</li>
-<li>保留：
-<ul>
-<li>关键定义</li>
-<li>关键概率/推导</li>
-<li>最终结论</li>
-</ul></li>
-<li>不要复制题目，只写：
-<ul>
-<li><code>\solution&#123;1&#125;</code></li>
-<li><code>\solution&#123;2&#125;</code></li>
-<li><code>\solution&#123;3&#125;</code></li>
-<li><code>\solution&#123;4&#125;</code></li>
-</ul></li>
-<li>如果你最终参考了这份笔记来提交，最好再用你自己的英文表达重写一遍。</li>
-</ol>
-<!-- 图谱链接（自动添加） -->
-<p><a href="/posts/acc9d0e7.html">COMP5270</a></p>
+<li>Star graph 结构：中心点度数 <span
+class="math inline">\(n-1\)</span>，每个 leaf 度数 <span
+class="math inline">\(1\)</span>。</li>
+<li>Handshaking Lemma：<span class="math inline">\(\sum_v
+d_v=2|E|\)</span>。</li>
+<li>平均度数：<span class="math inline">\(\bar
+d(G)=2|E|/|V|\)</span>。</li>
+<li>独立重复采样：<span class="math inline">\(k\)</span> 次都抽到 leaf
+的概率是单次概率的 <span class="math inline">\(k\)</span> 次方。</li>
+<li>近似公式：<span class="math inline">\((1-1/n)^k\approx
+e^{-k/n}\)</span>。</li>
+<li>最坏情况输入分析：为了保证 “on every graph” 成功，star graph
+这种反例也必须满足成功概率要求。</li>
+</ul>
 
     </div>
 
@@ -867,19 +811,20 @@ id="如果后面要转成提交版我建议你这样做">如果后面要转成�
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/COMP5270/" rel="tag"><i class="fa fa-tag"></i> COMP5270</a>
+              <a href="/tags/Assignment/" rel="tag"><i class="fa fa-tag"></i> Assignment</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/a9d1e3aa.html" rel="prev" title="Chapter 14: Link Analysis and Web Search（链接分析与网络搜索）">
-                  <i class="fa fa-angle-left"></i> Chapter 14: Link Analysis and Web Search（链接分析与网络搜索）
+                <a href="/posts/a2c6af75.html" rel="prev" title="每日科技速递 - 2026-06-02">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-06-02
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/16d693d8.html" rel="next" title="Network Science - Chapter 9 Communities 社群结构（9.1-9.4）">
-                  Network Science - Chapter 9 Communities 社群结构（9.1-9.4） <i class="fa fa-angle-right"></i>
+                <a href="/posts/142f48a8.html" rel="next" title="Chapter 16: Information Cascades（信息级联）">
+                  Chapter 16: Information Cascades（信息级联） <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -915,14 +860,14 @@ id="如果后面要转成提交版我建议你这样做">如果后面要转成�
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">630k</span>
+    <span title="Word count total">759k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">38:12</span>
+    <span title="Reading time total">46:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

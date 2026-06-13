@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 10 的 tutorial 没有传统的 tutorial sheet，而是由「CIA Triad in Information Security」内容阅读 与「CIA Privacy Arcade」闯关小游戏组成。本文总结 CIA 三元组（机密性&#x2F;完整性&#x2F;可用性）的定义、威胁与控制， 及其在专业 IT 实践中的应用，并给出 CIA Privacy Arcade 五个关卡共 35 道题目的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO5990 Week 10 Tutorial Summary">
+<meta property="og:url" content="http://example.com/posts/0b27150d.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 10 的 tutorial 没有传统的 tutorial sheet，而是由「CIA Triad in Information Security」内容阅读 与「CIA Privacy Arcade」闯关小游戏组成。本文总结 CIA 三元组（机密性&#x2F;完整性&#x2F;可用性）的定义、威胁与控制， 及其在专业 IT 实践中的应用，并给出 CIA Privacy Arcade 五个关卡共 35 道题目的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-09T11:12:24.743Z">
+<meta property="article:modified_time" content="2026-06-09T11:12:24.744Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="INFO5990">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/0b27150d.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/0b27150d.html","path":"posts/0b27150d.html","title":"INFO5990 Week 10 Tutorial Summary"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO5990 Week 10 Tutorial Summary | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/0b27150d.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview%E6%A6%82%E8%BF%B0"><span class="nav-text">Overview（概述）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-a-cia-triad-%E5%86%85%E5%AE%B9%E6%80%BB%E7%BB%93"><span class="nav-text">Part A — CIA Triad 内容总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E5%8E%9F%E5%88%99%E5%AE%9A%E4%B9%89%E5%A8%81%E8%83%81%E4%B8%8E%E6%8E%A7%E5%88%B6"><span class="nav-text">三大原则：定义、威胁与控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cia-%E5%9C%A8%E4%B8%93%E4%B8%9A-it-%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-text">CIA 在专业 IT 实践中的重要性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-b-cia-privacy-arcade-%E9%A2%98%E7%9B%AE%E4%B8%8E%E7%AD%94%E6%A1%88"><span class="nav-text">Part B — CIA Privacy
+Arcade 题目与答案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-1-cia-triad-foundations%E5%9F%BA%E7%A1%80"><span class="nav-text">关卡 1 — CIA Triad
+Foundations（基础）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-2-confidentiality-threats-controls%E6%9C%BA%E5%AF%86%E6%80%A7"><span class="nav-text">关卡 2 —
+Confidentiality: Threats &amp; Controls（机密性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-3-integrity-trustworthy-data%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-text">关卡 3 — Integrity:
+Trustworthy Data（完整性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-4-availability-reliable-access%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">关卡 4 —
+Availability: Reliable Access（可用性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-5-cia-in-professional-it-practice%E4%B8%93%E4%B8%9A%E5%AE%9E%E8%B7%B5"><span class="nav-text">关卡 5 — CIA in
+Professional IT Practice（专业实践）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93"><span class="nav-text">关键概念总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">关键术语表</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/0b27150d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO5990 Week 10 Tutorial Summary | Joey">
+      <meta itemprop="description" content="Week 10 的 tutorial 没有传统的 tutorial sheet，而是由「CIA Triad in Information Security」内容阅读 与「CIA Privacy Arcade」闯关小游戏组成。本文总结 CIA 三元组（机密性/完整性/可用性）的定义、威胁与控制， 及其在专业 IT 实践中的应用，并给出 CIA Privacy Arcade 五个关卡共 35 道题目的答案。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO5990 Week 10 Tutorial Summary
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-06-09 11:12:24" itemprop="dateCreated datePublished" datetime="2026-06-09T11:12:24Z">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/INFO5990/" itemprop="url" rel="index"><span itemprop="name">INFO5990</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Week 10 的 tutorial 没有传统的 tutorial sheet，而是由「CIA Triad in Information Security」内容阅读 与「CIA Privacy Arcade」闯关小游戏组成。本文总结 CIA 三元组（机密性/完整性/可用性）的定义、威胁与控制， 及其在专业 IT 实践中的应用，并给出 CIA Privacy Arcade 五个关卡共 35 道题目的答案。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="overview概述">Overview（概述）</h2>
+<p>与 Week 8、Week 9 不同，<strong>Week 10 的 tutorial 没有传统的
+tutorial sheet（讨论/案例题）</strong>。本周的 tutorial
+材料由两部分组成：</p>
+<ol type="1">
+<li><strong><code>Professional Practices and CIA Triad content.pdf</code></strong>
+—— 一份 4 页的<strong>内容阅读</strong>，标题为 <em>CIA Triad in
+Information Security</em>，系统讲解 CIA
+三元组的定义、威胁、控制，以及它在专业 IT 实践中的重要性（即"这份 PDF
+是什么"的答案）。</li>
+<li><strong><code>CIA Privacy Arcade.html</code></strong> ——
+一个<strong>闯关小游戏</strong>，包含 5 个关卡、每关 7
+道选择题，用游戏化方式检验 CIA 三元组知识。</li>
+</ol>
+<p>因此本文分为两部分：<strong>Part A</strong> 总结 CIA Triad
+阅读内容，<strong>Part B</strong> 给出 CIA Privacy Arcade
+全部题目的答案。</p>
+<hr />
+<h2 id="part-a-cia-triad-内容总结">Part A — CIA Triad 内容总结</h2>
+<p>CIA 三元组（CIA
+Triad）是网络安全的基础模型，由<strong>机密性（Confidentiality）、完整性（Integrity）、可用性（Availability）</strong>组成，提供一个用于<strong>设计安全系统、评估风险、实施控制</strong>的结构化框架，确保信息保持受保护、准确且在需要时可访问。</p>
+<h3 id="三大原则定义威胁与控制">三大原则：定义、威胁与控制</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>原则</th>
+<th>定义</th>
+<th>主要威胁</th>
+<th>控制 / 措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>机密性（Confidentiality）</strong></td>
+<td>确保只有授权用户能访问敏感信息，防止未授权披露，支持隐私与合规</td>
+<td>未授权访问、数据泄露、弱密码、缺乏加密</td>
+<td>加密（TLS、AES）、认证（MFA）、访问控制（RBAC）、数据隐私保护</td>
+</tr>
+<tr>
+<td><strong>完整性（Integrity）</strong></td>
+<td>确保数据准确、一致，除授权用户外不被更改，维持系统可信</td>
+<td>数据篡改、恶意软件、SQL 注入、传输错误</td>
+<td>哈希（SHA-256）、数字签名、校验和（checksums）、版本控制</td>
+</tr>
+<tr>
+<td><strong>可用性（Availability）</strong></td>
+<td>确保系统与数据在需要时对授权用户可访问，强调可靠性、正常运行时间与韧性</td>
+<td>DoS/DDoS 攻击、服务器崩溃、硬件故障、网络中断</td>
+<td>冗余、负载均衡、定期备份、灾难恢复规划</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cia-在专业-it-实践中的重要性">CIA 在专业 IT 实践中的重要性</h3>
+<p>CIA 三元组是 IT 专业人员每天用来设计、管理与保护系统的实用框架：</p>
+<ul>
+<li><strong>安全系统设计与开发：</strong>
+从架构之初就纳入机密性（加密）、完整性（校验）与可用性（容错），让安全"内建"而非事后添加。</li>
+<li><strong>风险评估与安全规划：</strong> 用 CIA
+识别并排序风险——机密性泄露（数据外泄）与可用性问题（系统宕机）需要不同的控制。</li>
+<li><strong>合规与标准：</strong> ISO/IEC 27001、NIST 与隐私法都与 CIA
+原则对齐，组织须实施控制以满足法律要求。</li>
+<li><strong>安全软件开发生命周期（SDLC）：</strong> CIA
+原则贯穿从需求到部署与监控的各阶段，保障全周期安全。</li>
+<li><strong>运营安全与监控：</strong>
+安全团队持续监控以检测机密性泄露、完整性破坏与可用性中断，从而及时响应。</li>
+<li><strong>事件响应与灾难恢复：</strong> 按 CIA
+排定优先级——机密性→遏制数据泄露；完整性→恢复正确数据；可用性→恢复系统访问。</li>
+<li><strong>伦理与专业责任：</strong> IT
+专业人员有责任保护用户数据、确保系统可靠、维持信任；违背 CIA
+可能带来法律与伦理后果。</li>
+<li><strong>云计算与现代系统：</strong>
+在云环境中通过加密、身份管理、分布式系统与冗余落实 CIA。</li>
+<li><strong>真实案例（医疗）：</strong>
+机密性→保护患者数据；完整性→准确的病历；可用性→紧急情况下即时访问。任一环节失败都可能造成严重后果。</li>
+<li><strong>职业相关性：</strong> CIA 适用于所有 IT
+角色——开发者（安全编码）、网络工程师（系统可用性）、安全分析师（威胁检测）、管理者（政策执行）。</li>
+</ul>
+<blockquote>
+<p>核心思想：<strong>每一个 IT
+决策都应自问——它是否保护了机密性、维持了完整性、确保了可用性？</strong></p>
+</blockquote>
+<hr />
+<h2 id="part-b-cia-privacy-arcade-题目与答案">Part B — CIA Privacy
+Arcade 题目与答案</h2>
+<p>游戏共 5 关、每关 7 题，每关需答对 5/7
+通关。以下给出每题的<strong>正确答案</strong>。</p>
+<h3 id="关卡-1-cia-triad-foundations基础">关卡 1 — CIA Triad
+Foundations（基础）</h3>
+<ol type="1">
+<li>CIA 三元组的三大支柱是什么？→
+<strong>机密性、完整性与可用性。</strong></li>
+<li>CIA 三元组的主要目的？→
+<strong>提供设计安全系统、评估风险、实施控制的结构化框架。</strong></li>
+<li>哪个原则专注于防止信息被未授权披露？→ <strong>机密性。</strong></li>
+<li>哪个原则确保数据准确、除非由授权用户更改否则保持不变？→
+<strong>完整性。</strong></li>
+<li>哪个原则确保系统与数据在需要时可访问？→
+<strong>可用性。</strong></li>
+<li>CIA 三元组为何在网络安全中重要？→
+<strong>它帮助保护数据、维持信任并确保系统可用。</strong></li>
+<li>大学门户保护学生成绩、保持成绩准确、并在选课期间保持在线——最能体现什么？→
+<strong>CIA 三元组三者协同工作。</strong></li>
+</ol>
+<h3 id="关卡-2-confidentiality-threats-controls机密性">关卡 2 —
+Confidentiality: Threats &amp; Controls（机密性）</h3>
+<ol type="1">
+<li>信息安全中机密性的含义？→
+<strong>只有授权用户才能访问敏感信息。</strong></li>
+<li>哪种情形属于机密性泄露？→
+<strong>攻击者读取了数据库中未加密的学生记录。</strong></li>
+<li>弱密码为何是机密性风险？→
+<strong>它们可被猜测或暴力破解，从而导致未授权的账户访问。</strong></li>
+<li>加密如何支持机密性？→
+<strong>它把数据转换成未授权者无法读取的形式。</strong></li>
+<li>多因素认证（MFA）的作用？→
+<strong>在密码之外增加额外的验证层。</strong></li>
+<li>基于角色的访问控制（RBAC）帮助实现什么？→
+<strong>用户只能访问其角色所必需的数据。</strong></li>
+<li>医院系统只允许被指派的医生查看其患者记录——用的是哪种机密性控制？→
+<strong>访问控制 / RBAC。</strong></li>
+</ol>
+<h3 id="关卡-3-integrity-trustworthy-data完整性">关卡 3 — Integrity:
+Trustworthy Data（完整性）</h3>
+<ol type="1">
+<li>网络安全中完整性的含义？→
+<strong>数据保持准确、一致，除非由授权用户更改否则不被改动。</strong></li>
+<li>哪个例子最能体现完整性问题？→
+<strong>攻击者篡改了数据库中的学生成绩。</strong></li>
+<li>恶意软件如何影响完整性？→
+<strong>它可以破坏或篡改数据，降低可靠性与信任。</strong></li>
+<li>SQL 注入为何威胁完整性？→
+<strong>攻击者可操纵数据库查询以更改或获取未授权数据。</strong></li>
+<li>哈希如何支持完整性？→
+<strong>通过比较哈希值来检测数据是否发生了更改。</strong></li>
+<li>数字签名提供什么？→
+<strong>完整性与认证（验证数据的来源与内容）。</strong></li>
+<li>软件更新附带签名以便用户核实其来自厂商且未被更改——主要支持哪个 CIA
+原则？→ <strong>完整性。</strong></li>
+</ol>
+<h3 id="关卡-4-availability-reliable-access可用性">关卡 4 —
+Availability: Reliable Access（可用性）</h3>
+<ol type="1">
+<li>CIA 三元组中可用性的含义？→
+<strong>授权用户在需要时能访问系统与数据。</strong></li>
+<li>哪种攻击直接威胁可用性？→ <strong>DoS/DDoS 攻击。</strong></li>
+<li>服务器崩溃如何影响可用性？→
+<strong>会中断系统功能并造成停机。</strong></li>
+<li>硬件故障为何是可用性风险？→
+<strong>物理组件失效会导致停机或数据丢失。</strong></li>
+<li>冗余如何提升可用性？→
+<strong>当某个组件失效时，备份系统可以接管。</strong></li>
+<li>负载均衡的目的是什么？→
+<strong>将流量分散到多台服务器以防止过载。</strong></li>
+<li>大学 LMS
+使用多台服务器与备份，让学生在考试高峰周仍能访问——最直接支持哪个原则？→
+<strong>可用性。</strong></li>
+</ol>
+<h3 id="关卡-5-cia-in-professional-it-practice专业实践">关卡 5 — CIA in
+Professional IT Practice（专业实践）</h3>
+<ol type="1">
+<li>CIA 三元组如何支持安全系统设计与开发？→
+<strong>指导开发者从一开始就纳入加密、校验与容错。</strong></li>
+<li>CIA 三元组如何帮助风险评估？→
+<strong>帮助把风险归类为机密性、完整性或可用性影响，并选择合适的控制。</strong></li>
+<li>CIA 三元组为何与合规相关？→
+<strong>标准与隐私法要求保护数据、保证准确性与服务连续性。</strong></li>
+<li>CIA 原则可应用于安全软件开发生命周期（SDLC）的哪些环节？→
+<strong>贯穿需求、设计、实现、测试、部署与监控全过程。</strong></li>
+<li>CIA 如何指导事件响应？→
+<strong>帮助团队优先处理：遏制数据泄露、恢复正确数据、恢复访问。</strong></li>
+<li>为何 CIA 是 IT 专业人员的伦理责任？→
+<strong>专业人员必须保护用户数据、维持系统可靠并保持信任。</strong></li>
+<li>医疗系统中患者记录必须受保护、准确且在紧急时可用——这体现了什么？→
+<strong>机密性、完整性与可用性三者协同的实践重要性。</strong></li>
+</ol>
+<hr />
+<h2 id="关键概念总结">关键概念总结</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>概念</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CIA 三元组</strong></td>
+<td>机密性（只授权可访问）、完整性（准确未篡改）、可用性（需要时可访问），是信息安全的基础框架。</td>
+</tr>
+<tr>
+<td><strong>机密性控制</strong></td>
+<td>加密（TLS/AES）、MFA、RBAC、数据隐私保护。</td>
+</tr>
+<tr>
+<td><strong>完整性控制</strong></td>
+<td>哈希（SHA-256）、数字签名、校验和、版本控制。</td>
+</tr>
+<tr>
+<td><strong>可用性控制</strong></td>
+<td>冗余、负载均衡、定期备份、灾难恢复。</td>
+</tr>
+<tr>
+<td><strong>CIA 与专业实践</strong></td>
+<td>贯穿安全设计、风险评估、合规、SDLC、监控、事件响应与伦理；适用于所有
+IT 角色。</td>
+</tr>
+<tr>
+<td><strong>核心思维</strong></td>
+<td>每个 IT 决策都应自问：是否保护了 C、维持了 I、确保了 A？</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="关键术语表">关键术语表</h2>
+<ul>
+<li><strong>Confidentiality（机密性）：</strong>
+防止信息被未授权访问或披露。</li>
+<li><strong>Integrity（完整性）：</strong>
+保证数据准确、未被不当篡改。</li>
+<li><strong>Availability（可用性）：</strong>
+保证授权用户在需要时可访问系统与数据。</li>
+<li><strong>RBAC（基于角色的访问控制）：</strong>
+按角色授予最小必要访问权限。</li>
+<li><strong>MFA（多因素认证）：</strong>
+在密码之外增加验证层，降低未授权访问风险。</li>
+<li><strong>Hashing（哈希）：</strong>
+用哈希值检测数据是否被更改，支持完整性验证。</li>
+<li><strong>Redundancy（冗余）：</strong>
+备用系统/组件在故障时接管，保障可用性。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO5990/" rel="tag"><i class="fa fa-tag"></i> INFO5990</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c6265260.html" rel="prev" title="INFO5990 Week 9 Tutorial Summary">
+                  <i class="fa fa-angle-left"></i> INFO5990 Week 9 Tutorial Summary
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/a11a1d84.html" rel="next" title="INFO5990-Week11-Lecture-Summary">
+                  INFO5990-Week11-Lecture-Summary <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

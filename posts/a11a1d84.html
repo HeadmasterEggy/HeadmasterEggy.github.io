@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 11 Lecture 深度总结：Quality Assurance and Software Testing（质量保证与软件测试）。按讲义议程组织：IT 质量基础（七大质量维度、劣质成本与 Ariane 5&#x2F;Knight Capital 案例）、QA 与 QC 及测试的区别、QA 标准（ISO 9000 &#x2F; ISO 27001）与治理框架（ITIL&#x2F;COBIT&#x2F;CMMI）、Deming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO5990-Week11-Lecture-Summary">
+<meta property="og:url" content="http://example.com/posts/a11a1d84.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 11 Lecture 深度总结：Quality Assurance and Software Testing（质量保证与软件测试）。按讲义议程组织：IT 质量基础（七大质量维度、劣质成本与 Ariane 5&#x2F;Knight Capital 案例）、QA 与 QC 及测试的区别、QA 标准（ISO 9000 &#x2F; ISO 27001）与治理框架（ITIL&#x2F;COBIT&#x2F;CMMI）、Deming">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-09T11:16:02.758Z">
+<meta property="article:modified_time" content="2026-06-09T11:16:02.759Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="INFO5990">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/a11a1d84.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/a11a1d84.html","path":"posts/a11a1d84.html","title":"INFO5990-Week11-Lecture-Summary"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO5990-Week11-Lecture-Summary | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/a11a1d84.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9C%AC%E5%91%A8%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-text">一、本周整体框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cfoundations-of-quality-in-itit-%E8%B4%A8%E9%87%8F%E5%9F%BA%E7%A1%80"><span class="nav-text">二、Foundations of
+Quality in IT（IT 质量基础）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-it-%E8%B4%A8%E9%87%8F"><span class="nav-text">2.1 什么是 IT 质量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E4%B8%BA%E4%BD%95%E9%87%8D%E8%A6%81-%E5%8A%A3%E8%B4%A8%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="nav-text">2.2 质量为何重要 + 劣质的代价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qaqc-%E4%B8%8E-testing-%E7%9A%84%E5%8C%BA%E5%88%AB%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9"><span class="nav-text">2.3 QA、QC 与 Testing
+的区别（高频考点）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89qa-in-it-practice%E6%A0%87%E5%87%86%E4%B8%8E%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">三、QA in IT
+Practice（标准与治理框架）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#iso-9000%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86"><span class="nav-text">3.1 ISO 9000（质量管理）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isoiec-27001%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86"><span class="nav-text">3.2 ISO&#x2F;IEC 27001（信息安全管理）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qa-%E4%B8%8E%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">3.3 QA 与治理框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deming-%E5%BE%AA%E7%8E%AFpdca%E4%B8%8E-cmmi-%E6%88%90%E7%86%9F%E5%BA%A6"><span class="nav-text">3.4 Deming 循环（PDCA）与 CMMI
+成熟度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E5%AE%A1%E8%AE%A1quality-audits"><span class="nav-text">3.5 质量审计（Quality Audits）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bsoftware-testing-fundamentals%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">四、Software
+Testing Fundamentals（软件测试基础）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9Fstlc"><span class="nav-text">4.1 软件测试生命周期（STLC）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%88%B6%E5%93%81test-artifacts"><span class="nav-text">4.2 测试制品（Test Artifacts）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94types-of-testing%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">五、Types of
+Testing（测试类型）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95-vs-%E9%9D%9E%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">5.1 功能测试 vs 非功能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">5.2 功能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">5.3 非功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADqa-in-software-development-methodologiesqa-%E5%9C%A8%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">六、QA
+in Software Development Methodologies（QA 在开发方法论中的应用）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E9%97%AE%E9%A2%98%E4%B8%8E%E6%9C%AA%E6%9D%A5%E8%B6%8B%E5%8A%BF"><span class="nav-text">专业问题与未来趋势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qa-%E8%A7%92%E8%89%B2%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="nav-text">QA 角色在不同环境中的差异</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83end-of-lecture-questions%E8%AF%BE%E5%90%8E%E5%A4%8D%E4%B9%A0%E9%97%AE%E9%A2%98%E4%B8%8E%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88"><span class="nav-text">七、End of
+Lecture Questions（课后复习问题与参考答案）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABcase-study%E5%9C%A8%E7%BA%BF%E9%93%B6%E8%A1%8C%E5%B9%B3%E5%8F%B0"><span class="nav-text">八、Case Study：在线银行平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">8.1 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E8%AE%A8%E8%AE%BA%E9%97%AE%E9%A2%98"><span class="nav-text">8.2 案例讨论问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E8%80%83%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8quick-reference"><span class="nav-text">九、考试速查表（Quick
+Reference）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E4%B8%83%E7%BB%B4%E5%BA%A6"><span class="nav-text">质量七维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qa-qc-testing"><span class="nav-text">QA &#x2F; QC &#x2F; Testing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86"><span class="nav-text">标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E6%94%B9%E8%BF%9B"><span class="nav-text">持续改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stlc"><span class="nav-text">STLC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">测试类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qa-%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-text">QA × 方法论</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/a11a1d84.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO5990-Week11-Lecture-Summary | Joey">
+      <meta itemprop="description" content="Week 11 Lecture 深度总结：Quality Assurance and Software Testing（质量保证与软件测试）。按讲义议程组织：IT 质量基础（七大质量维度、劣质成本与 Ariane 5/Knight Capital 案例）、QA 与 QC 及测试的区别、QA 标准（ISO 9000 / ISO 27001）与治理框架（ITIL/COBIT/CMMI）、Deming 循环（PDCA）与 CMMI 五级成熟度、质量审计、软件测试生命周期（STLC）与测试制品（测试计划/用例/数据）、功能与非功能测试类型（单元/集成/系统/UAT/黑盒/白盒、负载/压力/冒烟/AB）、以及 QA 在 Waterfall/Agile/DevOps 中的差异，附在线银行案例与课后复习问题。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO5990-Week11-Lecture-Summary
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-06-09 11:16:02" itemprop="dateCreated datePublished" datetime="2026-06-09T11:16:02Z">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/INFO5990/" itemprop="url" rel="index"><span itemprop="name">INFO5990</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>16 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Week 11 Lecture 深度总结：Quality Assurance and Software Testing（质量保证与软件测试）。按讲义议程组织：IT 质量基础（七大质量维度、劣质成本与 Ariane 5/Knight Capital 案例）、QA 与 QC 及测试的区别、QA 标准（ISO 9000 / ISO 27001）与治理框架（ITIL/COBIT/CMMI）、Deming 循环（PDCA）与 CMMI 五级成熟度、质量审计、软件测试生命周期（STLC）与测试制品（测试计划/用例/数据）、功能与非功能测试类型（单元/集成/系统/UAT/黑盒/白盒、负载/压力/冒烟/AB）、以及 QA 在 Waterfall/Agile/DevOps 中的差异，附在线银行案例与课后复习问题。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一本周整体框架">一、本周整体框架</h2>
+<p>Week 11 Lecture 的主题是 <strong>Quality Assurance and Software
+Testing（质量保证与软件测试）</strong>，从"什么是质量"出发，讲到 QA
+的标准与治理框架、持续改进模型、软件测试的生命周期与类型，以及 QA
+在不同开发方法论中的角色。</p>
+<p>本周讲义按以下议程（Agenda）展开：</p>
+<ol type="1">
+<li><strong>Foundations of Quality in IT</strong>（IT 质量基础）</li>
+<li><strong>QA in IT Practice</strong>（QA 在 IT
+中的实践：标准与治理框架）</li>
+<li><strong>Software Testing Fundamentally</strong>（软件测试基础）</li>
+<li><strong>Types of Testing</strong>（测试类型）</li>
+<li><strong>QA in Software Development Methodologies</strong>（QA
+在开发方法论中的应用）</li>
+</ol>
+<p>核心逻辑链：</p>
+<blockquote>
+<p>先理解<strong>质量的多维含义</strong>与<strong>劣质的代价</strong> →
+用 <strong>QA（预防）/ QC（检测）/ Testing（验证）</strong> 区分职责 →
+用<strong>标准（ISO
+9000/27001）与治理框架（ITIL/COBIT/CMMI）</strong>把质量制度化 → 用
+<strong>Deming 循环（PDCA）+ CMMI 成熟度</strong>驱动持续改进 → 用
+<strong>STLC 与各类测试</strong>在每个阶段保证质量 → 最后看 QA 如何融入
+<strong>Waterfall / Agile / DevOps</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="二foundations-of-quality-in-itit-质量基础">二、Foundations of
+Quality in IT（IT 质量基础）</h2>
+<h3 id="什么是-it-质量">2.1 什么是 IT 质量</h3>
+<p>IT 质量是指软件产品或 IT
+服务<strong>满足利益相关者需求与期望</strong>的程度，同时具备可靠、安全与可维护性。软件质量的维度包括：</p>
+<ul>
+<li><strong>功能性（Functionality）：</strong>
+系统是否做了它应做的事？</li>
+<li><strong>可靠性（Reliability）：</strong>
+在预期条件下能否稳定运行？</li>
+<li><strong>可用性（Usability）：</strong> 是否易用、可访问？</li>
+<li><strong>效率（Efficiency）：</strong>
+是否最优地使用资源（CPU、内存、带宽）？</li>
+<li><strong>可维护性（Maintainability）：</strong>
+更新、修复、改进是否容易？</li>
+<li><strong>可移植性（Portability）：</strong>
+能否轻松部署到不同环境？</li>
+<li><strong>安全性（Security）：</strong> 能否保护数据、抵御威胁？</li>
+</ul>
+<h3 id="质量为何重要-劣质的代价">2.2 质量为何重要 + 劣质的代价</h3>
+<ul>
+<li><strong>业务视角：</strong>
+提升客户满意度、减少返工成本、建立信任。</li>
+<li><strong>技术视角：</strong> 防止缺陷、系统崩溃与漏洞。</li>
+<li><strong>专业/伦理视角：</strong> IT
+专业人员有责任交付安全可靠的系统。</li>
+</ul>
+<p><strong>劣质成本（Cost of Poor Quality）：</strong>
+直接成本（缺陷修复、停机、数据丢失）+
+间接成本（声誉受损、客户流失、法律风险）。两个著名失败案例：</p>
+<ul>
+<li><strong>Ariane 5 火箭失败（1996）：</strong>
+惯性参考系统的软件错误致火箭发射后 37 秒偏离航线自毁，损失约 <strong>3.7
+亿美元</strong>。</li>
+<li><strong>Knight Capital 交易故障（2012）：</strong>
+新交易软件部署不完整，旧代码被误激活，产生大量非预期交易，<strong>45
+分钟内损失 4.4 亿美元</strong>，公司濒临破产。</li>
+</ul>
+<h3 id="qaqc-与-testing-的区别高频考点">2.3 QA、QC 与 Testing
+的区别（高频考点）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>概念</th>
+<th>性质</th>
+<th>焦点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>质量保证（QA）</strong></td>
+<td><strong>主动（proactive）、面向过程</strong></td>
+<td>通过有效可靠的流程<strong>预防缺陷</strong>，确保软件满足标准与期望</td>
+</tr>
+<tr>
+<td><strong>质量控制（QC）</strong></td>
+<td><strong>被动（reactive）、面向产品</strong></td>
+<td>在产品产出后<strong>检测缺陷</strong>，确保交付物符合规范</td>
+</tr>
+<tr>
+<td><strong>测试（Testing）</strong></td>
+<td>QC 的子集</td>
+<td>执行系统以<strong>发现缺陷</strong>并核验需求；含<strong>验证（verification，把产品做对）</strong>与<strong>确认（validation，做对的产品）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>记忆口诀：<strong>QA 防患于未然（流程）、QC 事后把关（产品）、Testing
+是 QC 的具体手段。</strong></p>
+</blockquote>
+<hr />
+<h2 id="三qa-in-it-practice标准与治理框架">三、QA in IT
+Practice（标准与治理框架）</h2>
+<p>IT 中的 QA 是一套系统化流程，确保 IT
+系统、软件与服务持续满足需求、行业标准与用户期望，其范围不止软件，还涵盖<strong>基础设施</strong>（服务器、网络、云）、<strong>流程</strong>（SDLC、ITIL
+实践）与<strong>信息安全</strong>（合规、审计）。</p>
+<h3 id="iso-9000质量管理">3.1 ISO 9000（质量管理）</h3>
+<p>ISO 9000 是 ISO
+制定的国际标准族，目标是确保组织持续交付满足客户与监管要求的产品与服务。<strong>七大原则：</strong>
+客户导向、领导力、全员参与、过程方法、持续改进、基于事实的决策、关系管理。在
+IT
+中它确保软件开发/测试/交付流程清晰、跨项目一致、赢得客户信任并持续改进。</p>
+<h3 id="isoiec-27001信息安全管理">3.2 ISO/IEC 27001（信息安全管理）</h3>
+<p>ISO/IEC 27001
+是信息安全管理体系（ISMS）的国际标准，提供系统化方法管理敏感信息，使其保持机密、准确与可用。<strong>主要目标：</strong>
+保护信息的 CIA、建立
+ISMS（政策/流程/控制的结构化框架）、降低数据泄露/黑客/内部威胁/人为错误风险、满足法律法规与合同要求。<strong>关键组成：</strong>
+风险评估、安全控制（114 项控制、归为 14
+类）、持续改进、管理层参与。它帮助组织展示可信度、降低泄露概率与影响，并与
+GDPR、HIPAA、澳大利亚 APRA 等合规要求对齐。</p>
+<h3 id="qa-与治理框架">3.3 QA 与治理框架</h3>
+<p>治理框架定义确保 IT
+活动与业务目标、法规与质量标准对齐的结构、流程与实践。QA
+保证产品与流程达到标准，治理提供监督与问责确保 QA
+被一致地应用——二者共同营造<strong>质量与问责文化</strong>。关键框架：</p>
+<ul>
+<li><strong>ITIL：</strong> 聚焦 IT
+服务管理（ITSM），通过事件/变更/问题管理保证一致的服务交付。</li>
+<li><strong>COBIT：</strong> 聚焦 IT
+治理与管理，强调控制、风险管理与流程成熟度。</li>
+<li><strong>CMMI：</strong>
+聚焦软件与系统工程的流程成熟度，提供分级的流程改进路线图。</li>
+</ul>
+<h3 id="deming-循环pdca与-cmmi-成熟度">3.4 Deming 循环（PDCA）与 CMMI
+成熟度</h3>
+<p><strong>Deming 循环（PDCA）</strong>
+是持续改进模型：<strong>Plan（识别问题/机会）→ Do（小规模实施）→
+Check（对照预期评估结果）→ Act（标准化成功做法）</strong>。</p>
+<p><strong>CMMI（能力成熟度模型集成）</strong>
+提供组织流程演进的成熟度路线图，常与 ISO 9001 和 Deming
+循环结合。二者关系：<strong>Deming 回答"如何持续改进"，CMMI
+回答"组织处于哪一成熟度、下一步是什么"</strong>。五个等级：</p>
+<ul>
+<li><strong>Level 1（初始）：</strong> 流程临时、混乱，无 PDCA。</li>
+<li><strong>Level 2（已管理）：</strong> 项目级有基本的 Plan–Do，但
+Check–Act 有限。</li>
+<li><strong>Level 3（已定义）：</strong>
+流程在组织层面标准化、文档化，Plan–Do 一致，有一定 Check–Act。</li>
+<li><strong>Level 4（量化管理）：</strong> 强调
+Check，流程被统计度量与控制，决策数据驱动。</li>
+<li><strong>Level 5（优化）：</strong> 持续 Act，主动改进与创新。</li>
+</ul>
+<h3 id="质量审计quality-audits">3.5 质量审计（Quality Audits）</h3>
+<p>质量审计是系统化、独立的检查，判定活动与结果是否符合既定安排（标准、流程、要求）并被有效实施。<strong>目标：</strong>
+核验合规、识别差距/低效/风险、推荐改进、建立组织信任。<strong>类型：</strong>
+内部审计（第一方，组织自查）、外部审计（第二/三方，客户或认证/监管机构，如
+ISO 9000 认证）、过程审计、产品审计、系统审计（评估整体质量管理体系
+QMS）。</p>
+<hr />
+<h2 id="四software-testing-fundamentals软件测试基础">四、Software
+Testing Fundamentals（软件测试基础）</h2>
+<h3 id="软件测试生命周期stlc">4.1 软件测试生命周期（STLC）</h3>
+<p>STLC 是在测试过程中开展的一系列特定活动，确保软件达到质量标准。它与
+SDLC 平行，但专注于软件的<strong>验证与确认</strong>。关键特征：与 SDLC
+并行、需求一就绪即开始测试（<strong>左移测试，shift-left</strong>）、迭代进行（每个
+sprint/版本可重复）、在每个阶段而非仅在最后保证质量。</p>
+<p><strong>测试阶段：</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>阶段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>需求分析</strong></td>
+<td>QA 分析功能与非功能需求，识别可测试需求并与利益相关者澄清歧义</td>
+</tr>
+<tr>
+<td><strong>测试计划</strong></td>
+<td>定义范围、目标、资源、进度与职责，评估风险并制定缓解策略</td>
+</tr>
+<tr>
+<td><strong>测试设计</strong></td>
+<td>设计含输入/预期输出/条件的测试用例，准备测试数据并同行评审</td>
+</tr>
+<tr>
+<td><strong>环境搭建</strong></td>
+<td>准备硬件、软件、网络与工具（常用 DevOps 流水线或容器化环境，如
+Docker/Kubernetes）</td>
+</tr>
+<tr>
+<td><strong>测试执行</strong></td>
+<td>手动或自动执行用例、记录结果，对失败提出缺陷/Bug 报告</td>
+</tr>
+<tr>
+<td><strong>缺陷报告与跟踪</strong></td>
+<td>在缺陷跟踪系统中记录、排序缺陷，与开发协作及时修复</td>
+</tr>
+<tr>
+<td><strong>测试周期收尾</strong></td>
+<td>评估退出标准（用例已执行、关键缺陷已关闭），分析覆盖率并产出测试总结报告（TSR）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="测试制品test-artifacts">4.2 测试制品（Test Artifacts）</h3>
+<p>测试制品是 STLC
+中产生的文档与交付物，提供测试活动的证据、支持可追溯性、帮助评估软件质量。好处：<strong>可追溯性</strong>（连接需求与测试，确保无遗漏）、<strong>问责</strong>（提供尽职与合规证据，如
+ISO、CMMI）、<strong>沟通</strong>（让管理者/客户/审计员了解质量状态）。三类重要制品：</p>
+<ul>
+<li><strong>测试计划（Test Plan）：</strong>
+高层文档，定义测试的范围、方法、目标、资源、进度与职责——回答"测什么、怎么测、何时测、谁测、用什么工具"。</li>
+<li><strong>测试用例（Test Case）：</strong>
+验证某项功能的详细分步指令，含
+ID、前置条件、测试步骤、预期结果、实际结果、状态（通过/失败）。</li>
+<li><strong>测试数据（Test Data）：</strong>
+用例中使用的输入值，含<strong>有效数据、无效数据、边界数据</strong>（如密码长度恰为
+8 或 20）与<strong>大批量数据</strong>（用于性能/负载测试）。</li>
+</ul>
+<hr />
+<h2 id="五types-of-testing测试类型">五、Types of
+Testing（测试类型）</h2>
+<h3 id="功能测试-vs-非功能测试">5.1 功能测试 vs 非功能测试</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>方面</th>
+<th>功能测试（Functional）</th>
+<th>非功能测试（Non-functional）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>目的</strong></td>
+<td>验证系统是否按需求/功能行事</td>
+<td>评估系统在特定条件下表现如何（质量属性）</td>
+</tr>
+<tr>
+<td><strong>焦点</strong></td>
+<td>系统<strong>做什么</strong>（功能、操作、交互）</td>
+<td>系统<strong>表现如何</strong>（性能、可用性、可靠性、安全）</td>
+</tr>
+<tr>
+<td><strong>需求来源</strong></td>
+<td>功能需求（如"用户可用账号密码登录"）</td>
+<td>非功能需求（如"系统须支持 1000 并发用户"）</td>
+</tr>
+<tr>
+<td><strong>测试数据</strong></td>
+<td>确定性的输入/输出场景</td>
+<td>基于指标：响应时间、吞吐量、错误率</td>
+</tr>
+<tr>
+<td><strong>自动化可行性</strong></td>
+<td>高（单元与集成测试常自动化）</td>
+<td>部分（部分性能/安全可自动化，可用性常为手动）</td>
+</tr>
+<tr>
+<td><strong>示例</strong></td>
+<td>单元、集成、系统、UAT 测试</td>
+<td>性能、安全、可用性、兼容性测试</td>
+</tr>
+</tbody>
+</table>
+<h3 id="功能测试">5.2 功能测试</h3>
+<ul>
+<li><strong>单元测试（Unit）：</strong>
+隔离测试最小单元（函数、方法、类），确保每个单元按预期工作，通常由开发者完成。</li>
+<li><strong>集成测试（Integration）：</strong>
+测试模块/组件间的交互，验证组合后正确协作；方法有大爆炸（Big
+Bang，一次性整合）、自顶向下（Top-Down，用桩
+stub）、自底向上（Bottom-Up，用驱动 driver）。</li>
+<li><strong>系统测试（System）：</strong>
+测试完整集成的系统整体，验证是否满足规定需求，由独立
+QA/测试团队执行。</li>
+<li><strong>用户验收测试（UAT）：</strong>
+发布前由真实用户/客户测试，确保满足业务需求；含 <strong>Alpha
+测试</strong>（内部团队以终端用户视角）与 <strong>Beta
+测试</strong>（外部用户在真实环境）。</li>
+<li><strong>黑盒测试（Black Box）：</strong>
+不看内部代码，关注输入与输出；技术如边界值分析、等价类划分。</li>
+<li><strong>白盒测试（White Box）：</strong>
+测试内部逻辑、路径与代码结构，关注代码覆盖、循环、条件；由懂代码者执行。</li>
+</ul>
+<h3 id="非功能测试">5.3 非功能测试</h3>
+<ul>
+<li><strong>负载测试（Load）：</strong>
+检验系统在预期用户负载下的表现（响应时间、吞吐量、资源使用），如模拟
+10,000 用户同时登录。</li>
+<li><strong>压力测试（Stress）：</strong>
+将系统推到极限之外以测试崩溃点与故障后恢复，如施加 5
+倍流量直至崩溃并观察恢复。</li>
+<li><strong>冒烟测试（Smoke）：</strong>
+新构建/部署后对基本功能的快速检查（"构建验证"），确保稳定到可继续测试。</li>
+<li><strong>A/B 测试：</strong> 比较两个版本（A 与
+B）哪个对用户表现更好，用于提升可用性、转化或参与度（如红色按钮 vs
+蓝色按钮）。</li>
+</ul>
+<hr />
+<h2
+id="六qa-in-software-development-methodologiesqa-在开发方法论中的应用">六、QA
+in Software Development Methodologies（QA 在开发方法论中的应用）</h2>
+<ul>
+<li><strong>Waterfall 中的 QA：</strong>
+在生命周期的特定节点做验证与确认——需求阶段确保需求完整/一致/可测试，设计阶段核验架构与设计文档，实现阶段确保编码规范，测试阶段由专门
+QA 团队执行功能与非功能测试，部署/维护阶段确保发布就绪。</li>
+<li><strong>Agile 中的 QA：</strong>
+贯穿整个生命周期而非末期单独阶段——参与故事细化与估算以确保验收标准清晰可测、按
+sprint 而非整体提前规划测试、与开发紧密协作
+TDD/BDD、持续测试即时修复缺陷、强调自动化、参与 sprint 评审与回顾。</li>
+<li><strong>DevOps 中的 QA：</strong>
+完全融入交付流水线，强调自动化、监控与持续反馈——QA 嵌入 CI/CD
+以尽早发现缺陷、高度依赖测试自动化支持快速发布、尽早开始
+QA、监控生产环境的错误/性能/用户体验、由开发/测试/运维/安全协作共担质量。</li>
+</ul>
+<h3 id="专业问题与未来趋势">专业问题与未来趋势</h3>
+<p>QA
+不只是流程与测试，还涉及<strong>专业与伦理责任</strong>：确保软件安全可靠、满足用户需求；遵守监管与法律标准；处理敏感数据时的保密与数据隐私。<strong>未来的
+QA</strong>
+正从阶段驱动的被动过程演变为持续、主动、自动化的质量管理，AI、云、IoT、DevOps
+等正在重塑测试实践，未来 QA 人员需兼具技术、分析与协作能力。</p>
+<h3 id="qa-角色在不同环境中的差异">QA 角色在不同环境中的差异</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>方面</th>
+<th>Waterfall</th>
+<th>Agile</th>
+<th>DevOps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>QA 何时发生</strong></td>
+<td>生命周期末期</td>
+<td>sprint 内持续</td>
+<td>内建于 CI/CD 流水线</td>
+</tr>
+<tr>
+<td><strong>你的角色</strong></td>
+<td>QA 专员核验交付物、重文档</td>
+<td>开发 + QA 紧密协作、共担</td>
+<td>人人（开发/QA/运维/安全）共担质量</td>
+</tr>
+<tr>
+<td><strong>专业风险</strong></td>
+<td>缺陷发现晚→返工成本高</td>
+<td>快速迭代中漏测→质量风险</td>
+<td>过度依赖自动化→疏漏风险</td>
+</tr>
+<tr>
+<td><strong>伦理与标准</strong></td>
+<td>合规 ISO/CMMI、审计检查</td>
+<td>对利益相关者透明、验收标准清晰</td>
+<td>持续监控、隐私与安全合规</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七end-of-lecture-questions课后复习问题与参考答案">七、End of
+Lecture Questions（课后复习问题与参考答案）</h2>
+<ol type="1">
+<li><p><strong>描述 Deming 循环（PDCA）及其与 QA 的关系。</strong> PDCA
+即 Plan（计划/识别问题）→ Do（小规模实施）→ Check（评估结果）→
+Act（标准化成功做法），是 QA
+与流程管理的持续改进基础，让质量改进成为循环往复、数据驱动的过程。</p></li>
+<li><p><strong>什么是 CMMI，其成熟度等级如何与 QA 流程相关？</strong>
+CMMI
+是流程改进框架，分五级（初始→已管理→已定义→量化管理→优化）。等级越高，流程越标准化、可度量、可持续改进；QA
+确保流程被一致执行，CMMI 衡量并提升这些流程的成熟度。</p></li>
+<li><p><strong>列举并简述 STLC 的各阶段。</strong> 需求分析 → 测试计划 →
+测试设计 → 环境搭建 → 测试执行 → 缺陷报告与跟踪 →
+测试周期收尾，强调左移与迭代、全程保证质量。</p></li>
+<li><p><strong>从焦点、责任、时机比较单元、集成、系统与 UAT
+测试。</strong> 单元（最小代码单元、开发者、最早）→
+集成（模块间交互、开发/测试）→ 系统（完整系统、独立 QA）→
+UAT（业务需求、真实用户/客户、发布前），范围由小到大、责任由开发转向用户。</p></li>
+<li><p><strong>解释 QA 在 Waterfall、Agile、DevOps 中的差异。</strong>
+Waterfall 在末期集中验证、重文档；Agile 贯穿
+sprint、协作共担、强调自动化与持续测试；DevOps 内建于 CI/CD、自动化 +
+监控、全员共担。</p></li>
+<li><p><strong>ISO 9000 与 ISO 27001 如何影响 QA 实践？</strong> ISO
+9000 通过质量管理原则（客户导向、过程方法、持续改进等）使 QA
+流程一致可审计；ISO 27001 通过 ISMS 保障信息的 CIA，使 QA
+涵盖信息安全合规——二者共同把质量与安全制度化。</p></li>
+</ol>
+<hr />
+<h2 id="八case-study在线银行平台">八、Case Study：在线银行平台</h2>
+<h3 id="背景">8.1 背景</h3>
+<p>某银行正在开发新的在线银行平台（登录、转账、缴费、查看交易记录）。开发期间发现若干问题：部分用户登录失败的严重
+Bug；高峰时段交易处理变慢；安全扫描发现密码存储漏洞；QA
+文档不完整，导致漏测用例。</p>
+<h3 id="案例讨论问题">8.2 案例讨论问题</h3>
+<ol type="1">
+<li>说明需求与测试用例之间的<strong>可追溯性</strong>如何防止漏测用例。</li>
+<li>哪种性能测试能识别高峰时段的变慢？在此情境中解释负载（load）、压力（stress）与浸泡（soak）测试的区别。</li>
+<li>若银行带着已知的登录与安全问题发布系统，会有哪些专业或伦理问题？</li>
+<li>结合 DevOps 实践，说明持续测试与监控如何防止类似问题流入生产。</li>
+</ol>
+<blockquote>
+<p><strong>参考思路：</strong>
+①可追溯性把每条需求映射到对应测试用例，确保无需求遗漏、覆盖完整；②变慢应用<strong>负载测试</strong>复现高峰，负载=预期负载下表现、压力=超极限找崩溃点、浸泡=长时间持续负载查内存泄漏等；③带病上线违反"交付安全可靠系统"的伦理责任与合规要求（如密码明文存储违反数据保护法），损害客户信任与法律责任；④DevOps
+通过 CI/CD
+持续测试在早期拦截缺陷、自动化安全扫描、生产环境持续监控性能与异常，从而预防同类问题复发。</p>
+</blockquote>
+<hr />
+<h2 id="九考试速查表quick-reference">九、考试速查表（Quick
+Reference）</h2>
+<h3 id="质量七维度">质量七维度</h3>
+<p>功能性、可靠性、可用性、效率、可维护性、可移植性、安全性。</p>
+<h3 id="qa-qc-testing">QA / QC / Testing</h3>
+<p>QA = 主动·面向过程·预防缺陷；QC = 被动·面向产品·检测缺陷；Testing =
+QC 子集（验证 + 确认）。</p>
+<h3 id="标准">标准</h3>
+<p>ISO 9000 = 质量管理（7 原则）；ISO 27001 = 信息安全 ISMS（CIA、114
+控制 / 14 类）。</p>
+<h3 id="持续改进">持续改进</h3>
+<p>Deming 循环 = Plan → Do → Check → Act；CMMI 五级 = 初始 → 已管理 →
+已定义 → 量化管理 → 优化。</p>
+<h3 id="stlc">STLC</h3>
+<p>需求 → 计划 → 设计 → 环境 → 执行 → 缺陷跟踪 →
+收尾（左移、迭代）。</p>
+<h3 id="测试类型">测试类型</h3>
+<ul>
+<li>功能：单元 → 集成（大爆炸/自顶向下/自底向上）→ 系统 →
+UAT（Alpha/Beta）；黑盒 vs 白盒。</li>
+<li>非功能：负载、压力、冒烟、A/B。</li>
+</ul>
+<h3 id="qa-方法论">QA × 方法论</h3>
+<p>Waterfall（末期、重文档）/ Agile（贯穿 sprint、TDD/BDD、自动化）/
+DevOps（CI/CD 内建、自动化 + 监控、全员共担）。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO5990/" rel="tag"><i class="fa fa-tag"></i> INFO5990</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/0b27150d.html" rel="prev" title="INFO5990 Week 10 Tutorial Summary">
+                  <i class="fa fa-angle-left"></i> INFO5990 Week 10 Tutorial Summary
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/e475a3ec.html" rel="next" title="INFO5990 Week 11 Tutorial Summary">
+                  INFO5990 Week 11 Tutorial Summary <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

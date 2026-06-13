@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 11 详细总结，结合课程 handout 与论文 Balakrishnan et al. “Looking up data in P2P systems” (CACM 2003)，系统梳理 P2P 查找问题、分布式哈希表（DHT）、Chord 一致性哈希环与 finger table、CAN 多维路由，附完整 finger table 与 lookup 路由例子，并明确">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Week 11 P2P 查找与分布式哈希表（Chord&#x2F;CAN）总结">
+<meta property="og:url" content="http://example.com/posts/393cd0af.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 11 详细总结，结合课程 handout 与论文 Balakrishnan et al. “Looking up data in P2P systems” (CACM 2003)，系统梳理 P2P 查找问题、分布式哈希表（DHT）、Chord 一致性哈希环与 finger table、CAN 多维路由，附完整 finger table 与 lookup 路由例子，并明确">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T09:28:42.709Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Chord">
+<meta property="article:tag" content="Distributed Hash Table">
+<meta property="article:tag" content="Peer-to-Peer">
+<meta property="article:tag" content="CAN">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/393cd0af.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/393cd0af.html","path":"posts/393cd0af.html","title":"COMP5313 Week 11 P2P 查找与分布式哈希表（Chord/CAN）总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Week 11 P2P 查找与分布式哈希表（Chord/CAN）总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/393cd0af.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#week-11-%E6%80%BB%E7%BB%93p2p-%E6%9F%A5%E6%89%BE%E9%97%AE%E9%A2%98%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E5%93%88%E5%B8%8C%E8%A1%A8chord-can"><span class="nav-text">Week 11
+总结：P2P 查找问题与分布式哈希表（Chord &#x2F; CAN）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E9%80%9F%E8%A7%88"><span class="nav-text">〇、考点速览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80p2p-%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B-optional%E4%B8%8D%E8%80%83"><span class="nav-text">一、P2P 系统简介　🚫
+optional（不考）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%9F%A5%E6%89%BE%E9%97%AE%E9%A2%98-lookup-problem-%E8%80%83%E7%82%B9"><span class="nav-text">二、查找问题 Lookup Problem　✅
+考点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%88%86%E5%B8%83%E5%BC%8F%E5%93%88%E5%B8%8C%E8%A1%A8-dht-%E8%80%83%E7%82%B9"><span class="nav-text">三、分布式哈希表 DHT　✅ 考点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bchord-dht-%E6%A0%B8%E5%BF%83%E9%AB%98%E9%A2%91"><span class="nav-text">四、Chord DHT　⚠️ 核心高频</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AF%86%E7%AC%A6%E4%B8%8E%E7%8E%AF%E7%BB%93%E6%9E%84-%E8%80%83%E7%82%B9"><span class="nav-text">4.1 标识符与环结构　✅ 考点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E4%B8%8E-successor-%E8%A7%84%E5%88%99-%E8%80%83%E7%82%B9"><span class="nav-text">4.2 一致性哈希与 successor
+规则　✅ 考点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E6%9F%A5%E6%89%BEon"><span class="nav-text">4.3 朴素查找：\(O(n)\)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finger-table-%E6%AF%8F%E5%B9%B4%E5%BF%85%E8%80%83"><span class="nav-text">4.4 Finger Table　⚠️ 每年必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lookup-%E8%B7%AF%E7%94%B1-%E6%AF%8F%E5%B9%B4%E5%BF%85%E8%80%83"><span class="nav-text">4.5 Lookup 路由　⚠️ 每年必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6olog-n-%E8%80%83%E7%82%B9"><span class="nav-text">4.6 时间复杂度：\(O(\log n)\)　✅ 考点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6olog-n-%E8%80%83%E7%82%B9"><span class="nav-text">4.7 空间复杂度：\(O(\log n)\)　✅ 考点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E9%94%99%E5%8A%A0%E5%85%A5%E4%B8%8E%E7%A8%B3%E5%AE%9A%E5%8C%96-%E8%AE%BA%E6%96%87%E6%B7%B1%E5%BA%A6%E4%B8%8D%E8%80%83"><span class="nav-text">4.8 容错、加入与稳定化　🚫
+论文深度，不考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94cancontent-addressable-networkdht-%E8%80%83%E7%82%B9"><span class="nav-text">五、CAN（Content
+Addressable Network）DHT　✅ 考点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADchord-vs-can-%E5%AF%B9%E6%AF%94-%E8%80%83%E7%82%B9"><span class="nav-text">六、Chord vs CAN 对比　✅ 考点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E8%AE%BA%E6%96%87%E6%8F%90%E5%88%B0%E7%9A%84%E5%85%B6%E4%BB%96-dht-%E8%AF%BE%E4%B8%8A%E6%9C%AA%E8%AE%B2%E4%B8%8D%E8%80%83"><span class="nav-text">七、论文提到的其他 DHT　🚫
+课上未讲，不考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9%E5%8A%A1%E5%BF%85%E6%8E%8C%E6%8F%A1"><span class="nav-text">八、考点重点（务必掌握）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/393cd0af.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Week 11 P2P 查找与分布式哈希表（Chord/CAN）总结 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 11 详细总结，结合课程 handout 与论文 Balakrishnan et al. “Looking up data in P2P systems” (CACM 2003)，系统梳理 P2P 查找问题、分布式哈希表（DHT）、Chord 一致性哈希环与 finger table、CAN 多维路由，附完整 finger table 与 lookup 路由例子，并明确标注考点与 optional（不考）。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Week 11 P2P 查找与分布式哈希表（Chord/CAN）总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-24 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-24T00:00:00Z">2026-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-06-07 09:28:42" itemprop="dateModified" datetime="2026-06-07T09:28:42Z">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 11 详细总结，结合课程 handout 与论文 Balakrishnan et al. “Looking up data in P2P systems” (CACM 2003)，系统梳理 P2P 查找问题、分布式哈希表（DHT）、Chord 一致性哈希环与 finger table、CAN 多维路由，附完整 finger table 与 lookup 路由例子，并明确标注考点与 optional（不考）。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="week-11-总结p2p-查找问题与分布式哈希表chord-can">Week 11
+总结：P2P 查找问题与分布式哈希表（Chord / CAN）</h1>
+<blockquote>
+<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026
+结合两份材料：① 课程 handout <code>11_peer_to_peer_handout.pdf</code>；②
+论文 H. Balakrishnan, M. F. Kaashoek, D. Karger, R. Morris, I. Stoica,
+<em>Looking up data in P2P systems</em>, <strong>CACM</strong> 46(2),
+2003。</p>
+<p><strong>考点标注</strong>：⚠️ 高频/每年必考　✅ 考点　🚫 optional /
+不考。 <strong>主线</strong>：把 Week 10
+的「去中心化搜索」搬进分布式系统——在没有中心服务器的网络里，仅用局部邻居信息，快速、可靠地找到负责某个
+key 的节点。</p>
+</blockquote>
+<hr />
+<h2 id="考点速览">〇、考点速览</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>内容</th>
+<th>是否考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P2P 系统简介（overlay、结构化/非结构化、Napster、Gnutella）</td>
+<td>🚫 不考（仅用于引出 lookup）</td>
+</tr>
+<tr>
+<td>查找问题 Lookup Problem</td>
+<td>✅ 考点</td>
+</tr>
+<tr>
+<td>分布式哈希表 DHT 与 <code>lookup(key)</code></td>
+<td>✅ 考点</td>
+</tr>
+<tr>
+<td>Chord：一致性哈希环 + successor 规则</td>
+<td>✅ 考点</td>
+</tr>
+<tr>
+<td>Chord：<strong>finger table 构造 + lookup 路由</strong></td>
+<td>⚠️ 高频必考</td>
+</tr>
+<tr>
+<td>Chord：时间/空间复杂度 <span class="math inline">\(O(\log
+n)\)</span></td>
+<td>✅ 考点</td>
+</tr>
+<tr>
+<td>Chord：successor list 容错、join、stabilization</td>
+<td>🚫 论文深度，不考</td>
+</tr>
+<tr>
+<td>CAN：<span class="math inline">\(d\)</span> 维
+zones、贪心路由、复杂度</td>
+<td>✅ 考点（细节不必过深）</td>
+</tr>
+<tr>
+<td>Chord vs CAN 对比</td>
+<td>✅ 考点</td>
+</tr>
+<tr>
+<td>Pastry / Tapestry / Kademlia / Viceroy / Freenet</td>
+<td>🚫 课上未讲，不考</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="一p2p-系统简介-optional不考">一、P2P 系统简介　🚫
+optional（不考）</h2>
+<blockquote>
+<p>老师明确说本节 optional，<strong>不考</strong>，只用于引出 lookup
+problem；下面从简。</p>
+</blockquote>
+<ul>
+<li><strong>Overlay network（覆盖网络）</strong>：P2P
+把节点组织成一个<strong>逻辑</strong>网络。overlay
+的节点是物理网络节点的子集，每条 overlay
+逻辑链路对应物理网络中的一条路径。每个节点只能直接给它在 overlay
+中的<strong>邻居</strong>发消息。Overlay 让 P2P
+独立于物理网络，用于索引与节点发现。</li>
+<li><strong>两类 P2P</strong>：
+<ul>
+<li><strong>非结构化（unstructured）</strong>：不对 overlay 强加结构，如
+<strong>Gnutella、Kazaa</strong>。</li>
+<li><strong>结构化（structured）</strong>：overlay
+组织成特定拓扑，有协议保证任何节点都能高效查找，如
+<strong>Chord、CAN</strong>。</li>
+</ul></li>
+<li><strong>三种查找方式（演化）</strong>：中心化（Napster）→
+洪泛（Gnutella）→ 结构化对称（DHT）。详见下一节的对比表。</li>
+</ul>
+<hr />
+<h2 id="二查找问题-lookup-problem-考点">二、查找问题 Lookup Problem　✅
+考点</h2>
+<p><strong>定义</strong>：在大型 P2P 系统中，给定一个数据项的
+key，<strong>不依赖任何中心服务器或层级结构</strong>，仅用局部邻居信息找到负责存储它的节点，并且要求<strong>路径短、消息数少</strong>。</p>
+<p>这是所有 P2P 系统的核心问题，本质上与 Milgram 实验 /
+去中心化搜索一致：每一步只把请求转发给一个「看起来更接近目标」的邻居。论文把已有方案分为三类：</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>方案</th>
+<th>代表</th>
+<th>查找机制</th>
+<th>代价 / 问题</th>
+<th>是否考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中心化</td>
+<td>Napster</td>
+<td>中心服务器存目录，查询问服务器</td>
+<td>单点故障、扩展性差</td>
+<td>🚫</td>
+</tr>
+<tr>
+<td>洪泛 flooding</td>
+<td>Gnutella</td>
+<td>把请求转发给<strong>所有</strong>邻居</td>
+<td>健壮但消息量大、最坏 <span class="math inline">\(O(n)\)</span></td>
+<td>🚫</td>
+</tr>
+<tr>
+<td>结构化对称</td>
+<td><strong>Chord、CAN（DHT）</strong></td>
+<td>节点对称、维护少量邻居、按规则路由</td>
+<td>可<strong>保证</strong>数据存在即能找到，<span
+class="math inline">\(O(\log n)\)</span> 量级</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>结构化 DHT
+的最大优点：<strong>可证明的保证</strong>——只要数据已存入，就一定能被找到，且开销远小于洪泛。</p>
+<hr />
+<h2 id="三分布式哈希表-dht-考点">三、分布式哈希表 DHT　✅ 考点</h2>
+<p><strong>普通哈希表</strong>：存 key-value 对，两种操作
+<code>put(key, value)</code>、<code>value = get(key)</code>，用哈希函数把
+key 映射到 bucket。</p>
+<p><strong>DHT</strong>：把一张哈希表<strong>分区</strong>到很多机器上，每个节点负责一部分
+key。与普通哈希表的<strong>关键区别</strong>是多了一个核心操作：</p>
+<p><span class="math display">\[\texttt{lookup(key)} \;\rightarrow\;
+\text{当前负责该 key 的节点身份（如 IP 地址）}\]</span></p>
+<p><strong>完整流程</strong>： 1. 发布者把文件名用 <code>SHA-1</code>
+之类的普通哈希转成 key； 2. 调用 <code>lookup(key)</code> 得到负责该 key
+的节点； 3. 在该节点上 <code>put</code>/<code>get</code> 实际数据。</p>
+<p><strong>DHT 必须解决两件事</strong>（论文）： 1. <strong>负载均衡地把
+key 映射到节点</strong>：所有 key 和节点都用 <strong><span
+class="math inline">\(m\)</span> 位 ID</strong> 表示；每个 key 存在 ID
+与它「接近」的节点上（不同方案对「接近」定义不同：Chord
+看环上后继距离，CAN 看坐标距离）。 2.
+<strong>正确转发查询</strong>：任何收到 key
+查询的节点，都要能把它转给更接近负责节点的下一跳。</p>
+<hr />
+<h2 id="四chord-dht-核心高频">四、Chord DHT　⚠️ 核心高频</h2>
+<h3 id="标识符与环结构-考点">4.1 标识符与环结构　✅ 考点</h3>
+<ul>
+<li>每个<strong>节点</strong>有唯一 id、每个<strong>文件</strong>有
+key，都用 <strong><span class="math inline">\(m\)</span>
+位</strong>编码，因此 ID 空间大小为 <span
+class="math inline">\(2^m\)</span>。</li>
+<li><span class="math inline">\(n\)</span> 个节点排成一个有 <span
+class="math inline">\(2^m \ge n\)</span> 个 slot
+的<strong>环</strong>，id 沿<strong>顺时针递增</strong>。</li>
+</ul>
+<h3 id="一致性哈希与-successor-规则-考点">4.2 一致性哈希与 successor
+规则　✅ 考点</h3>
+<ul>
+<li><strong>Successor 规则</strong>：key <span
+class="math inline">\(k\)</span> 存在 id 满足 <span
+class="math inline">\(\min\{\,\text{node.id} : \text{node.id} \ge
+k\,\}\)</span> 的节点上，即「<strong>顺时针方向第一个 id <span
+class="math inline">\(\ge k\)</span> 的节点</strong>」，称该节点
+<strong>负责（responsible for）</strong> key <span
+class="math inline">\(k\)</span>；若没有正好 <span
+class="math inline">\(\ge k\)</span> 的，则回绕到环首的最小 id
+节点。</li>
+<li><strong>一致性哈希（consistent
+hashing）的关键性质</strong>：当节点加入/离开时，<strong>平均只有 <span
+class="math inline">\(K/N\)</span> 个 key 需要重新分配</strong>（<span
+class="math inline">\(K\)</span> 为 key 总数，<span
+class="math inline">\(N\)</span>
+为节点数），且只影响<strong>邻近区间</strong>——新节点只从它的 successor
+手里接管自己那段 key。
+<ul>
+<li>对比普通取模哈希 <span class="math inline">\(h(k)\bmod
+N\)</span>：一旦 <span class="math inline">\(N\)</span>
+变化，<strong>几乎所有 key</strong> 的归属都会改变。这正是 Chord
+用一致性哈希而非取模的原因。</li>
+</ul></li>
+</ul>
+<h3 id="朴素查找on">4.3 朴素查找：<span
+class="math inline">\(O(n)\)</span></h3>
+<p>若每个节点只知道自己的 successor，要找 key <span
+class="math inline">\(k\)</span> 就沿环逐个询问后继，直到某节点 id <span
+class="math inline">\(\ge k\)</span>。最坏要走遍几乎所有节点 →
+<strong>时间 <span class="math inline">\(O(n)\)</span></strong>。需要
+finger table 加速。</p>
+<h3 id="finger-table-每年必考">4.4 Finger Table　⚠️ 每年必考</h3>
+<p>为加速查找，每个节点 <span class="math inline">\(i\)</span> 维护一张
+<strong><span class="math inline">\(m\)</span> 项</strong>的 finger
+table，第 <span class="math inline">\(j\)</span>
+项指向<strong>负责</strong> key <span class="math inline">\((i +
+2^{\,j-1}) \bmod 2^m\)</span> <strong>的节点</strong>：</p>
+<p><span class="math display">\[\text{finger}[j] =
+\text{successor}\big((i + 2^{\,j-1}) \bmod 2^m\big), \qquad j = 1, 2,
+\dots, m\]</span></p>
+<ul>
+<li>直觉：finger 指向环上相距 <span class="math inline">\(1, 2, 4, 8,
+\dots\)</span>（2 的幂）处的负责节点，像一个
+<strong>skiplist</strong>，提供由近及远的多尺度跳跃边。</li>
+<li><strong>与 Week 10 的联系</strong>：finger 的 <span
+class="math inline">\(1,2,4,8,\dots\)</span>
+这些不同<strong>距离尺度</strong>的跳跃边，正对应 Week 10
+小世界模型里不同尺度的 <strong>weak ties /
+长程边</strong>——近处精细定位、远处大跨度逼近目标。</li>
+<li>项数 <span class="math inline">\(= m = \log_2(2^m)\)</span>，与
+<span class="math inline">\(\log n\)</span> 同量级。</li>
+</ul>
+<blockquote>
+<p><strong>完整例子</strong>：<span
+class="math inline">\(m=4\)</span>（ID 空间 <span
+class="math inline">\(0\text{–}15\)</span>），在线节点 <span
+class="math inline">\(\{1,3,5,8,9,11,14,15\}\)</span>。</p>
+<p>节点 1 的 finger table：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(j\)</span></th>
+<th>start <span class="math inline">\(=(1+2^{j-1})\bmod 16\)</span></th>
+<th>successor（负责节点）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>5</td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+<p>节点 8 的 finger table：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(j\)</span></th>
+<th>start <span class="math inline">\(=(8+2^{j-1})\bmod 16\)</span></th>
+<th>successor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td><strong>11</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>12</td>
+<td><strong>14</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="math inline">\(16\equiv 0\)</span></td>
+<td><strong>1</strong></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="lookup-路由-每年必考">4.5 Lookup 路由　⚠️ 每年必考</h3>
+<p><strong>路由规则</strong>：<em>Go as far as possible, but never pass
+the target</em>（不越过目标，尽量走远）： 1. 若 key 落在「我」与「我的
+successor」之间，直接交给 successor； 2. 否则，转发给 finger table 中
+<strong>id 不超过 key 的最大节点</strong>； 3.
+重复，直到到达负责节点。</p>
+<blockquote>
+<p><strong>完整路由 trace</strong>（同上环，查 key 13，从节点 1
+发起）：</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>当前节点</th>
+<th>finger table</th>
+<th>key 13 ∈ (当前, succ]?</th>
+<th>不超过 13 的最大 finger</th>
+<th>下一跳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>[3, 3, 5, 9]</td>
+<td>(1, 3] 否</td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td>[11, 11, 14, 1]</td>
+<td>(9, 11] 否</td>
+<td>11</td>
+<td><strong>11</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td>[14, 14, 15, 3]</td>
+<td>(11, 14] <strong>是</strong>（succ=14 负责 13）</td>
+<td>—</td>
+<td><strong>14</strong>（命中）</td>
+</tr>
+</tbody>
+</table>
+<p>路径 <span class="math inline">\(1 \to 9 \to 11 \to
+14\)</span>。可见每跳都把到目标的距离大幅缩短。</p>
+<p>handout 另一例（更大的环）：从节点 1 查 key 26 → <span
+class="math inline">\(1\to18\to20\to21\to28\)</span>；从节点 28 查 key
+12 → <span class="math inline">\(28\to4\to9\to11\to14\)</span>。</p>
+</blockquote>
+<h3 id="时间复杂度olog-n-考点">4.6 时间复杂度：<span
+class="math inline">\(O(\log n)\)</span>　✅ 考点</h3>
+<p><strong>halving 论证</strong>（handout）：假设 id
+在空间中近似均匀分布。</p>
+<ul>
+<li>第 1 步：finger 把查询送到<strong>目标所在的半个环</strong>；</li>
+<li>第 2 步：缩小到<strong>四分之一个环</strong>；</li>
+<li>第 <span class="math inline">\(i\)</span> 步后：可能的目标节点从
+<span class="math inline">\(n\)</span> 个减半到 <span
+class="math inline">\(n/2^i\)</span> 个。</li>
+</ul>
+<p>因此约 <span class="math inline">\(\log_2 n\)</span> 步后只剩 1
+个候选 → <strong>查找时间 <span class="math inline">\(O(\log
+n)\)</span></strong>。</p>
+<h3 id="空间复杂度olog-n-考点">4.7 空间复杂度：<span
+class="math inline">\(O(\log n)\)</span>　✅ 考点</h3>
+<p>每个节点维护： - finger table，大小 <span class="math inline">\(m =
+O(\log n)\)</span>； - （为应对失效/离开）其后 <span
+class="math inline">\(r\)</span> 个 successor 与前 <span
+class="math inline">\(r\)</span> 个 predecessor 的 id。</p>
+<p>综合每节点状态为 <span class="math inline">\(O(\log n)\)</span>。</p>
+<h3 id="容错加入与稳定化-论文深度不考">4.8 容错、加入与稳定化　🚫
+论文深度，不考</h3>
+<blockquote>
+<p>以下为论文细节，老师未要求，<strong>不考</strong>，了解即可：</p>
+<ul>
+<li><strong>Successor list</strong>：每节点记其后 <span
+class="math inline">\(r\approx\log N\)</span> 个后继；即便很多 finger
+指向失效节点，查询仍能在 ID 空间上前进。仅当某节点紧邻的 <span
+class="math inline">\(r\)</span>
+个后继<strong>同时失效</strong>才会出错；因 id 随机、失效独立，概率约
+<span class="math inline">\(1/N\)</span>。</li>
+<li><strong>节点加入</strong>：新节点 <span
+class="math inline">\(n\)</span> 让任一已有节点帮它
+<code>lookup(n)</code> 定位，只需更新 <span
+class="math inline">\(n\)</span> 与其前驱的 successor
+即可保证查找正确；finger table 后台修复（只影响性能不影响正确性）；并从
+successor 接管对应 key。</li>
+<li><strong>稳定化协议（stabilization）</strong>：每节点周期性问其
+successor「你的前驱是谁」，据此修正指针，保证并发加入/失效下的正确性。</li>
+</ul>
+</blockquote>
+<hr />
+<h2 id="五cancontent-addressable-networkdht-考点">五、CAN（Content
+Addressable Network）DHT　✅ 考点</h2>
+<blockquote>
+<p>老师说 CAN 细节不必过深，<strong>重点是思想与复杂度</strong>。</p>
+</blockquote>
+<ul>
+<li><strong>结构</strong>：用一个 <strong><span
+class="math inline">\(d\)</span> 维笛卡尔坐标空间</strong>（如二维 <span
+class="math inline">\([0,1]\times[0,1]\)</span>）实现
+DHT。空间被划分成若干<strong>超矩形 zone</strong>，每个节点负责一个
+zone，并由其 zone 的边界标识。</li>
+<li><strong>key 映射</strong>：key
+映射到坐标空间中的一个点，存到<strong>包含该点的 zone</strong>
+所属节点。</li>
+<li><strong>邻居</strong>：两个节点相邻 ⟺ 它们的 zone 共享一个 <span
+class="math inline">\((d-1)\)</span>
+维超平面（二维时即共享一条边）。每个节点维护其所有邻居的路由表，邻居数约
+<span class="math inline">\(2d\)</span>。</li>
+<li><strong>贪心路由（greedy）</strong>：查询沿「从发起者到目标点的直线」推进——每步转发给坐标上<strong>最接近目标</strong>的邻居（平局任意打破），直到到达包含目标点的
+zone。</li>
+<li><strong>复杂度</strong>：
+<ul>
+<li>每节点状态（邻居数）：<span
+class="math inline">\(O(d)\)</span>；</li>
+<li>查找时间：<span class="math inline">\(O(d\cdot
+n^{1/d})\)</span>。直觉：每个维度上约有 <span
+class="math inline">\(n^{1/d}\)</span> 段，平均要跨越 <span
+class="math inline">\(\tfrac{d}{4}n^{1/d}\)</span> 段，故为 <span
+class="math inline">\(O(d\,n^{1/d})\)</span>。二维时约 <span
+class="math inline">\(O(\sqrt n)\)</span>。</li>
+</ul></li>
+<li><strong>加入</strong>：新节点随机选坐标点 <span
+class="math inline">\(P\)</span>，让负责 <span
+class="math inline">\(P\)</span> 的节点把其 zone
+<strong>一分为二</strong>，交一半给新节点；新节点据邻居信息初始化路由表。</li>
+<li><strong>离开/失效</strong>：把 zone 交给邻居，若能合并成合法 zone
+则合并，否则邻居暂时兼管；后台运行 zone 重分配算法避免碎片化（🚫
+细节不考）。</li>
+</ul>
+<hr />
+<h2 id="六chord-vs-can-对比-考点">六、Chord vs CAN 对比　✅ 考点</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>维度</th>
+<th>Chord</th>
+<th>CAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结构</td>
+<td>一维环形 ID 空间 <span class="math inline">\(2^m\)</span></td>
+<td><span class="math inline">\(d\)</span> 维笛卡尔坐标空间，分
+zones</td>
+</tr>
+<tr>
+<td>key 归属</td>
+<td>顺时针第一个 id <span class="math inline">\(\ge k\)</span>
+的节点（successor）</td>
+<td>包含 key 坐标点的 zone</td>
+</tr>
+<tr>
+<td>路由信息</td>
+<td>finger table（<span class="math inline">\(1,2,4,\dots\)</span>
+跳）</td>
+<td>约 <span class="math inline">\(2d\)</span> 个相邻 zone 的邻居</td>
+</tr>
+<tr>
+<td>路由策略</td>
+<td>不越过目标尽量走远</td>
+<td>贪心选坐标最近邻、直线逼近</td>
+</tr>
+<tr>
+<td>查找时间</td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(d\,n^{1/d})\)</span></td>
+</tr>
+<tr>
+<td>每节点空间</td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(d)\)</span></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>小结：Chord 用 <span class="math inline">\(O(\log n)\)</span> 空间换
+<span class="math inline">\(O(\log n)\)</span> 时间；CAN 用很小的 <span
+class="math inline">\(O(d)\)</span> 空间换较慢的 <span
+class="math inline">\(O(d\,n^{1/d})\)</span> 时间。调大维度 <span
+class="math inline">\(d\)</span> 可缩短路径，但邻居维护更复杂。</p>
+</blockquote>
+<hr />
+<h2 id="七论文提到的其他-dht-课上未讲不考">七、论文提到的其他 DHT　🚫
+课上未讲，不考</h2>
+<p>论文是综述，还比较了多种结构化对称
+DHT，<strong>老师未讲、不考</strong>，仅供了解 DHT 设计谱系：</p>
+<ul>
+<li><strong>前缀/树形路由</strong>：<strong>Pastry、Tapestry、Kademlia</strong>——每个节点按
+ID 前缀记录路由表（如知道前缀 0、1、00、01…
+的某个节点），逐位匹配前进，期望 <span class="math inline">\(O(\log
+N)\)</span> 跳。Kademlia 用 <strong>XOR
+距离</strong>（单向且对称，故无需 leaf set / 稳定化）。</li>
+<li><strong>其他</strong>：<strong>Viceroy</strong>、Chord 的 <strong>de
+Bruijn</strong> 变体（每节点仅记约两个邻居仍达 <span
+class="math inline">\(O(\log
+N)\)</span>）、<strong>Freenet</strong>（非结构化对称、动态构建路由表）。</li>
+<li>论文讨论的设计维度（distance function、operation cost、fault
+tolerance、proximity routing）同样<strong>不考</strong>。</li>
+</ul>
+<hr />
+<h2 id="八考点重点务必掌握">八、考点重点（务必掌握）</h2>
+<ul>
+<li>⚠️ <strong>Chord finger table 构造</strong>：<span
+class="math inline">\(\text{finger}[j]=\text{successor}((i+2^{\,j-1})\bmod
+2^m),\ j=1\dots m\)</span>；会画出某节点全部 finger 边。</li>
+<li>⚠️ <strong>Chord lookup
+路由</strong>：按「不越过目标尽量走远」走出路径，数出经过的 finger
+边与跳数。</li>
+<li>✅ <strong>复杂度</strong>：Chord 时间/空间均 <span
+class="math inline">\(O(\log n)\)</span>（halving 论证）；CAN 时间 <span
+class="math inline">\(O(d\,n^{1/d})\)</span>、空间 <span
+class="math inline">\(O(d)\)</span>。</li>
+<li>✅ <strong>概念</strong>：lookup problem 定义；DHT 比普通哈希表多
+<code>lookup(key)</code>；一致性哈希环 + successor 规则（及「只移动
+<span class="math inline">\(K/N\)</span> 个 key」性质）；CAN 的 <span
+class="math inline">\(d\)</span> 维 zone 与贪心路由。</li>
+<li>🚫 <strong>不考</strong>：P2P/overlay 简介、Napster/Gnutella、Chord
+的 successor list / join / stabilization 细节、CAN
+节点重分配、以及论文中 Pastry/Tapestry/Kademlia/Viceroy/Freenet
+等其他系统。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Chord/" rel="tag"><i class="fa fa-tag"></i> Chord</a>
+              <a href="/tags/Distributed-Hash-Table/" rel="tag"><i class="fa fa-tag"></i> Distributed Hash Table</a>
+              <a href="/tags/Peer-to-Peer/" rel="tag"><i class="fa fa-tag"></i> Peer-to-Peer</a>
+              <a href="/tags/CAN/" rel="tag"><i class="fa fa-tag"></i> CAN</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c96a21de.html" rel="prev" title="COMP5313 Week 12 Project Presentations 讲课总结">
+                  <i class="fa fa-angle-left"></i> COMP5313 Week 12 Project Presentations 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/bc6415e8.html" rel="next" title="COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结">
+                  COMP5313 Week 11 Distributed Hash Table 与 Consistent Hashing 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

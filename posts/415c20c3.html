@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Chapter 18: Power Laws and Rich-Get-Richer Phenomena（幂律与富者愈富）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cambridge University Pres">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 - Chapter 18 Power Laws and Rich-Get-Richer Phenomena 幂律与富者愈富">
+<meta property="og:url" content="http://example.com/posts/415c20c3.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Chapter 18: Power Laws and Rich-Get-Richer Phenomena（幂律与富者愈富）  教材：Networks, Crowds, and Markets: Reasoning about a Highly Connected World 作者：David Easley &amp; Jon Kleinberg, Cambridge University Pres">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-03T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-03T07:25:21.970Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Networks">
+<meta property="article:tag" content="Power Law">
+<meta property="article:tag" content="Rich Get Richer">
+<meta property="article:tag" content="Preferential Attachment">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/415c20c3.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/415c20c3.html","path":"posts/415c20c3.html","title":"COMP5313 - Chapter 18 Power Laws and Rich-Get-Richer Phenomena 幂律与富者愈富"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 - Chapter 18 Power Laws and Rich-Get-Richer Phenomena 幂律与富者愈富 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/415c20c3.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-18-power-laws-and-rich-get-richer-phenomena%E5%B9%82%E5%BE%8B%E4%B8%8E%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C"><span class="nav-text">Chapter
+18: Power Laws and Rich-Get-Richer Phenomena（幂律与富者愈富）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B5%81%E8%A1%8C%E5%BA%A6%E5%A6%82%E6%AD%A4%E4%B8%8D%E5%9D%87%E8%A1%A1"><span class="nav-text">一、核心问题：为什么流行度如此不均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88-normal-distribution-%E4%B8%8D%E9%80%82%E5%90%88%E8%A7%A3%E9%87%8A%E6%B5%81%E8%A1%8C%E5%BA%A6"><span class="nav-text">二、为什么 normal
+distribution 不适合解释流行度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B9%82%E5%BE%8B%E5%88%86%E5%B8%83-power-law"><span class="nav-text">三、幂律分布 (Power Law)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%82%E5%BE%8B%E5%92%8C%E6%8C%87%E6%95%B0%E4%B8%8B%E9%99%8D%E7%9A%84%E5%B7%AE%E5%88%AB"><span class="nav-text">3.1 幂律和指数下降的差别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%A6%82%E4%BD%95%E6%A3%80%E6%B5%8B%E5%B9%82%E5%BE%8Blog-log-plot"><span class="nav-text">四、如何检测幂律：log-log plot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C%E6%A8%A1%E5%9E%8B-rich-get-richer-model"><span class="nav-text">五、富者愈富模型
+(Rich-Get-Richer Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-%E9%93%BE%E6%8E%A5%E5%A4%8D%E5%88%B6%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.1 Web 链接复制模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C%E4%BC%9A%E4%BA%A7%E7%94%9F%E5%B9%82%E5%BE%8B"><span class="nav-text">六、为什么富者愈富会产生幂律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C%E6%95%88%E5%BA%94%E7%9A%84%E4%B8%8D%E5%8F%AF%E9%A2%84%E6%B5%8B%E6%80%A7"><span class="nav-text">七、富者愈富效应的不可预测性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%B3%E4%B9%90%E4%B8%8B%E8%BD%BD%E5%AE%9E%E9%AA%8C"><span class="nav-text">7.1 音乐下载实验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%B9%82%E5%BE%8B%E4%B8%8E%E4%BF%A1%E6%81%AF%E7%BA%A7%E8%81%94%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">八、幂律与信息级联的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E9%95%BF%E5%B0%BE-the-long-tail"><span class="nav-text">九、长尾 (The Long Tail)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-popularity-plot-%E5%88%B0-rank-plot"><span class="nav-text">9.1 从 popularity plot 到 rank
+plot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E5%B0%BE%E7%9A%84%E5%95%86%E4%B8%9A%E5%90%AB%E4%B9%89"><span class="nav-text">9.2 长尾的商业含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E6%90%9C%E7%B4%A2%E5%B7%A5%E5%85%B7%E5%92%8C%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">十、搜索工具和推荐系统的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%83%BD%E6%94%BE%E5%A4%A7%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C"><span class="nav-text">10.1 可能放大富者愈富</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%9F%E5%8F%AF%E8%83%BD%E5%89%8A%E5%BC%B1%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C"><span class="nav-text">10.2 也可能削弱富者愈富</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E5%8F%AF%E9%80%89%E6%8E%A8%E5%AF%BC%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%B9%82%E5%BE%8B%E6%8C%87%E6%95%B0"><span class="nav-text">十一、可选推导：富者愈富模型的幂律指数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E6%9C%AC%E7%AB%A0%E8%80%83%E8%AF%95%E7%BA%A7%E6%80%BB%E7%BB%93"><span class="nav-text">十二、本章考试级总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%89%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9"><span class="nav-text">十三、常见坑点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/415c20c3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 - Chapter 18 Power Laws and Rich-Get-Richer Phenomena 幂律与富者愈富 | Joey">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 - Chapter 18 Power Laws and Rich-Get-Richer Phenomena 幂律与富者愈富
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-06-03 00:00:00 / Modified: 07:25:21" itemprop="dateCreated datePublished" datetime="2026-06-03T00:00:00Z">2026-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/" itemprop="url" rel="index"><span itemprop="name">Course</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course/COMP5313/Networks-and-Markets/" itemprop="url" rel="index"><span itemprop="name">Networks and Markets</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="chapter-18-power-laws-and-rich-get-richer-phenomena幂律与富者愈富">Chapter
+18: Power Laws and Rich-Get-Richer Phenomena（幂律与富者愈富）</h1>
+<blockquote>
+<p>教材：<em>Networks, Crowds, and Markets: Reasoning about a Highly
+Connected World</em> 作者：David Easley &amp; Jon Kleinberg, Cambridge
+University Press, 2010</p>
+</blockquote>
+<hr />
+<h2
+id="一核心问题为什么流行度如此不均衡">一、核心问题：为什么流行度如此不均衡</h2>
+<p>这一章讨论的是<strong>流行度 (popularity)</strong> 的分布。</p>
+<p>典型现象：</p>
+<ul>
+<li>大多数网页、书、论文、歌曲、城市都只获得很少关注；</li>
+<li>少数对象获得非常多关注；</li>
+<li>极少数对象获得超级巨大的关注。</li>
+</ul>
+<p>在 Web 中，网页的流行度可以用 <strong>in-links（入链数量）</strong>
+衡量：</p>
+<p><span class="math display">\[
+k = \text{number of in-links to a page}.
+\]</span></p>
+<p>核心问题是：</p>
+<blockquote>
+<p>作为 <span class="math inline">\(k\)</span>
+的函数，有多少比例的网页拥有 <span class="math inline">\(k\)</span>
+条入链？</p>
+</blockquote>
+<p>也就是研究：</p>
+<p><span class="math display">\[
+f(k) = \Pr[\text{a page has } k \text{ in-links}].
+\]</span></p>
+<p>这看起来像一个普通统计问题，但结果非常重要：流行度分布不是普通的钟形曲线，而是幂律。</p>
+<hr />
+<h2 id="二为什么-normal-distribution-不适合解释流行度">二、为什么 normal
+distribution 不适合解释流行度</h2>
+<p>一个自然猜想是：网页入链数是否服从正态分布 (normal/Gaussian
+distribution)？</p>
+<p>正态分布的基本特征是：</p>
+<ul>
+<li>大多数值集中在平均值附近；</li>
+<li>偏离平均值很多的极端值非常少；</li>
+<li>尾部下降很快，通常是指数级下降。</li>
+</ul>
+<p>中心极限定理 (Central Limit Theorem) 给出正态分布常见的原因：</p>
+<blockquote>
+<p>如果一个量是许多小的、独立随机因素相加而成，那么它通常近似服从正态分布。</p>
+</blockquote>
+<p>如果 Web 链接是这样产生的：</p>
+<ul>
+<li>每个网页独立随机决定是否链接到另一个网页；</li>
+<li>某个网页的入链数是很多独立随机变量的和；</li>
+</ul>
+<p>那么入链数应该近似正态分布，极高入链数的网页会极其罕见。</p>
+<p>但真实 Web 数据不是这样。</p>
+<hr />
+<h2 id="三幂律分布-power-law">三、幂律分布 (Power Law)</h2>
+<p>真实测量发现，拥有 <span class="math inline">\(k\)</span>
+条入链的网页比例大约满足：</p>
+<p><span class="math display">\[
+f(k) \propto \frac{1}{k^c},
+\]</span></p>
+<p>其中 <span class="math inline">\(c\)</span> 通常略大于 <span
+class="math inline">\(2\)</span>。在教材例子中，Web 入链分布近似为：</p>
+<p><span class="math display">\[
+f(k) \propto \frac{1}{k^2}.
+\]</span></p>
+<p>这类形式称为 <strong>power law（幂律）</strong>。</p>
+<h3 id="幂律和指数下降的差别">3.1 幂律和指数下降的差别</h3>
+<p>幂律下降得很慢：</p>
+<p><span class="math display">\[
+\frac{1}{k^2}
+\]</span></p>
+<p>当 <span class="math inline">\(k=1000\)</span> 时仍然是：</p>
+<p><span class="math display">\[
+\frac{1}{1000^2} = \frac{1}{1,000,000}.
+\]</span></p>
+<p>但指数下降如：</p>
+<p><span class="math display">\[
+2^{-k}
+\]</span></p>
+<p>在 <span class="math inline">\(k=1000\)</span> 时几乎小到不可见。</p>
+<p>所以幂律分布的核心含义是：</p>
+<blockquote>
+<p>极端热门对象不是异常，而是会以可观概率出现。</p>
+</blockquote>
+<p>这解释了为什么 Web 上会有 Google、Wikipedia
+这类拥有巨大入链数的页面，也解释了为什么论文引用、电话呼叫、图书销量等流行度指标经常出现极端不均衡。</p>
+<hr />
+<h2 id="四如何检测幂律log-log-plot">四、如何检测幂律：log-log plot</h2>
+<p>假设：</p>
+<p><span class="math display">\[
+f(k) = \frac{a}{k^c}.
+\]</span></p>
+<p>写成：</p>
+<p><span class="math display">\[
+f(k) = ak^{-c}.
+\]</span></p>
+<p>两边取对数：</p>
+<p><span class="math display">\[
+\log f(k)
+=
+\log a - c \log k.
+\]</span></p>
+<p>这是一条直线形式：</p>
+<p><span class="math display">\[
+y = b + mx,
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(y = \log f(k)\)</span>；</li>
+<li><span class="math inline">\(x = \log k\)</span>；</li>
+<li>截距为 <span class="math inline">\(\log a\)</span>；</li>
+<li>斜率为 <span class="math inline">\(-c\)</span>。</li>
+</ul>
+<p>所以检测幂律的常用方法是：</p>
+<ol type="1">
+<li>横轴画 <span class="math inline">\(\log k\)</span>；</li>
+<li>纵轴画 <span class="math inline">\(\log f(k)\)</span>；</li>
+<li>如果图像近似一条直线，则数据可能符合幂律；</li>
+<li>直线斜率的绝对值就是幂律指数 <span
+class="math inline">\(c\)</span>。</li>
+</ol>
+<p>考试要点：</p>
+<blockquote>
+<p>幂律在 log-log plot 上表现为直线；斜率越负，尾部下降越快。</p>
+</blockquote>
+<hr />
+<h2 id="五富者愈富模型-rich-get-richer-model">五、富者愈富模型
+(Rich-Get-Richer Model)</h2>
+<p>幂律为什么会出现？教材给出的核心机制是：</p>
+<blockquote>
+<p>流行度越高，未来越容易获得更多关注。</p>
+</blockquote>
+<p>这叫 <strong>rich-get-richer effect（富者愈富效应）</strong>，也叫
+<strong>preferential attachment（优先连接）</strong>。</p>
+<h3 id="web-链接复制模型">5.1 Web 链接复制模型</h3>
+<p>假设网页按顺序生成：</p>
+<p><span class="math display">\[
+1,2,3,\ldots,N.
+\]</span></p>
+<p>当新网页 <span class="math inline">\(j\)</span>
+生成时，它向一个已有网页创建一条链接。规则如下：</p>
+<ol type="1">
+<li>以概率 <span class="math inline">\(p\)</span>，网页 <span
+class="math inline">\(j\)</span> 从所有早期网页中均匀随机选一个网页
+<span class="math inline">\(i\)</span>，并链接到 <span
+class="math inline">\(i\)</span>；</li>
+<li>以概率 <span class="math inline">\(1-p\)</span>，网页 <span
+class="math inline">\(j\)</span> 从所有早期网页中均匀随机选一个网页
+<span class="math inline">\(i\)</span>，但不链接到 <span
+class="math inline">\(i\)</span>，而是复制 <span
+class="math inline">\(i\)</span> 的链接，链接到 <span
+class="math inline">\(i\)</span> 指向的网页。</li>
+</ol>
+<p>第二步是关键。它表示：</p>
+<blockquote>
+<p>新网页作者会模仿已有网页作者的链接选择。</p>
+</blockquote>
+<p>如果某个网页已经有很多入链，那么随机选到一个指向它的网页的概率就更高；复制这个网页的链接时，就更可能继续链接到它。</p>
+<p>因此：</p>
+<p><span class="math display">\[
+\Pr[\text{new link points to page } x]
+\propto
+\text{current in-links of } x.
+\]</span></p>
+<p>这就是 preferential attachment：</p>
+<blockquote>
+<p>一个节点获得新链接的概率与它当前已有的链接数成正比。</p>
+</blockquote>
+<hr />
+<h2 id="六为什么富者愈富会产生幂律">六、为什么富者愈富会产生幂律</h2>
+<p>富者愈富的增长逻辑类似复利：</p>
+<p><span class="math display">\[
+\text{growth rate} \propto \text{current popularity}.
+\]</span></p>
+<p>如果一个网页早期因为随机波动稍微领先，它之后会更容易被复制和链接，从而进一步扩大领先优势。</p>
+<p>和正态分布背后的独立随机因素不同：</p>
+<ul>
+<li>正态分布中，随机误差容易相互抵消；</li>
+<li>富者愈富中，早期优势会被反馈机制放大。</li>
+</ul>
+<p>这就是幂律产生的直觉基础。</p>
+<hr />
+<h2 id="七富者愈富效应的不可预测性">七、富者愈富效应的不可预测性</h2>
+<p>富者愈富不仅会产生不平等，也会产生<strong>不可预测性
+(unpredictability)</strong>。</p>
+<p>原因是：</p>
+<blockquote>
+<p>早期随机波动会被后续反馈放大。</p>
+</blockquote>
+<p>一个网页、一本书、一首歌是否爆红，可能取决于早期很小的偶然优势。一旦优势形成，rich-get-richer
+会继续推动它变得更热门。</p>
+<h3 id="音乐下载实验">7.1 音乐下载实验</h3>
+<p>Salganik, Dodds, and Watts 做过一个实验：</p>
+<ul>
+<li>建立一个音乐下载网站；</li>
+<li>放入 48 首不知名歌曲；</li>
+<li>访问者可以试听并下载；</li>
+<li>用户会看到每首歌当前的下载次数；</li>
+<li>但用户被随机分配到 8 个互相独立的“平行世界”版本。</li>
+</ul>
+<p>每个平行世界一开始完全相同，但之后会因为用户行为而独立演化。</p>
+<p>结果：</p>
+<ul>
+<li>不同平行世界中，歌曲的市场份额差异很大；</li>
+<li>好歌一般不会垫底，差歌一般不会登顶；</li>
+<li>但具体哪首歌最火，很难预测。</li>
+</ul>
+<p>实验还设置了一个没有下载次数反馈的版本。没有反馈时，歌曲之间的市场份额差异明显更小。</p>
+<p>结论：</p>
+<blockquote>
+<p>社会反馈会增加结果的不平等，也会增加成功路径的不确定性。</p>
+</blockquote>
+<hr />
+<h2 id="八幂律与信息级联的关系">八、幂律与信息级联的关系</h2>
+<p>信息级联和富者愈富有共同点：</p>
+<ul>
+<li>都由人群中的相互影响产生；</li>
+<li>都可能让早期少量信息被放大；</li>
+<li>都可能导致结果对初始条件敏感。</li>
+</ul>
+<p>但两者也有区别：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>模型</th>
+<th>选择对象</th>
+<th>机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>信息级联</td>
+<td>通常是两个选择，如 accept/reject</td>
+<td>个体根据前人行为做贝叶斯推断</td>
+</tr>
+<tr>
+<td>富者愈富</td>
+<td>很多可选对象，如网页、歌曲、书</td>
+<td>后来者复制或偏向已有热门选择</td>
+</tr>
+</tbody>
+</table>
+<p>教材指出，一个更深的问题是：</p>
+<blockquote>
+<p>能否把富者愈富的复制行为，也从更基础的理性决策模型中推导出来？</p>
+</blockquote>
+<p>这可以理解为：流行度幂律可能来自许多相互竞争的信息级联。</p>
+<hr />
+<h2 id="九长尾-the-long-tail">九、长尾 (The Long Tail)</h2>
+<p>幂律分布不仅解释头部超级热门对象，也解释尾部大量小众对象。</p>
+<p>媒体产业中的问题是：</p>
+<blockquote>
+<p>销售额主要来自少数爆款，还是来自大量小众产品的总和？</p>
+</blockquote>
+<p>传统实体店受空间限制，只能摆放热门商品；但互联网平台如
+Amazon、Netflix
+可以储存和展示巨大库存，因此可以从大量小众商品中获得可观收益。</p>
+<p>这就是 <strong>Long Tail（长尾）</strong>。</p>
+<h3 id="从-popularity-plot-到-rank-plot">9.1 从 popularity plot 到 rank
+plot</h3>
+<p>前面研究的是：</p>
+<p><span class="math display">\[
+f(k) = \text{拥有 popularity } k \text{ 的对象比例}.
+\]</span></p>
+<p>长尾讨论更常用 <strong>rank plot / Zipf plot</strong>：</p>
+<ul>
+<li>第 1 名最热门；</li>
+<li>第 2 名次热门；</li>
+<li>第 <span class="math inline">\(j\)</span> 名的销量为 <span
+class="math inline">\(k\)</span>。</li>
+</ul>
+<p>横轴是排名 <span class="math inline">\(j\)</span>，纵轴是销量 <span
+class="math inline">\(k\)</span>。</p>
+<p>如果曲线向右缓慢下降，说明虽然每个小众产品销量不高，但右侧尾部很长，累计起来可能很重要。</p>
+<h3 id="长尾的商业含义">9.2 长尾的商业含义</h3>
+<p>曲线左侧面积代表爆款产品贡献；</p>
+<p><span class="math display">\[
+\text{hits revenue}
+\]</span></p>
+<p>曲线右侧面积代表小众产品贡献；</p>
+<p><span class="math display">\[
+\text{niche products revenue}.
+\]</span></p>
+<p>如果右侧总面积很大，平台就可以通过大量小众产品获利。</p>
+<p>考试理解：</p>
+<blockquote>
+<p>幂律既说明头部超级热门对象存在，也说明尾部大量小众对象合起来可能有重要规模。</p>
+</blockquote>
+<hr />
+<h2 id="十搜索工具和推荐系统的影响">十、搜索工具和推荐系统的影响</h2>
+<p>搜索引擎和推荐系统对富者愈富有双重影响。</p>
+<h3 id="可能放大富者愈富">10.1 可能放大富者愈富</h3>
+<p>如果搜索引擎总是把热门页面排在前面，那么：</p>
+<ol type="1">
+<li>热门页面更容易被用户看到；</li>
+<li>用户更可能继续链接或点击这些页面；</li>
+<li>这些页面变得更热门；</li>
+<li>排名继续升高。</li>
+</ol>
+<p>这会进一步强化不平等。</p>
+<h3 id="也可能削弱富者愈富">10.2 也可能削弱富者愈富</h3>
+<p>另一方面，用户搜索的 query 非常多样化。对于小众
+query，搜索工具可能帮助用户发现原本很难通过浏览找到的小众页面。</p>
+<p>推荐系统也是如此：</p>
+<ul>
+<li>如果只推荐热门内容，会强化头部；</li>
+<li>如果根据用户兴趣推荐小众内容，就能帮助长尾产品被发现。</li>
+</ul>
+<p>所以搜索和推荐系统是更高层次的反馈机制：</p>
+<blockquote>
+<p>它们可以放大、削弱，甚至重新塑造 rich-get-richer dynamics。</p>
+</blockquote>
+<hr />
+<h2
+id="十一可选推导富者愈富模型的幂律指数">十一、可选推导：富者愈富模型的幂律指数</h2>
+<p>这一节对应教材 18.7 Advanced
+Material。考试若不要求推导，理解结论即可。</p>
+<p>设页面 <span class="math inline">\(j\)</span> 在时间 <span
+class="math inline">\(t\)</span> 的入链数为 <span
+class="math inline">\(X_j(t)\)</span>。用连续函数 <span
+class="math inline">\(x_j(t)\)</span> 近似它。</p>
+<p>新链接指向页面 <span class="math inline">\(j\)</span>
+的概率由两部分组成：</p>
+<ol type="1">
+<li>均匀随机选择：概率贡献 <span
+class="math inline">\(\frac{p}{t}\)</span>；</li>
+<li>富者愈富选择：概率贡献 <span
+class="math inline">\(\frac{(1-p)x_j(t)}{t}\)</span>。</li>
+</ol>
+<p>因此近似增长方程为：</p>
+<p><span class="math display">\[
+\frac{dx_j}{dt}
+=
+\frac{p}{t}
++
+\frac{(1-p)x_j}{t}.
+\]</span></p>
+<p>令：</p>
+<p><span class="math display">\[
+q = 1-p.
+\]</span></p>
+<p>则：</p>
+<p><span class="math display">\[
+\frac{dx_j}{dt}
+=
+\frac{p+q x_j}{t}.
+\]</span></p>
+<p>解这个微分方程并使用初始条件 <span
+class="math inline">\(x_j(j)=0\)</span>，得到：</p>
+<p><span class="math display">\[
+x_j(t)
+=
+\frac{p}{q}
+\left[
+\left(\frac{t}{j}\right)^q - 1
+\right].
+\]</span></p>
+<p>由此可以推出，入链数至少为 <span class="math inline">\(k\)</span>
+的节点比例近似满足：</p>
+<p><span class="math display">\[
+F(k) \propto k^{-1/q}.
+\]</span></p>
+<p>因此入链数<strong>恰好为</strong> <span
+class="math inline">\(k\)</span> 的节点比例满足：</p>
+<p><span class="math display">\[
+f(k) \propto k^{-(1+1/q)}.
+\]</span></p>
+<p>因为 <span class="math inline">\(q=1-p\)</span>，幂律指数为：</p>
+<p><span class="math display">\[
+c = 1 + \frac{1}{1-p}.
+\]</span></p>
+<p>解释：</p>
+<ul>
+<li>当 <span class="math inline">\(p \to 1\)</span>
+时，几乎都是均匀随机链接，富者愈富很弱，<span class="math inline">\(c
+\to \infty\)</span>，极端热门节点变少；</li>
+<li>当 <span class="math inline">\(p \to 0\)</span>
+时，几乎都是复制/优先连接，富者愈富很强，<span class="math inline">\(c
+\to 2\)</span>，极端热门节点更常见。</li>
+</ul>
+<hr />
+<h2 id="十二本章考试级总结">十二、本章考试级总结</h2>
+<ol type="1">
+<li>流行度通常不是正态分布，而是幂律分布。</li>
+<li>幂律形式：</li>
+</ol>
+<p><span class="math display">\[
+f(k) \propto \frac{1}{k^c}.
+\]</span></p>
+<ol start="3" type="1">
+<li>幂律在 log-log plot 上表现为直线，斜率为 <span
+class="math inline">\(-c\)</span>。</li>
+<li>幂律尾部下降慢，所以极端热门对象会以非忽略概率出现。</li>
+<li>富者愈富/优先连接机制：</li>
+</ol>
+<p><span class="math display">\[
+\Pr[\text{new link to } x] \propto \text{current popularity of } x.
+\]</span></p>
+<ol start="6" type="1">
+<li>富者愈富会放大早期随机优势，因此结果既不平等又不完全可预测。</li>
+<li>长尾说明大量小众对象的总贡献可能非常大。</li>
+<li>搜索和推荐系统既可能强化头部，也可能帮助用户发现长尾。</li>
+</ol>
+<hr />
+<h2 id="十三常见坑点">十三、常见坑点</h2>
+<ul>
+<li><strong>不要把幂律和正态分布混淆</strong>：正态分布尾部下降快，幂律尾部下降慢。</li>
+<li><strong>不要只看平均值</strong>：在幂律分布中，平均值可能无法代表典型对象。</li>
+<li><strong>log-log
+直线不等于普通坐标直线</strong>：检测幂律必须在对数坐标上看。</li>
+<li><strong>富者愈富不是说质量不重要</strong>：质量可能影响初始成功，但社会反馈会放大早期差异。</li>
+<li><strong>长尾不是否认爆款重要</strong>：它强调尾部小众产品累计起来也可能重要。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Networks/" rel="tag"><i class="fa fa-tag"></i> Networks</a>
+              <a href="/tags/Power-Law/" rel="tag"><i class="fa fa-tag"></i> Power Law</a>
+              <a href="/tags/Rich-Get-Richer/" rel="tag"><i class="fa fa-tag"></i> Rich Get Richer</a>
+              <a href="/tags/Preferential-Attachment/" rel="tag"><i class="fa fa-tag"></i> Preferential Attachment</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/5c1d7c92.html" rel="prev" title="COMP5313 - Chapter 20 The Small-World Phenomenon 小世界现象">
+                  <i class="fa fa-angle-left"></i> COMP5313 - Chapter 20 The Small-World Phenomenon 小世界现象
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/d5c19fe3.html" rel="next" title="每日科技速递 - 2026-06-03">
+                  每日科技速递 - 2026-06-03 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

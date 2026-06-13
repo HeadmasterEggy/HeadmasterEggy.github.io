@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Week 12 的 tutorial 没有传统的 tutorial sheet，而是由「Foundations of Quality in IT」质量保证内容阅读 与「Quality Assurance Arcade」闯关小游戏组成。本文总结 IT 质量的维度、QA 实践、软件测试基础与类型、 QA 在 Waterfall&#x2F;Agile&#x2F;DevOps 中的应用，并给出 QA Arcade 五个关卡共">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO5990 Week 12 Tutorial Summary">
+<meta property="og:url" content="http://example.com/posts/0ef37e8e.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Week 12 的 tutorial 没有传统的 tutorial sheet，而是由「Foundations of Quality in IT」质量保证内容阅读 与「Quality Assurance Arcade」闯关小游戏组成。本文总结 IT 质量的维度、QA 实践、软件测试基础与类型、 QA 在 Waterfall&#x2F;Agile&#x2F;DevOps 中的应用，并给出 QA Arcade 五个关卡共">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-09T11:23:13.235Z">
+<meta property="article:modified_time" content="2026-06-09T11:23:13.236Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="INFO5990">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/0ef37e8e.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/0ef37e8e.html","path":"posts/0ef37e8e.html","title":"INFO5990 Week 12 Tutorial Summary"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO5990 Week 12 Tutorial Summary | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/0ef37e8e.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview%E6%A6%82%E8%BF%B0"><span class="nav-text">Overview（概述）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-a-qa-%E5%86%85%E5%AE%B9%E6%80%BB%E7%BB%93"><span class="nav-text">Part A — QA 内容总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a.1-%E4%BB%80%E4%B9%88%E6%98%AF-it-%E8%B4%A8%E9%87%8F%E5%8F%8A%E5%85%B6%E7%BB%B4%E5%BA%A6"><span class="nav-text">A.1 什么是 IT 质量及其维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a.2-qa-%E5%9C%A8-it-%E5%AE%9E%E8%B7%B5%E4%B8%AD"><span class="nav-text">A.2 QA 在 IT 实践中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a.3-%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">A.3 软件测试基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a.4-%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">A.4 测试类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a.5-qa-%E5%9C%A8%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA%E4%B8%AD"><span class="nav-text">A.5 QA 在开发方法论中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-b-quality-assurance-arcade-%E9%A2%98%E7%9B%AE%E4%B8%8E%E7%AD%94%E6%A1%88"><span class="nav-text">Part B — Quality
+Assurance Arcade 题目与答案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-1-foundations-of-quality-in-it%E8%B4%A8%E9%87%8F%E5%9F%BA%E7%A1%80"><span class="nav-text">关卡 1 —
+Foundations of Quality in IT（质量基础）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-2-qa-in-it-practiceqa-%E5%AE%9E%E8%B7%B5"><span class="nav-text">关卡 2 — QA in IT Practice（QA
+实践）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-3-software-testing-fundamentals%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">关卡 3 — Software
+Testing Fundamentals（测试基础）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-4-types-of-testing%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B"><span class="nav-text">关卡 4 — Types of
+Testing（测试类型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%8D%A1-5-qa-in-development-methodologiesqa-%E4%B8%8E%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-text">关卡 5 — QA
+in Development Methodologies（QA 与方法论）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93"><span class="nav-text">关键概念总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">关键术语表</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/0ef37e8e.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO5990 Week 12 Tutorial Summary | Joey">
+      <meta itemprop="description" content="Week 12 的 tutorial 没有传统的 tutorial sheet，而是由「Foundations of Quality in IT」质量保证内容阅读 与「Quality Assurance Arcade」闯关小游戏组成。本文总结 IT 质量的维度、QA 实践、软件测试基础与类型、 QA 在 Waterfall/Agile/DevOps 中的应用，并给出 QA Arcade 五个关卡共 35 道题目的答案。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO5990 Week 12 Tutorial Summary
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-06-09 11:23:13" itemprop="dateCreated datePublished" datetime="2026-06-09T11:23:13Z">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/INFO5990/" itemprop="url" rel="index"><span itemprop="name">INFO5990</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Week 12 的 tutorial 没有传统的 tutorial sheet，而是由「Foundations of Quality in IT」质量保证内容阅读 与「Quality Assurance Arcade」闯关小游戏组成。本文总结 IT 质量的维度、QA 实践、软件测试基础与类型、 QA 在 Waterfall/Agile/DevOps 中的应用，并给出 QA Arcade 五个关卡共 35 道题目的答案。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="overview概述">Overview（概述）</h2>
+<p>与 Week 10、Week 11 一样，<strong>Week 12 的 tutorial 没有传统的
+tutorial sheet</strong>。本周 tutorial 材料由两部分组成：</p>
+<ol type="1">
+<li><strong><code>week 12 Quality Assurance Content for game.pdf</code></strong>
+—— 关于<strong>质量保证（Quality
+Assurance）与软件测试</strong>的内容阅读（标题 <em>Foundations of
+Quality in IT</em>），是 Week 11 讲义的应用与巩固。</li>
+<li><strong><code>Quality_Assurance_ARCADE_updated_quiz.html</code></strong>
+—— QA 主题的<strong>闯关小游戏</strong>，5 个关卡、每关 7 题。</li>
+</ol>
+<p>（文件夹中另有
+<code>Advanced_Monitoring_Framework_KPIs_Continuous_Improvement AW12 Helping content.pdf</code>，那是<strong>小组作业
+AW12（监控、KPI 与持续改进）的辅助材料</strong>，并非本 tutorial
+的内容。）</p>
+<p>因此本文分为两部分：<strong>Part A</strong> 总结 QA
+阅读内容，<strong>Part B</strong> 给出 QA Arcade 全部题目的答案。</p>
+<hr />
+<h2 id="part-a-qa-内容总结">Part A — QA 内容总结</h2>
+<h3 id="a.1-什么是-it-质量及其维度">A.1 什么是 IT 质量及其维度</h3>
+<p>IT
+质量指软件系统、应用、服务或流程满足规定需求、用户期望、可靠性标准与组织目标的程度。高质量系统应<strong>功能正确、安全、性能高效、用户体验良好</strong>。关键维度：</p>
+<ul>
+<li><strong>功能正确性（Functional Correctness）：</strong>
+系统正确执行其设计任务、不产生错误输出（如网银正确处理交易并显示准确余额）。</li>
+<li><strong>可靠性（Reliability）：</strong>
+长期稳定运行、不频繁崩溃（如医院系统 7×24 稳定可用）。</li>
+<li><strong>安全性（Security）：</strong>
+保护敏感数据、防止未授权访问与泄露（如安全认证与加密通信）。</li>
+<li><strong>可用性（Usability）：</strong>
+易用、可访问、易理解（如学生门户便捷查分与提交作业）。</li>
+<li><strong>性能（Performance）：</strong>
+在高负载下仍快速响应（如电商在购物高峰保持响应）。</li>
+<li><strong>可维护性（Maintainability）：</strong>
+易于更新、修复与改进（如模块可改而不破坏整体）。</li>
+</ul>
+<p><strong>质量为何重要：</strong>
+降低安全风险（劣质软件常含可被利用的漏洞，如弱输入校验导致 SQL
+注入）、提升用户信任、减少财务损失（故障/宕机/泄露代价高）、支持合规（GDPR、ISO
+9001、ISO 27001、APPs、HIPAA）。</p>
+<h3 id="a.2-qa-在-it-实践中">A.2 QA 在 IT 实践中</h3>
+<p><strong>质量保证（QA）</strong> 是确保 IT
+系统在开发与运营全程满足质量标准的系统化过程，聚焦<strong>预防缺陷、改进流程、维持标准、保证客户满意</strong>——QA
+是<strong>主动</strong>而非被动的。<strong>目标：</strong>
+尽早预防缺陷（降低后期修复成本）、改进开发流程（标准化实践，如代码评审与测试规程）、确保合规、提升客户满意。<strong>QA
+活动：</strong> 需求评审、代码评审、安全测试（针对 SQL
+注入、XSS、认证缺陷）、文档核验、持续监控。</p>
+<h3 id="a.3-软件测试基础">A.3 软件测试基础</h3>
+<p>软件测试是执行软件以发现缺陷、验证功能、确保系统按预期运行的过程，用于核验需求是否满足、输出是否正确、系统是否稳定、安全防护是否有效。<strong>目标：</strong>
+发现错误、确认功能、提升可靠性、增强安全。<strong>测试原则：</strong>
+测试只能<strong>显示缺陷的存在、不能证明其不存在</strong>；<strong>尽早测试</strong>可节省成本；<strong>穷尽测试不可能</strong>（大型系统输入与路径过多）。</p>
+<h3 id="a.4-测试类型">A.4 测试类型</h3>
+<ul>
+<li><strong>功能测试（Functional）：</strong>
+单元测试（独立测试函数/模块）→ 集成测试（测试组件间交互）→
+系统测试（测试完整集成应用）→ 用户验收测试
+UAT（终端用户核验业务需求）。</li>
+<li><strong>非功能测试（Non-functional）：</strong>
+性能测试（负载下的响应与稳定）、安全测试（识别漏洞、验证安全控制）、可用性测试（评估易用性与体验）、兼容性测试（跨浏览器/系统/设备）、回归测试（确保更新不破坏既有功能）。</li>
+</ul>
+<h3 id="a.5-qa-在开发方法论中">A.5 QA 在开发方法论中</h3>
+<ul>
+<li><strong>Waterfall：</strong>
+顺序开发，测试通常在实现之后；优点是结构化、文档清晰、易规划，缺点是缺陷发现晚、难以适应变化。</li>
+<li><strong>Agile：</strong> 将 QA 持续融入开发，在短迭代/Sprint
+与持续反馈循环中测试；优点是更快发现问题、灵活、持续改进，缺点是需强协作、快速变化增加管理复杂度。</li>
+<li><strong>DevOps：</strong> 整合开发、测试、部署与运营，通过
+<strong>CI/CD 流水线、自动化测试与持续监控</strong>实现 QA
+自动化；优点是部署更快、可靠性更高、反馈迅速、可扩展性更好。</li>
+</ul>
+<blockquote>
+<p>IT 专业人员有伦理责任开发安全、可靠、可信的系统，因此 QA 在专业 IT
+实践、软件工程、网络安全、云计算、AI 与数字化转型中都扮演关键角色。</p>
+</blockquote>
+<hr />
+<h2 id="part-b-quality-assurance-arcade-题目与答案">Part B — Quality
+Assurance Arcade 题目与答案</h2>
+<p>游戏共 5 关、每关 7 题。以下给出每题的<strong>正确答案</strong>。</p>
+<h3 id="关卡-1-foundations-of-quality-in-it质量基础">关卡 1 —
+Foundations of Quality in IT（质量基础）</h3>
+<ol type="1">
+<li>IT 质量主要描述什么？→
+<strong>满足需求、用户需要与可靠性目标。</strong></li>
+<li>哪项最能描述功能正确性？→
+<strong>系统以准确的结果执行其预期任务。</strong></li>
+<li>可靠性为何在 IT 系统中重要？→
+<strong>它帮助系统稳定运行、不频繁失败。</strong></li>
+<li>哪个质量维度保护敏感数据？→
+<strong>安全性——保护数据免遭攻击与未授权访问。</strong></li>
+<li>可用性在 IT 系统中关注什么？→
+<strong>让系统易用、可访问、易理解。</strong></li>
+<li>哪个例子最能代表性能质量？→
+<strong>网站在用户流量高峰时仍保持响应。</strong></li>
+<li>可维护性为何对软件质量重要？→
+<strong>它使软件更易于更新、修复与改进。</strong></li>
+</ol>
+<h3 id="关卡-2-qa-in-it-practiceqa-实践">关卡 2 — QA in IT Practice（QA
+实践）</h3>
+<ol type="1">
+<li>质量保证的主要目的是什么？→
+<strong>通过有计划的质量流程预防缺陷。</strong></li>
+<li>QA 与"事后修 Bug"有何不同？→ <strong>QA
+旨在部署前就预防问题。</strong></li>
+<li>需求评审在 QA 中为何有用？→
+<strong>它检查需求是否清晰且可测试。</strong></li>
+<li>代码评审在 QA 实践中的价值？→
+<strong>帮助发现错误、缺陷与安全弱点。</strong></li>
+<li>哪项活动检查 SQL 注入与 XSS 缺陷？→
+<strong>安全测试——验证漏洞与防护控制。</strong></li>
+<li>文档核验为何是 QA 的一部分？→
+<strong>确保用户与技术文档保持准确。</strong></li>
+<li>部署后持续监控为何重要？→
+<strong>及早发现故障、异常与服务问题。</strong></li>
+</ol>
+<h3 id="关卡-3-software-testing-fundamentals测试基础">关卡 3 — Software
+Testing Fundamentals（测试基础）</h3>
+<ol type="1">
+<li>软件测试从根本上用于做什么？→
+<strong>评估软件以发现缺陷并验证行为。</strong></li>
+<li>哪个目标最能描述测试中的"确认（validation）"？→
+<strong>确认软件按需求运行。</strong></li>
+<li>测试为何能提升可靠性？→
+<strong>它在缺陷影响真实用户之前发现它们。</strong></li>
+<li>"测试显示缺陷"这一原则是什么意思？→
+<strong>测试能揭示缺陷，但不能证明缺陷不存在。</strong></li>
+<li>为何应尽早开始测试？→
+<strong>早期修复通常比发布后修复成本更低。</strong></li>
+<li>为何穷尽测试通常不可能？→
+<strong>大型系统有太多输入、路径与条件。</strong></li>
+<li>测试如何支持安全目标？→
+<strong>在攻击者利用之前识别漏洞。</strong></li>
+</ol>
+<h3 id="关卡-4-types-of-testing测试类型">关卡 4 — Types of
+Testing（测试类型）</h3>
+<ol type="1">
+<li>单元测试通常检查什么？→
+<strong>被单独测试的个别函数或模块。</strong></li>
+<li>集成测试关注什么？→
+<strong>相互连接的系统组件之间的交互。</strong></li>
+<li>系统测试的目的是什么？→
+<strong>将完整集成的应用作为整体进行测试。</strong></li>
+<li>用户验收测试通常确认什么？→
+<strong>由终端用户检查业务需求是否被满足。</strong></li>
+<li>哪种测试检查重负载下的响应？→
+<strong>性能测试——衡量响应性与稳定性。</strong></li>
+<li>兼容性测试主要关心什么？→
+<strong>在不同浏览器、设备与平台上正确运行。</strong></li>
+<li>为何在变更后执行回归测试？→
+<strong>确保更新不破坏既有功能。</strong></li>
+</ol>
+<h3 id="关卡-5-qa-in-development-methodologiesqa-与方法论">关卡 5 — QA
+in Development Methodologies（QA 与方法论）</h3>
+<ol type="1">
+<li>Waterfall 开发中通常如何处理 QA？→
+<strong>测试通常在顺序的实现阶段之后进行。</strong></li>
+<li>Waterfall 的一个主要 QA 局限是什么？→
+<strong>缺陷可能在生命周期后期才被发现。</strong></li>
+<li>Agile 通常如何融入 QA？→
+<strong>测试在短迭代中持续进行。</strong></li>
+<li>Agile 开发的一个 QA 好处是什么？→
+<strong>它带来更快的反馈与更早的问题发现。</strong></li>
+<li>DevOps 如何强化 QA 实践？→
+<strong>它把自动化测试与部署流水线结合起来。</strong></li>
+<li>哪种 DevOps 机制常用于支持 QA 自动化？→ <strong>CI/CD
+流水线反复运行测试与检查。</strong></li>
+<li>为何 QA 是 IT 中的职业责任？→ <strong>IT
+专业人员必须构建安全可靠的系统。</strong></li>
+</ol>
+<hr />
+<h2 id="关键概念总结">关键概念总结</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>概念</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IT 质量维度</strong></td>
+<td>功能正确性、可靠性、安全性、可用性、性能、可维护性。</td>
+</tr>
+<tr>
+<td><strong>QA = 预防</strong></td>
+<td>主动、面向流程，通过需求评审/代码评审/安全测试/文档核验/持续监控预防缺陷。</td>
+</tr>
+<tr>
+<td><strong>测试三原则</strong></td>
+<td>显示缺陷存在（非证明不存在）、尽早测试省成本、穷尽测试不可能。</td>
+</tr>
+<tr>
+<td><strong>功能测试</strong></td>
+<td>单元 → 集成 → 系统 → UAT。</td>
+</tr>
+<tr>
+<td><strong>非功能测试</strong></td>
+<td>性能、安全、可用性、兼容性、回归。</td>
+</tr>
+<tr>
+<td><strong>QA × 方法论</strong></td>
+<td>Waterfall（测试在后、发现晚）/ Agile（持续测试、快速反馈）/
+DevOps（CI/CD 自动化 + 持续监控）。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="关键术语表">关键术语表</h2>
+<ul>
+<li><strong>QA（质量保证）：</strong>
+主动、面向流程地预防缺陷，确保满足质量标准。</li>
+<li><strong>QC（质量控制）：</strong> 被动、面向产品地检测缺陷（QA
+的对照概念）。</li>
+<li><strong>Functional vs Non-functional Testing：</strong>
+功能测试看"系统做什么"，非功能测试看"系统表现如何"。</li>
+<li><strong>Regression Testing（回归测试）：</strong>
+变更后验证既有功能未被破坏。</li>
+<li><strong>CI/CD：</strong> 持续集成/持续交付流水线，DevOps
+中支撑自动化 QA。</li>
+<li><strong>Shift-left（左移测试）：</strong>
+尽早开始测试以降低后期修复成本。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO5990/" rel="tag"><i class="fa fa-tag"></i> INFO5990</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/f2804600.html" rel="prev" title="INFO5990-Week12-Lecture-Summary">
+                  <i class="fa fa-angle-left"></i> INFO5990-Week12-Lecture-Summary
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/55d3ff18.html" rel="next" title="每日科技速递 - 2026-06-10">
+                  每日科技速递 - 2026-06-10 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

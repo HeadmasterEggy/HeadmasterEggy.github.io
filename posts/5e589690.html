@@ -30,12 +30,12 @@
 <meta property="og:description" content="COMP5313 Week 5 Tutorial Hub and Authority（HITS 算法）题解，梳理 Authority 与 Hub 更新规则的相互递归定义、k 步迭代流程与归一化方法，并在示例网络上手算权威与中枢分数。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-16T00:00:00.000Z">
-<meta property="article:modified_time" content="2026-05-04T09:34:58.795Z">
+<meta property="article:modified_time" content="2026-06-08T07:39:18.673Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="题解">
 <meta property="article:tag" content="COMP5313">
-<meta property="article:tag" content="Hub and Authority">
 <meta property="article:tag" content="HITS">
+<meta property="article:tag" content="Hub and Authority">
 <meta name="twitter:card" content="summary">
 
 
@@ -128,7 +128,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">144</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">195</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
   </ul>
 </nav>
 
@@ -158,7 +158,8 @@ Authority 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2
 1：计算权威分数（Computing Authority Scores）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-text">2.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%A7%82%E5%AF%9F%E5%93%AA%E4%BA%9B%E5%88%86%E6%95%B0%E6%97%A0%E9%9C%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.2
 关键观察：哪些分数无需初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.3 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-1"><span class="nav-text">2.4 Round 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-2"><span class="nav-text">2.5 Round 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">2.6 归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E4%B8%8E%E7%BB%93%E8%AE%BA"><span class="nav-text">2.7 观察与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%83%E4%B9%A0-2%E5%88%9B%E5%BB%BA%E7%BD%91%E9%A1%B5creating-web-pages"><span class="nav-text">三、练习
 2：创建网页（Creating Web Pages）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-1"><span class="nav-text">3.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-1-%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">3.2 方案 1 的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-2-%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">3.3 方案 2 的分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="nav-text">3.4 两方案对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%BB%83%E4%B9%A0-3%E5%88%9B%E5%BB%BA%E8%B6%85%E9%93%BE%E6%8E%A5creating-hyperlinks"><span class="nav-text">四、练习
-3：创建超链接（Creating Hyperlinks）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-2"><span class="nav-text">4.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.2 最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-1-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.3 Round 1 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-2-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.4 Round 2 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%90%8D%E9%AA%8C%E8%AF%81"><span class="nav-text">4.5 排名验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%90%A6%E8%AE%A9-x-%E6%8E%92%E7%AC%AC%E4%B8%80"><span class="nav-text">4.6 能否让 X 排第一？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%90%AF%E7%A4%BA"><span class="nav-text">4.7 核心启示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%BB%BC%E5%90%88%E6%80%BB%E7%BB%93"><span class="nav-text">五、综合总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-text">5.1 关键公式回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD"><span class="nav-text">5.2 练习经验教训</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E8%AF%BE%E7%A8%8B%E5%85%B6%E4%BB%96%E7%AB%A0%E8%8A%82%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">5.3 与课程其他章节的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">六、术语表</span></a></li></ol></li></ol></div>
+3：创建超链接（Creating Hyperlinks）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0-2"><span class="nav-text">4.1 题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E5%A6%82%E4%BD%95%E5%8F%8D%E6%8E%A8%E5%87%BA%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.2
+解题思路：如何反推出最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-1-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.4 Round 1 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-2-%E8%AF%A6%E7%BB%86%E8%AE%A1%E7%AE%97"><span class="nav-text">4.5 Round 2 详细计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%90%8D%E9%AA%8C%E8%AF%81"><span class="nav-text">4.6 排名验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%90%A6%E8%AE%A9-x-%E6%8E%92%E7%AC%AC%E4%B8%80"><span class="nav-text">4.7 能否让 X 排第一？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%90%AF%E7%A4%BA"><span class="nav-text">4.8 核心启示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%BB%BC%E5%90%88%E6%80%BB%E7%BB%93"><span class="nav-text">五、综合总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-text">5.1 关键公式回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD"><span class="nav-text">5.2 练习经验教训</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E8%AF%BE%E7%A8%8B%E5%85%B6%E4%BB%96%E7%AB%A0%E8%8A%82%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">5.3 与课程其他章节的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">六、术语表</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -173,18 +174,18 @@ Authority 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">215</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">154</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -265,7 +266,7 @@ Authority 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-05-04 09:34:58" itemprop="dateModified" datetime="2026-05-04T09:34:58Z">2026-05-04</time>
+      <time title="Modified: 2026-06-08 07:39:18" itemprop="dateModified" datetime="2026-06-08T07:39:18Z">2026-06-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,14 +285,14 @@ Authority 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.4k</span>
+      <span>3.9k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>12 mins.</span>
+      <span>14 mins.</span>
     </span>
 </div>
 
@@ -636,7 +637,60 @@ class="math inline">\(Z\)</span> 的出边（<span
 class="math inline">\(X\)</span> 无出边），使得在 2 步 HITS
 计算后，按权威分数排名，<span class="math inline">\(X\)</span>
 位列<strong>第二</strong>。</p>
-<h3 id="最优策略">4.2 最优策略</h3>
+<h3 id="解题思路如何反推出最优策略">4.2
+解题思路：如何反推出最优策略</h3>
+<p>最优策略不是猜的，而是从目标<strong>反推</strong>出来的。</p>
+<p><strong>① 把目标写成公式。</strong> X 要权威高，而 <span
+class="math inline">\(\text{auth}(X)=\sum_{p\to
+X}\text{hub}(p)\)</span>。X 在原图没有入链，只有新建的 <span
+class="math inline">\(Y,Z\)</span> 能指向它，所以 <span
+class="math display">\[\text{auth}(X)=\text{hub}(Y)\cdot\mathbb{1}[Y\to
+X]+\text{hub}(Z)\cdot\mathbb{1}[Z\to X]\le
+\text{hub}(Y)+\text{hub}(Z).\]</span>
+于是<strong>第一步就确定</strong>：<span
+class="math inline">\(Y,Z\)</span> 必须都指向 <span
+class="math inline">\(X\)</span>；问题缩小成「怎么把 <span
+class="math inline">\(\text{hub}(Y)+\text{hub}(Z)\)</span> 做大」。</p>
+<p><strong>② 抓住 HITS 的递归张力。</strong> hub 大 <span
+class="math inline">\(\iff\)</span> 指向的都是高权威：<span
+class="math inline">\(\text{hub}(Y)=\sum_{Y\to
+q}\text{auth}(q)\)</span>。新页初始 hub <span
+class="math inline">\(=1\)</span>，要在<strong>仅 2 轮</strong>内把 hub
+冲上去，只能去指<strong>现成的最强权威 <span
+class="math inline">\(A\)</span></strong>。核心技巧：<strong>想让你的「推荐人」可信，就让它指向公认的权威。</strong></p>
+<p><strong>③ 策略落地。</strong> <span class="math inline">\(Y,Z \to
+\{A,\,X\}\)</span>：指 <span class="math inline">\(A\)</span> → 变成强
+hub；指 <span class="math inline">\(X\)</span> → 把强 hub 转成 <span
+class="math inline">\(X\)</span> 的权威。代入计算（见 §4.4–4.6）即得
+<span class="math inline">\(A&gt;X&gt;B\)</span>。</p>
+<p><strong>④ 为什么指 <span class="math inline">\(A\)</span> 不指 <span
+class="math inline">\(B\)</span>。</strong> <span
+class="math inline">\(A\)</span> 是最强权威，单轮回灌给 <span
+class="math inline">\(Y,Z\)</span> 的 hub 最多，2
+轮预算下涨得最快（对比练习 2 方案 1：新页只在彼此间互指，分数从 1
+几乎涨不起来）。</p>
+<p><strong>⑤ 为什么最多第二（详证见 §4.7）。</strong>
+同一个动作有副作用：<span class="math inline">\(Y,Z\)</span> 指 <span
+class="math inline">\(A\)</span> 在抬高自身 hub
+的同时<strong>等量</strong>抬高 <span
+class="math inline">\(\text{auth}(A)\)</span>，而 <span
+class="math inline">\(A\)</span> 还保留原有 <span
+class="math inline">\(C,D,E\)</span> 的支持，故 <span
+class="math inline">\(\text{auth}(A)&gt;\text{auth}(X)\)</span>
+恒成立——<strong>你借谁的信用，就超不过谁</strong>。</p>
+<p><strong>可迁移技巧（HITS 操纵题通用）：</strong> -
+<strong>反推</strong>：先写 <span
+class="math inline">\(\text{auth}(\text{目标})=\sum\text{hub}(\text{入链})\)</span>，看分数从哪来。
+- <strong>顺着递归找源头</strong>：authority ← hub ← authority，要造强
+hub 必须指向现成的强权威。 - <strong>co-pointing
+配方</strong>：伪推荐页同时指「真·最强权威」（赚 hub
+信用）+「你的目标」（把信用转过去）。 -
+<strong>看轮数预算</strong>：只有 <span class="math inline">\(K\)</span>
+轮时，新页必须借助已有高分节点才能在期限内起势。 -
+<strong>求上界</strong>：用 <span
+class="math inline">\(\text{auth}(X)\le\text{hub}(Y)+\text{hub}(Z)\)</span>
+既证明策略最优，也说明为什么上不了第一。</p>
+<h3 id="最优策略">4.3 最优策略</h3>
 <p><strong>策略设计</strong>： - <span class="math inline">\(Y \to
 A\)</span>，<span class="math inline">\(Y \to X\)</span> - <span
 class="math inline">\(Z \to A\)</span>，<span class="math inline">\(Z
@@ -646,7 +700,7 @@ class="math inline">\(Z\)</span> 都同时指向 <span
 class="math inline">\(A\)</span>（最强权威）和 <span
 class="math inline">\(X\)</span>。</p>
 <p><strong>图示（Figure 3 对应）</strong>： <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Y</span> ---&gt; <span class="attribute">X</span></span><br><span class="line"><span class="attribute">Y</span> ---&gt; <span class="selector-tag">A</span></span><br><span class="line">Z ---&gt; <span class="attribute">X</span></span><br><span class="line">Z ---&gt; <span class="selector-tag">A</span></span><br><span class="line">C ---&gt; <span class="selector-tag">A</span></span><br><span class="line">D ---&gt; <span class="selector-tag">A</span></span><br><span class="line">E ---&gt; <span class="selector-tag">A</span></span><br><span class="line">E ---&gt; <span class="selector-tag">B</span></span><br><span class="line">F ---&gt; <span class="selector-tag">B</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="round-1-详细计算">4.3 Round 1 详细计算</h3>
+<h3 id="round-1-详细计算">4.4 Round 1 详细计算</h3>
 <p><strong>初始</strong>：<span class="math inline">\(\text{hub}(C) =
 \text{hub}(D) = \text{hub}(E) = \text{hub}(F) = \text{hub}(Y) =
 \text{hub}(Z) = 1\)</span></p>
@@ -675,7 +729,7 @@ class="math inline">\(X\)</span>。</p>
 <li><span class="math inline">\(\text{hub}(Z) = \text{auth}(A) +
 \text{auth}(X) = 5+2 = 7\)</span></li>
 </ul>
-<h3 id="round-2-详细计算">4.4 Round 2 详细计算</h3>
+<h3 id="round-2-详细计算">4.5 Round 2 详细计算</h3>
 <p><strong>权威更新</strong>：</p>
 <ul>
 <li><span class="math inline">\(\text{auth}(A) = \text{hub}(C) +
@@ -686,7 +740,7 @@ class="math inline">\(X\)</span>。</p>
 <li><span class="math inline">\(\text{auth}(X) = \text{hub}(Y) +
 \text{hub}(Z) = 7+7 = 14\)</span></li>
 </ul>
-<h3 id="排名验证">4.5 排名验证</h3>
+<h3 id="排名验证">4.6 排名验证</h3>
 <p>Round 2 权威分数（未归一化）：</p>
 <table>
 <thead>
@@ -715,7 +769,7 @@ B\)</span> ✓</p>
 <p><span class="math inline">\(X\)</span>
 成功位列<strong>第二</strong>，超越了原网络中的 <span
 class="math inline">\(B\)</span>。</p>
-<h3 id="能否让-x-排第一">4.6 能否让 X 排第一？</h3>
+<h3 id="能否让-x-排第一">4.7 能否让 X 排第一？</h3>
 <p><strong>结论</strong>：<strong>不可能</strong>。</p>
 <p><strong>证明（引理：<span class="math inline">\(\text{auth}(X) \le
 \text{hub}(Y) + \text{hub}(Z)\)</span>）</strong>：</p>
@@ -769,7 +823,7 @@ class="math inline">\(X\)</span>，则 <span
 class="math inline">\(X\)</span> 最多排第二（低于 <span
 class="math inline">\(B\)</span>）。无论如何，<strong><span
 class="math inline">\(X\)</span> 最多排第二</strong>。</p>
-<h3 id="核心启示">4.7 核心启示</h3>
+<h3 id="核心启示">4.8 核心启示</h3>
 <ul>
 <li><strong>对抗 HITS
 的难点</strong>：算法的相互递归结构使得"伪造中枢"和"伪造权威"之间存在内在张力</li>
@@ -935,21 +989,21 @@ Crowds, and Markets</em>, 第 14 章</p>
           <div class="post-tags">
               <a href="/tags/%E9%A2%98%E8%A7%A3/" rel="tag"><i class="fa fa-tag"></i> 题解</a>
               <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
-              <a href="/tags/Hub-and-Authority/" rel="tag"><i class="fa fa-tag"></i> Hub and Authority</a>
               <a href="/tags/HITS/" rel="tag"><i class="fa fa-tag"></i> HITS</a>
+              <a href="/tags/Hub-and-Authority/" rel="tag"><i class="fa fa-tag"></i> Hub and Authority</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/344a1748.html" rel="prev" title="COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分">
-                  <i class="fa fa-angle-left"></i> COMP5313 - Chapter 3 Advanced Material - Betweenness and Graph Partitioning 中介性与图划分
+                <a href="/posts/76a28bc6.html" rel="prev" title="COMP5313 Tutorial 06 - PageRank 题解">
+                  <i class="fa fa-angle-left"></i> COMP5313 Tutorial 06 - PageRank 题解
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/76a28bc6.html" rel="next" title="COMP5313 Tutorial 06 - PageRank 题解">
-                  COMP5313 Tutorial 06 - PageRank 题解 <i class="fa fa-angle-right"></i>
+                <a href="/posts/c104b4f8.html" rel="next" title="COMP5313 考试 Cheatsheet（六大模块复习）">
+                  COMP5313 考试 Cheatsheet（六大模块复习） <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -985,14 +1039,14 @@ Crowds, and Markets</em>, 第 14 章</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">630k</span>
+    <span title="Word count total">759k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">38:12</span>
+    <span title="Reading time total">46:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

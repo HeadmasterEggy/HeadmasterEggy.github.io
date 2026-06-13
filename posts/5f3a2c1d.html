@@ -22,21 +22,21 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（MaxCut 近似算法的实现与分析）。">
+    <meta name="description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（Pairwise Independent Hash Functions、图生成、随机化 MaxCut、哈希去随机化、条件期望去随机化、运行时间比较）。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COMP5270 Assignment 2 完整题解">
 <meta property="og:url" content="http://example.com/posts/5f3a2c1d.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（MaxCut 近似算法的实现与分析）。">
+<meta property="og:description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（Pairwise Independent Hash Functions、图生成、随机化 MaxCut、哈希去随机化、条件期望去随机化、运行时间比较）。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-04-18T15:32:31.670Z">
-<meta property="article:modified_time" content="2026-04-18T15:32:31.674Z">
+<meta property="article:published_time" content="2026-06-13T11:59:48.580Z">
+<meta property="article:modified_time" content="2026-06-13T11:59:48.581Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Randomized-Algorithms">
 <meta property="article:tag" content="Algorithms">
-<meta property="article:tag" content="Karger">
-<meta property="article:tag" content="MaxCut">
 <meta property="article:tag" content="Derandomization">
+<meta property="article:tag" content="MaxCut">
+<meta property="article:tag" content="Karger">
 <meta property="article:tag" content="Hash-Functions">
 <meta property="article:tag" content="Conditional-Expectation">
 <meta name="twitter:card" content="summary">
@@ -131,7 +131,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">144</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">195</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
   </ul>
 </nav>
 
@@ -159,16 +159,12 @@
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5270-assignment-2-%E5%AE%8C%E6%95%B4%E9%A2%98%E8%A7%A3"><span class="nav-text">COMP5270 Assignment 2
 完整题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-1-karger-%E7%AE%97%E6%B3%95%E5%88%97%E5%87%BA%E6%89%80%E6%9C%89%E6%9C%80%E5%B0%8F%E5%89%B2"><span class="nav-text">Problem 1 — Karger
 算法列出所有最小割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%83%BD%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89-minimum-cuts"><span class="nav-text">为什么这样能找到所有 minimum
-cuts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0"><span class="nav-text">算法描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E4%BA%A4%E4%BD%9C%E4%B8%9A%E7%9A%84%E7%9F%AD%E7%AD%94%E6%A1%88"><span class="nav-text">可以直接交作业的短答案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%82%B9%E8%A1%A5%E5%85%85%E7%90%86%E8%A7%A3"><span class="nav-text">一点补充理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2a-pairwise-independent-hash-functions"><span class="nav-text">Problem 2(a) —
-Pairwise Independent Hash Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-1"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-1"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF-1"><span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E6%9E%84%E9%80%A0%E5%8F%AF%E8%A1%8C"><span class="nav-text">为什么这个构造可行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%97%B6%E7%9A%84%E5%85%B3%E9%94%AE%E7%82%B9"><span class="nav-text">实现时的关键点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#randbelown-%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="nav-text">randbelow(n) 的思路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0"><span class="nav-text">参考实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%90%AB%E4%B9%89%E8%A7%A3%E9%87%8A"><span class="nav-text">代码含义解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">容易错的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A9-a-0"><span class="nav-text">1. 让 a &#x3D; 0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%AF%B9-getrandbitsk-%E5%8F%96%E6%A8%A1"><span class="nav-text">2. 直接对 getrandbits(k)
-取模</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E7%9A%84-p-%E4%B8%8D%E6%98%AF%E7%B4%A0%E6%95%B0"><span class="nav-text">3. 选的 \(p\)
-不是素数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%98%E8%AE%B0%E6%A0%B9%E6%8D%AE%E9%A2%98%E7%9B%AE%E9%99%90%E5%88%B6%E6%8E%A7%E5%88%B6%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%9D%A5%E6%BA%90"><span class="nav-text">4.
-忘记根据题目限制控制随机数来源</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%86%99%E8%BF%9B%E4%BD%9C%E4%B8%9A%E8%AF%B4%E6%98%8E%E7%9A%84%E7%AE%80%E7%9F%AD%E7%89%88%E6%9C%AC"><span class="nav-text">可以直接写进作业说明的简短版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2b-%E7%94%9F%E6%88%90-k%E2%82%99-%E5%AE%8C%E5%85%A8%E5%9B%BE%E5%92%8C-c%E2%82%99-%E7%8E%AF%E5%9B%BE"><span class="nav-text">Problem 2(b) — 生成 Kₙ
-完全图和 Cₙ 环图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-2"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-2"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-2"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF-2"><span class="nav-text">核心思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E5%9B%BE-k_n"><span class="nav-text">完全图 \(K_n\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%9B%BE-c_n"><span class="nav-text">环图 \(C_n\)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0-1"><span class="nav-text">参考实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%9B%BE%E5%9C%A8%E5%90%8E%E7%BB%AD%E9%97%AE%E9%A2%98%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-text">两种图在后续问题中的角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9-1"><span class="nav-text">容易错的地方</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2c-%E9%9A%8F%E6%9C%BA%E5%8C%96-maxcut-%E7%AE%97%E6%B3%95"><span class="nav-text">Problem 2(c) — 随机化 MaxCut
-算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-3"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-3"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-3"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxcut-%E9%97%AE%E9%A2%98%E5%9B%9E%E9%A1%BE"><span class="nav-text">MaxCut 问题回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">随机化算法的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E5%80%BC%E5%88%86%E6%9E%90"><span class="nav-text">期望值分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8-k_n-%E5%92%8C-c_n-%E4%B8%8A%E8%A1%A8%E7%8E%B0%E4%B8%8D%E5%90%8C"><span class="nav-text">为什么在 \(K_n\) 和 \(C_n\) 上表现不同</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E5%9B%BE-k_n-1"><span class="nav-text">完全图 \(K_n\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%9B%BE-c_n-1"><span class="nav-text">环图 \(C_n\)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F%E5%9B%BE%E5%BD%A2%E7%89%B9%E5%BE%81"><span class="nav-text">实验结果的预期图形特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-text">参考实现思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2d-%E5%9F%BA%E4%BA%8E%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84-maxcut"><span class="nav-text">Problem 2(d) —
-基于哈希函数去随机化的 MaxCut</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-4"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-4"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-4"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E9%9A%8F%E6%9C%BA%E5%8C%96%E5%88%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96"><span class="nav-text">从随机化到去随机化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%A4%E4%B8%A4%E7%8B%AC%E7%AB%8B%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%A4%9F%E7%94%A8"><span class="nav-text">为什么两两独立哈希函数够用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E5%80%BC%E7%9A%84%E7%B2%BE%E7%A1%AE%E8%AE%A1%E7%AE%97"><span class="nav-text">期望值的精确计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F%E7%89%B9%E5%BE%81"><span class="nav-text">实验结果的预期特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="nav-text">与随机化版本的关键区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9-2"><span class="nav-text">容易错的地方</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2e-%E5%9F%BA%E4%BA%8E%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84-maxcut"><span class="nav-text">Problem 2(e) —
-基于条件期望去随机化的 MaxCut</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-5"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-5"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-5"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%96%B9%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">条件期望方法的核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxcut-%E4%B8%8A%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%B3%95"><span class="nav-text">MaxCut 上的条件期望法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA%E9%A1%B6%E7%82%B9%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E8%AE%A1%E7%AE%97"><span class="nav-text">单个顶点的条件期望计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E6%9C%89%E6%95%88"><span class="nav-text">为什么这个方法有效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-text">与哈希函数去随机化的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F"><span class="nav-text">实验结果的预期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF-1"><span class="nav-text">参考实现思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2f-%E4%B8%89%E7%A7%8D-maxcut-%E7%AE%97%E6%B3%95%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%E6%AF%94%E8%BE%83"><span class="nav-text">Problem 2(f) — 三种
-MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-6"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-6"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-6"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E7%AE%97%E6%B3%95%E5%9B%9E%E9%A1%BE"><span class="nav-text">三种算法回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-text">理论时间复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%A7%82%E5%AF%9F"><span class="nav-text">实验观察</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95%E6%9C%80%E5%BF%AB"><span class="nav-text">为什么随机化算法最快</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94%E9%9A%8F%E6%9C%BA%E5%8C%96%E6%85%A2"><span class="nav-text">条件期望为什么比随机化慢</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%80%E6%85%A2"><span class="nav-text">哈希函数法为什么最慢</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%AF%94%E8%BE%83"><span class="nav-text">可靠性比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E6%9D%83%E8%A1%A1"><span class="nav-text">实际应用中的权衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE%E7%9C%8B%E8%B6%8B%E5%8A%BF"><span class="nav-text">从实验数据看趋势</span></a></li></ol></li></ol></li></ol></div>
+cuts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0"><span class="nav-text">算法描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%9B%B4%E6%8E%A5%E4%BA%A4%E4%BD%9C%E4%B8%9A%E7%9A%84%E7%9F%AD%E7%AD%94%E6%A1%88"><span class="nav-text">可直接交作业的短答案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%82%B9%E8%A1%A5%E5%85%85%E7%90%86%E8%A7%A3"><span class="nav-text">一点补充理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2a-pairwise-independent-hash-functions"><span class="nav-text">Problem 2(a) —
+Pairwise Independent Hash Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-1"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-1"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF-1"><span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E6%9E%84%E9%80%A0%E5%8F%AF%E8%A1%8C"><span class="nav-text">为什么这个构造可行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%97%B6%E7%9A%84%E5%85%B3%E9%94%AE%E7%82%B9"><span class="nav-text">实现时的关键点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0"><span class="nav-text">参考实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-text">容易错的地方</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%86%99%E8%BF%9B%E4%BD%9C%E4%B8%9A%E7%9A%84%E7%AE%80%E7%9F%AD%E7%89%88%E6%9C%AC"><span class="nav-text">可直接写进作业的简短版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2b-%E7%94%9F%E6%88%90-k_n-%E5%AE%8C%E5%85%A8%E5%9B%BE%E5%92%8C-c_n-%E7%8E%AF%E5%9B%BE"><span class="nav-text">Problem 2(b) — 生成 \(K_n\) 完全图和 \(C_n\) 环图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-2"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-2"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-2"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF-2"><span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0-1"><span class="nav-text">参考实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%9B%BE%E5%9C%A8%E5%90%8E%E7%BB%AD%E9%97%AE%E9%A2%98%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-text">两种图在后续问题中的角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9-1"><span class="nav-text">容易错的地方</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2c-%E9%9A%8F%E6%9C%BA%E5%8C%96-maxcut-%E7%AE%97%E6%B3%95"><span class="nav-text">Problem 2(c) — 随机化 MaxCut
+算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-3"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-3"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-3"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxcut-%E9%97%AE%E9%A2%98%E5%9B%9E%E9%A1%BE"><span class="nav-text">MaxCut 问题回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">随机化算法的核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8-k_n-%E5%92%8C-c_n-%E4%B8%8A%E8%A1%A8%E7%8E%B0%E4%B8%8D%E5%90%8C"><span class="nav-text">为什么在 \(K_n\) 和 \(C_n\) 上表现不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F%E5%9B%BE%E5%BD%A2%E7%89%B9%E5%BE%81"><span class="nav-text">实验结果的预期图形特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-text">参考实现思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2d-%E5%9F%BA%E4%BA%8E%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84-maxcut"><span class="nav-text">Problem 2(d) —
+基于哈希函数去随机化的 MaxCut</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-4"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-4"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-4"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E9%9A%8F%E6%9C%BA%E5%8C%96%E5%88%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96"><span class="nav-text">从随机化到去随机化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%A4%E4%B8%A4%E7%8B%AC%E7%AB%8B%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%A4%9F%E7%94%A8"><span class="nav-text">为什么两两独立哈希函数够用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F%E7%89%B9%E5%BE%81"><span class="nav-text">实验结果的预期特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="nav-text">与随机化版本的关键区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9-2"><span class="nav-text">容易错的地方</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2e-%E5%9F%BA%E4%BA%8E%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84-maxcut"><span class="nav-text">Problem 2(e) —
+基于条件期望去随机化的 MaxCut</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-5"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-5"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-5"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%96%B9%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">条件期望方法的核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxcut-%E4%B8%8A%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%9C%9F%E6%9C%9B%E6%B3%95"><span class="nav-text">MaxCut 上的条件期望法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%8E%BB%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-text">与哈希函数去随机化的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E9%A2%84%E6%9C%9F"><span class="nav-text">实验结果的预期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF-1"><span class="nav-text">参考实现思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#problem-2f-%E4%B8%89%E7%A7%8D-maxcut-%E7%AE%97%E6%B3%95%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%E6%AF%94%E8%BE%83"><span class="nav-text">Problem 2(f) — 三种
+MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E9%A2%98%E7%9B%AE-6"><span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98-6"><span class="nav-text">原题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-6"><span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E7%AE%97%E6%B3%95%E5%9B%9E%E9%A1%BE"><span class="nav-text">三种算法回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-text">理论时间复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%A7%82%E5%AF%9F"><span class="nav-text">实验观察</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%AF%94%E8%BE%83"><span class="nav-text">可靠性比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E6%9D%83%E8%A1%A1"><span class="nav-text">实际应用中的权衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE%E7%9C%8B%E8%B6%8B%E5%8A%BF"><span class="nav-text">从实验数据看趋势</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -183,18 +179,18 @@ MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-i
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">215</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">154</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -253,7 +249,7 @@ MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-i
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="COMP5270 Assignment 2 完整题解 | Joey">
-      <meta itemprop="description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（MaxCut 近似算法的实现与分析）。">
+      <meta itemprop="description" content="COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（Pairwise Independent Hash Functions、图生成、随机化 MaxCut、哈希去随机化、条件期望去随机化、运行时间比较）。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -268,7 +264,7 @@ MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-i
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2026-04-18 15:32:31" itemprop="dateCreated datePublished" datetime="2026-04-18T15:32:31Z">2026-04-18</time>
+      <time title="Created: 2026-06-13 11:59:48" itemprop="dateCreated datePublished" datetime="2026-06-13T11:59:48Z">2026-06-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -287,18 +283,18 @@ MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-i
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>6.7k</span>
+      <span>4.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>24 mins.</span>
+      <span>16 mins.</span>
     </span>
 </div>
 
-            <div class="post-description">COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（MaxCut 近似算法的实现与分析）。</div>
+            <div class="post-description">COMP5270 Assignment 2 完整题解，涵盖 Problem 1（Karger 算法枚举最小割）和 Problem 2 (a-f)（Pairwise Independent Hash Functions、图生成、随机化 MaxCut、哈希去随机化、条件期望去随机化、运行时间比较）。</div>
         </div>
       </header>
 
@@ -308,12 +304,8 @@ MaxCut 算法运行时间比较</span></a><ol class="nav-child"><li class="nav-i
     <div class="post-body" itemprop="articleBody"><h1 id="comp5270-assignment-2-完整题解">COMP5270 Assignment 2
 完整题解</h1>
 <blockquote>
-<p>本题解涵盖 COMP5270 Assignment 2 的全部问题，包含 Problem 1（Karger
-算法与最小割枚举）以及 Problem 2 的六个子问题（Pairwise Independent Hash
-Functions、<span class="math inline">\(K_n\)</span>/<span
-class="math inline">\(C_n\)</span> 图生成、随机化
-MaxCut、哈希函数去随机化、条件期望去随机化、运行时间比较）。</p>
-<p>所有内容均基于课程 lecture notes 与算法原理撰写，供学习参考使用。</p>
+<p>本题解合并 Problem 1 与 Problem 2(a)–2(f)
+的所有子问题，按题目顺序排列。</p>
 </blockquote>
 <hr />
 <h2 id="problem-1-karger-算法列出所有最小割">Problem 1 — Karger
@@ -347,7 +339,7 @@ cut。要把它改成"列出所有 minimum cuts"，最直接的方法不是改 c
 <li>每次得到一个 cut 后，计算它的 cut size</li>
 <li>维护当前见过的最小 cut size</li>
 <li>只保留所有大小等于这个最小值的 cuts</li>
-<li>对这些 cuts 做 <strong>去重</strong>，最后输出去重后的结果集合</li>
+<li>对这些 cuts 做<strong>去重</strong>，最后输出去重后的结果集合</li>
 </ul>
 <p>换句话说，这里真正的修改是把"单次随机输出一个最小割候选"变成"多次采样并收集所有采样到的
 minimum cuts"。</p>
@@ -380,7 +372,6 @@ class="math inline">\(1\%\)</span>，也就是以至少 <strong>99%</strong>
 的概率列出全部 minimum cuts。</p>
 <hr />
 <h3 id="算法描述">算法描述</h3>
-<p>可以写成下面这个版本：</p>
 <ol type="1">
 <li>设 <code>best = +∞</code>，设集合 <code>S = ∅</code></li>
 <li>重复运行 Karger 算法 <span class="math inline">\(r = \Theta(n^2 \log
@@ -392,28 +383,22 @@ n)\)</span> 次</li>
 class="math inline">\(C\)</span></li>
 <li>如果 <span class="math inline">\(|C| = best\)</span>，则把 <span
 class="math inline">\(C\)</span> 加入 <code>S</code></li>
-<li>对 cuts 做规范化表示并去重，例如始终把一个 cut
-表示成两侧顶点集里较小字典序的一侧，避免同一个 cut 被重复存储</li>
+<li>对 cuts
+做规范化表示并去重（例如始终用两侧顶点集里字典序较小的那侧表示），避免同一个
+cut 被重复存储</li>
 <li>输出 <code>S</code></li>
 </ol>
 <hr />
 <h3 id="时间复杂度">时间复杂度</h3>
-<p>如果一次 Karger 运行耗时记为 <span
-class="math inline">\(O(n^2)\)</span>，而我们总共运行</p>
+<p>如果一次 Karger 运行耗时 <span
+class="math inline">\(O(n^2)\)</span>，总共运行 <span
+class="math inline">\(O(n^2 \log n)\)</span> 次，则</p>
 <p><span class="math display">\[
-O(n^2 \log n)
+\boxed{O(n^4 \log n).}
 \]</span></p>
-<p>次，那么总时间复杂度就是</p>
-<p><span class="math display">\[
-O(n^2) \cdot O(n^2 \log n) = O(n^4 \log n).
-\]</span></p>
-<p>去重带来的额外开销不会改变这个主导复杂度，因此最终时间复杂度仍然是</p>
-<p><span class="math display">\[
-\boxed{O(n^4 \log n)}.
-\]</span></p>
+<p>去重带来的额外开销不会改变这个主导项。</p>
 <hr />
-<h3 id="可以直接交作业的短答案">可以直接交作业的短答案</h3>
-<blockquote>
+<h3 id="可直接交作业的短答案">可直接交作业的短答案</h3>
 <p>Run Karger's algorithm independently <span
 class="math inline">\(O(n^2\log n)\)</span> times, keep every cut whose
 size equals the minimum found, and deduplicate them. Since each fixed
@@ -424,17 +409,13 @@ minimum cuts with probability at least <span
 class="math inline">\(99\%\)</span>. If one run takes <span
 class="math inline">\(O(n^2)\)</span>, the total running time is <span
 class="math inline">\(O(n^4\log n)\)</span>.</p>
-</blockquote>
 <hr />
 <h3 id="一点补充理解">一点补充理解</h3>
 <p>这道题的关键不是设计一个全新的算法，而是把 Karger
-的"<strong>单个最小割采样器</strong>"升级成"<strong>最小割全集收集器</strong>"。核心工具只有两个：</p>
-<ul>
-<li>单个 minimum cut 的命中概率下界</li>
-<li>minimum cut 总数的上界，加上 union bound</li>
-</ul>
-<p>所以这题本质上是在考，你会不会把一个 randomized existence
-guarantee，转成一个 high-probability enumeration guarantee。</p>
+的"<strong>单个最小割采样器</strong>"升级成"<strong>最小割全集收集器</strong>"。核心工具只有两个：单个
+minimum cut 的命中概率下界，加上 minimum cut 总数的上界与 union
+bound。本质上是在练习：把一个 randomized existence guarantee，转成
+high-probability enumeration guarantee。</p>
 <hr />
 <h2 id="problem-2a-pairwise-independent-hash-functions">Problem 2(a) —
 Pairwise Independent Hash Functions</h2>
@@ -460,107 +441,66 @@ the unit.</p>
 <p><span class="math display">\[
 h_{a,b}(x)=((ax+b) \bmod p) \bmod m
 \]</span></p>
-<p>其中：</p>
-<ul>
-<li><span class="math inline">\(p\)</span> 是一个大于输入范围的素数</li>
-<li><span class="math inline">\(a \in \{1,2,\dots,p-1\}\)</span></li>
-<li><span class="math inline">\(b \in \{0,1,\dots,p-1\}\)</span></li>
-<li><span class="math inline">\(m\)</span>
-是哈希值范围，比如桶的个数</li>
-</ul>
-<p>随机选择 <span class="math inline">\(a,b\)</span>
-后，就得到一个具体的哈希函数 <span
-class="math inline">\(h_{a,b}\)</span>。这一族函数满足 pairwise
-independence，也就是对任意不同的 <span
-class="math inline">\(x_1,x_2\)</span>，它们的哈希值分布是成对独立的。</p>
+<p>其中 <span class="math inline">\(p\)</span>
+是大于输入范围的素数，<span class="math inline">\(a \in
+\{1,2,\dots,p-1\}\)</span>，<span class="math inline">\(b \in
+\{0,1,\dots,p-1\}\)</span>，<span class="math inline">\(m\)</span>
+是哈希值范围（桶的个数）。随机选 <span
+class="math inline">\(a,b\)</span> 后得到一个具体哈希函数 <span
+class="math inline">\(h_{a,b}\)</span>，该族满足 pairwise
+independence。</p>
 <hr />
 <h3 id="为什么这个构造可行">为什么这个构造可行</h3>
-<p>在模素数 <span class="math inline">\(p\)</span> 的域上，映射</p>
-<p><span class="math display">\[
-x \mapsto ax+b \pmod p
-\]</span></p>
-<p>是最经典的随机线性哈希构造。</p>
-<p>对于任意不同的两个输入 <span class="math inline">\(x_1 \neq
-x_2\)</span>，以及任意两个目标值 <span
+<p>在模素数 <span class="math inline">\(p\)</span> 的域上，映射 <span
+class="math inline">\(x \mapsto ax+b \pmod p\)</span>
+是随机线性哈希的经典构造。对任意 <span class="math inline">\(x_1 \neq
+x_2\)</span> 与任意目标值 <span
 class="math inline">\(y_1,y_2\)</span>，联立方程</p>
 <p><span class="math display">\[
-ax_1+b \equiv y_1 \pmod p
+ax_1+b \equiv y_1 \pmod p,\qquad ax_2+b \equiv y_2 \pmod p
 \]</span></p>
-<p><span class="math display">\[
-ax_2+b \equiv y_2 \pmod p
-\]</span></p>
-<p>有唯一解 <span
-class="math inline">\((a,b)\)</span>。这意味着从所有可能的 <span
+<p>有唯一解 <span class="math inline">\((a,b)\)</span>，因此从所有 <span
 class="math inline">\((a,b)\)</span>
-中均匀随机选取时，不同输入的像会呈现两两独立的分布。因此这就是课程里常见的
-pairwise independent family。</p>
+中均匀随机选取时，不同输入的像成对独立分布，这正是 pairwise independent
+family。</p>
 <hr />
 <h3 id="实现时的关键点">实现时的关键点</h3>
-<p>题目特别限制，你的 Python 代码只能通过：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.getrandbits(k)</span><br></pre></td></tr></table></figure>
-<p>来产生随机性。所以不能直接用 <code>random.randrange()</code> 或
-<code>random.randint()</code>。</p>
-<p>因此标准做法是自己写一个 <code>randbelow(n)</code>，用 rejection
-sampling 从 <span class="math inline">\(\{0,1,\dots,n-1\}\)</span>
-中均匀采样。</p>
-<h4 id="randbelown-的思路"><code>randbelow(n)</code> 的思路</h4>
+<p>题目限制只能用 <code>random.getrandbits(k)</code>
+产生随机性，因此需要自行实现 <code>randbelow(n)</code>（rejection
+sampling 方式）：</p>
 <ol type="1">
 <li>令 <span class="math inline">\(k =
 \text{bit\_length}(n-1)\)</span></li>
-<li>调用 <code>random.getrandbits(k)</code> 得到一个 <span
+<li>调用 <code>random.getrandbits(k)</code> 得到 <span
 class="math inline">\(k\)</span> 位随机整数</li>
-<li>如果这个数小于 <span class="math inline">\(n\)</span>，就接受</li>
-<li>否则丢弃，重新抽一次</li>
+<li>若该数小于 <span
+class="math inline">\(n\)</span>，接受；否则丢弃重试</li>
 </ol>
-<p>这样可以保证采样是均匀的。</p>
 <hr />
 <h3 id="参考实现">参考实现</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">randbelow</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;n must be positive&quot;</span>)</span><br><span class="line">    k = (n - <span class="number">1</span>).bit_length()</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        r = random.getrandbits(k)</span><br><span class="line">        <span class="keyword">if</span> r &lt; n:</span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_pairwise_hash</span>(<span class="params">m, p=<span class="number">2147483647</span></span>):</span><br><span class="line">    a = randbelow(p - <span class="number">1</span>) + <span class="number">1</span>   <span class="comment"># 1..p-1</span></span><br><span class="line">    b = randbelow(p)           <span class="comment"># 0..p-1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">h</span>(<span class="params">x</span>):</span><br><span class="line">        <span class="keyword">return</span> ((a * x + b) % p) % m</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h</span><br></pre></td></tr></table></figure>
-<p>如果 Ed 的接口要求你返回参数而不是闭包，也可以保存
-<code>a,b,p,m</code>，然后单独写一个 <code>hash(x)</code>
-方法，思路完全一样。</p>
-<hr />
-<h3 id="代码含义解释">代码含义解释</h3>
-<p>这里：</p>
-<ul>
-<li><code>a = randbelow(p - 1) + 1</code> 保证 <span
-class="math inline">\(a \neq 0\)</span></li>
-<li><code>b = randbelow(p)</code> 保证 <span
-class="math inline">\(b\)</span> 在 <span
-class="math inline">\([0,p-1]\)</span> 内均匀分布</li>
-<li><code>((a * x + b) % p) % m</code> 先在模 <span
-class="math inline">\(p\)</span> 的域里做随机线性映射，再映射到目标范围
-<span class="math inline">\(\{0,1,\dots,m-1\}\)</span></li>
-</ul>
-<p>通常课程里要求你实现的，就是这个 family，而不是去重新证明它。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">randbelow</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;n must be positive&quot;</span>)</span><br><span class="line">    k = (n - <span class="number">1</span>).bit_length()</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        r = random.getrandbits(k)</span><br><span class="line">        <span class="keyword">if</span> r &lt; n:</span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_pairwise_hash</span>(<span class="params">m, p=<span class="number">2147483647</span></span>):</span><br><span class="line">    a = randbelow(p - <span class="number">1</span>) + <span class="number">1</span>   <span class="comment"># a ∈ &#123;1,...,p-1&#125;</span></span><br><span class="line">    b = randbelow(p)           <span class="comment"># b ∈ &#123;0,...,p-1&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">h</span>(<span class="params">x</span>):</span><br><span class="line">        <span class="keyword">return</span> ((a * x + b) % p) % m</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h</span><br></pre></td></tr></table></figure>
 <hr />
 <h3 id="容易错的地方">容易错的地方</h3>
-<h4 id="让-a-0">1. 让 <code>a = 0</code></h4>
-<p>如果 <span
-class="math inline">\(a=0\)</span>，哈希函数就退化成常数平移，失去课程里要求的性质。所以必须保证
-<span class="math inline">\(a \in \{1,\dots,p-1\}\)</span>。</p>
-<h4 id="直接对-getrandbitsk-取模">2. 直接对 <code>getrandbits(k)</code>
-取模</h4>
-<p>如果写成：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">random.getrandbits(k) % n</span><br></pre></td></tr></table></figure>
-<p>通常会引入偏差，不能保证均匀分布。正确方法是 rejection sampling。</p>
-<h4 id="选的-p-不是素数">3. 选的 <span class="math inline">\(p\)</span>
-不是素数</h4>
-<p>这个构造依赖模素数域的性质，所以 <span
-class="math inline">\(p\)</span> 应该取素数。</p>
-<h4 id="忘记根据题目限制控制随机数来源">4.
-忘记根据题目限制控制随机数来源</h4>
-<p>如果作业明确要求只能用
-<code>random.getrandbits(k)</code>，那就不要调用别的随机 API。</p>
+<ol type="1">
+<li><strong>让 <span class="math inline">\(a=0\)</span></strong>：<span
+class="math inline">\(h\)</span> 会退化成常数平移，失去 pairwise
+independence 性质，必须保证 <span class="math inline">\(a\ge
+1\)</span>。</li>
+<li><strong>直接对 <code>getrandbits(k)</code>
+取模</strong>：<code>getrandbits(k) % n</code> 有偏差，不均匀，必须用
+rejection sampling。</li>
+<li><strong><span class="math inline">\(p\)</span>
+不是素数</strong>：构造依赖模素数域，<span
+class="math inline">\(p\)</span> 必须是素数。</li>
+<li><strong>使用题目禁止的随机 API</strong>：若题目明确只允许
+<code>getrandbits(k)</code>，不要调用 <code>random.randint</code>
+等。</li>
+</ol>
 <hr />
-<h3
-id="可以直接写进作业说明的简短版本">可以直接写进作业说明的简短版本</h3>
-<blockquote>
-<p>We use the standard pairwise independent family</p>
-<p><span class="math display">\[
-h_{a,b}(x)=((ax+b) \bmod p) \bmod m,
-\]</span></p>
-<p>where <span class="math inline">\(p\)</span> is prime, <span
+<h3 id="可直接写进作业的简短版本">可直接写进作业的简短版本</h3>
+<p>We use the standard pairwise independent family <span
+class="math inline">\(h_{a,b}(x)=((ax+b) \bmod p) \bmod m\)</span>,
+where <span class="math inline">\(p\)</span> is prime, <span
 class="math inline">\(a \in \{1,\dots,p-1\}\)</span>, and <span
 class="math inline">\(b \in \{0,\dots,p-1\}\)</span>. Since the task
 only allows <code>random.getrandbits(k)</code>, we implement a uniform
@@ -568,10 +508,10 @@ only allows <code>random.getrandbits(k)</code>, we implement a uniform
 class="math inline">\(a\)</span> and <span
 class="math inline">\(b\)</span> uniformly and return the resulting hash
 function.</p>
-</blockquote>
 <hr />
-<h2 id="problem-2b-生成-kₙ-完全图和-cₙ-环图">Problem 2(b) — 生成 Kₙ
-完全图和 Cₙ 环图</h2>
+<h2 id="problem-2b-生成-k_n-完全图和-c_n-环图">Problem 2(b) — 生成 <span
+class="math inline">\(K_n\)</span> 完全图和 <span
+class="math inline">\(C_n\)</span> 环图</h2>
 <h3 id="中文题目-2">中文题目</h3>
 <p>实现两个函数：输入 <span class="math inline">\(n\)</span>，返回 (1)
 <span class="math inline">\(n\)</span> 个顶点的完全图 <span
@@ -596,90 +536,77 @@ class="math inline">\(n\)</span> vertices.</p>
 </ul>
 <hr />
 <h3 id="核心思路-2">核心思路</h3>
-<p>这道题是整个 Assignment 2 的基础设施题。后续所有 MaxCut
-实验都依赖这两个函数生成的图，所以理解它们的结构很重要。</p>
-<h4 id="完全图-k_n">完全图 <span class="math inline">\(K_n\)</span></h4>
-<p>完全图 <span class="math inline">\(K_n\)</span>
-是任意两个不同顶点之间都有一条边的图。对角化来说：</p>
-<ul>
-<li><strong>顶点</strong>：<span class="math inline">\(n\)</span>
-个，通常编号为 <span class="math inline">\(0,1,\dots,n-1\)</span></li>
-<li><strong>边</strong>：共 <span class="math inline">\(\binom{n}{2} =
-\frac{n(n-1)}{2}\)</span> 条</li>
-<li><strong>度数</strong>：每个顶点的度数为 <span
-class="math inline">\(n-1\)</span></li>
-</ul>
-<p>实现方式是两层循环：外层遍历所有顶点，内层从该顶点的下一个顶点开始，遍历到最后一个顶点，每对顶点插入一条边。</p>
-<h4 id="环图-c_n">环图 <span class="math inline">\(C_n\)</span></h4>
-<p>环图 <span class="math inline">\(C_n\)</span> 是 <span
-class="math inline">\(n\)</span>
-个顶点排成一个环，每相邻两个顶点之间有一条边，首尾顶点也相连：</p>
-<ul>
-<li><strong>顶点</strong>：<span class="math inline">\(n\)</span>
-个，编号 <span class="math inline">\(0,1,\dots,n-1\)</span></li>
-<li><strong>边</strong>：共 <span class="math inline">\(n\)</span>
-条，恰好每个顶点度数为 <span class="math inline">\(2\)</span></li>
-<li><strong>结构</strong>：视觉上是一个环</li>
-</ul>
-<p>实现方式是连接 <span class="math inline">\((0,1), (1,2), \dots, (n-2,
-n-1)\)</span>，最后 <span class="math inline">\((n-1, 0)\)</span>
-形成闭环。</p>
+<p>这道题是整个 Assignment 2 的基础设施题，后续所有 MaxCut
+实验都依赖这两个函数。</p>
+<p><strong>完全图 <span class="math inline">\(K_n\)</span>：</strong>
+任意两个不同顶点之间都有一条边。顶点数 <span
+class="math inline">\(n\)</span>，边数 <span
+class="math inline">\(\binom{n}{2}\)</span>，每个顶点度数 <span
+class="math inline">\(n-1\)</span>。两层循环实现：外层遍历所有顶点，内层从该顶点的下一个顶点开始，逐对插入边。</p>
+<p><strong>环图 <span class="math inline">\(C_n\)</span>：</strong>
+<span class="math inline">\(n\)</span>
+个顶点排成一个环，每相邻两个顶点之间有一条边，首尾相连。顶点数 <span
+class="math inline">\(n\)</span>，边数 <span
+class="math inline">\(n\)</span>，每个顶点度数 <span
+class="math inline">\(2\)</span>。连接 <span
+class="math inline">\((0,1),(1,2),\dots,(n-2,n-1),(n-1,0)\)</span>。</p>
 <hr />
 <h3 id="参考实现-1">参考实现</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> graph <span class="keyword">import</span> Graph</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">complete_graph</span>(<span class="params">n</span>):</span><br><span class="line">    G = Graph()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_vertex(i)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, n):</span><br><span class="line">            G.insert_edge(i, j)</span><br><span class="line">    <span class="keyword">return</span> G</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cycle_graph</span>(<span class="params">n</span>):</span><br><span class="line">    G = Graph()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_vertex(i)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        G.insert_edge(i, (i + <span class="number">1</span>) % n)</span><br><span class="line">    <span class="keyword">return</span> G</span><br></pre></td></tr></table></figure>
-<p>注意： - 完全图的双层循环中，内层从 <code>i + 1</code>
-开始，避免重复插入同一条边（因为 Graph API 的 <code>insert_edge</code>
-会把 <span class="math inline">\((u,v)\)</span> 和 <span
-class="math inline">\((v,u)\)</span> 当作同一条边） - 环图用
-<code>(i + 1) % n</code> 自动处理 <span
-class="math inline">\(n-1\)</span> 到 <span
-class="math inline">\(0\)</span> 的回边，这是 Python
-里写环结构的常用技巧</p>
 <hr />
 <h3 id="两种图在后续问题中的角色">两种图在后续问题中的角色</h3>
 <table>
 <thead>
 <tr>
-<th>图</th>
-<th><span class="math inline">\(K_n\)</span> 的特点</th>
-<th><span class="math inline">\(C_n\)</span> 的特点</th>
+<th style="text-align: left;">图</th>
+<th style="text-align: left;"><span
+class="math inline">\(K_n\)</span></th>
+<th style="text-align: left;"><span
+class="math inline">\(C_n\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>边数</td>
-<td><span class="math inline">\(\Theta(n^2)\)</span></td>
-<td><span class="math inline">\(\Theta(n)\)</span></td>
+<td style="text-align: left;">边数</td>
+<td style="text-align: left;"><span
+class="math inline">\(\Theta(n^2)\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(\Theta(n)\)</span></td>
 </tr>
 <tr>
-<td>每个顶点度</td>
-<td><span class="math inline">\(n-1\)</span></td>
-<td><span class="math inline">\(2\)</span></td>
-</tr>
-<tr>
-<td>MaxCut 最优值</td>
-<td><span class="math inline">\(\lfloor n^2/4 \rfloor\)</span></td>
-<td><span class="math inline">\(n\)</span> 或 <span
+<td style="text-align: left;">每顶点度</td>
+<td style="text-align: left;"><span
 class="math inline">\(n-1\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(2\)</span></td>
 </tr>
 <tr>
-<td>随机算法效果</td>
-<td>接近最优，方差小</td>
-<td>约 <span class="math inline">\(n/2\)</span>，方差较大</td>
+<td style="text-align: left;">MaxCut 最优值</td>
+<td style="text-align: left;"><span class="math inline">\(\lfloor n^2/4
+\rfloor\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(n\)</span> 或
+<span class="math inline">\(n-1\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">算法效果</td>
+<td style="text-align: left;">接近最优，方差小</td>
+<td style="text-align: left;">约 <span
+class="math inline">\(n/2\)</span>，方差较大</td>
 </tr>
 </tbody>
 </table>
-<p>这两个图是后续实验的基准测试用例，分别代表稠密图和稀疏图两种极端情况。</p>
+<p>两个图分别代表稠密图和稀疏图两种极端情况，是后续实验的基准测试用例。</p>
 <hr />
 <h3 id="容易错的地方-1">容易错的地方</h3>
 <ol type="1">
 <li><strong>完全图循环边界</strong>：内层从 <code>i + 1</code>
-开始，不是 <code>0</code>。否则会重复插入边或者漏掉某些边对。</li>
-<li><strong>环图的首尾连接</strong>：最后一条边 <code>(n-1, 0)</code>
-容易忘掉，用取模技巧可以自动覆盖。</li>
-<li><strong>Graph API 的语义</strong>：<code>insert_edge(u, v)</code>
-会同时在邻接表中加入 <code>u -&gt; v</code> 和
-<code>v -&gt; u</code>，不需要手动处理无向边的双向插入。</li>
+开始，否则会重复插入边。</li>
+<li><strong>环图首尾连接</strong>：用取模 <code>(i + 1) % n</code>
+自动覆盖最后一条边 <span class="math inline">\((n-1, 0)\)</span>。</li>
+<li><strong>Graph API
+的无向边语义</strong>：<code>insert_edge(u, v)</code> 同时加入 <span
+class="math inline">\(u\to v\)</span> 和 <span
+class="math inline">\(v\to u\)</span>，不需要手动处理双向。</li>
 </ol>
 <hr />
 <h2 id="problem-2c-随机化-maxcut-算法">Problem 2(c) — 随机化 MaxCut
@@ -700,9 +627,7 @@ class="math inline">\(100\)</span>, run it on both <span
 class="math inline">\(K_n\)</span> and <span
 class="math inline">\(C_n\)</span>, each for <span
 class="math inline">\(k = 20\)</span> iterations, and report the results
-on two different graphs (one for <span
-class="math inline">\(K_n\)</span>, one for <span
-class="math inline">\(C_n\)</span>, each with 5 plots)...</p>
+on two different graphs...</p>
 </blockquote>
 <h3 id="知识点-3">知识点</h3>
 <ul>
@@ -714,116 +639,87 @@ class="math inline">\(C_n\)</span>, each with 5 plots)...</p>
 </ul>
 <hr />
 <h3 id="maxcut-问题回顾">MaxCut 问题回顾</h3>
-<p>给定一个无向图 <span
+<p>给定无向图 <span
 class="math inline">\(G=(V,E)\)</span>，<strong>MaxCut</strong>
-问题是把顶点集划分成两部分 <span class="math inline">\(S\)</span> 和
-<span class="math inline">\(T=V\setminus
-S\)</span>，使得跨越划分的边数（即"割"的大小）最大化：</p>
+把顶点集划分成两部分 <span class="math inline">\(S\)</span> 和 <span
+class="math inline">\(T=V\setminus
+S\)</span>，最大化跨越划分的边数：</p>
 <p><span class="math display">\[
 \text{cut}(S,T) = |\{(u,v)\in E : u\in S, v\in T\}|.
 \]</span></p>
-<p>MaxCut 是一个经典的 NP-hard
-优化问题，没有已知的多项式时间精确算法。</p>
+<p>MaxCut 是经典 NP-hard 问题。</p>
 <hr />
 <h3 id="随机化算法的核心思想">随机化算法的核心思想</h3>
-<p>最朴素的随机化算法极度简单：</p>
+<p>最朴素的随机化算法：</p>
 <ol type="1">
 <li>对每个顶点 <span class="math inline">\(v\)</span>，独立地以概率
-<span class="math inline">\(1/2\)</span> 把它放入 <span
+<span class="math inline">\(1/2\)</span> 放入 <span
 class="math inline">\(S\)</span> 或 <span
 class="math inline">\(T\)</span></li>
 <li>返回这样得到的割</li>
 </ol>
-<p>这就是全部操作。没有任何复杂的局部搜索或启发式。</p>
-<h4 id="期望值分析">期望值分析</h4>
-<p>对于任意一条边 <span
-class="math inline">\((u,v)\)</span>，考虑它被割开的概率：</p>
-<ul>
-<li><span class="math inline">\(u\)</span> 和 <span
-class="math inline">\(v\)</span> 被独立随机分配到两侧</li>
-<li>共有 4 种等概率分配：<span class="math inline">\((S,S), (S,T),
-(T,S), (T,T)\)</span></li>
-<li>其中 <span class="math inline">\((S,T)\)</span> 和 <span
-class="math inline">\((T,S)\)</span> 两种会跨割</li>
-<li>所以 <span class="math inline">\(P[\text{边在割中}] = 2/4 =
-1/2\)</span></li>
-</ul>
-<p>边的期望贡献是 <span
-class="math inline">\(1/2\)</span>。由线性期望，所有边的总期望割大小是：</p>
+<p><strong>期望值分析：</strong> 对任意一条边 <span
+class="math inline">\((u,v)\)</span>，<span
+class="math inline">\(u\)</span> 和 <span
+class="math inline">\(v\)</span> 独立随机分配，被割开的概率为 <span
+class="math inline">\(1/2\)</span>。由线性期望：</p>
 <p><span class="math display">\[
 \mathbb{E}[\text{cut size}] = \frac{1}{2}|E|.
 \]</span></p>
-<p>由于最优割的大小最多是 <span
-class="math inline">\(|E|\)</span>，所以这个随机算法<strong>至少达到最优值一半</strong>，近似比为
-<span
-class="math inline">\(1/2\)</span>。这是一个非常简单的算法，却有可证明的性能下界。</p>
+<p>最优割至多 <span
+class="math inline">\(|E|\)</span>，所以随机算法期望达到最优值一半，近似比为
+<span class="math inline">\(1/2\)</span>。</p>
 <hr />
 <h3 id="为什么在-k_n-和-c_n-上表现不同">为什么在 <span
 class="math inline">\(K_n\)</span> 和 <span
 class="math inline">\(C_n\)</span> 上表现不同</h3>
-<h4 id="完全图-k_n-1">完全图 <span
-class="math inline">\(K_n\)</span></h4>
-<p><span class="math inline">\(|E| = \binom{n}{2} =
-\frac{n(n-1)}{2}\)</span>。</p>
-<p>期望割大小为 <span class="math inline">\(|E|/2 =
-\frac{n(n-1)}{4}\)</span>。</p>
-<p>最优割大小也是 <span class="math inline">\(\lfloor n^2/4
-\rfloor\)</span>（相当于把顶点对半划分），所以随机算法在完全图上的<strong>期望表现几乎是最优的</strong>，而且由于所有割边数都集中在均值附近，<strong>标准差相对于割大小很小</strong>。</p>
-<p>这是因为大量相互独立的边产生了良好的集中（concentration）效应。</p>
-<h4 id="环图-c_n-1">环图 <span class="math inline">\(C_n\)</span></h4>
-<p><span class="math inline">\(|E| = n\)</span>，最优割大小为 <span
+<p><strong>完全图 <span class="math inline">\(K_n\)</span>：</strong>
+<span class="math inline">\(|E|=\binom{n}{2}\)</span>，期望割大小 <span
+class="math inline">\(\approx n(n-1)/4\)</span>，最优割 <span
+class="math inline">\(\lfloor
+n^2/4\rfloor\)</span>，两者几乎相等。大量独立边产生良好的集中效应，标准差相对均值很小。</p>
+<p><strong>环图 <span class="math inline">\(C_n\)</span>：</strong>
+<span class="math inline">\(|E|=n\)</span>，期望割大小 <span
+class="math inline">\(n/2\)</span>，最优割 <span
 class="math inline">\(n\)</span> 或 <span
-class="math inline">\(n-1\)</span>（把环的奇偶交替着色）。</p>
-<p>期望割大小为 <span class="math inline">\(n/2\)</span>，而最优是 <span
-class="math inline">\(n\)</span>，所以<strong>近似比仍是 <span
-class="math inline">\(1/2\)</span></strong>，但此时：</p>
-<ul>
-<li>最优和期望的差距是绝对值 <span
-class="math inline">\(n/2\)</span>，明显比完全图大</li>
-<li>每条边被割的概率仍是 <span
-class="math inline">\(1/2\)</span>，但集中效应弱，<strong>标准差相对割大小较大</strong></li>
-</ul>
-<p>此外，环图上每条边被割与否并非完全独立（割的性质有图的约束），所以实验的分布形态也和完全图不同。</p>
+class="math inline">\(n-1\)</span>，期望与最优差距绝对值为 <span
+class="math inline">\(n/2\)</span>。集中效应弱，标准差相对均值较大。</p>
 <hr />
 <h3 id="实验结果的预期图形特征">实验结果的预期图形特征</h3>
-<p>根据理论预期，绘图时应观察到：</p>
 <table>
 <thead>
 <tr>
-<th>指标</th>
-<th><span class="math inline">\(K_n\)</span> 上的表现</th>
-<th><span class="math inline">\(C_n\)</span> 上的表现</th>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;"><span
+class="math inline">\(K_n\)</span></th>
+<th style="text-align: left;"><span
+class="math inline">\(C_n\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>平均值曲线</td>
-<td>紧贴最优值（平方增长）</td>
-<td>在 <span class="math inline">\(n/2\)</span> 附近（线性增长）</td>
+<td style="text-align: left;">平均值曲线</td>
+<td style="text-align: left;">紧贴最优值（平方增长）</td>
+<td style="text-align: left;">在 <span
+class="math inline">\(n/2\)</span> 附近（线性增长）</td>
 </tr>
 <tr>
-<td>±标准差范围</td>
-<td>窄，相对割大小很小</td>
-<td>宽一些，但绝对值不大</td>
+<td style="text-align: left;">±标准差范围</td>
+<td style="text-align: left;">窄，相对割大小很小</td>
+<td style="text-align: left;">宽一些</td>
 </tr>
 <tr>
-<td>最小/最大值</td>
-<td>紧贴均值</td>
-<td>散布更广</td>
-</tr>
-<tr>
-<td>曲线形态</td>
-<td>越来越接近最优</td>
-<td>与最优差距恒定在约 <span class="math inline">\(n/2\)</span></td>
+<td style="text-align: left;">最小/最大值</td>
+<td style="text-align: left;">紧贴均值</td>
+<td style="text-align: left;">散布更广</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="参考实现思路">参考实现思路</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">randmaxcut</span>(<span class="params">G</span>):</span><br><span class="line">    <span class="comment"># 把每个顶点随机分配到 S 或 T</span></span><br><span class="line">    assignment = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> G.list_vertices():</span><br><span class="line">        assignment[v] = random.getrandbits(<span class="number">1</span>)  <span class="comment"># 0 -&gt; S, 1 -&gt; T</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 数跨割的边</span></span><br><span class="line">    cut_size = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> u, v <span class="keyword">in</span> G.list_edges():</span><br><span class="line">        <span class="keyword">if</span> assignment[u] != assignment[v]:</span><br><span class="line">            cut_size += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cut_size</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">randmaxcut</span>(<span class="params">G</span>):</span><br><span class="line">    assignment = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> G.list_vertices():</span><br><span class="line">        assignment[v] = random.getrandbits(<span class="number">1</span>)  <span class="comment"># 0 -&gt; S, 1 -&gt; T</span></span><br><span class="line"></span><br><span class="line">    cut_size = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> u, v <span class="keyword">in</span> G.list_edges():</span><br><span class="line">        <span class="keyword">if</span> assignment[u] != assignment[v]:</span><br><span class="line">            cut_size += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cut_size</span><br></pre></td></tr></table></figure>
 <p>注意题目要求只用 <code>random.getrandbits(1)</code>
-生成单个随机比特，而不能用 <code>random.random()</code> 或
-<code>random.randint()</code>。</p>
+生成单个随机比特。</p>
 <hr />
 <h2 id="problem-2d-基于哈希函数去随机化的-maxcut">Problem 2(d) —
 基于哈希函数去随机化的 MaxCut</h2>
@@ -844,154 +740,117 @@ on hash functions...</p>
 <li>去随机化（derandomization）</li>
 <li>两两独立哈希函数（pairwise independent hash functions）</li>
 <li>期望的线性性</li>
-<li>条件化方法（method of conditional expectations）</li>
 <li>固定种子的去随机化</li>
 </ul>
 <hr />
 <h3 id="从随机化到去随机化">从随机化到去随机化</h3>
 <p>Problem 2(c)
-的随机化算法依赖对每个顶点的独立随机抛硬币。<strong>去随机化</strong>（derandomization）的目标是：用确定性的算法模拟随机算法能达到的效果，而不真正使用随机性。</p>
-<p>核心思路是：<strong>用两两独立（pairwise
-independent）的哈希函数替代完全独立的随机比特</strong>。虽然独立程度降低了，但足以保持可预测的期望性质。</p>
+的随机算法依赖对每个顶点的独立随机抛硬币。<strong>去随机化</strong>的目标是用确定性算法模拟随机算法的效果，核心思路是：用两两独立哈希函数替代完全独立的随机比特。</p>
 <hr />
 <h3 id="为什么两两独立哈希函数够用">为什么两两独立哈希函数够用</h3>
-<p>回想随机化算法的核心：每个顶点 <span class="math inline">\(v\)</span>
-以 <span class="math inline">\(1/2\)</span> 概率放入 <span
-class="math inline">\(S\)</span>，以 <span
-class="math inline">\(1/2\)</span> 概率放入 <span
-class="math inline">\(T\)</span>。我们希望：</p>
-<p><span class="math display">\[
-\mathbb{E}[\text{割大小}] = \frac{1}{2}|E|.
-\]</span></p>
-<p>现在考虑用哈希函数 <span class="math inline">\(h: V \to
-\{0,1\}\)</span> 来决定分配。关键观察：<strong>如果 <span
-class="math inline">\(h\)</span> 是 pairwise independent
-的，那么对任意不同的顶点 <span class="math inline">\(u,v\)</span>，<span
-class="math inline">\(h(u)\)</span> 和 <span
-class="math inline">\(h(v)\)</span>
-分布是独立的（或说"成对独立"）。</strong></p>
-<p>对每条边 <span
-class="math inline">\((u,v)\)</span>，它被割开的概率是：</p>
+<p>设哈希函数 <span class="math inline">\(h: V \to \{0,1\}\)</span>
+决定分配。若 <span class="math inline">\(h\)</span> pairwise
+independent，则对任意不同顶点 <span
+class="math inline">\(u,v\)</span>，<span
+class="math inline">\((h(u),h(v))\)</span>
+成对独立，因此每条边被割开的概率：</p>
 <p><span class="math display">\[
 P[h(u) \neq h(v)] = P[h(u)=0]P[h(v)=1] + P[h(u)=1]P[h(v)=0] =
 \frac{1}{2}.
 \]</span></p>
-<p>即使只有成对的独立性，这个概率关系依然成立——因为我们只需要每条边两端比特独立的概率，而不是更多。</p>
-<hr />
-<h3 id="期望值的精确计算">期望值的精确计算</h3>
-<p>更妙的是，由于 <span class="math inline">\(h\)</span>
-是确定性的（给定哈希函数后），我们<strong>可以直接计算</strong>任意给定
-<span class="math inline">\(h\)</span> 的割大小，不需要采样：</p>
-<p><span class="math display">\[
-\text{cut}(h) = \sum_{(u,v)\in E} \mathbf{1}[h(u) \neq h(v)].
-\]</span></p>
-<p>而对所有哈希函数（由随机种子决定）取平均，期望仍然是 <span
+<p>由线性期望，期望割大小仍然是 <span
 class="math inline">\(|E|/2\)</span>。</p>
-<p>所以我们可以<strong>遍历所有哈希函数</strong>（或者用某种确定性方式覆盖），找出割最大的那个。由于状态空间是有限的（对于
-<span class="math inline">\(p\)</span> 素数和哈希值范围 <span
-class="math inline">\(m\)</span>，共有 <span
-class="math inline">\((p-1)\cdot p\)</span> 种 <span
-class="math inline">\((a,b)\)</span>
-组合），这在实验规模下是完全可行的。</p>
-<p>这就是为什么<strong>输出是确定性的</strong>（平均=最小=最大），因为我们选的是所有哈希函数中割最大的那一个。</p>
 <hr />
 <h3 id="算法步骤">算法步骤</h3>
 <ol type="1">
 <li>固定哈希族参数：素数 <span class="math inline">\(p\)</span>，桶数
-<span class="math inline">\(m=2\)</span>（因为只需要把顶点映射到 <span
+<span class="math inline">\(m=2\)</span>（映射到 <span
 class="math inline">\(\{0,1\}\)</span>）</li>
-<li>对每一对可能的 <span class="math inline">\((a,b)\)</span>：
+<li>对每一对可能的 <span class="math inline">\((a,b)\)</span>（<span
+class="math inline">\(a\in\{1,\dots,p-1\}\)</span>，<span
+class="math inline">\(b\in\{0,\dots,p-1\}\)</span>）：
 <ul>
-<li>定义哈希函数 <span class="math inline">\(h_{a,b}(v) = ((a \cdot v +
-b) \bmod p) \bmod 2\)</span></li>
+<li>定义 <span class="math inline">\(h_{a,b}(v) = ((a \cdot v + b) \bmod
+p) \bmod 2\)</span></li>
 <li>计算该哈希函数产生的割大小</li>
 </ul></li>
-<li>返回割大小最大的那个哈希函数对应的割值</li>
+<li>返回割大小最大的那个割值</li>
 </ol>
-<p>实际上，由于课程里用的是 pairwise independent
-family，我们可以遍历所有 <span class="math inline">\((a,b)\)</span>
-组合。</p>
 <hr />
 <h3 id="实验结果的预期特征">实验结果的预期特征</h3>
 <table>
 <thead>
 <tr>
-<th>指标</th>
-<th>预期</th>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">预期</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>平均值</td>
-<td>等于最优值（因为我们选的是最大者）</td>
+<td style="text-align: left;">平均值</td>
+<td style="text-align: left;">等于最优值</td>
 </tr>
 <tr>
-<td>最小值</td>
-<td>与平均值相同</td>
+<td style="text-align: left;">最小值 = 最大值</td>
+<td style="text-align: left;">与平均值相同</td>
 </tr>
 <tr>
-<td>最大值</td>
-<td>与平均值相同</td>
-</tr>
-<tr>
-<td>标准差</td>
-<td><span class="math inline">\(0\)</span>（三条线完全重合）</td>
+<td style="text-align: left;">标准差</td>
+<td style="text-align: left;"><span
+class="math inline">\(0\)</span>（三条线完全重合）</td>
 </tr>
 </tbody>
 </table>
-<p>对 <span class="math inline">\(K_n\)</span>：割值应为 <span
-class="math inline">\(\lfloor n^2/4
-\rfloor\)</span>（完全图的全局最优割） 对 <span
-class="math inline">\(C_n\)</span>：割值应为 <span
-class="math inline">\(n\)</span> 或 <span
-class="math inline">\(n-1\)</span>（环图交替染色的最优割）</p>
+<p>原因：这是确定性算法，对固定输入每次运行结果完全一样。</p>
 <hr />
 <h3 id="与随机化版本的关键区别">与随机化版本的关键区别</h3>
 <table>
 <thead>
 <tr>
-<th></th>
-<th>随机化版本</th>
-<th>哈希去随机化版本</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">随机化版本</th>
+<th style="text-align: left;">哈希去随机化版本</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>结果是否确定</td>
-<td>否（每次运行不同）</td>
-<td>是（给定 <span class="math inline">\((a,b)\)</span> 就确定）</td>
+<td style="text-align: left;">结果是否确定</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
 </tr>
 <tr>
-<td>标准差</td>
-<td><span class="math inline">\(&gt;0\)</span></td>
-<td><span class="math inline">\(=0\)</span></td>
+<td style="text-align: left;">标准差</td>
+<td style="text-align: left;"><span
+class="math inline">\(&gt;0\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(=0\)</span></td>
 </tr>
 <tr>
-<td>最优保证</td>
-<td>期望 <span class="math inline">\(1/2\)</span></td>
-<td>实际达到 <span class="math inline">\(1/2\)</span> 以上</td>
+<td style="text-align: left;">最优保证</td>
+<td style="text-align: left;">期望 <span class="math inline">\(\geq
+1/2\)</span></td>
+<td style="text-align: left;">实际达到 <span class="math inline">\(\geq
+1/2\)</span></td>
 </tr>
 <tr>
-<td>运行时间</td>
-<td>每次 <span class="math inline">\(O(n^2)\)</span></td>
-<td>需要遍历所有哈希函数，更慢</td>
+<td style="text-align: left;">运行时间</td>
+<td style="text-align: left;"><span
+class="math inline">\(O(n^2)\)</span></td>
+<td style="text-align: left;">更慢（需遍历所有哈希函数）</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="容易错的地方-2">容易错的地方</h3>
 <ol type="1">
-<li><strong>混淆"随机选一个哈希函数"和"遍历所有哈希函数找最优"</strong>：前者还是随机算法，后者才是确定性去随机化版本。题目要求的是后者。</li>
-<li><strong>哈希函数生成方式</strong>：必须保证 <span
-class="math inline">\(a \neq 0\)</span>（<span class="math inline">\(a
-\in \{1,\dots,p-1\}\)</span>），<span class="math inline">\(b \in
-\{0,\dots,p-1\}\)</span>，用 <code>randbelow(p-1)+1</code> 和
-<code>randbelow(p)</code> 实现。</li>
-<li><strong>参数 <span class="math inline">\(p\)</span>
-的选择</strong>：<span class="math inline">\(p\)</span> 需要大于顶点数
-<span class="math inline">\(n\)</span>，通常用一个大素数如 <span
-class="math inline">\(2147483647\)</span>（<span
-class="math inline">\(2^{31}-1\)</span>）。</li>
+<li><strong>混淆"随机选一个哈希函数"和"遍历所有哈希函数找最优"</strong>：前者仍是随机算法，题目要求后者（确定性去随机化）。</li>
+<li><strong>让 <span
+class="math inline">\(a=0\)</span></strong>：必须保证 <span
+class="math inline">\(a \in \{1,\dots,p-1\}\)</span>。</li>
+<li><strong><span class="math inline">\(p\)</span>
+的选择</strong>：<span class="math inline">\(p\)</span> 需大于顶点数
+<span class="math inline">\(n\)</span>，通常取 <span
+class="math inline">\(2^{31}-1=2147483647\)</span>。</li>
 </ol>
 <hr />
 <h2 id="problem-2e-基于条件期望去随机化的-maxcut">Problem 2(e) —
@@ -1012,138 +871,104 @@ on the method of conditional expectations...</p>
 <ul>
 <li>条件期望（conditional expectation）</li>
 <li>去随机化（derandomization）</li>
-<li>Yen's algorithm / method of conditional expectations</li>
+<li>Method of conditional expectations</li>
 <li>贪心消减（deterministic rounding）</li>
 </ul>
 <hr />
 <h3 id="条件期望方法的核心思想">条件期望方法的核心思想</h3>
-<p><strong>Method of Conditional
-Expectations</strong>（条件期望法）是一种通用的去随机化技术。它的基本框架是：</p>
+<p><strong>Method of Conditional Expectations</strong>
+是通用的去随机化技术，框架如下：</p>
 <ol type="1">
-<li><strong>定义随机变量</strong>：先考虑一个随机算法产生的目标值（如割大小）<span
-class="math inline">\(X\)</span></li>
+<li><strong>定义随机变量</strong>：考虑随机算法产生的目标值 <span
+class="math inline">\(X\)</span>（如割大小）</li>
 <li><strong>计算期望</strong>：<span
-class="math inline">\(\mathbb{E}[X]\)</span> 是某个容易计算的值（如
-<span class="math inline">\(|E|/2\)</span>）</li>
-<li><strong>逐步固定随机比特</strong>：按顺序遍历每个顶点，每次选择让条件期望更大的那半边</li>
+class="math inline">\(\mathbb{E}[X]\)</span> 是容易计算的值（如 <span
+class="math inline">\(|E|/2\)</span>）</li>
+<li><strong>逐步固定随机比特</strong>：按顺序遍历每个顶点，每次选择让条件期望不降低的那一侧</li>
 </ol>
-<p>具体到 MaxCut 问题，我们按顺序决定每个顶点的分配。</p>
 <hr />
 <h3 id="maxcut-上的条件期望法">MaxCut 上的条件期望法</h3>
-<p>设图的顶点顺序为 <span class="math inline">\(v_1, v_2, \dots,
-v_n\)</span>。对每个顶点，我们依次决定它进入 <span
-class="math inline">\(S\)</span> 还是 <span
-class="math inline">\(T\)</span>。</p>
-<p>当决定 <span class="math inline">\(v_i\)</span> 的分配时，之前的顶点
-<span class="math inline">\(v_1,\dots,v_{i-1}\)</span>
-已经分配好了，我们<strong>在已知这些信息条件下</strong>，计算 <span
-class="math inline">\(v_i\)</span> 进入 <span
-class="math inline">\(S\)</span> 或 <span
-class="math inline">\(T\)</span>
-时的<strong>条件期望割大小</strong>，选择条件期望更大的那个。</p>
-<h4 id="单个顶点的条件期望计算">单个顶点的条件期望计算</h4>
-<p>设已确定分配的顶点集合为 <span
-class="math inline">\(A\)</span>，未确定的为 <span
-class="math inline">\(B\)</span>。对于一条连接 <span
-class="math inline">\(A\)</span> 和 <span
-class="math inline">\(B\)</span> 的边，它被割开的概率取决于 <span
-class="math inline">\(B\)</span> 中顶点如何分配。</p>
-<p>更精确的框架是：当我们决定 <span class="math inline">\(v_i\)</span>
-的值时，考虑两种选择的条件期望：</p>
-<ul>
-<li><span class="math inline">\(v_i \to S\)</span> 时的期望割大小</li>
-<li><span class="math inline">\(v_i \to T\)</span> 时的期望割大小</li>
-</ul>
-<p>选择期望更大的那个。由于期望的线性性，这个计算在每一步都是可以高效进行的。</p>
-<hr />
-<h3 id="为什么这个方法有效">为什么这个方法有效</h3>
-<p>关键不等式是：<strong>无论我们选择哪一半，条件期望都至少和原来的（全）期望一样大</strong>。</p>
-<p>形式化地，设 <span class="math inline">\(X\)</span> 是随机变量，<span
-class="math inline">\(E\)</span> 是某个事件（比如"随机比特的前 <span
-class="math inline">\(i-1\)</span> 个已固定"），则：</p>
+<p>设顶点顺序为 <span
+class="math inline">\(v_1,v_2,\dots,v_n\)</span>。决定 <span
+class="math inline">\(v_i\)</span> 的分配时，<span
+class="math inline">\(v_1,\dots,v_{i-1}\)</span>
+已分配好。计算两种选择的条件期望割大小，选择较大的那个。</p>
+<p><strong>关键不等式：</strong></p>
 <p><span class="math display">\[
-\max(\mathbb{E}[X \mid E, v_i\to S], \mathbb{E}[X \mid E, v_i\to T])
+\max(\mathbb{E}[X \mid E, v_i\to S],\ \mathbb{E}[X \mid E, v_i\to T])
 \geq \mathbb{E}[X \mid E].
 \]</span></p>
-<p>如果我们从 <span class="math inline">\(\mathbb{E}[X]\)</span>
-开始，然后<strong>沿着每一步都选择不降低条件期望的方向</strong>，最终得到的值至少是原始期望值，即：</p>
+<p>每一步都不降低条件期望，最终割大小至少是原始期望值：</p>
 <p><span class="math display">\[
 \text{最终割大小} \geq \mathbb{E}[\text{割大小}] = \frac{1}{2}|E|.
 \]</span></p>
-<p>所以这个确定性算法<strong>保证至少达到最优割的一半</strong>，与随机版本有相同的近似保证。</p>
+<p>所以这个确定性算法<strong>保证至少达到最优割的一半</strong>。</p>
 <hr />
 <h3 id="与哈希函数去随机化的比较">与哈希函数去随机化的比较</h3>
 <table>
 <thead>
 <tr>
-<th>特征</th>
-<th>哈希函数法</th>
-<th>条件期望法</th>
+<th style="text-align: left;">特征</th>
+<th style="text-align: left;">哈希函数法</th>
+<th style="text-align: left;">条件期望法</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>是否确定性</td>
-<td>是</td>
-<td>是</td>
+<td style="text-align: left;">是否确定性</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">是</td>
 </tr>
 <tr>
-<td>近似比保证</td>
-<td><span class="math inline">\(\geq 1/2\)</span></td>
-<td><span class="math inline">\(\geq 1/2\)</span></td>
+<td style="text-align: left;">近似比保证</td>
+<td style="text-align: left;"><span class="math inline">\(\geq
+1/2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\geq
+1/2\)</span></td>
 </tr>
 <tr>
-<td>实际效果</td>
-<td>通常更好</td>
-<td>通常达到最优</td>
+<td style="text-align: left;">实际效果</td>
+<td style="text-align: left;">通常更好</td>
+<td style="text-align: left;">通常达到最优</td>
 </tr>
 <tr>
-<td>实现复杂度</td>
-<td>需要枚举哈希函数</td>
-<td>逐顶点贪心</td>
-</tr>
-<tr>
-<td>时间复杂度</td>
-<td><span class="math inline">\(O(n^2 \cdot
+<td style="text-align: left;">时间复杂度</td>
+<td style="text-align: left;"><span class="math inline">\(O(n^2 \cdot
 \text{哈希空间})\)</span></td>
-<td><span class="math inline">\(O(n^2)\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(O(n^2)\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>在本题的实验中，两种方法在 <span class="math inline">\(K_n\)</span>
-和 <span class="math inline">\(C_n\)</span>
-上都达到了最优值，但这是因为这两类图的结构比较特殊。在更一般的图上，两种方法的效果可能不同。</p>
 <hr />
 <h3 id="实验结果的预期">实验结果的预期</h3>
-<p>与 Problem 2(d) 完全一样：</p>
 <table>
 <thead>
 <tr>
-<th>指标</th>
-<th>预期</th>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">预期</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>平均值</td>
-<td>最优割值</td>
+<td style="text-align: left;">平均值</td>
+<td style="text-align: left;">最优割值</td>
 </tr>
 <tr>
-<td>最小/最大值</td>
-<td>与平均值相同</td>
+<td style="text-align: left;">最小/最大值</td>
+<td style="text-align: left;">与平均值相同</td>
 </tr>
 <tr>
-<td>标准差</td>
-<td><span class="math inline">\(0\)</span></td>
+<td style="text-align: left;">标准差</td>
+<td style="text-align: left;"><span
+class="math inline">\(0\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>原因相同：这是一个确定性算法，没有随机性，所以在同样输入下每次运行结果完全一样。</p>
+<p>原因：这是确定性算法，对固定输入每次运行结果完全一样。</p>
 <hr />
 <h3 id="参考实现思路-1">参考实现思路</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">maxcut_conditionalexpect</span>(<span class="params">G</span>):</span><br><span class="line">    vertices = G.list_vertices()</span><br><span class="line">    assignment = &#123;&#125;  <span class="comment"># 0 = S, 1 = T</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> vertices:</span><br><span class="line">        <span class="comment"># 计算如果 v 进入 S 的条件期望</span></span><br><span class="line">        cut_if_S = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u, w <span class="keyword">in</span> G.list_edges()</span><br><span class="line">                        <span class="keyword">if</span> (u == v <span class="keyword">and</span> assignment.get(w, <span class="literal">None</span>) == <span class="number">1</span>) <span class="keyword">or</span></span><br><span class="line">                           (w == v <span class="keyword">and</span> assignment.get(u, <span class="literal">None</span>) == <span class="number">1</span>))</span><br><span class="line">        <span class="comment"># 粗略计算：比较 v 的邻居中已分配到 T 的数量和已分配到 S 的数量</span></span><br><span class="line">        neighbors_in_T = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">1</span>)</span><br><span class="line">        neighbors_in_S = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 选择割边贡献更大的那一侧</span></span><br><span class="line">        assignment[v] = <span class="number">0</span> <span class="keyword">if</span> neighbors_in_T &gt;= neighbors_in_S <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算最终割大小</span></span><br><span class="line">    cut_size = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u, w <span class="keyword">in</span> G.list_edges()</span><br><span class="line">                   <span class="keyword">if</span> assignment[u] != assignment[w])</span><br><span class="line">    <span class="keyword">return</span> cut_size</span><br></pre></td></tr></table></figure>
-<p>实际实现可能需要根据具体 API
-调整，关键是按顺序处理每个顶点，在已知前面分配结果的情况下，选择让当前条件期望更大的那侧。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">maxcut_conditionalexpect</span>(<span class="params">G</span>):</span><br><span class="line">    vertices = G.list_vertices()</span><br><span class="line">    assignment = &#123;&#125;  <span class="comment"># 0 = S, 1 = T</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> vertices:</span><br><span class="line">        neighbors_in_T = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">1</span>)</span><br><span class="line">        neighbors_in_S = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u <span class="keyword">in</span> G.incident_edges(v)</span><br><span class="line">                             <span class="keyword">if</span> assignment.get(G.opposite(v, u), <span class="literal">None</span>) == <span class="number">0</span>)</span><br><span class="line">        <span class="comment"># 选择贡献割边更多的一侧</span></span><br><span class="line">        assignment[v] = <span class="number">0</span> <span class="keyword">if</span> neighbors_in_T &gt;= neighbors_in_S <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    cut_size = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> u, w <span class="keyword">in</span> G.list_edges()</span><br><span class="line">                   <span class="keyword">if</span> assignment[u] != assignment[w])</span><br><span class="line">    <span class="keyword">return</span> cut_size</span><br></pre></td></tr></table></figure>
 <hr />
 <h2 id="problem-2f-三种-maxcut-算法运行时间比较">Problem 2(f) — 三种
 MaxCut 算法运行时间比较</h2>
@@ -1169,8 +994,6 @@ class="math inline">\(K_n\)</span>...</p>
 </ul>
 <hr />
 <h3 id="三种算法回顾">三种算法回顾</h3>
-<p>我们在 Problem 2(c)、2(d)、2(e) 中分别实现和分析了三种 MaxCut
-算法：</p>
 <ol type="1">
 <li><strong>随机化算法</strong>
 (<code>randmaxcut</code>)：每个顶点独立随机分配</li>
@@ -1182,7 +1005,7 @@ class="math inline">\(K_n\)</span>...</p>
 <hr />
 <h3 id="理论时间复杂度分析">理论时间复杂度分析</h3>
 <p>在完全图 <span class="math inline">\(K_n\)</span> 上（<span
-class="math inline">\(|E| = \binom{n}{2} = \Theta(n^2)\)</span>）：</p>
+class="math inline">\(|E|=\Theta(n^2)\)</span>）：</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -1191,106 +1014,100 @@ class="math inline">\(|E| = \binom{n}{2} = \Theta(n^2)\)</span>）：</p>
 </colgroup>
 <thead>
 <tr>
-<th>算法</th>
-<th>单次运行复杂度</th>
-<th>备注</th>
+<th style="text-align: left;">算法</th>
+<th style="text-align: left;">单次运行复杂度</th>
+<th style="text-align: left;">备注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>随机化</td>
-<td><span class="math inline">\(O(n^2)\)</span></td>
-<td>遍历所有边一次</td>
+<td style="text-align: left;">随机化</td>
+<td style="text-align: left;"><span
+class="math inline">\(O(n^2)\)</span></td>
+<td style="text-align: left;">遍历所有边一次</td>
 </tr>
 <tr>
-<td>哈希函数</td>
-<td><span class="math inline">\(O(n^2 \cdot p)\)</span></td>
-<td>对每个 <span class="math inline">\((a,b)\)</span>
-都要遍历所有边；<span class="math inline">\((a,b)\)</span> 空间约为
-<span class="math inline">\(p^2\)</span></td>
+<td style="text-align: left;">哈希函数</td>
+<td style="text-align: left;"><span class="math inline">\(O(n^2 \cdot
+p)\)</span></td>
+<td style="text-align: left;">对每个 <span
+class="math inline">\((a,b)\)</span> 遍历所有边；<span
+class="math inline">\((a,b)\)</span> 空间约 <span
+class="math inline">\(p^2\)</span></td>
 </tr>
 <tr>
-<td>条件期望</td>
-<td><span class="math inline">\(O(n^2)\)</span></td>
-<td>逐顶点处理，每个顶点检查所有邻居</td>
+<td style="text-align: left;">条件期望</td>
+<td style="text-align: left;"><span
+class="math inline">\(O(n^2)\)</span></td>
+<td style="text-align: left;">逐顶点处理，每个顶点检查所有邻居</td>
 </tr>
 </tbody>
 </table>
-<p>哈希函数法的 <span class="math inline">\(p\)</span> 是素数（通常取
-<span class="math inline">\(2147483647\)</span>），所以即使只枚举所有
-<span class="math inline">\((a,b)\)</span>
-的一小部分，复杂度也远高于其他两者。</p>
+<p>哈希函数法需要枚举所有 <span class="math inline">\((a,b)\)</span>
+组合，复杂度远高于其他两者。</p>
 <hr />
 <h3 id="实验观察">实验观察</h3>
 <p>在 <span class="math inline">\(K_n\)</span> 上测量 <span
 class="math inline">\(n=2\)</span> 到 <span
-class="math inline">\(100\)</span> 的运行时间，典型观察结果是：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">随机化  &lt;  条件期望  &lt;  哈希函数</span><br><span class="line">最快            中等        最慢</span><br></pre></td></tr></table></figure>
-<p>具体原因：</p>
-<h4 id="为什么随机化算法最快">为什么随机化算法最快</h4>
-<p>随机化算法做一次割只需要：遍历所有边，对每条边检查两个端点是否在不同侧。这是最简单直接的操作。</p>
-<h4 id="条件期望为什么比随机化慢">条件期望为什么比随机化慢</h4>
-<p>条件期望算法在每个顶点上需要： 1.
-遍历该顶点的所有邻居（完全图上每个顶点有 <span
-class="math inline">\(n-1\)</span> 个邻居） 2.
-对每种选择计算贡献（本质上是两次遍历邻居） 3. 做一次比较决定分配</p>
-<p>这比随机算法"一次遍历所有边检查是否跨割"多了约一倍的工作量。</p>
-<h4 id="哈希函数法为什么最慢">哈希函数法为什么最慢</h4>
-<p>哈希函数法需要对<strong>每一对</strong> <span
+class="math inline">\(100\)</span> 的运行时间，典型结果：</p>
+<p><span class="math display">\[
+\text{随机化} &lt; \text{条件期望} &lt; \text{哈希函数（最慢）}
+\]</span></p>
+<p><strong>随机化最快：</strong> 一次遍历所有边，最简单直接的操作。</p>
+<p><strong>条件期望比随机化慢：</strong>
+每个顶点需两次遍历邻居（比较两种选择的贡献），工作量约多一倍。</p>
+<p><strong>哈希函数法最慢：</strong> 需对每一对 <span
 class="math inline">\((a,b)\)</span>（约 <span
-class="math inline">\((p-1)\cdot p\)</span>
-种组合）计算一次割大小，每次计算都需要遍历 <span
-class="math inline">\(O(n^2)\)</span>
-条边。这使得总时间复杂度远高于其他两者，即使 <span
-class="math inline">\(p\)</span> 固定不变也如此。</p>
+class="math inline">\(p^2\)</span> 种）计算一次割大小，每次 <span
+class="math inline">\(O(n^2)\)</span> 边，总复杂度远高于其他两者。</p>
 <hr />
 <h3 id="可靠性比较">可靠性比较</h3>
 <table>
 <thead>
 <tr>
-<th>算法</th>
-<th>每次结果是否相同</th>
-<th>是否总返回最优</th>
+<th style="text-align: left;">算法</th>
+<th style="text-align: left;">结果是否确定</th>
+<th style="text-align: left;">最优保证</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>随机化</td>
-<td>否</td>
-<td>否（期望 <span class="math inline">\(1/2\)</span>，方差存在）</td>
+<td style="text-align: left;">随机化</td>
+<td style="text-align: left;">否（每次运行不同）</td>
+<td style="text-align: left;">期望 <span class="math inline">\(\geq
+1/2\)</span></td>
 </tr>
 <tr>
-<td>条件期望</td>
-<td>是</td>
-<td>否（保证 <span class="math inline">\(\geq
-1/2\)</span>，通常更好）</td>
+<td style="text-align: left;">条件期望</td>
+<td style="text-align: left;">是（可重复）</td>
+<td style="text-align: left;">保证 <span class="math inline">\(\geq
+1/2\)</span></td>
 </tr>
 <tr>
-<td>哈希函数</td>
-<td>是</td>
-<td>否（保证 <span class="math inline">\(\geq
-1/2\)</span>，通常最优）</td>
+<td style="text-align: left;">哈希函数</td>
+<td style="text-align: left;">是（可重复）</td>
+<td style="text-align: left;">保证 <span class="math inline">\(\geq
+1/2\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>去随机化的两种方法都是确定性的——对于固定输入，总产生相同的割。这是它们相对于随机算法的主要优势：<strong>可重复、可预测</strong>。</p>
+<p>去随机化的两种方法都是确定性的，对固定输入总产生相同的割——<strong>可重复、可预测</strong>，是相对随机算法的主要优势。</p>
 <hr />
 <h3 id="实际应用中的权衡">实际应用中的权衡</h3>
 <ul>
-<li>如果<strong>只需要一个近似解，且要求快</strong>：随机化算法</li>
-<li>如果<strong>需要可重复的结果，且时间不敏感</strong>：去随机化算法</li>
-<li>如果<strong>图规模很大</strong>：即使去随机化算法，复杂度也是 <span
-class="math inline">\(O(n^2)\)</span> 级别，需要考虑实际运行时间</li>
+<li><strong>只需一个近似解且要求快</strong>：随机化算法</li>
+<li><strong>需要可重复结果，时间不敏感</strong>：去随机化算法</li>
+<li><strong>图规模很大</strong>：即使去随机化算法复杂度也是 <span
+class="math inline">\(O(n^2)\)</span> 级别，需考虑实际运行时间</li>
 </ul>
 <hr />
 <h3 id="从实验数据看趋势">从实验数据看趋势</h3>
-<p>在 <span class="math inline">\(n\)</span>
-较小时，三种算法时间差异较小，因为常数因子和系统开销占主导。</p>
-<p>随着 <span class="math inline">\(n\)</span> 增大，<span
-class="math inline">\(O(n^2)\)</span> 和 <span
-class="math inline">\(O(n^2 \cdot p)\)</span> 的差距越来越明显： -
-随机化和条件期望的曲线接近线性（二次复杂度） -
-哈希函数法的曲线更陡，斜率更大</p>
+<p><span class="math inline">\(n\)</span>
+较小时三种算法差异不大（常数因子主导）。随着 <span
+class="math inline">\(n\)</span> 增大，<span
+class="math inline">\(O(n^2)\)</span> 与 <span
+class="math inline">\(O(n^2 \cdot p)\)</span>
+的差距越来越明显：随机化和条件期望曲线形态接近，哈希函数法曲线斜率更大。</p>
 
     </div>
 
@@ -1302,9 +1119,9 @@ class="math inline">\(O(n^2 \cdot p)\)</span> 的差距越来越明显： -
           <div class="post-tags">
               <a href="/tags/Randomized-Algorithms/" rel="tag"><i class="fa fa-tag"></i> Randomized-Algorithms</a>
               <a href="/tags/Algorithms/" rel="tag"><i class="fa fa-tag"></i> Algorithms</a>
-              <a href="/tags/Karger/" rel="tag"><i class="fa fa-tag"></i> Karger</a>
-              <a href="/tags/MaxCut/" rel="tag"><i class="fa fa-tag"></i> MaxCut</a>
               <a href="/tags/Derandomization/" rel="tag"><i class="fa fa-tag"></i> Derandomization</a>
+              <a href="/tags/MaxCut/" rel="tag"><i class="fa fa-tag"></i> MaxCut</a>
+              <a href="/tags/Karger/" rel="tag"><i class="fa fa-tag"></i> Karger</a>
               <a href="/tags/Hash-Functions/" rel="tag"><i class="fa fa-tag"></i> Hash-Functions</a>
               <a href="/tags/Conditional-Expectation/" rel="tag"><i class="fa fa-tag"></i> Conditional-Expectation</a>
           </div>
@@ -1313,14 +1130,11 @@ class="math inline">\(O(n^2 \cdot p)\)</span> 的差距越来越明显： -
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/7f27d59a.html" rel="prev" title="INFO5990-Week5-Tutorial-Summary">
-                  <i class="fa fa-angle-left"></i> INFO5990-Week5-Tutorial-Summary
+                <a href="/posts/ccdaaea2.html" rel="prev" title="每日科技速递 - 2026-06-13">
+                  <i class="fa fa-angle-left"></i> 每日科技速递 - 2026-06-13
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/6d8b3e91.html" rel="next" title="COMP5270 Assignment 2 Problem 1, Karger 算法列出所有最小割">
-                  COMP5270 Assignment 2 Problem 1, Karger 算法列出所有最小割 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -1355,14 +1169,14 @@ class="math inline">\(O(n^2 \cdot p)\)</span> 的差距越来越明显： -
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">630k</span>
+    <span title="Word count total">759k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">38:12</span>
+    <span title="Reading time total">46:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

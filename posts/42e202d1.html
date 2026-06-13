@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5313 Week 11 Tutorial（Network Dynamics）题解，覆盖幂律分布与富者愈富、小世界现象与强弱联系、以及 Chord DHT 的 finger table 构造与 lookup 路由，给出每题完整推理与计算过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5313 Tutorial 11 - Network Dynamics 题解">
+<meta property="og:url" content="http://example.com/posts/42e202d1.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5313 Week 11 Tutorial（Network Dynamics）题解，覆盖幂律分布与富者愈富、小世界现象与强弱联系、以及 Chord DHT 的 finger table 构造与 lookup 路由，给出每题完整推理与计算过程。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-21T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T08:55:49.349Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="COMP5313">
+<meta property="article:tag" content="Power Law">
+<meta property="article:tag" content="Small World">
+<meta property="article:tag" content="Chord">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/42e202d1.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/42e202d1.html","path":"posts/42e202d1.html","title":"COMP5313 Tutorial 11 - Network Dynamics 题解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5313 Tutorial 11 - Network Dynamics 题解 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/42e202d1.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">154</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">215</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#week-11-tutorial-network-dynamics-%E9%A2%98%E8%A7%A3"><span class="nav-text">Week 11 Tutorial:
+Network Dynamics 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-text">一、预备知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%82%E5%BE%8B%E5%88%86%E5%B8%83%E4%B8%8E%E5%AF%8C%E8%80%85%E6%84%88%E5%AF%8C"><span class="nav-text">1.1 幂律分布与「富者愈富」</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%B8%96%E7%95%8C%E7%8E%B0%E8%B1%A1%E5%BC%BA%E5%BC%B1%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E6%90%9C%E7%B4%A2"><span class="nav-text">1.2
+小世界现象、强弱联系与去中心化搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chord-dht-%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">1.3 Chord DHT 与一致性哈希</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E9%A2%98%E8%A7%A3"><span class="nav-text">二、题解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-1power-law%E5%B9%82%E5%BE%8B%E5%88%86%E5%B8%83"><span class="nav-text">Exercise 1：Power
+Law（幂律分布）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-2small-world%E5%B0%8F%E4%B8%96%E7%95%8C"><span class="nav-text">Exercise 2：Small
+World（小世界）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exercise-3p2p-overlayschord-dht"><span class="nav-text">Exercise 3：P2P Overlays（Chord
+DHT）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B0%8F%E7%BB%93"><span class="nav-text">三、小结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">215</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/42e202d1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5313 Tutorial 11 - Network Dynamics 题解 | Joey">
+      <meta itemprop="description" content="COMP5313 Week 11 Tutorial（Network Dynamics）题解，覆盖幂律分布与富者愈富、小世界现象与强弱联系、以及 Chord DHT 的 finger table 构造与 lookup 路由，给出每题完整推理与计算过程。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5313 Tutorial 11 - Network Dynamics 题解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-05-21 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-21T00:00:00Z">2026-05-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-06-07 08:55:49" itemprop="dateModified" datetime="2026-06-07T08:55:49Z">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/COMP5313/" itemprop="url" rel="index"><span itemprop="name">COMP5313</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5313 Week 11 Tutorial（Network Dynamics）题解，覆盖幂律分布与富者愈富、小世界现象与强弱联系、以及 Chord DHT 的 finger table 构造与 lookup 路由，给出每题完整推理与计算过程。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="week-11-tutorial-network-dynamics-题解">Week 11 Tutorial:
+Network Dynamics 题解</h1>
+<blockquote>
+<p>课程：COMP5313/COMP4313 — Large Scale Networks, S1 2026
+主题：网络动力学 —— 幂律分布（power law）与去中心化搜索（decentralised
+search） 依据教材 <em>Networks, Crowds, and Markets</em>（Easley &amp;
+Kleinberg）第 18、20 章，以及 Chord/一致性哈希</p>
+</blockquote>
+<p>本次 tutorial
+复习网络动力学部分的三块内容：<strong>幂律分布</strong>、<strong>小世界现象</strong>，以及把去中心化搜索思想落到分布式系统里的
+<strong>Chord DHT</strong>。下面逐题给出答案与解析。</p>
+<hr />
+<h2 id="一预备知识回顾">一、预备知识回顾</h2>
+<h3 id="幂律分布与富者愈富">1.1 幂律分布与「富者愈富」</h3>
+<p><strong>幂律分布（power law）</strong>：某个量取值为 <span
+class="math inline">\(k\)</span> 的对象所占比例约为</p>
+<p><span class="math display">\[f(k) \approx a\,k^{-c}\]</span></p>
+<p>其中指数 <span class="math inline">\(c\)</span>
+在网页入链等场景常略大于
+2。它的尾部比正态/指数分布衰减得<strong>慢得多</strong>，所以极端流行的对象（爆款）不是异常值，而是结构性的必然结果。</p>
+<p>产生幂律的核心机制是 <strong>优先连接（preferential attachment）/
+富者愈富（rich-get-richer）</strong>：一个对象越流行，就越容易被进一步选择，从而进一步变流行，形成正反馈。任何<strong>让流行度变得可见</strong>的设计（排行榜、播放量、点赞数、点击计数器）都会强化这种正反馈，使分布更接近幂律。</p>
+<h3 id="小世界现象强弱联系与去中心化搜索">1.2
+小世界现象、强弱联系与去中心化搜索</h3>
+<ul>
+<li><strong>小世界现象（small
+world）</strong>：大型网络中<strong>大多数</strong>节点对之间存在很短的路径（「六度分隔」）。注意是「大多数」而非「所有」。</li>
+<li><strong>强联系 vs 弱联系</strong>：强联系（close
+friends）因三元闭包而高度重叠 ——
+你的好友彼此多半也认识，信息冗余；弱联系（acquaintances / distant
+friends）往往跨越不同社群，是连接不同 cluster
+的<strong>捷径</strong>，带来非冗余信息。这正是「弱联系的力量」（Granovetter）。</li>
+</ul>
+<h3 id="chord-dht-与一致性哈希">1.3 Chord DHT 与一致性哈希</h3>
+<ul>
+<li>把节点 ID 与文件 key 都哈希到同一个大小为 <span
+class="math inline">\(2^m\)</span> 的<strong>环形 ID
+空间</strong>。</li>
+<li>key <span class="math inline">\(k\)</span> 由其
+<strong>successor</strong>（顺时针方向第一个 <span
+class="math inline">\(\text{ID} \ge k\)</span> 的节点）负责。</li>
+<li>每个节点维护一张 <strong>finger table</strong>：节点 <span
+class="math inline">\(i\)</span> 的第 <span
+class="math inline">\(j\)</span> 项指向</li>
+</ul>
+<p><span class="math display">\[\text{finger}[j] =
+\text{successor}\big((i + 2^{\,j-1}) \bmod 2^m\big), \qquad j =
+1,\dots,m\]</span></p>
+<p>即提供 <span class="math inline">\(1,2,4,8,\dots\)</span>
+这些不同尺度的「跳跃边」。 - <strong>lookup 路由原则</strong>：<em>Go as
+far as possible, but never pass the target</em> —— 转发给 finger table
+中不越过目标的最大节点。每跳至少把到目标的距离减半，因此 lookup
+的消息数为 <span class="math inline">\(O(\log_2 n)\)</span>。</p>
+<hr />
+<h2 id="二题解">二、题解</h2>
+<h3 id="exercise-1power-law幂律分布">Exercise 1：Power
+Law（幂律分布）</h3>
+<p><strong>题目</strong>：某新闻网站（如
+CNN、NYT）首页有指向大量文章的链接，运营者关心文章的<strong>流行度分布</strong>：「作为
+<span class="math inline">\(k\)</span> 的函数，有多少比例的文章被恰好
+<span class="math inline">\(k\)</span>
+个人浏览过？」。现在网站打算改版，在每个链接旁显示一个<strong>点击计数器</strong>（如「30,480
+人已阅读」，并实时更新）。</p>
+<p><strong>(1) 这个改动会如何影响用户行为？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：人们更倾向于点击旁边数字最大的链接。</p>
+</blockquote>
+<p><strong>解析</strong>：计数器把「流行度」变成了<strong>公开可见的信号</strong>。在信息不充分时，用户会把「别人读得多」当作「这篇值得读」的线索（类似信息级联里的从众）。于是注意力进一步向已经热门的文章集中。</p>
+<p><strong>(2)
+加上这个功能后，文章流行度分布会更接近还是更不接近幂律？为什么？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：会<strong>更接近</strong>幂律分布。因为人们更可能去点击浏览量已经最高的页面。</p>
+</blockquote>
+<p><strong>解析</strong>：计数器把流行度反馈给了用户，制造了
+<strong>rich-get-richer / 优先连接</strong> 的正反馈 ——
+已经热门的文章获得更多点击、数字更大、又吸引更多点击。这种「按当前流行度成比例地获得新流行度」的机制，正是幂律分布的生成原因，因此分布会更接近
+<span class="math inline">\(f(k)\approx
+a\,k^{-c}\)</span>。反之，若不显示计数器，用户选择更分散、更接近独立随机，分布的重尾会被削弱。</p>
+<p><em>(Duration: 10 min)</em></p>
+<hr />
+<h3 id="exercise-2small-world小世界">Exercise 2：Small
+World（小世界）</h3>
+<p><strong>题目</strong>：经典「六度分隔」问的是：社交网络里大多数人对之间是否存在长度不超过
+6
+的路径（边表示两人以名相称地认识）。现在做一个变体：让每个人列出自己最熟的
+30 个人，按熟悉程度降序排列（假设每人都能列满 30
+人），并据此构造两个<strong>有向</strong>网络：</p>
+<ul>
+<li><strong>close-friend 网络</strong>：每人只向列表中<strong>最熟的前
+10 人</strong>连有向边；</li>
+<li><strong>distant-friend 网络</strong>：每人只向列表中<strong>第 21–30
+位</strong>的人连有向边。</li>
+</ul>
+<p><strong>(1) 在 close-friend
+网络中，是否「每一对」人之间都很可能存在长度 ≤ 6 的路径？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：不会。小世界现象说的是<strong>大多数（MOST）</strong>人对之间存在
+≤ 6 的路径，而不是所有。总会存在一些相距很远的人对，其最短距离大于
+6。</p>
+</blockquote>
+<p><strong>解析</strong>：这是对小世界陈述的精确理解 ——
+它是关于「绝大多数节点对」的统计性质，而非对<strong>每一对</strong>都成立的全称命题。尤其在只保留强联系（前
+10 名）的网络里，捷径很少，更容易出现距离 &gt; 6 的边缘人对。</p>
+<p><strong>(2) 设 <span class="math inline">\(C\)</span> = close-friend
+网络中一个人 6 步内平均能到达的人数，<span
+class="math inline">\(D\)</span> = distant-friend
+网络中的对应值（对全体取平均）。实证研究通常发现 <span
+class="math inline">\(C\)</span>、<span class="math inline">\(D\)</span>
+中有一个</strong>一致地<strong>更大。你认为哪个更大？简述理由。</strong></p>
+<blockquote>
+<p><strong>答案</strong>：<span class="math inline">\(D &gt;
+C\)</span>。因为「远距离朋友」这类<strong>弱联系连接到不同的
+cluster</strong>，而你<strong>最熟的朋友们彼此往往也互相认识</strong>。</p>
+</blockquote>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>close-friend（强联系）网络中存在强烈的 <strong>三元闭包 /
+重叠</strong>：你的前 10
+名好友很可能彼此也是好友，于是从你出发几步能到的人<strong>高度重复</strong>，可达集合扩张慢
+→ <span class="math inline">\(C\)</span> 小。</li>
+<li>distant-friend（弱联系）网络中的边更像 <strong>捷径（long-range /
+weak
+ties）</strong>，跳到与你社群不同的人群里，重叠少、每一步都打开<strong>新的、非冗余</strong>的人群
+→ 可达集合扩张快 → <span class="math inline">\(D\)</span> 大。</li>
+</ul>
+<p>这正是「弱联系的力量」在去中心化扩散上的体现：弱联系虽不亲密，却对<strong>短路径与信息传播</strong>至关重要，故
+<span class="math inline">\(D &gt; C\)</span>。</p>
+<p><em>(Duration: 20 min)</em></p>
+<hr />
+<h3 id="exercise-3p2p-overlayschord-dht">Exercise 3：P2P Overlays（Chord
+DHT）</h3>
+<p><strong>背景（Figure 1）</strong>：16 个节点编号 <span
+class="math inline">\(1,2,\dots,16\)</span> 顺时针均匀排布在一个环形
+overlay 上（ID 空间大小 <span class="math inline">\(2^m=16\)</span>，即
+<span class="math inline">\(m=4\)</span>；编号 16 等价于位置
+0）。本题所有节点都在线，因此 <span
+class="math inline">\(\text{successor}(x)\)</span> 就是 <span
+class="math inline">\(x\)</span> 本身（其中 <span
+class="math inline">\(17\equiv 1,\,18\equiv 2,\dots\)</span>）。</p>
+<p><strong>(1) 实现 Chord DHT，每个节点的 finger table
+应有几项？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：<span class="math inline">\(\log_2 16 =
+4\)</span> 项。</p>
+</blockquote>
+<p><strong>解析</strong>：finger table 的项数等于 ID 用的位数 <span
+class="math inline">\(m\)</span>。这里 <span class="math inline">\(2^m =
+16 \Rightarrow m = \log_2 16 = 4\)</span>，对应偏移量 <span
+class="math inline">\(2^0,2^1,2^2,2^3 = 1,2,4,8\)</span>。</p>
+<p><strong>(2) 画出节点 5 和节点 14 的出向 finger 边。</strong></p>
+<p>用公式 <span
+class="math inline">\(\text{finger}[j]=\text{successor}\big((i+2^{\,j-1})\bmod
+16\big)\)</span> 计算（所有节点在线，successor 即取模后的编号）：</p>
+<blockquote>
+<p><strong>为什么 <span class="math inline">\(j\)</span> 只到 4、没有
+<span class="math inline">\(j=5\)</span>？</strong> finger table
+的<strong>项数恒等于 <span class="math inline">\(m\)</span></strong>（由
+ID 空间位数决定，本题 <span class="math inline">\(2^m=16\Rightarrow
+m=4\)</span>），与节点的<strong>编号无关</strong>。所以无论是节点
+5、节点 14 还是任何节点，<span class="math inline">\(j\)</span> 都只取
+<span class="math inline">\(1,2,3,4\)</span>，对应偏移量 <span
+class="math inline">\(2^{0},2^{1},2^{2},2^{3}=1,2,4,8\)</span>。这里的「5」是<strong>节点
+id <span
+class="math inline">\(i\)</span></strong>，不是表项数——别把节点编号和索引
+<span class="math inline">\(j\)</span> 混淆了。（若 <span
+class="math inline">\(m=5\)</span>、ID 空间 <span
+class="math inline">\(2^5=32\)</span>，才会有 <span
+class="math inline">\(j=5\)</span>。）</p>
+</blockquote>
+<p><strong>节点 5</strong> 的 finger table：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(j\)</span></th>
+<th>start <span class="math inline">\(=(5+2^{j-1})\bmod 16\)</span></th>
+<th>successor（finger 指向）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>6</td>
+<td><strong>6</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>7</td>
+<td><strong>7</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>13</td>
+<td><strong>13</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 节点 5 的出向 finger 边：<span class="math inline">\(5\to 6,\ 5\to
+7,\ 5\to 9,\ 5\to 13\)</span>。</p>
+<p><strong>节点 14</strong> 的 finger table：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(j\)</span></th>
+<th>start <span class="math inline">\(=(14+2^{j-1})\bmod
+16\)</span></th>
+<th>successor（finger 指向）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>15</td>
+<td><strong>15</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>16</td>
+<td><strong>16</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="math inline">\(18\equiv 2\)</span></td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="math inline">\(22\equiv 6\)</span></td>
+<td><strong>6</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 节点 14 的出向 finger 边：<span class="math inline">\(14\to 15,\
+14\to 16,\ 14\to 2,\ 14\to 6\)</span>。</p>
+<p>（与讲义 Figure 2 一致。）</p>
+<p><strong>(3) 节点 1 发起、目标 key 为 16 的 lookup，会经过哪些 finger
+边？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：<span class="math inline">\(\langle
+1,9\rangle,\ \langle 9,13\rangle,\ \langle 13,15\rangle,\ \langle
+15,16\rangle\)</span>。</p>
+</blockquote>
+<p><strong>解析</strong>：路由规则是「在不越过目标的前提下尽量走远」——每一步转发给当前节点
+finger table 中<strong>不超过目标 16 的最大</strong>
+finger。逐跳追踪：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>当前节点</th>
+<th>finger table</th>
+<th>不越过 16 的最大 finger</th>
+<th>转发到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><span class="math inline">\(\{2,3,5,9\}\)</span></td>
+<td>9</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><span class="math inline">\(\{10,11,13,1\}\)</span></td>
+<td>13</td>
+<td><strong>13</strong></td>
+</tr>
+<tr>
+<td>13</td>
+<td><span class="math inline">\(\{14,15,1,5\}\)</span></td>
+<td>15</td>
+<td><strong>15</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td><span class="math inline">\(\{16,1,3,7\}\)</span></td>
+<td>16（即 <span
+class="math inline">\(\text{successor}(15)=16\)</span>，恰好负责 key
+16）</td>
+<td><strong>16</strong></td>
+</tr>
+</tbody>
+</table>
+<p>于是路径为 <span class="math inline">\(1\to 9\to 13\to 15\to
+16\)</span>，依次经过 finger 边 <span
+class="math inline">\(\langle1,9\rangle,\langle9,13\rangle,\langle13,15\rangle,\langle15,16\rangle\)</span>，共
+4 跳命中。</p>
+<p><strong>(4) 一次 lookup 最多会触发多少条消息？</strong></p>
+<blockquote>
+<p><strong>答案</strong>：<span class="math inline">\(\log_2 16 =
+4\)</span> 条。</p>
+</blockquote>
+<p><strong>解析</strong>：每一跳至少把当前节点到目标的环上距离<strong>减半</strong>（finger
+提供 <span class="math inline">\(1,2,4,8\)</span>
+的跳跃尺度），所以从任意节点到任意 key 最多需要 <span
+class="math inline">\(\log_2 n\)</span> 跳。此处 <span
+class="math inline">\(n=16 \Rightarrow \log_2 16 = 4\)</span>，与 (3)
+中的最长路径一致。</p>
+<p><em>(Duration: 20 min)</em></p>
+<hr />
+<h2 id="三小结">三、小结</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>主题</th>
+<th>核心结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>幂律</td>
+<td>让流行度可见 → 富者愈富正反馈 → 分布更接近 <span
+class="math inline">\(f(k)=ak^{-c}\)</span></td>
+</tr>
+<tr>
+<td>小世界</td>
+<td>小世界是「大多数」节点对短路径；弱联系（distant friends）跨社群，6
+步可达人数 <span class="math inline">\(D&gt;C\)</span></td>
+</tr>
+<tr>
+<td>Chord</td>
+<td>finger 项数 <span class="math inline">\(=m=\log_2 n\)</span>；<span
+class="math inline">\(\text{finger}[j]=\text{succ}(i+2^{j-1})\)</span>；路由「不越过目标尽量走远」，消息数
+<span class="math inline">\(O(\log_2 n)\)</span></td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/COMP5313/" rel="tag"><i class="fa fa-tag"></i> COMP5313</a>
+              <a href="/tags/Power-Law/" rel="tag"><i class="fa fa-tag"></i> Power Law</a>
+              <a href="/tags/Small-World/" rel="tag"><i class="fa fa-tag"></i> Small World</a>
+              <a href="/tags/Chord/" rel="tag"><i class="fa fa-tag"></i> Chord</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/comp5270-a3-feedback-detailed.html" rel="prev" title="COMP5270 Assignment 3 Feedback-only 中文详细题解">
+                  <i class="fa fa-angle-left"></i> COMP5270 Assignment 3 Feedback-only 中文详细题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/32a9fbe.html" rel="next" title="COMP5313 Week 10 Power Law 与 Small World 讲课总结">
+                  COMP5313 Week 10 Power Law 与 Small World 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">759k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">46:01</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
