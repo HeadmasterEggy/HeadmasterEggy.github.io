@@ -326,51 +326,51 @@ key 的节点。</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>内容</th>
 <th>是否考</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>P2P 系统简介（overlay、结构化/非结构化、Napster、Gnutella）</td>
 <td>🚫 不考（仅用于引出 lookup）</td>
 </tr>
-<tr class="even">
+<tr>
 <td>查找问题 Lookup Problem</td>
 <td>✅ 考点</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>分布式哈希表 DHT 与 <code>lookup(key)</code></td>
 <td>✅ 考点</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Chord：一致性哈希环 + successor 规则</td>
 <td>✅ 考点</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Chord：<strong>finger table 构造 + lookup 路由</strong></td>
 <td>⚠️ 高频必考</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Chord：时间/空间复杂度 <span class="math inline">\(O(\log
 n)\)</span></td>
 <td>✅ 考点</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Chord：successor list 容错、join、stabilization</td>
 <td>🚫 论文深度，不考</td>
 </tr>
-<tr class="even">
+<tr>
 <td>CAN：<span class="math inline">\(d\)</span> 维
 zones、贪心路由、复杂度</td>
 <td>✅ 考点（细节不必过深）</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Chord vs CAN 对比</td>
 <td>✅ 考点</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Pastry / Tapestry / Kademlia / Viceroy / Freenet</td>
 <td>🚫 课上未讲，不考</td>
 </tr>
@@ -417,7 +417,7 @@ key，<strong>不依赖任何中心服务器或层级结构</strong>，仅用局
 <col style="width: 20%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>方案</th>
 <th>代表</th>
 <th>查找机制</th>
@@ -426,21 +426,21 @@ key，<strong>不依赖任何中心服务器或层级结构</strong>，仅用局
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>中心化</td>
 <td>Napster</td>
 <td>中心服务器存目录，查询问服务器</td>
 <td>单点故障、扩展性差</td>
 <td>🚫</td>
 </tr>
-<tr class="even">
+<tr>
 <td>洪泛 flooding</td>
 <td>Gnutella</td>
 <td>把请求转发给<strong>所有</strong>邻居</td>
 <td>健壮但消息量大、最坏 <span class="math inline">\(O(n)\)</span></td>
 <td>🚫</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>结构化对称</td>
 <td><strong>Chord、CAN（DHT）</strong></td>
 <td>节点对称、维护少量邻居、按规则路由</td>
@@ -545,29 +545,29 @@ class="math inline">\(\{1,3,5,8,9,11,14,15\}\)</span>。</p>
 <p>节点 1 的 finger table：</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th><span class="math inline">\(j\)</span></th>
 <th>start <span class="math inline">\(=(1+2^{j-1})\bmod 16\)</span></th>
 <th>successor（负责节点）</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>2</td>
 <td><strong>3</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td>3</td>
 <td><strong>3</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>5</td>
 <td><strong>5</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td>9</td>
 <td><strong>9</strong></td>
@@ -577,29 +577,29 @@ class="math inline">\(\{1,3,5,8,9,11,14,15\}\)</span>。</p>
 <p>节点 8 的 finger table：</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th><span class="math inline">\(j\)</span></th>
 <th>start <span class="math inline">\(=(8+2^{j-1})\bmod 16\)</span></th>
 <th>successor</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>9</td>
 <td><strong>9</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td>10</td>
 <td><strong>11</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>12</td>
 <td><strong>14</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td><span class="math inline">\(16\equiv 0\)</span></td>
 <td><strong>1</strong></td>
@@ -625,7 +625,7 @@ successor」之间，直接交给 successor； 2. 否则，转发给 finger tabl
 <col style="width: 20%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>当前节点</th>
 <th>finger table</th>
 <th>key 13 ∈ (当前, succ]?</th>
@@ -634,21 +634,21 @@ successor」之间，直接交给 successor； 2. 否则，转发给 finger tabl
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>[3, 3, 5, 9]</td>
 <td>(1, 3] 否</td>
 <td>9</td>
 <td><strong>9</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>9</td>
 <td>[11, 11, 14, 1]</td>
 <td>(9, 11] 否</td>
 <td>11</td>
 <td><strong>11</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>11</td>
 <td>[14, 14, 15, 3]</td>
 <td>(11, 14] <strong>是</strong>（succ=14 负责 13）</td>
@@ -754,42 +754,42 @@ class="math inline">\(P\)</span> 的节点把其 zone
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>维度</th>
 <th>Chord</th>
 <th>CAN</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>结构</td>
 <td>一维环形 ID 空间 <span class="math inline">\(2^m\)</span></td>
 <td><span class="math inline">\(d\)</span> 维笛卡尔坐标空间，分
 zones</td>
 </tr>
-<tr class="even">
+<tr>
 <td>key 归属</td>
 <td>顺时针第一个 id <span class="math inline">\(\ge k\)</span>
 的节点（successor）</td>
 <td>包含 key 坐标点的 zone</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>路由信息</td>
 <td>finger table（<span class="math inline">\(1,2,4,\dots\)</span>
 跳）</td>
 <td>约 <span class="math inline">\(2d\)</span> 个相邻 zone 的邻居</td>
 </tr>
-<tr class="even">
+<tr>
 <td>路由策略</td>
 <td>不越过目标尽量走远</td>
 <td>贪心选坐标最近邻、直线逼近</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>查找时间</td>
 <td><span class="math inline">\(O(\log n)\)</span></td>
 <td><span class="math inline">\(O(d\,n^{1/d})\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td>每节点空间</td>
 <td><span class="math inline">\(O(\log n)\)</span></td>
 <td><span class="math inline">\(O(d)\)</span></td>
@@ -905,14 +905,14 @@ class="math inline">\(d\)</span> 维 zone 与贪心路由。</li>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">824k</span>
+    <span title="Word count total">825k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">49:55</span>
+    <span title="Reading time total">50:01</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
