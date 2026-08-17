@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 学期项目 One-Person AI Company 的完整指南，整合 Project Description 的两阶段评分要求、Tutorial 1 的 AI Agent 与 MAS 概念、LLM 与 Agent 的区别、三个伦理案例讨论、StrideWise AI 完整示例与 company brief 模板，以及 Lab 1 的组队与选题任务。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 项目指南：One-Person AI Company（Tutorial 1 + Lab 1 + Project Description）">
+<meta property="og:url" content="http://example.com/posts/elec5620-project-guide-one-person-ai-company.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 学期项目 One-Person AI Company 的完整指南，整合 Project Description 的两阶段评分要求、Tutorial 1 的 AI Agent 与 MAS 概念、LLM 与 Agent 的区别、三个伦理案例讨论、StrideWise AI 完整示例与 company brief 模板，以及 Lab 1 的组队与选题任务。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-08-13T16:30:00.000Z">
+<meta property="article:modified_time" content="2026-08-13T08:36:59.751Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="One-Person AI Company">
+<meta property="article:tag" content="Multi-Agent System">
+<meta property="article:tag" content="LLM Agent">
+<meta property="article:tag" content="Project">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/elec5620-project-guide-one-person-ai-company.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/elec5620-project-guide-one-person-ai-company.html","path":"posts/elec5620-project-guide-one-person-ai-company.html","title":"ELEC5620 项目指南：One-Person AI Company（Tutorial 1 + Lab 1 + Project Description）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 项目指南：One-Person AI Company（Tutorial 1 + Lab 1 + Project Description） | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/elec5620-project-guide-one-person-ai-company.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">193</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">29</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">250</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-%E9%A1%B9%E7%9B%AE%E6%8C%87%E5%8D%97one-person-ai-company"><span class="nav-text">ELEC5620
+项目指南：One-Person AI Company</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%E4%B8%8E%E4%B8%BB%E9%A2%98"><span class="nav-text">一、项目背景与主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%80%89%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F%E4%B8%83%E9%80%89%E4%B8%80"><span class="nav-text">可选应用领域（七选一）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cstage-1%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%BB%BA%E6%A8%A130-%E5%88%86"><span class="nav-text">二、Stage
+1：需求文档、架构设计与系统建模（30 分）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E9%83%A8%E5%88%8615-%E5%88%86"><span class="nav-text">2.1 报告部分（15 分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#presentation-%E4%B8%8E-interview15-%E5%88%86"><span class="nav-text">2.2 Presentation 与
+Interview（15 分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">2.3 其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89stage-2%E5%8E%9F%E5%9E%8B%E5%AE%9E%E7%8E%B0%E4%B8%8E%E6%BC%94%E7%A4%BA20-%E5%88%86"><span class="nav-text">三、Stage 2：原型实现与演示（20
+分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Btutorial-1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B8%80ai-agent"><span class="nav-text">四、Tutorial 1
+核心概念（一）：AI Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#llm-%E4%B8%8D%E4%BC%9A%E8%87%AA%E5%8A%A8%E6%88%90%E4%B8%BA-agent%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%80%E5%BC%A0%E5%AF%B9%E6%AF%94%E8%A1%A8"><span class="nav-text">4.1 ⭐ LLM
+不会自动成为 Agent（最重要的一张对比表）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent-%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%9E%84%E6%88%90"><span class="nav-text">4.2 Agent 的定义与构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7tools"><span class="nav-text">4.3 工具（Tools）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-agent-systemmas"><span class="nav-text">4.4 ⭐ Multi-Agent System（MAS）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94tutorial-1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%BA%8C%E4%B8%89%E4%B8%AA%E6%A1%88%E4%BE%8B%E8%AE%A8%E8%AE%BA"><span class="nav-text">五、Tutorial 1
+核心概念（二）：三个案例讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%80ai-%E4%B8%8E%E5%AD%A6%E4%B9%A0"><span class="nav-text">5.1 案例一：AI 与学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%BA%8C%E5%85%8D%E8%B4%B9%E7%9A%84-ai-%E5%8A%A9%E6%89%8B%E7%9C%9F%E7%9A%84%E5%85%8D%E8%B4%B9%E5%90%97"><span class="nav-text">5.2 案例二：免费的 AI
+助手真的免费吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%89%E7%BC%BA%E4%B9%8F%E4%BA%BA%E7%B1%BB%E5%88%A4%E6%96%AD%E7%9A%84-ai-%E6%B2%BB%E7%96%97%E5%B8%88"><span class="nav-text">5.3 案例三：缺乏人类判断的 AI
+治疗师</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD-%E4%BB%8E%E5%AE%A2%E6%88%B7%E9%9C%80%E6%B1%82%E5%88%B0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1stridewise-ai-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="nav-text">六、⭐
+从客户需求到系统设计：StrideWise AI 完整示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E6%8B%86%E8%A7%A3%E8%A1%A8%E5%B1%82%E8%AF%B7%E6%B1%82"><span class="nav-text">6.1 第一步：拆解表层请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%86%99-company-brief"><span class="nav-text">6.2 第二步：写 Company Brief</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D-company-brief-%E6%A8%A1%E6%9D%BF%E7%9B%B4%E6%8E%A5%E6%8B%BF%E5%8E%BB%E7%94%A8"><span class="nav-text">6.3 ⭐ 一句话 Company Brief
+模板（直接拿去用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E9%9C%80%E6%B1%82-%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%A0%E5%B0%84%E8%A1%A8%E6%9C%80%E9%87%8D%E8%A6%81"><span class="nav-text">6.4 ⭐⭐ 第三步：需求 →
+系统设计的映射表（最重要）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83lab-1week-2%E7%BB%84%E9%98%9F%E4%B8%8E%E9%80%89%E9%A2%98"><span class="nav-text">七、Lab 1（Week 2）：组队与选题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#part-one%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D%E4%B8%8E%E7%BB%84%E9%98%9F"><span class="nav-text">7.1 Part One：自我介绍与组队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-two%E9%80%89%E9%A2%98"><span class="nav-text">7.2 Part Two：选题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-three%E9%A1%B9%E7%9B%AE%E8%80%83%E9%87%8F%E4%BA%94%E7%82%B9"><span class="nav-text">7.3 Part Three：项目考量五点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-four%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3lab-1-%E7%9A%84%E4%BA%A7%E5%87%BA"><span class="nav-text">7.4 Part Four：项目文档（Lab 1
+的产出）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%B7%A5%E5%85%B7%E6%B8%85%E5%8D%95"><span class="nav-text">八、工具清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%97%B6%E9%97%B4%E7%BA%BF%E4%B8%8E%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">九、时间线与检查清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E6%8A%8A%E4%B8%A4%E5%91%A8%E5%86%85%E5%AE%B9%E4%B8%B2%E8%B5%B7%E6%9D%A5"><span class="nav-text">十、把两周内容串起来</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">250</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">193</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/elec5620-project-guide-one-person-ai-company.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 项目指南：One-Person AI Company（Tutorial 1 + Lab 1 + Project Description） | Joey">
+      <meta itemprop="description" content="ELEC5620 学期项目 One-Person AI Company 的完整指南，整合 Project Description 的两阶段评分要求、Tutorial 1 的 AI Agent 与 MAS 概念、LLM 与 Agent 的区别、三个伦理案例讨论、StrideWise AI 完整示例与 company brief 模板，以及 Lab 1 的组队与选题任务。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 项目指南：One-Person AI Company（Tutorial 1 + Lab 1 + Project Description）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-08-13 16:30:00 / Modified: 08:36:59" itemprop="dateCreated datePublished" datetime="2026-08-13T16:30:00Z">2026-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>16 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 学期项目 One-Person AI Company 的完整指南，整合 Project Description 的两阶段评分要求、Tutorial 1 的 AI Agent 与 MAS 概念、LLM 与 Agent 的区别、三个伦理案例讨论、StrideWise AI 完整示例与 company brief 模板，以及 Lab 1 的组队与选题任务。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-项目指南one-person-ai-company">ELEC5620
+项目指南：One-Person AI Company</h1>
+<blockquote>
+<p><strong>来源</strong>：<code>Project Description.pdf</code> +
+<code>ELEC5620-TUT-01.pdf</code>（39 页）+
+<code>ELEC5620-Lab-Note-1.pdf</code>
+<strong>项目占比</strong>：<strong>50%</strong>（Stage 1 = 30%，Stage 2
+= 20%）</p>
+<p>Tutorial 1 的定位（slide 2）： ⭐ <strong>"The goal: leave with one
+real problem worth investigating—and a disciplined way to model it as a
+One-Person AI Company."</strong>
+（目标：带着<strong>一个值得研究的真实问题</strong>离开，以及<strong>一套有纪律的方法</strong>把它建模成一家
+One-Person AI Company。）</p>
+<p>Tutorial 1 的五个环节：<strong>Welcome &amp; course → Architecture
+Review of Lecture → AI + learning case → Customer &amp; business
+thinking → Company workshop</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一项目背景与主题">一、项目背景与主题</h2>
+<blockquote>
+<p>随着大语言模型的快速发展，智能体（intelligent
+agents）已经具备<strong>规划、决策、工具使用和协作</strong>的能力。这使得<strong>一个人运营一家由多个专业化
+agent 支撑的 AI 驱动虚拟公司</strong>成为可能。</p>
+</blockquote>
+<p><strong>项目主题：One-Person AI Company</strong></p>
+<p>学生需要设计并实现一个 <strong>LLM 驱动的多智能体系统（multi-agent
+system）</strong>，其中：</p>
+<ul>
+<li><strong>不同 agent 承担不同的业务角色</strong></li>
+<li><strong>协作完成任务</strong></li>
+<li><strong>使用外部工具</strong></li>
+<li><strong>根据结果调整自己的行为</strong></li>
+</ul>
+<p>通过<strong>问题定义 → 系统建模 → 实现 → 测试 →
+评估</strong>的完整过程，把 model-based software engineering
+技术应用到智能体系统上。</p>
+<h3 id="可选应用领域七选一">可选应用领域（七选一）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">领域</th>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>Healthcare</strong></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><strong>Smart Personal
+Assistant</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>Finance</strong></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><strong>Smart Cities</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>Smart Home</strong></td>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;"><strong>Education</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>Retail and
+E-commerce</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="二stage-1需求文档架构设计与系统建模30-分">二、Stage
+1：需求文档、架构设计与系统建模（30 分）</h2>
+<h3 id="报告部分15-分">2.1 报告部分（15 分）</h3>
+<p>提交一份正式报告，<strong>必须包含</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">要求</th>
+<th style="text-align: left;">对应的 UML/产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>需求的清晰分类</strong>：<strong>agreement</strong>（约定）、<strong>mandatory
+capabilities</strong>（强制能力）、<strong>optional
+features</strong>（可选特性）</td>
+<td style="text-align: left;">需求分类表</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>User requirement diagram</strong>
+和 <strong>Feature diagram</strong></td>
+<td style="text-align: left;">需求图、特性图</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>主要特性的 use case
+描述</strong>，包括<strong>用户与流程如何与系统交互的步骤</strong></td>
+<td style="text-align: left;"><strong>Use case diagram</strong> +
+步骤说明</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>系统结构与生命周期流程的描述</strong>：高层组件、<strong>互连与相互依赖</strong></td>
+<td style="text-align: left;"><strong>Package
+diagram</strong>、<strong>Class
+diagram</strong>、collaborations、<strong>structured class</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">⭐
+<strong>关键组件的行为描述</strong>，<strong>特别聚焦于 LLM 在 agent
+系统中的角色</strong>；支撑组件简要描述即可</td>
+<td style="text-align: left;"><strong>Activity
+diagram</strong>、<strong>State machine</strong>、<strong>Sequence
+diagram</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><strong>关键组件之间的关系</strong>，用以<strong>说明对未来开发工作的支持</strong></td>
+<td style="text-align: left;">关系图</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">⭐
+<strong>设计过程中所做的假设（assumptions）</strong></td>
+<td style="text-align: left;">文字说明</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>第 5 条是本项目的核心差异点</strong>——<strong>必须把 LLM
+在 agent 系统中扮演什么角色讲清楚</strong>，而不是把 LLM 当成一个黑盒
+API。</p>
+</blockquote>
+<h3 id="presentation-与-interview15-分">2.2 Presentation 与
+Interview（15 分）</h3>
+<p><strong>演示 slides 必须覆盖</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 55%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>提出的需求及其分类</strong>（以便最终确定需求）</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">⭐
+<strong>提出的设计，以及设计选择的理由（rationale）——
+包括被放弃的选项（discarded choices）</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>所有模型的总览</strong>（Overview
+of the models / all UMLs）</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">⭐
+<strong>变更评估与验收判定的依据</strong>（The basis for change
+assessment and acceptance determination）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⭐ <strong>第 2 条是最容易丢分的地方</strong>：不能只说"我们选了
+X"，<strong>必须说明为什么选 X，以及为什么放弃了 Y 和
+Z</strong>。这正好呼应 Week 1 讲的 <strong>architecture
+trade-offs</strong>。</p>
+</blockquote>
+<h3 id="其他">2.3 其他</h3>
+<ul>
+<li>⭐ <strong>必须清楚写明每位组员的贡献</strong>（The contribution of
+each group member should be specified clearly）</li>
+<li>Tutorial 版本提到 Stage 1 还包含 <strong>video
+presentation</strong>（slides required）</li>
+</ul>
+<hr>
+<h2 id="三stage-2原型实现与演示20-分">三、Stage 2：原型实现与演示（20
+分）</h2>
+<p>基于 Stage 1 的架构设计实现一个 <strong>proof-of-concept
+原型</strong>，向 stakeholders（tutors）演示。<strong>必须实践 Agile
+软件开发模型</strong>（课上会讲）。</p>
+<p><strong>四条要求</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">要求</th>
+<th style="text-align: left;">Tutorial 给出的评分细节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>基于 Stage 1
+的需求和设计开发，实现大部分模型</strong></td>
+<td style="text-align: left;">⭐
+<strong>核心特性是强制的</strong>；<strong>特性的数量和质量都会被考量</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">⭐ <strong>演示 LLM 如何增强 agent
+的感知、决策与交互能力</strong></td>
+<td style="text-align: left;"><strong>使用 LLM
+的证据</strong>；<strong>合理的用法与设计</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>反映使用 Agile
+开发模型的经历</strong></td>
+<td style="text-align: left;">⭐ <strong>Jira 的时间线作为证据</strong>
++ 支撑文档</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>在软件中使用先进技术</strong></td>
+<td style="text-align: left;"><strong>包含的技术数量，以及是否开发完善</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>时间安排</strong>：</p>
+<ul>
+<li><strong>Demonstration 在最后一周（Week 13）进行</strong></li>
+<li>⭐ <strong>项目源代码必须在最后一周的周一之前上传到
+Canvas</strong></li>
+</ul>
+<hr>
+<h2 id="四tutorial-1-核心概念一ai-agent">四、Tutorial 1
+核心概念（一）：AI Agent</h2>
+<h3 id="llm-不会自动成为-agent最重要的一张对比表">4.1 ⭐ LLM
+不会自动成为 Agent（最重要的一张对比表）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>LLM</strong></th>
+<th style="text-align: left;"><strong>AGENT</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>生成和转换语言</strong>（Generates
+and transforms language）</td>
+<td style="text-align: left;">⭐
+<strong>跨多个步骤追求一个目标</strong>（Pursues a goal across multiple
+steps）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>响应当前的
+prompt</strong>（Responds to the current prompt）</td>
+<td style="text-align: left;">⭐
+<strong>使用工具并观察结果</strong>（Uses tools and observes
+results）</td>
+</tr>
+<tr>
+<td style="text-align: left;">⭐
+<strong>可能不知道自己的回答是否改变了世界</strong>（May not know
+whether an answer changed the world）</td>
+<td style="text-align: left;">⭐
+<strong>在约束内选择下一步行动</strong>（Chooses the next action within
+constraints）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⭐ <strong>Tutorial 给出的设计箴言</strong>： <strong>"The design
+question is not 'Which model?' first. It is 'What loop should the system
+responsibly complete?'"</strong>
+（<strong>首要的设计问题不是"用哪个模型"，而是"这个系统应当负责任地完成什么样的循环"。</strong>）</p>
+</blockquote>
+<h3 id="agent-的定义与构成">4.2 Agent 的定义与构成</h3>
+<blockquote>
+<p><strong>An agent is an autonomous entity capable of: perceiving its
+environment, making decisions, taking actions.</strong></p>
+</blockquote>
+<p><strong>三个模块</strong>：<strong>perception（感知）、decision-making（决策）、action（行动）</strong>。</p>
+<p><strong>LLM 何时成为 agent 的一部分</strong>：</p>
+<blockquote>
+<p>⭐ <strong>当它运行在一个 goal-directed
+loop（目标导向的循环）中时</strong>：<strong>观察环境 → 选择行动 →
+使用工具 → 评估结果</strong>。</p>
+</blockquote>
+<p><strong>Agent 如何扩展 LLM</strong>：</p>
+<blockquote>
+<p><strong>gathering evidence（收集证据）、maintaining
+state（维护状态）、using tools（使用工具）、completing multi-step
+tasks（完成多步任务）</strong></p>
+</blockquote>
+<h3 id="工具tools">4.3 工具（Tools）</h3>
+<blockquote>
+<p><strong>如果给 agent
+配上工具，它会变得更强大</strong>——<strong>更高效、更准确</strong>。</p>
+</blockquote>
+<p><strong>能做什么</strong>：检索和处理数据、与外部服务交互、自动化任务、进行复杂分析。</p>
+<p><strong>工具举例</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>数据查询与处理</strong></td>
+<td style="text-align: left;">SQL、Apache Hadoop</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>外部信息与服务</strong></td>
+<td style="text-align: left;">Google Maps API</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>自然语言处理</strong></td>
+<td style="text-align: left;">NLTK、spaCy</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>机器学习/深度学习框架</strong></td>
+<td style="text-align: left;">TensorFlow、PyTorch、sklearn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multi-agent-systemmas">4.4 ⭐ Multi-Agent System（MAS）</h3>
+<blockquote>
+<p><strong>A Multi-Agent System (MAS) is composed of multiple agents
+that can interact, collaborate, and even compete with each other to
+accomplish complex tasks.</strong> （多个 agent
+相互<strong>交互、协作、甚至竞争</strong>以完成复杂任务。）</p>
+</blockquote>
+<p><strong>应用范围</strong>：robotic control、logistics
+management、financial trading、intelligent transportation、game
+design。</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">层面</th>
+<th style="text-align: left;">关注点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>对每个 agent</strong></td>
+<td style="text-align: left;"><strong>不同的角色与职责</strong>；<strong>实时决策</strong>；<strong>处在动态变化的环境中</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>对系统设计</strong></td>
+<td style="text-align: left;">⭐ <strong>仔细规划每个 agent
+的行为</strong>；⭐ <strong>agent 之间的交互与协调机制</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>经典案例</strong>：<strong>AI Agent Town: Generative
+Agents（Stanford）</strong></p>
+<blockquote>
+<p>📌 <strong>这两条"系统设计"要点，就是你 Stage 1 报告里 sequence
+diagram 和 collaboration 要回答的问题。</strong></p>
+</blockquote>
+<hr>
+<h2 id="五tutorial-1-核心概念二三个案例讨论">五、Tutorial 1
+核心概念（二）：三个案例讨论</h2>
+<p>这三个案例都不是闲聊——<strong>它们是在训练你做架构权衡时的判断力</strong>，而且很可能出现在
+interview 提问里。</p>
+<h3 id="案例一ai-与学习">5.1 案例一：AI 与学习</h3>
+<p><strong>讨论题</strong>：⭐ <strong>"If AI helps you finish faster,
+what might you stop learning?"</strong></p>
+<p><strong>Tutorial 引用的研究数据</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">组别</th>
+<th style="text-align: left;">完成速度</th>
+<th style="text-align: center;"><strong>即时测验得分</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>AI-assisted</strong></td>
+<td style="text-align: left;">快约 <strong>2
+分钟</strong>（<strong>差异不具统计显著性</strong>）</td>
+<td style="text-align: center;"><strong>50%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hand coding</strong></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: center;"><strong>67%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⭐ <strong>17 个百分点的差距</strong>。</p>
+<blockquote>
+<p>⭐ <strong>核心结论</strong>：<strong>"Completion and comprehension
+are different
+outcomes."</strong>（<strong>完成和理解是两种不同的结果</strong>）
+<strong>"a completed task can conceal a weaker mental model of the
+system."</strong>（<strong>一个已完成的任务，可能掩盖了对系统更弱的心智模型</strong>）</p>
+</blockquote>
+<p><strong>两种使用 AI 的方式</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>DELEGATE TO
+FINISH（委托以完成）</strong></th>
+<th style="text-align: left;"><strong>USE AI TO UNDERSTAND（用 AI
+来理解）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">生成完整解决方案</td>
+<td style="text-align: left;"><strong>问概念性问题</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">让 AI 调试每一个失败</td>
+<td style="text-align: left;"><strong>要求"解释 + 代码"</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">复制、运行、继续下一个</td>
+<td style="text-align: left;"><strong>检验自己的理解</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">⭐ <strong>更少的独立推理</strong></td>
+<td style="text-align: left;">⭐
+<strong>独立解决一部分错误</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Slide
+自带的严谨性说明</strong>：该研究发现的是<strong>交互模式与结果之间的关联</strong>，<strong>并未确立每种模式的因果效应</strong>。</p>
+</blockquote>
+<h3 id="案例二免费的-ai-助手真的免费吗">5.2 案例二：免费的 AI
+助手真的免费吗？</h3>
+<p><strong>服务可能仍然让你付出</strong>：</p>
+<ul>
+<li><strong>个人和项目数据</strong></li>
+<li><strong>核查不可靠输出所花的时间</strong></li>
+<li>⭐ <strong>独立学习能力的丧失</strong></li>
+<li><strong>对单一平台的依赖</strong></li>
+<li><strong>对数据与输出如何被使用的控制权有限</strong></li>
+</ul>
+<p>⭐ <strong>讨论题</strong>：<strong>"If the monetary price is zero,
+who pays, what do they pay with, and who captures the value?"</strong>
+（如果金钱价格是零，<strong>那么谁在付费、用什么付费、又是谁攫取了价值？</strong>）</p>
+<h3 id="案例三缺乏人类判断的-ai-治疗师">5.3 案例三：缺乏人类判断的 AI
+治疗师</h3>
+<p><strong>背景</strong>：AI
+心理健康聊天机器人越来越被使用，因为它们<strong>便宜、随时可用、比人类治疗师更容易获得</strong>。</p>
+<p><strong>一个 AI 聊天机器人可能会</strong>：</p>
+<ul>
+<li><strong>迎合或强化用户已有的信念</strong>（mirror or reinforce a
+user's beliefs）</li>
+<li><strong>在缺乏充分临床证据的情况下给出自信的建议</strong></li>
+<li>⭐ <strong>无法识别正在发展中的危机</strong>（fail to recognise a
+developing crisis）</li>
+<li>⭐ <strong>通过持续的肯定鼓励情感依赖</strong></li>
+<li>⭐ <strong>对其建议的后果不承担责任</strong></li>
+</ul>
+<p>⭐ <strong>社会风险的核心表述</strong>：</p>
+<blockquote>
+<p><strong>If vulnerable users replace qualified human support with
+systems that cannot reliably challenge, escalate, or take
+responsibility, greater access may also produce greater
+harm.</strong></p>
+<p>（如果脆弱的用户用<strong>无法可靠地质疑、升级或承担责任</strong>的系统，去替代有资质的人类支持，那么<strong>更高的可及性也可能带来更大的伤害</strong>。）</p>
+</blockquote>
+<p><strong>三种设计定位，选哪一种？</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">选项</th>
+<th style="text-align: left;">定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><strong>独立的治疗师</strong>（an
+independent therapist）</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><strong>人类治疗之间的支持工具</strong>（a
+support tool used between human therapy sessions）</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><strong>筛查与转介系统</strong>，把用户连接到有资质的专业人士（a
+screening and referral system）</td>
+</tr>
+</tbody>
+</table>
+<p>⭐ <strong>真正的考题</strong>：<strong>"What architecture and human
+safeguards would your choice require?"</strong>
+（<strong>你的选择需要什么样的架构和人类保障机制？</strong>）</p>
+<blockquote>
+<p>📌 这直接对应 Week 1 讲的 <strong>"Build guardrails"</strong> 和
+<strong>human oversight</strong>——<strong>如果你的项目选 Healthcare
+方向，这一题基本就是你的设计答辩题。</strong></p>
+</blockquote>
+<hr>
+<h2 id="六-从客户需求到系统设计stridewise-ai-完整示例">六、⭐
+从客户需求到系统设计：StrideWise AI 完整示例</h2>
+<p>这是 Tutorial 1
+最有价值的部分——<strong>它给出了从"一句话商业想法"到"工程需求"的完整链条</strong>。</p>
+<h3 id="第一步拆解表层请求">6.1 第一步：拆解表层请求</h3>
+<p><strong>Deconstructing the Shoe Shopper</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">层次</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Surface
+Request（表层请求）</strong></td>
+<td style="text-align: left;">"I want to buy a pair of running
+shoes."</td>
+</tr>
+<tr>
+<td style="text-align: left;">⭐ <strong>Underlying
+Need（底层需求）</strong></td>
+<td style="text-align: left;"><strong>Financial
+confidence</strong>（价格/价值上的信心）、<strong>Fit
+accuracy</strong>（合脚，避免疼痛/受伤）、<strong>Trust</strong>（减少选择过载）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Business
+Goal（业务目标）</strong></td>
+<td style="text-align: left;"><strong>更高的转化率、更低的退货率、更高的客户信任</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⭐ <strong>Key Takeaway</strong>：</p>
+<blockquote>
+<p><strong>"An AI recommendation engine must solve the underlying
+hesitation, not just push sales."</strong> （<strong>AI
+推荐引擎必须解决底层的犹豫，而不只是推销。</strong>）</p>
+</blockquote>
+<h3 id="第二步写-company-brief">6.2 第二步：写 Company Brief</h3>
+<p><strong>StrideWise AI 的正式版本</strong>：</p>
+<blockquote>
+<p><strong>Company Name</strong>: StrideWise AI
+<strong>Purpose</strong>: A One-Person AI Company for Personalised
+Running-Shoe Decisions <strong>Company Brief</strong>: For runners who
+struggle to choose suitable shoes, StrideWise AI coordinates
+<strong>fit-analysis, product-research, inventory, and customer-support
+agents</strong> to recommend available shoes that match the customer's
+feet, running style, and budget. ⭐ <strong>The human founder reviews
+health-related advice, uncertain recommendations, and exceptional
+cases.</strong></p>
+</blockquote>
+<h3 id="一句话-company-brief-模板直接拿去用">6.3 ⭐ 一句话 Company Brief
+模板（直接拿去用）</h3>
+<blockquote>
+<p><strong>For [target user] in [situation], [problem] occurs because
+[cause].</strong> <strong>Our one-person AI company coordinates [agent
+roles] to [outcome],</strong> <strong>while the human founder approves
+[high-impact decision].</strong></p>
+</blockquote>
+<p><strong>五项检查清单</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">✓</th>
+<th style="text-align: left;">项目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">□</td>
+<td style="text-align: left;"><strong>specific
+user</strong>（具体的用户，不是"所有人"）</td>
+</tr>
+<tr>
+<td style="text-align: center;">□</td>
+<td style="text-align: left;"><strong>real
+evidence</strong>（真实的证据，不是想当然）</td>
+</tr>
+<tr>
+<td style="text-align: center;">□</td>
+<td style="text-align: left;"><strong>measurable
+value</strong>（可测量的价值）</td>
+</tr>
+<tr>
+<td style="text-align: center;">□</td>
+<td style="text-align: left;"><strong>multi-agent roles</strong>（多个
+agent 角色）</td>
+</tr>
+<tr>
+<td style="text-align: center;">□</td>
+<td style="text-align: left;">⭐ <strong>human
+accountability</strong>（人类问责——创始人批准什么）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>展开版模板</strong>（slide 37 的句式）：</p>
+<blockquote>
+<p><strong>(公司名)</strong> is a one-person AI company designed to
+<strong>(目标)</strong> in <strong>(场景)</strong> by
+<strong>(手段)</strong> based on each customer's
+<strong>(输入维度)</strong>. The company coordinates specialised AI
+agents and technologies—including <strong>(技术栈)</strong>—to
+<strong>(具体动作序列)</strong>.</p>
+</blockquote>
+<h3 id="第三步需求-系统设计的映射表最重要">6.4 ⭐⭐ 第三步：需求 →
+系统设计的映射表（最重要）</h3>
+<p><strong>StrideWise AI: From Customer Need to System
+Design</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Agent Element</strong></th>
+<th style="text-align: left;"><strong>StrideWise AI 示例</strong></th>
+<th style="text-align: left;"><strong>Engineering
+Requirement（工程需求）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Environment</strong>（环境）</td>
+<td style="text-align: left;">客户、脚部、产品和库存数据</td>
+<td style="text-align: left;"><strong>安全的数据模型与 API
+集成</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Perception</strong>（感知）</td>
+<td style="text-align: left;">捕捉偏好、分析足部扫描</td>
+<td style="text-align: left;"><strong>多模态处理与偏好抽取</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Decision-Making</strong>（决策）</td>
+<td style="text-align: left;">按合脚度、舒适度、价格、可获得性对鞋进行排序</td>
+<td style="text-align: left;"><strong>推荐逻辑与约束检查</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Action &amp;
+Tools</strong>（行动与工具）</td>
+<td style="text-align: left;">解释推荐理由、预留鞋子</td>
+<td style="text-align: left;"><strong>库存
+API、确认与响应生成</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feedback</strong>（反馈）</td>
+<td style="text-align: left;">记录试穿、满意度、退货、拒绝</td>
+<td style="text-align: left;"><strong>可追溯的反馈与模型精化</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">⭐ <strong>Human
+Oversight</strong>（人类监督）</td>
+<td style="text-align: left;">审查健康相关问题和不确定的案例</td>
+<td style="text-align: left;">⭐
+<strong>置信度阈值、升级机制与审批规则</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>📌 <strong>这张表就是你 Stage 1 报告的骨架。</strong>
+左列是<strong>通用的 agent
+六要素</strong>，中列是<strong>你的业务场景</strong>，右列是<strong>要写进架构设计的工程需求</strong>。
+<strong>照着这个结构填自己的项目，Stage 1
+的"关键组件行为描述"就有了。</strong></p>
+</blockquote>
+<hr>
+<h2 id="七lab-1week-2组队与选题">七、Lab 1（Week 2）：组队与选题</h2>
+<h3 id="part-one自我介绍与组队">7.1 Part One：自我介绍与组队</h3>
+<p><strong>破冰问题</strong>：</p>
+<ol type="1">
+<li>是什么驱动你参与这个项目？</li>
+<li>这学期你最期待什么？</li>
+<li><strong>你以前接触过 agentic AI 或 LLM 吗？</strong></li>
+<li><strong>你能给团队带来什么技能或优势？</strong></li>
+<li>你有兴趣探索或深入了解哪些领域？</li>
+</ol>
+<p><strong>组队规则</strong>：</p>
+<ul>
+<li><strong>3–5 人</strong>，⭐
+<strong>争取技能组合多样化</strong>，以便应对项目的不同方面</li>
+<li>⭐ <strong>在 Canvas 上加入对应自己 lab 时间的组</strong></li>
+<li>⭐ <strong>组名格式必须是「lab 时间 + 组号」</strong>，例如
+<strong><code>Mon 10-12 Group 1</code></strong></li>
+</ul>
+<h3 id="part-two选题">7.2 Part Two：选题</h3>
+<ul>
+<li>讨论、设计、开发一个<strong>利用 Agentic AI
+协作解决复杂问题或任务</strong>的软件项目</li>
+<li><strong>AI agent 的定义</strong>（Lab Note
+版）：能<strong>感知环境、做决策、基于预定义规则或习得经验采取行动</strong>的自主软件实体，并<strong>由
+LLM 提供增强能力</strong></li>
+<li>⭐ <strong>选一个所有成员都真正感兴趣的题目</strong></li>
+<li>参考现有的 LLM 应用作为灵感</li>
+<li>⭐
+<strong>争取解决澳大利亚本土的相关挑战，以吸引业界关注</strong></li>
+</ul>
+<h3 id="part-three项目考量五点">7.3 Part Three：项目考量五点</h3>
+<table>
+<colgroup>
+<col style="width: 55%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">考量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">⭐ <strong>准备 1–2
+个候选题目</strong>——多个选项能带来更丰富的讨论和灵活性</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">⭐
+<strong>清晰定义你的软件要解决的真实世界问题</strong>——理解这个问题会指导你的设计与实现</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>确定你的 agent 需要什么类型的
+LLM</strong>；探索可用资源，⭐ <strong>确保 LLM 集成显著增强了 agent
+的能力</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">⭐ <strong>确保项目与 Agentic AI
+有强关联</strong>——目标是 <strong>"One-Person AI Company"</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><strong>考虑软件对目标行业的潜在影响</strong>：如何<strong>精简流程、提升效率、提供创新方案</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="part-four项目文档lab-1-的产出">7.4 Part Four：项目文档（Lab 1
+的产出）</h3>
+<p>需要准备一份文档，<strong>包括但不限于</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 55%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>项目场景</strong>（The project
+scenario）</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>关键功能概述</strong>（An outline
+of the key functionalities）</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>目标用户或受益者的识别</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">⭐
+<strong>每位组员角色与职责的明确说明</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">⭐
+<strong>团队协作、沟通与冲突解决的准则</strong>（guidelines for team
+collaboration, communication, and conflict resolution）</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><strong>项目目标、范围与意义的全面概述</strong>，⭐
+<strong>强调 Agentic AI 的角色</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>第 5
+条容易被忽略但明确写在要求里</strong>——<strong>冲突解决机制要写进文档</strong>，别跳过。</p>
+</blockquote>
+<hr>
+<h2 id="八工具清单">八、工具清单</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>建模</strong></td>
+<td style="text-align: left;"><strong>StarUML</strong>、<strong>draw.io</strong>、Papyrus
+UML</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>项目管理</strong></td>
+<td style="text-align: left;">⭐ <strong>Jira</strong>（Stage 2 需要
+<strong>Jira 时间线作为 Agile 实践的证据</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>版本控制</strong></td>
+<td style="text-align: left;"><strong>Git</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>开发环境</strong></td>
+<td style="text-align: left;"><strong>VS Code</strong>、<strong>Jupyter
+Notebook</strong>、PyCharm、Spring Tools Suite</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>云服务</strong></td>
+<td style="text-align: left;"><strong>Amazon Web Services</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Agent 框架</strong></td>
+<td style="text-align: left;">⭐
+<strong>LangChain</strong>、<strong>LangGraph</strong>、<strong>Llama-Index</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Vibe coding</strong></td>
+<td style="text-align: left;"><strong>Codex</strong>、<strong>Claude
+Code</strong>、<strong>Cline</strong>、<strong>Continue</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>API key 提醒</strong>：课程提供的 key
+基于讲师个人账号，<strong>目前每组仅 $10</strong>，<strong>只能用于开源
+coding agent</strong>（不含 Codex / Claude Code）。<strong>不强制使用
+AI</strong>，传统开发方式同样可以。</p>
+</blockquote>
+<hr>
+<h2 id="九时间线与检查清单">九、时间线与检查清单</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">时间</th>
+<th style="text-align: left;">事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Week 2（Lab 1）</strong></td>
+<td style="text-align: left;">⭐ 组队（3–5 人，同 lab）、在 Canvas
+注册（<code>Mon 10-12 Group 1</code> 格式）、<strong>准备 1–2
+个候选题目</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Week 5</strong></td>
+<td style="text-align: left;">⭐ <strong>Stage 1
+checkpoint</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Week 8</strong></td>
+<td style="text-align: left;">⭐ <strong>Stage 1 截止</strong>：报告提交
++ <strong>presentation 和 in-class interview（必须到场）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Week 9</strong></td>
+<td style="text-align: left;">Midterm 线上 quiz（开卷，在家做）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Week 13</strong></td>
+<td style="text-align: left;">⭐ <strong>Stage
+2</strong>：<strong>周一前上传源代码</strong> + <strong>in-class
+demonstration（必须到场）</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Stage 1 报告自检清单</strong>：</p>
+<ul class="task-list">
+<li><label><input type="checkbox">需求分成 <strong>agreement /
+mandatory / optional</strong> 三类</label></li>
+<li><label><input type="checkbox"><strong>User requirement
+diagram</strong> + <strong>Feature diagram</strong></label></li>
+<li><label><input type="checkbox"><strong>Use case
+描述</strong>（含用户与流程的交互步骤）</label></li>
+<li><label><input type="checkbox"><strong>Package diagram / Class
+diagram / structured class</strong>（系统结构）</label></li>
+<li><label><input type="checkbox"><strong>Activity / State machine /
+Sequence diagram</strong>（关键组件行为）</label></li>
+<li><label><input type="checkbox">⭐ <strong>明确说明 LLM 在 agent
+系统中的角色</strong></label></li>
+<li><label><input type="checkbox"><strong>组件间关系</strong>（说明对未来开发的支持）</label></li>
+<li><label><input type="checkbox">⭐
+<strong>设计假设（assumptions）</strong></label></li>
+<li><label><input type="checkbox">⭐
+<strong>每位组员的贡献</strong></label></li>
+<li><label><input type="checkbox">Slides 含：需求分类 /
+<strong>设计理由 + 被放弃的选项</strong> / 模型总览 /
+<strong>变更评估与验收依据</strong></label></li>
+</ul>
+<p><strong>Stage 2 自检清单</strong>：</p>
+<ul class="task-list">
+<li><label><input type="checkbox"><strong>核心特性全部实现</strong>（数量和质量都算分）</label></li>
+<li><label><input type="checkbox">⭐ <strong>有 LLM
+使用的证据，且用法与设计合理</strong></label></li>
+<li><label><input type="checkbox">⭐ <strong>Jira 时间线 +
+支撑文档</strong>（Agile 证据）</label></li>
+<li><label><input type="checkbox"><strong>使用了多项先进技术且开发完善</strong></label></li>
+<li><label><input type="checkbox">周一前上传代码，demo
+当天到场</label></li>
+</ul>
+<hr>
+<h2 id="十把两周内容串起来">十、把两周内容串起来</h2>
+<p>Week 1 讲座和 Tutorial 1 其实在说同一件事，只是一个抽象一个具体：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Week 1 讲座（抽象）</th>
+<th style="text-align: left;">Tutorial 1（具体）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Design from customer value
+backward</strong></td>
+<td style="text-align: left;"><strong>Deconstructing the Shoe
+Shopper</strong>：表层请求 → 底层需求</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Narrow
+promise</strong>：一个客户、一件痛苦的事、一个可测量结果</td>
+<td style="text-align: left;"><strong>Company brief
+模板</strong>的五项检查清单</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Map the work</strong>：分离
+judgment / repeatable tasks / risky exceptions</td>
+<td style="text-align: left;"><strong>Human Oversight
+行</strong>：创始人审查健康问题和不确定案例</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Build
+guardrails</strong>：数据访问、质量检查、审批、降级</td>
+<td style="text-align: left;"><strong>置信度阈值、升级机制、审批规则</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Create
+memory</strong>：存决策、样例、指标、教训</td>
+<td style="text-align: left;"><strong>Feedback
+行</strong>：可追溯的反馈与模型精化</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DESIGN
+TEST</strong>：能否在创始人不介入每一步的情况下反复交付价值</td>
+<td style="text-align: left;">AI
+治疗师案例：<strong>系统能否可靠地质疑、升级、担责</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>架构控制快速生成的爆炸半径</strong></td>
+<td style="text-align: left;"><strong>"What loop should the system
+responsibly complete?"</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⭐ <strong>最后记住老师那句把 Stage 1 和 Stage 2
+连起来的话</strong>：
+<strong>"如果你的设计报告把每一部分都写清楚了，Stage 2
+可能会非常简单——你只要把每一部分丢进编码
+agent，软件就会被自动生成出来。"</strong>
+<strong>换句话说：这门课真正的杠杆在 Stage 1。</strong></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/One-Person-AI-Company/" rel="tag"><i class="fa fa-tag"></i> One-Person AI Company</a>
+              <a href="/tags/Multi-Agent-System/" rel="tag"><i class="fa fa-tag"></i> Multi-Agent System</a>
+              <a href="/tags/LLM-Agent/" rel="tag"><i class="fa fa-tag"></i> LLM Agent</a>
+              <a href="/tags/Project/" rel="tag"><i class="fa fa-tag"></i> Project</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week01-introduction.html" rel="prev" title="ELEC5620 Week 01 Introduction to Software Architecture 讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 01 Introduction to Software Architecture 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/comp5416-tutorial01-game-theory.html" rel="next" title="COMP5416 Tutorial 1 题解：无线信道竞争的博弈均衡">
+                  COMP5416 Tutorial 1 题解：无线信道竞争的博弈均衡 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">897k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">54:22</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>
