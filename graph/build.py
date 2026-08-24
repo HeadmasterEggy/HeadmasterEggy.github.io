@@ -33,6 +33,9 @@ OUT = Path(__file__).resolve().parent / "data.json"
 
 IGNORE_DIRS = {".obsidian", ".corrupted_backup", "node_modules", ".git"}
 SKIP_NODE_TOP_FOLDERS = {"标签集合", "思维导图"}
+# 26-S1-Course / 26-S2-Course / Course 这类学期目录，用课程代码而不是学期做聚类
+COURSE_DIR_RE = re.compile(r"^(?:\d\d-S\d-)?Course$")
+COURSE_PARENT = "Course Notes"
 WIKILINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 POST_URL_RE = re.compile(r"/posts/([A-Za-z0-9]+)\.html")
@@ -97,9 +100,15 @@ def derive_cluster(rel: str) -> str | None:
     parts = PurePosixPath(rel).parts
     if len(parts) <= 1:
         return None
-    if parts[0] == "Course" and len(parts) >= 2:
+    if COURSE_DIR_RE.match(parts[0]) and len(parts) >= 3:
         return parts[1]
     return parts[0]
+
+
+def is_course_cluster(rel: str) -> bool:
+    parts = PurePosixPath(rel).parts
+    return bool(COURSE_DIR_RE.match(parts[0])) and len(parts) >= 3
+
 
 
 def normalize_text(s: str) -> str:
@@ -111,6 +120,7 @@ path_no_ext_map = {}
 stem_map = {}
 abbr_map = {}
 clusters = {}
+course_clusters = set()
 
 for path in POSTS_DIR.rglob("*.md"):
     if set(path.parts) & IGNORE_DIRS:
@@ -152,6 +162,8 @@ for path in POSTS_DIR.rglob("*.md"):
         abbr_map[abbr] = rel
     if cluster:
         clusters.setdefault(cluster, []).append(rel)
+        if is_course_cluster(rel):
+            course_clusters.add(cluster)
 
 
 hub_for_cluster = {}
@@ -206,6 +218,29 @@ for cluster, ids in clusters.items():
             "type": "hub",
             "synthetic": True,
         }
+
+
+parent_hub_id = None
+if len(course_clusters & set(hub_for_cluster)) >= 2:
+    parent_hub_id = f"hub::{COURSE_PARENT}"
+    notes[parent_hub_id] = {
+        "id": parent_hub_id,
+        "rel": parent_hub_id,
+        "stem": COURSE_PARENT,
+        "title": COURSE_PARENT,
+        "top_folder": COURSE_PARENT,
+        "cluster": COURSE_PARENT,
+        "category": COURSE_PARENT,
+        "categories": [COURSE_PARENT],
+        "tags": [],
+        "abbrlink": "",
+        "published": False,
+        "url": None,
+        "body": "",
+        "excerpt": "所有课程笔记的总节点，把各门课的大类节点挂到一起。",
+        "type": "hub",
+        "synthetic": True,
+    }
 
 
 all_nodes = notes
@@ -290,38 +325,17 @@ for rel in sorted(real_note_ids):
     for raw in WIKILINK_RE.findall(body):
         dst = resolve_obsidian_target(raw, rel)
         if dst in real_note_ids:
-            src_cluster = note["cluster"]
-            dst_cluster = all_nodes[dst]["cluster"]
-            if src_cluster and src_cluster == dst_cluster and src_cluster in hub_for_cluster:
-                hub = hub_for_cluster.get(src_cluster)
-                if rel == hub or dst == hub:
-                    add_edge(rel, dst, "hub", "wikilink")
-            else:
-                add_edge(rel, dst, "direct", "wikilink")
+            add_edge(rel, dst, "direct", "wikilink")
 
     for raw in MARKDOWN_LINK_RE.findall(body):
         dst = resolve_markdown_target(raw, rel)
         if dst in real_note_ids:
-            src_cluster = note["cluster"]
-            dst_cluster = all_nodes[dst]["cluster"]
-            if src_cluster and src_cluster == dst_cluster and src_cluster in hub_for_cluster:
-                hub = hub_for_cluster.get(src_cluster)
-                if rel == hub or dst == hub:
-                    add_edge(rel, dst, "hub", "markdown")
-            else:
-                add_edge(rel, dst, "direct", "markdown")
+            add_edge(rel, dst, "direct", "markdown")
 
     for m in POST_URL_RE.finditer(body):
         dst = abbr_map.get(m.group(1))
         if dst in real_note_ids:
-            src_cluster = note["cluster"]
-            dst_cluster = all_nodes[dst]["cluster"]
-            if src_cluster and src_cluster == dst_cluster and src_cluster in hub_for_cluster:
-                hub = hub_for_cluster.get(src_cluster)
-                if rel == hub or dst == hub:
-                    add_edge(rel, dst, "hub", "permalink")
-            else:
-                add_edge(rel, dst, "direct", "permalink")
+            add_edge(rel, dst, "direct", "permalink")
 
 
 # 保证同类文档统一挂到一个大类节点上
@@ -333,6 +347,38 @@ for cluster, ids in clusters.items():
         if rel == hub:
             continue
         add_edge(rel, hub, "hub", "cluster")
+
+
+if parent_hub_id:
+    for cluster in sorted(course_clusters):
+        hub = hub_for_cluster.get(cluster)
+        if hub:
+            add_edge(hub, parent_hub_id, "hub", "course-parent")
+
+
+# 兜底：仍然没有任何连接的笔记，按共享标签挂到最相近的一篇上
+linked = set()
+for e in edge_map.values():
+    linked.add(e["source"])
+    linked.add(e["target"])
+
+tag_index = {}
+for nid in real_note_ids:
+    for tag in all_nodes[nid]["tags"]:
+        tag_index.setdefault(str(tag), set()).add(nid)
+
+for nid in sorted(real_note_ids - linked):
+    own = {str(t) for t in all_nodes[nid]["tags"]}
+    scores = {}
+    for tag in own:
+        for other in tag_index.get(tag, ()):
+            if other != nid:
+                scores[other] = scores.get(other, 0) + 1
+    if not scores:
+        continue
+    best = max(sorted(scores), key=lambda o: (scores[o], -len(o)))
+    add_edge(nid, best, "tag", "shared-tag")
+    linked.update((nid, best))
 
 
 edges = list(edge_map.values())
