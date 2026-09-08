@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5318 Assignment 1（Rice Classification）作业要求梳理。整理提交与评分规则、数据集与三步预处理要求、Part 1 免调参交叉验证与 Part 2 网格搜索调参的分类器清单与参数网格、reflection 报告要点，以及「未知数据集」鲁棒性要求带来的三个实现陷阱。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5318 Assignment 1 作业要求梳理：Rice Classification">
+<meta property="og:url" content="http://example.com/posts/comp5318-assignment1-rice-classification.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5318 Assignment 1（Rice Classification）作业要求梳理。整理提交与评分规则、数据集与三步预处理要求、Part 1 免调参交叉验证与 Part 2 网格搜索调参的分类器清单与参数网格、reflection 报告要点，以及「未知数据集」鲁棒性要求带来的三个实现陷阱。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-01T20:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-01T12:39:07.822Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Assignment">
+<meta property="article:tag" content="COMP5318">
+<meta property="article:tag" content="Scikit-learn">
+<meta property="article:tag" content="Cross Validation">
+<meta property="article:tag" content="Grid Search">
+<meta property="article:tag" content="Data Preprocessing">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/posts/comp5318-assignment1-rice-classification.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/comp5318-assignment1-rice-classification.html","path":"posts/comp5318-assignment1-rice-classification.html","title":"COMP5318 Assignment 1 作业要求梳理：Rice Classification"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5318 Assignment 1 作业要求梳理：Rice Classification | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"http://example.com/posts/comp5318-assignment1-rice-classification.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">248</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">21</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">244</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5318-assignment-1-%E4%BD%9C%E4%B8%9A%E8%A6%81%E6%B1%82%E6%A2%B3%E7%90%86rice-classification"><span class="nav-text">COMP5318
+Assignment 1 作业要求梳理：Rice Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%B3%E9%94%AE%E4%BF%A1%E6%81%AF"><span class="nav-text">一、关键信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E4%B8%8E%E8%BF%9F%E4%BA%A4"><span class="nav-text">提交与迟交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E5%88%86%E6%9E%84%E6%88%90%E4%B8%89%E9%83%A8%E5%88%86"><span class="nav-text">评分构成（三部分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E9%98%9F"><span class="nav-text">组队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E7%BB%86%E8%8A%82%E5%AE%B9%E6%98%93%E6%89%A3%E5%88%86"><span class="nav-text">提交细节（容易扣分）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">二、数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%BB%BB%E5%8A%A1%E4%B8%80%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E9%A2%84%E5%A4%84%E7%90%86%E4%B8%8E%E6%89%93%E5%8D%B0"><span class="nav-text">三、任务一：数据加载、预处理与打印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%BB%BB%E5%8A%A1%E4%BA%8C%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%B8%AA%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">四、任务二：实现多个分类器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#part-1%E4%B8%8D%E8%B0%83%E5%8F%82%E7%9A%84%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-text">Part 1：不调参的交叉验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-2%E7%BD%91%E6%A0%BC%E6%90%9C%E7%B4%A2%E8%B0%83%E5%8F%82"><span class="nav-text">Part 2：网格搜索调参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%BB%99%E5%87%BA%E7%9A%84%E5%8F%82%E6%95%B0%E7%BD%91%E6%A0%BC"><span class="nav-text">模板给出的参数网格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-2-%E8%A6%81%E6%8A%A5%E5%91%8A%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-text">Part 2 要报告的内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E4%BB%BB%E5%8A%A1%E4%B8%89reflection-%E4%B8%8E-discussion"><span class="nav-text">五、任务三：Reflection 与
+Discussion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E8%AF%84%E5%88%86%E6%B5%8B%E8%AF%95%E4%B8%8E%E4%B8%89%E4%B8%AA%E5%AE%9E%E7%8E%B0%E9%99%B7%E9%98%B1"><span class="nav-text">六、评分测试与三个实现陷阱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%B7%E9%98%B1-1-%E4%BC%9A%E6%8A%8A%E6%89%80%E6%9C%89%E5%88%97%E5%8F%98%E6%88%90-object"><span class="nav-text">陷阱 1：?
+会把所有列变成 object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%B7%E9%98%B1-2%E4%BB%BB%E4%BD%95%E5%86%99%E6%AD%BB%E7%BB%B4%E5%BA%A6%E7%9A%84%E5%86%99%E6%B3%95%E9%83%BD%E4%BC%9A%E6%8C%82"><span class="nav-text">陷阱
+2：任何写死维度的写法都会挂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%B7%E9%98%B1-3part-1-%E5%92%8C-part-2-%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%8D%E4%B8%80%E6%A0%B7"><span class="nav-text">陷阱 3：Part 1 和 Part 2
+的数据流不一样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E5%AD%A6%E6%9C%AF%E8%AF%9A%E4%BF%A1"><span class="nav-text">七、学术诚信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%8F%90%E4%BA%A4%E5%89%8D%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">八、提交前检查清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E4%B8%8E%E8%AF%BE%E7%A8%8B%E5%86%85%E5%AE%B9%E7%9A%84%E5%AF%B9%E5%BA%94"><span class="nav-text">九、与课程内容的对应</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">244</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">248</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/comp5318-assignment1-rice-classification.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5318 Assignment 1 作业要求梳理：Rice Classification | Joey">
+      <meta itemprop="description" content="COMP5318 Assignment 1（Rice Classification）作业要求梳理。整理提交与评分规则、数据集与三步预处理要求、Part 1 免调参交叉验证与 Part 2 网格搜索调参的分类器清单与参数网格、reflection 报告要点，以及「未知数据集」鲁棒性要求带来的三个实现陷阱。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5318 Assignment 1 作业要求梳理：Rice Classification
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-09-01 20:00:00 / Modified: 12:39:07" itemprop="dateCreated datePublished" datetime="2026-09-01T20:00:00Z">2026-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/COMP5318/" itemprop="url" rel="index"><span itemprop="name">COMP5318</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5318 Assignment 1（Rice Classification）作业要求梳理。整理提交与评分规则、数据集与三步预处理要求、Part 1 免调参交叉验证与 Part 2 网格搜索调参的分类器清单与参数网格、reflection 报告要点，以及「未知数据集」鲁棒性要求带来的三个实现陷阱。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5318-assignment-1-作业要求梳理rice-classification">COMP5318
+Assignment 1 作业要求梳理：Rice Classification</h1>
+<blockquote>
+<p><strong>课程</strong>：COMP5318/COMP4318 — Machine Learning and Data
+Mining，Semester 2 2026
+<strong>规格文件</strong>：<code>COMP5318-A1-S22026-final.pdf</code>（4
+页） <strong>截止</strong>：<strong>2026 年 9 月 18 日（周五，Week
+7）23:59</strong> <strong>分值</strong>：<strong>15 分 = 期末总评的
+15%</strong></p>
+<p>⚠️
+本文只整理<strong>作业要求与方法论</strong>，<strong>不放解题代码</strong>——规格里明确写了「把自己的作业提供给他人抄袭」同样会被处罚。</p>
+</blockquote>
+<hr>
+<h2 id="一关键信息">一、关键信息</h2>
+<h3 id="提交与迟交">提交与迟交</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">项目</th>
+<th style="text-align: left;">规定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>截止时间</strong></td>
+<td style="text-align: left;">2026-09-18 23:59</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>迟交政策</strong></td>
+<td style="text-align: left;">最多迟交 <strong>3
+天</strong>，<strong>每天扣 5%</strong>；<strong>超过 3 天记 0
+分</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>每日截止点</strong></td>
+<td style="text-align: left;">23:59</td>
+</tr>
+</tbody>
+</table>
+<h3 id="评分构成三部分">评分构成（三部分）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">部分</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>代码</strong>（占大头）</td>
+<td style="text-align: left;">按<strong>正确性</strong>和<strong>可运行性</strong>评分</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>代码风格</strong></td>
+<td style="text-align: left;">可读性、有意义的变量名、打印结果、注释</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>理解程度</strong></td>
+<td style="text-align: left;">reflection 与 discussion</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>最狠的一条</strong>：<strong>「我们会运行你的代码。任何跑不起来的部分，那部分直接
+0 分。」</strong>
+所以<strong>提交前务必从头到尾重跑一遍</strong>（Kernel → Restart &amp;
+Run All）。</p>
+</blockquote>
+<h3 id="组队">组队</h3>
+<ul>
+<li><strong>2–4 人</strong>一组，<strong>最多 4 人</strong></li>
+<li>必须去 <strong>Canvas → People → Machine Learning Project
+Group</strong> 加组</li>
+<li><strong>Canvas
+上的组名/组号就是你的提交组号</strong>，全组必须在<strong>同一个</strong>
+group 里</li>
+</ul>
+<h3 id="提交细节容易扣分">提交细节（容易扣分）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">要求</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>谁提交</strong></td>
+<td style="text-align: left;"><strong>只需一人代表全组提交</strong>，不要各自单独交</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>交几个文件</strong></td>
+<td style="text-align: left;"><strong>两个：<code>.ipynb</code> 和
+<code>.pdf</code></strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>交到哪</strong></td>
+<td style="text-align: left;"><code>.ipynb</code> → <strong>"Submission:
+Assignment 1 ipynb"</strong><br><code>.pdf</code> → <strong>"Submission:
+Assignment 1 pdf"</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>文件命名</strong></td>
+<td style="text-align: left;">含组号，如
+<strong><code>ml-project-group1.ipynb</code>（<code>.pdf</code>）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>notebook 内</strong></td>
+<td style="text-align: left;">写<strong>组号 + 各成员
+SID</strong>；<strong>不要写姓名</strong>（匿名评分）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>交错箱子会有惩罚。</strong></p>
+<p>💡 <strong>PDF
+怎么生成</strong>（规格给的方法）：<code>File &gt; Download as &gt; PDF</code>，或
+<code>Print Preview &gt; Save as PDF</code>，或
+<code>File &gt; Download as &gt; HTML</code> 后打开 html 再存成
+PDF。</p>
+</blockquote>
+<hr>
+<h2 id="二数据集">二、数据集</h2>
+<p><strong>Rice dataset</strong> —— 两个水稻品种的谷粒图像特征。</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">属性</th>
+<th style="text-align: left;">值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>文件</strong></td>
+<td style="text-align: left;"><code>rice-final2.csv</code>（Canvas
+提供，比原始版本更小且略有改动）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>样本数</strong></td>
+<td style="text-align: left;"><strong>1400</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>特征数</strong></td>
+<td style="text-align: left;"><strong>7</strong>（从谷粒图像中提取）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>类别</strong></td>
+<td style="text-align: left;"><strong>class1 =
+cammeo</strong>，<strong>class2 = osmancik</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>缺失值</strong></td>
+<td style="text-align: left;">用 <strong><code>?</code></strong>
+记录</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>原始来源</strong></td>
+<td style="text-align: left;"><span class="exturl" data-url="aHR0cHM6Ly9hcmNoaXZlLmljcy51Y2kuZWR1L2RhdGFzZXQvNTQ1L3JpY2UrY2FtbWVvK2FuZCtvc21hbmNpaw==">UCI
+Rice (Cammeo and Osmancik)<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>7
+个特征</strong>：<code>Area</code>、<code>Perimiter</code>、<code>Major_Axis_Length</code>、<code>Minor_Axis_Length</code>、<code>Eccentricity</code>、<code>Convex_Area</code>、<code>Extent</code>（第
+8 列是 <code>class</code>）。</p>
+<blockquote>
+<p>💡 注意表头里 <code>Perimiter</code>
+是<strong>数据集自带的拼写</strong>（正确拼法应为
+Perimeter），别自己「修正」成别的名字。</p>
+</blockquote>
+<hr>
+<h2 id="三任务一数据加载预处理与打印">三、任务一：数据加载、预处理与打印</h2>
+<p><strong>三步预处理，顺序固定</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">指定工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>填补缺失值</strong> ——
+用<strong>该列的均值</strong>替换</td>
+<td style="text-align: left;"><code>sklearn.impute.SimpleImputer</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>归一化</strong> —— 每个属性缩放到
+<strong>[0, 1]</strong></td>
+<td style="text-align: left;"><code>sklearn.preprocessing.MinMaxScaler</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>改类别值</strong> ——
+<strong>class1 → 0，class2 → 1</strong></td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;"><strong>打印前 10 行</strong></td>
+<td style="text-align: left;">模板提供了 <code>print_data</code>
+函数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>打印格式</strong>：特征值保留 <strong>4
+位小数</strong>（<code>.4f</code>），<strong>类别值是整数</strong>。</p>
+<hr>
+<h2 id="四任务二实现多个分类器">四、任务二：实现多个分类器</h2>
+<p><strong>通用要求</strong>：所有分类器都用 tutorial 里的 sklearn
+模块；<strong>所有 <code>random_state</code> 一律设为 0</strong>。</p>
+<h3 id="part-1不调参的交叉验证">Part 1：不调参的交叉验证</h3>
+<p><strong>分类器</strong>：<strong>Logistic
+Regression</strong>、<strong>Naïve Bayes</strong></p>
+<p><strong>评估方式</strong>——固定写法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cvKFold = StratifiedKFold(n_splits=<span class="number">10</span>, shuffle=<span class="literal">True</span>, random_state=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>要报告</strong>：<strong>平均交叉验证准确率</strong>。</p>
+<blockquote>
+<p>💡 数据是 7 个连续特征，所以朴素贝叶斯要用
+<strong>GaussianNB</strong>（见 <a href="/posts/comp5318-week04-naive-bayes-evaluation.html">Week 04
+笔记</a>的高斯朴素贝叶斯部分），不是计数版本。</p>
+</blockquote>
+<h3 id="part-2网格搜索调参">Part 2：网格搜索调参</h3>
+<p><strong>分类器</strong>（6
+个）：<strong>KNN</strong>、<strong>Decision
+Tree</strong>、<strong>AdaBoost</strong>、<strong>Gradient
+Boosting</strong>、<strong>Random
+Forest</strong>、<strong>SVM</strong></p>
+<p><strong>方法</strong>：<strong><code>GridSearchCV</code> + 10
+折分层交叉验证</strong>（把 <code>cvKFold</code> 传给
+<code>GridSearchCV</code>）</p>
+<p><strong>数据划分</strong>：<strong><code>train_test_split</code>，要
+<code>stratify</code>，<code>random_state=0</code></strong></p>
+<blockquote>
+<p>⚠️ <strong>规格没给 <code>test_size</code></strong> —— 不传就是
+sklearn 默认的 <strong>0.25</strong>（1050 训练 / 350 测试）。这点建议和
+tutor 确认，或在 notebook 里注明你的选择。</p>
+</blockquote>
+<h3 id="模板给出的参数网格">模板给出的参数网格</h3>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">分类器</th>
+<th style="text-align: left;">参数网格</th>
+<th style="text-align: center;">组合数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>KNN</strong></td>
+<td style="text-align: left;"><code>k = [1, 3, 5, 7]</code><br><code>p = [1, 2]</code></td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Decision Tree</strong></td>
+<td style="text-align: left;"><code>max_depth = [3, 5, 7, 10]</code><br><code>min_samples_split = [2, 5, 10]</code><br><code>min_samples_leaf = [1, 2, 4]</code></td>
+<td style="text-align: center;">36</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AdaBoost</strong></td>
+<td style="text-align: left;"><code>n_estimators = [50, 100, 150]</code><br><code>learning_rate = [0.1, 0.2, 0.3, 0.5]</code></td>
+<td style="text-align: center;">12</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gradient Boosting</strong></td>
+<td style="text-align: left;"><code>max_depth = [1, 3, 5, 7]</code><br><code>n_estimators = [50, 100, 150]</code><br><code>learning_rate = [0.1, 0.2, 0.3, 0.5]</code></td>
+<td style="text-align: center;"><strong>48</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Random Forest</strong></td>
+<td style="text-align: left;"><code>n_estimators = [10, 30, 60, 100]</code><br><code>max_leaf_nodes = [6, 12]</code></td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SVM</strong></td>
+<td style="text-align: left;"><code>C = [0.01, 0.1, 1, 5]</code><br><code>gamma = [0.01, 0.1, 1, 10]</code><br><code>kernel</code>（可选）</td>
+<td style="text-align: center;">16</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Random Forest 有额外硬性要求</strong>（模板注释里写着）：
+<strong>用 information gain</strong>（即
+<code>criterion='entropy'</code>）<strong>且
+<code>max_features='sqrt'</code></strong>。</p>
+<p>⚠️ <strong>决策树的 criterion 规格没指定</strong>——只对 RF 明确要求了
+information gain。选 entropy（与课程 tutorial 一致）还是 gini（sklearn
+默认）都要在 notebook 里注明。</p>
+<p>💡 <strong>Gradient Boosting 是最慢的一个</strong>：48 组 × 10 折 =
+<strong>480 次模型拟合</strong>。整个 Part 2
+跑一遍需要<strong>两分钟量级</strong>，别以为是卡死了。</p>
+</blockquote>
+<h3 id="part-2-要报告的内容">Part 2 要报告的内容</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">分类器</th>
+<th style="text-align: left;">报告项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>全部 6 个</strong></td>
+<td style="text-align: left;"><strong>最优参数</strong> +
+<strong>最优交叉验证准确率</strong> + <strong>测试集准确率</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Random Forest 额外</strong></td>
+<td style="text-align: left;"><strong>macro average F1</strong> 和
+<strong>weighted average F1</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>格式</strong>：准确率、F1 等<strong>保留 4
+位小数</strong>（<code>.4f</code>）；<strong><code>k</code>、<code>p</code>、<code>n_estimators</code>、<code>max_leaf_nodes</code>
+这些整数不要用 <code>.4f</code></strong>。</p>
+<hr>
+<h2 id="五任务三reflection-与-discussion">五、任务三：Reflection 与
+Discussion</h2>
+<p>在模板<strong>最后一个 cell</strong>
+写一份简短报告，规格点名要覆盖（<strong>但不限于</strong>）：</p>
+<ul>
+<li><strong>比较并讨论所有分类器的性能</strong></li>
+<li><strong>讨论超参数调优对模型性能的影响</strong></li>
+<li><strong>……</strong>（省略号是规格里自带的——鼓励你自己补充角度）</li>
+</ul>
+<blockquote>
+<p>💡 <strong>可以自己加分的角度</strong>（都能挂靠到 Week 3/4
+学过的概念）： - <strong>交叉验证准确率 vs
+测试集准确率</strong>为什么不能直接比——测试集只有一次测量，350 个样本在
+0.94 附近的标准误约 <strong>1.3 个百分点</strong>，小于 2~3
+点的差距不该当成真实差异 -
+<strong>预处理顺序造成的数据泄漏</strong>——规格要求先对<strong>全量数据</strong>做插补和归一化，再在
+Part 2 里划分训练/测试集。这意味着 imputer 的列均值和 scaler 的 min/max
+<strong>看过了测试集</strong>。本例影响可忽略（全表只有 29
+个缺失值），但方法论上更干净的做法是用
+<code>sklearn.pipeline.Pipeline</code> 把预处理和分类器打包丢给
+<code>GridSearchCV</code>，让它在<strong>每一折内部</strong>重新拟合预处理
+-
+<strong>哪些模型对调参敏感、哪些不敏感</strong>，以及<strong>为什么</strong>——集成方法本身就在压制方差，所以调参空间小
+-
+<strong>朴素贝叶斯为什么垫底</strong>——检查特征间的相关系数，这直接对应
+Week 4 讲的「相关属性削弱朴素贝叶斯，对策是先做特征选择」</p>
+</blockquote>
+<hr>
+<h2 id="六评分测试与三个实现陷阱">六、评分测试与三个实现陷阱</h2>
+<blockquote>
+<p><strong>这是整份规格里最容易翻车的一段</strong>： <strong>「我们会用
+rice
+数据集和第二个数据集（<code>unknown.csv</code>）测试你的程序。」</strong>
+<strong>未知数据集格式相同，但特征数和样本数都不一样。</strong>
+<strong>所以不要硬编码特征数和样本数——不要写死 1400 和 7。</strong></p>
+<p><strong>可以假设的</strong>：类变量在<strong>最后一列</strong>，且<strong>只有两类
+class1 / class2</strong>。</p>
+</blockquote>
+<p>Canvas 还提供了 <strong><code>test-before.csv</code></strong>
+供提交前自测<strong>可运行性</strong>（<strong>不是</strong>用来看准确率的）。
+⚠️ <strong>提交的 notebook 里只能有 rice 数据集的结果，不要留
+test-before 的输出。</strong></p>
+<h3 id="陷阱-1-会把所有列变成-object">陷阱 1：<code>?</code>
+会把所有列变成 <code>object</code></h3>
+<p>缺失值记作 <code>?</code>，直接 <code>read_csv</code>
+会让<strong>每一列</strong>都被解析成 <code>object</code> 而不是
+<code>float</code>，<code>SimpleImputer</code>
+会在任何分类器跑起来之前就报错。</p>
+<p><strong>对策</strong>：读文件时告诉 pandas <code>?</code>
+就是缺失值（<code>na_values</code> 参数），让它直接解析成浮点数。</p>
+<h3 id="陷阱-2任何写死维度的写法都会挂">陷阱
+2：任何写死维度的写法都会挂</h3>
+<p>不能出现
+<code>1400</code>、<code>7</code>、<code>range(7)</code>、按列名取列这类写法。</p>
+<p><strong>对策</strong>：用<strong>位置索引</strong>取「除最后一列外的全部」和「最后一列」，特征数和样本数全部从文件本身读出来。
+<strong>自测方法</strong>：拿 <code>test-before.csv</code> 跑一遍——它是
+<strong>6 个特征、209 行</strong>，列名叫
+<code>a1</code>~<code>a6</code>，跟 rice 完全不同。跑通了才算过关。</p>
+<h3 id="陷阱-3part-1-和-part-2-的数据流不一样">陷阱 3：Part 1 和 Part 2
+的数据流不一样</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">用什么数据</th>
+<th style="text-align: left;">怎么评估</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Part 1</strong></td>
+<td style="text-align: left;"><strong>全量预处理后的数据集</strong></td>
+<td style="text-align: left;">直接 10 折分层交叉验证</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Part 2</strong></td>
+<td style="text-align: left;"><strong>先
+<code>train_test_split</code></strong>，在<strong>训练集</strong>上跑
+GridSearchCV</td>
+<td style="text-align: left;">报最优 CV 准确率 +
+<strong>在测试集上</strong>报准确率</td>
+</tr>
+</tbody>
+</table>
+<p><strong>搞混了整个 Part 2 都是错的。</strong></p>
+<hr>
+<h2 id="七学术诚信">七、学术诚信</h2>
+<p>规格用了整整一页讲这件事，几条要点：</p>
+<ul>
+<li><strong>允许使用生成式 AI 工具</strong>（规格原文明确写了）</li>
+<li>⚠️
+<strong>抄袭和「把自己的作业给别人抄」同样受罚</strong>——<strong>两边都会被处罚</strong></li>
+<li><strong>可以和其他同学讨论作业，但你的组必须写自己的代码</strong></li>
+<li><strong>会使用相似度检测软件</strong></li>
+<li><strong>惩罚</strong>：学术不诚信永久记录 / 扣分到挂科 /
+严重者停学并取消学生签证</li>
+<li>⚠️
+一旦立案，<strong>调查可能持续数月</strong>，成绩会被冻结——<strong>COMP5318
+是其他课的先修课</strong>，可能影响下学期选课甚至延毕</li>
+</ul>
+<hr>
+<h2 id="八提交前检查清单">八、提交前检查清单</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"><strong>Kernel → Restart &amp; Run
+All 从头跑通</strong>，无报错（跑不起来的部分直接 0 分）</label></li>
+<li><label><input type="checkbox">用
+<strong><code>test-before.csv</code></strong>
+验证过代码不依赖特征数/样本数/列名</label></li>
+<li><label><input type="checkbox"><strong>notebook 里只留 rice
+数据集的输出</strong>，清掉 test-before 的结果</label></li>
+<li><label><input type="checkbox">所有
+<code>random_state=0</code></label></li>
+<li><label><input type="checkbox"><code>cvKFold</code>
+传给了<strong>每一个</strong> <code>GridSearchCV</code></label></li>
+<li><label><input type="checkbox">Random Forest 用了
+<strong><code>criterion='entropy'</code> +
+<code>max_features='sqrt'</code></strong></label></li>
+<li><label><input type="checkbox">Random Forest 报了 <strong>macro F1
+和 weighted F1</strong></label></li>
+<li><label><input type="checkbox">小数<strong>全部 4
+位</strong>，<strong>整数参数不用 <code>.4f</code></strong></label></li>
+<li><label><input type="checkbox">填了<strong>组号和全部
+SID</strong>，<strong>没有写姓名</strong></label></li>
+<li><label><input type="checkbox">文件名含组号：<code>ml-project-group&lt;N&gt;.ipynb</code>
+/ <code>.pdf</code></label></li>
+<li><label><input type="checkbox">写完了 <strong>reflection</strong>
+和 <strong>AI acknowledgement</strong></label></li>
+<li><label><input type="checkbox"><strong>两个文件交到两个对应的提交箱</strong></label></li>
+<li><label><input type="checkbox">全组成员都在<strong>同一个 Canvas
+group</strong> 里</label></li>
+</ul>
+<hr>
+<h2 id="九与课程内容的对应">九、与课程内容的对应</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">作业环节</th>
+<th style="text-align: left;">对应笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">缺失值填补、归一化、kNN</td>
+<td style="text-align: left;"><a href="/posts/comp5318-week02-preprocessing-knn.html">Week 02 —
+数据预处理与 kNN</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Logistic Regression、过拟合、正则化</td>
+<td style="text-align: left;"><a href="/posts/comp5318-week03-linear-logistic-regression.html">Week 03 —
+线性回归与逻辑回归</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">朴素贝叶斯、分层十折交叉验证、网格搜索、混淆矩阵与
+F1</td>
+<td style="text-align: left;"><a href="/posts/comp5318-week04-naive-bayes-evaluation.html">Week 04 —
+朴素贝叶斯与模型评估</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Week 4
+那份笔记基本就是这次作业的说明书</strong>——分层抽样为什么必要、为什么是十折、网格搜索的完整流程（<strong>CV
+只在训练集上做、选出最优参数后要在整个训练集上重新训练</strong>）、precision/recall/F1
+的公式，全都直接用得上。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Assignment/" rel="tag"><i class="fa fa-tag"></i> Assignment</a>
+              <a href="/tags/COMP5318/" rel="tag"><i class="fa fa-tag"></i> COMP5318</a>
+              <a href="/tags/Scikit-learn/" rel="tag"><i class="fa fa-tag"></i> Scikit-learn</a>
+              <a href="/tags/Cross-Validation/" rel="tag"><i class="fa fa-tag"></i> Cross Validation</a>
+              <a href="/tags/Grid-Search/" rel="tag"><i class="fa fa-tag"></i> Grid Search</a>
+              <a href="/tags/Data-Preprocessing/" rel="tag"><i class="fa fa-tag"></i> Data Preprocessing</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/csys5030-week04-conditional-mutual-information.html" rel="prev" title="CSYS5030 Week 04 What is Information? II 讲课总结">
+                  <i class="fa fa-angle-left"></i> CSYS5030 Week 04 What is Information? II 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week04-cost-management.html" rel="next" title="INFO6007 Week 04 Cost Management 讲课总结">
+                  INFO6007 Week 04 Cost Management 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">961k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">58:15</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":180,"height":300},"mobile":{"show":false},"react":{"opacity":1},"log":false});</script></body>
+</html>

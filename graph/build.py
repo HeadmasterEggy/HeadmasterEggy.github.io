@@ -32,7 +32,7 @@ POSTS_DIR = ROOT / "source" / "_posts"
 OUT = Path(__file__).resolve().parent / "data.json"
 
 IGNORE_DIRS = {".obsidian", ".corrupted_backup", "node_modules", ".git"}
-SKIP_NODE_TOP_FOLDERS = {"标签集合", "思维导图"}
+SKIP_NODE_TOP_FOLDERS = {"标签集合", "思维导图", "自我修复"}
 # 26-S1-Course / 26-S2-Course / Course 这类学期目录，用课程代码而不是学期做聚类
 COURSE_DIR_RE = re.compile(r"^(?:\d\d-S\d-)?Course$")
 COURSE_PARENT = "Course Notes"
