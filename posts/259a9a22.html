@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="精读微软研究院 Agensh 技术报告：五步协作循环、Git 与消息及共享上下文组成的基础设施、ProgramBench 扩展实验，以及结果的适用边界。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件">
+<meta property="og:url" content="https://qiao1.top/posts/259a9a22.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="精读微软研究院 Agensh 技术报告：五步协作循环、Git 与消息及共享上下文组成的基础设施、ProgramBench 扩展实验，以及结果的适用边界。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-30T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-29T20:26:01.404Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="paper">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/259a9a22.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/259a9a22.html","path":"posts/259a9a22.html","title":"Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/259a9a22.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">280</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">214</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%AE%BA%E6%96%87%E8%A6%81%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-text">一、论文要解决什么问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cagensh-%E7%9A%84%E7%BB%93%E6%9E%84%E6%AF%8F%E4%B8%AA-agent-%E8%B7%91%E5%90%8C%E4%B8%80%E5%A5%97%E4%BA%94%E6%AD%A5%E5%BE%AA%E7%8E%AF"><span class="nav-text">二、Agensh
+的结构：每个 Agent 跑同一套五步循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%AE%A9%E8%87%AA%E7%BB%84%E7%BB%87%E8%BF%90%E8%BD%AC%E7%9A%84%E4%B8%89%E5%B1%82%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-text">三、让“自组织”运转的三层基础设施</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%83%E5%92%8C%E5%8D%95-agent-harness-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-text">四、它和单 Agent Harness
+的边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%AE%9E%E9%AA%8C%E7%A9%B6%E7%AB%9F%E6%80%8E%E4%B9%88%E5%81%9A"><span class="nav-text">五、实验究竟怎么做</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E7%BB%93%E6%9E%9C%E8%B4%A8%E9%87%8F%E6%8F%90%E5%8D%87%E4%B8%8E%E8%BE%BE%E5%88%B0%E7%9B%B8%E5%90%8C%E8%B4%A8%E9%87%8F%E7%9A%84%E6%97%B6%E9%97%B4%E7%BC%A9%E7%9F%AD"><span class="nav-text">六、结果：质量提升与达到相同质量的时间缩短</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E4%B8%AA%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%B9%B3%E5%9D%87%E5%88%86%E6%9C%80%E5%A4%9A%E6%B5%8B%E8%AF%95%E5%88%B0-128-agent"><span class="nav-text">五个任务的平均分：最多测试到
+128 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent%E5%8F%AA%E5%9C%A8-pandoc-%E5%8D%95%E9%A1%B9%E6%89%A9%E5%B1%95"><span class="nav-text">1,024 Agent：只在 pandoc
+单项扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E4%BD%9C%E8%80%85%E8%A7%82%E5%AF%9F%E5%88%B0%E7%9A%84%E6%B6%8C%E7%8E%B0%E5%8D%8F%E4%BD%9C"><span class="nav-text">七、作者观察到的“涌现协作”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B7%E8%BF%99%E9%A1%B9%E5%B7%A5%E4%BD%9C"><span class="nav-text">八、如何评价这项工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="nav-text">九、一句话总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">214</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">280</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/259a9a22.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件 | Joey">
+      <meta itemprop="description" content="精读微软研究院 Agensh 技术报告：五步协作循环、Git 与消息及共享上下文组成的基础设施、ProgramBench 扩展实验，以及结果的适用边界。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-30 12:00:00" itemprop="dateCreated datePublished" datetime="2026-09-30T12:00:00Z">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-09-29 20:26:01" itemprop="dateModified" datetime="2026-09-29T20:26:01Z">2026-09-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">精读微软研究院 Agensh 技术报告：五步协作循环、Git 与消息及共享上下文组成的基础设施、ProgramBench 扩展实验，以及结果的适用边界。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>原论文</strong>：<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDkuMjY3ODE=">Agensh: Scaling Organizational
+Intelligence to 1,024 Agents<i class="fa fa-external-link-alt"></i></span>，Zhihao Zhan 等，Microsoft
+Research，arXiv:2609.26781v1，2026 年 9 月 22 日。<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzI2MDkuMjY3ODE=">PDF<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9BZ2Vuc2g=">项目代码<i class="fa fa-external-link-alt"></i></span></p>
+<p>如果让大量编码 Agent
+同时完成一个大任务，瓶颈未必是它们各自写代码的速度，也可能是中央 Agent
+分配工作、消解冲突和合并成果的能力。Agensh
+的尝试是：<strong>去掉负责派工的中央指挥，让每个工作者自行寻找任务，并用共享基础设施维持协作。</strong></p>
+<p>论文最醒目的数字是：在六小时内重建 <code>pandoc</code> 的实验中，1 个
+Agent 的最终测试通过率为 <strong>33.89%</strong>，1,024 个为
+<strong>55.06%</strong>。但这不等于“任何任务上堆到 1,024 个 Agent
+都有效”：论文的 1,024 Agent 实验只覆盖
+<code>pandoc</code>；五任务对比最多扩展到 128
+个。下面按“问题—机制—实验—限制”拆解。</p>
+<span id="more"></span>
+<h2 id="一论文要解决什么问题">一、论文要解决什么问题</h2>
+<p>常见的多 Agent 组织是 <strong>orchestrator–worker</strong>：一个主
+Agent
+做计划、拆任务、派给并行工作者，再收集和整合结果。这种模式容易理解，但随着工作者增多，主
+Agent 必须持续处理分工、进度、依赖和合并，协调能力可能成为瓶颈。（论文第
+1 节、图 2）</p>
+<p>Agensh
+改变的是<strong>组织层</strong>，不是底层语言模型。所有工作者共享同一个用户目标，运行相同的协作协议；每个人都可以发现任务、声明负责范围、实现、验证、合并，然后继续找下一件事。作者把“Agent
+数量”视为模型能力、推理预算之外的另一个扩展维度。</p>
+<p>这里的“无中央指挥”有明确含义：没有一个主 Agent
+为全体工作者逐项派工和合并。它<strong>不意味着</strong>没有共同目标、规则、共享状态或事件分发系统。恰好相反，论文的核心贡献是用一套基础设施承接这些协作工作。</p>
+<h2 id="二agensh-的结构每个-agent-跑同一套五步循环">二、Agensh
+的结构：每个 Agent 跑同一套五步循环</h2>
+<p>论文第 2.1 节、图 3 给每个工作者规定了一个异步重复的循环：</p>
+<ol type="1">
+<li><strong>Gather
+context，收集上下文</strong>：读取共同目标、仓库当前状态、同伴进度、消息和历史发现；观察环境，判断什么还没完成。</li>
+<li><strong>Claim
+sub-task，认领子任务</strong>：自行提出一个工作范围，把
+<code>CLAIM</code> 写入共享上下文。若与别人重叠，就通过私信协商。</li>
+<li><strong>Take
+action，执行</strong>：在本地环境中实现任务，并及时分享对其他人有用的发现。</li>
+<li><strong>Verify
+results，验证</strong>：按自己认领的子任务验收条件检查；不满足就继续修正。</li>
+<li><strong>Merge
+progress，合并进展</strong>：把成果集成到共享仓库，公布改动思路和验证证据；出现合并冲突时先吸收最新进展、解决冲突，再合并。</li>
+</ol>
+<p>合并后回到第一步。关键在于<strong>每个工作者独立推进，不需要全体
+Agent
+等同一个阶段完成</strong>。协作循环由工作者提示词引导，而不是写死在底层运行时；附录
+A 展示的 1,024 人配置中，提示词除工作者 ID 外完全相同。（论文第 2.3
+节、附录 A）</p>
+<p>用一个简化例子理解：重建文档转换器时，有人探索表格行为并认领解析模块，有人探索命令行参数，有人修复构建脚本。各自验证后通过
+PR
+合入主分支；遇到相同文件或接口，再发消息协商。这是对论文机制的说明性例子，<strong>不是论文报告的一条具体执行轨迹</strong>。</p>
+<h2
+id="三让自组织运转的三层基础设施">三、让“自组织”运转的三层基础设施</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+<th>论文中的实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>共享工作区</td>
+<td>保存拟议、进行中和已集成的工作；提供版本历史与合并冲突</td>
+<td>Git 平台 Gitea；工作者使用独立检出和分支，通过 PR 集成到主分支</td>
+</tr>
+<tr>
+<td>消息接口</td>
+<td>广播进度，私下快速处理范围重叠与依赖</td>
+<td>Mattermost 的共享任务频道和私信</td>
+</tr>
+<tr>
+<td>共享上下文</td>
+<td>保存可复用的观察、确认事实、失败尝试、认领及改动摘要</td>
+<td>追加式记录板；近期内容主动分发，完整历史可搜索</td>
+</tr>
+</tbody>
+</table>
+<p>共享上下文的记录有明确类型：<code>OBSERVED</code>（观察到的行为）、<code>FACT</code>（确认的事实）、<code>FAIL</code>（被证伪的尝试）、<code>CLAIM</code>（正在负责的范围）、<code>PATCH_SUMMARY</code>（改动、思路和证据）。<code>FAIL</code>
+尤其重要：一条可靠的失败记录能阻止其他工作者重复消耗时间。记录板保留近期内容，也提供全文搜索旧记录的工具。（论文第
+2.2 节、附录 A）</p>
+<p>消息有不同的到达时机。普通频道消息在下一轮循环开始时交给工作者；更紧急的私信，以及新的共享上下文记录，可以随工作者下一次基础设施工具调用的返回结果进入当前轮。这里不是任意时刻打断一个正在运行的进程，而是<strong>在工具返回边界插入新信息</strong>。（论文第
+2.2 节、附录 B.2）</p>
+<p>更底层还有事件路由和存活机制：Gitea 与 Mattermost
+的事件进入持久队列，按事件 ID
+去重；分发失败会重试，重启后恢复未完成事件；工作者空闲十分钟时会收到继续工作的提醒。这些细节表明，1,024
+Agent
+的实验不只依赖一段“大家自行协作”的提示词，也依赖可靠的分发、恢复和状态同步。（论文附录
+B.1）</p>
+<h2 id="四它和单-agent-harness-的边界">四、它和单 Agent Harness
+的边界</h2>
+<p>Agensh 是叠加在<strong>单 Agent Harness 上方的组织层</strong>。单
+Agent Harness
+负责一个工作者的会话状态、模型调用、工具执行和下一步响应；Agensh
+负责工作者身份、协作协议、共享仓库、消息、上下文、事件路由与恢复。在论文实验里，底层
+Harness 使用 Copilot，模型固定为
+<code>GPT-5.6-sol</code>、<code>high</code>
+推理强度。作者说这层接口可以通过适配器连接其他底层
+Harness，但论文的量化结果来自上述实验配置。（论文第 2.3 节、附录 C）</p>
+<p>这个分层也解释了论文的“自组织”：它主要改变<strong>谁决定下一项任务，以及成果如何流入集体状态</strong>，并未展示训练一个全新的单体模型。论文没有通过实验把提示词、共享上下文、消息系统、Git
+工作区逐一拆开，因而不能从结果中单独算出每个组件贡献了多少。</p>
+<h2 id="五实验究竟怎么做">五、实验究竟怎么做</h2>
+<p>作者选择 <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDUuMDM1NDY=">ProgramBench<i class="fa fa-external-link-alt"></i></span>
+中按现有模型平均通过率衡量最难的五个任务：<code>FFmpeg</code>、<code>gromacs</code>、<code>pandoc</code>、<code>PHP-src</code>
+和
+<code>ctags</code>。任务要求在<strong>无互联网、六小时</strong>的条件下，仅通过运行一个不可读取源码的预编译参考程序，观察其行为，然后从零重建能通过隐藏测试的代码库。评测提交的是仓库中的程序和构建脚本，并报告
+ProgramBench 的
+<code>canonical-kept pass rate</code>。因此，这些数字表示<strong>重建程序通过的测试比例</strong>，不是完成整套产品的概率。（论文第
+3 节、附录 A、C）</p>
+<p>五个参考仓库大小差异明显，例如 <code>pandoc</code> 约 10.4
+万行、<code>PHP-src</code> 约 281
+万行；实验比较的是各任务的测试通过率，不是要求六小时复刻参考仓库每一行。所有报告的配置保持模型、底层
+Harness、工作者协议、评测和总时限一致。为了降低启动时的抢占，前一小时每
+30 秒启动一个 Agent，之后每 3 秒启动一个；1,024 Agent 分布在 16
+台节点上，每台 64 个。单 Agent 基线另有持续工作提醒，多 Agent
+的空闲工作者也会收到提醒。结束前 45 分钟和 5
+分钟还有统一的合并与构建提醒。（论文附录 C）</p>
+<h2
+id="六结果质量提升与达到相同质量的时间缩短">六、结果：质量提升与达到相同质量的时间缩短</h2>
+<h3
+id="五个任务的平均分最多测试到-128-agent">五个任务的平均分：最多测试到
+128 Agent</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Agent 数</th>
+<th style="text-align: right;">五任务平均最终通过率</th>
+<th style="text-align: right;">相对 1 Agent 的百分点变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">19.31%</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">20.68%</td>
+<td style="text-align: right;">+1.37</td>
+</tr>
+<tr>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">26.52%</td>
+<td style="text-align: right;">+7.21</td>
+</tr>
+<tr>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">28.78%</td>
+<td style="text-align: right;">+9.47</td>
+</tr>
+</tbody>
+</table>
+<p>从 1 个增至 128 个，平均分增加 <strong>9.47 个百分点</strong>，相对于
+19.31% 的基线约提高 <strong>49%</strong>。论文图 5
+显示五个任务整体呈随规模增大而上升的趋势；这些值是五任务平均值，不能当成每个单独任务的成绩。（论文第
+3.1 节、图 5）</p>
+<p>图 6 还比较前两小时达到相同成绩的速度。以 <code>pandoc</code>
+为例，128 Agent 在第 30 分钟检查点超过 30% 通过率，32 Agent 在第 60
+分钟、8 Agent 在第 90 分钟首次超过；单 Agent 在前两小时始终低于
+30%。这说明扩大并发人数在这个设置下既提升六小时终点成绩，也让相同成绩更早出现。注意这里是<strong>离散检查点</strong>，不能解读为精确到分钟的首次达到时间。（论文第
+3.1 节、图 6）</p>
+<h3 id="agent只在-pandoc-单项扩展">1,024 Agent：只在 <code>pandoc</code>
+单项扩展</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Agent 数</th>
+<th style="text-align: right;"><code>pandoc</code> 六小时最终通过率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">33.89%</td>
+</tr>
+<tr>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">50.94%</td>
+</tr>
+<tr>
+<td style="text-align: right;">1,024</td>
+<td style="text-align: right;">55.06%</td>
+</tr>
+</tbody>
+</table>
+<p>1,024 Agent 比 128 Agent 高 <strong>4.12 个百分点</strong>，比单
+Agent 高 <strong>21.17 个百分点</strong>。从 128 到 1,024
+增加八倍工作者，成绩继续增长，但边际收益明显小于从 1 到 128
+的跨度。论文用这组数据证明其系统<strong>可以在该任务上扩展到千人规模并继续提高分数</strong>；它没有证明千人规模在所有任务、所有预算下都是最合算的选择。（论文摘要、图
+1、第 3.1 节）</p>
+<h2 id="七作者观察到的涌现协作">七、作者观察到的“涌现协作”</h2>
+<p>论文第 3.2 节通过工作轨迹归纳出四类现象：</p>
+<ul>
+<li><strong>8 人时，直接协调任务边界。</strong> <code>gromacs</code>
+中，工作者约定模块接口后各自实现；<code>FFmpeg</code>
+中，有人在发现认领范围重叠后改做互补任务。</li>
+<li><strong>32 人时，多人共同管理集成。</strong> <code>PHP-src</code>
+的一个贡献先得到同伴认可，随后另一人提出反例，作者修复后再次被审阅并合并。</li>
+<li><strong>128 人时，形成专业分工与重复使用的流程。</strong>
+工作者按经验寻找审阅者；<code>pandoc</code>
+中有工作者约定“作者提交已测试分支和 commit
+hash，由同伴验证并合并”的流程，失败后又调整协议。</li>
+<li><strong>1,024 人时，同类角色可由多人承担。</strong>
+<code>pandoc</code>
+中多个工作者担任集成者；某人可以联系多名候选者，选出首个有效回应者，并取消其他请求。一个工作者失败后，同领域同伴也可能接手。</li>
+</ul>
+<p>这些是<strong>从轨迹中观察到的定性案例</strong>，不是像通过率那样有统一统计检验的量化指标。它们支持“没有中央派工也能产生协调、复核和角色分工”的解释；但不能据此断言每个
+1,024 Agent 运行都会出现同样组织形态。</p>
+<h2 id="八如何评价这项工作">八、如何评价这项工作</h2>
+<p>我认为最有价值的点是：论文把大规模并行 Agent 的难题从“怎样让一个主
+Agent
+管理更多下属”转向“怎样让工作者持续看到共同状态，并对认领、验证、合并负责”。<code>CLAIM</code>
+降低重复劳动，<code>FAIL</code> 传播负面知识，PR
+和验证证据让成果进入可追溯的共享状态。这种设计思路对需要长时间、多模块并行开发的任务有参考价值。</p>
+<p>不过，读结果要保留以下边界：</p>
+<ol type="1">
+<li><strong>任务范围有限。</strong> 五任务均是离线程序重建；1,024 Agent
+只测了
+<code>pandoc</code>。结果尚不能直接推广到产品开发、网页研究、写作或其他软件任务。</li>
+<li><strong>没有给出经济性结论。</strong>
+论文报告通过率和到达某个通过率的时间，没有系统报告
+token、算力、消息量、PR
+数量或每提高一个百分点的成本。更高的六小时成绩不自动等于更省钱。</li>
+<li><strong>组件贡献未隔离。</strong> 论文固定了模型和 Harness
+来比较人数，但没有充分的消融实验来分别量化共享上下文、消息、事件路由、Git
+及提示词的作用。</li>
+<li><strong>统计不确定性未充分展示。</strong>
+文中主要呈现这些配置的成绩和轨迹，没有提供足够的多随机种子重复、置信区间或显著性分析。尤其
+128→1,024 的 4.12
+个百分点差距，不能仅凭一组最终分数判断其稳定程度。</li>
+<li><strong>“无中央指挥”是组织概念。</strong>
+系统仍有共享服务、相同规则、统一时限和收尾提醒；这些本身就是关键工程投入。</li>
+</ol>
+<h2 id="九一句话总结">九、一句话总结</h2>
+<p>Agensh 展示了一种<strong>让多个 Agent
+自行认领任务、共享发现、互相处理冲突并完成验证合并</strong>的组织方式。在论文给定的六小时离线程序重建实验中，增加
+Agent
+数量带来了更高的最终测试通过率，也更早达到相近成绩；千人规模的证据目前集中在
+<code>pandoc</code>
+一项。下一步若要判断它是否适合实际工程，还需要成本、重复试验、组件消融和更多任务类型的证据。</p>
+<p><strong>资料</strong>：<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzI2MDkuMjY3ODE=">论文 PDF<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDkuMjY3ODE=">arXiv 页面<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9BZ2Vuc2g=">Agensh 代码仓库<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDUuMDM1NDY=">ProgramBench 论文<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/paper/" rel="tag"><i class="fa fa-tag"></i> paper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/b5aa6984.html" rel="prev" title="留学预算与外卖收入记账">
+                  <i class="fa fa-angle-left"></i> 留学预算与外卖收入记账
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">925k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">56:04</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
