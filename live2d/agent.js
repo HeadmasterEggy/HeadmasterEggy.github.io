@@ -383,13 +383,14 @@
     top = Math.max(edge, Math.min(top, innerHeight - ph - edge));
     Object.assign(panel.style, { left: left + 'px', top: top + 'px', right: 'auto', bottom: 'auto', transformOrigin: origin });
   }
+  document.addEventListener('pjax:success', () => { if (panel.classList.contains('open') && !history.length) renderChips(); }); // 站内换页且面板开着：推荐提问跟着换
   window.addEventListener('cat:move', () => { if (panel.classList.contains('open')) placePanel(); });
   window.addEventListener('resize', () => { if (panel.classList.contains('open')) placePanel(); });
 
   let button;
   const setOpen = open => {
     if (open) placePanel();
-    if (open && !history.length && !chips.childElementCount) renderChips();
+    if (open && !history.length && (!chips.childElementCount || suggestFor !== location.pathname)) renderChips(); // 换了页面就重新出题
     panel.classList.toggle('open', open);
     button && button.classList.toggle('active', open);
     if (open) { toBottom(); setTimeout(() => input.focus(), 120); }
