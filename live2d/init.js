@@ -6,7 +6,7 @@
   const base = '/live2d/';
   // 猫 agent 的后端地址（workers/cat-agent 部署后填这里，形如 https://cat-agent.<账号>.workers.dev/chat）。
   // 留空则不显示聊天按钮；本地调试可在控制台执行 localStorage.setItem('cat-agent-url', '<地址>') 覆盖。
-  const AGENT_URL = '';
+  const AGENT_URL = 'https://cat-agent.headmastereggy.workers.dev/chat';
   try { window.CAT_AGENT_URL = localStorage.getItem('cat-agent-url') || AGENT_URL; } catch (e) { window.CAT_AGENT_URL = AGENT_URL; }
   // 避免模型贴图的跨域问题
   const OriginalImage = window.Image;
