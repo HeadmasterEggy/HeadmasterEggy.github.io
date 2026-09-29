@@ -26,16 +26,74 @@
     document.head.appendChild(tag);
   });
 
+  // ───── 拖动猫：按住猫身体拖到想要的位置，位置记在浏览器里 ─────
+  function enableDrag() {
+    const root = document.documentElement;
+    const KEY = 'cat-pos';
+    const SIZE = { w: 180, h: 190, dockPad: 56, edge: 8 }; // 猫占位、脚下工具条需要的底部空间、留边
+    let pos = { r: 72, b: 72 };
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY));
+      if (s && Number.isFinite(s.r) && Number.isFinite(s.b)) pos = { r: s.r, b: s.b };
+    } catch (e) { /* 无痕模式等 */ }
+
+    const apply = () => {
+      pos.r = Math.min(Math.max(pos.r, SIZE.edge), Math.max(SIZE.edge, innerWidth - SIZE.w - SIZE.edge));
+      pos.b = Math.min(Math.max(pos.b, SIZE.dockPad), Math.max(SIZE.dockPad, innerHeight - SIZE.h - SIZE.edge));
+      root.style.setProperty('--cat-r', pos.r + 'px');
+      root.style.setProperty('--cat-b', pos.b + 'px');
+      window.dispatchEvent(new Event('cat:move')); // 聊天面板据此重新定位
+    };
+    apply();
+    setTimeout(() => root.classList.add('cat-ready'), 3600); // 入场动画（3s）结束之后
+    window.addEventListener('resize', apply);
+
+    // 猫的画布由组件异步创建，出现后再绑定拖动
+    const bind = canvas => {
+      let drag = null;
+      canvas.addEventListener('pointerdown', e => {
+        if (e.button !== 0) return;
+        drag = { x: e.clientX, y: e.clientY, r: pos.r, b: pos.b, moved: false };
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+        if (!drag.moved && Math.hypot(dx, dy) < 4) return; // 小幅抖动算点击，不算拖动
+        if (!drag.moved) { drag.moved = true; root.classList.add('cat-dragging'); }
+        pos.r = drag.r - dx;
+        pos.b = drag.b - dy;
+        apply();
+      });
+      const end = () => {
+        if (!drag) return;
+        if (drag.moved) { try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch (e) { /* ignore */ } }
+        root.classList.remove('cat-dragging');
+        drag = null;
+      };
+      canvas.addEventListener('pointerup', end);
+      canvas.addEventListener('pointercancel', end);
+    };
+    const found = document.getElementById('live2d');
+    if (found) return bind(found);
+    const timer = setInterval(() => {
+      const c = document.getElementById('live2d');
+      if (c) { clearInterval(timer); bind(c); }
+    }, 200);
+    setTimeout(() => clearInterval(timer), 20000);
+  }
+
   try {
     await Promise.all([load(base + 'waifu.css', 'css'), load(base + 'cat.css', 'css'), load(base + 'waifu-tips.js', 'js')]);
     window.initWidget({
       waifuPath: base + 'waifu-tips.json',
       cdnPath: base,                       // model_list.json 与 model/hijiki/ 都在这里
       cubism2Path: base + 'live2d.min.js', // hijiki 是 Cubism 2 模型
-      tools: [], // 不用自带工具按钮；入口是 agent.js 里的“问问猫”按钮
+      tools: [], // 不用自带工具按钮；入口是 agent.js 里的工具条
       logLevel: 'warn',
       drag: false,
     });
+    enableDrag();
     if (window.CAT_AGENT_URL) {
       const s = document.createElement('script');
       s.src = base + 'agent.js';

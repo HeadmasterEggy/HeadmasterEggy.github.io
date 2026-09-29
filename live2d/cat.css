@@ -2,9 +2,14 @@
    配色全部取自博客主题（NexT）的 CSS 变量，强调色用 NexT 的橙色 #fc6423，随明暗模式自动切换。 */
 
 /* 尺寸与旧版一致（旧 live2d 挂件 180×300 画布里的猫约 95px 宽）；位置离开右下角，整只猫（含脚）完整露出 */
-#waifu { left: auto; right: 72px; }
-#waifu.waifu-active { bottom: 72px; transform: none; }
+/* 位置由 init.js 里的拖动逻辑写入 --cat-r / --cat-b（离右、下边缘的距离），默认 72px */
+#waifu { left: auto; right: var(--cat-r, 72px); }
+#waifu.waifu-active { bottom: var(--cat-b, 72px); transform: none; }
 #waifu.waifu-active:hover { transform: translateY(-3px); }
+html.cat-ready #waifu { transition: transform .3s ease-in-out; } /* 入场动画结束后，拖动/缩放时位置立即生效 */
+html.cat-dragging #waifu, html.cat-dragging #cat-dock, html.cat-dragging #cat-chat { transition: none !important; }
+html.cat-dragging { user-select: none; -webkit-user-select: none; }
+#live2d { touch-action: none; }
 #live2d { width: 180px; height: 180px; }
 #waifu-tool { display: none; } /* 不用自带的工具按钮，入口是下面的“问问猫”按钮 */
 
@@ -48,7 +53,7 @@
 
 /* ───── 猫脚下的胶囊工具条（参考 Codex 的猫）：聊天 | 随机一篇笔记 ───── */
 #cat-dock {
-  position: fixed; right: 162px; translate: 50% 0; bottom: 24px; z-index: 9;
+  position: fixed; right: calc(var(--cat-r, 72px) + 90px); translate: 50% 0; bottom: calc(var(--cat-b, 72px) - 48px); z-index: 9;
   display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px;
   background: var(--c-bg); border: 1px solid var(--c-border); box-shadow: var(--c-shadow);
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
@@ -69,8 +74,8 @@
 
 /* ───── 聊天面板 ───── */
 #cat-chat {
-  position: fixed; right: 270px; bottom: 28px; z-index: 10;
-  width: 372px; max-width: calc(100vw - 300px); height: min(540px, calc(100vh - 60px));
+  position: fixed; right: calc(var(--cat-r, 72px) + 198px); bottom: calc(var(--cat-b, 72px) - 44px); z-index: 10; /* 打开时由 agent.js 按可用空间重新定位 */
+  width: 372px; max-width: calc(100vw - 16px); height: min(540px, calc(100vh - 16px));
   display: flex; flex-direction: column; overflow: hidden;
   color: var(--c-fg); font-size: 14px; line-height: 1.65;
   background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 18px; box-shadow: var(--c-shadow);

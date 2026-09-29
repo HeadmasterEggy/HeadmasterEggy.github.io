@@ -7,7 +7,7 @@
   window.__catAgentLoaded = true;
 
   const STORE = 'cat-chat-history';
-  const GREETING = '喵～我是这个博客的看板猫。想找哪方面的笔记，或者想聊聊当前这页，都可以问我。';
+  const GREETING = '喵～我是这个博客的看板喵。想找哪方面的笔记，或者想聊聊当前这页，都可以问我。';
   const CHIPS = ['推荐几篇值得看的笔记', '总结一下当前这页', '有哪些关于算法的笔记？', '你是谁？'];
 
   const svg = (paths, extra = '') => `<svg viewBox="0 0 24 24" aria-hidden="true" ${extra}>${paths}</svg>`;
@@ -190,11 +190,11 @@
   const panel = h('div');
   panel.id = 'cat-chat';
   panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-label', '和看板猫聊天');
+  panel.setAttribute('aria-label', '和看板喵聊天');
   panel.innerHTML = `
     <div class="cc-head">
       <div class="cc-avatar">${ICONS.cat}</div>
-      <div class="cc-title"><b>看板猫</b><span>可以帮你翻笔记、聊聊这一页</span></div>
+      <div class="cc-title"><b>看板喵</b><span>可以帮你翻笔记、聊聊这一页</span></div>
       <button type="button" class="cc-icon" data-act="clear" title="清空对话" aria-label="清空对话">${ICONS.clear}</button>
       <button type="button" class="cc-icon" data-act="close" title="关闭" aria-label="关闭">${ICONS.close}</button>
     </div>
@@ -202,7 +202,7 @@
     <div class="chips"></div>
     <form>
       <div class="box">
-        <textarea rows="1" maxlength="800" placeholder="问问猫…" aria-label="消息"></textarea>
+        <textarea rows="1" maxlength="800" placeholder="问问喵…" aria-label="消息"></textarea>
         <button type="submit" class="send" title="发送" aria-label="发送">${ICONS.send}</button>
       </div>
     </form>`;
@@ -335,8 +335,26 @@
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); } // isComposing：输入法选字时的回车不发送
   });
 
+  // 面板放在猫旁边：优先猫的左边，放不下就放右边；上下按猫脚下的工具条对齐并限制在窗口内
+  function placePanel() {
+    const w = document.getElementById('waifu');
+    if (!w) return;
+    const c = w.getBoundingClientRect();
+    const pw = Math.min(372, innerWidth - 16), ph = Math.min(540, innerHeight - 16);
+    const gap = 12, edge = 8;
+    let left = c.left - gap - pw, origin = 'bottom right';
+    if (left < edge) { left = c.right + gap; origin = 'bottom left'; }
+    if (left + pw > innerWidth - edge) left = Math.max(edge, innerWidth - pw - edge);
+    let top = c.bottom + 34 - ph;
+    top = Math.max(edge, Math.min(top, innerHeight - ph - edge));
+    Object.assign(panel.style, { left: left + 'px', top: top + 'px', right: 'auto', bottom: 'auto', transformOrigin: origin });
+  }
+  window.addEventListener('cat:move', () => { if (panel.classList.contains('open')) placePanel(); });
+  window.addEventListener('resize', () => { if (panel.classList.contains('open')) placePanel(); });
+
   let button;
   const setOpen = open => {
+    if (open) placePanel();
     panel.classList.toggle('open', open);
     button && button.classList.toggle('active', open);
     if (open) { toBottom(); setTimeout(() => input.focus(), 120); }
@@ -352,8 +370,8 @@
   const dock = h('div');
   dock.id = 'cat-dock';
   dock.setAttribute('role', 'toolbar');
-  dock.setAttribute('aria-label', '看板猫工具');
-  dock.innerHTML = `<button type="button" data-act="chat" title="和猫聊聊" aria-label="和猫聊聊">${ICONS.chatBtn}</button><span class="sep"></span><button type="button" data-act="random" title="随机一篇笔记" aria-label="随机一篇笔记">${ICONS.shuffle}</button>`;
+  dock.setAttribute('aria-label', '看板喵工具');
+  dock.innerHTML = `<button type="button" data-act="chat" title="和喵聊聊" aria-label="和喵聊聊">${ICONS.chatBtn}</button><span class="sep"></span><button type="button" data-act="random" title="随机一篇笔记" aria-label="随机一篇笔记">${ICONS.shuffle}</button>`;
   document.body.appendChild(dock);
   button = dock.querySelector('[data-act="chat"]');
   button.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
