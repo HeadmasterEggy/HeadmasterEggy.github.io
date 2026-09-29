@@ -31,7 +31,8 @@
     const root = document.documentElement;
     const KEY = 'cat-pos';
     const SIZE = { w: 180, h: 190, dockPad: 56, edge: 8 }; // 猫占位、脚下工具条需要的底部空间、留边
-    let pos = { r: 72, b: 72 };
+    const DEFAULT = { r: 72, b: 72 };
+    let pos = { ...DEFAULT };
     try {
       const s = JSON.parse(localStorage.getItem(KEY));
       if (s && Number.isFinite(s.r) && Number.isFinite(s.b)) pos = { r: s.r, b: s.b };
@@ -73,6 +74,15 @@
       };
       canvas.addEventListener('pointerup', end);
       canvas.addEventListener('pointercancel', end);
+      // 双击猫：回到默认位置（带一小段滑动动画）
+      canvas.title = '拖动可以移动，双击回到原位';
+      canvas.addEventListener('dblclick', () => {
+        pos = { r: DEFAULT.r, b: DEFAULT.b };
+        try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+        root.classList.add('cat-anim');
+        apply();
+        setTimeout(() => root.classList.remove('cat-anim'), 500);
+      });
     };
     const found = document.getElementById('live2d');
     if (found) return bind(found);
