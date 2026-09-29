@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="解释 GitHub Stacked PRs（堆叠式拉取请求）的工作方式：如何把大型改动拆成相互依赖的小 PR，如何评审、变基、运行 CI，以及什么时候不应该使用它。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stacked PRs：把大改动拆成一条可合并的依赖链">
+<meta property="og:url" content="https://qiao1.top/posts/stacked-prs.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="解释 GitHub Stacked PRs（堆叠式拉取请求）的工作方式：如何把大型改动拆成相互依赖的小 PR，如何评审、变基、运行 CI，以及什么时候不应该使用它。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-21T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-29T11:03:40.354Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Pull-Request">
+<meta property="article:tag" content="Code-Review">
+<meta property="article:tag" content="工程实践">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/stacked-prs.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/stacked-prs.html","path":"posts/stacked-prs.html","title":"Stacked PRs：把大改动拆成一条可合并的依赖链"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Stacked PRs：把大改动拆成一条可合并的依赖链 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/stacked-prs.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">280</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#stacked-prs%E6%8A%8A%E5%A4%A7%E6%94%B9%E5%8A%A8%E6%8B%86%E6%88%90%E4%B8%80%E6%9D%A1%E5%8F%AF%E5%90%88%E5%B9%B6%E7%9A%84%E4%BE%9D%E8%B5%96%E9%93%BE"><span class="nav-text">Stacked
+PRs：把大改动拆成一条可合并的依赖链</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%88%E7%9C%8B%E5%AE%83%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="nav-text">一、先看它长什么样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%AE%83%E5%92%8C%E6%99%AE%E9%80%9A-pr-%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C"><span class="nav-text">二、它和普通 PR 有什么不同？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%AE%83%E7%9C%9F%E6%AD%A3%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-text">三、它真正解决了什么问题？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%BF%85%E7%AD%89%E5%89%8D%E4%B8%80%E4%B8%AA-pr-%E5%90%88%E5%B9%B6"><span class="nav-text">1. 不必等前一个 PR 合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E4%B8%AA-pr-%E9%83%BD%E6%9B%B4%E5%AE%B9%E6%98%93%E5%AE%A1%E6%9F%A5"><span class="nav-text">2. 每个 PR 都更容易审查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E9%80%82%E5%90%88%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98%E5%92%8C-ai-%E4%BB%A3%E7%90%86%E5%BC%80%E5%8F%91"><span class="nav-text">3. 更适合持续交付和 AI
+代理开发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">四、实际开发流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E6%89%8B%E5%8A%A8%E7%90%86%E8%A7%A3-stack"><span class="nav-text">方式一：手动理解 stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E4%BD%BF%E7%94%A8-github-cli-%E7%9A%84-gh-stack"><span class="nav-text">方式二：使用 GitHub CLI 的
+gh stack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%BA%95%E5%B1%82-pr-%E5%90%88%E5%B9%B6%E5%90%8E%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88"><span class="nav-text">五、底层 PR 合并后会发生什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%90%88%E5%B9%B6%E6%97%B6%E5%BF%85%E9%A1%BB%E9%81%B5%E5%AE%88%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F"><span class="nav-text">六、合并时必须遵守什么顺序？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%80%82%E5%90%88%E7%94%A8%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%B8%8D%E9%80%82%E5%90%88%E7%94%A8"><span class="nav-text">七、什么时候适合用，什么时候不适合用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%9C%80%E5%AE%B9%E6%98%93%E8%B8%A9%E7%9A%84%E5%9D%91"><span class="nav-text">八、最容易踩的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A-stack-%E5%BD%93%E6%88%90%E8%B6%85%E9%95%BF%E5%88%86%E6%94%AF"><span class="nav-text">1. 把 stack 当成“超长分支”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E5%B1%82-pr-%E6%B7%B7%E5%85%A5%E4%B8%8B%E5%B1%82%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-text">2. 上层 PR
+混入下层未完成的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%9F%BA%E5%90%8E%E5%BF%98%E8%AE%B0%E5%90%8C%E6%AD%A5%E8%BF%9C%E7%A8%8B"><span class="nav-text">3. 变基后忘记同步远程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E5%AE%A1%E9%A1%BA%E5%BA%8F%E6%B7%B7%E4%B9%B1"><span class="nav-text">4. 评审顺序混乱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%98%E8%AE%B0%E5%AE%83%E4%BB%8D%E6%98%AF%E9%A2%84%E8%A7%88%E5%8A%9F%E8%83%BD"><span class="nav-text">5. 忘记它仍是预览功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%88%91%E7%9A%84%E7%90%86%E8%A7%A3stacked-prs-%E6%98%AF%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-text">九、我的理解：Stacked
+PRs 是“依赖关系可视化”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">213</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">280</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/stacked-prs.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Stacked PRs：把大改动拆成一条可合并的依赖链 | Joey">
+      <meta itemprop="description" content="解释 GitHub Stacked PRs（堆叠式拉取请求）的工作方式：如何把大型改动拆成相互依赖的小 PR，如何评审、变基、运行 CI，以及什么时候不应该使用它。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Stacked PRs：把大改动拆成一条可合并的依赖链
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-21 12:00:00" itemprop="dateCreated datePublished" datetime="2026-09-21T12:00:00Z">2026-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-09-29 11:03:40" itemprop="dateModified" datetime="2026-09-29T11:03:40Z">2026-09-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" itemprop="url" rel="index"><span itemprop="name">工程实践</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>10 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">解释 GitHub Stacked PRs（堆叠式拉取请求）的工作方式：如何把大型改动拆成相互依赖的小 PR，如何评审、变基、运行 CI，以及什么时候不应该使用它。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="stacked-prs把大改动拆成一条可合并的依赖链">Stacked
+PRs：把大改动拆成一条可合并的依赖链</h1>
+<p>最近 GitHub 文档里出现了一个很值得注意的概念：<strong>Stacked
+PRs</strong>，中文可以叫“堆叠式拉取请求”。</p>
+<p>它解决的是一个很常见的开发问题：一个功能很大，最好拆成多个小 PR
+来评审；但这些小 PR
+又彼此依赖，后面的工作必须建立在前面的工作之上。如果每个 PR
+都必须等前一个合并到 <code>main</code>，开发节奏就会被卡住。</p>
+<p>Stacked PRs 的做法是：<strong>让后一个 PR 直接以前一个 PR 的分支作为
+base，形成一条依赖链。</strong></p>
+<blockquote>
+<p>它不是把一个巨大 PR
+按文件随便切开，而是把一项工作按依赖关系切成多个、每个都能独立理解的变更层。</p>
+</blockquote>
+<h2 id="一先看它长什么样">一、先看它长什么样</h2>
+<p>假设我们要做一个“用户登录”功能，可以按下面的顺序拆分：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">main</span><br><span class="line">  └── feat/auth-layer       → PR #1，base: main</span><br><span class="line">        └── feat/api-endpoints → PR #2，base: feat/auth-layer</span><br><span class="line">              └── feat/frontend → PR #3，base: feat/api-endpoints</span><br></pre></td></tr></table></figure>
+<p>这三个 PR 不是三个互不相关的分支，而是一条有方向的依赖链：</p>
+<ol type="1">
+<li><code>feat/auth-layer</code>
+添加认证模型、共享类型或数据库结构。</li>
+<li><code>feat/api-endpoints</code> 在认证层之上添加 API 路由。</li>
+<li><code>feat/frontend</code> 再调用这些 API，添加页面和交互。</li>
+</ol>
+<p>因此，PR #2 的改动里不会重复展示 PR #1 已经完成的内容；PR #3
+也只展示相对于 PR #2 的新增内容。</p>
+<p>这就是“stack”的含义：每一层都站在下面一层之上。</p>
+<h2 id="二它和普通-pr-有什么不同">二、它和普通 PR 有什么不同？</h2>
+<p>普通的 PR 通常是这样：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">feature ───────────────→ main</span><br></pre></td></tr></table></figure>
+<p>Stacked PRs 则是这样：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">feature-1 ─────────────→ main</span><br><span class="line">feature-2 ─────────────→ feature-1</span><br><span class="line">feature-3 ─────────────→ feature-2</span><br></pre></td></tr></table></figure>
+<p>最重要的变化不是分支多了，而是 <strong>PR 的 base 不再全部指向
+<code>main</code></strong>。</p>
+<p>如果三个分支都直接向 <code>main</code> 提 PR，那么后面的 PR
+会把前面分支的代码也全部带进
+diff，审阅者看到的可能是一个越来越大的混合变更。Stacked PRs 让每个 PR
+只显示自己这一层的增量，因此评审者可以按层理解：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">PR #1：底层能力是否正确？</span><br><span class="line">PR #2：API 是否正确使用了底层能力？</span><br><span class="line">PR #3：界面是否正确使用了 API？</span><br></pre></td></tr></table></figure>
+<h2 id="三它真正解决了什么问题">三、它真正解决了什么问题？</h2>
+<h3 id="不必等前一个-pr-合并">1. 不必等前一个 PR 合并</h3>
+<p>最直接的好处是，前一个 PR 还在
+review，你就可以继续开发后面的部分。</p>
+<p>比如后端同事正在等待认证层的
+review，前端同事不必把工作复制到另一个临时分支，也不必等认证层合并后再开始，而是直接基于
+<code>feat/auth-layer</code> 创建 <code>feat/api-endpoints</code> 或
+<code>feat/frontend</code>。</p>
+<p>这样既保留了依赖关系，又不会让团队停下来排队。</p>
+<h3 id="每个-pr-都更容易审查">2. 每个 PR 都更容易审查</h3>
+<p>一个 2000 行的 PR 很难认真
+review。即使代码本身没有问题，审阅者也很容易因为范围太大而只做粗略检查。</p>
+<p>拆成多个有明确主题的层之后，每个 PR 可以只关注一件事：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>层</th>
+<th>关注点</th>
+<th>适合的评审问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>底层</td>
+<td>数据结构、共享类型、核心逻辑</td>
+<td>设计是否稳定？边界是否正确？</td>
+</tr>
+<tr>
+<td>中层</td>
+<td>API、服务、业务流程</td>
+<td>是否正确调用底层能力？错误处理是否完整？</td>
+</tr>
+<tr>
+<td>上层</td>
+<td>UI、测试、文档、集成</td>
+<td>用户行为是否正确？是否覆盖关键路径？</td>
+</tr>
+</tbody>
+</table>
+<p>评审的粒度变小之后，反馈也会更具体：到底是数据模型的问题、API
+的问题，还是页面集成的问题，不会全部混在同一个 diff 里。</p>
+<h3 id="更适合持续交付和-ai-代理开发">3. 更适合持续交付和 AI
+代理开发</h3>
+<p>大型功能通常天然存在先后顺序：先改
+schema，再改后端，再改前端，最后补测试和文档。</p>
+<p>这种顺序本身就很像一个 stack。尤其是使用 AI coding agent
+时，每完成一个清晰的子任务就创建一个分支和
+PR，可以把“代理做了哪些变更、这些变更之间是什么关系”记录下来，而不是把几十个不同目的的修改堆进一个分支。</p>
+<h2 id="四实际开发流程">四、实际开发流程</h2>
+<h3 id="方式一手动理解-stack">方式一：手动理解 stack</h3>
+<p>先用普通 Git 分支建立关系：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git switch main</span><br><span class="line">git pull</span><br><span class="line"></span><br><span class="line">git switch -c feat/auth-layer</span><br><span class="line"><span class="comment"># 完成认证层</span></span><br><span class="line">git add . &amp;&amp; git commit -m <span class="string">&quot;Add auth layer&quot;</span></span><br><span class="line"></span><br><span class="line">git switch -c feat/api-endpoints</span><br><span class="line"><span class="comment"># 完成 API 层</span></span><br><span class="line">git add . &amp;&amp; git commit -m <span class="string">&quot;Add auth API endpoints&quot;</span></span><br><span class="line"></span><br><span class="line">git switch -c feat/frontend</span><br><span class="line"><span class="comment"># 完成前端层</span></span><br><span class="line">git add . &amp;&amp; git commit -m <span class="string">&quot;Add auth frontend&quot;</span></span><br></pre></td></tr></table></figure>
+<p>创建 PR 时，base 要逐层指定：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">PR #1: feat/auth-layer     → main</span><br><span class="line">PR #2: feat/api-endpoints  → feat/auth-layer</span><br><span class="line">PR #3: feat/frontend       → feat/api-endpoints</span><br></pre></td></tr></table></figure>
+<p>这样做能帮助你理解原理，但随着层数增加，手动维护会变得麻烦：底层 PR
+合并后，上面的分支都要重新变基，相关 PR 的 base 也要同步更新。</p>
+<h3 id="方式二使用-github-cli-的-gh-stack">方式二：使用 GitHub CLI 的
+<code>gh stack</code></h3>
+<p>GitHub 目前提供了 <code>gh stack</code>
+扩展来管理本地的堆叠分支。先安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gh extension install github/gh-stack</span><br></pre></td></tr></table></figure>
+<p>常用命令大致可以这样记：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 初始化一个 stack</span></span><br><span class="line">gh stack init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在当前 stack 顶部创建下一层分支</span></span><br><span class="line">gh stack add api-endpoints</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前 stack</span></span><br><span class="line">gh stack view</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建或更新所有分支对应的 PR</span></span><br><span class="line">gh stack submit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取远程更新，并同步整个 stack</span></span><br><span class="line">gh stack <span class="built_in">sync</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对整个 stack 做级联 rebase</span></span><br><span class="line">gh stack rebase</span><br></pre></td></tr></table></figure>
+<p>其中最关键的是 <code>submit</code>、<code>sync</code> 和
+<code>rebase</code>：它们把推送分支、创建或更新
+PR、重新建立上下游关系这些容易出错的操作集中处理了。</p>
+<h2 id="五底层-pr-合并后会发生什么">五、底层 PR 合并后会发生什么？</h2>
+<p>假设现在的 stack 是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">main ← PR #1 ← PR #2 ← PR #3</span><br></pre></td></tr></table></figure>
+<p>当 PR #1 合并到 <code>main</code> 后，PR #2 不应该继续以已经合并的
+<code>feat/auth-layer</code> 作为长期 base。系统需要把它重新定位成：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">main ← PR #2 ← PR #3</span><br></pre></td></tr></table></figure>
+<p>这就是级联变基（cascading rebase）。PR #2
+的独有提交会被重新应用到最新的 <code>main</code> 上，PR #3 再以 PR #2
+的新位置为基础。</p>
+<p>如果底层改动和上层改动没有冲突，这个过程通常很顺滑；如果底层 PR
+的实现方式发生了变化，上层分支就可能出现冲突，需要人工解决。也就是说，Stacked
+PRs <strong>减少了等待，但没有消除依赖关系带来的协调成本</strong>。</p>
+<h2 id="六合并时必须遵守什么顺序">六、合并时必须遵守什么顺序？</h2>
+<p>通常应该从底部向上合并：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">PR #1 → PR #2 → PR #3</span><br></pre></td></tr></table></figure>
+<p>因为上层 PR 依赖下层 PR。底层合并后，上层 PR 会自动重新定位到新的
+base 分支。</p>
+<p>GitHub 的堆叠 PR 也支持一次合并整个
+stack，或者合并其中一段。但理解上仍然可以记住一句话：<strong>依赖先合并，被依赖的代码后合并。</strong></p>
+<p>另外，堆叠中的每一层仍然要满足仓库的规则和 CI
+要求。分支保护、CODEOWNER 审批和 GitHub Actions 不应该因为某个 PR
+不是直接面向 <code>main</code> 就被绕过。</p>
+<h2
+id="七什么时候适合用什么时候不适合用">七、什么时候适合用，什么时候不适合用？</h2>
+<p>适合使用的情况：</p>
+<ul>
+<li>一个大功能可以自然拆成多个有先后关系的主题。</li>
+<li>后面的开发确实依赖前面的代码，但不想等待前一个 PR 合并。</li>
+<li>团队希望小步 review，而不是等所有工作完成后一次性提交。</li>
+<li>代码库有较好的自动化测试、分支保护和 PR 管理习惯。</li>
+</ul>
+<p>不适合使用的情况：</p>
+<ul>
+<li>各个改动其实互不依赖，只是为了“看起来像一个
+stack”而强行串起来。</li>
+<li>每一层都很小，拆分后反而增加沟通和维护成本。</li>
+<li>团队不熟悉 rebase，或者没有明确谁负责维护整个 stack。</li>
+<li>分支会被很多人同时随意修改，导致 stack 经常发生分叉。</li>
+</ul>
+<p>一个很实用的判断标准是：<strong>如果删除下面一层，上面一层仍然可以独立存在，那它们可能应该是普通的并行
+PR；如果上面一层必须建立在下面一层之上，stack 才有意义。</strong></p>
+<h2 id="八最容易踩的坑">八、最容易踩的坑</h2>
+<h3 id="把-stack-当成超长分支">1. 把 stack 当成“超长分支”</h3>
+<p>Stack
+的目的不是让一条分支永远叠很多东西，而是让每一层都保持可理解、可评审、可合并。如果某一层已经变成“顺手把所有剩余工作都放进去”，就失去了拆分的意义。</p>
+<h3 id="上层-pr-混入下层未完成的内容">2. 上层 PR
+混入下层未完成的内容</h3>
+<p>创建上层分支前，应该先把当前层的提交边界整理清楚。每一层最好代表一个稳定的逻辑单元，而不是半个功能加上一堆临时修改。</p>
+<h3 id="变基后忘记同步远程">3. 变基后忘记同步远程</h3>
+<p>rebase 会改写提交历史。stack
+重新变基后，通常需要使用安全的强制推送方式更新远程分支；不要在不了解影响的情况下直接覆盖其他人的分支。</p>
+<h3 id="评审顺序混乱">4. 评审顺序混乱</h3>
+<p>最下面的 PR 发生重大变化时，上面的 diff
+也可能跟着变化。审阅者最好从底层开始看，开发者也应该在底层设计变化后及时通知上层
+PR 的审阅者。</p>
+<h3 id="忘记它仍是预览功能">5. 忘记它仍是预览功能</h3>
+<p>GitHub 文档目前将 Stacked PRs 标记为 Public
+Preview，功能和命令未来可能发生变化；同时，所有 stack
+分支必须位于同一个仓库中，GitHub Desktop 目前也不支持这种工作流。</p>
+<h2 id="九我的理解stacked-prs-是依赖关系可视化">九、我的理解：Stacked
+PRs 是“依赖关系可视化”</h2>
+<p>Stacked PRs 最有价值的地方，不只是帮我们少敲几条 Git
+命令，而是把代码之间的依赖关系显式化了。</p>
+<p>普通的大 PR 往往把这些关系都压扁在一个 diff
+里：数据库结构、后端服务、前端页面和测试同时出现，审阅者只能自己在脑子里重建顺序。</p>
+<p>Stack 则把这个顺序写在分支和 PR 的 base 关系里：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">基础能力 → 业务能力 → 用户界面 → 测试与收尾</span><br></pre></td></tr></table></figure>
+<p>因此，它更像一种协作结构，而不只是 Git
+技巧。它要求我们在提交代码之前先回答一个问题：<strong>这项改动依赖什么，谁依赖它？</strong></p>
+<p>如果这个问题能回答清楚，Stacked PRs
+就能让大型改动变得更容易并行、更容易评审，也更容易在中途停下来合并一部分成果。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vemgvcHVsbC1yZXF1ZXN0cy9nZXQtc3RhcnRlZC9hYm91dC1zdGFja2VkLXBycw==">GitHub：关于堆叠式拉取请求<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vemgvcHVsbC1yZXF1ZXN0cy9yZWZlcmVuY2Uvc3RhY2tlZC1wcnMtY2xpLWNvbW1hbmRz">GitHub：堆叠式拉取请求
+CLI 命令<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vemgvcHVsbC1yZXF1ZXN0cy9nZXQtc3RhcnRlZC9zdGFja2VkLXBycy1xdWlja3N0YXJ0">GitHub：堆叠式拉取请求快速入门<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
+              <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+              <a href="/tags/Pull-Request/" rel="tag"><i class="fa fa-tag"></i> Pull-Request</a>
+              <a href="/tags/Code-Review/" rel="tag"><i class="fa fa-tag"></i> Code-Review</a>
+              <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag"><i class="fa fa-tag"></i> 工程实践</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/shanghai-workers-three-outcomes.html" rel="prev" title="刚来的 · 沪漂6年 · 已离开｜上海打工人的三种结局？">
+                  <i class="fa fa-angle-left"></i> 刚来的 · 沪漂6年 · 已离开｜上海打工人的三种结局？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/b5aa6984.html" rel="next" title="留学预算与外卖收入记账">
+                  留学预算与外卖收入记账 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">922k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">55:52</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

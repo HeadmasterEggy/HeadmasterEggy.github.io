@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Laboratory 1–6 的完整路线图：从组队、One-Person AI Company 选题与需求规模约束开始，依次完成 Ad-Hoc、Feature-Oriented、Use Case 三类需求建模，经过 checkpoint、设计原则与视点分析，进入架构模式、类图和运行时对象图。 附跨 Lab 溯源链、交付物检查表和常见失分点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Lab 1–6 总结：从选题到运行时对象模型">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-lab-notes-1-6.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Laboratory 1–6 的完整路线图：从组队、One-Person AI Company 选题与需求规模约束开始，依次完成 Ad-Hoc、Feature-Oriented、Use Case 三类需求建模，经过 checkpoint、设计原则与视点分析，进入架构模式、类图和运行时对象图。 附跨 Lab 溯源链、交付物检查表和常见失分点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-14T10:22:25.000Z">
+<meta property="article:modified_time" content="2026-09-29T11:03:40.457Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="Model-Based-Software-Engineering">
+<meta property="article:tag" content="Requirement-Modeling">
+<meta property="article:tag" content="Software-Architecture">
+<meta property="article:tag" content="UML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-lab-notes-1-6.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-lab-notes-1-6.html","path":"posts/elec5620-lab-notes-1-6.html","title":"ELEC5620 Lab 1–6 总结：从选题到运行时对象模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Lab 1–6 总结：从选题到运行时对象模型 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-lab-notes-1-6.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">280</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-lab-16-%E6%80%BB%E7%BB%93%E4%BB%8E%E9%80%89%E9%A2%98%E5%88%B0%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="nav-text">ELEC5620 Lab 1–6
+总结：从选题到运行时对象模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%AD%E6%AC%A1-lab-%E7%9A%84%E6%95%B4%E4%BD%93%E8%B7%AF%E7%BA%BF%E5%9B%BE"><span class="nav-text">一、六次 Lab 的整体路线图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Clab-1week-2%E7%BB%84%E9%98%9F%E9%80%89%E9%A2%98%E4%B8%8E%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3"><span class="nav-text">二、Lab 1（Week
+2）：组队、选题与项目文档</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E5%BB%BA%E7%AB%8B%E5%9B%A2%E9%98%9F"><span class="nav-text">2.1 先建立团队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E9%A2%98%E5%BF%85%E9%A1%BB%E5%9B%B4%E7%BB%95%E7%9C%9F%E5%AE%9E%E9%97%AE%E9%A2%98"><span class="nav-text">2.2 选题必须围绕真实问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-1-%E6%96%87%E6%A1%A3%E8%87%B3%E5%B0%91%E8%A6%86%E7%9B%96%E5%85%AD%E9%A1%B9"><span class="nav-text">2.3 Lab 1 文档至少覆盖六项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89lab-2week-3%E5%8F%AF%E8%A1%8C%E6%80%A7%E7%A1%AE%E8%AE%A4%E4%B8%8E%E9%9C%80%E6%B1%82%E8%A7%84%E6%A8%A1"><span class="nav-text">三、Lab 2（Week
+3）：可行性确认与需求规模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E5%88%86%E9%92%9F-pitch-%E5%8F%AA%E5%9B%9E%E7%AD%94%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-text">3.1 三分钟 pitch
+只回答两个问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%9D%A1%E7%A1%AC%E6%80%A7%E8%A7%84%E6%A8%A1%E8%A6%81%E6%B1%82"><span class="nav-text">3.2 两条硬性规模要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Blab-3week-4%E4%B8%89%E7%A7%8D%E9%9C%80%E6%B1%82%E5%BB%BA%E6%A8%A1%E6%96%B9%E6%B3%95"><span class="nav-text">四、Lab 3（Week
+4）：三种需求建模方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%9E%8B%E5%BF%85%E9%A1%BB%E4%BA%92%E7%9B%B8%E5%AF%B9%E5%BA%94"><span class="nav-text">4.1 三种模型必须互相对应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94lab-4week-5checkpoint%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E4%B8%8E%E8%A7%86%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-text">五、Lab 4（Week
+5）：Checkpoint、设计原则与视点分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#checkpoint-%E6%98%AF%E4%B8%80%E6%AC%A1%E6%96%B9%E5%90%91%E6%A0%A1%E5%87%86"><span class="nav-text">5.1 Checkpoint 是一次方向校准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E5%8C%96-use-cases"><span class="nav-text">5.2 细化 Use Cases</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%94%BB%E6%9E%B6%E6%9E%84%E5%89%8D%E5%85%88%E5%86%99-design-principles"><span class="nav-text">5.3 在画架构前先写 Design
+Principles</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#viewpoint-analysis"><span class="nav-text">5.4 Viewpoint Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADlab-5week-6%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%B1%BB%E5%9B%BE"><span class="nav-text">六、Lab 5（Week
+6）：架构模式与类图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%A8%A1%E5%BC%8F%E8%80%8C%E4%B8%8D%E6%98%AF%E5%A0%86%E7%A0%8C%E6%A8%A1%E5%BC%8F"><span class="nav-text">6.1 选择模式，而不是堆砌模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-diagram-%E7%9A%84%E5%9B%9B%E7%B1%BB%E6%A3%80%E6%9F%A5%E9%A1%B9"><span class="nav-text">6.2 Class Diagram 的四类检查项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83lab-6week-7object-diagram-%E4%B8%8E%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8D%8F%E4%BD%9C"><span class="nav-text">七、Lab 6（Week
+7）：Object Diagram 与运行时协作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1%E4%BB%8E%E7%B1%BB%E5%9B%BE%E9%80%89%E6%8B%A9%E5%AE%9E%E4%BE%8B"><span class="nav-text">7.1 Step 1：从类图选择实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2%E7%94%A8%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E8%A1%A8%E7%8E%B0-collaboration"><span class="nav-text">7.2 Step 2：用对象关系表现
+collaboration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E8%B7%A8-lab-%E7%9A%84%E5%AE%8C%E6%95%B4%E6%BA%AF%E6%BA%90%E7%9F%A9%E9%98%B5"><span class="nav-text">八、跨 Lab 的完整溯源矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1%E9%9C%80%E6%B1%82%E7%9A%84%E7%BA%B5%E5%90%91%E6%A3%80%E6%9F%A5%E6%96%B9%E5%BC%8F"><span class="nav-text">一条需求的纵向检查方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%80%E5%AE%B9%E6%98%93%E8%B8%A9%E7%9A%84%E4%B8%83%E4%B8%AA%E5%9D%91"><span class="nav-text">九、最容易踩的七个坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81lab-16-%E5%AE%8C%E6%88%90%E6%A3%80%E6%9F%A5%E8%A1%A8"><span class="nav-text">十、Lab 1–6 完成检查表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%8E%E5%9B%A2%E9%98%9F"><span class="nav-text">项目与团队</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E4%B8%8E%E6%9E%B6%E6%9E%84"><span class="nav-text">需求与架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E6%A8%A1%E5%9E%8B"><span class="nav-text">结构模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">213</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">280</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-lab-notes-1-6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Lab 1–6 总结：从选题到运行时对象模型 | Joey">
+      <meta itemprop="description" content="ELEC5620 Laboratory 1–6 的完整路线图：从组队、One-Person AI Company 选题与需求规模约束开始，依次完成 Ad-Hoc、Feature-Oriented、Use Case 三类需求建模，经过 checkpoint、设计原则与视点分析，进入架构模式、类图和运行时对象图。 附跨 Lab 溯源链、交付物检查表和常见失分点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Lab 1–6 总结：从选题到运行时对象模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-14 10:22:25" itemprop="dateCreated datePublished" datetime="2026-09-14T10:22:25Z">2026-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-09-29 11:03:40" itemprop="dateModified" datetime="2026-09-29T11:03:40Z">2026-09-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Laboratory 1–6 的完整路线图：从组队、One-Person AI Company 选题与需求规模约束开始，依次完成 Ad-Hoc、Feature-Oriented、Use Case 三类需求建模，经过 checkpoint、设计原则与视点分析，进入架构模式、类图和运行时对象图。 附跨 Lab 溯源链、交付物检查表和常见失分点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-lab-16-总结从选题到运行时对象模型">ELEC5620 Lab 1–6
+总结：从选题到运行时对象模型</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model-Based Software
+Engineering，Semester 2 2026<br>
+<strong>来源</strong>：<code>ELEC5620-Lab-Note-1.pdf</code> 至
+<code>ELEC5620-Lab-Note-6.pdf</code>（共 7 页）<br>
+<strong>配套阅读</strong>：<a href="/posts/elec5620-project-guide-one-person-ai-company.html">One-Person
+AI Company 项目指南</a>｜<a href="/posts/elec5620-project-requirement-example.html">需求范例拆解</a>｜<a href="/posts/elec5620-stage1-marking-criteria.html">Stage 1 评分标准与
+Lab 3</a></p>
+</blockquote>
+<blockquote>
+<p><strong>先说结论</strong>：Lab 1–6
+不是六次互不相关的练习，而是一条连续的项目建模流水线。每周的结果都应该成为下一周的输入：</p>
+<p><strong>真实问题与团队 → 项目需求 → 需求模型 → 架构原则与视点 →
+架构模式与类图 → 运行时对象模型</strong></p>
+</blockquote>
+<hr>
+<h2 id="一六次-lab-的整体路线图">一、六次 Lab 的整体路线图</h2>
+<table>
+<colgroup>
+<col style="width: 27%">
+<col style="width: 27%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">Lab</th>
+<th style="text-align: center;">教学周</th>
+<th style="text-align: left;">核心问题</th>
+<th style="text-align: left;">应形成的主要产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Lab 1</strong></td>
+<td style="text-align: center;">Week 2</td>
+<td style="text-align: left;">我们是谁，要解决什么真实问题？</td>
+<td style="text-align: left;">团队、1–2
+个候选题目、项目初稿、协作约定</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lab 2</strong></td>
+<td style="text-align: center;">Week 3</td>
+<td style="text-align: left;">题目可行吗？Agent
+角色与功能规模够不够？</td>
+<td style="text-align: left;">3 分钟 pitch、tutor 反馈、≥3 个 AI
+角色、功能分工</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lab 3</strong></td>
+<td style="text-align: center;">Week 4</td>
+<td style="text-align: left;">如何从不同角度把需求说明白？</td>
+<td style="text-align: left;">Ad-Hoc requirements、Feature model、Use
+cases</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lab 4</strong></td>
+<td style="text-align: center;">Week 5</td>
+<td style="text-align: left;">需求是否成熟？用什么原则和视点指导架构？</td>
+<td style="text-align: left;">Checkpoint 反馈、细化后的 use
+cases、设计原则、viewpoint analysis</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lab 5</strong></td>
+<td style="text-align: center;">Week 6</td>
+<td style="text-align: left;">系统采用什么架构模式？静态结构是什么？</td>
+<td style="text-align: left;">架构设计、模式选择与 rationale、class
+diagram(s)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lab 6</strong></td>
+<td style="text-align: center;">Week 7</td>
+<td style="text-align: left;">类在实际运行时如何实例化与协作？</td>
+<td style="text-align: left;">Object
+diagram(s)、具体对象值、运行时关系与 collaboration</td>
+</tr>
+</tbody>
+</table>
+<p>这条路线可以压缩成一条可追踪链：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Problem / Company Goal</span><br><span class="line">        ↓</span><br><span class="line">Project Requirements</span><br><span class="line">        ↓</span><br><span class="line">Ad-Hoc → Feature Model → Use Case</span><br><span class="line">        ↓</span><br><span class="line">Design Principles + Viewpoints</span><br><span class="line">        ↓</span><br><span class="line">Architectural Patterns + Components</span><br><span class="line">        ↓</span><br><span class="line">Class Diagram</span><br><span class="line">        ↓</span><br><span class="line">Object Diagram / Runtime Collaboration</span><br></pre></td></tr></table></figure>
+<p>任何一步与上一步断开，都会让最终报告看起来像“一组彼此无关的 UML
+图”，而不是一个有设计逻辑的系统。</p>
+<hr>
+<h2 id="二lab-1week-2组队选题与项目文档">二、Lab 1（Week
+2）：组队、选题与项目文档</h2>
+<h3 id="先建立团队">2.1 先建立团队</h3>
+<p>Lab 1 首先要求成员介绍自己的背景、兴趣、Agentic AI / LLM
+经验、可贡献的技能，以及希望在本学期学习的方向。随后组成 <strong>3–5
+人小组</strong>，并加入 Canvas 中与 lab 时间对应的 group；小组名称采用
+<code>lab time + group number</code> 的格式。</p>
+<p>这里真正要解决的不是“凑够人数”，而是让团队技能覆盖项目所需的不同方面。至少要提前知道谁更适合负责：</p>
+<ul>
+<li>需求与项目文档</li>
+<li>UML 与架构建模</li>
+<li>LLM / agent workflow</li>
+<li>后端、工具调用和数据</li>
+<li>前端、演示与整合</li>
+</ul>
+<h3 id="选题必须围绕真实问题">2.2 选题必须围绕真实问题</h3>
+<p>小组要讨论一个利用 <strong>Agentic AI
+协作解决复杂问题或任务</strong>的软件项目。官方建议：</p>
+<ul>
+<li>准备 <strong>1–2 个候选题目</strong>，保留比较和调整空间；</li>
+<li>明确软件要解决的 <strong>real-world problem</strong>；</li>
+<li>说明需要什么类型的 LLM，以及 LLM 为什么能显著增强 agent；</li>
+<li>保持与 <strong>One-Person AI Company</strong> 主题的强关联；</li>
+<li>思考对目标行业的影响，例如简化流程、提高效率或提供新方案；</li>
+<li>可以参考现有 LLM
+应用，但最好面向澳大利亚的相关挑战，并具有行业吸引力。</li>
+</ul>
+<blockquote>
+<p><strong>关键判断</strong>：不要从“我们想用哪个模型”出发，而要从“现实中哪一段工作值得由多个
+agent 协作完成”出发。</p>
+</blockquote>
+<h3 id="lab-1-文档至少覆盖六项">2.3 Lab 1 文档至少覆盖六项</h3>
+<p>根据 Project Description，项目初稿应包括：</p>
+<ol type="1">
+<li><strong>Project scenario</strong>：项目场景与问题背景；</li>
+<li><strong>Key functionalities</strong>：关键功能概览；</li>
+<li><strong>Intended users or
+beneficiaries</strong>：目标用户或受益者；</li>
+<li><strong>Member roles and
+responsibilities</strong>：每位成员的角色与职责；</li>
+<li><strong>Collaboration
+rules</strong>：协作、沟通与冲突解决方式；</li>
+<li><strong>Objectives, scope and
+significance</strong>：目标、范围、意义，并突出 Agentic AI 的作用。</li>
+</ol>
+<p>Lab 1 的理想结果不是一份很长的报告，而是一份全组都同意的
+<strong>company brief + team
+charter</strong>。它将成为后续需求建模的地基。</p>
+<hr>
+<h2 id="三lab-2week-3可行性确认与需求规模">三、Lab 2（Week
+3）：可行性确认与需求规模</h2>
+<h3 id="三分钟-pitch-只回答两个问题">3.1 三分钟 pitch
+只回答两个问题</h3>
+<p>小组需要向其他组进行 <strong>3 分钟题目介绍</strong>，重点回答：</p>
+<ol type="1">
+<li><strong>它解决什么真实世界问题？</strong></li>
+<li><strong>公司中的哪些角色应由 AI agent 执行或替代？</strong></li>
+</ol>
+<p>在展示前，应先与 tutor
+讨论候选题目的可行性，确认它符合课程项目目标。三分钟很短，所以 pitch
+不应堆功能，而应讲清楚：<strong>问题 → 角色 → agent
+协作带来的价值</strong>。</p>
+<h3 id="两条硬性规模要求">3.2 两条硬性规模要求</h3>
+<p>Lab 2 明确写出：</p>
+<ul>
+<li>应用必须包含 <strong>至少 3 个不同的 AI 角色</strong>，并承担主要
+stakeholder 或 business function；</li>
+<li><strong>每位成员</strong>必须独立实现至少 <strong>2 个 core features
++ 1 个 optional feature</strong>。</li>
+</ul>
+<p>因此，最低功能规模取决于组员人数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">组员数</th>
+<th style="text-align: center;">Core features 下限</th>
+<th style="text-align: center;">Optional features 下限</th>
+<th style="text-align: center;">每人合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">3 人</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr>
+<td style="text-align: center;">4 人</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">12</td>
+</tr>
+<tr>
+<td style="text-align: center;">5 人</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">15</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>容易误解的地方</strong>：三个 agent
+不能只是同一个聊天机器人换三个名字。它们需要有不同职责，并在工作流中真正传递信息、委派任务、验证结果或进行升级处理。</p>
+</blockquote>
+<p>Lab 2 结束时，建议形成一张最小责任矩阵：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">AI 角色</th>
+<th style="text-align: left;">业务职责</th>
+<th style="text-align: left;">Core features</th>
+<th style="text-align: left;">Optional features</th>
+<th style="text-align: left;">负责人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Agent A</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">Member 1</td>
+</tr>
+<tr>
+<td style="text-align: left;">Agent B</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">Member 2</td>
+</tr>
+<tr>
+<td style="text-align: left;">Agent C</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">Member 3</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="四lab-3week-4三种需求建模方法">四、Lab 3（Week
+4）：三种需求建模方法</h2>
+<p>Lab 3
+引入三种互补方法。它们不是三选一，而是从模糊想法走向可验证需求的三个层次。</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">作用</th>
+<th style="text-align: left;">应回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ad-Hoc Approach</strong></td>
+<td style="text-align: left;">用灵活、非正式的方式先描述和分析需求</td>
+<td style="text-align: left;">我们在这个具体场景里到底需要什么？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feature-Oriented
+Approach</strong></td>
+<td style="text-align: left;">把初始需求系统化地细化为功能和属性</td>
+<td style="text-align: left;">系统必须具备哪些明确能力？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Use Case Approach</strong></td>
+<td style="text-align: left;">从用户或外部系统的交互角度定义需求</td>
+<td style="text-align: left;">谁在什么条件下，通过哪些步骤实现什么目标？</td>
+</tr>
+</tbody>
+</table>
+<p>官方给出的关系可以概括为：</p>
+<blockquote>
+<p><strong>Ad-Hoc 提供初始、灵活的需求定义 → Feature-Oriented
+把它细化为具体特性 → Use Case
+验证这些特性是否符合用户期望和交互。</strong></p>
+</blockquote>
+<h3 id="三种模型必须互相对应">4.1 三种模型必须互相对应</h3>
+<p>假设初始需求是“当行程预算超限时，系统应帮助用户调整方案”，三种方法不应该各写各的：</p>
+<ul>
+<li><strong>Ad-Hoc
+requirement</strong>：描述预算超限的业务情境、约束和期望结果；</li>
+<li><strong>Feature model</strong>：包含 Budget Monitoring、Alternative
+Search、Negotiation、Human Approval 等特性；</li>
+<li><strong>Use case</strong>：描述用户、Planner Agent 与 Budget Agent
+如何协作完成调整。</li>
+</ul>
+<p>这条需求之后还应继续成为 activity、interaction 和 state machine
+diagram 的来源。Lab 3 与 Stage 1 评分项的详细对应，见 <a href="/posts/elec5620-stage1-marking-criteria.html">Stage 1
+评分标准拆解</a>。</p>
+<hr>
+<h2 id="五lab-4week-5checkpoint设计原则与视点分析">五、Lab 4（Week
+5）：Checkpoint、设计原则与视点分析</h2>
+<h3 id="checkpoint-是一次方向校准">5.1 Checkpoint 是一次方向校准</h3>
+<p>首先向 tutor 展示当前进展，检查需求是否：</p>
+<ul>
+<li>符合课程目标；</li>
+<li>可实现，而不是范围无限扩大；</li>
+<li>足够完整，能够支撑后续建模；</li>
+<li>清楚体现 One-Person AI Company 和 agent collaboration。</li>
+</ul>
+<p>最值得在 checkpoint 主动问 tutor 的问题包括：项目范围是否合适、agent
+的职责是否真的不同、功能数量是否满足每人要求、关键 use case
+能否支撑后续三类行为图。</p>
+<h3 id="细化-use-cases">5.2 细化 Use Cases</h3>
+<p>Use case 需要准确表示系统的 functional
+requirements，并清楚定义用户与系统之间的交互。至少应检查：</p>
+<ul>
+<li>Actor 和目标是否明确；</li>
+<li>Preconditions / trigger 是否成立；</li>
+<li>Main flow 是否有完整的起点和终点；</li>
+<li>Alternative / exception flow 是否覆盖失败与人工升级；</li>
+<li>Postconditions 是否可以验证；</li>
+<li>是否与 feature model 和项目目标一致。</li>
+</ul>
+<h3 id="在画架构前先写-design-principles">5.3 在画架构前先写 Design
+Principles</h3>
+<p>Lab 4 给出的例子包括：</p>
+<ul>
+<li><strong>Separating control from
+function</strong>：控制逻辑与业务功能分离；</li>
+<li><strong>Centralizing control</strong>：在适合的情况下集中协调；</li>
+<li>选择合适的 <strong>Model of Computation（MoC）</strong>。</li>
+</ul>
+<p>设计原则不是口号。每条原则都应能约束后续决策，例如：“所有高风险输出必须经过独立验证
+agent 或 human approval”，就会影响组件划分、消息流和状态设计。</p>
+<h3 id="viewpoint-analysis">5.4 Viewpoint Analysis</h3>
+<p>设计原则确定后，选择合适的 viewpoint model，例如 <strong>4+1 View
+Model</strong>，再从特定视点分析架构。核心是让不同 stakeholder
+看到自己关心的系统属性，而不是试图用一张图解释全部内容。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">视点示例</th>
+<th style="text-align: left;">关注内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Logical</td>
+<td style="text-align: left;">核心功能、领域对象、职责划分</td>
+</tr>
+<tr>
+<td style="text-align: left;">Process</td>
+<td style="text-align: left;">并发、通信、运行时协作与控制流</td>
+</tr>
+<tr>
+<td style="text-align: left;">Development</td>
+<td style="text-align: left;">模块、包、代码组织和团队分工</td>
+</tr>
+<tr>
+<td style="text-align: left;">Physical</td>
+<td style="text-align: left;">部署节点、外部服务、网络与基础设施</td>
+</tr>
+<tr>
+<td style="text-align: left;">Scenarios（+1）</td>
+<td style="text-align: left;">用关键 use cases 验证其他视点是否一致</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="六lab-5week-6架构模式与类图">六、Lab 5（Week
+6）：架构模式与类图</h2>
+<h3 id="选择模式而不是堆砌模式">6.1 选择模式，而不是堆砌模式</h3>
+<p>Lab 5 要求基于合适的 architectural design patterns
+完成系统架构。候选包括：</p>
+<ul>
+<li>通用架构模式：<strong>Layered Architecture、MVC、Service-Oriented
+Architecture、Shared-Data</strong>；</li>
+<li>Agent-oriented
+patterns：<strong>ReAct、Planner–Executor、Supervisor–Worker、Blackboard、Cognitive
+Layering</strong>。</li>
+</ul>
+<p>官方明确说明：<strong>不需要使用所有模式，只选择与系统最相关的模式。</strong>
+对每个选中的模式，应回答三件事：</p>
+<ol type="1">
+<li>它解决什么架构问题？</li>
+<li>在本系统中如何落地到具体组件、职责和交互？</li>
+<li>它的优势、限制和 trade-offs 是什么，如何满足 functional /
+non-functional requirements？</li>
+</ol>
+<p>例如，一个多 agent 系统选择 Supervisor–Worker，并不等于画一个
+Supervisor 框。还要说明：任务如何拆分、worker
+如何选择、失败如何重试、结果如何合并、何时升级给人类，以及集中式
+supervisor 带来的单点故障和性能权衡。</p>
+<h3 id="class-diagram-的四类检查项">6.2 Class Diagram 的四类检查项</h3>
+<p>类图表示系统的 <strong>design-time static structure</strong>。Lab 5
+要求覆盖：</p>
+<ol type="1">
+<li><strong>Classes and relationships</strong>：主要类，以及
+association、generalization、aggregation、composition；</li>
+<li><strong>Interfaces</strong>：接口及其实现关系；</li>
+<li><strong>Multiplicity</strong>：每条 association 的多重性；</li>
+<li><strong>Attributes and
+methods</strong>：与职责相符的属性和方法。</li>
+</ol>
+<blockquote>
+<p><strong>常见失分点</strong>：把架构组件图直接当类图；只画类名不画关系；漏掉
+multiplicity；把 aggregation 与 composition
+随意混用；接口与具体实现没有区分。</p>
+</blockquote>
+<p>类图应当能够反向解释 use case，也应能向前支持 Lab 6
+的对象实例化。如果一个关键 use case
+中出现的重要职责在类图里找不到承担者，说明模型之间已经断链。</p>
+<hr>
+<h2 id="七lab-6week-7object-diagram-与运行时协作">七、Lab 6（Week
+7）：Object Diagram 与运行时协作</h2>
+<p>Lab 6
+从“系统有哪些类”推进到“某个具体时刻，系统中实际存在哪些对象，它们怎样连接”。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Class Diagram</th>
+<th style="text-align: left;">Object Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">描述类型和规则</td>
+<td style="text-align: left;">描述某个时刻的具体实例</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>TripPlanner</code></td>
+<td style="text-align: left;"><code>plannerSydney:TripPlanner</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">属性定义 <code>budget: Money</code></td>
+<td style="text-align: left;">具体值 <code>budget = AUD 2500</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">关联允许哪些对象相连</td>
+<td style="text-align: left;">当前场景中哪些对象真的相连</td>
+</tr>
+<tr>
+<td style="text-align: left;">设计时静态结构</td>
+<td style="text-align: left;">运行时快照与 collaboration</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-1从类图选择实例">7.1 Step 1：从类图选择实例</h3>
+<ul>
+<li>回顾 Lab 5 的 class diagram；</li>
+<li>找出关键场景中真正参与运行的类；</li>
+<li>为每个类创建具体命名的 object；</li>
+<li>给关键 attributes 填入能解释该场景的具体值。</li>
+</ul>
+<p>对象命名通常采用：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">objectName:ClassName</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">request42:TripRequest</span><br><span class="line">plannerSydney:PlannerAgent</span><br><span class="line">budgetGuard:BudgetAgent</span><br><span class="line">operatorJoey:HumanOperator</span><br></pre></td></tr></table></figure>
+<h3 id="step-2用对象关系表现-collaboration">7.2 Step 2：用对象关系表现
+collaboration</h3>
+<p>对象图不能只是把类名改成带下划线的对象名。它要呈现：</p>
+<ul>
+<li>当前场景中的 object links；</li>
+<li>哪些对象交换信息或共同完成任务；</li>
+<li>运行时关系是否符合类图中的 association 和 multiplicity；</li>
+<li>agent collaboration pattern 在具体场景中如何出现。</li>
+</ul>
+<p>最适合画对象图的是一个有代表性的运行时瞬间，例如“Planner
+已生成方案、Budget Agent 判定超支、系统等待 Human Operator
+批准替代方案”。具体值和连接会让抽象架构变得可检查。</p>
+<hr>
+<h2 id="八跨-lab-的完整溯源矩阵">八、跨 Lab 的完整溯源矩阵</h2>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">输入</th>
+<th style="text-align: left;">输出</th>
+<th style="text-align: left;">一致性检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Lab 1</td>
+<td style="text-align: left;">真实问题、团队能力</td>
+<td style="text-align: left;">项目场景、范围、用户、功能初稿</td>
+<td style="text-align: left;">Agentic AI
+是否不可替代？范围是否可控？</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lab 2</td>
+<td style="text-align: left;">候选题目</td>
+<td style="text-align: left;">AI 角色、功能数量、成员分工</td>
+<td style="text-align: left;">≥3 个不同 AI 角色？每人 ≥2 core + 1
+optional？</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lab 3</td>
+<td style="text-align: left;">项目需求</td>
+<td style="text-align: left;">Ad-Hoc、Feature、Use Case 模型</td>
+<td style="text-align: left;">三类需求是否互相映射？</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lab 4</td>
+<td style="text-align: left;">需求模型</td>
+<td style="text-align: left;">细化 use cases、原则、视点</td>
+<td style="text-align: left;">原则是否约束设计？视点是否服务
+stakeholder？</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lab 5</td>
+<td style="text-align: left;">原则、视点、use cases</td>
+<td style="text-align: left;">架构模式、组件、类图</td>
+<td style="text-align: left;">模式是否有 rationale？类能否承担 use case
+职责？</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lab 6</td>
+<td style="text-align: left;">类图、关键场景</td>
+<td style="text-align: left;">对象图、运行时 collaboration</td>
+<td style="text-align: left;">实例、属性值、链接是否符合类图？</td>
+</tr>
+</tbody>
+</table>
+<h3 id="一条需求的纵向检查方式">一条需求的纵向检查方式</h3>
+<p>挑一条关键需求，从头到尾追问：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">它来自哪个真实问题？</span><br><span class="line">→ 属于哪个 feature？</span><br><span class="line">→ 由哪个 use case 实现？</span><br><span class="line">→ 受到哪些 design principles 约束？</span><br><span class="line">→ 在哪个 architecture pattern 中运行？</span><br><span class="line">→ 由哪些 classes 承担？</span><br><span class="line">→ 在具体场景中实例化为哪些 objects？</span><br></pre></td></tr></table></figure>
+<p>如果每个问题都能明确回答，模型之间才真正具有 traceability。</p>
+<hr>
+<h2 id="九最容易踩的七个坑">九、最容易踩的七个坑</h2>
+<ol type="1">
+<li><strong>先选模型，再找问题</strong>：结果通常只是普通聊天应用套了一个
+LLM API。</li>
+<li><strong>三个 agent
+只有名称不同</strong>：角色没有独立职责，也没有真实协作或交接。</li>
+<li><strong>功能数量与组员人数不匹配</strong>：忽略每人 2 core + 1
+optional 的最低要求。</li>
+<li><strong>三类需求模型互不对应</strong>：Ad-Hoc、Feature 和 Use Case
+各自描述不同系统。</li>
+<li><strong>设计原则停留在口号</strong>：没有影响组件边界、控制方式、异常处理或人类审批。</li>
+<li><strong>为了显得复杂而叠加模式</strong>：列出多个架构模式，却没有说明各自解决的问题和
+trade-offs。</li>
+<li><strong>Object Diagram 只是 Class Diagram
+的复制品</strong>：缺少具体对象名、属性值、场景和运行时链接。</li>
+</ol>
+<hr>
+<h2 id="十lab-16-完成检查表">十、Lab 1–6 完成检查表</h2>
+<h3 id="项目与团队">项目与团队</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">已组成 3–5 人小组并加入正确的 Canvas
+group</label></li>
+<li><label><input type="checkbox">有明确的真实问题、目标用户与行业价值</label></li>
+<li><label><input type="checkbox">已定义至少 3 个职责不同且会协作的 AI
+角色</label></li>
+<li><label><input type="checkbox">每位成员至少负责 2 个 core features
+和 1 个 optional feature</label></li>
+<li><label><input type="checkbox">已记录成员职责、协作方式和冲突解决规则</label></li>
+</ul>
+<h3 id="需求与架构">需求与架构</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Ad-Hoc、Feature 与 Use Case
+三类模型彼此一致</label></li>
+<li><label><input type="checkbox">Use cases 有 main flow、alternative
+flow 和可验证的 postconditions</label></li>
+<li><label><input type="checkbox">Checkpoint 已向 tutor
+验证范围、可行性和完整性</label></li>
+<li><label><input type="checkbox">设计原则能实际约束架构决策</label></li>
+<li><label><input type="checkbox">已选择合适 viewpoint，并用 scenarios
+检查一致性</label></li>
+<li><label><input type="checkbox">每个架构模式都有
+problem、application、benefit、limitation 和 rationale</label></li>
+</ul>
+<h3 id="结构模型">结构模型</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">类图包含主要
+classes、relationships、interfaces、multiplicity、attributes 和
+methods</label></li>
+<li><label><input type="checkbox">关键 use case
+中的每项职责都能在类图中找到承担者</label></li>
+<li><label><input type="checkbox">对象图使用具体实例名和属性值</label></li>
+<li><label><input type="checkbox">对象链接符合类图的 association 与
+multiplicity</label></li>
+<li><label><input type="checkbox">对象图清楚展示一个关键运行时
+collaboration 场景</label></li>
+</ul>
+<hr>
+<h2 id="总结">总结</h2>
+<p>Lab 1–6
+的核心不是“每周多画一张图”，而是逐步把一个真实问题变成可解释、可追踪、可实现的系统设计：</p>
+<blockquote>
+<p><strong>Lab 1–2 决定做什么、谁来做；Lab 3 说明系统必须做什么；Lab 4
+决定用什么原则和视点观察它；Lab 5 定义它的架构与静态结构；Lab 6
+证明这些结构在具体运行场景中如何成立。</strong></p>
+</blockquote>
+<p>最终交付的质量，取决于这条链是否连贯。单张图画得漂亮但彼此无法追踪，价值有限；每个模型都能解释上一步并支撑下一步，才真正体现
+Model-Based Software Engineering。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/Model-Based-Software-Engineering/" rel="tag"><i class="fa fa-tag"></i> Model-Based-Software-Engineering</a>
+              <a href="/tags/Requirement-Modeling/" rel="tag"><i class="fa fa-tag"></i> Requirement-Modeling</a>
+              <a href="/tags/Software-Architecture/" rel="tag"><i class="fa fa-tag"></i> Software-Architecture</a>
+              <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/72a8cd12.html" rel="prev" title="DeepSeek-V4.1-Flash 技术报告与架构解析">
+                  <i class="fa fa-angle-left"></i> DeepSeek-V4.1-Flash 技术报告与架构解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/f4a29123.html" rel="next" title="DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的">
+                  DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">922k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">55:52</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
