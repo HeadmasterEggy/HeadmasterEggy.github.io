@@ -32,7 +32,7 @@
       waifuPath: base + 'waifu-tips.json',
       cdnPath: base,                       // model_list.json 与 model/hijiki/ 都在这里
       cubism2Path: base + 'live2d.min.js', // hijiki 是 Cubism 2 模型
-      tools: ['hitokoto', 'quit'],
+      tools: [], // 不用自带工具按钮；入口是 agent.js 里的“问问猫”按钮
       logLevel: 'warn',
       drag: false,
     });

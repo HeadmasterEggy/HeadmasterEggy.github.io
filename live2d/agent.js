@@ -12,14 +12,13 @@
 
   const svg = (paths, extra = '') => `<svg viewBox="0 0 24 24" aria-hidden="true" ${extra}>${paths}</svg>`;
   const ICONS = {
-    chat: '<svg viewBox="0 0 512 512" aria-label="chat"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z"/></svg>',
     close: svg('<path d="M18 6 6 18M6 6l12 12"/>'),
     clear: svg('<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>'),
     send: svg('<path d="M12 19V5M5 12l7-7 7 7"/>'),
     copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>'),
     check: svg('<path d="M20 6 9 17l-5-5"/>'),
-    // 黑猫头像：深色底、两只耳朵、琥珀色眼睛
-    cat: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#18181b"/><path d="M9 9l6 5-5 7zM31 9l-6 5 5 7z" fill="#3f3f46"/><ellipse cx="20" cy="23" rx="10" ry="9" fill="#27272a"/><ellipse cx="15.5" cy="22" rx="2.2" ry="2.8" fill="#fbbf24"/><ellipse cx="24.5" cy="22" rx="2.2" ry="2.8" fill="#fbbf24"/><ellipse cx="15.5" cy="22" rx=".8" ry="2.2" fill="#18181b"/><ellipse cx="24.5" cy="22" rx=".8" ry="2.2" fill="#18181b"/><path d="M18.6 26.4h2.8l-1.4 1.6z" fill="#f4a3b0"/></svg>'
+    // 头像：从猫的 Live2D 模型画布里截取的猫脸（source/live2d/avatar.webp）
+    cat: '<img src="/live2d/avatar.webp" alt="" draggable="false">'
   };
 
   const h = (tag, cls, text) => {
@@ -193,7 +192,7 @@
   panel.innerHTML = `
     <div class="cc-head">
       <div class="cc-avatar">${ICONS.cat}</div>
-      <div class="cc-title"><b>看板猫</b><span>在线 · 可以帮你翻笔记</span></div>
+      <div class="cc-title"><b>看板猫</b><span>可以帮你翻笔记、聊聊这一页</span></div>
       <button type="button" class="cc-icon" data-act="clear" title="清空对话" aria-label="清空对话">${ICONS.clear}</button>
       <button type="button" class="cc-icon" data-act="close" title="关闭" aria-label="关闭">${ICONS.close}</button>
     </div>
@@ -204,8 +203,7 @@
         <textarea rows="1" maxlength="800" placeholder="问问猫…" aria-label="消息"></textarea>
         <button type="submit" class="send" title="发送" aria-label="发送">${ICONS.send}</button>
       </div>
-    </form>
-    <div class="hint">Enter 发送 · Shift+Enter 换行 · 由 DeepSeek 驱动，可能出错</div>`;
+    </form>`;
   document.body.appendChild(panel);
   const msgs = panel.querySelector('.msgs');
   const chips = panel.querySelector('.chips');
@@ -348,22 +346,22 @@
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) setOpen(false); });
 
-  // 等猫的工具栏出现后加“聊天”按钮；猫被关闭时同时收起面板
-  const mount = () => {
-    const tool = document.getElementById('waifu-tool');
-    if (!tool || document.getElementById('waifu-tool-chat')) return !!tool;
-    button = h('span');
-    button.id = 'waifu-tool-chat';
-    button.title = '和猫聊聊';
-    button.innerHTML = ICONS.chat;
-    button.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
-    tool.insertBefore(button, tool.firstChild);
-    return true;
-  };
-  new MutationObserver(() => {
-    mount();
+  // 入口：猫脚边的“问问猫”按钮（等猫出现后再显示）
+  const fab = h('button');
+  fab.id = 'cat-fab';
+  fab.type = 'button';
+  fab.innerHTML = `${ICONS.cat}<span>问问猫</span>`;
+  fab.setAttribute('aria-label', '和看板猫聊天');
+  fab.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  document.body.appendChild(fab);
+  button = fab;
+
+  const sync = () => {
     const w = document.getElementById('waifu');
+    const visible = !!w && w.classList.contains('waifu-active') && !w.classList.contains('waifu-hidden');
+    fab.classList.toggle('show', visible);
     if (w && w.classList.contains('waifu-hidden')) setOpen(false);
-  }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-  mount();
+  };
+  new MutationObserver(sync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  sync();
 })();
