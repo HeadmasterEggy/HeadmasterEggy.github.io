@@ -8,7 +8,8 @@
 
   const STORE = 'cat-chat-history';
   const GREETING = '喵～我是这个博客的看板喵。想找哪方面的笔记，或者想聊聊当前这页，都可以问我。';
-  const CHIPS = ['推荐几篇值得看的笔记', '总结一下当前这页', '有哪些关于算法的笔记？', '你是谁？'];
+  const CHIPS = ['推荐几篇值得看的笔记', '总结一下当前这页', '有哪些关于算法的笔记？', '你是谁？']; // 生成失败时的兜底
+  const SUGGEST_URL = url.replace(/\/chat$/, '/suggest');
 
   const svg = (paths, extra = '') => `<svg viewBox="0 0 24 24" aria-hidden="true" ${extra}>${paths}</svg>`;
   const ICONS = {
@@ -264,10 +265,43 @@
     }
   }
 
-  function renderChips() {
+  // 推荐提问：由后端根据随机几篇笔记（和当前页面）用 DeepSeek 现场生成，每次都不一样；失败时用 CHIPS 兜底
+  let suggestFor = '', suggestion = null;
+  function fetchSuggestions(force = false) {
+    const key = location.pathname;
+    if (!force && suggestion && suggestFor === key) return suggestion;
+    suggestFor = key;
+    suggestion = (async () => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 9000);
+      try {
+        const res = await fetch(SUGGEST_URL, {
+          method: 'POST', signal: ctrl.signal, headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ page: { title: document.title.slice(0, 100), url: location.pathname } })
+        });
+        const data = await res.json();
+        if (!res.ok || !Array.isArray(data.suggestions) || data.suggestions.length < 3) return null;
+        return data.suggestions.slice(0, 4).map(s => String(s).slice(0, 40));
+      } catch (e) { return null; } finally { clearTimeout(timer); }
+    })();
+    return suggestion;
+  }
+
+  let chipToken = 0;
+  async function renderChips(force = false) {
+    const token = ++chipToken;
     chips.textContent = '';
     if (history.length) return;
-    CHIPS.forEach((text, i) => {
+    const widths = [128, 92, 116, 100];
+    widths.forEach((w, i) => { // 生成期间显示骨架占位
+      const s = h('span', 'skel');
+      s.style.cssText = `--w:${w}px;--i:${i}`;
+      chips.append(s);
+    });
+    const list = (await fetchSuggestions(force)) || CHIPS;
+    if (token !== chipToken || history.length) return; // 期间用户已经发了消息 / 又重新渲染过
+    chips.textContent = '';
+    list.forEach((text, i) => {
       const b = h('button', '', text);
       b.type = 'button';
       b.style.setProperty('--i', i);
@@ -276,14 +310,14 @@
     });
   }
 
-  function renderAll() {
+  function renderAll(force = false, withChips = true) {
     msgs.textContent = '';
     if (!history.length) catMessage(GREETING);
     history.forEach(m => (m.role === 'user' ? (addRow('me').bubble.textContent = m.content) : catMessage(m.content)));
-    renderChips();
+    if (withChips) renderChips(force);
     toBottom();
   }
-  renderAll();
+  renderAll(false, false); // 页面加载时不生成推荐提问（省 API 调用），首次打开面板时才生成
 
   async function send(text) {
     busy = true; sendBtn.disabled = true;
@@ -355,6 +389,7 @@
   let button;
   const setOpen = open => {
     if (open) placePanel();
+    if (open && !history.length && !chips.childElementCount) renderChips();
     panel.classList.toggle('open', open);
     button && button.classList.toggle('active', open);
     if (open) { toBottom(); setTimeout(() => input.focus(), 120); }
@@ -362,7 +397,7 @@
   panel.querySelector('[data-act="close"]').addEventListener('click', () => setOpen(false));
   panel.querySelector('[data-act="clear"]').addEventListener('click', () => {
     if (busy) return;
-    history = []; save(); renderAll(); input.focus();
+    history = []; save(); renderAll(true); input.focus();
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) setOpen(false); });
 
@@ -375,6 +410,7 @@
   document.body.appendChild(dock);
   button = dock.querySelector('[data-act="chat"]');
   button.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  button.addEventListener('pointerenter', () => { if (!history.length) fetchSuggestions(); }, { once: true }); // 鼠标靠近就预取，点开时基本已经生成好
 
   let notes = null;
   dock.querySelector('[data-act="random"]').addEventListener('click', async () => {
