@@ -1,8 +1,10 @@
 /* 看板猫：右下角布局（覆盖 waifu.css 的默认左下角）+ 聊天面板。
    配色全部取自博客主题（NexT）的 CSS 变量，强调色用 NexT 的橙色 #fc6423，随明暗模式自动切换。 */
 
-/* 尺寸与旧版一致（旧 live2d 挂件 180×300 画布里的猫约 95px 宽） */
-#waifu { left: auto; right: 0; }
+/* 尺寸与旧版一致（旧 live2d 挂件 180×300 画布里的猫约 95px 宽）；位置离开右下角，整只猫（含脚）完整露出 */
+#waifu { left: auto; right: 72px; }
+#waifu.waifu-active { bottom: 72px; transform: none; }
+#waifu.waifu-active:hover { transform: translateY(-3px); }
 #live2d { width: 180px; height: 180px; }
 #waifu-tool { display: none; } /* 不用自带的工具按钮，入口是下面的“问问猫”按钮 */
 
@@ -23,7 +25,7 @@
 #waifu-toggle.waifu-toggle-active:hover { margin-left: 0; margin-right: -30px; }
 
 /* ───── 公共变量 ───── */
-#cat-chat, #cat-fab {
+#cat-chat, #cat-dock {
   --c-fg: var(--text-color, #555);
   --c-muted: color-mix(in srgb, var(--text-color, #555) 62%, transparent);
   --c-border: color-mix(in srgb, var(--text-color, #555) 16%, transparent);
@@ -37,34 +39,38 @@
   --c-me-border: color-mix(in srgb, #fc6423 42%, transparent);
   --c-link: #e0500f;
   --c-ring: rgba(252, 100, 35, .25);
-  --c-avatar-bg: #e4e0d8; /* 浅暖灰底，让黑猫在明暗两种模式下都清晰 */
+  --c-avatar-bg: #e4e0d8; /* 浅暖灰底，让黑猫头像在明暗两种模式下都清晰 */
   --c-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 12px 32px -8px rgba(0, 0, 0, .3);
 }
 @media (prefers-color-scheme: dark) {
-  #cat-chat, #cat-fab { --c-link: #ff8c5a; --c-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px -8px rgba(0, 0, 0, .6); }
+  #cat-chat, #cat-dock { --c-link: #ff8c5a; --c-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px -8px rgba(0, 0, 0, .6); }
 }
 
-/* ───── “问问猫”按钮 ───── */
-#cat-fab {
-  all: unset; box-sizing: border-box; position: fixed; right: 172px; bottom: 30px; z-index: 9;
-  display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px 6px 6px; border-radius: 999px; cursor: pointer;
-  font-size: 13px; line-height: 1; color: var(--c-fg);
+/* ───── 猫脚下的胶囊工具条（参考 Codex 的猫）：聊天 | 随机一篇笔记 ───── */
+#cat-dock {
+  position: fixed; right: 162px; translate: 50% 0; bottom: 24px; z-index: 9;
+  display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px;
   background: var(--c-bg); border: 1px solid var(--c-border); box-shadow: var(--c-shadow);
-  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
   opacity: 0; transform: translateY(8px) scale(.94); pointer-events: none;
-  transition: transform .35s cubic-bezier(.34, 1.4, .64, 1), opacity .25s ease, border-color .15s, background .15s;
+  transition: transform .4s cubic-bezier(.34, 1.4, .64, 1), opacity .25s ease;
 }
-#cat-fab.show { opacity: 1; transform: none; pointer-events: auto; }
-#cat-fab:hover { border-color: var(--c-accent); transform: translateY(-2px); }
-#cat-fab:active { transform: scale(.96); }
-#cat-fab:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
-#cat-fab.active { color: var(--c-accent-fg); background: var(--c-accent); border-color: var(--c-accent); }
-#cat-fab img { width: 22px; height: 22px; border-radius: 50%; background: var(--c-avatar-bg); object-fit: cover; }
+#cat-dock.show { opacity: 1; transform: none; pointer-events: auto; }
+#cat-dock button {
+  all: unset; box-sizing: border-box; display: grid; place-items: center; width: 40px; height: 34px; border-radius: 999px; cursor: pointer;
+  color: var(--c-muted); transition: background .15s, color .15s, transform .15s;
+}
+#cat-dock button:hover { background: var(--c-code); color: var(--c-fg); }
+#cat-dock button:active { transform: scale(.9); }
+#cat-dock button:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+#cat-dock button.active { color: var(--c-accent); }
+#cat-dock .sep { width: 1px; height: 18px; background: var(--c-border); }
+#cat-dock svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ───── 聊天面板 ───── */
 #cat-chat {
-  position: fixed; right: 16px; bottom: 208px; z-index: 10;
-  width: 372px; max-width: calc(100vw - 32px); height: min(540px, calc(100vh - 236px));
+  position: fixed; right: 270px; bottom: 28px; z-index: 10;
+  width: 372px; max-width: calc(100vw - 300px); height: min(540px, calc(100vh - 60px));
   display: flex; flex-direction: column; overflow: hidden;
   color: var(--c-fg); font-size: 14px; line-height: 1.65;
   background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 18px; box-shadow: var(--c-shadow);
@@ -180,5 +186,5 @@
 @keyframes cc-in { from { opacity: 0; transform: translateY(8px) scale(.97); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes cc-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  #cat-chat, #cat-chat *, #cat-fab { animation: none !important; transition-duration: .01ms !important; }
+  #cat-chat, #cat-chat *, #cat-dock { animation: none !important; transition-duration: .01ms !important; }
 }

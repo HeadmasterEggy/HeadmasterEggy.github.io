@@ -15,10 +15,12 @@
     close: svg('<path d="M18 6 6 18M6 6l12 12"/>'),
     clear: svg('<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>'),
     send: svg('<path d="M12 19V5M5 12l7-7 7 7"/>'),
+    chatBtn: svg('<path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),
+    shuffle: svg('<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'),
     copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>'),
     check: svg('<path d="M20 6 9 17l-5-5"/>'),
-    // 头像：从猫的 Live2D 模型画布里截取的猫脸（source/live2d/avatar.webp）
-    cat: '<img src="/live2d/avatar.webp" alt="" draggable="false">'
+    // 头像：自绘的黑猫（source/live2d/avatar.svg）
+    cat: '<img src="/live2d/avatar.svg" alt="" draggable="false">'
   };
 
   const h = (tag, cls, text) => {
@@ -346,20 +348,30 @@
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) setOpen(false); });
 
-  // 入口：猫脚边的“问问猫”按钮（等猫出现后再显示）
-  const fab = h('button');
-  fab.id = 'cat-fab';
-  fab.type = 'button';
-  fab.innerHTML = `${ICONS.cat}<span>问问猫</span>`;
-  fab.setAttribute('aria-label', '和看板猫聊天');
-  fab.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
-  document.body.appendChild(fab);
-  button = fab;
+  // 入口：猫脚下的胶囊工具条（等猫出现后再显示）：聊天 | 随机一篇笔记
+  const dock = h('div');
+  dock.id = 'cat-dock';
+  dock.setAttribute('role', 'toolbar');
+  dock.setAttribute('aria-label', '看板猫工具');
+  dock.innerHTML = `<button type="button" data-act="chat" title="和猫聊聊" aria-label="和猫聊聊">${ICONS.chatBtn}</button><span class="sep"></span><button type="button" data-act="random" title="随机一篇笔记" aria-label="随机一篇笔记">${ICONS.shuffle}</button>`;
+  document.body.appendChild(dock);
+  button = dock.querySelector('[data-act="chat"]');
+  button.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+
+  let notes = null;
+  dock.querySelector('[data-act="random"]').addEventListener('click', async () => {
+    try {
+      notes = notes || (await (await fetch('/graph/data.json')).json()).nodes.filter(n => n.url && n.published);
+      const cur = location.pathname;
+      const pool = notes.filter(n => n.url !== cur);
+      location.assign(pool[Math.floor(Math.random() * pool.length)].url);
+    } catch (e) { /* 拿不到索引就什么都不做 */ }
+  });
 
   const sync = () => {
     const w = document.getElementById('waifu');
     const visible = !!w && w.classList.contains('waifu-active') && !w.classList.contains('waifu-hidden');
-    fab.classList.toggle('show', visible);
+    dock.classList.toggle('show', visible);
     if (w && w.classList.contains('waifu-hidden')) setOpen(false);
   };
   new MutationObserver(sync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
