@@ -29,12 +29,19 @@
 <meta property="og:site_name" content="Joey">
 <meta property="og:description" content="逐节精读微软研究院 Agensh 技术报告：五步协作循环、Git + 消息 + 共享上下文三层基础设施、完整 Worker 提示词与事件驱动运行时、ProgramBench 五任务及 1,024 Agent 实验的分任务数据，以及结果的适用边界。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig2-cooperation-loop.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig3-event-runtime.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig6-startup-ramp.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig4-scaling-per-task.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig5-pandoc-1024.svg">
 <meta property="article:published_time" content="2026-09-30T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-30T07:39:09.767Z">
+<meta property="article:modified_time" content="2026-09-30T07:47:35.701Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="AI-Agent">
 <meta property="article:tag" content="paper">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg">
 
 
 <link rel="canonical" href="https://qiao1.top/posts/259a9a22.html">
@@ -255,7 +262,7 @@ pandoc 单项扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-09-30 12:00:00 / Modified: 07:39:09" itemprop="dateCreated datePublished" datetime="2026-09-30T12:00:00Z">2026-09-30</time>
+      <time title="Created: 2026-09-30 12:00:00 / Modified: 07:47:35" itemprop="dateCreated datePublished" datetime="2026-09-30T12:00:00Z">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -274,14 +281,14 @@ pandoc 单项扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>7.9k</span>
+      <span>8.3k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>29 mins.</span>
+      <span>30 mins.</span>
     </span>
 </div>
 
@@ -307,7 +314,10 @@ Dong†、Shaohan Huang、Jianxun Lian、Yan Xia†、Furu Wei†（* 同等贡�
 <strong>55.06%</strong>。但这不等于“任何任务上堆到 1,024 个 Agent
 都有效”：1,024 Agent 的实验只覆盖
 <code>pandoc</code>；五任务对比最多扩展到 128
-个，且分任务看并不单调。下面按“问题—机制—提示词与运行时—实验—协作现象—局限”逐节拆解。</p>
+个，且分任务看并不单调。下面按“问题—机制—提示词与运行时—实验—协作现象—局限”逐节拆解。文中的
+6
+张图是我根据论文内容<strong>自己绘制</strong>的示意图与数据图，不是论文原图；数据来自论文正文与图
+5，启动曲线是推算值。</p>
 <span id="more"></span>
 <h2 id="一论文要解决什么问题">一、论文要解决什么问题</h2>
 <h3 id="背景从单-agent-到多-agent">1.1 背景：从单 Agent 到多 Agent</h3>
@@ -330,6 +340,15 @@ Agent，而是共享工作区、消息接口和共享上下文。</p>
 <p>这里的“无中央指挥”有明确含义：没有一个主 Agent
 为全体工作者逐项派工和合并。它<strong>不意味着</strong>没有共同目标、规则、共享状态或事件分发系统。恰好相反，论文的核心贡献是用一套基础设施承接这些协作工作。所有工作者共享同一个用户目标，运行相同的协作协议；每个人都可以发现任务、声明负责范围、实现、验证、合并，然后继续找下一件事。Agensh
 改变的是<strong>组织层</strong>，不是底层语言模型。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg"
+alt="orchestrator–worker 与 Agensh 的组织方式对比" />
+<figcaption aria-hidden="true">orchestrator–worker 与 Agensh
+的组织方式对比</figcaption>
+</figure>
+<p><em>图 1　两种组织方式对比（自绘，参考论文图 2
+的思路）：左边所有协调都经过中央
+Orchestrator，右边中心只是共享工作区、消息接口与共享上下文。</em></p>
 <h3 id="论文的贡献一览">1.4 论文的贡献一览</h3>
 <ol type="1">
 <li>提出 Agensh：一个<strong>没有中央编排者</strong>的、可扩展的多 Agent
@@ -366,6 +385,14 @@ progress，合并进展</strong>：把成果合并进共享工作区，并发布
 <li><strong>完全异步</strong>：每个工作者继续往下走，不等所有同伴完成一轮迭代。</li>
 <li><strong>进展逐步累积</strong>：发现和已验证的贡献通过共享基础设施沉淀下来，推动整个组织走向用户目标。</li>
 </ul>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig2-cooperation-loop.svg"
+alt="Agensh 五步协作循环与组织基础设施" />
+<figcaption aria-hidden="true">Agensh
+五步协作循环与组织基础设施</figcaption>
+</figure>
+<p><em>图 2　五步协作循环与三层基础设施（自绘，参考论文图 3、图
+4）：绿色虚线是异步读取，橙色实线是并发写入。</em></p>
 <p>用一个简化例子理解：重建文档转换器时，有人探索表格行为并认领解析模块，有人探索命令行参数，有人修复构建脚本。各自验证后通过
 PR
 合入主分支；遇到相同文件或接口，再发消息协商。这是对论文机制的说明性例子，<strong>不是论文报告的一条具体执行轨迹</strong>。</p>
@@ -567,6 +594,13 @@ Agent 系统并非在一片空白里自己涌现出全部规则。</p>
 </ul>
 <p>论文特别说明：这条路径作用于 <strong>MCP
 工具返回</strong>，不会打断任意正在运行的进程。也就是说，“实时”只是<strong>在工具返回的边界插入新信息</strong>，而不是强行中断工作者。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig3-event-runtime.svg"
+alt="事件驱动运行时与两条投递路径" />
+<figcaption aria-hidden="true">事件驱动运行时与两条投递路径</figcaption>
+</figure>
+<p><em>图 3　附录 B
+的事件驱动运行时（自绘）：事件先进持久队列，轮次之间与轮次之中有两条不同的送达路径。</em></p>
 <h2 id="六实验怎么设计">六、实验怎么设计</h2>
 <h3 id="为什么是-programbench">6.1 为什么是 ProgramBench</h3>
 <p><strong>ProgramBench</strong>（Yang 等，<em>Can language models
@@ -659,6 +693,14 @@ PR 落地，不能合并就说明并继续）；结束前 5
 分钟后收到类似的提示（把差距补上，而不是“别被之前 <code>CLAIM</code>
 的范围束缚”）。</li>
 </ul>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig6-startup-ramp.svg"
+alt="1024 与 128 个 Agent 的启动爬坡曲线" />
+<figcaption aria-hidden="true">1024 与 128 个 Agent
+的启动爬坡曲线</figcaption>
+</figure>
+<p><em>图 4　按附录 C 的启动节奏推算的在线 Agent
+数（自绘；满员时间为推算值，论文未直接给出）。</em></p>
 <h2 id="七结果">七、结果</h2>
 <h3 id="五个任务1128-个-agent">7.1 五个任务、1→128 个 Agent</h3>
 <table>
@@ -767,6 +809,14 @@ PR 落地，不能合并就说明并继续）；结束前 5
 </tr>
 </tbody>
 </table>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig4-scaling-per-task.svg"
+alt="五个任务在 1/8/32/128 个 Agent 下的最终通过率" />
+<figcaption aria-hidden="true">五个任务在 1/8/32/128 个 Agent
+下的最终通过率</figcaption>
+</figure>
+<p><em>图 5　分任务折线（自绘，数据读自论文图 5）：ctags 在 8 个 Agent
+时低于单 Agent，gromacs 到 32 个才持平后上升。</em></p>
 <p>几点值得注意：</p>
 <ul>
 <li>论文说“五个任务的最终得分总体呈上升趋势”，从 1 到 128
@@ -829,6 +879,15 @@ Agent 的曲线在前两小时始终低于这个阈值。作者据此认为，�
 这一段几乎持平，曲线并不光滑）；从 128 到 1,024
 增加八倍工作者，成绩继续增长，但边际收益明显小于 1→128
 的跨度。论文用这组数据证明其系统<strong>可以在该任务上扩展到千人规模并继续提高分数</strong>；它没有证明千人规模在所有任务、所有预算下都是最合算的选择。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig5-pandoc-1024.svg"
+alt="pandoc 上 1 到 1024 个 Agent 的通过率与涌现协作形态" />
+<figcaption aria-hidden="true">pandoc 上 1 到 1024 个 Agent
+的通过率与涌现协作形态</figcaption>
+</figure>
+<p><em>图 6　<code>pandoc</code>
+上的扩展曲线，以及各规模下论文归纳的协作形态（自绘，参考论文图
+1）。</em></p>
 <h2 id="八作者观察到的涌现协作">八、作者观察到的“涌现协作”</h2>
 <p>论文第 3.2 节强调：所有工作者遵循同一套循环、拿到同样的提示词（仅 ID
 不同），但随着组织变大，新的自组织形态逐渐出现，范围从“协调实现”扩展到“管理集成”“标准化流程”“形成专业角色”（对应图
@@ -995,7 +1054,7 @@ orchestrator 基线的同规模对照和更多任务类型的证据。</p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">56:20</span>
+    <span title="Reading time total">56:22</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
