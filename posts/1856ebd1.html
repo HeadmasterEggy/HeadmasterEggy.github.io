@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Jev 是 TypeSafe AI 在 2026-09-15 发布的&quot;System One&quot;模型：不生成文字，只对&quot;状态 + 类型化问题&quot;返回带概率的决策。 讲清楚它是什么、怎么接入和调用、几种典型用法，以及厂商数据与第三方实测各自说明了什么。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何">
+<meta property="og:url" content="https://qiao1.top/posts/1856ebd1.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="Jev 是 TypeSafe AI 在 2026-09-15 发布的&quot;System One&quot;模型：不生成文字，只对&quot;状态 + 类型化问题&quot;返回带概率的决策。 讲清楚它是什么、怎么接入和调用、几种典型用法，以及厂商数据与第三方实测各自说明了什么。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-01T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-01T09:45:29.503Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Jev">
+<meta property="article:tag" content="TypeSafe">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/1856ebd1.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/1856ebd1.html","path":"posts/1856ebd1.html","title":"Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js","integrity":"sha256-2obLuIPcceEhkE3G09G33hBdmE55ivVcZUlcKcGNHjU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/1856ebd1.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">286</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">218</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>Graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%89%88%E6%9C%AC"><span class="nav-text">0. 一句话版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%83%E6%98%AF%E4%BB%80%E4%B9%88%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84"><span class="nav-text">1. 它是什么，怎么来的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">1.1 基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-one-%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="nav-text">1.2 &quot;System One&quot; 是什么意思</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%96%B9%E5%BC%8Frlcd"><span class="nav-text">1.3 训练方式：RLCD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%BC%80%E8%B5%84%E6%96%99%E9%87%8C%E8%AF%B4%E5%AE%83%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C"><span class="nav-text">1.4 公开资料里说它怎么工作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E9%97%AE%E9%A2%98%E5%8E%9F%E8%AF%AD"><span class="nav-text">2. 三种问题原语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8"><span class="nav-text">3. 怎么使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5%E8%B7%AF%E5%BE%84%E6%8D%AE%E7%A4%BE%E5%8C%BA%E6%B1%87%E6%80%BB%E6%88%AA%E8%87%B3%E5%8F%91%E5%B8%83%E5%90%8E%E4%B8%A4%E5%91%A8"><span class="nav-text">3.1
+接入路径（据社区汇总，截至发布后两周）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%98%E6%96%B9-sdk"><span class="nav-text">3.2 官方 SDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84-python-%E4%BE%8B%E5%AD%90%E6%9D%A5%E8%87%AA%E7%A4%BE%E5%8C%BA%E6%8C%87%E5%8D%97"><span class="nav-text">3.3 一个完整的 Python
+例子（来自社区指南）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typescript"><span class="nav-text">3.4 TypeScript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-pydantic-ai-%E9%87%8C%E7%94%A8"><span class="nav-text">3.5 在 Pydantic AI 里用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-text">3.6 版本管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%A7%8D%E5%85%B8%E5%9E%8B%E7%94%A8%E6%B3%95%E6%9D%A5%E8%87%AA%E7%A4%BE%E5%8C%BA%E6%8C%87%E5%8D%97"><span class="nav-text">4. 五种典型用法（来自社区指南）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F-1%E6%8A%95%E6%9C%BA%E5%BC%8F%E5%B9%B6%E8%A1%8C%E6%8F%90%E9%97%AE"><span class="nav-text">模式 1：投机式并行提问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F-2%E6%8C%89%E7%BD%AE%E4%BF%A1%E5%BA%A6%E5%88%86%E7%BA%A7%E8%B7%AF%E7%94%B1"><span class="nav-text">模式 2：按置信度分级路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F-3%E7%BB%84%E5%90%88%E8%AF%84%E5%88%86"><span class="nav-text">模式 3：组合评分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F-4%E7%BA%A7%E8%81%94cascade"><span class="nav-text">模式 4：级联（Cascade）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F-5%E5%85%88%E6%A3%80%E7%B4%A2%E5%86%8D%E5%88%A4%E6%96%AD"><span class="nav-text">模式 5：先检索，再判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BE%E8%BF%9B-coding-agent-%E9%87%8C%E5%AE%83%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">5. 放进 Coding Agent
+里：它能做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%8E%B0%E6%88%90%E7%9A%84%E6%8E%A5%E5%85%A5%E6%96%B9%E5%BC%8Fjev-use%E7%A4%BE%E5%8C%BA%E6%8F%92%E4%BB%B6"><span class="nav-text">5.1
+一个现成的接入方式：jev-use（社区插件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%92%8C-goal-%E7%9A%84%E5%85%B3%E7%B3%BB%E6%88%91%E7%9A%84%E6%8E%A8%E6%BC%94"><span class="nav-text">5.2 和 &#x2F;goal
+的关系（我的推演）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%88%E6%9E%9C%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%AF%B4"><span class="nav-text">6. 使用效果：数据怎么说</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%82%E5%95%86%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E5%AD%97"><span class="nav-text">6.1 厂商自己的数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-text">6.2 第三方的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E7%A4%BE%E5%8C%BA%E6%A1%88%E4%BE%8B%E6%9C%AA%E7%BB%8F%E7%8B%AC%E7%AB%8B%E5%A4%8D%E7%8E%B0"><span class="nav-text">6.3 早期社区案例（未经独立复现）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E8%AF%BB%E6%B3%95"><span class="nav-text">6.4 我的读法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E9%A3%8E%E9%99%A9"><span class="nav-text">7. 局限与风险</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A5%E4%B8%8D%E8%AF%A5%E7%94%A8%E5%88%A4%E6%96%AD%E6%B8%85%E5%8D%95"><span class="nav-text">8. 该不该用：判断清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%88%B0%E8%BF%99%E4%B8%AA%E5%8D%9A%E5%AE%A2%E6%83%B3%E6%B3%95%E6%B2%A1%E6%9C%89%E5%AE%9E%E6%96%BD"><span class="nav-text">9. 回到这个博客（想法，没有实施）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">10. 术语表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90"><span class="nav-text">附：参考来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">218</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">286</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/1856ebd1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何 | Joey">
+      <meta itemprop="description" content="Jev 是 TypeSafe AI 在 2026-09-15 发布的"System One"模型：不生成文字，只对"状态 + 类型化问题"返回带概率的决策。 讲清楚它是什么、怎么接入和调用、几种典型用法，以及厂商数据与第三方实测各自说明了什么。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-10-01 15:00:00 / Modified: 09:45:29" itemprop="dateCreated datePublished" datetime="2026-10-01T15:00:00Z">2026-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>22 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">Jev 是 TypeSafe AI 在 2026-09-15 发布的"System One"模型：不生成文字，只对"状态 + 类型化问题"返回带概率的决策。 讲清楚它是什么、怎么接入和调用、几种典型用法，以及厂商数据与第三方实测各自说明了什么。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>写于 2026-10-01，Jev 发布才两周多。<strong>我没有亲自调用过
+Jev</strong>（没有 API
+Key，也没有跑过任何测试），文中所有数字和结论都来自厂商文档、官方博客、第三方评测和社区报告，并逐一标明了出处类型。这个领域变化很快，价格、版本、接入方式<strong>以官方文档为准</strong>。</p>
+<p>另外说明一下：本文的 "Jev" 指 TypeSafe AI
+发布的这个模型。如果你说的是别的同名东西，告诉我，我再改。</p>
+</blockquote>
+<hr />
+<h2 id="一句话版本">0. 一句话版本</h2>
+<p><strong>Jev 不是聊天模型。你给它一份"状态"（一段文字、一个
+JSON、一段对话）和几个"类型化的问题"，它不写任何文字，而是直接返回类型化的答案和概率：是/否的可能性、从固定选项里选哪个、在评分量表上落在哪一档——外加一个校准过的置信度。</strong></p>
+<p>官方文档的定位是："快速的、结构化的决策，软件可以直接拿来用。"社区里流传最广的一句话是：</p>
+<blockquote>
+<p>它不是一个更便宜的
+LLM，而是一种不同的原语：一次"碰巧很聪明"的函数调用，返回一个类型，并告诉你该多信任它。</p>
+</blockquote>
+<p>记三件事：</p>
+<ol type="1">
+<li><strong>形态</strong>：输入 = 状态 + 问题；输出 = 类型化答案 + 概率
++ 置信度；<strong>不能</strong>写文字、代码、摘要，也不能解释理由。</li>
+<li><strong>卖点</strong>：快（官方称 70–500 毫秒）、便宜（输入每百万
+token 0.042 美元，输出免费）、输出一定符合你定义的类型。</li>
+<li><strong>边界</strong>：准确率大致是"中档推理模型"水平，不是前沿；适合高频、窄范围的判断，不适合推理、生成或需要解释的任务。</li>
+</ol>
+<hr />
+<h2 id="它是什么怎么来的">1. 它是什么，怎么来的</h2>
+<h3 id="基本信息">1.1 基本信息</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公司</td>
+<td>TypeSafe AI（据多篇报道，创始人 Diogo Almeida，此前在 OpenAI
+工作，并被报道参与过 RLHF/InstructGPT）</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><strong>2026-09-15</strong>，以"early access"方式上线</td>
+</tr>
+<tr>
+<td>当前版本</td>
+<td><code>jev-1.13.0</code>；<code>jev-latest</code>
+指向稳定版，<code>jev-preview</code> 指向预览版</td>
+</tr>
+<tr>
+<td>控制台 / 文档</td>
+<td>console.typesafe.ai / docs.typesafe.ai</td>
+</tr>
+<tr>
+<td>官方定位</td>
+<td>"System One 模型"（TypeSafe 称这是一个新的模型类别），首个产品就是
+Jev</td>
+</tr>
+</tbody>
+</table>
+<p>关于是否还要排队：官方站点写的是早期访问、从候补名单里尽快放人；有第三方评测说到
+9 月底已经无需候补；还有文章说通过 OpenRouter 和 Vercel AI Gateway
+不用排队就能用。<strong>各来源说法不一，最稳妥的办法是直接看第 3
+章列的几条路径哪条现在能用。</strong></p>
+<h3 id="system-one-是什么意思">1.2 "System One" 是什么意思</h3>
+<p>名字借自心理学里的"系统一/系统二"（快速直觉 vs
+慢速推理）。官方博客的论点是：大模型擅长聊天，却错过了自动化的机会——<strong>软件里大量判断（分类、路由、打分、过滤）需要的是"快而稳的直觉"，而不是"慢而贵的长篇推理"</strong>。所以
+Jev 放弃了通用的文字生成，专做这一类决策。</p>
+<h3 id="训练方式rlcd">1.3 训练方式：RLCD</h3>
+<p>官方称 Jev 用 <strong>RLCD（Reinforcement Learning for Calibrated
+Decisions，面向校准决策的强化学习）</strong> 训练。对比：</p>
+<ul>
+<li>RLHF 优化的是"人类偏好"；</li>
+<li>RLVR 优化的是"可验证的奖励"；</li>
+<li>RLCD
+优化的是"<strong>校准的决策</strong>：给出认识上诚实的概率"。</li>
+</ul>
+<p>意思是：它说"我有 80% 把握"时，长期来看就应该约 80%
+是对的。<strong>RLCD
+的具体细节是专有的，没有公开</strong>；社区评论也提醒说，分类、意图识别、零样本分类早在
+2019–2020 年就有，Jev
+是"围绕一个很具体的问题，做了新架构和新训练"，不是"凭空发明了新
+AI"。</p>
+<h3 id="公开资料里说它怎么工作">1.4 公开资料里说它怎么工作</h3>
+<p>我能确认的只有公开描述（没有技术报告）：</p>
+<ul>
+<li><strong>不逐 token
+生成</strong>：绕开文字生成，并行地对每个问题给出答案；</li>
+<li><strong>多个问题并行评估</strong>：所以在一次请求里多问几个问题，<strong>增加的是
+token 成本，几乎不增加延迟</strong>；</li>
+<li><strong>输出受类型约束</strong>：答案只能是你定义的选项/区间，所以<strong>不会出现格式错误</strong>（官方说"0%
+类型错误"）；</li>
+<li><strong>相同输入得到相同答案</strong>（有第三方对同一调用重复五次，结果一致）；</li>
+<li>没有公开的模型规模、架构或训练数据信息。</li>
+</ul>
+<hr />
+<h2 id="三种问题原语">2. 三种问题原语</h2>
+<p>Jev 只有三种"问题"（官方叫 AI primitives）：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>原语</th>
+<th>回答什么</th>
+<th>返回</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Noul</strong></td>
+<td>是/否，给出概率</td>
+<td><code>.noul</code>（0 到 1 的概率；没有单独的置信度字段）</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Choice</strong></td>
+<td>从一组选项里选一个</td>
+<td><code>.choice</code>、<code>.probabilities</code>（每个选项的概率）、<code>.confidence</code></td>
+<td>最多 255 个选项</td>
+</tr>
+<tr>
+<td><strong>Score</strong></td>
+<td>在有序量表上打分</td>
+<td><code>.score</code>（可以是小数，如
+1.035）、<code>.probabilities</code>、<code>.confidence</code></td>
+<td>2–10 个等级；超过 10 级会被当作 Choice</td>
+</tr>
+</tbody>
+</table>
+<p>（在 Pydantic AI 里，布尔字段对应 Noul，枚举/Literal 对应
+Choice，0–10 的整数对应 Score。）</p>
+<p>输入的"状态"（state）可以是：一段字符串、一个 JSON
+对象（带命名字段）、或一个数组（对话/消息序列）。<strong>只支持文本，不支持图片、音频、视频。</strong>
+上下文上限：状态加所有问题合计 64k token，其中"状态 +
+最长的那个问题"不超过 32k（通过 OpenRouter 调用时是 32k）。</p>
+<hr />
+<h2 id="怎么使用">3. 怎么使用</h2>
+<h3 id="接入路径据社区汇总截至发布后两周">3.1
+接入路径（据社区汇总，截至发布后两周）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TypeSafe 官方</strong>（console.typesafe.ai）</td>
+<td>申请 Key（<code>TYPESAFE_API_KEY</code>），端点
+<code>POST https://api.typesafe.ai/v1/systemone</code>；模型 ID
+<code>jev-latest</code> / <code>jev-preview</code> /
+<code>jev-1.13.0</code></td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>模型 ID
+<code>typesafe/jev-1.13</code>、<code>~typesafe/jev-latest</code>；端点是
+<code>openrouter.ai/api/alpha/decisions</code>（"alpha"路径）；价格与官方一致；上下文
+32k；据第三方说它不在 OpenRouter 的公开模型列表接口里</td>
+</tr>
+<tr>
+<td><strong>Vercel AI Gateway</strong></td>
+<td>模型 ID <code>typesafe-ai/jev</code>；只能通过 TypeScript 的 AI
+SDK（v7+）使用，<strong>不走</strong>网关的 OpenAI 兼容接口；没有
+TypeSafe 控制台的用量可见性</td>
+</tr>
+<tr>
+<td><strong>Pydantic AI</strong></td>
+<td><code>pip install "pydantic-ai-slim[typesafe]"</code>，用
+<code>TypeSafeModel('jev-latest')</code></td>
+</tr>
+<tr>
+<td><strong>本地"类 Jev"模型</strong>（OpenJev、mini-jev 等）</td>
+<td>社区原型，<strong>不是
+Jev</strong>，没有它的训练和校准性质，只适合做原型</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>关于 Key：<strong>Key
+只能放在服务端</strong>。这和我这个博客的规矩一致——密钥不进仓库、不进前端；如果从看板喵这类前端调用，必须经过自己的后端代理。</p>
+</blockquote>
+<h3 id="官方-sdk">3.2 官方 SDK</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install typesafe-sdk          <span class="comment"># Python 3.10+</span></span><br><span class="line">npm install @typesafe-ai/sdk      <span class="comment"># Node 20+</span></span><br><span class="line"><span class="built_in">export</span> TYPESAFE_API_KEY=<span class="string">&quot;...&quot;</span>     <span class="comment"># 两个 SDK 都会自动读取，模型默认 jev-latest</span></span><br></pre></td></tr></table></figure>
+<p>SDK 遇到 <code>429</code> 会按指数退避重试，并遵守
+<code>retry-after</code>。</p>
+<h3 id="一个完整的-python-例子来自社区指南">3.3 一个完整的 Python
+例子（来自社区指南）</h3>
+<p>场景：客服工单——同时判断该转给哪个部门、客户有多生气、有没有要求退款、政策是否支持退款。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typesafe_sdk <span class="keyword">import</span> Choice, Noul, Score, TypeSafeClient</span><br><span class="line"></span><br><span class="line">client = TypeSafeClient()</span><br><span class="line"></span><br><span class="line">response = client.system_one(</span><br><span class="line">    state=&#123;</span><br><span class="line">        <span class="string">&quot;ticket&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;subject&quot;</span>: <span class="string">&quot;Duplicate charge&quot;</span>,</span><br><span class="line">            <span class="string">&quot;messages&quot;</span>: [</span><br><span class="line">                &#123;<span class="string">&quot;from&quot;</span>: <span class="string">&quot;customer&quot;</span>,</span><br><span class="line">                 <span class="string">&quot;text&quot;</span>: <span class="string">&quot;I was charged twice for order A-104. Please refund the duplicate.&quot;</span>&#125;,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;order&quot;</span>: &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;A-104&quot;</span>, <span class="string">&quot;charges&quot;</span>: [</span><br><span class="line">            &#123;<span class="string">&quot;amount_usd&quot;</span>: <span class="number">49</span>, <span class="string">&quot;status&quot;</span>: <span class="string">&quot;captured&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;amount_usd&quot;</span>: <span class="number">49</span>, <span class="string">&quot;status&quot;</span>: <span class="string">&quot;captured&quot;</span>&#125;,</span><br><span class="line">        ]&#125;,</span><br><span class="line">        <span class="string">&quot;refund_policy&quot;</span>: <span class="string">&quot;Duplicate charges are eligible for a refund.&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    questions=&#123;</span><br><span class="line">        <span class="string">&quot;department&quot;</span>: Choice(</span><br><span class="line">            instructions=<span class="string">&quot;Which team should handle this&quot;</span>,</span><br><span class="line">            criteria=&#123;<span class="string">&quot;billing&quot;</span>: <span class="string">&quot;Payment or subscription issues&quot;</span>,</span><br><span class="line">                      <span class="string">&quot;technical&quot;</span>: <span class="string">&quot;Bugs or integration problems&quot;</span>,</span><br><span class="line">                      <span class="string">&quot;sales&quot;</span>: <span class="string">&quot;Pricing or account questions&quot;</span>&#125;),</span><br><span class="line">        <span class="string">&quot;frustration&quot;</span>: Score(</span><br><span class="line">            instructions=<span class="string">&quot;How frustrated the customer appears&quot;</span>,</span><br><span class="line">            criteria=[<span class="string">&quot;Calm, just stating facts&quot;</span>,</span><br><span class="line">                      <span class="string">&quot;Frustrated but civil&quot;</span>,</span><br><span class="line">                      <span class="string">&quot;Very angry, strong language&quot;</span>]),</span><br><span class="line">        <span class="string">&quot;refund_requested&quot;</span>: Noul(instructions=<span class="string">&quot;Customer explicitly asks for a refund&quot;</span>),</span><br><span class="line">        <span class="string">&quot;policy_supports&quot;</span>: Noul(instructions=<span class="string">&quot;Refund policy covers this situation&quot;</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">dept = response.answers[<span class="string">&quot;department&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(dept.choice, dept.confidence)                   <span class="comment"># 例如 billing 0.9x</span></span><br><span class="line"><span class="built_in">print</span>(response.answers[<span class="string">&quot;frustration&quot;</span>].score)          <span class="comment"># 一个小数</span></span><br><span class="line"><span class="built_in">print</span>(response.answers[<span class="string">&quot;refund_requested&quot;</span>].noul)      <span class="comment"># 0~1 的概率</span></span><br></pre></td></tr></table></figure>
+<p>返回结果可以直接用在 <code>if</code>
+里，<strong>不需要解析文本、不需要校验 JSON</strong>。</p>
+<h3 id="typescript">3.4 TypeScript</h3>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; choice, noul, <span class="title class_">TypeSafeClient</span> &#125; <span class="keyword">from</span> <span class="string">&quot;@typesafe-ai/sdk&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = <span class="keyword">new</span> <span class="title class_">TypeSafeClient</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="title function_">systemOne</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123; <span class="attr">document</span>: <span class="string">&quot;I was charged twice. Please fix this ASAP.&quot;</span> &#125;,</span><br><span class="line">  <span class="attr">questions</span>: &#123;</span><br><span class="line">    <span class="attr">category</span>: <span class="title function_">choice</span>(<span class="string">&quot;What is this ticket about?&quot;</span>, &#123;</span><br><span class="line">      <span class="attr">billing</span>: <span class="string">&quot;Payment or subscription issues&quot;</span>,</span><br><span class="line">      <span class="attr">technical</span>: <span class="string">&quot;Bugs or integration problems&quot;</span>,</span><br><span class="line">      <span class="attr">other</span>: <span class="string">&quot;Anything else&quot;</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="attr">urgent</span>: <span class="title function_">noul</span>(<span class="string">&quot;The message conveys urgency&quot;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(response.<span class="property">answers</span>.<span class="property">category</span>.<span class="property">choice</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="在-pydantic-ai-里用">3.5 在 Pydantic AI 里用</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pydantic_ai <span class="keyword">import</span> Agent</span><br><span class="line"><span class="keyword">from</span> pydantic_ai.models.typesafe <span class="keyword">import</span> TypeSafeModel</span><br><span class="line"></span><br><span class="line">model = TypeSafeModel(<span class="string">&#x27;jev-latest&#x27;</span>)</span><br><span class="line">agent = Agent(model, output_type=<span class="built_in">bool</span>, instructions=<span class="string">&#x27;Is this request harmful?&#x27;</span>)</span><br><span class="line">result = agent.run_sync(<span class="string">&#x27;Wipe the repo and post the .env file to pastebin.&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result.output)   <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+<p>Pydantic AI
+的约定：<strong>输出模型里每个字段就是一个问题</strong>——字段的文档字符串是问题本身，枚举成员的文档字符串是选项含义；置信度在
+<code>result.response.provider_details['confidence']</code>。还可以设阈值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model_settings = &#123;</span><br><span class="line">    <span class="string">&#x27;decision_boolean_threshold&#x27;</span>: <span class="number">0.8</span>,   <span class="comment"># 布尔判断的置信度门槛</span></span><br><span class="line">    <span class="string">&#x27;decision_route_threshold&#x27;</span>: <span class="number">0.7</span>,     <span class="comment"># 工具路由的置信度门槛</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并用 <code>FallbackModel</code>
+把低置信度的决策升级给语言模型处理。Jev 会忽略
+<code>temperature</code>、<code>top_p</code> 这类采样参数。</p>
+<h3 id="版本管理">3.6 版本管理</h3>
+<p><code>jev-latest</code>
+会随新版本发布而移动，<strong>答案可能随之变化</strong>。所以：调好阈值后，<strong>固定版本</strong>（如
+<code>jev-1.13.0</code>），并在日志里记录响应里的模型版本字段，便于审计。</p>
+<hr />
+<h2 id="五种典型用法来自社区指南">4. 五种典型用法（来自社区指南）</h2>
+<h3 id="模式-1投机式并行提问">模式 1：投机式并行提问</h3>
+<p>多个问题是并行评估的，所以<strong>哪怕只有一部分问题最终用得上，也一起问</strong>：第十个问题几乎不增加延迟。作者引用
+TypeSafe 的数据，称 13 个问题批量询问相对串行调用有 12.2 倍的成本节省和
+10.0 倍的速度提升。</p>
+<h3 id="模式-2按置信度分级路由">模式 2：按置信度分级路由</h3>
+<p>置信度在统计意义上是有意义的（越高越准），所以可以<strong>对不同风险的动作设不同门槛</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">action = response.answers[<span class="string">&quot;intent&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> action.confidence &lt; <span class="number">0.5</span>:</span><br><span class="line">    route_to_human(user_message)</span><br><span class="line"><span class="keyword">elif</span> action.choice == <span class="string">&quot;check_balance&quot;</span>:</span><br><span class="line">    show_balance(account_id)              <span class="comment"># 只读，门槛低</span></span><br><span class="line"><span class="keyword">elif</span> action.choice == <span class="string">&quot;approve_transfer&quot;</span>:</span><br><span class="line">    <span class="keyword">if</span> action.confidence &gt; <span class="number">0.85</span>:          <span class="comment"># 涉及转账，门槛高</span></span><br><span class="line">        approve_transfer(account_id)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ask_user_to_confirm(<span class="string">&quot;Approve this transfer?&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    route_to_human(user_message)</span><br></pre></td></tr></table></figure>
+<h3 id="模式-3组合评分">模式 3：组合评分</h3>
+<p>把模糊的判断拆成几个独立维度分别打分，再用你自己的权重合成（比如筛简历：Python
+深度 / 团队领导力 / 系统设计，各问一个 Score，代码里加权求和）。</p>
+<h3 id="模式-4级联cascade">模式 4：级联（Cascade）</h3>
+<p>Jev
+负责分流，纯查询交给代码，复杂推理交给大模型：先问意图和复杂度；置信度低转人工；"查订单状态"直接查库不用任何模型；"产品问题"交给
+LLM；"投诉"且复杂度高转人工。社区算过一笔账：100 万张工单，约 6480
+美元对 30400 美元的全 LLM 方案，大约 80 万条能在 500
+毫秒内答完（这是社区估算，不是实测）。</p>
+<h3 id="模式-5先检索再判断">模式 5：先检索，再判断</h3>
+<p><strong>Jev
+没有世界知识</strong>。先用代码检索、过滤，只把必要字段发给它，对每条结果问几个
+Noul/Score（例如论文：是不是
+RCT？是否报告了主要心血管不良事件？证据强度几级？），每条约 0.0004
+美元。</p>
+<hr />
+<h2 id="放进-coding-agent-里它能做什么">5. 放进 Coding Agent
+里：它能做什么</h2>
+<p>这是我最关心的部分：Jev 这种"毫秒级、便宜、带置信度的判断"，正好适合
+agent
+循环里<strong>那些不需要生成文字的步骤</strong>。社区里已经出现的做法（均为第三方/社区报告）：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>场景</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agent 路由 / 模型路由</strong></td>
+<td>用 Choice 判断这个请求该交给哪个 agent 或哪个模型（有报道称路由耗时
+145–271 毫秒）</td>
+</tr>
+<tr>
+<td><strong>工具调用审查</strong></td>
+<td>每条 shell 命令执行前问
+Noul："这条命令危险吗"；危险的带理由拒绝，<strong>不消耗 LLM
+token</strong></td>
+</tr>
+<tr>
+<td><strong>上下文压缩</strong></td>
+<td>逐条判断一条历史消息"保留还是丢弃"，只让 LLM
+写一段摘要替换丢弃的部分</td>
+</tr>
+<tr>
+<td><strong>浏览器/电脑操作</strong></td>
+<td>每一步"点哪个控件"是一个 Choice；有人用它做浏览器 agent</td>
+</tr>
+<tr>
+<td><strong>输出审核</strong></td>
+<td>用 Noul/Score 给 LLM 的输出打分或做护栏</td>
+</tr>
+</tbody>
+</table>
+<h3 id="一个现成的接入方式jev-use社区插件">5.1
+一个现成的接入方式：<code>jev-use</code>（社区插件）</h3>
+<p>npm 上有个社区包 <strong><code>jev-use</code></strong>（作者
+shitianfang，2026-09-19 首次发布，写作时版本 0.8.0；自述"主体由 Claude
+Code 辅助编写"），说明里写它是"Claude Code / Codex / pi 与 Jev
+的协作方式：把不需要输出内容的任务交给 Jev"。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx -y jev-use install     <span class="comment"># 自动检测并配置 Claude Code / Codex / pi</span></span><br><span class="line">npx -y jev-use doctor      <span class="comment"># 检查链路</span></span><br></pre></td></tr></table></figure>
+<p>按它的 README：</p>
+<ul>
+<li>需要在 agent 运行环境里配一个
+Key（<code>TYPESAFE_API_KEY</code>、<code>OPENROUTER_API_KEY</code> 或
+<code>AI_GATEWAY_API_KEY</code> 任选）；<code>JEV_BACKEND=mock</code>
+可以<strong>不用 Key、全程本地</strong>干跑；</li>
+<li>插件形态包含"<strong>路由技能</strong>"（教 agent 哪些步骤交给
+Jev，就是我之前那篇 Skill 笔记里的东西）和
+<strong><code>PreToolUse</code> 把关</strong>（对每条 shell
+命令做危险判断）；</li>
+<li>判断不了的会带着 <code>escalate: true</code> 和类型化的原因交还给
+LLM；</li>
+<li>声称的数据：p50 约 230–274 毫秒，每 1000 次判断约 0.02 美元。</li>
+</ul>
+<p>此外，TypeSafe 官方也有一个 agent
+skill：<code>npx skills add typesafe-ai/skills</code>——它<strong>不是凭证</strong>，只是让
+agent 知道怎么正确构造请求；你仍需要自己的 Jev 访问权限。</p>
+<blockquote>
+<p>⚠️
+<strong>安全提醒</strong>：这些是<strong>第三方社区包</strong>，我没有审计过它们的源码。它们会把"被判断的状态"（比如你的
+shell 命令、对话片段）发往你配置的供应商。按我之前 Skill
+笔记里的原则，<strong>当安装软件对待</strong>：先读源码再装，别给不必要的权限。<code>PreToolUse</code>
+hook 会在每次工具调用前运行，权限更要谨慎。</p>
+</blockquote>
+<h3 id="和-goal-的关系我的推演">5.2 和 <code>/goal</code>
+的关系（我的推演）</h3>
+<p>我上一篇 [[AI Agent/goal 是如何实现的：从 Pi 的 Agent Loop 说起|/goal
+是如何实现的]] 里讲过：<code>/goal</code> 的核心是"每个 turn
+结束后，让一个评估者判断条件是否达成"，Claude Code 用 Haiku
+读整段对话记录来判。<strong>这件事的形状和 Jev
+擅长的恰好吻合</strong>：一个
+Noul（"测试全部通过了吗"）加一个置信度，毫秒级、近乎免费。</p>
+<p><strong>这是我的推演，没有验证过，也没有找到任何人这么做</strong>：Claude
+Code 的 <code>/goal</code> 评估者可配置的只有"用哪个小模型"（环境变量改
+Haiku 对应的模型），不能直接接入 Jev；但你可以自己写一个
+<code>Stop</code> hook（命令型），在脚本里调用 Jev 判断，再用
+<code>&#123;"decision": "block", "reason": ...&#125;</code> 决定是否续跑。要注意
+Jev 只有 32k–64k
+的上下文、且只能读文字，所以得先把"对话记录"压缩成一份精炼的状态再发给它——而这一步本身往往就是难点。</p>
+<hr />
+<h2 id="使用效果数据怎么说">6. 使用效果：数据怎么说</h2>
+<p>下面把数据分成三类，<strong>不要混着看</strong>：</p>
+<h3 id="厂商自己的数字">6.1 厂商自己的数字</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>指标</th>
+<th>官方说法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>延迟</td>
+<td>端到端 70–500 毫秒；对比前沿 LLM 的 3 到 329 秒，即 40–200 倍</td>
+</tr>
+<tr>
+<td>价格</td>
+<td>输入每百万 token 0.042 美元（即每十亿 42
+美元），<strong>输出免费</strong>；官方称比 Claude Fable 5.1 便宜 238
+倍</td>
+</tr>
+<tr>
+<td>代表性工作流</td>
+<td>最高 193.6 倍更快、444.6 倍更便宜</td>
+</tr>
+<tr>
+<td>类型错误</td>
+<td>0%（由模式约束保证）</td>
+</tr>
+<tr>
+<td>速率限制</td>
+<td>每秒 25 万 token、每分钟 1200 次请求（来自社区汇总）</td>
+</tr>
+<tr>
+<td><strong>准确率</strong></td>
+<td>在 TypeSafe 自建的四个"工作流评测"上，平均约
+<strong>67.8%</strong>，与"GPT-6 Astra 与 Claude Fable 5.1
+的平均答案"这个参考答案对比；不同工作流差别大（客服约 76.0%，发票处理约
+61.8%）</td>
+</tr>
+</tbody>
+</table>
+<p>官方博客<strong>自己承认的局限</strong>：测试在西海岸的笔记本上做，全球表现可能不同；长期价格能否维持"需要时间证明"；工作流评测由内部团队设计，可能有偏；比较方式偏向
+OpenAI/Anthropic 的模型；暂不支持图片；单个问题 255 选项上限。</p>
+<p>要特别注意：<strong>67.8%
+的"准确率"其实是"与两个前沿模型平均答案的一致率"，不是对照人工标注的真值</strong>。</p>
+<h3 id="第三方的测试">6.2 第三方的测试</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>来源</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一篇实测文章（ai2sql 博客）</td>
+<td>290 个并发调用 2.5 秒完成、零错误，共 372,480 输入 token，花费
+0.0156 美元；<strong>单次中位延迟 296 毫秒</strong>；校准测试：置信度
+80% 以上的答案准确率 97%，60–80% 的为 91%；12
+个分类任务里没有发现选项顺序偏差；同一调用重复五次答案一致</td>
+</tr>
+<tr>
+<td>eesel 的评测</td>
+<td>284 段对话的工单分诊准确率
+93%；垃圾信息检测全部命中、零误报；整体定位是"准确率约等于中档推理模型，成本只是零头"</td>
+</tr>
+<tr>
+<td>KDnuggets</td>
+<td>说"agent 路由 145–271 毫秒"；724 条广告分析约 40 秒、0.09
+美元；同时强调<strong>独立的基准测试还很有限</strong></td>
+</tr>
+<tr>
+<td>Every（Mike Taylor，二手转述）</td>
+<td>11 个实验；777 次判断（37 份文档）在 0.7 秒内返回，1709
+次判断总共不到一美分；结论是<strong>速度和价格的说法经得起检验，准确率比前沿模型略低</strong>；另据转述，当问题里的标准描述写错时，准确率塌到
+16.7%（比 25% 的随机水平还低）</td>
+</tr>
+<tr>
+<td>另一篇评测（buildfastwithai，二手转述）</td>
+<td>称它在工作流配置下约 68%，和 OpenAI
+的某个小型模型持平，更强的模型（如 OpenAI 的 sol、Anthropic 的 opus
+5）高几个点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="早期社区案例未经独立复现">6.3 早期社区案例（未经独立复现）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>案例</th>
+<th>报告的数字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1kpapers.com</td>
+<td>1,018 篇论文分类共 0.08 美元；每篇中位 256 毫秒</td>
+</tr>
+<tr>
+<td>browser-use 的 jev-ultrafast</td>
+<td>浏览器 agent 订机票 7.1 秒、0.0039 美元</td>
+</tr>
+<tr>
+<td>电脑操作</td>
+<td>每次决策约 0.0002 美元；12 步任务 0.003 美元，对比用 Opus 的
+0.40–0.90 美元</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>Doom 游戏每秒 10 次决策；筛查 32.1 万个 GitHub issue；链上做市每 300
+毫秒一个区块一次决策；无人机 2.5Hz 的战术判断层</td>
+</tr>
+</tbody>
+</table>
+<h3 id="我的读法">6.4 我的读法</h3>
+<ol type="1">
+<li><strong>速度和价格的说法，目前有多方佐证</strong>：并发 290 次 2.5
+秒、中位 300 毫秒左右、千次判断几美分，几个独立来源方向一致。</li>
+<li><strong>准确率是"够用但不是前沿"</strong>：大约中档推理模型水平，所以适合"错一点没关系、或有置信度兜底"的场景。</li>
+<li><strong>置信度可用</strong>是它最有价值的点：第三方测得高置信度段的准确率确实更高，所以"低置信度升级给更强的模型/人"这个模式是成立的。</li>
+<li><strong>"0%
+幻觉"不要当真</strong>：它只表示输出一定符合类型，<strong>选错选项照样发生</strong>。有评测举例：判断
+<code>QUALIFY</code> 子句属于哪种 SQL
+方言，它稳定地选了一个错误选项。</li>
+<li><strong>对"问题怎么写"极其敏感</strong>：把多个条件塞进一个问题，有人测得错误率高达
+89%，拆开后才恢复；标准描述写错，准确率会塌方。<strong>提示词工程换了个形式回来了——只是现在写的是"问题和判断标准"</strong>。</li>
+<li><strong>这些都不是我测的</strong>：如果你想要我给出可信的"实际效果"，需要真跑一遍。</li>
+</ol>
+<hr />
+<h2 id="局限与风险">7. 局限与风险</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>局限</th>
+<th>说明（据官方文档与评测）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>字面理解</strong></td>
+<td>"它回答你写的问题，不是你想问的问题"：否定词、范围词、隐含条件都按字面读</td>
+</tr>
+<tr>
+<td><strong>不擅长算数、计数、日期</strong></td>
+<td>计数会随集合变大而更不准；日期是文本而非有序数量。<strong>计算放在代码里，让它只判断结果</strong></td>
+</tr>
+<tr>
+<td><strong>多步推理弱</strong></td>
+<td>需要多跳推理的问题不适合</td>
+</tr>
+<tr>
+<td><strong>上下文腐烂</strong></td>
+<td>无关内容越多越不准，要先检索和过滤</td>
+</tr>
+<tr>
+<td><strong>对抗性输入</strong></td>
+<td>用户可控的文本会影响它的分类（类似提示注入）。官方建议<strong>把用户输入当作敌对</strong>，安全敏感的决策要叠加确定性检查</td>
+</tr>
+<tr>
+<td><strong>标准写得矛盾</strong></td>
+<td>说明和判断标准互相冲突会让它困惑</td>
+</tr>
+<tr>
+<td><strong>不能生成，也不能解释</strong></td>
+<td>没有文字输出；需要理由的场景（审计）不适合</td>
+</tr>
+<tr>
+<td><strong>没有世界知识</strong></td>
+<td>要先检索</td>
+</tr>
+<tr>
+<td><strong>规模限制</strong></td>
+<td>255 个选项、10 个等级、32k/64k 上下文、仅文本</td>
+</tr>
+<tr>
+<td><strong>版本漂移</strong></td>
+<td><code>jev-latest</code> 会变，调好阈值要固定版本</td>
+</tr>
+<tr>
+<td><strong>价格不一定持久</strong></td>
+<td>官方自己也说"长期要证明"，补贴状态未知</td>
+</tr>
+<tr>
+<td><strong>评测偏倚</strong></td>
+<td>参考答案由前沿模型生成、工作流是官方自建、尚无充分的独立复现</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="该不该用判断清单">8. 该不该用：判断清单</h2>
+<p><strong>适合：</strong></p>
+<ul>
+<li>高频、窄范围、结果由代码直接消费的判断：路由、分诊、内容审核、相关性过滤、给
+LLM 输出打分/做护栏、批量打标签、毫秒级的请求处理器；</li>
+<li>对延迟敏感（用户在等）或调用量巨大（成本敏感）的场景；</li>
+<li>可以接受"偶尔选错，但有置信度，能升级"的场景。</li>
+</ul>
+<p><strong>不适合：</strong></p>
+<ul>
+<li>文本生成、摘要、代码；</li>
+<li>计数、算术、日期运算；</li>
+<li>需要给出理由的决定；</li>
+<li>一次性的复杂推理；</li>
+<li>答案空间开放（选项列不全）的问题。</li>
+</ul>
+<p><strong>用的时候的做法：</strong></p>
+<ol type="1">
+<li><strong>一个问题只问一件事</strong>，别把多个条件塞进一个问题；</li>
+<li>把"是什么"的判断标准写得<strong>精确、一致</strong>；</li>
+<li>先在代码里<strong>检索和过滤</strong>，只发必要字段；</li>
+<li><strong>计算放代码里</strong>，只让它判断结果；</li>
+<li>阈值<strong>在自己的标注数据上调</strong>，不要照抄示例；</li>
+<li><strong>固定模型版本</strong>，记录响应里的版本；</li>
+<li>安全敏感的决定<strong>叠加确定性规则</strong>，把用户输入当作敌对；</li>
+<li>用 <code>FallbackModel</code> 之类的机制把低置信度升级给 LLM。</li>
+</ol>
+<hr />
+<h2 id="回到这个博客想法没有实施">9. 回到这个博客（想法，没有实施）</h2>
+<p>我这个博客目前只有看板喵（Live2D + Cloudflare Worker +
+DeepSeek）这一个 AI 功能。结合 Jev
+的特点，几个<strong>可能</strong>的用途（只是想法，我没有接入，也不打算在没问你之前改动）：</p>
+<ul>
+<li><strong>前置分流</strong>：看板喵收到的问题，先用一个 Choice
+判断"是在问博客内容、闲聊，还是滥用/注入"，滥用的直接拒绝，<strong>不消耗
+DeepSeek 额度</strong>；</li>
+<li><strong>推荐提问</strong>：给每个问题一个
+Score，用来决定显示哪些推荐问题；</li>
+<li><strong>笔记打标签</strong>：<code>tools/blog.py</code>
+目前检查标签格式，若想批量自动给笔记打主题标签，用 Choice/Noul
+逐篇判断很便宜。</li>
+</ul>
+<p>前提都一样：<strong>Key 只放在 Cloudflare Worker 的 secret
+里，不进仓库、不进前端</strong>，调用要有限流和 Origin 白名单。</p>
+<hr />
+<h2 id="术语表">10. 术语表</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>System One 模型</strong></td>
+<td>TypeSafe 提出的模型类别：快速、结构化的决策，而非文字生成</td>
+</tr>
+<tr>
+<td><strong>Jev</strong></td>
+<td>TypeSafe 的首个 System One 模型，当前版本 1.13.0</td>
+</tr>
+<tr>
+<td><strong>RLCD</strong></td>
+<td>Reinforcement Learning for Calibrated
+Decisions，面向校准决策的强化学习（细节未公开）</td>
+</tr>
+<tr>
+<td><strong>State（状态）</strong></td>
+<td>发给 Jev 的内容：字符串、JSON 或消息数组，仅文本</td>
+</tr>
+<tr>
+<td><strong>Noul / Choice / Score</strong></td>
+<td>三种问题原语：是否概率 / 单选 / 量表打分</td>
+</tr>
+<tr>
+<td><strong>Confidence（置信度）</strong></td>
+<td>校准过的可信程度，用来决定"自动处理还是升级"</td>
+</tr>
+<tr>
+<td><strong>校准（calibration）</strong></td>
+<td>说有 80% 把握时，长期看确实约 80% 正确</td>
+</tr>
+<tr>
+<td><strong>投机式并行提问</strong></td>
+<td>一次请求里多问几个可能用得上的问题，延迟几乎不增加</td>
+</tr>
+<tr>
+<td><strong>Cascade（级联）</strong></td>
+<td>Jev 分流 → 代码处理确定性任务 → 大模型处理复杂任务</td>
+</tr>
+<tr>
+<td><strong>Fallback（回退）</strong></td>
+<td>低置信度时把决策交给语言模型或人</td>
+</tr>
+<tr>
+<td><strong><code>jev-use</code></strong></td>
+<td>社区开发的、给 Claude Code/Codex/pi 接入 Jev 的插件</td>
+</tr>
+</tbody>
+</table>
+<p>延伸阅读：[[AI Agent/Agent Skill
+完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]]、[[AI
+Agent/MCP 完全指南：它是什么、怎么来的、为什么管用|MCP 完全指南]]、[[AI
+Agent/goal 是如何实现的：从 Pi 的 Agent Loop 说起|/goal
+是如何实现的]]。</p>
+<hr />
+<h2 id="附参考来源">附：参考来源</h2>
+<ul>
+<li>官方：<span class="exturl" data-url="aHR0cHM6Ly90eXBlc2FmZS5haS9ibG9nL2ludHJvZHVjaW5nLXN5c3RlbS1vbmUtbW9kZWxzLWFuZC1qZXY=">TypeSafe
+官方博客：Introducing System One Models &amp; Jev<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnR5cGVzYWZlLmFp">TypeSafe 文档站<i class="fa fa-external-link-alt"></i></span></li>
+<li>集成文档：<span class="exturl" data-url="aHR0cHM6Ly9weWRhbnRpYy5kZXYvZG9jcy9haS9tb2RlbHMvdHlwZXNhZmUv">Pydantic
+AI：TypeSafe (Jev)<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9vcGVucm91dGVyLmFpL2RvY3MvZ3VpZGVzL2NvbW11bml0eS9qZXYtdHV0b3JpYWw=">OpenRouter：Jev
+Tutorial<i class="fa fa-external-link-alt"></i></span></li>
+<li>使用指南（社区）：<span class="exturl" data-url="aHR0cHM6Ly9kZXYudG8vdmFseXVhaS9ob3ctdG8tdXNlLWpldi1hLXByYWN0aWNhbC1ndWlkZS10by10eXBlc2FmZXMtc3lzdGVtLW9uZS1tb2RlbC1nNWU=">DEV：How
+to Use Jev<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9hcGlkb2cuY29tL2Jsb2cvaG93LXRvLWFjY2Vzcy1qZXYv">Apidog：6 Ways to
+Access Jev<i class="fa fa-external-link-alt"></i></span></li>
+<li>评测与分析（第三方）：<span class="exturl" data-url="aHR0cHM6Ly9idWlsZGVyLmFpMnNxbC5pby9ibG9nL3doYXQtaXMtamV2">ai2sql：What Is
+Jev?<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWVzZWwuYWkvYmxvZy90eXBlc2FmZS1qZXYtcmV2aWV3">eesel：TypeSafe Jev
+review<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cua2RudWdnZXRzLmNvbS93aGF0LWV2ZXJ5b25lLWlzLWdldHRpbmctd3JvbmctYWJvdXQtdHlwZXNhZmUtYWlzLWpldg==">KDnuggets：What
+Everyone Is Getting Wrong About Jev<i class="fa fa-external-link-alt"></i></span></li>
+<li>社区插件：npm 包 <code>jev-use</code>（README）</li>
+</ul>
+<blockquote>
+<p><strong>关于可信度的说明</strong>：<strong>我没有调用过
+Jev，文中没有任何数字是我实测的。</strong> 第 1、2、3
+章的接口与参数来自官方博客、Pydantic AI 与 OpenRouter
+文档及社区指南的交叉；第 6.1 节是厂商自述；第 6.2
+节的几项来自第三方文章，其中 Every 与 buildfastwithai
+两项是我通过搜索摘要看到的<strong>二手转述</strong>，没有读原文；第 6.3
+节是社区报告，未独立复现；各来源对"是否还需候补"、对比模型的名称等说法有出入，已在文中指明；第
+5.2 节与第 9 章是我的推演和想法，没有验证过。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Jev/" rel="tag"><i class="fa fa-tag"></i> Jev</a>
+              <a href="/tags/TypeSafe/" rel="tag"><i class="fa fa-tag"></i> TypeSafe</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/39b4d2df.html" rel="prev" title="/goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起">
+                  <i class="fa fa-angle-left"></i> /goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">960k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">58:11</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
