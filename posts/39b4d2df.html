@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -34,8 +34,8 @@
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="AI-Agent">
 <meta property="article:tag" content="Claude-Code">
-<meta property="article:tag" content="Pi">
 <meta property="article:tag" content="Codex">
+<meta property="article:tag" content="Pi">
 <meta name="twitter:card" content="summary">
 
 
@@ -642,7 +642,7 @@ steering，但"只在之前那次没取到东西时才再取，否则一条一�
 <tr>
 <td><code>beforeToolCall</code></td>
 <td>工具参数校验后、执行前</td>
-<td>返回 <code>&#123;block: true&#125;</code> 阻止执行（权限检查）</td>
+<td>返回 <code>{block: true}</code> 阻止执行（权限检查）</td>
 </tr>
 <tr>
 <td><code>afterToolCall</code></td>
@@ -652,8 +652,8 @@ steering，但"只在之前那次没取到东西时才再取，否则一条一�
 <tr>
 <td><code>finishTurn</code></td>
 <td>一个 turn 的工具都执行完后、<code>turn_end</code> 前</td>
-<td>返回 <code>&#123;action: "end"&#125;</code> 结束整个 run，或
-<code>&#123;action: "continue"&#125;</code> 保证再来一次请求</td>
+<td>返回 <code>{action: "end"}</code> 结束整个 run，或
+<code>{action: "continue"}</code> 保证再来一次请求</td>
 </tr>
 <tr>
 <td><code>prepareNextTurn</code></td>
@@ -669,8 +669,8 @@ steering，但"只在之前那次没取到东西时才再取，否则一条一�
 </tbody>
 </table>
 <p>其中 <strong><code>finishTurn</code> 是最像"给 <code>/goal</code>
-预留的接口"的一个</strong>：它的注释写得很明白——<code>&#123; action: "end" &#125;</code>
-结束运行，<code>&#123; action: "continue" &#125;</code>
+预留的接口"的一个</strong>：它的注释写得很明白——<code>{ action: "end" }</code>
+结束运行，<code>{ action: "continue" }</code>
 在正常回合里"保证再来一次模型请求"（如果已经有工具结果、steering 或
 follow-up
 要来，就由它们满足这次请求，不额外多请求；否则用当前上下文再续一次）。出错或被中止的回复则是<strong>硬退出，钩子也拦不住</strong>。</p>
@@ -911,7 +911,7 @@ MCP 工具）可以<strong>并发</strong>；</li>
 </tbody>
 </table>
 <p><strong>被拒绝的工具调用不会让循环崩溃</strong>：模型收到一条"被拒绝"的消息作为工具结果，通常会换个办法或汇报做不了。这和
-Pi 的 <code>beforeToolCall</code> 返回 <code>&#123;block: true&#125;</code>、loop
+Pi 的 <code>beforeToolCall</code> 返回 <code>{block: true}</code>、loop
 发一条错误工具结果的做法是同一个思路。</p>
 <p>此外，<code>ToolSearch</code>
 工具可以按需加载工具定义而不是全部预载，这正是上一篇 MCP
@@ -1155,7 +1155,7 @@ Claude Code v2.1.139 以上。</p>
 <p>Claude Code 的 hooks
 机制允许在生命周期事件上挂处理程序。<strong><code>Stop</code> 事件在
 Claude 要结束这一轮回复时触发</strong>。普通的 Stop hook
-是一个命令：返回 <code>&#123;"decision": "block", "reason": "..."&#125;</code>
+是一个命令：返回 <code>{"decision": "block", "reason": "..."}</code>
 或以退出码 2 结束，就<strong>阻止停下，并把 reason 作为下一步指令喂给
 Claude</strong>。</p>
 <p>还有一种 <code>type: "prompt"</code> 的
@@ -1747,7 +1747,7 @@ follow-up</td>
 </tr>
 <tr>
 <td><strong>Prompt-based hook</strong></td>
-<td>用小模型而非脚本做判断的 hook，返回 <code>&#123;ok, reason&#125;</code></td>
+<td>用小模型而非脚本做判断的 hook，返回 <code>{ok, reason}</code></td>
 </tr>
 <tr>
 <td><strong>评估者（evaluator）</strong></td>

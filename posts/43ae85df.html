@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
@@ -33,9 +33,9 @@
 <meta property="article:modified_time" content="2026-10-02T17:45:58.696Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="AI-Agent">
-<meta property="article:tag" content="Pi">
-<meta property="article:tag" content="LLM">
 <meta property="article:tag" content="Coding-Agent">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Pi">
 <meta name="twitter:card" content="summary">
 
 
@@ -265,7 +265,7 @@ mjx-container[display="true"] + br {
 Agent Loop？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%80%E4%BB%A5-agent-%E5%92%8C%E6%99%AE%E9%80%9A-chatbot-%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">5. 所以 Agent 和普通
 Chatbot 的关键区别是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%86%E6%98%AF-agent-loop-%E8%87%AA%E5%B7%B1%E5%85%B6%E5%AE%9E%E4%B8%8D%E5%BA%94%E8%AF%A5%E7%9F%A5%E9%81%93%E5%A4%AA%E5%A4%9A"><span class="nav-text">6. 但是 Agent Loop
 自己其实不应该知道太多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#event-driven-%E6%98%AF%E8%BF%99%E9%87%8C%E9%9D%9E%E5%B8%B8%E9%87%8D%E8%A6%81%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-text">7. Event-Driven
-是这里非常重要的设计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#events"><span class="nav-text">Events</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tui-%E5%85%B6%E5%AE%9E%E5%8F%AA%E6%98%AF-agent-%E5%A4%96%E9%9D%A2%E7%9A%84%E4%B8%80%E5%B1%82%E5%A3%B3"><span class="nav-text">8. TUI 其实只是 Agent
+是这里非常重要的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#events"><span class="nav-text">Events</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tui-%E5%85%B6%E5%AE%9E%E5%8F%AA%E6%98%AF-agent-%E5%A4%96%E9%9D%A2%E7%9A%84%E4%B8%80%E5%B1%82%E5%A3%B3"><span class="nav-text">8. TUI 其实只是 Agent
 外面的一层“壳”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#session-%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B9%9F%E9%9D%9E%E5%B8%B8%E6%9C%89%E6%84%8F%E6%80%9D"><span class="nav-text">9. Session 的设计也非常有意思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E7%89%B9%E5%88%AB%E7%9A%84%E6%98%AFpi-%E7%9A%84-session-%E6%98%AF%E6%A0%91%E8%80%8C%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AF%E4%B8%80%E6%9D%A1%E7%BA%BF"><span class="nav-text">10. 更特别的是：Pi
 的 Session 是树，而不仅仅是一条线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#context-%E5%A4%AA%E9%95%BF%E6%80%8E%E4%B9%88%E5%8A%9E-compaction"><span class="nav-text">11. Context 太长怎么办？——
 Compaction</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#compaction"><span class="nav-text">Compaction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pi-%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99-compact"><span class="nav-text">12. Pi 怎么判断什么时候
@@ -273,7 +273,7 @@ Compact？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" h
 完全不是一个东西</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#skills-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E5%85%A8%E9%83%A8%E5%A1%9E-context"><span class="nav-text">14. Skills 为什么不能全部塞
 Context？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#context-engineering"><span class="nav-text">Context Engineering</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#extensions-%E5%92%8C-skills-%E4%B9%9F%E4%B8%8D%E6%98%AF%E4%B8%80%E5%9B%9E%E4%BA%8B"><span class="nav-text">15. Extensions 和 Skills
 也不是一回事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8A%E6%95%B4%E4%B8%AA%E8%A7%86%E9%A2%91%E7%94%BB%E6%88%90%E5%AE%8C%E6%95%B4%E6%9E%B6%E6%9E%84"><span class="nav-text">16. 把整个视频画成完整架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8A%E4%BD%A0%E6%9C%80%E8%BF%91%E7%9C%8B%E7%9A%84%E4%B8%89%E4%B8%AA%E8%A7%86%E9%A2%91%E4%B8%B2%E8%B5%B7%E6%9D%A5%E5%B0%B1%E6%9B%B4%E6%9C%89%E6%84%8F%E6%80%9D%E4%BA%86"><span class="nav-text">17.
-把你最近看的三个视频串起来，就更有意思了</span></a></li></ol></div>
+把你最近看的三个视频串起来，就更有意思了</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
