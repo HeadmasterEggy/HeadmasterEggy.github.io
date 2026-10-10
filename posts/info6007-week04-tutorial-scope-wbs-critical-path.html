@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="INFO6007 Week 04 Tutorial 完整解析。整理 Part A 范围蔓延的三大风险与两条防控策略、Part B 三层 WBS 的构建、Part C AON 图与关键路径计算（17 周 → 19 周），以及小组组建与 GitHub 项目看板的搭建步骤（仓库命名、协作者、Kanban 五列工作流）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO6007 Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径">
+<meta property="og:url" content="https://qiao1.top/posts/info6007-week04-tutorial-scope-wbs-critical-path.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="INFO6007 Week 04 Tutorial 完整解析。整理 Part A 范围蔓延的三大风险与两条防控策略、Part B 三层 WBS 的构建、Part C AON 图与关键路径计算（17 周 → 19 周），以及小组组建与 GitHub 项目看板的搭建步骤（仓库命名、协作者、Kanban 五列工作流）。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-01T21:30:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.478Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Critical-Path">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="INFO6007">
+<meta property="article:tag" content="Project-Management">
+<meta property="article:tag" content="Scope-Creep">
+<meta property="article:tag" content="WBS">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/info6007-week04-tutorial-scope-wbs-critical-path.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/info6007-week04-tutorial-scope-wbs-critical-path.html","path":"posts/info6007-week04-tutorial-scope-wbs-critical-path.html","title":"INFO6007 Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO6007 Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/info6007-week04-tutorial-scope-wbs-critical-path.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#info6007-week-04-tutorial-%E8%A7%A3%E6%9E%90%E8%8C%83%E5%9B%B4%E8%94%93%E5%BB%B6wbs-%E4%B8%8E%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="nav-text">INFO6007
+Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80tutorial-%E7%9B%AE%E6%A0%87%E4%B8%8E%E7%BB%93%E6%9E%84"><span class="nav-text">一、Tutorial 目标与结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cpart-a%E8%8C%83%E5%9B%B4%E8%94%93%E5%BB%B6%E4%B8%8E%E9%A3%8E%E9%99%A9%E5%88%86%E6%9E%90"><span class="nav-text">二、Part A：范围蔓延与风险分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-text">场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E9%A3%8E%E9%99%A9%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88"><span class="nav-text">三个风险（标准答案）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%9D%A1%E9%98%B2%E6%8E%A7%E7%AD%96%E7%95%A5%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88"><span class="nav-text">两条防控策略（标准答案）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89part-bwork-breakdown-structure"><span class="nav-text">三、Part B：Work Breakdown
+Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-text">任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88"><span class="nav-text">参考答案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E8%AE%BE%E8%AE%A1%E9%80%89%E6%8B%A9"><span class="nav-text">几个值得注意的设计选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bpart-c%E8%BF%9B%E5%BA%A6%E4%BE%9D%E8%B5%96%E4%B8%8E%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="nav-text">四、Part C：进度依赖与关键路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#aon-%E5%9B%BE"><span class="nav-text">① AON 图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84%E4%B8%8E%E6%80%BB%E5%B7%A5%E6%9C%9F"><span class="nav-text">② 关键路径与总工期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#development-%E6%94%B9%E4%B8%BA-8-%E5%91%A8"><span class="nav-text">③ Development 改为 8 周</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94part-d%E5%B0%8F%E7%BB%84%E7%BB%84%E5%BB%BA"><span class="nav-text">五、Part D：小组组建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADpart-egithub-%E9%A1%B9%E7%9B%AE%E7%9C%8B%E6%9D%BF"><span class="nav-text">六、Part E：GitHub 项目看板</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-text">Step 1：创建仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2%E6%B7%BB%E5%8A%A0%E5%8D%8F%E4%BD%9C%E8%80%85"><span class="nav-text">Step 2：添加协作者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9C%8B%E6%9D%BF"><span class="nav-text">Step 3：创建项目看板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E4%BA%94%E5%88%97"><span class="nav-text">工作流五列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E4%BB%BB%E5%8A%A1"><span class="nav-text">初始任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E5%91%A8%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">下周检查清单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">七、考点重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E4%B8%8E%E8%AE%B2%E4%B9%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">八、与讲义的关系</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/info6007-week04-tutorial-scope-wbs-critical-path.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO6007 Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径 | Joey">
+      <meta itemprop="description" content="INFO6007 Week 04 Tutorial 完整解析。整理 Part A 范围蔓延的三大风险与两条防控策略、Part B 三层 WBS 的构建、Part C AON 图与关键路径计算（17 周 → 19 周），以及小组组建与 GitHub 项目看板的搭建步骤（仓库命名、协作者、Kanban 五列工作流）。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO6007 Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-01 21:30:00" itemprop="dateCreated datePublished" datetime="2026-09-01T21:30:00Z">2026-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/INFO6007/" itemprop="url" rel="index"><span itemprop="name">INFO6007</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">INFO6007 Week 04 Tutorial 完整解析。整理 Part A 范围蔓延的三大风险与两条防控策略、Part B 三层 WBS 的构建、Part C AON 图与关键路径计算（17 周 → 19 周），以及小组组建与 GitHub 项目看板的搭建步骤（仓库命名、协作者、Kanban 五列工作流）。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="info6007-week-04-tutorial-解析范围蔓延wbs-与关键路径">INFO6007
+Week 04 Tutorial 解析：范围蔓延、WBS 与关键路径</h1>
+<blockquote>
+<p><strong>课程</strong>：INFO6007 — Project Management in IT，Semester
+2 2026
+<strong>来源</strong>：<code>Tutorial sheet Week 04 INFO6007.pdf</code>
++ <code>Tutorial Answer Sheet Week 4.pdf</code></p>
+<p>⚠️⚠️ <strong>先说一件容易踩坑的事</strong>： <strong>Week 4 的
+tutorial 内容与 Week 4 的 lecture 完全不对应。</strong> <strong>Lecture
+讲的是成本管理与 EVM</strong>（见 <a href="/posts/info6007-week04-cost-management.html">Week 04
+讲课总结</a>）， <strong>而这份 tutorial 做的是范围蔓延、WBS
+和关键路径——都是 Week 3「时间管理」的内容。</strong>
+<strong>复习时要把两者分开看</strong>，别指望 tutorial 里能练到 EVM
+计算题。</p>
+<p><strong>这个一周的错位从第一次 tutorial
+起就存在，且由课程文档明写</strong>（Week 2 答案原文："Drawing from Week
+1 lecture"）： <a href="/posts/info6007-week02-tutorial-triple-constraint.html">Week 2</a>
+做 Week 1 内容 → <a href="/posts/info6007-week03-tutorial-methodology-stakeholder.html">Week
+3</a> 做 Week 2 内容 → <strong>本文（Week 4）做 Week 3 内容</strong> →
+<a href="/posts/info6007-week05-tutorial-evm-exercises.html">Week 5</a>
+做 Week 4 的 EVM。 <strong>所以本文正是 <a href="/posts/info6007-week03-scope-schedule-management.html">Week 03
+讲课总结</a>（范围 + 进度管理）的配套练习。</strong></p>
+</blockquote>
+<hr>
+<h2 id="一tutorial-目标与结构">一、Tutorial 目标与结构</h2>
+<p><strong>目标</strong>：通过小组活动探讨<strong>范围与进度管理</strong>中的实际挑战——识别范围蔓延的风险、辩论
+<strong>WBS</strong>
+的作用、用真实场景分析<strong>进度依赖关系</strong>。重点是<strong>批判性讨论、协作，以及在具体情境中应用项目管理概念</strong>。同时<strong>敲定小组分配并开始创建项目看板</strong>。</p>
+<p><strong>五个部分</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">部分</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>A</strong></td>
+<td style="text-align: left;">Scope Creep 与风险分析</td>
+<td style="text-align: left;">讨论题</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>B</strong></td>
+<td style="text-align: left;">Work Breakdown Structure</td>
+<td style="text-align: left;">构建题</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>C</strong></td>
+<td style="text-align: left;">进度依赖与关键路径</td>
+<td style="text-align: left;"><strong>计算题（课后自己做）</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>D</strong></td>
+<td style="text-align: left;">敲定小组分配</td>
+<td style="text-align: left;">事务</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>E</strong></td>
+<td style="text-align: left;">创建项目看板</td>
+<td style="text-align: left;"><strong>动手，下周要检查</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>学习成果</strong>：</p>
+<ul>
+<li><strong>LO1</strong> 理解各项目管理知识领域</li>
+<li><strong>LO2</strong> 应用项目管理知识、工具与技术</li>
+<li><strong>LO4</strong> 初步掌握项目管理工具与实践</li>
+</ul>
+<hr>
+<h2 id="二part-a范围蔓延与风险分析">二、Part A：范围蔓延与风险分析</h2>
+<h3 id="场景">场景</h3>
+<blockquote>
+<p>团队正在开发一套 <strong>HR
+管理系统</strong>。<strong>进行到一半时</strong>，客户要求增加新功能（<strong>移动
+App、薪资分析、多语言支持</strong>），<strong>但预算和时间线都不变</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意题目的设计</strong>：三个新功能<strong>各自属于不同的技术维度</strong>——移动端是新平台、薪资分析是新业务域、多语言是横切关注点。<strong>任何一个都不是小改动</strong>，而客户把它们当成「顺便加一下」。这正是范围蔓延最典型的样子。</p>
+</blockquote>
+<h3 id="三个风险标准答案">三个风险（标准答案）</h3>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">风险</th>
+<th style="text-align: left;">机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>交付延期</strong>（Delays in
+Delivery）</td>
+<td style="text-align: left;">额外功能<strong>拉长开发时间</strong>，把项目推过原定截止日</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>预算超支</strong>（Budget
+Overruns）</td>
+<td style="text-align: left;">计划外功能需要<strong>更多资源和测试</strong>，超出原预算</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>质量下降</strong>（Reduced
+Quality）</td>
+<td style="text-align: left;"><strong>增加范围却不调整资源 → 工作量上升
+→ 交付物仓促或测试不足</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三个风险的内在逻辑很重要</strong>：它们正好对应<strong>项目管理铁三角的三条边</strong>——<strong>时间、成本、质量</strong>。
+<strong>范围增加而资源不变，压力必然从这三个方向之一泄出。</strong> 第 3
+条最隐蔽，因为<strong>质量下降在交付前往往看不见</strong>。</p>
+</blockquote>
+<h3 id="两条防控策略标准答案">两条防控策略（标准答案）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">策略</th>
+<th style="text-align: left;">做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>正式变更控制流程</strong><br>（Formal
+Change Control Process）</td>
+<td style="text-align: left;"><strong>任何新请求都要走结构化评估</strong>，分析其对<strong>时间、成本、资源</strong>的影响</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>清晰的范围说明书与验证</strong><br>（Clear
+Scope Statement &amp; Validation）</td>
+<td style="text-align: left;"><strong>早期就确立「包含什么、不包含什么」</strong>，并在<strong>关键里程碑</strong>由干系人<strong>签字确认</strong>范围</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>两条策略的分工</strong>：
+<strong>变更控制是「事后闸门」</strong>——请求来了怎么处理；
+<strong>范围说明书是「事前围栏」</strong>——<strong>尤其是明确写出
+exclusions（不包含什么）</strong>，这是实践中最容易漏、也最能防争议的一条。</p>
+<p>💡 这两条都能挂靠到 Week 4 lecture
+的成本管理：<strong>任何范围变更都要做「成本影响分析」并获批</strong>——NSW
+数字驾照项目就是这么做的。</p>
+</blockquote>
+<hr>
+<h2 id="三part-bwork-breakdown-structure">三、Part B：Work Breakdown
+Structure</h2>
+<h3 id="任务">任务</h3>
+<p>沿用同一个 HR 系统场景，构建一个<strong>至少 3 层</strong>的简化
+WBS，涵盖<strong>需求、设计、开发、测试、部署</strong>五类交付物。</p>
+<h3 id="参考答案">参考答案</h3>
+<figure class="highlight gauss"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> Requirements（需求）</span><br><span class="line">   ├── <span class="number">1.1</span> Requirement Gathering（需求收集）</span><br><span class="line">   └── <span class="number">1.2</span> Requirement Validation（需求验证）</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> <span class="built_in">Design</span>（设计）</span><br><span class="line">   ├── <span class="number">2.1</span> <span class="keyword">System</span> Architecture <span class="built_in">Design</span>（系统架构设计）</span><br><span class="line">   └── <span class="number">2.2</span> UI/UX <span class="built_in">Design</span>（界面与体验设计）</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> Development（开发）</span><br><span class="line">   ├── <span class="number">3.1</span> Front-<span class="keyword">end</span> Development（前端开发）</span><br><span class="line">   ├── <span class="number">3.2</span> Back-<span class="keyword">end</span> Development（后端开发）</span><br><span class="line">   └── <span class="number">3.3</span> Integration（集成）</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> Testing（测试）</span><br><span class="line">   ├── <span class="number">4.1</span> Unit Testing（单元测试）</span><br><span class="line">   ├── <span class="number">4.2</span> <span class="keyword">System</span> Testing（系统测试）</span><br><span class="line">   └── <span class="number">4.3</span> User Acceptance Testing（用户验收测试）</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> Deployment（部署）</span><br><span class="line">   ├── <span class="number">5.1</span> Training &amp; Documentation（培训与文档）</span><br><span class="line">   └── <span class="number">5.2</span> Production Deployment（生产环境部署）</span><br></pre></td></tr></table></figure>
+<h3 id="几个值得注意的设计选择">几个值得注意的设计选择</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">观察</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Integration 单独列为
+3.3</strong></td>
+<td style="text-align: left;"><strong>集成不是「前后端做完自然就有」的免费产物，而是独立的工作包</strong>
+—— 这直接呼应 Week 4 lecture
+里反复出现的「<strong>低估集成成本</strong>」</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>测试拆成三层</strong></td>
+<td style="text-align: left;">单元 → 系统 →
+<strong>UAT</strong>，<strong>验收测试是有干系人参与的独立活动</strong>，不能并进「测试」一笔带过</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Training 归在部署下</strong></td>
+<td style="text-align: left;"><strong>培训是交付的一部分</strong>，不是可选项
+—— 讲义里 Hershey's ERP 失败的原因之一正是「培训不足」</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>WBS 与成本估算的连接</strong>（考试常考的跨周关联）：
+<strong>自下而上估算之所以最准确，前提就是有一个足够细的 WBS。</strong>
+<strong>成本要在「活动/工作包」层级分配</strong> —— 也就是上面
+1.1、2.2、3.3 这一层。<strong>WBS 拆得越合理，估算越可靠。</strong></p>
+</blockquote>
+<hr>
+<h2 id="四part-c进度依赖与关键路径">四、Part C：进度依赖与关键路径</h2>
+<blockquote>
+<p>💡 tutorial sheet 上标注了 <strong>"try in your own time"</strong> ——
+这部分是<strong>留给课后自己做</strong>的。</p>
+</blockquote>
+<h3 id="题目">题目</h3>
+<p>活动序列：</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="84.872ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 37513.2 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{Requirements (2)} \to \text{Design (3)} \to \text{Development (6)}
+\to \text{Testing (4)} \to \text{Deployment (2)}
+"><g data-mml-node="mtext" data-latex="\text{Requirements (2)}"><path data-c="52" d="M611 501C611 558 580 604 519 639C468 668 411 683 349 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 38 63 38L35 38L35-1C62 2 111 3 183 3C256 3 305 2 332-1L332 38L304 38C269 38 248 41 241 46C234 51 230 63 230 81L230 327L340 327C404 327 451 289 462 235C464 224 465 200 465 165C465 138 466 118 467 106C473 22 546-22 634-22C672-22 699-6 714 25C726 48 732 70 732 91C732 104 726 111 715 111C706 111 700 105 699 92C694 36 673 8 638 8C603 8 591 41 585 70C579 104 575 130 572 147L559 226C544 278 507 316 448 339C524 361 611 415 611 501M470 600C491 581 502 548 502 501C502 463 492 431 473 404C450 373 405 357 336 357L230 357L230 609C230 630 236 641 248 642C255 643 274 644 306 644C385 644 426 641 470 600Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(736,0)"></path><path data-c="71" d="M255 442C193 442 141 419 98 374C55 329 34 276 34 214C34 153 55 100 96 55C137 10 187-13 248-13C297-13 339 8 374 51L374-115C374-134 371-146 364-150C357-154 335-155 298-155L298-194L412-191L527-194L527-155C490-155 468-154 461-150C454-146 450-134 450-115L450 442L422 442L387 358C364 401 320 442 255 442M251 16C210 16 177 40 153 88C134 126 124 168 124 214C124 261 135 303 157 341C183 386 218 409 261 409C326 409 377 342 377 275L377 136C377 75 311 16 251 16Z" transform="translate(1180,0)"></path><path data-c="75" d="M267 18C198 18 185 47 185 112L185 442L32 431L32 393C71 393 94 389 100 382C106 375 109 350 109 306L109 159C109 120 112 90 119 67C134 15 189-11 262-11C316-11 357 14 385 65L385-11L535 0L535 38C499 38 478 40 470 46C462 52 458 66 458 89L458 442L306 431L306 393C341 393 362 390 370 384C378 378 382 365 382 342L382 167C382 88 340 18 267 18Z" transform="translate(1708,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2264,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(2542,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2934,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(3378,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4211,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4655,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(5211,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(5600,0)"></path><path data-c="20" d="" transform="translate(5994,0)"></path><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z" transform="translate(6326,0)"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(6715,0)"></path><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z" transform="translate(7215,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(7881.8,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\text{Design (3)}" transform="translate(9159.6,0)"><path data-c="44" d="M401 0C490 0 563 34 622 103C679 168 707 246 707 336C707 428 679 508 624 575C565 647 490 683 401 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0M374 39L274 39C235 39 230 38 230 74L230 609C230 645 235 644 274 644L373 644C447 644 506 614 550 554C583 507 600 435 600 336C600 161 534 39 374 39Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(764,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(1208,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1602,0)"></path><path data-c="67" d="M431 453C393 453 358 438 326 408C296 431 262 442 223 442C137 442 59 378 59 294C59 252 74 218 104 192C85 168 75 141 75 110C75 72 88 43 113 24C71 10 28-26 28-77C28-120 56-154 111-178C153-197 199-206 249-206C300-206 347-197 389-178C444-154 471-120 471-75C471-22 449 17 405 42C359 67 308 70 234 70C190 70 166 70 161 71C133 75 113 102 113 133C113 148 117 162 126 174C154 155 186 145 223 145C309 145 386 209 386 293C386 332 373 364 347 389C372 412 399 423 428 423C423 418 420 410 420 400C420 378 431 367 453 367C474 367 485 378 485 401C485 432 461 453 431 453M223 411C277 411 304 372 304 294C304 215 277 175 223 175C168 175 141 214 141 293C141 372 168 411 223 411M164 4L222 4C274 4 316 1 348-6C391-15 412-39 412-77C412-109 392-134 352-153C321-168 287-175 250-175C214-175 180-168 148-153C107-134 87-109 87-77C87-35 123 4 164 4Z" transform="translate(1880,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2380,0)"></path><path data-c="20" d="" transform="translate(2936,0)"></path><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z" transform="translate(3268,0)"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(3657,0)"></path><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z" transform="translate(4157,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(13983.3,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\text{Development (6)}" transform="translate(15261.1,0)"><path data-c="44" d="M401 0C490 0 563 34 622 103C679 168 707 246 707 336C707 428 679 508 624 575C565 647 490 683 401 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0M374 39L274 39C235 39 230 38 230 74L230 609C230 645 235 644 274 644L373 644C447 644 506 614 550 554C583 507 600 435 600 336C600 161 534 39 374 39Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(764,0)"></path><path data-c="76" d="M388 354C388 349 386 342 382 332L286 91L179 356C175 365 173 370 173 371C173 386 192 393 230 393L230 431L118 428C94 427 61 428 19 431L19 393C75 393 84 395 98 359L240 10C245-4 253-11 264-11C275-11 283-4 288 10L417 329C421 340 425 349 430 357C444 381 470 393 508 393L508 431C475 428 449 427 430 428L341 431L341 393C370 392 388 380 388 354Z" transform="translate(1208,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1736,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2180,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(2458,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(2958,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(3514,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4347,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4791,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(5347,0)"></path><path data-c="20" d="" transform="translate(5736,0)"></path><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z" transform="translate(6068,0)"></path><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z" transform="translate(6457,0)"></path><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z" transform="translate(6957,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(22884.9,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\text{Testing (4)}" transform="translate(24162.7,0)"><path data-c="54" d="M653 447L685 447L666 677L55 677L36 447L68 447C75 513 78 572 106 605C132 635 181 638 242 638C271 638 289 638 295 637C313 633 313 624 313 603L313 82C313 69 312 61 309 56C303 45 271 39 213 39L169 39L169 0C199 2 263 3 360 3C458 3 522 2 552 0L552 39L508 39C450 39 418 45 412 56C409 61 408 69 408 82L408 603C408 614 410 623 412 629C414 635 436 638 479 638C540 638 588 635 614 605C642 572 646 513 653 447Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(722,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(1166,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(1560,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1949,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2227,0)"></path><path data-c="67" d="M431 453C393 453 358 438 326 408C296 431 262 442 223 442C137 442 59 378 59 294C59 252 74 218 104 192C85 168 75 141 75 110C75 72 88 43 113 24C71 10 28-26 28-77C28-120 56-154 111-178C153-197 199-206 249-206C300-206 347-197 389-178C444-154 471-120 471-75C471-22 449 17 405 42C359 67 308 70 234 70C190 70 166 70 161 71C133 75 113 102 113 133C113 148 117 162 126 174C154 155 186 145 223 145C309 145 386 209 386 293C386 332 373 364 347 389C372 412 399 423 428 423C423 418 420 410 420 400C420 378 431 367 453 367C474 367 485 378 485 401C485 432 461 453 431 453M223 411C277 411 304 372 304 294C304 215 277 175 223 175C168 175 141 214 141 293C141 372 168 411 223 411M164 4L222 4C274 4 316 1 348-6C391-15 412-39 412-77C412-109 392-134 352-153C321-168 287-175 250-175C214-175 180-168 148-153C107-134 87-109 87-77C87-35 123 4 164 4Z" transform="translate(2783,0)"></path><path data-c="20" d="" transform="translate(3283,0)"></path><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z" transform="translate(3615,0)"></path><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z" transform="translate(4004,0)"></path><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z" transform="translate(4504,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(29333.4,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\text{Deployment (2)}" transform="translate(30611.2,0)"><path data-c="44" d="M401 0C490 0 563 34 622 103C679 168 707 246 707 336C707 428 679 508 624 575C565 647 490 683 401 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0M374 39L274 39C235 39 230 38 230 74L230 609C230 645 235 644 274 644L373 644C447 644 506 614 550 554C583 507 600 435 600 336C600 161 534 39 374 39Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(764,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(1208,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1764,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(2042,0)"></path><path data-c="79" d="M113-205C168-205 212-167 243-90L416 332C433 372 463 392 508 392L508 431C475 428 449 427 430 428L341 431L341 393C372 392 387 379 387 354C387 348 385 341 381 332L286 98L180 354C177 362 175 368 174 371C174 385 193 392 230 392L230 431L118 428C94 427 61 428 19 431L19 392C72 392 85 394 99 360L246 1L222-55C195-119 176-175 113-175C99-175 87-171 76-164C99-159 110-144 110-120C110-90 95-75 64-75C34-75 19-90 19-121C19-170 64-205 113-205Z" transform="translate(2542,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(3070,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3903,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4347,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(4903,0)"></path><path data-c="20" d="" transform="translate(5292,0)"></path><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z" transform="translate(5624,0)"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(6013,0)"></path><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z" transform="translate(6513,0)"></path></g></g></g></svg></mjx-container></span></p>
+<p>（单位：周）</p>
+<p><strong>要求</strong>： 1. 画出
+<strong>AON（Activity-on-Node）</strong> 图 2.
+找出<strong>关键路径</strong>和<strong>项目总工期</strong> 3. 若
+<strong>Development 变成 8 周</strong>，重新计算总工期</p>
+<h3 id="解答">解答</h3>
+<h4 id="aon-图">① AON 图</h4>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">┌─────────────┐   ┌────────┐   ┌───────────────┐   ┌─────────┐   ┌────────────┐</span><br><span class="line">│      A      │   │   B    │   │       C       │   │    D    │   │     E      │</span><br><span class="line">│ Requirements│──▶│ Design │──▶│  Development  │──▶│ Testing │──▶│ Deployment │</span><br><span class="line">│  <span class="number"> 2 </span>weeks   │   │3 weeks │   │   <span class="number"> 6 </span>weeks    │   │<span class="number"> 4 </span>weeks │   │ <span class="number"> 2 </span>weeks   │</span><br><span class="line">└─────────────┘   └────────┘   └───────────────┘   └─────────┘   └────────────┘</span><br></pre></td></tr></table></figure>
+<p>全部是 <strong>Finish-to-Start（完成–开始）</strong>
+依赖，<strong>单一链条，没有并行分支</strong>。</p>
+<h4 id="关键路径与总工期">② 关键路径与总工期</h4>
+<p><strong>路径</strong>：<strong>A – B – C – D – E</strong></p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="25.351ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 11205.3 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+2 + 3 + 6 + 4 + 2 = \mathbf{17\ \text{周}}
+"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(722.2,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="3" transform="translate(1722.4,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(2444.7,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="6" transform="translate(3444.9,0)"><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(4167.1,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="4" transform="translate(5167.3,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(5889.6,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(6889.8,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(7667.6,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{17\ \text{周}}" data-mjx-texclass="ORD" transform="translate(8723.3,0)"><g data-mml-node="mn" data-latex="17"><path data-c="1D7CF" d="M494 0L494 47L354 47L354 623C354 645 354 655 328 655C317 655 315 655 306 648C229 591 126 591 105 591L85 591L85 544L105 544C121 544 176 545 235 564L235 47L96 47L96 0C140 3 246 3 295 3C344 3 450 3 494 0Z"></path><path data-c="1D7D5" d="M558 644L354 644C331 644 184 649 170 653C149 657 148 666 146 676L99 676L64 422L111 422C121 498 134 511 138 513C149 519 230 519 247 519L416 519C398 497 379 476 361 454C265 342 193 207 193 59C193-11 249-11 255-11C271-11 318-6 318 60L318 106C318 230 335 348 393 416L548 596C558 607 558 609 558 644Z" transform="translate(575,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(1150,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{周}" transform="translate(1482,0)"><text data-variant="bold" transform="scale(1,-1)" font-size="884px" font-family="serif" font-weight="bold">周</text></g></g></g></g></svg></mjx-container></span></p>
+<blockquote>
+<p><strong>这题为什么「简单」，以及为什么值得想清楚</strong>：
+<strong>因为只有一条路径，所以这条路径必然就是关键路径。</strong>
+<strong>推论：链条上的每一个活动都是关键活动，浮动时间（float/slack）全部为
+0。</strong> <strong>任何一个活动延期 1 周，整个项目就延期 1 周</strong>
+—— 没有任何缓冲。</p>
+</blockquote>
+<h4 id="development-改为-8-周">③ Development 改为 8 周</h4>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="25.351ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 11205.3 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+2 + 3 + 8 + 4 + 2 = \mathbf{19\ \text{周}}
+"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(722.2,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="3" transform="translate(1722.4,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(2444.7,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="8" transform="translate(3444.9,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(4167.1,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="4" transform="translate(5167.3,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(5889.6,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(6889.8,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(7667.6,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{19\ \text{周}}" data-mjx-texclass="ORD" transform="translate(8723.3,0)"><g data-mml-node="mn" data-latex="19"><path data-c="1D7CF" d="M494 0L494 47L354 47L354 623C354 645 354 655 328 655C317 655 315 655 306 648C229 591 126 591 105 591L85 591L85 544L105 544C121 544 176 545 235 564L235 47L96 47L96 0C140 3 246 3 295 3C344 3 450 3 494 0Z"></path><path data-c="1D7D7" d="M526 329C526 396 526 655 289 655C147 655 48 574 48 440C48 302 147 227 270 227C305 227 352 234 390 304L390 282C390 209 381 150 366 116C349 77 306 32 237 32C219 32 183 34 153 54C165 57 202 71 202 116C202 150 179 178 140 178C101 178 77 152 77 114C77 46 128-11 239-11C369-11 526 73 526 329M389 428C389 365 363 263 279 263C184 263 184 338 184 438C184 536 184 616 291 616C350 616 373 563 377 553C389 520 389 462 389 428Z" transform="translate(575,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(1150,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{周}" transform="translate(1482,0)"><text data-variant="bold" transform="scale(1,-1)" font-size="884px" font-family="serif" font-weight="bold">周</text></g></g></g></g></svg></mjx-container></span></p>
+<p><strong>关键路径仍然是 A–B–C–D–E</strong>。</p>
+<blockquote>
+<p><strong>为什么关键路径不变</strong>：<strong>因为压根只有一条路径可选。</strong>
+<strong>这正是本题的教学意图</strong>——在有<strong>并行分支</strong>的网络中，某个活动延期<strong>可能会让关键路径转移</strong>到另一条路径上；但在<strong>纯串行</strong>的网络中，<strong>延期
+100% 直接传导到总工期</strong>，一周不差。</p>
+<p>💡 <strong>延伸思考</strong>（题目没问但值得想）：如果 Testing 能和
+Development 的后半段<strong>部分重叠</strong>（快速跟进 /
+fast-tracking），或者给 Development <strong>加人手</strong>（赶工 /
+crashing），总工期就能压缩——<strong>这两个正是 Week 3
+讲的进度压缩技术</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="五part-d小组组建">五、Part D：小组组建</h2>
+<p><strong>要求</strong>：组建 <strong>4–5
+人</strong>小组，记录每位成员的 <strong>student ID、unikey
+和姓名</strong>，交给 tutor（或邮件）。</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">要点</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>确认状态</strong></td>
+<td style="text-align: left;">在 tutor 帮助下确认你是<strong>已满员 /
+部分成员 / 还没组队</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>没组队怎么办</strong></td>
+<td style="text-align: left;"><strong>找 tutor，他会在本 tutorial
+内帮忙匹配</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>交换联系方式</strong></td>
+<td style="text-align: left;">大学邮箱 + 小组同意的其他方式</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>责任在你</strong></td>
+<td style="text-align: left;"><strong>确保你能联系上每一位队友</strong>；缺谁的联系方式就问
+tutor</td>
+</tr>
+<tr>
+<td style="text-align: left;">⚠️ <strong>tutor
+有最终决定权</strong></td>
+<td style="text-align: left;"><strong>成员仍可能被增减</strong>，所以要保持信息畅通</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 注意 <strong>tutorial 要求 4–5 人</strong>，与 ELEC5620、COMP5318
+等课的组队规模不同，别记混。</p>
+</blockquote>
+<hr>
+<h2 id="六part-egithub-项目看板">六、Part E：GitHub 项目看板</h2>
+<blockquote>
+<p>⚠️⚠️ <strong>本节内容已于 Week 5 作废，保留仅作记录。</strong>
+<strong>Week 5 tutorial 明确说明：团队仓库和看板已由课程在 GitHub
+组织下统一创建好，不需要再用自己建的那个。</strong>
+<strong>新做法</strong>：去
+<strong>https://github.sydney.edu.au/INFO6007-S2-2026</strong> 找
+<code>INFO6007-TXX-GYY</code>（<strong>注意改成连字符了</strong>），并<strong>填写
+<code>README.md</code></strong>。
+<strong>若已在旧看板加过任务，需手动复制到新看板。</strong> 详见 <a href="/posts/info6007-week05-tutorial-evm-exercises.html">Week 05
+Tutorial 解析</a>第五节。</p>
+</blockquote>
+<blockquote>
+<p>💡 tutorial 说：<strong>课上做不完没关系，下周可以接着做</strong>。但
+<strong>下周要检查</strong>。</p>
+</blockquote>
+<h3 id="step-1创建仓库">Step 1：创建仓库</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. 登录</strong></td>
+<td style="text-align: left;">每人先各自登录
+<strong>https://github.sydney.edu.au/login</strong>（用 Unikey
+和密码）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. 选协调人</strong></td>
+<td style="text-align: left;">小组选<strong>一人作为 team leader /
+coordinator</strong>，由他代表团队创建仓库并完成初始设置</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. 命名</strong></td>
+<td style="text-align: left;"><strong>格式固定：<code>INFO6007 TXX-GYY</code></strong><br><strong>XX
+= tutorial 编号，YY = 该 tutorial 内的小组编号</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. 可见性</strong></td>
+<td style="text-align: left;"><strong>设为
+Private</strong>，其余设置保持默认</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-2添加协作者">Step 2：添加协作者</h3>
+<p>在仓库 <strong>Settings</strong> 里，用 <strong>unikey
+或大学邮箱</strong>添加：</p>
+<ul>
+<li><strong>所有小组成员</strong></li>
+<li><strong>你的 tutor</strong>（需要问他要 unikey）</li>
+<li><strong><code>info6007</code></strong>（课程账号）</li>
+</ul>
+<blockquote>
+<p>⚠️⚠️ <strong>一个必须注意的前提</strong>：
+<strong>被添加的人必须已经用自己的 Unikey 登录过
+https://github.sydney.edu.au/login，添加才会生效。</strong>
+<strong>所以务必让每位成员先各自登录一次</strong>——这是最容易卡住全组的一步。</p>
+<p><strong>验证方法</strong>：让每位成员登录后确认<strong>能看到这个仓库</strong>。</p>
+</blockquote>
+<h3 id="step-3创建项目看板">Step 3：创建项目看板</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">打开 <strong>Projects</strong>
+标签，创建新的 project board</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>推荐选 Kanban
+布局</strong>——更便于组织和跟踪作业期间的工作</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">项目名<strong>与仓库同名</strong>（<code>INFO6007 TXX-GYY</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="工作流五列">工作流五列</h3>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.455ex;" xmlns="http://www.w3.org/2000/svg" width="60.89ex" height="2.025ex" role="img" focusable="false" viewBox="0 -694 26913.2 895"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\textbf{Backlog} \to \textbf{Ready} \to \textbf{In Progress} \to
+\textbf{In Review} \to \textbf{Done}
+"><g data-mml-node="mtext" data-latex="\textbf{Backlog}"><path data-c="1D401" d="M753 186C753 282 667 349 548 358C656 377 721 437 721 514C721 606 634 686 473 686L39 686L39 639L147 639L147 47L39 47L39 0L503 0C669 0 753 88 753 186M579 514C579 437 531 375 434 375L278 375L278 639L460 639C561 639 579 560 579 514M606 187C606 175 606 47 462 47L278 47L278 339L472 339C492 339 539 339 573 296C606 254 606 198 606 187Z"></path><path data-c="1D41A" d="M553 24C553 47 540 47 527 47C466 48 466 61 466 84L466 299C466 388 395 453 246 453C189 453 67 449 67 361C67 317 102 298 129 298C160 298 192 319 192 361C192 391 173 408 170 410C198 416 230 417 242 417C317 417 352 375 352 299L352 265C281 262 27 253 27 108C27 12 151-6 220-6C300-6 347 35 369 77C369 46 369 0 473 0L521 0C541 0 553 0 553 24M352 139C352 43 260 30 235 30C184 30 144 65 144 109C144 217 302 231 352 234Z" transform="translate(818,0)"></path><path data-c="1D41C" d="M478 117C478 131 464 131 454 131C436 131 435 129 430 116C404 53 356 34 305 34C166 34 166 181 166 227C166 283 166 413 295 413C330 413 347 410 360 407C342 391 340 370 340 361C340 317 375 298 402 298C433 298 465 319 465 361C465 447 349 453 291 453C112 453 38 338 38 222C38 89 132-6 286-6C448-6 478 110 478 117Z" transform="translate(1377,0)"></path><path data-c="1D424" d="M587 0L587 47L570 47C527 47 524 51 511 67L342 278L472 379C486 390 495 397 562 397L562 444C535 441 510 441 484 441L369 444L369 397C392 397 395 394 403 386L214 237L214 694L37 686L37 639C99 639 106 639 106 600L106 47L37 47L37 0L157 3L278 0L278 47L209 47L209 174C238 197 246 203 266 217L367 91C376 79 392 59 392 56C392 47 374 47 361 47L361 0C391 2 478 3 483 3C519 3 553 2 587 0Z" transform="translate(1888,0)"></path><path data-c="1D425" d="M293 0L293 47L224 47L224 694L47 686L47 639C109 639 116 639 116 600L116 47L47 47L47 0L170 3Z" transform="translate(2495,0)"></path><path data-c="1D428" d="M542 218C542 352 450 453 287 453C123 453 32 351 32 218C32 94 120-6 287-6C455-6 542 95 542 218M414 229C414 142 414 34 287 34C160 34 160 142 160 229C160 274 160 325 177 359C196 396 238 417 287 417C329 417 371 401 393 366C414 332 414 277 414 229Z" transform="translate(2814,0)"></path><path data-c="1D420" d="M558 397C558 420 541 455 495 455C480 455 433 452 389 417C371 429 329 450 255 450C111 450 56 372 56 302C56 261 76 220 108 197C80 162 74 129 74 108C74 93 78 44 118 12C105 9 32-12 32-75C32-126 87-201 287-201C464-201 542-142 542-72C542-42 534 21 467 55C411 83 351 83 255 83C229 83 183 83 178 84C134 91 123 129 123 147C123 157 127 172 133 180C179 156 230 154 255 154C399 154 454 232 454 302C454 349 429 382 414 398C444 414 465 416 476 417C474 412 472 403 472 397C472 372 489 354 515 354C541 354 558 373 558 397M343 302C343 257 343 190 255 190C167 190 167 257 167 302C167 347 167 414 255 414C343 414 343 347 343 302M456-75C456-111 417-165 287-165C167-165 118-119 118-73C118-13 181-13 195-13L312-13C343-13 456-13 456-75Z" transform="translate(3389,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(4241.8,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\textbf{Ready}" transform="translate(5519.6,0)"><path data-c="1D411" d="M858 95C858 117 844 117 834 117C813 117 812 107 811 94C806 47 777 25 747 25C687 25 678 96 673 138C671 149 663 218 662 223C648 293 593 324 550 340C666 370 717 435 717 501C717 602 607 686 419 686L39 686L39 639L147 639L147 47L39 47L39 0C75 3 173 3 215 3C257 3 355 3 391 0L391 47L283 47L283 325L400 325C414 325 458 325 489 291C521 256 521 237 521 164C521 98 521 49 591 15C635-7 697-11 738-11C845-11 858 79 858 95M564 500C564 444 564 361 399 361L283 361L283 639L401 639C562 639 564 561 564 500Z"></path><path data-c="1D41E" d="M494 117C494 135 475 135 470 135C453 135 451 130 445 114C424 66 367 34 302 34C161 34 160 167 160 218L462 218C484 218 494 218 494 245C494 276 488 349 438 399C401 435 348 453 279 453C119 453 32 350 32 225C32 91 132-6 293-6C451-6 494 100 494 117M399 251L160 251C162 290 163 332 184 365C210 405 250 417 279 417C396 417 398 286 399 251Z" transform="translate(863,0)"></path><path data-c="1D41A" d="M553 24C553 47 540 47 527 47C466 48 466 61 466 84L466 299C466 388 395 453 246 453C189 453 67 449 67 361C67 317 102 298 129 298C160 298 192 319 192 361C192 391 173 408 170 410C198 416 230 417 242 417C317 417 352 375 352 299L352 265C281 262 27 253 27 108C27 12 151-6 220-6C300-6 347 35 369 77C369 46 369 0 473 0L521 0C541 0 553 0 553 24M352 139C352 43 260 30 235 30C184 30 144 65 144 109C144 217 302 231 352 234Z" transform="translate(1390,0)"></path><path data-c="1D41D" d="M601 0L601 47C539 47 532 47 532 86L532 694L355 686L355 639C417 639 424 639 424 600L424 405C374 444 322 450 289 450C143 450 38 362 38 221C38 89 130-6 278-6C339-6 387 18 418 43L418-6M418 103C405 85 364 30 288 30C166 30 166 151 166 221C166 269 166 323 192 362C221 404 268 414 299 414C356 414 396 382 418 353Z" transform="translate(1949,0)"></path><path data-c="1D432" d="M580 397L580 444C556 442 526 441 501 441L410 444L410 397C410 397 457 397 457 385L452 373L337 127L210 397L264 397L264 444L140 441L26 444L26 397L90 397L277 0L254-48C232-96 200-164 129-164C115-164 113-163 105-160C114-156 137-142 137-107C137-74 113-50 79-50C51-50 22-69 22-108C22-159 69-200 129-200C206-200 264-138 291-81L506 376C513 390 516 397 580 397Z" transform="translate(2588,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(8992.3,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\textbf{In Progress}" transform="translate(10270.1,0)"><path data-c="1D408" d="M403 0L403 47L289 47L289 639L403 639L403 686C362 683 264 683 218 683C172 683 74 683 33 686L33 639L147 639L147 47L33 47L33 0C74 3 172 3 218 3C264 3 362 3 403 0Z"></path><path data-c="1D427" d="M615 0L615 47L546 47L546 306C546 411 492 450 392 450C296 450 243 393 217 342L217 450L45 442L45 395C107 395 114 395 114 356L114 47L45 47L45 0L171 3L297 0L297 47L228 47L228 256C228 365 314 414 377 414C411 414 432 393 432 317L432 47L363 47L363 0L489 3Z" transform="translate(436,0)"></path><path data-c="20" d="" transform="translate(1075,0)"></path><path data-c="1D40F" d="M721 491C721 601 622 686 456 686L39 686L39 639L147 639L147 47L39 47L39 0C77 3 175 3 218 3C261 3 359 3 397 0L397 47L289 47L289 302L466 302C605 302 721 374 721 491M568 491C568 420 568 343 417 343L283 343L283 639L418 639C568 639 568 563 568 491Z" transform="translate(1458,0)"></path><path data-c="1D42B" d="M442 368C442 421 388 450 336 450C266 450 226 400 203 337L203 450L37 442L37 395C99 395 106 395 106 356L106 47L37 47L37 0L163 3C201 3 265 3 301 0L301 47L214 47L214 222C214 292 239 414 339 414C339 414 320 397 320 368C320 327 352 307 381 307C410 307 442 328 442 368Z" transform="translate(2244,0)"></path><path data-c="1D428" d="M542 218C542 352 450 453 287 453C123 453 32 351 32 218C32 94 120-6 287-6C455-6 542 95 542 218M414 229C414 142 414 34 287 34C160 34 160 142 160 229C160 274 160 325 177 359C196 396 238 417 287 417C329 417 371 401 393 366C414 332 414 277 414 229Z" transform="translate(2718,0)"></path><path data-c="1D420" d="M558 397C558 420 541 455 495 455C480 455 433 452 389 417C371 429 329 450 255 450C111 450 56 372 56 302C56 261 76 220 108 197C80 162 74 129 74 108C74 93 78 44 118 12C105 9 32-12 32-75C32-126 87-201 287-201C464-201 542-142 542-72C542-42 534 21 467 55C411 83 351 83 255 83C229 83 183 83 178 84C134 91 123 129 123 147C123 157 127 172 133 180C179 156 230 154 255 154C399 154 454 232 454 302C454 349 429 382 414 398C444 414 465 416 476 417C474 412 472 403 472 397C472 372 489 354 515 354C541 354 558 373 558 397M343 302C343 257 343 190 255 190C167 190 167 257 167 302C167 347 167 414 255 414C343 414 343 347 343 302M456-75C456-111 417-165 287-165C167-165 118-119 118-73C118-13 181-13 195-13L312-13C343-13 456-13 456-75Z" transform="translate(3293,0)"></path><path data-c="1D42B" d="M442 368C442 421 388 450 336 450C266 450 226 400 203 337L203 450L37 442L37 395C99 395 106 395 106 356L106 47L37 47L37 0L163 3C201 3 265 3 301 0L301 47L214 47L214 222C214 292 239 414 339 414C339 414 320 397 320 368C320 327 352 307 381 307C410 307 442 328 442 368Z" transform="translate(3868,0)"></path><path data-c="1D41E" d="M494 117C494 135 475 135 470 135C453 135 451 130 445 114C424 66 367 34 302 34C161 34 160 167 160 218L462 218C484 218 494 218 494 245C494 276 488 349 438 399C401 435 348 453 279 453C119 453 32 350 32 225C32 91 132-6 293-6C451-6 494 100 494 117M399 251L160 251C162 290 163 332 184 365C210 405 250 417 279 417C396 417 398 286 399 251Z" transform="translate(4342,0)"></path><path data-c="1D42C" d="M415 140C415 183 395 218 360 246C321 275 289 281 211 294C174 301 109 312 109 359C109 421 202 421 221 421C296 421 334 392 339 337C340 322 341 317 362 317C386 317 386 322 386 345L386 425C386 444 386 453 368 453C364 453 362 453 323 434C297 447 262 453 222 453C192 453 38 453 38 322C38 282 58 255 78 238C118 203 156 197 233 183C269 177 344 164 344 105C344 30 252 30 230 30C124 30 98 103 86 146C81 160 76 160 62 160C38 160 38 154 38 131L38 22C38 3 38-6 56-6C63-6 65-6 86 9L112 26C158-6 210-6 230-6C261-6 415-6 415 140Z" transform="translate(4869,0)"></path><path data-c="1D42C" d="M415 140C415 183 395 218 360 246C321 275 289 281 211 294C174 301 109 312 109 359C109 421 202 421 221 421C296 421 334 392 339 337C340 322 341 317 362 317C386 317 386 322 386 345L386 425C386 444 386 453 368 453C364 453 362 453 323 434C297 447 262 453 222 453C192 453 38 453 38 322C38 282 58 255 78 238C118 203 156 197 233 183C269 177 344 164 344 105C344 30 252 30 230 30C124 30 98 103 86 146C81 160 76 160 62 160C38 160 38 154 38 131L38 22C38 3 38-6 56-6C63-6 65-6 86 9L112 26C158-6 210-6 230-6C261-6 415-6 415 140Z" transform="translate(5323,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(16324.9,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\textbf{In Review}" transform="translate(17602.7,0)"><path data-c="1D408" d="M403 0L403 47L289 47L289 639L403 639L403 686C362 683 264 683 218 683C172 683 74 683 33 686L33 639L147 639L147 47L33 47L33 0C74 3 172 3 218 3C264 3 362 3 403 0Z"></path><path data-c="1D427" d="M615 0L615 47L546 47L546 306C546 411 492 450 392 450C296 450 243 393 217 342L217 450L45 442L45 395C107 395 114 395 114 356L114 47L45 47L45 0L171 3L297 0L297 47L228 47L228 256C228 365 314 414 377 414C411 414 432 393 432 317L432 47L363 47L363 0L489 3Z" transform="translate(436,0)"></path><path data-c="20" d="" transform="translate(1075,0)"></path><path data-c="1D411" d="M858 95C858 117 844 117 834 117C813 117 812 107 811 94C806 47 777 25 747 25C687 25 678 96 673 138C671 149 663 218 662 223C648 293 593 324 550 340C666 370 717 435 717 501C717 602 607 686 419 686L39 686L39 639L147 639L147 47L39 47L39 0C75 3 173 3 215 3C257 3 355 3 391 0L391 47L283 47L283 325L400 325C414 325 458 325 489 291C521 256 521 237 521 164C521 98 521 49 591 15C635-7 697-11 738-11C845-11 858 79 858 95M564 500C564 444 564 361 399 361L283 361L283 639L401 639C562 639 564 561 564 500Z" transform="translate(1458,0)"></path><path data-c="1D41E" d="M494 117C494 135 475 135 470 135C453 135 451 130 445 114C424 66 367 34 302 34C161 34 160 167 160 218L462 218C484 218 494 218 494 245C494 276 488 349 438 399C401 435 348 453 279 453C119 453 32 350 32 225C32 91 132-6 293-6C451-6 494 100 494 117M399 251L160 251C162 290 163 332 184 365C210 405 250 417 279 417C396 417 398 286 399 251Z" transform="translate(2321,0)"></path><path data-c="1D42F" d="M580 397L580 444C555 442 526 441 501 441L410 444L410 397C429 397 458 394 458 386C458 386 458 384 453 374L337 124L210 397L264 397L264 444L140 441L26 444L26 397L90 397L265 21C277-4 290-4 303-4C320-4 330-1 340 20L506 376C512 390 516 397 580 397Z" transform="translate(2848,0)"></path><path data-c="1D422" d="M286 0L286 47L224 47L224 450L50 442L50 395C109 395 116 395 116 356L116 47L47 47L47 0L169 3M238 607C238 650 203 685 160 685C117 685 82 650 82 607C82 564 117 529 160 529C203 529 238 564 238 607Z" transform="translate(3455,0)"></path><path data-c="1D41E" d="M494 117C494 135 475 135 470 135C453 135 451 130 445 114C424 66 367 34 302 34C161 34 160 167 160 218L462 218C484 218 494 218 494 245C494 276 488 349 438 399C401 435 348 453 279 453C119 453 32 350 32 225C32 91 132-6 293-6C451-6 494 100 494 117M399 251L160 251C162 290 163 332 184 365C210 405 250 417 279 417C396 417 398 286 399 251Z" transform="translate(3774,0)"></path><path data-c="1D430" d="M805 397L805 444C782 442 752 441 728 441L632 444L632 397C641 397 690 396 690 385C690 382 687 376 686 373L581 117L467 397L523 397L523 444L409 441C367 441 325 443 309 444L309 397L368 397C389 347 389 344 389 344C389 340 386 334 385 331L306 139L201 397L257 397L257 444L134 441L25 444L25 397L84 397L237 23C244 6 248-4 273-4C298-4 302 6 309 23L415 282L521 23C528 6 532-4 557-4C582-4 586 6 593 23L737 376C742 389 746 397 805 397Z" transform="translate(4301,0)"></path></g><g data-mml-node="mo" data-latex="\to" transform="translate(23012.4,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="mtext" data-latex="\textbf{Done}" transform="translate(24290.2,0)"><path data-c="1D403" d="M817 337C817 557 667 686 469 686L39 686L39 639L147 639L147 47L39 47L39 0L470 0C667 0 817 123 817 337M670 338C670 229 658 176 626 131C578 63 490 47 429 47L283 47L283 639L429 639C495 639 578 620 627 550C662 499 670 431 670 338Z"></path><path data-c="1D428" d="M542 218C542 352 450 453 287 453C123 453 32 351 32 218C32 94 120-6 287-6C455-6 542 95 542 218M414 229C414 142 414 34 287 34C160 34 160 142 160 229C160 274 160 325 177 359C196 396 238 417 287 417C329 417 371 401 393 366C414 332 414 277 414 229Z" transform="translate(882,0)"></path><path data-c="1D427" d="M615 0L615 47L546 47L546 306C546 411 492 450 392 450C296 450 243 393 217 342L217 450L45 442L45 395C107 395 114 395 114 356L114 47L45 47L45 0L171 3L297 0L297 47L228 47L228 256C228 365 314 414 377 414C411 414 432 393 432 317L432 47L363 47L363 0L489 3Z" transform="translate(1457,0)"></path><path data-c="1D41E" d="M494 117C494 135 475 135 470 135C453 135 451 130 445 114C424 66 367 34 302 34C161 34 160 167 160 218L462 218C484 218 494 218 494 245C494 276 488 349 438 399C401 435 348 453 279 453C119 453 32 350 32 225C32 91 132-6 293-6C451-6 494 100 494 117M399 251L160 251C162 290 163 332 184 365C210 405 250 417 279 417C396 417 398 286 399 251Z" transform="translate(2096,0)"></path></g></g></g></svg></mjx-container></span></p>
+<blockquote>
+<p>这比经典的三列 Kanban 多了 <strong>Ready</strong> 和 <strong>In
+Review</strong>： <strong>Ready</strong>
+把「想到了」和「可以开工了」分开；<strong>In Review</strong>
+让<strong>评审成为显式的工作状态</strong>而不是隐形的等待。</p>
+</blockquote>
+<h3 id="初始任务">初始任务</h3>
+<p>每位成员想几个下周可做的任务，作为 <strong>issue</strong> 加到
+<strong>Backlog</strong> 列并<strong>认领给自己</strong>。tutorial
+给的示例：</p>
+<ul>
+<li><code>draft a work plan</code>（起草工作计划）</li>
+<li><code>research GitHub usage</code>（研究 GitHub 用法）</li>
+<li><code>review the assignment guidelines</code>（审阅作业指引）</li>
+<li><code>choose a project topic</code>（选定项目主题）</li>
+</ul>
+<blockquote>
+<p>💡 也可以参考 Canvas 上 Group Project 模块里的 <strong>"Suggested
+Weekly Progress"</strong> 文档。</p>
+</blockquote>
+<h3 id="下周检查清单">下周检查清单</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">仓库<strong>已创建</strong>，命名格式为
+<code>INFO6007 TXX-GYY</code>，<strong>Private</strong></label></li>
+<li><label><input type="checkbox"><strong>协作者已添加</strong>：全体成员 + tutor +
+<strong><code>info6007</code></strong></label></li>
+<li><label><input type="checkbox"><strong>每位成员都能看到该仓库</strong>（都已登录过
+github.sydney.edu.au）</label></li>
+<li><label><input type="checkbox"><strong>项目看板已建立</strong>，Kanban
+布局，与仓库同名</label></li>
+<li><label><input type="checkbox"><strong>已录入并认领了初始任务</strong></label></li>
+</ul>
+<p><strong>GitHub
+帮助文档</strong>：https://docs.github.com/en/enterprise-server@3.16</p>
+<hr>
+<h2 id="七考点重点">七、考点重点</h2>
+<ol type="1">
+<li><strong>范围蔓延的三大风险</strong>：<strong>延期、超支、质量下降</strong>
+—— 对应铁三角的三条边。</li>
+<li><strong>两条防控策略</strong>：<strong>正式变更控制流程</strong>（事后闸门）+
+<strong>清晰的范围说明书与验证</strong>（事前围栏，<strong>务必写明
+exclusions</strong>）。</li>
+<li><strong>三层 WBS 的构建</strong>：需求 / 设计 / 开发 / 测试 /
+部署五大类；<strong>Integration
+要独立成工作包</strong>；<strong>测试拆成单元、系统、UAT
+三层</strong>。</li>
+<li><strong>WBS 是自下而上成本估算的前提</strong> ——
+成本在<strong>工作包层级</strong>分配。</li>
+<li><strong>关键路径计算</strong>：串行链 <strong>2+3+6+4+2 = 17
+周</strong>；Development 改 8 周 → <strong>19 周</strong>。</li>
+<li><strong>单一路径网络的三个性质</strong>：<strong>这条路径必然是关键路径</strong>；<strong>所有活动浮动时间为
+0</strong>；<strong>任何延期 1:1 传导到总工期</strong>。</li>
+<li><strong>AON 图</strong>：节点表示活动，箭头表示
+<strong>Finish-to-Start</strong> 依赖。</li>
+<li><strong>GitHub 看板</strong>：仓库命名
+<strong><code>INFO6007 TXX-GYY</code></strong>、<strong>Private</strong>、协作者含
+<strong>tutor 和
+<code>info6007</code></strong>、<strong>成员须先登录过才能被添加</strong>、五列工作流。</li>
+</ol>
+<hr>
+<h2 id="八与讲义的关系">八、与讲义的关系</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Week 4 Lecture</th>
+<th style="text-align: left;">Week 4 Tutorial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>主题</strong></td>
+<td style="text-align: left;"><strong>成本管理与 EVM</strong></td>
+<td style="text-align: left;"><strong>范围蔓延、WBS、关键路径</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>实际对应周次</strong></td>
+<td style="text-align: left;">Week 4</td>
+<td style="text-align: left;"><strong>Week 3（时间管理）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>计算内容</strong></td>
+<td style="text-align: left;">CV / SV / CPI / SPI / EAC</td>
+<td style="text-align: left;">关键路径工期</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>所以复习时要注意</strong>： <strong>EVM 的计算题只能在
+lecture 的讲义算例和课后案例里练</strong>（<a href="/posts/info6007-week04-cost-management.html">Week 04
+讲课总结</a>整理了两个完整算例），<strong>tutorial
+帮不上忙</strong>。</p>
+<p><strong>不过两者有一条真实的连接</strong>：<strong>tutorial 的 WBS
+正是 lecture 里「自下而上估算」的输入</strong>。把 Part B 那棵 WBS
+的每个叶子节点标上工时和费率，汇总起来就是一份自下而上的成本估算——<strong>这也是小组项目里真正要做的事</strong>。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+              <a href="/tags/INFO6007/" rel="tag"><i class="fa fa-tag"></i> INFO6007</a>
+              <a href="/tags/Project-Management/" rel="tag"><i class="fa fa-tag"></i> Project-Management</a>
+              <a href="/tags/WBS/" rel="tag"><i class="fa fa-tag"></i> WBS</a>
+              <a href="/tags/Critical-Path/" rel="tag"><i class="fa fa-tag"></i> Critical-Path</a>
+              <a href="/tags/Scope-Creep/" rel="tag"><i class="fa fa-tag"></i> Scope-Creep</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week04-cost-management.html" rel="prev" title="INFO6007 Week 04 Cost Management 讲课总结">
+                  <i class="fa fa-angle-left"></i> INFO6007 Week 04 Cost Management 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week05-quality-management.html" rel="next" title="INFO6007 Week 05 Quality Management 讲课总结">
+                  INFO6007 Week 05 Quality Management 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

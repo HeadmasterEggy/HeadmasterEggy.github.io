@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="整理《入职大厂两个月，我的 AI 开发心得》：如何减少流程噪声，用需求对齐、小范围改动、可执行的端到端环境和风险导向审查，提高 Agent 的交付质量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 开发工作流：轻量约束、端到端测试与人工审查">
+<meta property="og:url" content="https://qiao1.top/posts/fc3938a9.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="整理《入职大厂两个月，我的 AI 开发心得》：如何减少流程噪声，用需求对齐、小范围改动、可执行的端到端环境和风险导向审查，提高 Agent 的交付质量。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-10T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.478Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/fc3938a9.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/fc3938a9.html","path":"posts/fc3938a9.html","title":"AI 开发工作流：轻量约束、端到端测试与人工审查"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AI 开发工作流：轻量约束、端到端测试与人工审查 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/fc3938a9.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%BF%9B%E6%AD%A5%E4%B9%8B%E5%90%8E%E5%B7%A5%E4%BD%9C%E6%B5%81%E4%B9%9F%E9%9C%80%E8%A6%81%E5%81%9A%E5%87%8F%E6%B3%95"><span class="nav-text">1.
+模型进步之后，工作流也需要做减法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%8C%89%E4%BB%BB%E5%8A%A1%E5%88%86%E5%B7%A5skill-%E6%B2%89%E6%B7%80%E9%87%8D%E5%A4%8D%E6%93%8D%E4%BD%9C"><span class="nav-text">2. 工具按任务分工，Skill
+沉淀重复操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AE%9A%E6%96%B9%E6%B3%95%E4%BD%86%E4%BB%8D%E8%A6%81%E7%BB%99%E5%87%BA%E5%85%B7%E4%BD%93%E9%97%AE%E9%A2%98"><span class="nav-text">3.
+短提示词可以指定方法，但仍要给出具体问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%96%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E8%B7%91%E4%BB%8E%E6%94%B6%E5%88%B0%E9%9C%80%E6%B1%82%E5%88%B0%E4%BA%BA%E5%B7%A5-review"><span class="nav-text">4.
+他的工作流到底怎么跑：从收到需求到人工 Review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E6%8A%8A%E9%9C%80%E6%B1%82%E6%9D%90%E6%96%99%E5%92%8C%E4%BB%93%E5%BA%93%E4%BA%8B%E5%AE%9E%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="nav-text">第一步：把需求材料和仓库事实放在一起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%94%A8-grill-%E8%BF%BD%E9%97%AE%E6%8A%8A%E4%BC%9A%E6%94%B9%E5%8F%98%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E9%97%AE%E6%B8%85%E6%A5%9A"><span class="nav-text">第二步：用 grill
+追问，把会改变实现的问题问清楚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%8A%8A%E5%AF%B9%E9%BD%90%E7%BB%93%E6%9E%9C%E4%BF%9D%E5%AD%98%E6%88%90%E5%90%8E%E7%BB%AD-agent-%E9%83%BD%E8%83%BD%E8%AF%BB%E5%8F%96%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-text">第三步：把对齐结果保存成后续
+Agent 都能读取的文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E4%B8%BB-agent-%E9%80%89%E6%8B%A9%E7%9B%B4%E6%8E%A5%E5%81%9A%E8%BF%98%E6%98%AF%E6%8B%86%E5%BC%80%E5%81%9A"><span class="nav-text">第四步：主 Agent
+选择直接做，还是拆开做</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E7%BC%96%E7%A0%81-agent-%E5%85%88%E5%AE%8C%E6%88%90%E8%87%AA%E5%B7%B1%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-text">第五步：编码 Agent
+先完成自己的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%E5%BF%85%E8%A6%81%E6%97%B6%E5%BC%95%E5%85%A5%E5%85%B6%E4%BB%96-agent%E4%B8%93%E9%97%A8%E5%AF%BB%E6%89%BE%E5%8F%8D%E4%BE%8B"><span class="nav-text">第六步：必要时引入其他
+Agent，专门寻找反例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%E4%BA%BA%E5%B7%A5-review-%E5%89%8D%E8%B7%91%E7%9C%9F%E5%AE%9E%E4%B8%9A%E5%8A%A1%E8%B7%AF%E5%BE%84"><span class="nav-text">第七步：人工 Review
+前，跑真实业务路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AB%E6%AD%A5%E5%BC%80%E5%8F%91%E8%80%85%E6%A0%B9%E6%8D%AE%E8%AF%81%E6%8D%AE%E5%AE%A1%E6%9F%A5%E5%B9%B6%E6%89%BF%E6%8B%85%E4%BA%A4%E4%BB%98%E5%88%A4%E6%96%AD"><span class="nav-text">第八步：开发者根据证据审查，并承担交付判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E4%B8%80%E6%AD%A5%E4%BA%A4%E6%8E%A5%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">每一步交接的是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99-agent-%E4%B8%80%E5%A5%97%E8%83%BD%E8%87%AA%E5%B7%B1%E4%BD%BF%E7%94%A8%E7%9A%84%E7%AB%AF%E5%88%B0%E7%AB%AF%E7%8E%AF%E5%A2%83"><span class="nav-text">5. 给 Agent
+一套能自己使用的端到端环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA%E5%B7%A5%E5%AE%A1%E6%9F%A5%E9%9B%86%E4%B8%AD%E5%9C%A8%E4%B8%9A%E5%8A%A1%E9%A3%8E%E9%99%A9%E5%92%8C%E6%96%B0%E5%A2%9E%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">6.
+人工审查集中在业务风险和新增复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#harness-%E7%9A%84%E4%BB%B7%E5%80%BC%E4%B8%8A%E4%B8%8B%E6%96%87%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8C%E5%88%A4%E6%96%AD%E4%BE%9D%E6%8D%AE"><span class="nav-text">7. Harness
+的价值：上下文、执行环境和判断依据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E4%BB%8E%E4%B8%80%E6%9D%A1%E8%87%AA%E6%B5%8B%E8%B7%AF%E5%BE%84%E5%BC%80%E5%A7%8B"><span class="nav-text">8. 可以从一条自测路径开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%B8%8E%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0"><span class="nav-text">来源与相关笔记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/fc3938a9.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AI 开发工作流：轻量约束、端到端测试与人工审查 | Joey">
+      <meta itemprop="description" content="整理《入职大厂两个月，我的 AI 开发心得》：如何减少流程噪声，用需求对齐、小范围改动、可执行的端到端环境和风险导向审查，提高 Agent 的交付质量。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI 开发工作流：轻量约束、端到端测试与人工审查
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-10-10 12:00:00 / Modified: 12:40:21" itemprop="dateCreated datePublished" datetime="2026-10-10T12:00:00Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>17 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">整理《入职大厂两个月，我的 AI 开发心得》：如何减少流程噪声，用需求对齐、小范围改动、可执行的端到端环境和风险导向审查，提高 Agent 的交付质量。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>AI
+能同时写多个任务，开发者确认业务是否正确的速度却不会同步增长。代码生成越来越快之后，瓶颈可能转移到需求判断、测试证据和人工审查。</p>
+<p>黄同学在<span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9odWFuZ3Rvbmd4dWVoL3N0YXR1cy8yMTA4NTc3MTY1MzA2Njg3OTM4">《入职大厂两个月，我的
+AI 开发心得》<i class="fa fa-external-link-alt"></i></span>中，分享了自己做 Agent
+开发和后端维护时的工作流。本文按需求、实现、验证和审查四条线整理原文，最后补充一份落地清单。</p>
+<p><strong>他的日常主线是：材料汇总 → grill 澄清 → Spec / CONTEXT.md →
+实现与自测 → 按需交叉审查 → Codex 修复重测 → 端到端验证 → 人工
+Review。</strong> 第 4 节逐步说明每一步如何执行、如何交接。</p>
+<p>原文发布于 2026 年 10 月 9
+日。工具与模型分工属于作者当时的个人实践；文中效率和质量的描述也来自作者自述，没有提供可独立复核的对照实验。</p>
+<h2 id="模型进步之后工作流也需要做减法">1.
+模型进步之后，工作流也需要做减法</h2>
+<p>作者早期使用过围绕规格说明和测试驱动开发组织任务的重型
+Skill。这类流程能给 Agent
+提供约束，但也可能让它在信息已经充分时，继续执行没有必要的步骤，增加
+token 和沟通成本。</p>
+<p>随着模型能力增强，某些原来用来补短板的要求，可能逐渐变成噪声。作者因此主张定期检查工作流：简单任务直接处理，复杂任务再增加规划、拆分与交叉审查。</p>
+<p>这里需要区分两类约束：</p>
+<table>
+<thead>
+<tr>
+<th>约束</th>
+<th>应如何处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>业务范围、权限边界、验收条件</td>
+<td>必须明确，不能因为模型更强就省略</td>
+</tr>
+<tr>
+<td>为特定模型设计的固定思考步骤</td>
+<td>定期评估，删除不再带来收益的部分</td>
+</tr>
+</tbody>
+</table>
+<p>后面这一区分是对原文的工程归纳。流程精简的目标，是减少无效动作，同时保留判断交付是否成立的依据。</p>
+<h2 id="工具按任务分工skill-沉淀重复操作">2. 工具按任务分工，Skill
+沉淀重复操作</h2>
+<p>作者把编码、规划、简单任务、方案设计和对抗性审查交给不同工具。在原文所述版本中，Codex
+与 GPT-5.6 Sol 主要承担实现，Astra 负责规划；pi 搭配 DeepSeek V4 Flash
+处理简单任务，Claude 5 Fable 参与审查，网页端 GPT-6 Pro
+用于个人项目方案设计。</p>
+<p>这份分工值得理解为个人经验，不能直接当作模型能力排名。真正可迁移的是：根据任务需要选择实现、规划和审查能力，而不是让每个任务都走同样的工具组合。</p>
+<p>作者常用的 Skill 可以按用途归为几组：</p>
+<ul>
+<li><strong>对齐问题。</strong> 用 think 做方案讨论，用 grill me 或
+grill with docs 追问目标、限制和取舍。</li>
+<li><strong>推进实现。</strong> 需求明确后，再用 implement 执行计划或
+Issue。</li>
+<li><strong>压缩复杂度。</strong> 用 ponytail
+检查过度设计，减少人工理解负担。</li>
+<li><strong>交接上下文。</strong> 用 handoff
+把关键背景整理成文件，方便换工具或新会话继续。</li>
+<li><strong>审查变更。</strong> 用 check 等审查能力辅助 MR 检查。</li>
+<li><strong>复用业务流程。</strong>
+把测试、查询日志等重复操作整理成自己的 Skill。</li>
+</ul>
+<p>原文还提出一个经验阈值：同一流程做过三次以上，就可以考虑提炼成
+Skill。适合沉淀的是稳定、重复、可验证的操作；每次都需要重新判断的决策，仍应保留任务上下文。</p>
+<h2 id="短提示词可以指定方法但仍要给出具体问题">3.
+短提示词可以指定方法，但仍要给出具体问题</h2>
+<p>作者倾向于用成熟方法论指定思考方向，减少长篇固定步骤。原文重点讨论了五种方法：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>方法</th>
+<th>主要用途</th>
+<th>可以怎样提出任务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一性原理</td>
+<td>检查问题是否被预设方案带偏</td>
+<td>先定位接口延迟来源，再判断是否需要缓存</td>
+</tr>
+<tr>
+<td>对抗性审查</td>
+<td>寻找推翻核心假设的反例</td>
+<td>检查分布式锁是否必要，以及失效时会发生什么</td>
+</tr>
+<tr>
+<td>消融实验</td>
+<td>分离多个改动的实际贡献</td>
+<td>分别比较索引、缓存和批量查询带来的收益</td>
+</tr>
+<tr>
+<td>奥卡姆剃刀</td>
+<td>在满足需求时减少机制</td>
+<td>检查事务和唯一约束能否代替多套协调设施</td>
+</tr>
+<tr>
+<td>高内聚、低耦合</td>
+<td>判断职责边界</td>
+<td>分析服务应承担哪些责任，再决定如何拆分</td>
+</tr>
+</tbody>
+</table>
+<p>这些方法对应不同的工作：重新定义问题、质疑假设、测量贡献、降低复杂度、整理边界。它们不能相互替代。</p>
+<p>比如，要求“做消融实验”后，仍需明确基线、输入数据、测量指标和可接受的误差；要求“简化设计”后，也仍需保留必要的权限和一致性保障。这是本文对原文的补充：<strong>方法名称可以压缩指令，但不能替代验证条件。</strong></p>
+<h2 id="他的工作流到底怎么跑从收到需求到人工-review">4.
+他的工作流到底怎么跑：从收到需求到人工 Review</h2>
+<p>下面按原文描述还原执行顺序。表格中的输入、产出是对作者做法的归纳，不代表作者公开过一份固定模板。简单任务会省去不必要的规划和交叉审查。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">开发者收集 PRD、会议记录、聊天补充、用户反馈</span><br><span class="line">    ↓</span><br><span class="line">Agent 阅读团队 Wiki 和现有代码，用 grill 追问需求</span><br><span class="line">    ↓</span><br><span class="line">开发者回答；不确定的问题找产品或相关同事确认</span><br><span class="line">    ↓</span><br><span class="line">把范围、关键决策、验收标准写进 Spec / CONTEXT.md</span><br><span class="line">    ↓</span><br><span class="line">主 Agent 判断任务复杂度</span><br><span class="line">    ├─ 简单：直接实现</span><br><span class="line">    └─ 复杂：拆成可独立验收的 Issue</span><br><span class="line">              └─ 能独立推进的部分：不同 worktree 并行，再集成</span><br><span class="line">    ↓</span><br><span class="line">编码 Agent 完成实现与自测</span><br><span class="line">    ↓</span><br><span class="line">按复杂度引入其他 Agent 做对抗性审查</span><br><span class="line">    ↓</span><br><span class="line">问题统一交回 Codex → 修复 → 重新验证</span><br><span class="line">    ↓</span><br><span class="line">人工 Review 前，执行端到端测试</span><br><span class="line">    ↓</span><br><span class="line">开发者核对验收证据，审查核心业务与高风险变更</span><br></pre></td></tr></table></figure>
+<h3
+id="第一步把需求材料和仓库事实放在一起">第一步：把需求材料和仓库事实放在一起</h3>
+<p><strong>开发者提供材料，Agent 建立背景。</strong> 作者会给 Agent
+PRD、会议纪要、聊天记录和用户反馈，再让它结合团队 Wiki
+与现有代码理解需求。</p>
+<p>原因是需求分散在不同地方：PRD
+可能旧了，会议补充过限制，聊天又调整过优先级。直接拿其中一份材料编码，容易实现一个已经过时或不完整的版本。</p>
+<p>这一步的目标，是让 Agent
+知道需求从哪里来、系统现在怎样运作，以及哪些信息还相互冲突。</p>
+<h3 id="第二步用-grill-追问把会改变实现的问题问清楚">第二步：用 grill
+追问，把会改变实现的问题问清楚</h3>
+<p><strong>Agent 提问，开发者作出业务判断。</strong> 作者用 grill
+做连续澄清，找出目标、边界、约束和取舍。能回答的当场回答；需要产品或其他同事决定的问题，回头找人确认。</p>
+<p>例如，一个需求写着“支持重试”，实现前就需要判断允许重试哪些失败、是否可能产生重复业务操作。这是本文用于解释该步骤的例子，并非作者披露的具体业务。</p>
+<p>作者不会要求 Agent
+提前设计完所有细节。他的推进条件是：<strong>剩余疑问已经不会显著改变实现方向和验收结果。</strong>
+达到这个条件，就开始开发。</p>
+<h3
+id="第三步把对齐结果保存成后续-agent-都能读取的文件">第三步：把对齐结果保存成后续
+Agent 都能读取的文件</h3>
+<p><strong>将讨论结论写入 Spec 或 CONTEXT.md；需要时把决策沉淀到
+ADR。</strong> 原文关注的是问题、范围、关键决策和验收标准。</p>
+<p>这些文件是后续实现和审查共同使用的依据。换会话或换工具时，不需要重新读取全部聊天记录，也能知道这次为什么改、改到哪里、怎样算完成。</p>
+<p>作者还会用 handoff 整理上下文，从 Codex 交接到 Claude Code 或
+pi；需要网页端 GPT Pro 参与方案设计时，则先让 Codex 根据讨论生成交接
+Prompt。这是跨工具协作的手段，并非每个需求的必经步骤。</p>
+<h3 id="第四步主-agent-选择直接做还是拆开做">第四步：主 Agent
+选择直接做，还是拆开做</h3>
+<p><strong>实现由主 Agent 统筹。</strong> 作者日常主要用 Codex + GPT-5.6
+Sol 编码，用 Astra 规划；简单需求也会交给 pi + DeepSeek V4 Flash。</p>
+<p>简单任务直接实现。复杂任务先拆成职责清楚、可以独立验收的
+Issue，再判断哪些可以并行。只有能独立推进的部分，才交给 subagent
+放到不同 worktree 开发，最后由主 Agent 集成。</p>
+<p>因此，并行的前提是任务边界和验收边界已经清楚。原文没有说每个任务都会开多个
+Agent，也没有公开固定的 worktree 命名或分支命令。</p>
+<h3 id="第五步编码-agent-先完成自己的测试">第五步：编码 Agent
+先完成自己的测试</h3>
+<p><strong>主编码 Agent
+完成实现并自测，达到它认为可交付的状态。</strong>
+开发者不会一开始就逐行检查尚未完成的全部代码。</p>
+<p>这里的“先完成测试”描述的是进入交叉审查之前的要求。原文不足以证明每个任务都严格采用“先写测试、再写实现”的
+TDD 顺序，也没有规定统一的单元测试数量。</p>
+<p>测试是否有效，要看它验证了哪些验收条件。通过数量本身无法说明业务路径已经正确。</p>
+<h3 id="第六步必要时引入其他-agent专门寻找反例">第六步：必要时引入其他
+Agent，专门寻找反例</h3>
+<p><strong>根据复杂度安排交叉对抗性审查。</strong> 作者主要让 Claude 5
+Fable 参与方案审查和 Code Review；常用的 check Skill 也会在提 MR
+时使用。</p>
+<p>审查的重点是攻击核心假设、寻找遗漏，并检查是否引入了不必要的复杂度。ponytail
+用来清理过度设计，属于作者经常使用的辅助能力。</p>
+<p><strong>发现的问题统一反馈给 Codex，由它修复和重新验证。</strong>
+这是原文明说的修复闭环：其他 Agent 提供审查意见，主编码 Agent
+继续负责代码集成与验证。</p>
+<h3 id="第七步人工-review-前跑真实业务路径">第七步：人工 Review
+前，跑真实业务路径</h3>
+<p><strong>让 Agent 使用预先搭好的端到端环境完成操作和取证。</strong>
+这套环境可以启动服务、准备测试数据，通过浏览器、API 或 CLI
+执行业务，并查询数据库、日志和 Trace。</p>
+<p>验证的链条是：从真实入口执行任务 → 对照业务约定检查用户结果 →
+查询持久化状态 → 失败时利用日志和 Trace
+定位。数据库与日志提供证据，验收标准仍来自已经对齐的业务需求。</p>
+<p>原文提到的统一测试 CLI
+覆盖环境检查、数据准备、场景执行、结果查询和清理，但没有公布命令名。不能把一套自行编造的命令写成作者实际使用的工具。</p>
+<p>这一环节既需要事先建设环境，也需要每次需求选择相应场景。环境搭好后可反复复用，不必为每个
+MR 从头搭建。</p>
+<h3
+id="第八步开发者根据证据审查并承担交付判断">第八步：开发者根据证据审查，并承担交付判断</h3>
+<p><strong>开发者先看验收标准，再看测试是否支持这些标准。</strong>
+然后沿业务路径检查核心逻辑，把精力放到权限、状态变化、并发、重试、数据一致性、迁移和回滚等高风险部分。</p>
+<p>新增抽象或协调机制也要单独检查，确认它们确实必要。作者减少对稳定 CRUD
+的逐行阅读，前提是每个 MR
+足够小，且随着开发推进逐步验证完整业务路径。</p>
+<p>原文没有公开一套固定上线流水线或部署门禁，因此还原到人工 Review
+和交付判断为止，不能补写成“测试通过就自动上线”。</p>
+<h3 id="每一步交接的是什么">每一步交接的是什么</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>阶段</th>
+<th>谁主要负责</th>
+<th>输入</th>
+<th>产出或进入下一步的条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建立背景</td>
+<td>开发者 + Agent</td>
+<td>需求材料、Wiki、代码</td>
+<td>对现状和需求来源的共同理解</td>
+</tr>
+<tr>
+<td>需求澄清</td>
+<td>grill + 开发者</td>
+<td>背景、冲突和未决问题</td>
+<td>不再有显著影响方向或验收的疑问</td>
+</tr>
+<tr>
+<td>固化结论</td>
+<td>开发者与 Agent</td>
+<td>已确认的范围和决策</td>
+<td>Spec / CONTEXT.md，必要时 ADR</td>
+</tr>
+<tr>
+<td>实现与集成</td>
+<td>主编码 Agent，必要时 subagent</td>
+<td>对齐文档、计划或 Issue</td>
+<td>可自测的改动；并行结果由主 Agent 集成</td>
+</tr>
+<tr>
+<td>自测</td>
+<td>编码 Agent</td>
+<td>实现、验收要求、测试环境</td>
+<td>Agent 认为可交付的实现与测试结果</td>
+</tr>
+<tr>
+<td>交叉审查与修复</td>
+<td>审查 Agent + Codex</td>
+<td>方案、变更、相关上下文</td>
+<td>问题由 Codex 修复并重新验证</td>
+</tr>
+<tr>
+<td>端到端验证</td>
+<td>Agent 使用测试工具</td>
+<td>业务场景、测试数据、预期结果</td>
+<td>操作结果、落库证据和失败诊断</td>
+</tr>
+<tr>
+<td>人工 Review</td>
+<td>开发者</td>
+<td>小范围 MR、验收条件、验证证据</td>
+<td>对业务正确性与未验证风险的判断</td>
+</tr>
+</tbody>
+</table>
+<h2 id="给-agent-一套能自己使用的端到端环境">5. 给 Agent
+一套能自己使用的端到端环境</h2>
+<p>原文认为，大量测试代码未必能发现部署后的实际问题。一个重要原因是，Agent
+没有环境去执行真实业务入口、检查最终状态、追踪失败原因。</p>
+<p>作者把自己的日常自测过程整理成四类能力：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>Agent 需要获得的条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准备环境</td>
+<td>启动方式、版本信息、测试账号、权限、数据准备与重置</td>
+</tr>
+<tr>
+<td>执行业务</td>
+<td>通过浏览器、API 或 CLI 完成真实操作路径</td>
+</tr>
+<tr>
+<td>检查结果</td>
+<td>只读数据库查询、日志查询与 Trace 定位</td>
+</tr>
+<tr>
+<td>复用流程</td>
+<td>将稳定操作写成脚本，将入口与排障方式整理成 Skill</td>
+</tr>
+</tbody>
+</table>
+<p>作者进一步把这些能力整合到统一测试 CLI
+中，覆盖环境检查、数据准备、场景执行、结果查询和清理。这样 Agent
+可以反复使用同一条验证路径，减少人工复制命令和补充上下文。</p>
+<p>原文提到用 ego lite 做浏览器自动化，并搭配 pi 与 DeepSeek V4
+Flash。这属于作者的工具选择；本文没有验证这些工具的性能，也不据此作速度排名。</p>
+<p>最关键的原则，是把<strong>验收预期和系统输出分开</strong>。数据库、日志与
+Trace 提供观察证据，业务需求决定什么结果才正确。如果 Agent
+看见系统返回某个结果，就把它认作标准答案，测试会变成对现有实现的复述。</p>
+<p>对于产品本身就是 Agent
+的情况，还要补上答案质量评估。请求成功、状态落库、页面显示正常，都不能单独证明回答准确、完整或符合用户意图。</p>
+<h2 id="人工审查集中在业务风险和新增复杂度">6.
+人工审查集中在业务风险和新增复杂度</h2>
+<p>作者强调，即使实现和测试由 AI
+完成，开发者仍需对交付负责。审查可以按下面的顺序进行：</p>
+<p><strong>先核对验收范围。</strong>
+确认测试覆盖了需求真正关心的行为，而不只是统计通过数量；特别留意遗漏的条件和异常分支。</p>
+<p><strong>再沿业务路径检查风险。</strong>
+把精力集中到权限判断、状态迁移、并发、重试、数据一致性，以及迁移和回滚。作者会减少对模式稳定的
+CRUD 的阅读投入，但这是建立在其业务环境和已有验证上的个人选择。</p>
+<p><strong>单独检查新增机制。</strong>
+对抽象层、缓存、锁、状态机和补偿流程追问必要性：解决了什么已知问题，是否有更简单的方案，新增了哪些维护成本。</p>
+<p><strong>重复审查交给自动化。</strong> MR 较多时，可以构建 Review
+Bot，把 Git
+变更和稳定审查流程结合起来。它的价值应体现为发现了多少有效问题、减少了多少人工负担，而非评论数量。</p>
+<h2 id="harness-的价值上下文执行环境和判断依据">7. Harness
+的价值：上下文、执行环境和判断依据</h2>
+<p>这篇文章对 Harness 的理解可以归纳为三部分：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">上下文：知道问题、范围和约束</span><br><span class="line">    ↓</span><br><span class="line">执行环境：能够运行系统、操作业务、查询证据</span><br><span class="line">    ↓</span><br><span class="line">判断依据：用明确的验收条件检验结果</span><br></pre></td></tr></table></figure>
+<p>这三个部分缺一不可。只有上下文，Agent
+可能写出无法验证的方案；只有工具，Agent
+可能不知道应该证明什么；只有测试结果，开发者仍可能看不出代码和测试是否共同误解了需求。</p>
+<p>作者也提醒，端到端测试只证明特定环境和选定场景中的行为。生产流量、并发与数据分布，仍可能引入新的问题。</p>
+<h2 id="可以从一条自测路径开始">8. 可以从一条自测路径开始</h2>
+<p>以下是基于原文整理的实践清单：</p>
+<ol type="1">
+<li>选一个经常人工验证、结果明确的业务场景。</li>
+<li>写清前置条件、操作入口和预期结果。</li>
+<li>准备测试环境、测试账号与可清理的数据。</li>
+<li>让 Agent 执行操作，并核对页面、接口和持久化结果。</li>
+<li>失败时保存日志、Trace 或其他能够解释原因的证据。</li>
+<li>将反复有效的步骤整理成脚本、CLI 或 Skill。</li>
+<li>用小范围变更交付，人工重点检查业务判断和剩余风险。</li>
+<li>模型或工具升级后，重新评估流程中哪些步骤仍有收益。</li>
+</ol>
+<p>原文最后还谈到学习：AI
+替开发者修复了问题，也可能带走亲自排查的机会。因此，节省的时间值得留一部分用于复盘——理解为什么出错、证据怎样支持判断，以及下次能否更早发现。</p>
+<p>这套工作流最值得借鉴的，是让 Agent
+能够独立获取验证证据，同时把需求解释、关键取舍和交付判断留在开发者手中。</p>
+<h2 id="来源与相关笔记">来源与相关笔记</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9odWFuZ3Rvbmd4dWVoL3N0YXR1cy8yMTA4NTc3MTY1MzA2Njg3OTM4">黄同学：入职大厂两个月，我的
+AI 开发心得（原帖及长文）<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9pL2FydGljbGUvMjEwODU1MTg5MTAwNTM5NDk0NA==">X
+长文入口<i class="fa fa-external-link-alt"></i></span></li>
+<li>[[AI Agent/Agent Skill
+完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]]</li>
+<li>[[工作笔记/Stacked PRs：把大改动拆成一条可合并的依赖链|Stacked
+PRs：把大改动拆成一条可合并的依赖链]]</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/pi-durable.html" rel="prev" title="Pi Durable 详解：让 Agent 在崩溃后继续工作">
+                  <i class="fa fa-angle-left"></i> Pi Durable 详解：让 Agent 在崩溃后继续工作
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5dc2b058.html" rel="next" title="COMP5270 Assignment 1 中文题解">
+                  COMP5270 Assignment 1 中文题解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

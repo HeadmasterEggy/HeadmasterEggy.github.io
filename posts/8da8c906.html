@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="从小墨同学分享的 How Compaction Works in Pi 出发，理解上下文为什么会装满、Pi 如何总结早期历史并保留近期消息、交接摘要应记录什么，以及压缩与提示缓存之间的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始理解上下文压缩：Pi 如何继续长会话">
+<meta property="og:url" content="https://qiao1.top/posts/8da8c906.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="从小墨同学分享的 How Compaction Works in Pi 出发，理解上下文为什么会装满、Pi 如何总结早期历史并保留近期消息、交接摘要应记录什么，以及压缩与提示缓存之间的关系。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-05T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.482Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Compaction">
+<meta property="article:tag" content="Context-Engineering">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Pi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/8da8c906.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/8da8c906.html","path":"posts/8da8c906.html","title":"从零开始理解上下文压缩：Pi 如何继续长会话"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从零开始理解上下文压缩：Pi 如何继续长会话 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/8da8c906.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%98%AF%E6%AF%8F%E6%AC%A1%E8%AF%B7%E6%B1%82%E4%BA%A4%E7%BB%99%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9D%90%E6%96%99"><span class="nav-text">1.
+上下文是每次请求交给模型的材料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E4%B8%8D%E4%B8%8B%E6%97%B6%E6%80%8E%E6%A0%B7%E7%BB%A7%E7%BB%AD"><span class="nav-text">2. 装不下时，怎样继续？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pi-%E4%BF%9D%E7%95%99%E8%BF%91%E6%9C%9F%E6%B6%88%E6%81%AF%E6%80%BB%E7%BB%93%E6%97%A9%E6%9C%9F%E5%8E%86%E5%8F%B2"><span class="nav-text">3. Pi
+保留近期消息，总结早期历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E6%91%98%E8%A6%81%E6%98%AF%E4%B8%80%E4%BB%BD%E5%8F%AF%E4%BB%A5%E6%8E%A5%E6%89%8B%E7%9A%84%E5%B7%A5%E4%BD%9C%E4%BA%A4%E6%8E%A5"><span class="nav-text">4.
+好摘要是一份可以接手的工作交接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BD%B1%E5%93%8D%E6%8F%90%E7%A4%BA%E7%BC%93%E5%AD%98"><span class="nav-text">5. 压缩为什么会影响提示缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8A%E5%87%A0%E4%B8%AA%E6%A6%82%E5%BF%B5%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="nav-text">6. 把几个概念放在一起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E7%9A%84%E5%90%AF%E5%8F%91"><span class="nav-text">7. 对实际使用的启发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%B8%8E%E8%AE%B8%E5%8F%AF"><span class="nav-text">来源与许可</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/8da8c906.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从零开始理解上下文压缩：Pi 如何继续长会话 | Joey">
+      <meta itemprop="description" content="从小墨同学分享的 How Compaction Works in Pi 出发，理解上下文为什么会装满、Pi 如何总结早期历史并保留近期消息、交接摘要应记录什么，以及压缩与提示缓存之间的关系。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从零开始理解上下文压缩：Pi 如何继续长会话
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-05 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-05T12:00:00Z">2026-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>10 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">从小墨同学分享的 How Compaction Works in Pi 出发，理解上下文为什么会装满、Pi 如何总结早期历史并保留近期消息、交接摘要应记录什么，以及压缩与提示缓存之间的关系。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>来源：小墨同学于 2026-10-04 分享的 <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS94aWFvbW92cHMvc3RhdHVzLzIxMDY1NjE4NzQ2NDUxMTEyODQ=">X
+文章《从零开始理解上下文压缩》<i class="fa fa-external-link-alt"></i></span>。英文原作是 Earendil Engineering 于
+2026-08-13 发布的 <span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvY29tcGFjdGlvbi1pbi1waS8=">How Compaction Works
+in Pi<i class="fa fa-external-link-alt"></i></span>，中文翻译与适配由小墨同学完成，可在 <span class="exturl" data-url="aHR0cHM6Ly9waS54aWFvbW92cHMuY29tL3RyYW5zbGF0aW9ucy9jb21wYWN0aW9uLWluLXBp">Pi
+学习蓝皮书<i class="fa fa-external-link-alt"></i></span> 阅读。</p>
+<p>本文依据中文译文重新组织、改写为学习笔记，保留核心机制说明；例子、概念对照表和实践建议为本笔记补充。中文译文及适配部分按
+<span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LzQuMC9kZWVkLnpoLWhhbnM=">CC BY
+4.0<i class="fa fa-external-link-alt"></i></span> 发布，本文对这些内容的改写沿用该许可并注明修改；英文原文版权归
+Earendil 所有。本文不复制原文配图。</p>
+</blockquote>
+<p>使用编程 Agent
+时，一次修复可能持续几十轮：先读代码、再查报错、修改文件、运行测试，最后还要处理提交与部署。聊天记录看起来只是不断往下延伸，模型每次请求能接收的材料却有上限。</p>
+<p><strong>上下文压缩（Compaction）把较早的工作整理成摘要，让模型带着关键状态和近期细节继续任务。</strong>
+理解它，需要先看清楚一次 Agent 会话如何增长。</p>
+<h2 id="上下文是每次请求交给模型的材料">1.
+上下文是每次请求交给模型的材料</h2>
+<p>模型生成回复时，依赖本次请求中实际提供的上下文。在本文讨论的连续会话里，材料通常包括系统提示、已加载的项目说明、工具定义，以及用户消息、助手回复和工具结果。</p>
+<p>第一次请求可以简化为：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">[系统提示与项目说明][工具定义][用户要求]</span><br></pre></td></tr></table></figure>
+<p>假设用户让 Agent 修复登录问题，模型先要求读取文件。Agent
+程序执行工具，再把结果加入后续请求：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">[初始材料][助手：读取文件][工具：文件内容]</span><br></pre></td></tr></table></figure>
+<p>随后可能继续修改代码、运行测试：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">[此前材料][助手：修改代码][工具：修改结果]</span><br><span class="line">          [助手：运行测试][工具：测试输出][助手：汇报]</span><br></pre></td></tr></table></figure>
+<p>所以，<strong>用户的一次要求可能带来多次模型请求</strong>。即使只聊了几句话，大文件与长日志也可能占用大量空间。聊天界面保留的记录，与某一刻实际发送给模型的内容，也不必完全相同。</p>
+<p>原文用这样的过程解释溢出：历史持续增长，最终下一次请求超过模型允许的范围，得到类似
+<code>Request exceeds the maximum size</code> 的错误。</p>
+<h2 id="装不下时怎样继续">2. 装不下时，怎样继续？</h2>
+<p>可以重新开一段会话，也可以压缩已有上下文。</p>
+<p>新会话提供了空出来的空间，但先前的目标、限制、决定和尚未完成的工作，需要重新交代。如果仍在处理同一项任务，压缩可以把这些状态带过去。</p>
+<p>常见实现是再调用一次模型，请它总结较早的历史。也可以用确定性规则筛选内容；“压缩”描述的是缩小后续请求所携带的历史，并不限定某一种算法。</p>
+<p>这里的摘要会筛选与改写信息，<strong>无法保证逐字恢复原来的对话</strong>。它的价值在于让后续工作能够接上，质量取决于有没有保留真正需要的线索。</p>
+<h2 id="pi-保留近期消息总结早期历史">3. Pi
+保留近期消息，总结早期历史</h2>
+<p>原文描述的 Pi
+会将上下文分成两个部分：较早的内容接受总结，近期消息尽量保持原样。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">压缩前：</span><br><span class="line">[系统与工具][较早历史........................][近期消息]</span><br><span class="line"></span><br><span class="line">压缩后：</span><br><span class="line">[系统与工具][工作摘要][近期消息][新消息]</span><br></pre></td></tr></table></figure>
+<p>这样既能缩小输入，又能保留正在处理的工作细节。最近的报错、刚改过的代码和最新要求，往往仍然需要原始信息。</p>
+<p>Pi 使用可配置的 token 预算决定保留范围。原文写作时默认保留约
+<strong>20,000 token</strong>，并用“约 5 到 20
+个轮次”帮助理解。这个轮次数只是粗略估计：读一份大文件与简短问答消耗的空间不同，token
+也不能直接等同于汉字数。</p>
+<p>用户可以通过 <code>/compact</code>
+手动压缩，程序也会在上下文接近上限时自动处理。</p>
+<blockquote>
+<p><strong>版本补充（2026-10-05 核对）：</strong>
+原文主要描述轮次结束后检查，以及溢出时的中途恢复。当前 <span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3QvY29tcGFjdGlvbiN3aGVuLWl0LXRyaWdnZXJz">Pi 官方
+Compaction 文档<i class="fa fa-external-link-alt"></i></span>
+还明确描述了工具结果追加后、下一次助手响应前的检查，以及新用户请求前的检查。不要把原文的时机描述当作所有版本的固定规则。</p>
+</blockquote>
+<p>压缩改变的是下一次模型请求使用的历史表示。按当前官方文档，摘要以压缩记录追加到会话中，再用摘要和保留消息重建上下文；原始记录仍可存储在会话里。<strong>“模型不再收到全部旧消息”与“磁盘上的历史被删除”是两件事。</strong>
+具体条目与切点可继续看 [[Pi/Pi Compaction：上下文压缩的完整流程|Pi
+Compaction：上下文压缩的完整流程]]（<a
+href="/posts/a58baeab.html">博客阅读入口</a>）。</p>
+<h2 id="好摘要是一份可以接手的工作交接">4.
+好摘要是一份可以接手的工作交接</h2>
+<p>原文把摘要比作工作交接：接手者需要知道目标、进度、关键决定，以及下一步该做什么。</p>
+<p>Pi
+为此构造独立的摘要请求，使用面向上下文总结的提示，并要求结构化结果。待总结的历史会作为材料交给它；“独立请求”指重新组织提示与输入，并不表示它无需读取历史，也不表示没有
+token 成本。这种组织方式也允许通过定制机制选用其他模型。</p>
+<p>下面是本笔记补充的交接例子：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">目标：修复登录后仍停留在登录页的问题。</span><br><span class="line">限制：保留现有认证方案，不改注册流程。</span><br><span class="line">已完成：检查回调路由；修复跳转条件；相关测试通过。</span><br><span class="line">关键决定：复用现有会话状态，避免增加第二套状态来源。</span><br><span class="line">当前工作：浏览器中验证登录后的实际跳转。</span><br><span class="line">下一步：验证通过后提交；若失败，检查回调响应与页面日志。</span><br><span class="line">关键线索：修改文件路径、测试命令与结果、仍未解决的报错。</span><br></pre></td></tr></table></figure>
+<p>如果只留下“讨论过登录问题，继续修复”，后续模型很可能重复排查。反过来，如果把每条工具输出都照搬进摘要，又难以节省空间。</p>
+<p>好的交接保留的是<strong>继续行动所需的事实与证据</strong>。尤其要区分“已修改”“测试通过”和“实际验证通过”，避免在压缩时把尚未确认的结果写成完成状态。</p>
+<p>Pi
+以纯文本保存摘要，使人能够检查交接内容，也便于后续切换模型时继续使用；摘要本身仍可能遗漏信息。</p>
+<h2 id="压缩为什么会影响提示缓存">5. 压缩为什么会影响提示缓存？</h2>
+<p>压缩与提示缓存解决的问题不同。压缩让输入变短；缓存让重复输入的计算得到复用。</p>
+<p>原文讨论的缓存依赖相同的输入前缀。连续会话通常在已有内容后追加消息，因此先前相同的开头有机会命中缓存。压缩把早期历史换成摘要，输入从该位置开始变化：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">压缩前：</span><br><span class="line">[系统与工具][旧历史][近期消息]</span><br><span class="line"></span><br><span class="line">压缩后首次请求：</span><br><span class="line">[系统与工具][摘要][近期消息][新消息]</span><br><span class="line">  可能复用    ↑ 从这里开始，前缀发生变化</span><br></pre></td></tr></table></figure>
+<p><strong>近期消息即使一字没改，它们前面的材料已经不同，对应的旧计算状态也无法直接沿用。</strong>
+未变化的系统与工具前缀仍可能命中缓存，实际效果取决于提供商的机制和缓存有效期。</p>
+<p>后续请求继续在压缩后的输入末尾追加内容，又可以逐渐受益于新的缓存。因此，压缩不意味着以后永远没有缓存，只是重建了后续请求所沿用的输入基础。</p>
+<p>这一点也解释了为什么不能只根据“摘要更短”判断当次费用：生成摘要要消耗
+token，压缩后的首次请求还可能减少缓存命中。是否降低总体成本，需要看后续请求和提供商计费。</p>
+<h2 id="把几个概念放在一起">6. 把几个概念放在一起</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>概念</th>
+<th>主要作用</th>
+<th>需要记住的边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上下文窗口</td>
+<td>限制一次请求可处理的材料范围</td>
+<td>聊天界面能显示更多历史，不等于模型本次全都收到</td>
+</tr>
+<tr>
+<td>上下文压缩</td>
+<td>用较短表示替换部分历史</td>
+<td>摘要会筛选信息，可能丢失细节</td>
+</tr>
+<tr>
+<td>近期保留消息</td>
+<td>带上当前工作的原始细节</td>
+<td>保留范围受 token 预算影响</td>
+</tr>
+<tr>
+<td>压缩提示</td>
+<td>指导交接内容与结构</td>
+<td>应保留目标、限制、进度、决定与下一步</td>
+</tr>
+<tr>
+<td>提示缓存</td>
+<td>复用相同输入前缀的计算</td>
+<td>命中缓存不会扩大上下文窗口</td>
+</tr>
+</tbody>
+</table>
+<h2 id="对实际使用的启发">7. 对实际使用的启发</h2>
+<p>以下是本笔记的实践补充。</p>
+<p>长任务中，可以在阶段结束时明确写出当前目标、已完成事项、验证结果与下一步。这些状态越清楚，摘要越容易形成可靠交接。重要文件路径、错误信息与检查结果也应留下可追查的入口。</p>
+<p>压缩后，如果 Agent
+忘记了某个约束，可以直接补回该约束及其关联决定；若需要精确的代码或日志，让它重新读取实际材料比依赖摘要回忆更可靠。换到不同任务时，则可以整理必要背景后开启新会话。</p>
+<p>原文还指出，Pi 允许通过 Extension
+自定义压缩机制。可以针对自己的任务调整摘要关注点，例如调试时突出排除过的原因和未验证的假设。定制时应关注接手后的行动是否准确，而不仅是摘要是否更短。</p>
+<p>与这篇入门文章衔接的两篇笔记：</p>
+<ul>
+<li>[[Pi/Pi Architecture：拆解 Coding Agent 的内部架构|Pi
+Architecture：理解模型、工具与 Agent Loop 怎样配合]]（<a
+href="/posts/43ae85df.html">博客阅读入口</a>）。</li>
+<li>[[Pi/Pi Compaction：上下文压缩的完整流程|Pi
+Compaction：进一步理解切点、会话条目、分支摘要与扩展钩子]]（<a
+href="/posts/a58baeab.html">博客阅读入口</a>）。</li>
+</ul>
+<h2 id="来源与许可">来源与许可</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly94LmNvbS94aWFvbW92cHMvc3RhdHVzLzIxMDY1NjE4NzQ2NDUxMTEyODQ=">小墨同学的 X
+帖子<i class="fa fa-external-link-alt"></i></span>与 <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9pL2FydGljbGUvMjEwNjU1OTYxODY1NDkwODQxNw==">X
+长文<i class="fa fa-external-link-alt"></i></span>：本次整理的入口。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9waS54aWFvbW92cHMuY29tL3RyYW5zbGF0aW9ucy9jb21wYWN0aW9uLWluLXBp">小墨同学中文译文：Pi
+中的压缩机制<i class="fa fa-external-link-alt"></i></span>：主要整理依据，中文译文及适配部分采用 CC BY 4.0。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvY29tcGFjdGlvbi1pbi1waS8=">Earendil
+Engineering：How Compaction Works in Pi<i class="fa fa-external-link-alt"></i></span>：英文原作，发表于
+2026-08-13。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3QvY29tcGFjdGlvbg==">Pi 官方 Compaction
+文档<i class="fa fa-external-link-alt"></i></span>：2026-10-05 核对版本差异与会话保存方式。</li>
+</ul>
+<p>本文是对授权中文译文的结构重组与改写，并加入明确标注的补充；不是原文的逐字转载。术语有歧义时，可对照英文原文；具体运行行为以所使用的
+Pi 版本为准。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/Compaction/" rel="tag"><i class="fa fa-tag"></i> Compaction</a>
+              <a href="/tags/Context-Engineering/" rel="tag"><i class="fa fa-tag"></i> Context-Engineering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/1856ebd1.html" rel="prev" title="Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何">
+                  <i class="fa fa-angle-left"></i> Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/comp5416-assignment-http-caching-proxy.html" rel="next" title="COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy">
+                  COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="逐步拆解 Pi 的 Compaction：什么时候触发、切点怎么找、摘要长什么样、CompactionEntry 里存了什么，以及 Branch Summarization、配置项和扩展钩子。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pi Compaction：上下文压缩的完整流程">
+<meta property="og:url" content="https://qiao1.top/posts/a58baeab.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="逐步拆解 Pi 的 Compaction：什么时候触发、切点怎么找、摘要长什么样、CompactionEntry 里存了什么，以及 Branch Summarization、配置项和扩展钩子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-19T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.482Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Compaction">
+<meta property="article:tag" content="Context-Engineering">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Pi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/a58baeab.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/a58baeab.html","path":"posts/a58baeab.html","title":"Pi Compaction：上下文压缩的完整流程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Pi Compaction：上下文压缩的完整流程 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/a58baeab.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E5%88%86%E6%B8%85%E4%B8%A4%E5%A5%97%E6%9C%BA%E5%88%B6"><span class="nav-text">0. 先分清两套机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91"><span class="nav-text">1. 什么时候触发？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E4%BA%94%E6%AD%A5"><span class="nav-text">2. 完整的五步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1%E6%89%BE%E5%88%87%E7%82%B9"><span class="nav-text">Step 1：找切点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2%E5%8F%96%E5%87%BA%E5%BE%85%E6%80%BB%E7%BB%93%E7%9A%84%E6%B6%88%E6%81%AF"><span class="nav-text">Step 2：取出待总结的消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3%E7%94%9F%E6%88%90%E6%91%98%E8%A6%81"><span class="nav-text">Step 3：生成摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-4%E8%BF%BD%E5%8A%A0-compactionentry"><span class="nav-text">Step 4：追加 CompactionEntry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-5%E9%87%8D%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-text">Step 5：重建上下文</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E4%BD%8D%E7%BD%AE%E5%8F%AF%E4%BB%A5%E5%88%87"><span class="nav-text">3. 哪些位置可以切？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#split-turn%E4%B8%80%E8%BD%AE%E5%B0%B1%E8%B6%85%E9%A2%84%E7%AE%97%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-text">Split
+turn：一轮就超预算怎么办</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="nav-text">4. 摘要长什么样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%98%AF%E6%80%8E%E4%B9%88%E5%8F%98%E6%88%90%E6%96%87%E6%9C%AC%E7%9A%84"><span class="nav-text">5. 消息是怎么变成文本的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%AF%E7%A7%AF%E6%96%87%E4%BB%B6%E8%BF%BD%E8%B8%AA"><span class="nav-text">6. 累积文件追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compactionentry-%E7%9A%84%E5%AE%8C%E6%95%B4%E7%BB%93%E6%9E%84"><span class="nav-text">7. CompactionEntry 的完整结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#branch-summarization"><span class="nav-text">8. Branch Summarization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-text">9. 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E6%A8%A1%E5%9E%8B%E8%A6%86%E7%9B%96"><span class="nav-text">按模型覆盖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E9%92%A9%E5%AD%90"><span class="nav-text">10. 扩展钩子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reason-%E7%9A%84%E4%B8%89%E4%B8%AA%E5%80%BC"><span class="nav-text">reason 的三个值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%B9%E6%98%93%E5%BF%BD%E7%95%A5%E7%9A%84%E7%BB%86%E8%8A%82"><span class="nav-text">11. 一个容易忽略的细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">12. 小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/a58baeab.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Pi Compaction：上下文压缩的完整流程 | Joey">
+      <meta itemprop="description" content="逐步拆解 Pi 的 Compaction：什么时候触发、切点怎么找、摘要长什么样、CompactionEntry 里存了什么，以及 Branch Summarization、配置项和扩展钩子。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pi Compaction：上下文压缩的完整流程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-19 12:00:00" itemprop="dateCreated datePublished" datetime="2026-09-19T12:00:00Z">2026-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">逐步拆解 Pi 的 Compaction：什么时候触发、切点怎么找、摘要长什么样、CompactionEntry 里存了什么，以及 Branch Summarization、配置项和扩展钩子。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>上一篇 <a href="/posts/43ae85df.html">Pi Architecture</a> 里讲到
+Compaction
+时，只说了"上下文太长就总结一下"。但真正去看文档会发现，这件事比想象中讲究得多——<strong>从哪里下刀、下刀之后怎么重建、连续压缩好几次会不会把早期信息丢干净</strong>，每一步都有明确的设计。</p>
+<p>这篇就把这个过程完整拆一遍。</p>
+<hr />
+<h2 id="先分清两套机制">0. 先分清两套机制</h2>
+<p>Pi 里其实有<strong>两套</strong>总结机制，容易混：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>机制</th>
+<th>触发时机</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compaction</td>
+<td>上下文超阈值，或手动 <code>/compact</code></td>
+<td>总结旧消息，腾出上下文</td>
+</tr>
+<tr>
+<td>Branch Summarization</td>
+<td><code>/tree</code> 切换分支时</td>
+<td>切branch 时保住上下文</td>
+</tr>
+</tbody>
+</table>
+<p>前者是"时间轴上往前压"，后者是"从另一条分支跳过来时，把那条分支上发生过什么带过来"。两者的产物结构几乎一样，但触发路径完全不同。</p>
+<p>先讲 Compaction。</p>
+<hr />
+<h2 id="什么时候触发">1. 什么时候触发？</h2>
+<p>判断条件只有一行：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">contextTokens &gt; contextWindow - reserveTokens</span><br></pre></td></tr></table></figure>
+<p><code>reserveTokens</code> 默认
+<strong>16,384</strong>，可配置。它的含义是<strong>给模型回复预留的缓冲</strong>——不能等到上下文刚好填满才压，那时候模型连回答的空间都没有了。</p>
+<p>检查发生在四个时机：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">1. 多轮 agent run 中，tool result 被追加之后</span><br><span class="line">2. 新的 user prompt 之前</span><br><span class="line">3. low-level agent run 结束之后</span><br><span class="line">4. 手动 /compact [instructions]</span><br></pre></td></tr></table></figure>
+<p>注意第 1
+条：<strong>工具结果追加之后立刻检查</strong>。这是最容易爆上下文的地方——一次
+<code>read</code> 读进来一个大文件，或者一段 bash
+输出几千行，上下文可能瞬间翻倍。</p>
+<hr />
+<h2 id="完整的五步">2. 完整的五步</h2>
+<p>整个过程是这样：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────┐</span><br><span class="line">│  Step 1  找切点          │</span><br><span class="line">│  从最新消息往回走         │</span><br><span class="line">│  累加 token 估算          │</span><br><span class="line">│  直到够 keepRecentTokens │</span><br><span class="line">└───────────┬─────────────┘</span><br><span class="line">            ▼</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│  Step 2  取出待总结消息   │</span><br><span class="line">│  上次保留边界 → 切点      │</span><br><span class="line">└───────────┬─────────────┘</span><br><span class="line">            ▼</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│  Step 3  生成摘要         │</span><br><span class="line">│  调 LLM，结构化格式        │</span><br><span class="line">│  把上一份摘要一起传进去    │</span><br><span class="line">└───────────┬─────────────┘</span><br><span class="line">            ▼</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│  Step 4  追加 Entry       │</span><br><span class="line">│  summary                 │</span><br><span class="line">│  + firstKeptEntryId      │</span><br><span class="line">└───────────┬─────────────┘</span><br><span class="line">            ▼</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│  Step 5  重建上下文        │</span><br><span class="line">│  摘要 + firstKeptEntryId  │</span><br><span class="line">│         之后的消息         │</span><br><span class="line">└─────────────────────────┘</span><br></pre></td></tr></table></figure>
+<p>逐个说。</p>
+<h3 id="step-1找切点">Step 1：找切点</h3>
+<p><strong>从最新的消息往回走</strong>，一路累加 token 估算，直到攒够
+<code>keepRecentTokens</code>（默认
+<strong>20,000</strong>，可配置）为止。走到的那个位置就是切点。</p>
+<p>方向很重要：是<strong>倒着走</strong>，不是正着走。因为要保证的是"最近
+2 万 token 原样留着"，而不是"前面多少 token 被压掉"。</p>
+<h3 id="step-2取出待总结的消息">Step 2：取出待总结的消息</h3>
+<p>范围是：<strong>上一次保留边界 → 这次的切点</strong>。</p>
+<p>这里有个关键细节，也是我觉得最值得注意的一点：</p>
+<blockquote>
+<p>重复压缩时，被总结的区间从<strong>上一次压缩的保留边界（<code>firstKeptEntryId</code>）</strong>开始，而不是从上一条
+compaction entry 开始。</p>
+</blockquote>
+<p>差别在哪？如果从 compaction entry
+开始，那么上一次"保留下来没被压"的那 2 万
+token，这次就会被重新扫一遍——不会丢，但会重复劳动。从
+<code>firstKeptEntryId</code>
+开始，区间是严格衔接的，每条原始消息只会被总结进摘要一次。</p>
+<h3 id="step-3生成摘要">Step 3：生成摘要</h3>
+<p>调 LLM，用结构化的格式（下面第 4
+节会贴完整模板），并且<strong>把上一份摘要作为上下文一起传进去</strong>。</p>
+<p>所以摘要是<strong>迭代累积</strong>的，不是每次从头重写：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">第 1 次压缩:  [原始消息 A..J]            → Summary₁</span><br><span class="line">第 2 次压缩:  Summary₁ + [原始消息 K..T] → Summary₂</span><br><span class="line">第 3 次压缩:  Summary₂ + [原始消息 U..Z] → Summary₃</span><br></pre></td></tr></table></figure>
+<p>这样早期的目标、约束、关键决定能一路传下去，不会因为压了三四轮就把最初的需求忘掉。当然代价是有损——摘要的摘要，细节会逐层衰减。</p>
+<h3 id="step-4追加-compactionentry">Step 4：追加 CompactionEntry</h3>
+<p>写进去的核心是两样东西：摘要本身，和
+<code>firstKeptEntryId</code>（从哪条开始是原样保留的）。</p>
+<p>还有个小细节：<code>tokensBefore</code> 是<strong>从重建后的 session
+上下文重新算的</strong>，然后才写进新的
+entry，保证这个数字反映的是压缩前的真实上下文大小。</p>
+<h3 id="step-5重建上下文">Step 5：重建上下文</h3>
+<p>session 用「摘要 + <code>firstKeptEntryId</code>
+之后的消息」重建。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">压缩前:  [ A B C D E F G H I J | K L M N ]</span><br><span class="line">                                ↑ 切点</span><br><span class="line"></span><br><span class="line">压缩后:  [ Summary | K L M N ]</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="哪些位置可以切">3. 哪些位置可以切？</h2>
+<p>不是随便哪儿都能下刀。合法切点只有四类：</p>
+<ul>
+<li>User messages</li>
+<li>Assistant messages</li>
+<li>BashExecution messages</li>
+<li>Custom
+messages（<code>custom_message</code>、<code>branch_summary</code>）</li>
+</ul>
+<p><strong>绝对不能在 tool result 处切</strong>——工具结果必须和它对应的
+tool call 待在一起。</p>
+<p>原因很直接：如果切点落在 tool call 和 tool result
+中间，重建出来的上下文里就会出现一个"发起了工具调用但永远没有结果"的悬空调用。大部分模型
+API 会直接报错，就算不报错，模型也会困惑。</p>
+<h3 id="split-turn一轮就超预算怎么办">Split
+turn：一轮就超预算怎么办</h3>
+<p>有一种情况躲不掉——<strong>单独一轮对话本身就超过了
+<code>keepRecentTokens</code></strong>。比如一轮里读了十个大文件。这时候倒着走
+2 万 token 还没走出这一轮，切点只能落在这一轮内部的某条 assistant
+message 上，形成 split turn。</p>
+<p>Pi 的处理是生成<strong>两份摘要</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌──────────────────────────────┐</span><br><span class="line">│  之前的历史                    │  → 摘要 1（history summary）</span><br><span class="line">├──────────────────────────────┤</span><br><span class="line">│  这一轮的前半段                 │  → 摘要 2（turn prefix summary）</span><br><span class="line">│  ── 切点 ──                   │</span><br><span class="line">│  这一轮的后半段（原样保留）       │</span><br><span class="line">└──────────────────────────────┘</span><br><span class="line">             ↓</span><br><span class="line">    两份摘要合并后写进</span><br><span class="line">    同一个 CompactionEntry</span><br></pre></td></tr></table></figure>
+<p>状态上用 <code>isSplitTurn: true</code>
+标记，<code>turnPrefixMessages</code>
+存的是从这一轮开始到切点之间的消息。</p>
+<hr />
+<h2 id="摘要长什么样">4. 摘要长什么样</h2>
+<p>Compaction 和 Branch Summarization 用的是同一套模板：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section">## Goal</span></span><br><span class="line">[User&#x27;s objective]</span><br><span class="line"></span><br><span class="line"><span class="section">## Constraints &amp; Preferences</span></span><br><span class="line"><span class="bullet">-</span> [Requirements]</span><br><span class="line"></span><br><span class="line"><span class="section">## Progress</span></span><br><span class="line"><span class="section">### Done</span></span><br><span class="line"><span class="bullet">-</span> [x] [Completed]</span><br><span class="line"><span class="section">### In Progress</span></span><br><span class="line"><span class="bullet">-</span> [ ] [Current work]</span><br><span class="line"><span class="section">### Blocked</span></span><br><span class="line"><span class="bullet">-</span> [Issues]</span><br><span class="line"></span><br><span class="line"><span class="section">## Key Decisions</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**[Decision]**</span>: [Rationale]</span><br><span class="line"></span><br><span class="line"><span class="section">## Next Steps</span></span><br><span class="line"><span class="bullet">1.</span> [What&#x27;s next]</span><br><span class="line"></span><br><span class="line"><span class="section">## Critical Context</span></span><br><span class="line"><span class="bullet">-</span> [Essential data]</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">read-files</span>&gt;</span></span></span><br><span class="line">path/to/file1.ts</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">read-files</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">modified-files</span>&gt;</span></span></span><br><span class="line">path/to/changed.ts</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">modified-files</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>这个模板的取舍挺明显：它保的是<strong>目标、约束、决定和下一步</strong>，丢的是过程细节。换句话说，压缩之后
+agent
+记得"我要干什么、我决定了怎么干、我干到哪儿了"，但不记得"当时那个函数第
+37 行长什么样"。</p>
+<p>最后两个标签是文件追踪，单独说。</p>
+<hr />
+<h2 id="消息是怎么变成文本的">5. 消息是怎么变成文本的</h2>
+<p>送去总结之前，消息先经 <code>serializeConversation()</code>
+拍平成纯文本：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">[User]: message text</span><br><span class="line">[Assistant thinking]: reasoning</span><br><span class="line">[Assistant]: response</span><br><span class="line">[Assistant tool calls]: read(path=&quot;foo.ts&quot;); edit(path=&quot;bar.ts&quot;, ...)</span><br><span class="line">[Tool result]: output</span><br></pre></td></tr></table></figure>
+<p>其中 <strong>tool result 截断到 2,000
+字符</strong>，超出部分打截断标记。</p>
+<p>这一步其实是压缩成本的关键。不截断的话，光是把待总结的消息喂给总结模型这一下，本身就可能又炸一次上下文——你要压缩的东西，正是因为太大才需要压缩。</p>
+<hr />
+<h2 id="累积文件追踪">6. 累积文件追踪</h2>
+<p>摘要里那两个 <code>&lt;read-files&gt;</code> /
+<code>&lt;modified-files&gt;</code> 标签，来源有两处：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">1. 被总结消息里的 tool calls</span><br><span class="line">2. 上一份 compaction / branch summary 的 details</span><br></pre></td></tr></table></figure>
+<p>第 2
+条是重点：<strong>文件列表是跨压缩累积的</strong>。压了五轮之后，前四轮碰过的文件路径仍然在列表里。</p>
+<p>这算是对"摘要有损"的一个补救——正文细节会衰减，但"我碰过哪些文件"这个索引一直是完整的。agent
+真要用到，重新 <code>read</code> 一次就行。</p>
+<p>对应的结构：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">CompactionDetails</span> &#123;</span><br><span class="line">  <span class="attr">readFiles</span>: <span class="built_in">string</span>[];</span><br><span class="line">  <span class="attr">modifiedFiles</span>: <span class="built_in">string</span>[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="compactionentry-的完整结构">7. CompactionEntry 的完整结构</h2>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">CompactionEntry</span>&lt;T = <span class="built_in">unknown</span>&gt; &#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;compaction&quot;</span>;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">parentId</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">timestamp</span>: <span class="built_in">number</span>;</span><br><span class="line">  <span class="attr">summary</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">firstKeptEntryId</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">tokensBefore</span>: <span class="built_in">number</span>;</span><br><span class="line">  <span class="attr">usage</span>?: <span class="title class_">Usage</span>;</span><br><span class="line">  <span class="attr">fromHook</span>?: <span class="built_in">boolean</span>;</span><br><span class="line">  <span class="attr">details</span>?: T;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>几个字段值得留意：</p>
+<ul>
+<li><code>parentId</code> —— session 是树，每条 entry
+都挂在父节点上</li>
+<li><code>firstKeptEntryId</code> ——
+重建上下文的锚点，也是下次压缩的起点</li>
+<li><code>tokensBefore</code> ——
+压缩前的上下文大小，用来观察压缩效果</li>
+<li><code>fromHook</code> —— 这份摘要是不是扩展提供的（见第 10 节）</li>
+</ul>
+<hr />
+<h2 id="branch-summarization">8. Branch Summarization</h2>
+<p><code>/tree</code> 切分支时触发，五步：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">1. 找到最深的公共祖先节点</span><br><span class="line">2. 从旧 leaf 往回收集到祖先为止的 entries</span><br><span class="line">3. 按 token 预算纳入消息（从新到旧）</span><br><span class="line">4. 调 LLM 生成摘要</span><br><span class="line">5. 在导航落点追加 BranchSummaryEntry</span><br></pre></td></tr></table></figure>
+<p>第 3
+步的顺序是<strong>从新到旧</strong>——预算不够时，先牺牲老的。这和
+Compaction 倒着走找切点是同一个思路：近的比远的重要。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">BranchSummaryEntry</span>&lt;T = <span class="built_in">unknown</span>&gt; &#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;branch_summary&quot;</span>;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">parentId</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">timestamp</span>: <span class="built_in">number</span>;</span><br><span class="line">  <span class="attr">summary</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">fromId</span>: <span class="built_in">string</span>;      <span class="comment">// 从哪个节点跳过来的</span></span><br><span class="line">  <span class="attr">usage</span>?: <span class="title class_">Usage</span>;</span><br><span class="line">  <span class="attr">fromHook</span>?: <span class="built_in">boolean</span>;</span><br><span class="line">  <span class="attr">details</span>?: T;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和 <code>CompactionEntry</code>
+的差别就一个字段：<code>firstKeptEntryId</code> 换成了
+<code>fromId</code>。因为语义不同——压缩是"从这里往后原样保留"，分支总结是"我从那边过来的"。</p>
+<hr />
+<h2 id="配置">9. 配置</h2>
+<p>配置文件在 <code>~/.pi/agent/settings.json</code> 或
+<code>&lt;project-dir&gt;/.pi/settings.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compaction&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;reserveTokens&quot;</span><span class="punctuation">:</span> <span class="number">16384</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;keepRecentTokens&quot;</span><span class="punctuation">:</span> <span class="number">20000</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>默认值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>true</code></td>
+<td>是否开启自动压缩</td>
+</tr>
+<tr>
+<td><code>reserveTokens</code></td>
+<td><code>16384</code></td>
+<td>给回复留的 token 缓冲</td>
+</tr>
+<tr>
+<td><code>keepRecentTokens</code></td>
+<td><code>20000</code></td>
+<td>原样保留的最近 token 量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="按模型覆盖">按模型覆盖</h3>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compaction&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;modelOverrides&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;provider/modelId&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;reserveTokens&quot;</span><span class="punctuation">:</span> <span class="number">400000</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>key 是精确的 <code>provider/modelId</code> 字符串。回退顺序是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">模型覆盖  →  普通设置  →  内置默认</span><br></pre></td></tr></table></figure>
+<p>而且<strong>每个配置项独立回退</strong>——你只覆盖
+<code>reserveTokens</code>，<code>keepRecentTokens</code>
+仍然走普通设置或默认值，不需要整块重写。</p>
+<p>上面那个 <code>400000</code>
+的例子也点出了为什么需要按模型配：百万级上下文的模型，留 16k
+缓冲太小了。</p>
+<hr />
+<h2 id="扩展钩子">10. 扩展钩子</h2>
+<p>三个：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line">pi.<span class="title function_">on</span>(<span class="string">&quot;session_before_compact&quot;</span>, <span class="title function_">async</span> (event, ctx) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 可访问：preparation.messagesToSummarize、turnPrefixMessages、</span></span><br><span class="line">  <span class="comment">//        previousSummary、fileOps、tokensBefore、firstKeptEntryId、settings</span></span><br><span class="line">  <span class="comment">// reason: &quot;manual&quot; | &quot;threshold&quot; | &quot;overflow&quot;</span></span><br><span class="line">  <span class="comment">// willRetry: 压缩之后被中断的这一轮要不要重试</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">cancel</span>: <span class="literal">true</span> &#125;;   <span class="comment">// 或者自己提供一份 summary</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line">pi.<span class="title function_">on</span>(<span class="string">&quot;session_compact_failed&quot;</span>, <span class="title function_">async</span> (event, ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; reason, errorMessage, aborted, willRetry, fromExtension &#125; = event;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line">pi.<span class="title function_">on</span>(<span class="string">&quot;session_before_tree&quot;</span>, <span class="title function_">async</span> (event, ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; preparation, signal &#125; = event;</span><br><span class="line">  <span class="comment">// preparation.targetId、oldLeafId、commonAncestorId、entriesToSummarize</span></span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">cancel</span>: <span class="literal">true</span> &#125;;   <span class="comment">// 或者自己提供一份 summary</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>session_before_compact</code>
+的能力其实很大：它能拿到待总结的原始消息，也能<strong>直接返回一份自己的
+summary
+顶替掉默认流程</strong>。想换个摘要模板、想接自己的总结模型、想在压缩前把某些内容强行保下来，都是在这儿做。</p>
+<h3 id="reason-的三个值">reason 的三个值</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">&quot;manual&quot;     用户敲了 /compact</span><br><span class="line">&quot;threshold&quot;  超过阈值，正常触发</span><br><span class="line">&quot;overflow&quot;   跑到一半上下文溢出了</span><br></pre></td></tr></table></figure>
+<p><code>overflow</code> 这条会带
+<code>willRetry: true</code>——意思是这次压缩属于<strong>救场</strong>而不是打断，被中断的那一轮压缩完之后会重试。这个区分对做遥测有用：<code>threshold</code>
+是正常运转，<code>overflow</code> 说明预留缓冲设小了。</p>
+<hr />
+<h2 id="一个容易忽略的细节">11. 一个容易忽略的细节</h2>
+<p>文档里提了一句，我觉得挺有意思：</p>
+<blockquote>
+<p>compaction 和 branch summary 的请求使用全新的 routing session
+ID，并且<strong>禁用 prompt cache 写入</strong>。</p>
+</blockquote>
+<p>理由是这类一次性 prompt 基本不会被复用，写进缓存是白花钱。</p>
+<p>这种地方不影响功能，但能看出成本意识已经渗进实现细节里了。Agent
+的账单不只是主循环那几次调用——压缩本身也是要调模型的，而且压的越频繁调的越多。</p>
+<hr />
+<h2 id="小结">12. 小结</h2>
+<p>把整个 Compaction 串起来：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">             上下文增长</span><br><span class="line">                 │</span><br><span class="line">                 ▼</span><br><span class="line">contextTokens &gt; contextWindow - reserveTokens ?</span><br><span class="line">                 │</span><br><span class="line">          ┌──────┴──────┐</span><br><span class="line">         No            Yes</span><br><span class="line">          │             │</span><br><span class="line">        继续            ▼</span><br><span class="line">                 倒着走 keepRecentTokens</span><br><span class="line">                      找切点</span><br><span class="line">                        │</span><br><span class="line">                 （落在 tool result 上？</span><br><span class="line">                   不行，继续往前找）</span><br><span class="line">                        │</span><br><span class="line">                 ┌──────┴──────┐</span><br><span class="line">              正常切点      切在turn 内部</span><br><span class="line">                 │             │</span><br><span class="line">                 │        split turn</span><br><span class="line">                 │        两份摘要</span><br><span class="line">                 └──────┬──────┘</span><br><span class="line">                        ▼</span><br><span class="line">            上次 firstKeptEntryId → 切点</span><br><span class="line">                    送去总结</span><br><span class="line">                （带上一份摘要）</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">               CompactionEntry</span><br><span class="line">            summary + firstKeptEntryId</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">            摘要 + 切点之后的原始消息</span><br><span class="line">                   重建上下文</span><br></pre></td></tr></table></figure>
+<p>几个我觉得值得抄的设计：</p>
+<ol type="1">
+<li><strong>预留缓冲而不是压到满</strong> —— <code>reserveTokens</code>
+保证模型永远有回话的空间</li>
+<li><strong>倒着找切点</strong> —— 保的是"最近多少"，不是"压掉多少"</li>
+<li><strong>切点有合法性约束</strong> —— tool call / tool result
+必须成对，这是正确性问题不是优化问题</li>
+<li><strong>摘要迭代传递</strong> ——
+上一份摘要是下一次的输入，早期目标不会掉</li>
+<li><strong>文件列表跨压缩累积</strong> —— 正文有损，但索引无损</li>
+<li><strong>压缩本身的成本也管</strong> —— tool result 截断 2000
+字符、禁用 cache 写入</li>
+</ol>
+<p>第 3 点尤其值得强调。前五点都是"效果好不好"的问题，第 3
+点是"能不能跑"的问题——切错地方直接出错误的上下文，这类约束在自己实现类似机制时最容易漏。</p>
+<hr />
+<p>参考：<span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3QvY29tcGFjdGlvbg==">Pi Docs —
+Compaction<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/Compaction/" rel="tag"><i class="fa fa-tag"></i> Compaction</a>
+              <a href="/tags/Context-Engineering/" rel="tag"><i class="fa fa-tag"></i> Context-Engineering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/43ae85df.html" rel="prev" title="Pi Architecture：拆解 Coding Agent 的内部架构">
+                  <i class="fa fa-angle-left"></i> Pi Architecture：拆解 Coding Agent 的内部架构
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/shanghai-workers-three-outcomes.html" rel="next" title="刚来的 · 沪漂6年 · 已离开｜上海打工人的三种结局？">
+                  刚来的 · 沪漂6年 · 已离开｜上海打工人的三种结局？ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

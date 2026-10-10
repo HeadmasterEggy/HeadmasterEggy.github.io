@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="整理 Thesys 对 ChatGPT Intelligent UI 的逆向分析：模型如何输出 DIL，服务端如何编译和流式传输，客户端如何隔离执行、保留状态并渲染组件，以及这套方案的局限。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT Intelligent UI 拆解：从 DIL 到交互界面">
+<meta property="og:url" content="https://qiao1.top/posts/8e2cf97.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="整理 Thesys 对 ChatGPT Intelligent UI 的逆向分析：模型如何输出 DIL，服务端如何编译和流式传输，客户端如何隔离执行、保留状态并渲染组件，以及这套方案的局限。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.479Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/8e2cf97.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/8e2cf97.html","path":"posts/8e2cf97.html","title":"ChatGPT Intelligent UI 拆解：从 DIL 到交互界面"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ChatGPT Intelligent UI 拆解：从 DIL 到交互界面 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/8e2cf97.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%9B%9E%E7%AD%94%E7%BB%8F%E8%BF%87%E5%93%AA%E4%BA%9B%E5%B1%82"><span class="nav-text">1. 一次回答经过哪些层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dil%E8%AE%A9%E6%A8%A1%E5%9E%8B%E5%86%99%E5%BE%97%E5%87%BA%E4%B9%9F%E8%AE%A9%E5%8D%8A%E6%88%90%E5%93%81%E8%83%BD%E6%98%BE%E7%A4%BA"><span class="nav-text">2.
+DIL：让模型写得出，也让半成品能显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%BC%96%E8%AF%91%E6%8A%8A%E7%94%9F%E6%88%90%E5%86%85%E5%AE%B9%E5%8F%98%E6%88%90%E5%8F%AF%E8%BF%90%E8%A1%8C%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="nav-text">3.
+服务端编译：把生成内容变成可运行的协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%90%E8%A1%8C%E9%80%BB%E8%BE%91%E4%B8%8E%E7%BB%98%E5%88%B6%E7%95%8C%E9%9D%A2%E5%88%86%E5%BC%80"><span class="nav-text">4.
+客户端：运行逻辑与绘制界面分开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E5%BC%8F-ui-%E7%9A%84%E9%9A%BE%E7%82%B9%E5%8D%8A%E6%88%90%E5%93%81%E7%8A%B6%E6%80%81%E5%92%8C%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE"><span class="nav-text">5. 流式 UI
+的难点：半成品、状态和异步数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%8A%A8%E4%BD%9C%E5%93%AA%E4%BA%9B%E4%BA%8B%E4%BA%A4%E7%BB%99%E6%A8%A1%E5%9E%8B%E5%93%AA%E4%BA%9B%E4%BA%A4%E7%BB%99%E5%AE%BF%E4%B8%BB"><span class="nav-text">6.
+数据与动作：哪些事交给模型，哪些交给宿主</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B9%8B%E5%A4%96%E8%BF%98%E6%9C%89-appblock"><span class="nav-text">7. 组件目录之外，还有 AppBlock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E6%8A%AB%E9%9C%B2%E7%9A%84%E5%B1%80%E9%99%90"><span class="nav-text">8. 作者披露的局限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E8%A7%A3%E8%AF%BB%E5%81%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F-ui%E5%8F%AF%E4%BB%A5%E5%80%9F%E9%89%B4%E4%BB%80%E4%B9%88"><span class="nav-text">9.
+工程解读：做自己的生成式 UI，可以借鉴什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90"><span class="nav-text">来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/8e2cf97.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ChatGPT Intelligent UI 拆解：从 DIL 到交互界面 | Joey">
+      <meta itemprop="description" content="整理 Thesys 对 ChatGPT Intelligent UI 的逆向分析：模型如何输出 DIL，服务端如何编译和流式传输，客户端如何隔离执行、保留状态并渲染组件，以及这套方案的局限。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT Intelligent UI 拆解：从 DIL 到交互界面
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-09 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-09T12:00:00Z">2026-10-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">整理 Thesys 对 ChatGPT Intelligent UI 的逆向分析：模型如何输出 DIL，服务端如何编译和流式传输，客户端如何隔离执行、保留状态并渲染组件，以及这套方案的局限。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>聊天回答可以直接成为一个能操作的界面：调整人数，购物清单随之变化；拖动滑块，报价立即更新；选择偏好，再把结果发给模型继续规划。</p>
+<p>Rabi Shanker Guha 在 X 上分享了 Thesys 团队对 <strong>ChatGPT
+Intelligent UI</strong>
+的逆向分析。最值得关注的是背后的分工：<strong>模型描述界面与逻辑，服务端编译，客户端在隔离环境里运行，再交给
+ChatGPT 自己的组件系统绘制。</strong></p>
+<p>本文根据<span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9yYWJpX2d1aGEvc3RhdHVzLzIxMDgyMzg0MzIzNTUxMjM1NzI=">原帖及其长文<i class="fa fa-external-link-alt"></i></span>和作者网站上的<span class="exturl" data-url="aHR0cHM6Ly93d3cub3BlbnVpLmNvbS9ibG9nL2hvdy1jaGF0Z3B0LWludGVsbGlnZW50LXVpLXdvcmtz">详细分析<i class="fa fa-external-link-alt"></i></span>整理，后半部分补充工程解读。</p>
+<p>这些机制来自第三方对自己账号的会话数据、网络流量和公开客户端
+JavaScript 的观察，时间为 2026 年 10 月，使用 GPT-6 与 GPT-6
+Thinking。它们属于特定版本的逆向结果，并非 OpenAI
+官方架构文档；作者没有直接检查手机端实现。</p>
+<h2 id="一次回答经过哪些层">1. 一次回答经过哪些层</h2>
+<p>可以把主路径画成下面这条链：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">用户提出需求</span><br><span class="line">    ↓</span><br><span class="line">模型输出 DIL：正文 + 组件 + 状态与逻辑</span><br><span class="line">    ↓</span><br><span class="line">服务端编译：JavaScript 程序 + JSON 文本与数据</span><br><span class="line">    ↓</span><br><span class="line">客户端隔离运行时：执行程序、维护状态、比较界面树</span><br><span class="line">    ↓</span><br><span class="line">UI 操作协议：创建、设置属性、放置、更新节点</span><br><span class="line">    ↓</span><br><span class="line">ChatGPT 组件系统绘制界面</span><br></pre></td></tr></table></figure>
+<p>组件目录与设计系统贯穿整个过程：模型从中选择组件，编译器据此检查属性，渲染器知道怎样画出来。</p>
+<p>这里的“原生组件”指 ChatGPT 自有的界面组件。Web
+端最终仍由浏览器显示，不能据此断言每个元素都是操作系统控件。作者从协议和运行时兼容性推测手机端可能复用这套运行时，再接各自的渲染器，但没有实机验证。</p>
+<h2 id="dil让模型写得出也让半成品能显示">2.
+DIL：让模型写得出，也让半成品能显示</h2>
+<p>作者观察到的生成格式叫 <strong>DIL</strong>，混合了三类表达：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>表达方式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>解释文字</td>
+<td>Markdown</td>
+<td>标题、段落、强调</td>
+</tr>
+<tr>
+<td>界面结构</td>
+<td>类似 JSX 的标签</td>
+<td>容器、滑块、表格、图表</td>
+</tr>
+<tr>
+<td>状态与计算</td>
+<td>JavaScript 语句和表达式</td>
+<td>保存输入、计算结果、响应事件</td>
+</tr>
+</tbody>
+</table>
+<p>详细版用团队订阅报价解释这套机制：人数初始为 8，每人每月 29
+美元，价格由人数乘单价得到；滑块绑定人数状态。拖到 9 人后，价格变成 261
+美元。</p>
+<p>模型输出里既有普通文字，也有组件标签和状态声明。它还能使用条件、循环及事件处理器，所以它并非只是一份静态组件清单。</p>
+<p>专用格式的一项关键价值是<strong>适应逐 token
+生成</strong>。输出经常停在半个标签或未完成的表达式中；编译器需要保留已经完整的内容，临时舍弃不完整语句，并给可恢复的元素补上闭合结构。这样用户可以边等边看，界面不必等整篇回答结束才出现。</p>
+<h2 id="服务端编译把生成内容变成可运行的协议">3.
+服务端编译：把生成内容变成可运行的协议</h2>
+<p>客户端收到的不是直接照抄执行的原始 DIL。作者发现，服务端把它编译成
+JavaScript 程序，并配上保存文字、工具数据等内容的 JSON，存放在消息的
+<code>model_dil_v2</code> 元数据中。</p>
+<p>编译阶段主要解决五件事：</p>
+<ul>
+<li><strong>转换结构。</strong> Markdown
+和组件标签进入同一棵树，标签被转换成运行时函数调用。</li>
+<li><strong>隔离局部错误。</strong>
+表达式有异常保护，某个表达式抛错时，相关内容可以消失，避免整张界面一起失败。</li>
+<li><strong>分离文字和程序。</strong>
+静态文字移入常量表。只有文字增长时，可以更新常量，减少程序结构变化。</li>
+<li><strong>赋予状态稳定的 key。</strong>
+新版本程序不断到达时，运行时能找回同一个状态槽位，保留用户已经调整的值。</li>
+<li><strong>修复和校验。</strong> 处理半成品语法，并依据组件 schema
+移除不存在的属性或类型不正确的字面量，记录诊断信息。</li>
+</ul>
+<p>这也是“能渲染”和“逻辑正确”的分界：校验可以发现属性类型错误，却无法保证模型写出的报价、统计或条件判断符合业务含义。</p>
+<h2 id="客户端运行逻辑与绘制界面分开">4.
+客户端：运行逻辑与绘制界面分开</h2>
+<p>作者观察到，Web 端通过隐藏的 iframe 启动 Web
+Worker。运行时会限制生成程序可接触的全局能力，包含网络、计时器和动态求值等，并设有超时监控；程序无响应时会被隔离，Worker
+会重启。</p>
+<p>这里有个容易误读的细节：详细版同时提到运行时内部使用
+<code>new Function</code>
+求值。限制的是生成程序可使用的环境能力，不能简单概括成“整个实现没有动态执行
+JavaScript”。</p>
+<p>Worker
+负责执行程序、保存状态、生成界面树，再与旧树比较，输出操作列表。主页面负责把这些操作映射到
+ChatGPT 组件。<strong>Worker 本身不直接绘制页面。</strong></p>
+<p>事件处理函数也不直接跨出
+Worker，而是以标识符传递。用户拖动滑块时，页面把处理器标识和参数送回
+Worker；Worker 更新人数、重算价格，再返回界面更新操作。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">拖动滑块 → 事件送到 Worker → 更新状态与计算 → 返回 UI 操作</span><br></pre></td></tr></table></figure>
+<p>整个过程可以不调用模型。因此，界面上的每一次点击，并不都意味着一次新的推理请求。</p>
+<h2 id="流式-ui-的难点半成品状态和异步数据">5. 流式 UI
+的难点：半成品、状态和异步数据</h2>
+<p>文本流通常只需追加字符。界面流还要回答三个问题：程序没写完怎么办，用户已经改过的输入怎么办，图片等数据稍后才到怎么办。</p>
+<p>作者观察到的方式是通过 SSE 给结构化消息发送类似 JSON Patch
+的更新，在同一条消息里维护原始 DIL、编译程序、文字常量和外部数据。</p>
+<p>详细版指出，观察到的服务端会反复编译目前已生成的全部源内容，而不是采用真正的增量编译。传输时则有不同情况：</p>
+<table>
+<thead>
+<tr>
+<th>生成进展</th>
+<th>界面更新方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组件结构改变</td>
+<td>替换整个编译程序</td>
+</tr>
+<tr>
+<td>只有文字增长</td>
+<td>可以只更新常量</td>
+</tr>
+<tr>
+<td>仍在未完成标签内部</td>
+<td>原始文本继续增长，界面暂时不变</td>
+</tr>
+<tr>
+<td>图片搜索完成</td>
+<td>单独补入数据</td>
+</tr>
+</tbody>
+</table>
+<p>客户端用新程序重新计算界面，同时通过稳定 key
+保留已有状态。如果新程序执行失败，就继续显示最后一个成功版本。</p>
+<p>代价是重复传输。作者的一次样本包含 6,341 个字符，文本流持续 18.7
+秒，总计 84 次更新；约 275 KB 的补丁数据中，83%
+是重复发送的编译程序。<strong>这是单次抓包结果，不能当作所有回答的平均成本。</strong></p>
+<p>淡入、滑入、图表绘制与容器高度过渡，则让这些离散更新看起来更连贯。</p>
+<h2 id="数据与动作哪些事交给模型哪些交给宿主">6.
+数据与动作：哪些事交给模型，哪些交给宿主</h2>
+<p>详细版补充了短帖里容易忽略的数据通道。</p>
+<p>对于部分图片组件，模型只描述要找什么图片。标签完整后，由服务端搜索、检查
+URL，再把结果放入响应数据。对于部分商品信息，模型可以引用工具结果 ID
+对应的价格、商家等字段，服务端提供真实字段值，避免让模型重新抄写。</p>
+<p>这能减少某些复制错误，但不代表所有数据都绕过模型。作者也观察到，部分天气数据仍由模型写进回答；图片搜索也可能找错，而且模型未必看到最终图片。</p>
+<p>动作则通过宿主提供的有限接口执行，例如复制文字、打开链接、查看实体，以及
+<code>issueNewTurn</code>。</p>
+<p>其中 <code>issueNewTurn</code>
+用于把界面里的选择组织成一条新用户消息。例如用户先选风格和颜色，再按按钮，程序把这些值写入消息，让模型继续生成。</p>
+<p><strong>本地状态不会自动成为模型上下文。</strong>
+按作者观察，模型看到的是动作提交的文本；如果没有把相关状态放进去，模型就不知道用户刚刚选了什么。后续回答也会生成新界面，而非直接修改原来那张界面。</p>
+<h2 id="组件目录之外还有-appblock">7. 组件目录之外，还有 AppBlock</h2>
+<p>常规回答受组件目录约束。作者在客户端注册表中找到约 70 个组件，其中 39
+个出现在抓取样本里；这是当时版本与样本的统计。</p>
+<p>预定义组件让样式更统一，也给属性校验提供明确边界。但鼓机、音频合成等需求可能超出组件能力。</p>
+<p>对此，作者观察到 <strong>AppBlock</strong> 路径：模型可以生成包含
+HTML、CSS 和 JavaScript 的独立小应用，由独立域名上的可见 iframe
+承载。它使用另一套宿主机制，通过基础样式、主题变量和尺寸适配融入聊天页面。</p>
+<p>所以原帖“模型不写原始代码”的简述需要加上范围：<strong>常规
+Intelligent UI 组件路径使用 DIL；AppBlock
+允许生成完整网页代码。</strong> DIL 自身也包含 JavaScript 逻辑。</p>
+<h2 id="作者披露的局限">8. 作者披露的局限</h2>
+<p>这套方案把生成界面拆成了清晰的层次，但详细版没有回避实际问题：</p>
+<ul>
+<li><strong>刷新可能丢失状态。</strong>
+流式重编译期间保留状态，不等于刷新后能够恢复。</li>
+<li><strong>模型不自动感知界面状态。</strong>
+需要明确提交给下一轮对话。</li>
+<li><strong>交互操作仍有冗余。</strong> 一次定价控件点击产生 158
+个操作，其中只有 4 个带来实际变化。</li>
+<li><strong>运行成功不代表计算正确。</strong>
+作者展示过切换图表指标后金额异常变化的例子；错误表达式也可能静默消失。</li>
+<li><strong>Markdown 降级会损失信息。</strong> 服务端提供
+<code>fallbackMarkdown</code>，但交互部分会静态化，部分计算内容和循环内容没有出现在降级结果中。</li>
+<li><strong>布局与图片仍可能出错。</strong>
+样本里存在固定列数、固定像素宽度和图片检索偏差。</li>
+</ul>
+<p>这些都是作者对当时样本的观察，不能据此认定每个版本、每种界面都有同样问题。</p>
+<h2 id="工程解读做自己的生成式-ui可以借鉴什么">9.
+工程解读：做自己的生成式 UI，可以借鉴什么</h2>
+<p>以下是基于原文的工程判断。</p>
+<p>这篇分析最有价值的地方，是把生成式 UI
+拆成了可设计、可测试的责任边界：模型负责组合表达，编译器负责格式恢复和校验，运行时负责状态与计算，宿主负责绘制、数据和外部动作。</p>
+<p>如果用在旅行规划里，可以让模型选择地图、地点卡片和偏好表单；把删除地点、切换选项等操作留在本地；在用户点击“重新规划”时，再明确提交当前行程和约束。价格、地址等关键字段尽量绑定工具结果，同时为计算结果加入业务校验。</p>
+<p>这里尤其要区分三个层次：<strong>流式生成时状态不丢、刷新后状态可恢复、下一轮模型知道当前状态</strong>。它们需要分别实现，不能由一个状态
+key 自动解决。</p>
+<p>Thesys 还发布了 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RoZXN5c2Rldi9vcGVuLWludGVsbGlnZW50LXVp">Open Intelligent
+UI<i class="fa fa-external-link-alt"></i></span>，用 OpenUI
+和自定义旅行组件实现类似的地图、图片、可编辑行程体验。它可以作为公开参考，但使用自己的
+OpenUI Lang 与组件系统，不能视为 ChatGPT 内部协议的完整复制。</p>
+<p>该仓库当前示例依赖 OpenUI Gateway
+和服务端密钥，包含图片搜索等在线服务。接入本地模型需要另行调整推理和数据通路，“界面框架可以接不同模型”并不意味着这个示例已经完全离线运行。</p>
+<p>对应用开发者来说，值得带走的是这套分工，以及对状态、工具数据、错误恢复和宿主动作的明确约定。把这些约定做好，生成出来的界面才有机会从一次漂亮演示变成可持续使用的产品能力。</p>
+<h2 id="来源">来源</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9yYWJpX2d1aGEvc3RhdHVzLzIxMDgyMzg0MzIzNTUxMjM1NzI=">Rabi
+Shanker Guha 的原帖与 X 长文<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cub3BlbnVpLmNvbS9ibG9nL2hvdy1jaGF0Z3B0LWludGVsbGlnZW50LXVpLXdvcmtz">Thesys
+Engineering Team：How ChatGPT Intelligent UI
+works<i class="fa fa-external-link-alt"></i></span>，2026-10-08，本文技术细节的主要来源。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RoZXN5c2Rldi9vcGVuLWludGVsbGlnZW50LXVp">Open
+Intelligent UI 源码与
+README<i class="fa fa-external-link-alt"></i></span>，用于核对开源示例的实现方式与依赖。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/comp5416-assignment-http-caching-proxy.html" rel="prev" title="COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy">
+                  <i class="fa fa-angle-left"></i> COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/pi-durable.html" rel="next" title="Pi Durable 详解：让 Agent 在崩溃后继续工作">
+                  Pi Durable 详解：让 Agent 在崩溃后继续工作 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="INFO6007 Week 02 Tutorial 完整解析。UniConnect 手机应用的三重约束权衡挑战：Change A 范围增加、Change B 时间缩短至 8 周、Change C 预算削减 25% 三种变更的逐条分析，含受影响的约束、建议应对、质量与风险影响，以及三者共同揭示的「质量是隐藏泄压口」这一核心洞见。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO6007 Week 02 Tutorial 解析：三重约束权衡挑战">
+<meta property="og:url" content="https://qiao1.top/posts/info6007-week02-tutorial-triple-constraint.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="INFO6007 Week 02 Tutorial 完整解析。UniConnect 手机应用的三重约束权衡挑战：Change A 范围增加、Change B 时间缩短至 8 周、Change C 预算削减 25% 三种变更的逐条分析，含受影响的约束、建议应对、质量与风险影响，以及三者共同揭示的「质量是隐藏泄压口」这一核心洞见。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-02T09:30:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.477Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="INFO6007">
+<meta property="article:tag" content="Project-Management">
+<meta property="article:tag" content="Trade-off">
+<meta property="article:tag" content="Triple-Constraint">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/info6007-week02-tutorial-triple-constraint.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/info6007-week02-tutorial-triple-constraint.html","path":"posts/info6007-week02-tutorial-triple-constraint.html","title":"INFO6007 Week 02 Tutorial 解析：三重约束权衡挑战"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO6007 Week 02 Tutorial 解析：三重约束权衡挑战 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/info6007-week02-tutorial-triple-constraint.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#info6007-week-02-tutorial-%E8%A7%A3%E6%9E%90%E4%B8%89%E9%87%8D%E7%BA%A6%E6%9D%9F%E6%9D%83%E8%A1%A1%E6%8C%91%E6%88%98"><span class="nav-text">INFO6007 Week 02
+Tutorial 解析：三重约束权衡挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E5%8F%A5%E8%AF%9D%E9%A1%BA%E5%B8%A6%E8%AF%81%E5%AE%9E%E4%BA%86%E8%AF%BE%E7%A8%8B%E7%9A%84%E5%9B%BA%E5%AE%9A%E8%8A%82%E5%A5%8F"><span class="nav-text">这句话顺带证实了课程的固定节奏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80tutorial-%E7%9B%AE%E6%A0%87%E4%B8%8E%E7%BB%93%E6%9E%84"><span class="nav-text">一、Tutorial 目标与结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cpart-a%E6%AC%A2%E8%BF%8E%E4%B8%8E%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D"><span class="nav-text">二、Part A：欢迎与自我介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89part-b%E4%B8%89%E9%87%8D%E7%BA%A6%E6%9D%9F%E6%9D%83%E8%A1%A1%E6%8C%91%E6%88%98"><span class="nav-text">三、Part B：三重约束权衡挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E5%9F%BA%E7%BA%BF"><span class="nav-text">场景基线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E4%B8%AA%E8%A6%81%E5%9B%9E%E7%AD%94%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">五个要回答的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bchange-a%E8%8C%83%E5%9B%B4%E5%A2%9E%E5%8A%A0"><span class="nav-text">四、Change A：范围增加</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%8C%96%E7%9A%84%E7%BA%A6%E6%9D%9F"><span class="nav-text">① 变化的约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%97%B6%E9%97%B4%E5%92%8C%E6%88%90%E6%9C%AC%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">② 对时间和成本的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E5%BA%94%E5%AF%B9"><span class="nav-text">③ 建议应对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E5%BD%B1%E5%93%8D%E4%B8%8E%E9%A3%8E%E9%99%A9"><span class="nav-text">④ 质量影响与风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E5%BA%94%E5%AF%B9%E6%98%AF%E6%81%B0%E5%BD%93%E7%9A%84"><span class="nav-text">⑤ 为什么这个应对是恰当的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94change-b%E6%97%B6%E9%97%B4%E7%BC%A9%E7%9F%AD"><span class="nav-text">五、Change B：时间缩短</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%8C%96%E7%9A%84%E7%BA%A6%E6%9D%9F-1"><span class="nav-text">① 变化的约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%8C%83%E5%9B%B4%E5%92%8C%E6%88%90%E6%9C%AC%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">② 对范围和成本的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E5%BA%94%E5%AF%B9-1"><span class="nav-text">③ 建议应对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E5%BD%B1%E5%93%8D%E4%B8%8E%E9%A3%8E%E9%99%A9-1"><span class="nav-text">④ 质量影响与风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E5%BA%94%E5%AF%B9%E6%98%AF%E6%81%B0%E5%BD%93%E7%9A%84-1"><span class="nav-text">⑤ 为什么这个应对是恰当的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADchange-c%E6%88%90%E6%9C%AC%E5%89%8A%E5%87%8F"><span class="nav-text">六、Change C：成本削减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%8C%96%E7%9A%84%E7%BA%A6%E6%9D%9F-2"><span class="nav-text">① 变化的约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%8C%83%E5%9B%B4%E5%92%8C%E6%97%B6%E9%97%B4%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">② 对范围和时间的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E5%BA%94%E5%AF%B9-2"><span class="nav-text">③ 建议应对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E5%BD%B1%E5%93%8D%E4%B8%8E%E9%A3%8E%E9%99%A9-2"><span class="nav-text">④ 质量影响与风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA%E5%BA%94%E5%AF%B9%E6%98%AF%E6%81%B0%E5%BD%93%E7%9A%84-2"><span class="nav-text">⑤ 为什么这个应对是恰当的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E4%B8%89%E7%A7%8D%E5%8F%98%E6%9B%B4%E7%9A%84%E5%AF%B9%E7%85%A7%E6%80%BB%E7%BB%93%E7%AD%94%E6%A1%88%E5%8E%9F%E6%96%87%E8%A1%A8%E6%A0%BC"><span class="nav-text">七、三种变更的对照总结（答案原文表格）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%9D%A1%E5%BA%94%E5%AF%B9%E7%AD%96%E7%95%A5%E7%9A%84%E5%85%B1%E5%90%8C%E7%BB%93%E6%9E%84"><span class="nav-text">三条应对策略的共同结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E8%AF%84%E5%88%86%E6%8F%90%E7%A4%BA"><span class="nav-text">一个重要的评分提示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABpart-c%E5%B0%8F%E7%BB%84%E9%A1%B9%E7%9B%AE"><span class="nav-text">八、Part C：小组项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E8%80%83%E7%82%B9%E9%87%8D%E7%82%B9"><span class="nav-text">九、考点重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%8E%E8%AE%B2%E4%B9%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">十、与讲义的关系</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/info6007-week02-tutorial-triple-constraint.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO6007 Week 02 Tutorial 解析：三重约束权衡挑战 | Joey">
+      <meta itemprop="description" content="INFO6007 Week 02 Tutorial 完整解析。UniConnect 手机应用的三重约束权衡挑战：Change A 范围增加、Change B 时间缩短至 8 周、Change C 预算削减 25% 三种变更的逐条分析，含受影响的约束、建议应对、质量与风险影响，以及三者共同揭示的「质量是隐藏泄压口」这一核心洞见。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO6007 Week 02 Tutorial 解析：三重约束权衡挑战
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-02 09:30:00" itemprop="dateCreated datePublished" datetime="2026-09-02T09:30:00Z">2026-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/INFO6007/" itemprop="url" rel="index"><span itemprop="name">INFO6007</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">INFO6007 Week 02 Tutorial 完整解析。UniConnect 手机应用的三重约束权衡挑战：Change A 范围增加、Change B 时间缩短至 8 周、Change C 预算削减 25% 三种变更的逐条分析，含受影响的约束、建议应对、质量与风险影响，以及三者共同揭示的「质量是隐藏泄压口」这一核心洞见。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="info6007-week-02-tutorial-解析三重约束权衡挑战">INFO6007 Week 02
+Tutorial 解析：三重约束权衡挑战</h1>
+<blockquote>
+<p><strong>课程</strong>：INFO6007 — Project Management in IT，Semester
+2 2026
+<strong>来源</strong>：<code>Tutorial Sheet - INFO6007 Week 02.pdf</code>
++ <code>Tutorial Answers - Week 2.pdf</code></p>
+<p><strong>这是本课程的第一次 tutorial</strong>（Week 1 没有
+tutorial）。 <strong>它练的是 <a href="/posts/info6007-week01-introduction.html">Week 01
+讲义</a>的三重约束</strong> —— <strong>答案文档开头原文写着</strong>：
+<strong>"Drawing from Week 1 lecture, students will reinforce their
+understanding of triple constraints scope, time, and quality by applying
+it to a given scenario."</strong></p>
+</blockquote>
+<h2 id="这句话顺带证实了课程的固定节奏">这句话顺带证实了课程的固定节奏</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Tutorial</th>
+<th style="text-align: left;">实际练的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Week 2（本文）</strong></td>
+<td style="text-align: left;"><strong>Week 1（三重约束）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="/posts/info6007-week03-tutorial-methodology-stakeholder.html">Week
+3</a></td>
+<td style="text-align: left;"><strong>Week
+2</strong>（方法论、干系人分析）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="/posts/info6007-week04-tutorial-scope-wbs-critical-path.html">Week
+4</a></td>
+<td style="text-align: left;"><strong>Week
+3</strong>（范围蔓延、WBS、关键路径）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="/posts/info6007-week05-tutorial-evm-exercises.html">Week
+5</a></td>
+<td style="text-align: left;"><strong>Week 4</strong>（EVM 计算）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>tutorial 恒比 lecture 慢一周</strong> —— 从第一次 tutorial
+就是如此，并由课程文档本身写明。 <strong>复习策略：想练某周 lecture
+的内容，去看下一周的 tutorial。</strong></p>
+</blockquote>
+<hr>
+<h2 id="一tutorial-目标与结构">一、Tutorial 目标与结构</h2>
+<p><strong>目标</strong>：让大家互相认识，并通过<strong>基于场景的实践学习</strong>来应用三重约束。<strong>依托
+Week 1 讲义</strong>，学生将通过把 <strong>scope、time、quality</strong>
+应用到给定场景来巩固理解。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">部分</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>A</strong></td>
+<td style="text-align: left;">欢迎与自我介绍</td>
+<td style="text-align: left;">破冰</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>B</strong></td>
+<td style="text-align: left;"><strong>三重约束权衡挑战</strong></td>
+<td style="text-align: left;"><strong>核心活动</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>C</strong></td>
+<td style="text-align: left;">小组项目</td>
+<td style="text-align: left;">事务</td>
+</tr>
+</tbody>
+</table>
+<p><strong>学习成果</strong>：<strong>LO1</strong>
+理解各项目管理知识领域；<strong>LO4</strong>
+初步掌握项目管理工具与实践。</p>
+<blockquote>
+<p>💡 注意目标里写的是 <strong>"scope, time, and quality"</strong>
+而不是 "scope, time, and cost"。 <strong>讲义 p34 的三重约束是「范围 /
+时间 / 成本」</strong>，<strong>但这份 tutorial 刻意把 quality
+拉了进来</strong> ——
+这个措辞上的差异正是整个活动想让你体会的：<strong>质量是那个被挤压时最先让步的东西。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二part-a欢迎与自我介绍">二、Part A：欢迎与自我介绍</h2>
+<p>tutor 会引导大家互相介绍，可以聊：</p>
+<ul>
+<li><strong>姓名与专业背景</strong></li>
+<li><strong>你能为项目团队贡献的一项技能或经验</strong></li>
+<li><strong>你希望在 INFO6007 中培养的一项技能</strong></li>
+<li><strong>一个非学术兴趣</strong></li>
+</ul>
+<blockquote>
+<p>💡 中间两项其实是在为<strong>后面的组队</strong>做铺垫 ——
+记下谁擅长什么，Week 3–4 组队时用得上。</p>
+</blockquote>
+<hr>
+<h2 id="三part-b三重约束权衡挑战">三、Part B：三重约束权衡挑战</h2>
+<blockquote>
+<p><strong>以 3–4 人小组进行</strong>（⚠️
+<strong>不一定是你的项目组</strong>）。</p>
+</blockquote>
+<h3 id="场景基线">场景基线</h3>
+<blockquote>
+<p>大学正在开发 <strong>UniConnect</strong> ——
+一款面向学生的手机应用，<strong>项目外包给本地软件公司</strong>。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">约束</th>
+<th style="text-align: left;">基线</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Scope（范围）</strong></td>
+<td style="text-align: left;"><strong>四项功能</strong>：<strong>个人课表、作业提醒、校园地图、紧急通知</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Time（时间）</strong></td>
+<td style="text-align: left;"><strong>12
+周</strong>，须在下学期开始前就绪</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cost（成本）</strong></td>
+<td style="text-align: left;"><strong>最高预算 $180,000</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Quality（质量期望）</strong></td>
+<td style="text-align: left;"><strong>应用必须是安全的、无障碍的、可靠的</strong>（secure,
+accessible, reliable）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>注意「外包给本地软件公司」这个设定</strong> ——
+它让后面的分析多了一层：<strong>约束变化不只是内部调整，还涉及与供应商重新谈判。</strong></p>
+</blockquote>
+<h3 id="五个要回答的问题">五个要回答的问题</h3>
+<ol type="1">
+<li><strong>识别哪个约束发生了变化</strong></li>
+<li><strong>解释对另外两个约束的可能影响</strong></li>
+<li><strong>建议项目应如何应对</strong></li>
+<li><strong>指出一个对质量或项目风险的可能影响</strong></li>
+<li><strong>准备一个 60 秒的汇报</strong>（可用文档、在线协作文档或
+PPT）</li>
+</ol>
+<hr>
+<h2 id="四change-a范围增加">四、Change A：范围增加</h2>
+<blockquote>
+<p><strong>场景</strong>：<strong>发起人要求增加「实时聊天」和「教室预订」功能。截止日期和预算保持不变。</strong></p>
+</blockquote>
+<h3 id="变化的约束">① 变化的约束</h3>
+<p><strong>范围增加</strong> —— 新增 <strong>live chat</strong> 和
+<strong>room booking</strong> 两项功能。</p>
+<h3 id="对时间和成本的影响">② 对时间和成本的影响</h3>
+<p><strong>额外功能需要更多的分析、设计、开发、集成和测试。</strong></p>
+<p><strong>如果完整接受新范围，项目通常需要更多时间、更多预算，或两者都要。</strong></p>
+<blockquote>
+<p>⚠️<strong>答案原文的关键句</strong>： <strong>「保持 12 周期限和
+$180,000 预算不变，会造成删减其他工作或仓促交付的压力。」</strong></p>
+<p><strong>注意这句话在说什么</strong>：<strong>当三条边有两条被锁死、第三条却在增长时，压力必然要找出口</strong>
+—— 要么砍掉别的工作（隐性缩范围），要么赶工（牺牲质量）。</p>
+</blockquote>
+<h3 id="建议应对">③ 建议应对</h3>
+<p><strong>把原有四项功能保留在 12 周的版本内，把 live chat 和 room
+booking 移到后续版本。</strong></p>
+<p><strong>如果发起人坚持两项功能都要在首发时上线，则必须在承诺变更之前修订已批准的进度或预算。</strong></p>
+<h3 id="质量影响与风险">④ 质量影响与风险</h3>
+<p><strong>仓促测试可能引入安全、隐私、无障碍、集成或可靠性问题。</strong></p>
+<p><strong>这对 live chat
+尤其重要，因为它可能处理个人信息。</strong></p>
+<blockquote>
+<p><strong>这个细节值得学</strong>：答案没有泛泛地说「质量会下降」，而是<strong>指出了具体哪个功能带来哪类风险</strong>
+—— <strong>实时聊天 → 处理个人信息 →
+隐私与安全风险</strong>。<strong>答题时具体化永远比笼统更有说服力。</strong></p>
+</blockquote>
+<h3 id="为什么这个应对是恰当的">⑤ 为什么这个应对是恰当的</h3>
+<blockquote>
+<p><strong>答案原文</strong>：<strong>「它让权衡变得可见（makes the
+trade-off
+visible），保护了既有的期限和预算，并防止质量成为吸收这次变更的隐藏约束。」</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>"prevents quality from becoming the hidden constraint that
+absorbs the change"</strong> —— <strong>这是整个 tutorial
+最重要的一句话。</strong>
+<strong>三重约束里没有质量，所以当三条边都不让步时，质量就成了那个默默买单的人。</strong></p>
+</blockquote>
+<hr>
+<h2 id="五change-b时间缩短">五、Change B：时间缩短</h2>
+<blockquote>
+<p><strong>场景</strong>：<strong>应用必须在 8 周而非 12
+周内交付。预算保持不变。</strong></p>
+</blockquote>
+<h3 id="变化的约束-1">① 变化的约束</h3>
+<p><strong>时间从 12 周减少到 8 周</strong> —— <strong>减少 4
+周，约为三分之一</strong>。</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -1.552ex;" xmlns="http://www.w3.org/2000/svg" width="22.343ex" height="4.613ex" role="img" focusable="false" viewBox="0 -1353 9875.6 2039"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\frac{12 - 8}{12} = \frac{4}{12} \approx 33.3\%
+"><g data-mml-node="mfrac" data-latex="\frac{12 - 8}{12}"><g data-mml-node="mrow" data-latex="12 - 8" transform="translate(220,676)"><g data-mml-node="mn" data-latex="12"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path></g><g data-mml-node="mo" data-latex="-" transform="translate(1222.2,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="8" transform="translate(2222.4,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path></g></g><g data-mml-node="mn" data-latex="12" transform="translate(1081.2,-686)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path></g><rect width="2922.4" height="60" x="120" y="220"></rect></g><g data-mml-node="mo" data-latex="=" transform="translate(3440.2,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mfrac" data-latex="\frac{4}{12}" transform="translate(4496,0)"><g data-mml-node="mn" data-latex="4" transform="translate(470,676)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g><g data-mml-node="mn" data-latex="12" transform="translate(220,-686)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path></g><rect width="1200" height="60" x="120" y="220"></rect></g><g data-mml-node="mo" data-latex="\approx" transform="translate(6213.8,0)"><path data-c="2248" d="M717 432L717 434C717 445 712 450 701 450C694 450 689 446 686 439C679 404 665 377 645 360C612 331 577 317 539 317C510 317 480 328 449 349C392 390 358 413 347 420C304 445 266 457 232 457C125 457 77 382 56 284L56 281C56 271 61 266 72 266C81 266 86 270 88 278C95 313 108 339 128 356C161 385 196 399 235 399C264 399 293 388 324 366C381 326 415 303 426 296C469 271 507 259 541 259C648 259 696 334 717 432M717 216L717 219C717 229 712 234 701 234C694 234 689 230 686 223C679 188 665 162 645 144C612 115 577 101 539 101C510 101 480 112 449 134C392 174 358 197 347 204C304 229 266 241 232 241C125 241 77 166 56 68L56 66C56 55 61 50 72 50C81 50 86 54 88 62C95 97 108 123 128 140C161 169 196 183 235 183C264 183 293 172 324 151C381 110 415 87 426 80C469 55 507 43 541 43C648 43 696 118 717 216Z"></path></g><g data-mml-node="mn" data-latex="33.3" transform="translate(7264.6,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(500,0)"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(1000,0)"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(1278,0)"></path></g><g data-mml-node="mi" data-latex="\%" transform="translate(9042.6,0)"><path data-c="25" d="M643-56C687-56 721-32 746 17C766 56 776 99 776 147C776 194 766 238 746 278C721 327 686 351 643 351C597 351 560 328 531 282C506 242 494 197 494 148C494 98 506 53 530 14C559-33 596-56 643-56M583 640L148-10C141-20 138-27 138-32C138-48 146-56 162-56C170-56 178-50 185-39L685 706C691 715 694 721 694 726C694 742 686 750 670 750C662 750 654 745 646 735C600 673 538 642 461 642C394 642 333 667 279 717C256 739 231 750 205 750C158 750 121 727 93 681C68 641 56 596 56 547C56 497 68 452 92 413C121 366 158 343 205 343C249 343 283 367 308 416C328 455 338 498 338 546C338 583 332 617 321 649C367 624 414 612 462 612C510 612 550 621 583 640M644 321C677 321 702 299 721 255C736 221 743 185 743 148C743 110 736 74 722 40C703-4 677-26 644-26C619-26 597-5 587 15C571 43 563 87 563 147C563 214 576 281 608 307C620 316 632 321 644 321M206 720C239 720 264 698 283 654C298 620 305 584 305 547C305 509 298 473 284 439C265 395 239 373 206 373C195 373 183 378 171 387C134 415 125 468 125 546C125 613 138 680 170 706C182 715 194 720 206 720Z"></path></g></g></g></svg></mjx-container></span></p>
+<h3 id="对范围和成本的影响">② 对范围和成本的影响</h3>
+<ul>
+<li><strong>若要维持完整范围，项目可能需要额外的人手或资源，这会增加成本</strong></li>
+<li><strong>但因为预算是固定的，更现实的应对是减少或推迟部分范围</strong></li>
+<li>⚠️ <strong>试图在 8
+周内同时维持完整范围和预算，会造成巨大的交付压力</strong></li>
+</ul>
+<blockquote>
+<p><strong>这段推理的逻辑链值得完整记住</strong>： <strong>时间↓ →
+想保范围就得加资源 → 但预算锁死不能加资源 → 所以只能砍范围。</strong>
+<strong>这就是三重约束的实际用法：不是三个独立的量，而是「锁死两个，第三个就被决定了」。</strong></p>
+</blockquote>
+<h3 id="建议应对-1">③ 建议应对</h3>
+<p><strong>与发起人商定一个更小的首发版本。</strong></p>
+<p><strong>答案给的具体例子</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">版本</th>
+<th style="text-align: left;">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>8 周首发</strong></td>
+<td style="text-align: left;"><strong>个人课表 + 紧急通知</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>后续版本</strong></td>
+<td style="text-align: left;"><strong>作业提醒 + 校园地图</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>最终的功能优先级应与用户和发起人共同确认。</strong></p>
+<blockquote>
+<p>💡 <strong>为什么答案挑了「课表 + 紧急通知」</strong>：
+<strong>课表是这个 App
+存在的理由（核心价值），紧急通知关乎安全（不可延后）</strong> ——
+<strong>而作业提醒和校园地图都是「有更好，没有也能过」的增强功能。</strong>
+<strong>这就是按业务价值排优先级的思路，不是随便砍两个。</strong></p>
+</blockquote>
+<h3 id="质量影响与风险-1">④ 质量影响与风险</h3>
+<p><strong>压缩的进度可能减少用于安全、无障碍、集成和可靠性测试的时间，增加缺陷或发布失败的可能性。</strong></p>
+<h3 id="为什么这个应对是恰当的-1">⑤ 为什么这个应对是恰当的</h3>
+<blockquote>
+<p><strong>答案原文</strong>：<strong>「它在满足更早期限和固定预算的同时保护了必要的质量工作。它还向干系人提供了一个可用的首发版本，而不是一个包含全部功能但不可靠的版本。」</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>最后半句是关键</strong>：<strong>「可用的少数功能」优于「不可靠的全部功能」。</strong>
+💡 这正好呼应 <a href="/posts/info6007-week01-introduction.html">Week
+01</a>那条误解：<strong>「按时按预算完成 = 成功」是错的 ——
+如果产品不可用，就不是成功。</strong></p>
+</blockquote>
+<hr>
+<h2 id="六change-c成本削减">六、Change C：成本削减</h2>
+<blockquote>
+<p><strong>场景</strong>：<strong>预算削减 25%，从 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="12.318ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 5444.7 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="180,000 降至
+"><g data-mml-node="mn" data-latex="180"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1500,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1944.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mi" data-latex="降" transform="translate(3444.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">降</text></g><g data-mml-node="mi" data-latex="至" transform="translate(4444.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">至</text></g></g></g></svg></mjx-container>135,000。截止日期保持不变。</strong></p>
+</blockquote>
+<h3 id="变化的约束-2">① 变化的约束</h3>
+<p><strong>成本减少 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="11.187ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 4944.7 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="45,000，从 "><g data-mml-node="mn" data-latex="45"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(500,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1000,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1444.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mi" data-latex="，" transform="translate(2944.7,0)"><text data-variant="italic" transform="scale(1,-1)" font-size="884px" font-family="serif" font-style="italic">，</text></g><g data-mml-node="mi" data-latex="从" transform="translate(3944.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">从</text></g></g></g></svg></mjx-container>180,000 降到 $135,000，降幅
+25%。</strong></p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -1.989ex;" xmlns="http://www.w3.org/2000/svg" width="50.872ex" height="5.05ex" role="img" focusable="false" viewBox="0 -1353 22485.2 2232"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+180{,}000 - 135{,}000 = \mathbf{\$45{,}000}, \qquad
+\frac{45{,}000}{180{,}000} = \mathbf{25\%}
+"><g data-mml-node="mn" data-latex="180{,}000"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><g data-mml-node="mo" data-latex="-" transform="translate(3500.2,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="135{,}000" transform="translate(4500.4,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(8056.2,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{\$45{,}000}" data-mjx-texclass="ORD" transform="translate(9112,0)"><g data-mml-node="mi" data-latex="\$"><path data-c="24" d="M510 210C510 280 478 332 444 366C397 412 342 422 311 428L311 652C334 650 416 643 448 581C399 579 385 543 385 519C385 474 421 456 447 456C465 456 510 466 510 522C510 603 458 690 311 699L311 750L264 750L264 699C116 688 64 585 64 498C64 444 85 397 123 359C171 312 223 302 264 293L264 42C154 52 129 113 123 127C176 127 189 165 189 189C189 236 150 252 127 252C119 252 64 249 64 185C64 107 110 6 264-5L264-56L311-56L311-5C459 9 510 117 510 210M264 439C173 454 144 507 144 546C144 599 185 646 264 652M430 162C430 101 389 50 311 42L311 283C383 271 430 220 430 162Z"></path></g><g data-mml-node="mn" data-latex="45{,}000" transform="translate(575,0)"><path data-c="1D7D2" d="M542 0L542 47L445 47L445 156L542 156L542 203L445 203L445 624C445 651 443 656 415 656C394 656 393 655 381 640L32 203L32 156L320 156L320 47L208 47L208 0C246 3 337 3 380 3C420 3 507 3 542 0M331 203L84 203L331 513Z"></path><path data-c="1D7D3" d="M517 201C517 316 438 409 290 409C261 409 208 406 161 374L161 506C189 501 200 499 234 499C380 499 472 612 472 637C472 644 470 655 458 655C455 655 454 655 443 651C386 629 333 623 290 623C214 623 161 642 135 651C126 654 125 655 122 655C108 655 108 644 108 628L108 336C108 318 108 305 130 305C143 305 145 309 152 317C191 363 245 373 286 373C375 373 375 285 375 205C375 132 375 32 255 32C231 32 168 37 126 94C162 96 191 120 191 161C191 214 148 229 124 229C109 229 57 220 57 159C57 74 135-11 259-11C419-11 517 79 517 201Z" transform="translate(575,0)"></path><path data-c="2C" d="M250 31C250 99 216 156 158 156C112 156 81 121 81 78C81 38 108 0 159 0C191 0 211 17 214 20C206-89 141-142 120-160C114-165 111-168 111-174C111-184 122-194 130-194C145-194 250-108 250 31Z" transform="translate(1150,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(1469,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2044,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2619,0)"></path></g></g><g data-mml-node="mo" data-latex="," transform="translate(12881,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mspace" data-latex="\qquad" transform="translate(13159,0)"></g><g data-mml-node="mfrac" data-latex="\frac{45{,}000}{180{,}000}" transform="translate(15325.7,0)"><g data-mml-node="mn" data-latex="45{,}000" transform="translate(470,676)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g><g data-mml-node="mn" data-latex="180{,}000" transform="translate(220,-686)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><rect width="3478" height="60" x="120" y="220"></rect></g><g data-mml-node="mo" data-latex="=" transform="translate(19321.4,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{25\%}" data-mjx-texclass="ORD" transform="translate(20377.2,0)"><g data-mml-node="mn" data-latex="25"><path data-c="1D7D0" d="M517 222L470 222C467 202 458 138 444 131C433 125 358 125 342 125L195 125C242 164 294 207 339 240C453 324 517 371 517 466C517 581 413 655 272 655C151 655 57 593 57 503C57 444 105 429 129 429C161 429 201 451 201 501C201 553 159 569 144 573C173 597 211 608 247 608C333 608 379 540 379 465C379 396 341 328 271 257L70 52C57 40 57 38 57 18L57 0L486 0Z"></path><path data-c="1D7D3" d="M517 201C517 316 438 409 290 409C261 409 208 406 161 374L161 506C189 501 200 499 234 499C380 499 472 612 472 637C472 644 470 655 458 655C455 655 454 655 443 651C386 629 333 623 290 623C214 623 161 642 135 651C126 654 125 655 122 655C108 655 108 644 108 628L108 336C108 318 108 305 130 305C143 305 145 309 152 317C191 363 245 373 286 373C375 373 375 285 375 205C375 132 375 32 255 32C231 32 168 37 126 94C162 96 191 120 191 161C191 214 148 229 124 229C109 229 57 220 57 159C57 74 135-11 259-11C419-11 517 79 517 201Z" transform="translate(575,0)"></path></g><g data-mml-node="mi" data-latex="\%" transform="translate(1150,0)"><path data-c="25" d="M797 719C797 739 781 750 767 750C752 750 745 741 737 731C693 679 628 644 540 644C424 644 344 702 314 724C293 739 269 750 236 750C152 750 64 689 64 549C64 404 155 347 236 347C310 347 383 406 383 548C383 566 383 602 368 649C434 619 492 608 541 608C562 608 608 610 658 630L171 0C171 0 160-14 160-25C160-42 174-56 191-56C205-56 210-50 217-40L786 695C793 704 797 709 797 719M893 145C893 292 816 347 746 347C662 347 574 286 574 146C574 1 665-56 746-56C820-56 893 3 893 145M336 549C336 418 276 383 238 383C167 383 167 486 167 548C167 611 167 714 238 714C281 714 336 673 336 549M846 146C846 15 786-20 748-20C677-20 677 83 677 145C677 208 677 311 748 311C791 311 846 270 846 146Z"></path></g></g></g></g></svg></mjx-container></span></p>
+<h3 id="对范围和时间的影响">② 对范围和时间的影响</h3>
+<ul>
+<li><strong>项目能资助的员工工时、专业服务或其他资源变少</strong></li>
+<li><strong>维持完整范围通常需要更多时间</strong></li>
+<li><strong>但因为 12
+周期限固定不变，项目很可能需要减少或推迟部分范围</strong></li>
+</ul>
+<blockquote>
+<p><strong>和 Change B 完全对称的推理</strong>：<strong>成本↓ →
+想保范围就得延长工期 → 但工期锁死 → 所以只能砍范围。</strong></p>
+</blockquote>
+<h3 id="建议应对-2">③ 建议应对</h3>
+<p><strong>请发起人和用户对原有功能排定优先级。</strong></p>
+<p><strong>答案给的例子</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">决定</th>
+<th style="text-align: left;">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>保留首发</strong></td>
+<td style="text-align: left;"><strong>个人课表 + 紧急通知</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>推迟</strong></td>
+<td style="text-align: left;"><strong>校园地图 + 作业提醒</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>必要的安全、无障碍和测试工作应在削减后的预算内予以保留。</strong></p>
+<blockquote>
+<p><strong>最后这句是本题的答题要害</strong>：<strong>预算被砍时，第一反应不该是砍测试。</strong>
+<strong>答案明确要求「保住必要的质量工作」</strong> ——
+这再次呼应了「质量不能成为隐藏泄压口」。</p>
+</blockquote>
+<h3 id="质量影响与风险-2">④ 质量影响与风险</h3>
+<p><strong>给外包团队的资源不足可能导致仓促工作、技术债、缺陷，或就「供应商在降价后能交付什么」产生分歧。</strong></p>
+<blockquote>
+<p><strong>注意这条特别提到了「外包」这个设定</strong>：<strong>降价后与供应商的期望管理本身就是一个风险源</strong>
+——
+<strong>你以为少给钱只是少做功能，供应商可能理解成什么都做但都做得糙。</strong></p>
+</blockquote>
+<h3 id="为什么这个应对是恰当的-2">⑤ 为什么这个应对是恰当的</h3>
+<blockquote>
+<p><strong>答案原文</strong>：<strong>「它直接回应了削减的预算，而没有假装原有的范围、期限和质量可以全部保持不变。」</strong></p>
+</blockquote>
+<hr>
+<h2 id="七三种变更的对照总结答案原文表格">七、三种变更的对照总结（答案原文表格）</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">变更</th>
+<th style="text-align: left;">产生的压力</th>
+<th style="text-align: left;">应对示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>范围增加</strong></td>
+<td style="text-align: left;"><strong>通常需要更多时间和/或成本</strong></td>
+<td style="text-align: left;"><strong>分期交付新功能，或修订基线</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>时间减少</strong></td>
+<td style="text-align: left;"><strong>通常需要更多成本和/或更少范围</strong></td>
+<td style="text-align: left;"><strong>交付更小的首发版本</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>成本减少</strong></td>
+<td style="text-align: left;"><strong>通常需要更多时间和/或更少范围</strong></td>
+<td style="text-align: left;"><strong>排定功能优先级，保住必要的质量工作</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="三条应对策略的共同结构">三条应对策略的共同结构</h3>
+<blockquote>
+<p>把三行放在一起看，会发现<strong>它们其实是同一个动作的三种表述</strong>：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">步骤</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>承认权衡真实存在</strong>，不假装三者可以同时不变</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>让权衡显性化（make it
+visible）</strong>，摆到发起人面前</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>优先保住核心价值与必要的质量工作</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;"><strong>把其余部分分期/推迟，或正式修订基线</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三份答案的措辞里反复出现同一件事</strong>： - Change
+A：<strong>"prevents quality from becoming the hidden
+constraint"</strong> - Change B：<strong>"protecting essential quality
+work"</strong> - Change C：<strong>"Essential security, accessibility
+and testing work should be preserved"</strong></p>
+<p><strong>这就是这个 tutorial
+真正想教的东西：三重约束是三条边，但被牺牲的往往是那个不在图上的第四样东西
+—— 质量。</strong></p>
+</blockquote>
+<h3 id="一个重要的评分提示">一个重要的评分提示</h3>
+<blockquote>
+<p>⚠️ <strong>答案文档开头写着</strong>： <strong>「These are worked
+examples, NOT the only correct answers. Another response may be valid if
+it clearly explains the trade-off and protects the stated quality
+expectation.」</strong></p>
+<p><strong>所以给分点是两个</strong>： <strong>① 清楚地解释权衡；②
+保护既定的质量期望。</strong>
+<strong>只要这两点做到了，具体砍哪个功能不是唯一答案。</strong></p>
+</blockquote>
+<hr>
+<h2 id="八part-c小组项目">八、Part C：小组项目</h2>
+<p><strong>思考潜在的队友</strong> —— <strong>下周（Week
+3）正式开始组队。</strong></p>
+<blockquote>
+<p>💡 <strong>后续时间线</strong>： <strong>Week 3 tutorial</strong>
+开始组建 4–5 人小组 → <strong>Week 4 tutorial</strong> 敲定分组 →
+<strong>Week 5 起改用课程统一创建的 GitHub 仓库与看板</strong>（见 <a href="/posts/info6007-week05-tutorial-evm-exercises.html">Week 05
+Tutorial</a>第五节）。</p>
+</blockquote>
+<hr>
+<h2 id="九考点重点">九、考点重点</h2>
+<ol type="1">
+<li><strong>三重约束的三条传导规则</strong>（与 <a href="/posts/info6007-week01-introduction.html">Week 01 讲义</a> p35
+完全一致）：
+<ul>
+<li><strong>范围↑ ⇒ 时间和/或成本↑</strong></li>
+<li><strong>时间↓ ⇒ 成本↑ 和/或 范围↓</strong></li>
+<li><strong>成本↓ ⇒ 时间↑ 和/或 范围↓</strong></li>
+</ul></li>
+<li><strong>三重约束的实际用法</strong>：<strong>锁死其中两个，第三个就被决定了</strong>
+—— 这是所有权衡推理的核心。</li>
+<li><strong>质量是「隐藏的第四个约束」</strong> ——
+<strong>当三条边都不让步时，质量成为默默买单的那一个</strong>。答题时必须显式保护它。</li>
+<li><strong>数值要记</strong>：<strong>12 → 8 周 = 减少 4 周 ≈
+三分之一</strong>；<strong><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="7.793ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3444.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="180,000 → "><g data-mml-node="mn" data-latex="180"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1500,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1944.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1000 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="180,000 → "><g data-mml-node="mo" data-latex="→"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g></g></g></svg></mjx-container>135,000 = 减少 $45,000 =
+25%</strong>。</li>
+<li><strong>通用应对模板</strong>：<strong>承认权衡 → 让它显性化 →
+保住核心价值和必要质量 → 其余分期或正式修订基线</strong>。</li>
+<li><strong>「可用的少数功能」优于「不可靠的全部功能」</strong> —— 呼应
+Week 1 的成功观。</li>
+<li><strong>答题技巧</strong>：<strong>具体化风险</strong>（如「live
+chat 处理个人信息 → 隐私风险」）比泛泛地说「质量下降」得分更高。</li>
+<li><strong>评分点只有两个</strong>：<strong>清楚解释权衡 +
+保护既定的质量期望</strong>。</li>
+</ol>
+<hr>
+<h2 id="十与讲义的关系">十、与讲义的关系</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Week 2 Lecture</th>
+<th style="text-align: left;">Week 2 Tutorial（本文）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>主题</strong></td>
+<td style="text-align: left;"><a href="/posts/info6007-week02-pm-methodologies.html"><strong>PM
+方法论</strong></a>（瀑布 vs 敏捷、Scrum、Kanban）</td>
+<td style="text-align: left;"><strong>三重约束权衡</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>实际对应周次</strong></td>
+<td style="text-align: left;">Week 2</td>
+<td style="text-align: left;"><strong>Week 1（导论）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>本 tutorial 是 <a href="/posts/info6007-week01-introduction.html">Week 01
+讲义</a>第六节「三重约束」的直接实操</strong>，把讲义 p34–35
+的三条抽象规则放进一个具体场景里跑了一遍。</p>
+<p><strong>它还是后面几周的伏笔</strong>： - <strong>Change A
+的「范围增加但期限预算不变」</strong> = <a href="/posts/info6007-week03-scope-schedule-management.html">Week 3
+讲义</a>里 <strong>Scope Creep</strong> 的标准定义，也是 <a href="/posts/info6007-week04-tutorial-scope-wbs-critical-path.html">Week
+4 Tutorial</a> Part A 的完整场景 - <strong>Change B
+的「加人手以保范围」</strong> = <a href="/posts/info6007-week03-scope-schedule-management.html">Week 3
+讲义</a>的 <strong>Crashing（赶工）</strong>，代价是成本 -
+<strong>三次强调的「保住必要的质量工作」</strong> = <a href="/posts/info6007-week05-quality-management.html">Week 5 讲义</a>的
+<strong>Time vs Quality 权衡</strong>，以及
+<strong>CoNC（不符合成本）</strong> 的由来</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO6007/" rel="tag"><i class="fa fa-tag"></i> INFO6007</a>
+              <a href="/tags/Project-Management/" rel="tag"><i class="fa fa-tag"></i> Project-Management</a>
+              <a href="/tags/Triple-Constraint/" rel="tag"><i class="fa fa-tag"></i> Triple-Constraint</a>
+              <a href="/tags/Trade-off/" rel="tag"><i class="fa fa-tag"></i> Trade-off</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week01-introduction.html" rel="prev" title="INFO6007 Week 01 Introduction 讲课总结">
+                  <i class="fa fa-angle-left"></i> INFO6007 Week 01 Introduction 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week02-pm-methodologies.html" rel="next" title="INFO6007 Week 02 项目管理方法论讲课总结">
+                  INFO6007 Week 02 项目管理方法论讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

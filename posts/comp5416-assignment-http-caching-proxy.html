@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="COMP5416&#x2F;4416 Assignment（HTTP Caching Proxy）作业要求梳理：协议范围、Part 1 转发、Part 2 缓存、Part 3 51200&#x2F;102400 字节上限与 LRU、Part 4 并发与共享缓存，评分分布、提交要求与 AI 使用规定，以及实现思路、易错点和自测清单。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy">
+<meta property="og:url" content="https://qiao1.top/posts/comp5416-assignment-http-caching-proxy.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="COMP5416&#x2F;4416 Assignment（HTTP Caching Proxy）作业要求梳理：协议范围、Part 1 转发、Part 2 缓存、Part 3 51200&#x2F;102400 字节上限与 LRU、Part 4 并发与共享缓存，评分分布、提交要求与 AI 使用规定，以及实现思路、易错点和自测清单。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-08T23:30:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.472Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Assignment">
+<meta property="article:tag" content="COMP5416">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="HTTP">
+<meta property="article:tag" content="LRU-Cache">
+<meta property="article:tag" content="Socket">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/comp5416-assignment-http-caching-proxy.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/comp5416-assignment-http-caching-proxy.html","path":"posts/comp5416-assignment-http-caching-proxy.html","title":"COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/comp5416-assignment-http-caching-proxy.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5416-assignment-%E4%BD%9C%E4%B8%9A%E8%A6%81%E6%B1%82%E6%A2%B3%E7%90%86http-caching-proxy"><span class="nav-text">COMP5416
+Assignment 作业要求梳理：HTTP Caching Proxy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC"><span class="nav-text">一句话概括</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E8%8C%83%E5%9B%B4%E5%85%A8%E7%A8%8B%E9%80%82%E7%94%A8"><span class="nav-text">协议范围（全程适用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-1-http-%E8%BD%AC%E5%8F%91"><span class="nav-text">Part 1 — HTTP 转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82"><span class="nav-text">3.1 接收请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8F%91%E7%BB%99%E6%BA%90%E7%AB%99"><span class="nav-text">3.2 转发给源站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8F%91%E5%93%8D%E5%BA%94"><span class="nav-text">3.3 转发响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%B3%95%E8%AF%B7%E6%B1%82"><span class="nav-text">3.4 非法请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E6%9C%8D%E5%8A%A1"><span class="nav-text">3.5 持续服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-2-%E5%93%8D%E5%BA%94%E7%BC%93%E5%AD%98"><span class="nav-text">Part 2 — 响应缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-3-%E5%AE%B9%E9%87%8F%E4%B8%8E-lru"><span class="nav-text">Part 3 — 容量与 LRU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-4-%E5%B9%B6%E5%8F%91%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Part 4 — 并发客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E4%B8%8E%E8%AF%84%E5%88%86"><span class="nav-text">测试与评分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%A6%81%E6%B1%82"><span class="nav-text">提交要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E6%9C%AF%E8%AF%9A%E4%BF%A1%E4%B8%8E-ai"><span class="nav-text">学术诚信与 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF%E4%B8%8D%E5%90%AB%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-text">实现思路（不含完整代码）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%93%E9%94%99%E7%82%B9%E6%B8%85%E5%8D%95"><span class="nav-text">易错点清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E6%B5%8B%E6%B8%85%E5%8D%95"><span class="nav-text">自测清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0"><span class="nav-text">相关笔记</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/comp5416-assignment-http-caching-proxy.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy | Joey">
+      <meta itemprop="description" content="COMP5416&#x2F;4416 Assignment（HTTP Caching Proxy）作业要求梳理：协议范围、Part 1 转发、Part 2 缓存、Part 3 51200&#x2F;102400 字节上限与 LRU、Part 4 并发与共享缓存，评分分布、提交要求与 AI 使用规定，以及实现思路、易错点和自测清单。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COMP5416 Assignment 作业要求梳理：HTTP Caching Proxy
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-08 23:30:00" itemprop="dateCreated datePublished" datetime="2026-10-08T23:30:00Z">2026-10-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/COMP5416/" itemprop="url" rel="index"><span itemprop="name">COMP5416</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">COMP5416/4416 Assignment（HTTP Caching Proxy）作业要求梳理：协议范围、Part 1 转发、Part 2 缓存、Part 3 51200/102400 字节上限与 LRU、Part 4 并发与共享缓存，评分分布、提交要求与 AI 使用规定，以及实现思路、易错点和自测清单。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5416-assignment-作业要求梳理http-caching-proxy">COMP5416
+Assignment 作业要求梳理：HTTP Caching Proxy</h1>
+<blockquote>
+<p><strong>课程</strong>：COMP5416/COMP4416 — Advanced Network
+Technologies，Semester 2 2026
+<strong>规格文件</strong>：<code>COMP5416_Assignment_Specifications-2.pdf</code>（13
+页）+ Ed 上的 Submission 说明 <strong>截止</strong>：<strong>2026 年 10
+月 16 日（周五，Week 10）23:59</strong>
+<strong>分值</strong>：<strong>100 分</strong>（公开测试 80 + 隐藏测试
+20）；迟交每天扣总分 5%，超过 5 天 0 分
+<strong>提交</strong>：Ed，根目录必须有 <code>proxy.sh</code>；还要
+<code>README.md</code> 和源代码</p>
+<p>⚠️
+本文只整理<strong>作业要求、设计思路与易错点</strong>，<strong>不放完整解题代码</strong>——学校会把作业送查重，代码公开出去被同学抄了，自己也会被牵连。</p>
+</blockquote>
+<h2 id="一句话概括">一句话概括</h2>
+<p>用<strong>原生 TCP socket</strong> 写一个 HTTP 代理：对客户端它是 TCP
+服务器，对源站它是 TCP
+客户端。缓存未命中时去源站取完整响应并转发；命中时直接把之前存下的<strong>原始字节</strong>还给客户端，不碰源站。四个部分在<strong>同一个程序</strong>上逐步叠加：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Part</th>
+<th>要做到什么</th>
+<th>分值（公开 + 隐藏）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — HTTP Forwarding</td>
+<td>解析请求、连对源站、完整且逐字节地返回响应</td>
+<td>24 + 6 = <strong>30</strong></td>
+</tr>
+<tr>
+<td>2 — Response Caching</td>
+<td>精确识别资源、跨连接缓存可缓存响应、区分命中/未命中</td>
+<td>19 + 6 = <strong>25</strong></td>
+</tr>
+<tr>
+<td>3 — Cache Capacity &amp; LRU</td>
+<td>单对象 ≤ 51200 B、总量 ≤ 102400 B，LRU 替换</td>
+<td>20 + 4 = <strong>24</strong></td>
+</tr>
+<tr>
+<td>4 — Concurrent Clients</td>
+<td>最多 8 个客户端并发，共享同一个缓存</td>
+<td>17 + 4 = <strong>21</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Part 1–3 可以一个一个顺序处理客户端，Part 4 才要求并发。</p>
+<h2 id="协议范围全程适用">协议范围（全程适用）</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>方面</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传输</td>
+<td>客户端↔︎代理、代理↔︎源站都是 TCP socket</td>
+</tr>
+<tr>
+<td>HTTP 版本</td>
+<td>HTTP/1.1</td>
+</tr>
+<tr>
+<td>方法</td>
+<td>只有 <code>GET</code>，没有请求体</td>
+</tr>
+<tr>
+<td>客户端请求目标</td>
+<td><strong>absolute-form</strong>，带显式端口：<code>GET http://127.0.0.1:43172/path?q=1 HTTP/1.1</code></td>
+</tr>
+<tr>
+<td>发给源站的目标</td>
+<td><strong>origin-form</strong>：<code>GET /path?q=1 HTTP/1.1</code>，保留路径和
+query string</td>
+</tr>
+<tr>
+<td>源站地址</td>
+<td>IPv4
+<code>127.0.0.1:&lt;port&gt;</code>，端口每次可能不同；<strong>不需要
+DNS</strong></td>
+</tr>
+<tr>
+<td>每个客户端连接</td>
+<td>只有一个请求</td>
+</tr>
+<tr>
+<td>源站响应何时结束</td>
+<td><strong>读到源站关闭连接（EOF）为止</strong>——响应不一定有
+<code>Content-Length</code></td>
+</tr>
+<tr>
+<td>客户端响应何时结束</td>
+<td>发完完整响应后，代理关闭客户端连接</td>
+</tr>
+<tr>
+<td>响应数据</td>
+<td>文本和任意二进制都要逐字节保留</td>
+</tr>
+<tr>
+<td>状态码</td>
+<td>所有合法响应都要转发（404、500 也一样）</td>
+</tr>
+<tr>
+<td>非法请求</td>
+<td>回 <code>HTTP/1.1 400 Bad Request</code>，然后关连接</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不需要做</strong>：持久连接、pipelining、chunked
+编码、<code>Cache-Control</code> / <code>Expires</code> /
+<code>ETag</code> / <code>If-None-Match</code> /
+<code>If-Modified-Since</code> / <code>304</code>、缺失或重复的
+<code>Host</code> 头、空路径、请求体、超出规格的错误处理。</p>
+<h2 id="part-1-http-转发">Part 1 — HTTP 转发</h2>
+<h3 id="接收请求">3.1 接收请求</h3>
+<ul>
+<li>一直 <code>recv</code> 到出现 <code>\r\n\r\n</code>。TCP
+是字节流，请求可能在<strong>请求行中间、头部中间、甚至
+<code>\r\n\r\n</code> 中间</strong>被切开；<strong>不能假设一次 recv
+就是一个请求</strong>。</li>
+</ul>
+<h3 id="转发给源站">3.2 转发给源站</h3>
+<p>从 absolute-form 目标里拆出 host、port、resource（含 query）：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line">GET http:<span class="string">//127.0.0.1</span><span class="function">:43172</span>/images/a17.bin?<span class="keyword">version</span>=1 HTTP/1.1</span><br><span class="line">→ host = 127.0.0.1, port = 43172, resource = <span class="string">/images/a17.bin</span>?<span class="keyword">version</span>=1</span><br></pre></td></tr></table></figure>
+<p>发给源站的请求必须： - 保留路径和 query string； -
+<strong>恰好一个</strong> <code>Host</code> 头，值为
+<code>host:port</code>（来自请求目标）； - 包含
+<code>Connection: close</code>。</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/images/a17.bin?version=1</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:43172</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>不能把客户端的 absolute-form
+请求行原样转发</strong>；每个请求都要独立解析，上一个连接的状态不能影响下一个。</p>
+<h3 id="转发响应">3.3 转发响应</h3>
+<ul>
+<li>一直读到<strong>源站 EOF</strong>；缓冲区边界或某次 recv
+成功都不代表结束。</li>
+<li>逐字节保留：状态行、所有头、空行、完整
+body。<strong>不要解码成字符串再拼回去</strong>（body 可能不是合法
+UTF-8）。</li>
+<li>可以边收边发，也可以收完再发。</li>
+</ul>
+<h3 id="非法请求">3.4 非法请求</h3>
+<p>不是合法 absolute-form HTTP/1.1
+<code>GET</code>（格式错、<code>POST</code> 等其他方法）→
+<code>HTTP/1.1 400 Bad Request</code> 后关连接。</p>
+<h3 id="持续服务">3.5 持续服务</h3>
+<p>处理完一个请求就关这个客户端连接，继续 <code>accept</code>
+下一个；进程不能退出。</p>
+<h2 id="part-2-响应缓存">Part 2 — 响应缓存</h2>
+<ul>
+<li><strong>进程内内存缓存</strong>：跨客户端连接保留；重启进程就清空，不需要落盘。</li>
+<li><strong>缓存键</strong>：<code>&lt;origin-host, origin-port, resource-path&gt;</code>，resource-path
+含 query，<strong>逐字节比较、不做任何规范化</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>请求</th>
+<th>是否同一资源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/images/a.bin</code> vs <code>/images/b.bin</code></td>
+<td>不同</td>
+</tr>
+<tr>
+<td>同路径，端口 41000 vs 42000</td>
+<td>不同</td>
+</tr>
+<tr>
+<td><code>/search?q=cats</code> vs <code>/search?q=dogs</code></td>
+<td>不同</td>
+</tr>
+<tr>
+<td><code>/file%2Fname</code> vs <code>/file/name</code></td>
+<td>不同（<strong>不要 URL 解码</strong>）</td>
+</tr>
+<tr>
+<td>host、port、path/query 字节完全一样</td>
+<td>相同</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>命中</strong>：直接返回存储的响应，<strong>不联系源站</strong>，发完关连接。</li>
+<li><strong>未命中</strong>：按 Part 1
+转发，返回完整响应，符合条件就存。</li>
+<li>缓存的是<strong>完整 HTTP 响应</strong>（状态行 + 头 + 空行 +
+body）；命中时回放的必须是当初从源站收到的<strong>同一串字节</strong>，只存
+body 再重新拼头是不允许的。</li>
+<li><strong>可缓存条件</strong>：只看<strong>数字状态码是不是
+200</strong>，不看原因短语。<code>HTTP/1.1 200 OK</code> 和
+<code>HTTP/1.1 200</code> 都可以缓存；404、500
+等照样转发但不缓存，下次还要找源站。</li>
+<li>条目不过期、不需要重新验证，直到被 Part 3
+的规则淘汰或进程结束。</li>
+</ul>
+<h2 id="part-3-容量与-lru">Part 3 — 容量与 LRU</h2>
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>值（<strong>都是包含边界</strong>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单个缓存响应最大</td>
+<td><strong>51200</strong> 字节（正好 51200 可以存）</td>
+</tr>
+<tr>
+<td>缓存总大小最大</td>
+<td><strong>102400</strong> 字节（总量正好 102400 可以）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>字节计数</strong>：条目大小 = 完整 HTTP 响应的字节数（状态行
++ 头 + 空行 + body）。键、LRU 链表等元数据不算。</li>
+<li><strong>准入</strong>：状态码 200 <strong>且</strong> 大小 ≤
+51200。不满足的照样完整转发，但<strong>不能改变</strong>已有条目、总字节数或
+LRU 顺序。</li>
+<li><strong>LRU</strong>：一个条目在「命中返回」或「新插入」时变成
+MRU。插入会超过 102400 时，从 LRU
+端开始淘汰，直到放得下（可能一次淘汰多个）。</li>
+</ul>
+<p>规格里的例子：缓存里有 A(40000, LRU)、B(30000)、C(20000, MRU)，共
+90000。新来 D(40000)，90000 + 40000 &gt; 102400，淘汰 A → 50000 + 40000
+= 90000，放下 D。</p>
+<ul>
+<li>被淘汰的资源再次请求就是普通 miss，要重新去源站取。</li>
+</ul>
+<h2 id="part-4-并发客户端">Part 4 — 并发客户端</h2>
+<ul>
+<li>至少支持 <strong>8
+个同时活跃的客户端连接</strong>，共享<strong>一个</strong>缓存。</li>
+<li><strong>慢客户端/慢源站不能卡住别人</strong>：
+<ul>
+<li>一个客户端请求头发了一半停住时，另一个客户端要能完成请求；</li>
+<li>一个请求在等慢源站时，别的客户端要能拿到缓存命中、或者从快源站拿到响应。</li>
+</ul></li>
+<li>线程或其他并发机制都可以。</li>
+<li><strong>共享缓存要同步</strong>：查找、插入/淘汰、总字节数更新、LRU
+更新。</li>
+<li><strong>等源站响应时不能持有缓存的独占锁</strong>。</li>
+<li><strong>LRU
+在并发下</strong>：操作重叠时，任何与实际执行一致的顺序都可以；但<strong>已经完成的操作必须反映在之后开始的操作里</strong>。例：一个请求在等源站，期间另一个请求命中了
+X，那么前者插入时的淘汰顺序必须考虑 X 已经是 MRU——「开始
+fetch」时不能把淘汰顺序定死。</li>
+<li><strong>同时 miss
+同一资源</strong>：不要求合并请求，两个都可以去源站取（假设内容相同）。后完成的那个可以丢弃，也可以替换并标为
+MRU；但<strong>只能占一个逻辑条目、只算一次大小</strong>，两个客户端都要收到完整响应。</li>
+<li>并发时<strong>响应字节不能串到别的客户端</strong>，缓存状态不能被破坏；一波并发结束后进程继续服务。</li>
+</ul>
+<h2 id="测试与评分">测试与评分</h2>
+<ul>
+<li><strong>自动化黑盒测试</strong>：评分系统启动你的代理，自己开源站服务器和客户端，观察网络行为。代码结构不评分。</li>
+<li>可以往 stdout/stderr 打日志，响应只走 TCP。</li>
+<li><strong>公开测试（Ed 上，输入输出可见）</strong>覆盖：</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Part</th>
+<th>公开测试覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>转发、分片的请求和响应、二进制响应、非 200
+响应、非法请求、顺序客户端</td>
+</tr>
+<tr>
+<td>2</td>
+<td>命中/未命中、资源身份、query
+string、端口区分、二进制缓存、可缓存性</td>
+</tr>
+<tr>
+<td>3</td>
+<td>对象和总容量上限、字节计数、LRU
+更新、淘汰、多次淘汰、精确容量边界</td>
+</tr>
+<tr>
+<td>4</td>
+<td>并发客户端、共享缓存一致性、并发命中/未命中、并发下的
+LRU、持续服务</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>隐藏测试</strong>（只看到 pass/fail）不加新规则，重点是：
+<ol type="1">
+<li><strong>流处理纪律</strong>：TCP 分片、不依赖特定的 recv 边界；</li>
+<li><strong>缓存身份与可缓存性</strong>；</li>
+<li><strong>没见过的请求序列下的缓存管理</strong>（字节计数、LRU、容量、淘汰）；</li>
+<li><strong>并发下的共享缓存行为</strong>。</li>
+</ol></li>
+<li>最终成绩看<strong>最后一次提交</strong>。</li>
+</ul>
+<h2 id="提交要求">提交要求</h2>
+<ul>
+<li><p><strong>语言</strong>：强烈推荐 Python 3，也可以用 Ed
+支持的其他语言。</p></li>
+<li><p><strong>入口</strong>：根目录下的
+<code>proxy.sh</code>（大小写敏感），运行方式
+<code>./proxy.sh &lt;Proxy-Port&gt;</code>，例如
+<code>./proxy.sh 52000</code> 监听 52000；一直运行到被外部终止。Python
+可以这样写：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">python3 proxy.py <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p><strong>允许的库</strong>：只能用标准库；socket、并发、数据结构、字符串/字节处理都可以。<strong>禁止</strong>替你做
+HTTP 解析/请求构造/转发的库，例如
+<code>requests</code>、<code>urllib.request</code>、<code>http.client</code>。不确定就去
+Ed 问。</p></li>
+<li><p><strong>README.md</strong>（不评分，但没有它就不能对环境导致的测试失败申诉），要写：</p>
+<ul>
+<li>实现语言和版本；</li>
+<li>需要的运行/开发环境；</li>
+<li>构建步骤或依赖包信息；</li>
+<li>运行方法；</li>
+<li><strong>AI 使用声明：用了哪些工具、怎么用的</strong>。</li>
+</ul></li>
+<li><p><strong>提交内容</strong>：<code>proxy.sh</code> + 全部源码 +
+<code>README.md</code>；要在 Ed 环境里能跑，<strong>截止前在 Ed
+上实际测一遍</strong>。</p></li>
+</ul>
+<h2 id="学术诚信与-ai">学术诚信与 AI</h2>
+<ul>
+<li><strong>本作业允许使用 AI</strong>，但必须在 <code>README.md</code>
+里声明工具和用途；正确性仍由你负责。</li>
+<li><strong>必须能讲清楚提交的每一部分代码</strong>：会有一次
+<strong>demonstration</strong>，问你实现细节来确认你真的理解。</li>
+<li>其他任何非本人的工作要立刻报告给 tutor/讲师；作业可能送去查重。</li>
+</ul>
+<h2 id="实现思路不含完整代码">实现思路（不含完整代码）</h2>
+<p>整体结构：主线程 <code>accept</code>，每个客户端开一个线程
+<code>handle_client</code>。</p>
+<ol type="1">
+<li><strong>读请求头</strong>：循环 <code>recv</code> 累积到
+<code>bytes</code> 缓冲区，直到出现
+<code>b"\r\n\r\n"</code>；对方提前关闭 → 400。</li>
+<li><strong>解析</strong>：只看请求行，<code>split(b" ")</code> 必须正好
+3
+段：<code>GET</code>、<code>http://...</code>、<code>HTTP/1.1</code>；去掉
+<code>http://</code> 后第一个 <code>/</code> 之前是
+<code>host:port</code>，之后是 path（<strong>保持原始
+bytes</strong>，直接拿来当缓存键）。任何一步不对 → 400。</li>
+<li><strong>查缓存</strong>（加锁，命中就 <code>move_to_end</code> 变
+MRU，解锁后再发送）。</li>
+<li><strong>未命中</strong>：<code>socket.create_connection((host, port))</code>，发
+origin-form 请求，循环 <code>recv</code>
+到返回空字节（EOF），每块<strong>立刻转发</strong>给客户端，同时最多攒
+51200 字节用于缓存——一旦超过就不再攒（反正不能缓存）。</li>
+<li><strong>插入缓存</strong>：状态行第二段等于 <code>b"200"</code>
+且大小 ≤ 51200 时，加锁 → 如果键已存在先删掉旧的（同时 miss 的情况）→ 从
+<code>OrderedDict</code> 头部 <code>popitem(last=False)</code>
+淘汰到放得下 → 插到尾部。</li>
+<li><strong>关连接</strong>：先 <code>shutdown(SHUT_WR)</code> 再
+<code>close</code>。</li>
+</ol>
+<p>缓存用 <code>collections.OrderedDict</code>：头部是 LRU，尾部是
+MRU，<code>move_to_end</code> / <code>popitem(last=False)</code> 都是
+O(1)。一把 <code>threading.Lock</code> 包住所有缓存操作，<strong>网络
+I/O 全部在锁外</strong>。</p>
+<h2 id="易错点清单">易错点清单</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>坑</th>
+<th>后果</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一次 <code>recv</code> 就当成完整请求/响应</td>
+<td>分片测试和大响应全挂</td>
+<td>请求读到 <code>\r\n\r\n</code>，响应读到 EOF</td>
+</tr>
+<tr>
+<td>用 <code>.decode()</code> 处理响应</td>
+<td>二进制 body 报错或被改</td>
+<td>全程 <code>bytes</code>，只解析状态行</td>
+</tr>
+<tr>
+<td>把 absolute-form 请求行原样发给源站</td>
+<td>违反 3.2</td>
+<td>重新构造 <code>GET &lt;path&gt; HTTP/1.1</code></td>
+</tr>
+<tr>
+<td>缓存键只用 path / 先 URL 解码</td>
+<td>端口区分、<code>%2F</code> 测试挂</td>
+<td><code>(host, port, 原始 path bytes)</code></td>
+</tr>
+<tr>
+<td>只存 body，命中时重新拼头</td>
+<td>字节不一致</td>
+<td>存完整原始响应</td>
+</tr>
+<tr>
+<td>用 <code>"200 OK" in line</code> 判断</td>
+<td><code>HTTP/1.1 200</code>（无原因短语）不被缓存</td>
+<td>只比较第二段是否等于 <code>200</code></td>
+</tr>
+<tr>
+<td>超大响应先把旧条目淘汰了再发现放不下</td>
+<td>违反「不改变缓存」</td>
+<td>先判断大小再动缓存</td>
+</tr>
+<tr>
+<td>边界写成 <code>&lt;</code></td>
+<td>51200 / 102400 精确边界挂</td>
+<td>两个上限都是 <code>&lt;=</code></td>
+</tr>
+<tr>
+<td>同时 miss 同一资源插两次</td>
+<td>总字节数算重</td>
+<td>插入前先删掉同键旧条目</td>
+</tr>
+<tr>
+<td>在锁里等源站响应</td>
+<td>并发测试挂</td>
+<td>锁只包内存操作</td>
+</tr>
+<tr>
+<td>在 fetch 开始时就算好要淘汰谁</td>
+<td>违反 6.3</td>
+<td>插入那一刻再按当前 LRU 顺序淘汰</td>
+</tr>
+<tr>
+<td>客户端发来的数据没读完就 <code>close</code></td>
+<td>可能发 RST，客户端丢失尾部数据</td>
+<td><code>shutdown(SHUT_WR)</code> 后再短暂读空</td>
+</tr>
+</tbody>
+</table>
+<h2 id="自测清单">自测清单</h2>
+<p>本地写一个测试脚本：在 <code>127.0.0.1</code> 随机端口开几个「原始
+socket 源站」（能计数被访问次数、能分小块慢慢发、能延迟），再用原始
+socket 当客户端，对照下面这些情况：</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />请求按 3 字节一块慢慢发；响应按 37
+字节一块发；300 KB 的大响应</label></li>
+<li><label><input type="checkbox" />全 256 种字节值的二进制
+body；404、500（body 含 <code>\xff\x00</code>）原样转发</label></li>
+<li><label><input type="checkbox" /><code>POST</code>、origin-form
+请求、乱码、<code>HTTP/1.0</code>、非数字端口 → 400</label></li>
+<li><label><input
+type="checkbox" />第二次请求源站计数不增加；<code>?q=cats</code> /
+<code>?q=dogs</code>、<code>%2F</code> /
+<code>/</code>、不同端口互不影响</label></li>
+<li><label><input
+type="checkbox" /><code>HTTP/1.1 200</code>（无原因短语）被缓存，404
+不缓存</label></li>
+<li><label><input type="checkbox" />两个 51200 正好填满 102400；51201
+不缓存且不影响 LRU；一次插入淘汰两个条目</label></li>
+<li><label><input type="checkbox" />慢源站（2
+s）进行中，另一个客户端的缓存命中立即返回；请求头分段暂停的客户端不卡别人</label></li>
+<li><label><input type="checkbox" />8 个客户端同时 miss
+同一资源，全部拿到完整响应，之后是命中</label></li>
+<li><label><input type="checkbox" />一波混合并发后继续服务</label></li>
+</ul>
+<h2 id="相关笔记">相关笔记</h2>
+<ul>
+<li>[[26-S2-Course/COMP5416/COMP5416-Week03-Applications-Summary|COMP5416
+Week 03 应用层讲课总结]]（HTTP 报文格式、Web 缓存/代理）</li>
+<li>[[26-S2-Course/COMP5416/COMP5416-Week05-Transport-Summary|COMP5416
+Week 05 传输层讲课总结]]（TCP 字节流）</li>
+<li>[[26-S2-Course/COMP5416/COMP5416-Week05-Tutorial-DNS-HTTP|COMP5416
+Week 05 Tutorial：DNS 与 HTTP 时延]]</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Assignment/" rel="tag"><i class="fa fa-tag"></i> Assignment</a>
+              <a href="/tags/COMP5416/" rel="tag"><i class="fa fa-tag"></i> COMP5416</a>
+              <a href="/tags/HTTP/" rel="tag"><i class="fa fa-tag"></i> HTTP</a>
+              <a href="/tags/Socket/" rel="tag"><i class="fa fa-tag"></i> Socket</a>
+              <a href="/tags/LRU-Cache/" rel="tag"><i class="fa fa-tag"></i> LRU-Cache</a>
+              <a href="/tags/Concurrency/" rel="tag"><i class="fa fa-tag"></i> Concurrency</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/8da8c906.html" rel="prev" title="从零开始理解上下文压缩：Pi 如何继续长会话">
+                  <i class="fa fa-angle-left"></i> 从零开始理解上下文压缩：Pi 如何继续长会话
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/8e2cf97.html" rel="next" title="ChatGPT Intelligent UI 拆解：从 DIL 到交互界面">
+                  ChatGPT Intelligent UI 拆解：从 DIL 到交互界面 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

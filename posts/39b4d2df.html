@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="先读 Pi 的 agent-loop.ts 源码，再对照 Claude Code 官方文档描述的 agent loop，讲清楚内外两层循环、steering 与 follow-up、Stop hook 与 finishTurn 等插槽；再拆解 &#x2F;goal 在 Claude Code（Stop hook + 独立评估模型）、Codex （持久化状态机）和 Pi 社区扩展里分别是怎么做的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&#x2F;goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起">
+<meta property="og:url" content="https://qiao1.top/posts/39b4d2df.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="先读 Pi 的 agent-loop.ts 源码，再对照 Claude Code 官方文档描述的 agent loop，讲清楚内外两层循环、steering 与 follow-up、Stop hook 与 finishTurn 等插槽；再拆解 &#x2F;goal 在 Claude Code（Stop hook + 独立评估模型）、Codex （持久化状态机）和 Pi 社区扩展里分别是怎么做的。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-01T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.479Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Claude-Code">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="Pi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/39b4d2df.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/39b4d2df.html","path":"posts/39b4d2df.html","title":"/goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>/goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/39b4d2df.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E8%AF%B4%E7%BB%93%E8%AE%BA"><span class="nav-text">0. 先说结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-loop%E6%9C%80%E5%B0%8F%E6%A8%A1%E5%9E%8B"><span class="nav-text">1. Agent Loop：最小模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AE%B5%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-text">1.1 一段伪代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pi-%E6%8A%8A-loop-%E5%88%86%E6%88%90%E4%BA%86%E4%B8%A4%E5%B1%82"><span class="nav-text">1.2 Pi 把 loop 分成了两层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runloop%E5%8F%8C%E5%B1%82%E5%BE%AA%E7%8E%AF"><span class="nav-text">1.3 runLoop：双层循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#steering-%E5%92%8C-follow-up%E4%B8%A4%E7%A7%8D%E6%8F%92%E8%AF%9D"><span class="nav-text">1.4 steering 和
+follow-up：两种&quot;插话&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E9%92%A9%E5%AD%90agentloopconfig"><span class="nav-text">1.5
+几个钩子（AgentLoopConfig）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%87%A0%E4%B8%AA%E9%98%B2%E5%BE%A1%E6%80%A7%E7%BB%86%E8%8A%82"><span class="nav-text">1.6 工具执行与几个防御性细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E6%B5%81ui-%E5%92%8C-loop-%E7%9A%84%E5%94%AF%E4%B8%80%E6%8E%A5%E5%8F%A3"><span class="nav-text">1.7 事件流：UI 和 loop
+的唯一接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent-%E7%B1%BB%E5%B9%B6%E5%8F%91%E4%BF%9D%E6%8A%A4%E4%B8%8E%E7%BB%AD%E8%B7%91"><span class="nav-text">1.8 Agent
+类：并发保护与续跑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#claude-code-%E7%9A%84-agent-loop"><span class="nav-text">2. Claude Code 的 Agent Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E7%9A%84%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%8F%E8%BF%B0"><span class="nav-text">2.1 官方的三阶段描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%BD%AE%E5%BE%AA%E7%8E%AF%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88sdk-%E8%A7%86%E8%A7%92"><span class="nav-text">2.2 一轮循环发生了什么（SDK
+视角）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%83%E5%90%90%E5%87%BA%E7%9A%84%E6%B6%88%E6%81%AF"><span class="nav-text">2.3 它吐出的消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E6%A0%B7%E6%89%8D%E7%AE%97%E5%81%9C"><span class="nav-text">2.4 怎样才算&quot;停&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%89%A7%E8%A1%8C%E4%B8%8E%E6%9D%83%E9%99%90"><span class="nav-text">2.5 工具执行与权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hooksloop-%E4%B8%8A%E7%9A%84%E6%8F%92%E6%A7%BD"><span class="nav-text">2.6 Hooks：loop 上的插槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%8E%E5%8E%8B%E7%BC%A9"><span class="nav-text">2.7 上下文与压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%80%94%E6%8F%92%E8%AF%9D"><span class="nav-text">2.8 中途插话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E4%B8%8E%E5%9B%9E%E9%80%80loop-%E4%B9%8B%E5%A4%96%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="nav-text">2.9 会话与回退（loop
+之外的东西）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA-loop-%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7%E7%9C%8B"><span class="nav-text">2.10 两个 loop 放在一起看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-goalloop-%E7%9A%84%E5%81%9C%E6%98%AF%E8%B0%81%E8%AF%B4%E4%BA%86%E7%AE%97"><span class="nav-text">3. 为什么需要
+&#x2F;goal：loop 的&quot;停&quot;是谁说了算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#claude-codestop-hook-%E7%8B%AC%E7%AB%8B%E8%AF%84%E4%BC%B0%E6%A8%A1%E5%9E%8B"><span class="nav-text">4. Claude Code：Stop hook +
+独立评估模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D"><span class="nav-text">4.1 一句话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop-hook-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">4.2 Stop hook 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%BE%AA%E7%8E%AF%E9%87%8C%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-text">4.3 一次循环里发生了什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%85%B3%E9%94%AE%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%BA%A6%E6%9D%9F%E8%AF%84%E4%BC%B0%E8%80%85%E4%B8%8D%E8%B0%83%E5%B7%A5%E5%85%B7"><span class="nav-text">4.4
+最关键的设计约束：评估者不调工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E7%A9%BA%E8%BD%AC%E4%B8%8E%E5%87%BA%E9%94%99%E5%A4%84%E7%90%86%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%9A%84%E5%87%A0%E6%9D%A1%E8%A7%84%E5%88%99"><span class="nav-text">4.5
+防止空转与出错处理（官方文档的几条规则）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E5%89%8D%E6%8F%90"><span class="nav-text">4.6 一个值得注意的前提</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#goalloopstop-hook-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">4.7
+&#x2F;goal、&#x2F;loop、Stop hook 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#codex%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-text">5. Codex：持久化的目标状态机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%BA%BF%E4%B8%8D%E9%9D%A0%E5%A4%96%E9%83%A8%E8%AF%84%E5%AE%A1%E9%9D%A0%E7%8A%B6%E6%80%81-%E5%B7%A5%E5%85%B7-%E4%BA%8B%E4%BB%B6"><span class="nav-text">5.1
+路线：不靠&quot;外部评审&quot;，靠&quot;状态 + 工具 + 事件&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E5%80%BC%E5%BE%97%E5%AD%A6%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-text">5.2 三个值得学的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-claude-code-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="nav-text">5.3 与 Claude Code 的核心区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pi%E7%A4%BE%E5%8C%BA%E6%89%A9%E5%B1%95%E6%80%8E%E4%B9%88%E6%8C%82%E5%9C%A8-loop-%E4%B8%8A"><span class="nav-text">6. Pi：社区扩展怎么挂在 loop 上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E8%AF%B4%E6%98%8E%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="nav-text">6.1 先说明一件事</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tian.zuopi-goal-%E7%9A%84%E5%81%9A%E6%B3%95%E6%8D%AE%E5%85%B6%E8%AF%B4%E6%98%8E"><span class="nav-text">6.2
+@tian.zuo&#x2F;pi-goal 的做法（据其说明）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E6%84%8F%E5%9C%A8-pi-%E4%B8%8A%E5%81%9A%E4%B8%80%E4%B8%AA%E5%88%A4%E5%AE%98%E5%BC%8Fgoal"><span class="nav-text">6.3 示意：在 Pi
+上做一个&quot;判官式&quot;&#x2F;goal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94"><span class="nav-text">7. 横向对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E5%90%8C%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E5%BD%92%E7%BA%B3%E9%9D%9E%E4%BB%BB%E4%BD%95%E4%B8%80%E5%AE%B6%E7%9A%84%E5%8E%9F%E8%AF%9D"><span class="nav-text">8.
+共同的设计原则（归纳，非任何一家的原话）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E9%A3%8E%E9%99%A9"><span class="nav-text">9. 局限与风险</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E8%BF%99%E4%B8%AA%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%90%AF%E7%A4%BA%E4%BB%80%E4%B9%88%E6%9D%A1%E4%BB%B6%E9%80%82%E5%90%88%E5%BD%93-goal"><span class="nav-text">10.
+给这个博客的启示：什么条件适合当 &#x2F;goal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">11. 术语表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90"><span class="nav-text">附：参考来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/39b4d2df.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="&#x2F;goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起 | Joey">
+      <meta itemprop="description" content="先读 Pi 的 agent-loop.ts 源码，再对照 Claude Code 官方文档描述的 agent loop，讲清楚内外两层循环、steering 与 follow-up、Stop hook 与 finishTurn 等插槽；再拆解 &#x2F;goal 在 Claude Code（Stop hook + 独立评估模型）、Codex （持久化状态机）和 Pi 社区扩展里分别是怎么做的。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          /goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-01 14:00:00" itemprop="dateCreated datePublished" datetime="2026-10-01T14:00:00Z">2026-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>39 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">先读 Pi 的 agent-loop.ts 源码，再对照 Claude Code 官方文档描述的 agent loop，讲清楚内外两层循环、steering 与 follow-up、Stop hook 与 finishTurn 等插槽；再拆解 /goal 在 Claude Code（Stop hook + 独立评估模型）、Codex （持久化状态机）和 Pi 社区扩展里分别是怎么做的。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>写于 2026-10-01。Pi 的部分直接读了 <code>badlogic/pi-mono</code>
+主分支的 <code>packages/agent/src/</code>
+源码（<code>agent-loop.ts</code> 约 940 行、<code>agent.ts</code> 约 613
+行、<code>types.ts</code> 约 529 行，2026-10-01 拉取）；Claude Code 的
+agent loop 与 <code>/goal</code> 部分依据官方文档（Claude Code
+本身不开源，所以只有文档层面的描述）；Codex 与 Pi
+扩展的部分来自第三方的实现分析和包主页，文中会标明。源码和功能迭代很快，<strong>细节以你读到的版本为准</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="先说结论">0. 先说结论</h2>
+<p><strong><code>/goal</code> 不是什么新能力，它是在 Agent Loop
+的外面再套了一层"外环"：把"什么时候停"的决定权，从干活的模型手里拿走，交给一个可验证的条件。</strong></p>
+<ul>
+<li>Agent Loop
+的默认规则是：<strong>模型这一轮不再调用工具，就算做完了，停。</strong>
+这个判断由模型自己做，所以它会早停、偷懒、或者"自我感觉良好"地宣布完成。</li>
+<li><code>/goal</code>
+给这个"停"加了一道关卡：每次要停的时候，先检查"目标条件满足了吗"；没满足，就<strong>再塞一条消息，让它继续</strong>。</li>
+</ul>
+<p>三个工具的实现路线不同，但骨架一致：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>工具</th>
+<th>谁来判断"做完了"</th>
+<th>怎么让它继续</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td><strong>独立的小模型</strong>（默认 Haiku）读对话记录来评估</td>
+<td>借 <strong>Stop hook</strong>：评估说"没完成"就把理由喂回去</td>
+</tr>
+<tr>
+<td><strong>Codex</strong></td>
+<td><strong>干活的模型自己</strong>，通过
+<code>update_goal(complete)</code> 工具声明</td>
+<td>运行时在空闲时<strong>自动续跑</strong>，目标状态存 SQLite</td>
+</tr>
+<tr>
+<td><strong>Pi（社区扩展）</strong></td>
+<td>同样是模型自己声明（有证据要求）</td>
+<td>往 <strong>follow-up 队列</strong>里放一条续跑消息</td>
+</tr>
+</tbody>
+</table>
+<p>要看懂这三种做法，得先知道 Agent Loop 本身长什么样——所以本文先拆 Pi
+的源码（第 1 章），再看官方文档描述的 Claude Code loop 并与 Pi 对照（第
+2 章），然后才回头看 <code>/goal</code>（第 4 章起）。</p>
+<hr />
+<h2 id="agent-loop最小模型">1. Agent Loop：最小模型</h2>
+<h3 id="一段伪代码">1.1 一段伪代码</h3>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">messages</span> = [系统提示, 用户提问]</span><br><span class="line"><span class="keyword">while</span> True:</span><br><span class="line">    回复 = 调用模型(<span class="keyword">messages</span>)</span><br><span class="line">    <span class="keyword">messages</span>.<span class="keyword">append</span>(回复)</span><br><span class="line">    <span class="keyword">if</span> 回复里没有工具调用:</span><br><span class="line">        <span class="keyword">break</span>                      # ← 模型自己决定停</span><br><span class="line">    <span class="keyword">for</span> 每个工具调用:</span><br><span class="line">        结果 = 执行工具(调用)</span><br><span class="line">        <span class="keyword">messages</span>.<span class="keyword">append</span>(结果)</span><br></pre></td></tr></table></figure>
+<p>这就是所有 Coding Agent 的内核。我之前的笔记 [[Pi/Pi
+Architecture：拆解 Coding Agent 的内部架构|Pi Architecture]]
+从视频角度讲过这个结构，这次直接看源码实现，重点是：<strong>真实的 loop
+比这段伪代码多了哪些东西，这些东西为什么恰好是做 <code>/goal</code>
+需要的</strong>。</p>
+<h3 id="pi-把-loop-分成了两层">1.2 Pi 把 loop 分成了两层</h3>
+<p>Pi 的 agent 包（<code>packages/agent</code>）里有两层 API：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>层</th>
+<th>文件</th>
+<th>形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>底层 loop</strong></td>
+<td><code>agent-loop.ts</code></td>
+<td>纯函数：<code>agentLoop(prompts, context, config, signal, streamFn)</code>
+返回一个事件流</td>
+</tr>
+<tr>
+<td><strong>有状态包装</strong></td>
+<td><code>agent.ts</code></td>
+<td><code>Agent</code> 类：持有对话记录，提供 <code>prompt()</code> /
+<code>continue()</code> / <code>steer()</code> / <code>followUp()</code>
+/ <code>abort()</code> / <code>waitForIdle()</code></td>
+</tr>
+</tbody>
+</table>
+<p>底层 loop 不保存任何东西：给它一份 <code>context</code>（消息 +
+工具）和一份
+<code>config</code>（一堆回调），它跑完，把新产生的消息通过事件流吐出来。<code>Agent</code>
+类才负责"记住对话、排队、并发保护、把事件分发给界面"。</p>
+<p>入口有两个：</p>
+<ul>
+<li><strong><code>agentLoop</code></strong>：带着新的用户消息开始。先发
+<code>agent_start</code>、<code>turn_start</code>，再把用户消息作为事件发出，然后进入
+<code>runLoop</code>。</li>
+<li><strong><code>agentLoopContinue</code></strong>：<strong>不加新消息，直接从现有上下文继续</strong>，用于重试。源码里有两道检查——上下文不能为空，且<strong>最后一条消息不能是
+assistant</strong>（否则模型提供商会拒绝请求，因为对话必须以用户或工具结果结尾）。</li>
+</ul>
+<blockquote>
+<p>这个"最后一条不能是 assistant"的限制，是后面理解 <code>/goal</code>
+的关键：<strong>要让一个已经说完话的 agent 继续，必须在它后面补一条 user
+消息。</strong></p>
+</blockquote>
+<h3 id="runloop双层循环">1.3 <code>runLoop</code>：双层循环</h3>
+<p>核心是
+<code>runLoop</code>，结构（我把源码精简成示意，保留了真实的变量名和顺序）：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">runLoop</span>(<span class="params">context, newMessages, config, signal, emit, streamFn</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> pendingMessages = <span class="keyword">await</span> config.<span class="property">getSteeringMessages</span>?.() ?? [];   <span class="comment">// 开始前先看用户有没有插话</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;                                    <span class="comment">// ── 外环：agent 本来要停了，看有没有 follow-up</span></span><br><span class="line">    <span class="keyword">let</span> hasMoreToolCalls = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (hasMoreToolCalls || pendingMessages.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;   <span class="comment">// ── 内环：一个 turn 一轮</span></span><br><span class="line">      <span class="keyword">if</span> (lastCompletedTurn) &#123;</span><br><span class="line">        <span class="keyword">await</span> config.<span class="property">prepareNextTurn</span>?.(lastCompletedTurn);     <span class="comment">// 下一轮开始前：可换上下文/模型/思考等级（如压缩）</span></span><br><span class="line">        <span class="title function_">emit</span>(<span class="string">&quot;turn_start&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 把待处理消息（steering / follow-up / prepare 产生的）写进上下文并发事件</span></span><br><span class="line">      <span class="title function_">appendAndEmit</span>(pendingMessages); pendingMessages = [];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">await</span> config.<span class="property">prepareRequest</span>?.(&#123; context, model, thinkingLevel &#125;);   <span class="comment">// 每次请求模型前的最后一道钩子</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> message = <span class="keyword">await</span> <span class="title function_">streamAssistantResponse</span>(...);      <span class="comment">// 调模型，流式</span></span><br><span class="line">      <span class="keyword">if</span> (message.<span class="property">stopReason</span> === <span class="string">&quot;error&quot;</span> || <span class="string">&quot;aborted&quot;</span>) &#123;       <span class="comment">// 硬退出</span></span><br><span class="line">        <span class="title function_">emit</span>(<span class="string">&quot;turn_end&quot;</span>); <span class="title function_">emit</span>(<span class="string">&quot;agent_end&quot;</span>); <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> toolCalls = message.<span class="property">content</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">c</span> =&gt;</span> c.<span class="property">type</span> === <span class="string">&quot;toolCall&quot;</span>);</span><br><span class="line">      hasMoreToolCalls = <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (toolCalls.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> batch = message.<span class="property">stopReason</span> === <span class="string">&quot;length&quot;</span></span><br><span class="line">          ? <span class="keyword">await</span> <span class="title function_">failToolCallsFromTruncatedMessage</span>(...)       <span class="comment">// 输出被截断：所有工具调用都拒绝执行</span></span><br><span class="line">          : <span class="keyword">await</span> <span class="title function_">executeToolCalls</span>(...);                        <span class="comment">// 正常执行（默认并行）</span></span><br><span class="line">        hasMoreToolCalls = !batch.<span class="property">terminate</span>;                    <span class="comment">// 工具可以说&quot;到此为止&quot;</span></span><br><span class="line">        <span class="title function_">appendToolResults</span>(batch.<span class="property">messages</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      lastCompletedTurn = &#123; message, toolResults, context, newMessages &#125;;</span><br><span class="line">      <span class="keyword">const</span> decision = <span class="keyword">await</span> config.<span class="property">finishTurn</span>?.(lastCompletedTurn, signal);   <span class="comment">// ★ 回合收尾钩子</span></span><br><span class="line">      <span class="title function_">emit</span>(<span class="string">&quot;turn_end&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (decision?.<span class="property">action</span> === <span class="string">&quot;end&quot;</span>) &#123; <span class="title function_">emit</span>(<span class="string">&quot;agent_end&quot;</span>); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">      explicitContinuation = decision?.<span class="property">action</span> === <span class="string">&quot;continue&quot;</span>;</span><br><span class="line">      pendingMessages = <span class="keyword">await</span> config.<span class="property">getSteeringMessages</span>?.() ?? [];            <span class="comment">// ★ 取用户插话</span></span><br><span class="line">      <span class="keyword">if</span> (hasMoreToolCalls || pendingMessages.<span class="property">length</span> &gt; <span class="number">0</span>) explicitContinuation = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> followUps = <span class="keyword">await</span> config.<span class="property">getFollowUpMessages</span>?.() ?? [];              <span class="comment">// ★ 要停了：取排队的后续消息</span></span><br><span class="line">    <span class="keyword">if</span> (followUps.<span class="property">length</span> &gt; <span class="number">0</span>) &#123; pendingMessages = followUps; <span class="keyword">continue</span>; &#125;</span><br><span class="line">    <span class="keyword">if</span> (explicitContinuation)  &#123; explicitContinuation = <span class="literal">false</span>; <span class="keyword">continue</span>; &#125;     <span class="comment">// finishTurn 要求续跑，就再来一轮</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">emit</span>(<span class="string">&quot;agent_end&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>两层循环各管什么：</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>条件</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>内环</strong></td>
+<td><code>还有工具调用 \|\| 有待处理消息</code></td>
+<td>一个 turn = 一次模型回复 +
+它调用的所有工具。只要模型还在调工具，或者用户插了话，就继续</td>
+</tr>
+<tr>
+<td><strong>外环</strong></td>
+<td>内环结束后，<code>followUp</code> 队列非空</td>
+<td>模型已经没有工具要调了（本来要停），但还有排队的后续消息，就把它们塞进去再来一轮</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这个外环就是 <code>/goal</code> 的天然挂点</strong>：agent
+"本来要停了"的那个瞬间，正好是评估"目标达成了吗"的时机。</p>
+<h3 id="steering-和-follow-up两种插话">1.4 steering 和
+follow-up：两种"插话"</h3>
+<p>这两个都是往对话里塞用户消息，区别在<strong>什么时候被取走</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>steering（转向）</strong></th>
+<th><strong>follow-up（后续）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取走时机</td>
+<td>每个 turn 结束后（工具都执行完）</td>
+<td>agent 完全没事做、<strong>本来要停</strong>的时候</td>
+</tr>
+<tr>
+<td>对当前工作的影响</td>
+<td>打断：下一次模型请求就会看到它</td>
+<td>不打断：等当前工作做完</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>用户在 agent 干活时按回车补充一句"别动那个文件"</td>
+<td>排队下一件事</td>
+</tr>
+</tbody>
+</table>
+<p><code>Agent</code> 类里两者各有一个
+<code>PendingMessageQueue</code>，有两种取出方式（<code>QueueMode</code>）：<code>"one-at-a-time"</code>（默认，一次取一条）和
+<code>"all"</code>（一次全取）。注释里还有一个小细节：准备阶段（比如压缩）可能很久，所以
+loop 在准备完后会<strong>再取一次</strong>
+steering，但"只在之前那次没取到东西时才再取，否则一条一条模式会在同一轮塞两条消息"。</p>
+<h3 id="几个钩子agentloopconfig">1.5
+几个钩子（<code>AgentLoopConfig</code>）</h3>
+<p>loop
+本身只管"调模型、执行工具、判断要不要继续"，其余都交给配置里的回调：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>钩子</th>
+<th>时机</th>
+<th>能做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transformContext</code></td>
+<td>调模型前，消息层面</td>
+<td>修剪/压缩上下文、注入外部内容</td>
+</tr>
+<tr>
+<td><code>convertToLlm</code></td>
+<td>调模型前</td>
+<td>把应用层消息（含 UI 专用消息）转成模型能懂的
+<code>Message[]</code>；<strong>不得抛异常</strong></td>
+</tr>
+<tr>
+<td><code>getApiKey</code></td>
+<td>每次请求前</td>
+<td>动态取 Key（应对会过期的 OAuth 令牌）</td>
+</tr>
+<tr>
+<td><code>prepareRequest</code></td>
+<td>每次请求模型前（含第一次）</td>
+<td>替换本次请求的上下文、模型、思考等级</td>
+</tr>
+<tr>
+<td><code>beforeToolCall</code></td>
+<td>工具参数校验后、执行前</td>
+<td>返回 <code>{block: true}</code> 阻止执行（权限检查）</td>
+</tr>
+<tr>
+<td><code>afterToolCall</code></td>
+<td>工具执行后</td>
+<td>改写工具结果，或设 <code>terminate</code></td>
+</tr>
+<tr>
+<td><code>finishTurn</code></td>
+<td>一个 turn 的工具都执行完后、<code>turn_end</code> 前</td>
+<td>返回 <code>{action: "end"}</code> 结束整个 run，或
+<code>{action: "continue"}</code> 保证再来一次请求</td>
+</tr>
+<tr>
+<td><code>prepareNextTurn</code></td>
+<td><code>turn_end</code> 后、下一轮开始前</td>
+<td>换上下文/模型，追加消息（源码注释里点名了"例如压缩"）</td>
+</tr>
+<tr>
+<td><code>getSteeringMessages</code> /
+<code>getFollowUpMessages</code></td>
+<td>见上</td>
+<td>提供排队消息</td>
+</tr>
+</tbody>
+</table>
+<p>其中 <strong><code>finishTurn</code> 是最像"给 <code>/goal</code>
+预留的接口"的一个</strong>：它的注释写得很明白——<code>{ action: "end" }</code>
+结束运行，<code>{ action: "continue" }</code>
+在正常回合里"保证再来一次模型请求"（如果已经有工具结果、steering 或
+follow-up
+要来，就由它们满足这次请求，不额外多请求；否则用当前上下文再续一次）。出错或被中止的回复则是<strong>硬退出，钩子也拦不住</strong>。</p>
+<h3 id="工具执行与几个防御性细节">1.6 工具执行与几个防御性细节</h3>
+<ul>
+<li><strong>默认并行</strong>：<code>toolExecution</code> 默认
+<code>"parallel"</code>——先按顺序做预检（校验参数、跑
+<code>beforeToolCall</code>），通过的再并发执行；<code>tool_execution_end</code>
+按完成顺序发，但写回对话的工具结果按模型调用的顺序排。任何一个工具标了
+<code>executionMode: "sequential"</code>，整批就串行。</li>
+<li><strong>截断保护</strong>：模型回复因为输出 token
+上限被截断（<code>stopReason === "length"</code>）时，工具调用的参数可能是不完整的
+JSON（源码用"尽力修复的 JSON
+解析器"，所以可能解析成功却缺内容）。于是<strong>这一条消息里的所有工具调用一律不执行</strong>，每个都返回错误，让模型重新发。</li>
+<li><strong><code>terminate</code></strong>：工具结果可以带
+<code>terminate: true</code>；<strong>只有一批工具全都带才会结束</strong>（<code>every</code>）。</li>
+<li><strong>中止</strong>：每一步都检查
+<code>signal.aborted</code>，工具返回
+<code>"Operation aborted"</code>。</li>
+<li><strong>异常变消息</strong>：<code>Agent</code> 类的
+<code>handleRunFailure</code> 把 loop 里抛出的异常，转成一条
+<code>stopReason</code> 为 <code>error</code>/<code>aborted</code> 的
+assistant 消息，再补发 <code>turn_end</code> 和
+<code>agent_end</code>——<strong>界面永远能收到完整的事件序列</strong>。</li>
+</ul>
+<h3 id="事件流ui-和-loop-的唯一接口">1.7 事件流：UI 和 loop
+的唯一接口</h3>
+<p>loop 不碰界面，只发事件：</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">agent_start</span><br><span class="line"> └ turn_start</span><br><span class="line">    ├ message_start <span class="symbol">/</span> message_update(流式增量) <span class="symbol">/</span> message_end     ← 用户、assistant、toolResult 都有</span><br><span class="line">    ├ tool_execution_start <span class="symbol">/</span> tool_execution_update <span class="symbol">/</span> tool_execution_end</span><br><span class="line">    └ turn_end</span><br><span class="line"> └ turn_start …（下一轮）</span><br><span class="line">agent_end</span><br></pre></td></tr></table></figure>
+<p><code>/goal</code> 的各种实现，本质上都是<strong>监听这些事件 +
+在合适的钩子上动手</strong>。</p>
+<h3 id="agent-类并发保护与续跑">1.8 <code>Agent</code>
+类：并发保护与续跑</h3>
+<ul>
+<li><code>prompt()</code> / <code>continue()</code>
+在已有一次运行时会直接抛错："Agent is already processing a prompt. Use
+steer() or followUp() to queue
+messages"——<strong>同一时间只能有一次运行</strong>，想在运行中加消息只能走队列。</li>
+<li><code>continue()</code>：如果最后一条是
+assistant，就<strong>先尝试取 steering 队列，再取 follow-up
+队列</strong>，用它们当新消息跑；两个都空就报错 "Cannot continue from
+message role: assistant"。</li>
+</ul>
+<p><strong>这正好说明了 Pi 的设计立场：loop
+自己不"凭空续跑"，续跑一定要有一条新的输入消息（或工具结果）。</strong>
+这也决定了 <code>/goal</code> 的所有实现都必须"造一条消息"。</p>
+<blockquote>
+<p>顺带一提：源码注释说 <code>prepareNextTurn</code>
+的准备工作可能很耗时（例如压缩）。压缩的完整流程见 [[Pi/Pi
+Compaction：上下文压缩的完整流程|Pi Compaction]]。</p>
+</blockquote>
+<hr />
+<h2 id="claude-code-的-agent-loop">2. Claude Code 的 Agent Loop</h2>
+<blockquote>
+<p>先说明一件事：Claude Code 不是开源的，下面全部来自官方文档（"How
+Claude Code works"，以及 Agent SDK 文档里的"How the agent loop
+works"）。官方明确说，Agent SDK 运行的是<strong>"驱动 Claude Code
+的同一个执行循环"</strong>，所以 SDK 文档里的消息类型、停止条件，就是
+Claude Code 的 loop
+对外暴露的形态。<strong>我读不到它的内部实现</strong>，因此这一章只有"可观察的行为和接口"，没有源码级的细节。</p>
+</blockquote>
+<h3 id="官方的三阶段描述">2.1 官方的三阶段描述</h3>
+<p>官方这样概括：Claude
+拿到任务后，经历三个阶段——<strong>收集上下文（gather
+context）、采取行动（take action）、验证结果（verify
+results）</strong>。这三个阶段是混在一起的：搜文件是在收集上下文，改代码是行动，跑测试是验证，全都靠工具完成。一个问题可能只需要收集上下文；修一个
+bug 则会把三个阶段反复循环好几遍。</p>
+<p>循环由两个部分驱动：<strong>会推理的模型</strong>和<strong>会行动的工具</strong>。Claude
+Code 是包在模型外面、负责提供工具和管理上下文的那一层，官方把这层叫作
+<strong>agentic
+harness（智能体外壳）</strong>。用户也是循环的一部分：可以在任何时刻打断、补充或改方向。</p>
+<blockquote>
+<p>对照上一章 Pi 的 loop：同样的结构，只是 Pi 的 loop
+是一个很薄的纯函数，Claude Code
+的"外壳"要厚得多——权限、检查点、会话、压缩、子代理都包在里面。</p>
+</blockquote>
+<h3 id="一轮循环发生了什么sdk-视角">2.2 一轮循环发生了什么（SDK
+视角）</h3>
+<p>Agent SDK 文档把一次会话拆成五步：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 接收提示   系统提示 + 工具定义 + 对话历史一起交给模型          → 产出 SystemMessage(subtype: &quot;init&quot;)</span><br><span class="line"><span class="bullet">2.</span> 评估并回应 模型回文字、请求一个或多个工具调用，或两者都有       → 每个内容块一条 AssistantMessage</span><br><span class="line"><span class="bullet">3.</span> 执行工具   SDK 执行每个工具，把结果收集起来，喂回模型            → 工具结果以 UserMessage 返回；hooks 可在此拦截</span><br><span class="line"><span class="bullet">4.</span> 重复       第 2、3 步循环；一个完整循环 = 一个 turn</span><br><span class="line">   直到模型给出一条没有工具调用的回复</span><br><span class="line"><span class="bullet">5.</span> 返回结果   最终的文字 AssistantMessage + ResultMessage（结果文本、token 用量、费用、session ID）</span><br></pre></td></tr></table></figure>
+<p>官方举的例子是"Fix the failing tests in auth.ts"，一共四个 turn：</p>
+<ol type="1">
+<li>Turn 1：调 <code>Bash</code> 跑
+<code>npm test</code>，拿到输出（三个失败）；</li>
+<li>Turn 2：调 <code>Read</code> 读 <code>auth.ts</code> 和
+<code>auth.test.ts</code>；</li>
+<li>Turn 3：调 <code>Edit</code> 修 <code>auth.ts</code>，再调
+<code>Bash</code> 重跑测试，三个都过；</li>
+<li>最后一轮：只回文字"修好了，三个测试都通过"，没有工具调用，循环结束。</li>
+</ol>
+<p>关键点：一个 turn
+内部，<strong>工具执行和把结果喂回模型是自动完成的，不会把控制权交还给你的代码</strong>。只有整个循环结束才会交付
+<code>ResultMessage</code>。</p>
+<h3 id="它吐出的消息">2.3 它吐出的消息</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SystemMessage</code></td>
+<td>会话生命周期事件，靠 <code>subtype</code>
+区分：<code>init</code>（会话元数据）、<code>compact_boundary</code>（压缩发生后）、<code>informational</code>（状态横幅）、<code>worker_shutting_down</code>
+等</td>
+</tr>
+<tr>
+<td><code>AssistantMessage</code></td>
+<td>模型回复的<strong>每个内容块一条</strong>（一段文字、一个工具调用请求各是一条），同一次回复的几条共享消息
+ID</td>
+</tr>
+<tr>
+<td><code>UserMessage</code></td>
+<td>每次工具执行后发回模型的<strong>工具结果</strong>；也包括你在循环中途流式输入的用户消息</td>
+</tr>
+<tr>
+<td><code>StreamEvent</code></td>
+<td>仅在开启部分消息时出现：原始的 API
+流式事件（文字增量、工具参数片段）</td>
+</tr>
+<tr>
+<td><code>ResultMessage</code></td>
+<td><strong>循环的终点</strong>：最终文字、token 用量、费用、session
+ID；用 <code>subtype</code> 判断成功还是撞到上限</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>对比 Pi：Pi
+的事件粒度更细（<code>message_start/update/end</code>、<code>tool_execution_start/update/end</code>、<code>turn_start/end</code>、<code>agent_start/end</code>）；Claude
+Code 的 SDK 消息是"内容块级"的，另有一个明确的"结果消息"收尾。</p>
+</blockquote>
+<h3 id="怎样才算停">2.4 怎样才算"停"</h3>
+<ul>
+<li><strong>默认规则和 Pi
+一样</strong>：模型这一轮的回复里没有工具调用，就结束。</li>
+<li><strong>外部上限</strong>（默认都没有）：
+<ul>
+<li><code>maxTurns</code>：最多多少次"用了工具的
+turn"（只数带工具调用的回合）；</li>
+<li><code>maxBudgetUsd</code>：花费上限，<strong>子代理的花费也计入</strong>；超限后再起子代理会失败，并停止还在后台跑的子代理（官方说明这些执行行为需要
+v2.1.217 以上）。</li>
+</ul></li>
+<li>撞到上限时，<code>ResultMessage</code> 的 <code>subtype</code>
+是对应的错误类型：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>subtype</code></th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>success</code></td>
+<td>正常完成（只有这个带 <code>result</code> 字段）</td>
+</tr>
+<tr>
+<td><code>error_max_turns</code></td>
+<td>撞到 <code>maxTurns</code></td>
+</tr>
+<tr>
+<td><code>error_max_budget_usd</code></td>
+<td>撞到 <code>maxBudgetUsd</code></td>
+</tr>
+<tr>
+<td><code>error_during_execution</code></td>
+<td>循环被错误打断（例如请求被取消）</td>
+</tr>
+<tr>
+<td><code>error_max_structured_output_retries</code></td>
+<td>结构化输出多次校验失败</td>
+</tr>
+</tbody>
+</table>
+<p>另有 <code>stop_reason</code> 说明模型最后一轮为什么停：常见
+<code>end_turn</code>（正常结束）、<code>max_tokens</code>（撞到输出上限）、<code>refusal</code>（拒绝）。</p>
+<p>一个有意为之的细节：<strong>单次 <code>query()</code>
+在产出错误结果之后会抛异常</strong>，需要自己包
+try；而流式输入的会话在错误后仍然活着（会话崩溃除外）。</p>
+<blockquote>
+<p>没有上限时，循环会一直跑到模型自己停。官方原话大意：这对边界清楚的任务没问题，对"改进这个代码库"这类开放任务可能跑很久；生产环境设预算是个好默认。</p>
+</blockquote>
+<h3 id="工具执行与权限">2.5 工具执行与权限</h3>
+<p><strong>并行策略</strong>：同一个 turn 里模型请求多个工具时：</p>
+<ul>
+<li><strong>只读工具</strong>（<code>Read</code>、<code>Glob</code>、<code>Grep</code>，以及标记为只读的
+MCP 工具）可以<strong>并发</strong>；</li>
+<li><strong>会改状态的工具</strong>（<code>Edit</code>、<code>Write</code>、<code>Bash</code>）<strong>串行</strong>，避免冲突；</li>
+<li>自定义工具默认串行，设置 <code>readOnlyHint</code> 才能并行。</li>
+</ul>
+<blockquote>
+<p>对比 Pi：Pi 默认是"先顺序预检、再并发执行"，只有被标成
+<code>sequential</code>
+的工具才让整批串行。两家的默认方向正好相反：Claude Code
+默认保守（写操作串行），Pi 默认激进（除非声明）。</p>
+</blockquote>
+<p><strong>权限</strong>由三项配置共同决定：<code>allowedTools</code>（自动批准）、<code>disallowedTools</code>（一律拒绝）、<code>permissionMode</code>（总体放权程度）。模式有：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>需要批准的调用交给你的回调，没有回调就拒绝</td>
+</tr>
+<tr>
+<td><code>acceptEdits</code></td>
+<td>自动批准文件编辑和常见文件系统命令</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>只探索和规划，不改源文件</td>
+</tr>
+<tr>
+<td><code>dontAsk</code></td>
+<td>从不弹确认：预批准的照跑，其余一律拒绝</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>用一个模型分类器审查每个动作，放行或拦截</td>
+</tr>
+<tr>
+<td><code>bypassPermissions</code></td>
+<td>全部放行（仅限隔离环境）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>被拒绝的工具调用不会让循环崩溃</strong>：模型收到一条"被拒绝"的消息作为工具结果，通常会换个办法或汇报做不了。这和
+Pi 的 <code>beforeToolCall</code> 返回 <code>{block: true}</code>、loop
+发一条错误工具结果的做法是同一个思路。</p>
+<p>此外，<code>ToolSearch</code>
+工具可以按需加载工具定义而不是全部预载，这正是上一篇 MCP
+笔记里提到的"工具定义吃上下文"的解法。</p>
+<h3 id="hooksloop-上的插槽">2.6 Hooks：loop 上的插槽</h3>
+<p>Hooks 是在循环特定位置触发的回调：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Hook</th>
+<th>触发时机</th>
+<th>常见用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PreToolUse</code></td>
+<td>工具执行前</td>
+<td>校验输入、拦截危险命令（可短路：拒绝后工具不执行，模型收到拒绝消息）</td>
+</tr>
+<tr>
+<td><code>PostToolUse</code></td>
+<td>工具返回后</td>
+<td>审计输出、触发副作用</td>
+</tr>
+<tr>
+<td><code>UserPromptSubmit</code></td>
+<td>提交提示时</td>
+<td>注入额外上下文</td>
+</tr>
+<tr>
+<td><strong><code>Stop</code></strong></td>
+<td><strong>agent 要结束时</strong></td>
+<td>验证结果、保存状态——<strong>也是 <code>/goal</code>
+的挂点</strong></td>
+</tr>
+<tr>
+<td><code>SubagentStart</code> / <code>SubagentStop</code></td>
+<td>子代理启动/结束</td>
+<td>汇总并行任务结果</td>
+</tr>
+<tr>
+<td><code>PreCompact</code></td>
+<td>压缩前</td>
+<td>归档完整对话记录</td>
+</tr>
+</tbody>
+</table>
+<p>Hooks
+运行在<strong>你的应用进程</strong>里，不在模型的上下文窗口中，所以不占上下文。</p>
+<blockquote>
+<p>对照 Pi：<code>beforeToolCall</code>/<code>afterToolCall</code> ≈
+<code>PreToolUse</code>/<code>PostToolUse</code>；<code>finishTurn</code>
+和"要停了"的外环 ≈ <code>Stop</code>。<strong>差别是 Pi
+把钩子做成库的回调参数，Claude Code 把它做成用户可在 settings
+里配置的机制</strong>——这决定了后面 <code>/goal</code>
+一个能"配置出来"，一个要"写扩展"。</p>
+</blockquote>
+<h3 id="上下文与压缩">2.7 上下文与压缩</h3>
+<ul>
+<li>上下文窗口<strong>不会在 turn
+之间重置</strong>，一切不断累积：系统提示、工具定义、对话历史、工具输入输出。不变的部分（系统提示、工具定义、<code>CLAUDE.md</code>）会被自动
+prompt cache。</li>
+<li><strong>快满时自动压缩</strong>：官方的描述是先清理较旧的工具输出，再在必要时对对话做摘要；你的请求和关键代码片段会保留，早期的详细指令可能丢失。压缩发生时流里会出现
+<code>compact_boundary</code> 的 <code>SystemMessage</code>。</li>
+<li><strong>持久规则应写进
+<code>CLAUDE.md</code></strong>，因为它每次请求都会重新注入，不会在压缩中丢掉；也可以在
+<code>CLAUDE.md</code> 里写"压缩时必须保留什么"，或用
+<code>PreCompact</code> hook、<code>/compact</code> 手动控制。</li>
+<li><strong>一个循环级的熔断器</strong>：如果某个文件或工具输出太大，导致每次压缩后上下文立刻又满，Claude
+Code
+在尝试几次后会<strong>停止自动压缩并报错</strong>，而不是无限循环（文档里叫
+thrashing 错误）。</li>
+<li><strong>子代理</strong>在独立上下文里工作，只有它的最终回复作为工具结果回传，所以主
+agent 的上下文只增长一段摘要。</li>
+<li>MCP
+工具定义默认<strong>延迟加载</strong>（工具搜索），上下文里先只有工具名和服务器说明。</li>
+</ul>
+<h3 id="中途插话">2.8 中途插话</h3>
+<p>官方文档讲了两种方式：</p>
+<ul>
+<li><strong>输入一段话然后回车（不打断）</strong>：消息进入队列，显示为"已排队"。如果
+Claude 正在执行工具调用，<strong>等这些调用结束后、在同一个 turn
+内读取</strong>，并在下一步前调整。</li>
+<li><strong>按
+<code>Esc</code></strong>：立刻停下，取消正在运行的工具调用，等待下一条指令；已排队的消息会接着发送。</li>
+</ul>
+<blockquote>
+<p>第一种就是 Pi 里的 <strong>steering</strong>（每个 turn
+的工具跑完后取走）。至于 Pi
+的另一种插话——<strong>follow-up</strong>（agent
+本来要停时才取走）——我读到的 Claude Code
+文档里没有提到直接对应的机制；"要停了再续"这件事，在 Claude Code 里由
+<code>Stop</code> hook 完成。</p>
+</blockquote>
+<h3 id="会话与回退loop-之外的东西">2.9 会话与回退（loop
+之外的东西）</h3>
+<ul>
+<li>每条消息、工具调用、结果都写进 <code>~/.claude/projects/</code>
+下的纯文本 JSONL，所以能<strong>恢复</strong>（<code>--continue</code> /
+<code>--resume</code>，沿用同一个 session
+ID）和<strong>分叉</strong>（<code>--fork-session</code>，复制历史到新
+ID）。</li>
+<li>改文件之前会做<strong>检查点</strong>快照，按两次 <code>Esc</code>
+可回退；但只覆盖文件改动，数据库、API、部署这类远程动作无法回退，靠权限模式控制。</li>
+<li>每个新会话都是全新的上下文窗口；跨会话的东西靠
+<code>CLAUDE.md</code> 和自动记忆。</li>
+</ul>
+<h3 id="两个-loop-放在一起看">2.10 两个 loop 放在一起看</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Pi</strong>（读源码）</th>
+<th><strong>Claude Code</strong>（读官方文档）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>循环单位</td>
+<td>turn = 一次模型回复 + 它的所有工具调用</td>
+<td>同</td>
+</tr>
+<tr>
+<td>默认的停止判定</td>
+<td>回复里没有工具调用</td>
+<td>同</td>
+</tr>
+<tr>
+<td>内置的上限</td>
+<td><code>agent-loop.ts</code> 里没有轮数/预算上限，交给上层</td>
+<td><code>maxTurns</code>、<code>maxBudgetUsd</code>（含子代理）</td>
+</tr>
+<tr>
+<td>工具并行策略</td>
+<td>默认并行，标 <code>sequential</code> 的串行</td>
+<td>只读并发，改状态的串行</td>
+</tr>
+<tr>
+<td>工具前/后钩子</td>
+<td><code>beforeToolCall</code> /
+<code>afterToolCall</code>（库回调）</td>
+<td><code>PreToolUse</code> / <code>PostToolUse</code>（可配置
+hook）</td>
+</tr>
+<tr>
+<td>被拒绝的工具调用</td>
+<td>返回错误工具结果，模型继续</td>
+<td>返回拒绝消息作为工具结果，模型继续</td>
+</tr>
+<tr>
+<td>回合收尾钩子</td>
+<td><code>finishTurn</code>（可 <code>end</code> /
+<code>continue</code>）</td>
+<td><code>Stop</code> hook（可阻止停止并反馈理由）</td>
+</tr>
+<tr>
+<td>中途插话</td>
+<td>steering 队列 + follow-up 队列</td>
+<td>排队消息（类似 steering）；"要停了再续"靠 Stop hook</td>
+</tr>
+<tr>
+<td>压缩的挂点</td>
+<td><code>prepareNextTurn</code> /
+<code>transformContext</code>（库回调）</td>
+<td>自动压缩 + <code>PreCompact</code> hook</td>
+</tr>
+<tr>
+<td>对外形态</td>
+<td>细粒度事件流（<code>message_*</code>、<code>tool_execution_*</code>、<code>turn_*</code>、<code>agent_*</code>）</td>
+<td>消息流（5 种消息）+ <code>ResultMessage</code> 收尾</td>
+</tr>
+<tr>
+<td>防死循环</td>
+<td>调用方负责</td>
+<td>压缩 thrashing 熔断；Stop hook 连续阻止 8 次的上限（见 4.5）</td>
+</tr>
+<tr>
+<td>可读性</td>
+<td>开源，约 940 行可读完</td>
+<td>闭源，只有文档描述</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong>：两个 loop 的骨架完全一样（"模型 → 工具 →
+回灌，直到没有工具调用"），差异在<strong>外壳</strong>：Claude Code
+把钩子、权限、检查点、会话做成产品功能，让用户用配置去扩展；Pi
+把同样的插槽留成库的回调，让开发者用代码去扩展。理解了这一点，下面三种
+<code>/goal</code> 实现的区别就很自然了。</p>
+<hr />
+<h2 id="为什么需要-goalloop-的停是谁说了算">3. 为什么需要
+<code>/goal</code>：loop 的"停"是谁说了算</h2>
+<p>回到伪代码里那句 <code>if 没有工具调用: break</code>。</p>
+<p>模型停下来，只意味着<strong>这一轮它觉得没必要再调工具了</strong>。可能的原因：</p>
+<ol type="1">
+<li>真做完了；</li>
+<li>它<strong>以为</strong>做完了（没跑测试就说"应该可以了"）；</li>
+<li>遇到困难，用一段"总结"体面地结束；</li>
+<li>上下文快满了，倾向收尾。</li>
+</ol>
+<p>对短任务这没问题，你看一眼就能接着说"没做完，继续"。但对<strong>长任务</strong>（迁移几十个文件、清完一个
+issue 队列），每隔几分钟就得有人盯着说"继续"——这正是 <code>/goal</code>
+要消灭的人工步骤：</p>
+<blockquote>
+<p>官方文档的说法：<code>/goal</code> 用
+<strong>per-turn（每轮）的确认</strong>取代人工的 per-turn 提示；auto
+mode 则是去掉 per-tool（每次工具调用）的确认。两者互补。</p>
+</blockquote>
+<p>所以 <code>/goal</code> 要回答三个问题：</p>
+<ol type="1">
+<li><strong>条件</strong>怎么表达、存在哪？（一段文字？结构化？存进会话还是数据库？）</li>
+<li><strong>谁来判</strong>条件满足了没有？（干活的模型 / 另一个模型 /
+脚本？）</li>
+<li><strong>没满足时</strong>，怎么让 loop
+继续、又怎么防止它无限空转？</li>
+</ol>
+<p>下面三章是三种不同的答案。</p>
+<hr />
+<h2 id="claude-codestop-hook-独立评估模型">4. Claude Code：Stop hook +
+独立评估模型</h2>
+<h3 id="一句话">4.1 一句话</h3>
+<p>官方文档写得直接：<strong><code>/goal</code>
+是一个"会话级、基于提示的 Stop hook"的封装。</strong></p>
+<p>用法：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">/goal all tests in test/auth pass and the lint step is clean</span><br></pre></td></tr></table></figure>
+<p>设置之后<strong>立刻开始一个
+turn</strong>，条件本身就是指令，不用另发提示。条件最长 4000
+字符；一个会话同一时间只有一个目标，新的覆盖旧的。据第三方文章，需要
+Claude Code v2.1.139 以上。</p>
+<h3 id="stop-hook-是什么">4.2 Stop hook 是什么</h3>
+<p>Claude Code 的 hooks
+机制允许在生命周期事件上挂处理程序。<strong><code>Stop</code> 事件在
+Claude 要结束这一轮回复时触发</strong>。普通的 Stop hook
+是一个命令：返回 <code>{"decision": "block", "reason": "..."}</code>
+或以退出码 2 结束，就<strong>阻止停下，并把 reason 作为下一步指令喂给
+Claude</strong>。</p>
+<p>还有一种 <code>type: "prompt"</code> 的
+hook——不跑脚本，而是把你写的提示词和 hook
+的输入交给一个小模型，<strong>它只需要回 JSON</strong>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;ok&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span>                                         <span class="comment">// 条件满足，放行</span></span><br><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;ok&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span> <span class="attr">&quot;reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;还有 3 个测试没通过&quot;</span> <span class="punctuation">&#125;</span>        <span class="comment">// 没满足：reason 反馈给 Claude 继续干</span></span><br><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;ok&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span> <span class="attr">&quot;reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;impossible&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span>   <span class="comment">// 判定条件永远不可能满足：允许停止</span></span><br></pre></td></tr></table></figure>
+<p>官方 hooks 指南里有个现成的写法，<strong>这就是 <code>/goal</code>
+的原型</strong>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;hooks&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Stop&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span> <span class="attr">&quot;hooks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;prompt&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Check if all tasks are complete. If not, respond with &#123;\&quot;ok\&quot;: false, \&quot;reason\&quot;: \&quot;what remains to be done\&quot;&#125;.&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">]</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>/goal</code> 就是把"把条件写进这样一个
+hook"这件事做成了一条命令，且<strong>只对当前会话生效</strong>（普通
+Stop hook 写在 settings
+文件里，对该范围内的所有会话生效，还可以跑脚本做确定性检查）。</p>
+<h3 id="一次循环里发生了什么">4.3 一次循环里发生了什么</h3>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">你：<span class="symbol">/goal</span> <span class="operator">&lt;</span>条件<span class="operator">&gt;</span></span><br><span class="line"> │</span><br><span class="line"> ▼</span><br><span class="line">Claude 开始干活（读文件 <span class="symbol">/</span> 跑命令 <span class="symbol">/</span> 改代码）… 一个 turn 结束</span><br><span class="line"> │</span><br><span class="line"> ▼  触发 Stop hook</span><br><span class="line">Claude Code 把【条件 <span class="operator">+</span> 对话记录】发给评估模型（默认 Haiku，沿用当前会话的供应商）</span><br><span class="line"> │</span><br><span class="line"> ├ ok:<span class="literal">false</span> <span class="operator">+</span> reason ──► Claude 带着 reason 开始下一个 turn（回到上面）</span><br><span class="line"> ├ ok:<span class="literal">true</span>            ──► 目标清除，记一条<span class="string">&quot;达成&quot;</span>到对话记录，交还控制权</span><br><span class="line"> └ impossible          ──► 目标清除，记一条<span class="string">&quot;失败&quot;</span><span class="operator">+</span>原因，交还控制权</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对应到前两章的 loop：这就是 2.6 里说的 <strong><code>Stop</code>
+插槽</strong>，相当于 Pi 的 <strong><code>finishTurn</code> /
+外环里的一次评估</strong>——turn 结束 → 评估 →
+要么放行，要么塞一条消息再来一轮。</p>
+</blockquote>
+<h3 id="最关键的设计约束评估者不调工具">4.4
+最关键的设计约束：评估者不调工具</h3>
+<blockquote>
+<p><strong>评估模型不调用工具，不读文件，不跑命令，只能判断 Claude
+已经放进对话里的东西。</strong></p>
+</blockquote>
+<p>这直接决定了怎么写条件：</p>
+<ul>
+<li>✅ <code>npm test 退出码为 0</code>——Claude
+会跑，输出会出现在记录里，评估者能看到；</li>
+<li>❌ "代码质量很好"——没有可展示的证据，评估者无从判断；</li>
+<li>✅ 要包含<strong>一个可度量的终态 + 一个说明如何证明的检查 +
+不能动的约束</strong>，比如"<code>git status</code>
+干净，且没有修改其他测试文件"。</li>
+</ul>
+<p>想限制跑多久，也是<strong>写进条件里</strong>：<code>... or stop after 20 turns</code>——由
+Claude
+每轮汇报进度，评估者据此判断。（也就是说，turn/时间上限本身也是"被评估的文字"，不是运行时的硬限制。）</p>
+<h3 id="防止空转与出错处理官方文档的几条规则">4.5
+防止空转与出错处理（官方文档的几条规则）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>情形</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude
+一直回答评估者却毫无进展</strong>（连续几轮没有工具调用）</td>
+<td>停止循环，打印警告，<strong>目标保留</strong>，等你下次输入再继续评估</td>
+</tr>
+<tr>
+<td>普通 Stop hook 连续阻止 8 次没进展</td>
+<td>Claude Code 覆盖该 hook（可用环境变量
+<code>CLAUDE_CODE_STOP_HOOK_BLOCK_CAP</code> 调整）；脚本型 hook
+应检查输入里的 <code>stop_hook_active</code> 避免死循环</td>
+</tr>
+<tr>
+<td>还有<strong>子代理或后台命令</strong>在跑</td>
+<td><strong>跳过本轮评估</strong>，等没有后台任务的下一个 turn
+结束再评估；后台任务结束时作为新 turn 送回结果。等了 30
+分钟会做一次"check-in"，之后间隔翻倍（最多 4 倍）</td>
+</tr>
+<tr>
+<td>需要你修的错误（认证失败、余额耗尽、上下文溢出压缩不掉、模型不可用）</td>
+<td><strong>清除目标</strong>并警告，修好后重新 <code>/goal</code></td>
+</tr>
+<tr>
+<td>其他错误（服务过载、断线、限流等）</td>
+<td>目标保留；可恢复的自动重试 3 次后暂停，限流类直接暂停</td>
+</tr>
+<tr>
+<td>恢复会话（<code>--resume</code> / <code>--continue</code>）</td>
+<td>条件恢复，但<strong>轮数、计时、token
+基线重置</strong>；已达成/已清除的不恢复</td>
+</tr>
+</tbody>
+</table>
+<p>非交互模式也能用：<code>claude -p "/goal CHANGELOG.md has an entry for every PR merged this week"</code>
+会一直跑到结束；默认文本输出在结束前什么都不打印，看起来像卡住，要加
+<code>--output-format stream-json --verbose</code> 才能看到过程。</p>
+<h3 id="一个值得注意的前提">4.6 一个值得注意的前提</h3>
+<p><code>/goal</code> 依赖 hooks 系统，所以和 hooks
+受同样的限制：<strong>工作区未被信任、<code>disableAllHooks</code>
+为真、或托管设置里启用了 <code>allowManagedHooksOnly</code>
+时不可用</strong>，命令会明确告诉你原因，而不是默默失效。</p>
+<h3 id="goalloopstop-hook-的区别">4.7
+<code>/goal</code>、<code>/loop</code>、Stop hook 的区别</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>下一轮何时开始</th>
+<th>何时结束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/goal</code></td>
+<td><strong>上一轮结束时</strong>（或空闲 check-in、自动重试到期）</td>
+<td>模型确认达成/判定不可能，或出现需要修的错误，或
+<code>/goal clear</code></td>
+</tr>
+<tr>
+<td><code>/loop</code></td>
+<td><strong>经过一段时间间隔</strong></td>
+<td>你停止，或 Claude 认为做完</td>
+</tr>
+<tr>
+<td>Stop hook</td>
+<td>上一轮结束时</td>
+<td>你自己的脚本或提示决定</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="codex持久化的目标状态机">5. Codex：持久化的目标状态机</h2>
+<blockquote>
+<p>这一章依据一份对 Codex 相关 PR 的第三方实现分析（GitHub
+Gist）和几篇介绍文章，<strong>不是官方文档</strong>；据这些来源，该功能随
+Codex CLI 0.128.0（2026-04-30）加入。内部细节可能与现行版本有出入。</p>
+</blockquote>
+<h3 id="路线不靠外部评审靠状态-工具-事件">5.1
+路线：不靠"外部评审"，靠"状态 + 工具 + 事件"</h3>
+<p>Codex 把 <code>/goal</code> 做成了一个<strong>五层系统</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>层</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong>持久化</strong></td>
+<td>SQLite 表
+<code>thread_goals</code>，每个线程一条：<code>goal_id</code>（UUID）、<code>objective</code>、<code>status</code>、<code>token_budget</code>、<code>tokens_used</code>、<code>time_used_seconds</code>、时间戳</td>
+</tr>
+<tr>
+<td>② <strong>服务端 API</strong></td>
+<td><code>thread/goal/set</code> / <code>get</code> / <code>clear</code>
+三个 JSON-RPC
+方法，加两个通知（<code>updated</code>、<code>cleared</code>）让各客户端同步</td>
+</tr>
+<tr>
+<td>③ <strong>模型工具</strong></td>
+<td>只给模型三个：<code>create_goal</code>、<code>update_goal</code>（<strong>只能</strong>标记
+<code>complete</code>）、<code>get_goal</code></td>
+</tr>
+<tr>
+<td>④ <strong>运行时核算</strong></td>
+<td>事件总线（<code>core/src/goals.rs</code>）：记录每个 turn 的 token
+增量和墙钟时间，自动暂停/恢复/续跑</td>
+</tr>
+<tr>
+<td>⑤ <strong>界面</strong></td>
+<td>注册 <code>/goal</code> 命令；状态栏显示目标、状态、耗时、token</td>
+</tr>
+</tbody>
+</table>
+<p>状态有四种：<code>active</code>（进行中、计量）、<code>paused</code>（暂停、不计量）、<code>budget_limited</code>（预算用完，终态）、<code>complete</code>（完成，终态）。</p>
+<h3 id="三个值得学的设计">5.2 三个值得学的设计</h3>
+<p><strong>① 不对称的控制权。</strong>
+模型只能"创建目标"和"把目标标记为完成"，<strong>不能暂停、恢复、改预算</strong>——这些转换由系统控制。工具说明里还特意写了："只有用户明确要求时才创建目标，不要从普通任务里推断目标。"</p>
+<p><strong>② 事件总线驱动。</strong> 运行时监听会话生命周期事件：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TurnStarted</code></td>
+<td>记录 token 基线</td>
+</tr>
+<tr>
+<td><code>ToolCompleted</code></td>
+<td>累计增量，必要时注入"转向"消息</td>
+</tr>
+<tr>
+<td><code>TaskAborted(Interrupted)</code></td>
+<td><strong>用户中断 → 自动暂停</strong>当前目标</td>
+</tr>
+<tr>
+<td><code>ThreadResumed</code></td>
+<td>恢复会话 → 重新激活暂停的目标</td>
+</tr>
+<tr>
+<td><code>MaybeContinueIfIdle</code></td>
+<td><strong>空闲时判断是否自动续跑</strong></td>
+</tr>
+<tr>
+<td><code>ExternalSet/ExternalClear</code></td>
+<td>用户手动改目标</td>
+</tr>
+</tbody>
+</table>
+<p><strong>③ 保守的续跑 + 防空转。</strong>
+自动续跑是<strong>一次一轮</strong>的：触发条件是会话恢复或外部激活目标；如果某次续跑的那一轮<strong>一个工具都没调用</strong>，就设置
+<code>continuation_suppressed</code>
+标志，<strong>阻止下一次自动续跑</strong>；用户操作、工具调用或外部变更才会重置它。再加上一个信号量保证同一时间只有一次续跑在飞。</p>
+<p>此外：</p>
+<ul>
+<li><strong>预算转向</strong>：token
+用量越过预算时，往模型的响应流里注入一条 <code>budget_limiting</code>
+消息，让它收尾汇报；在完成的那一轮和已提示过之后不再重复提示。</li>
+<li><strong>防过期更新</strong>：目标被替换时生成新的
+<code>goal_id</code>，旧目标的核算调用到达时<strong>直接丢弃</strong>，不会覆盖新目标。</li>
+<li><strong>原子预算判断</strong>：用 SQL 的 <code>CASE</code>
+在写入时判断是否超预算，避免竞态。</li>
+</ul>
+<h3 id="与-claude-code-的核心区别">5.3 与 Claude Code 的核心区别</h3>
+<blockquote>
+<p><strong>谁说"做完了"？</strong> Codex
+是<strong>干活的模型自己</strong>调用
+<code>update_goal(complete)</code>；Claude Code
+是<strong>另一个模型</strong>读记录来判。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>独立评审（Claude Code）</th>
+<th>模型自评（Codex、Pi 扩展）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优点</td>
+<td>不被干活的模型自己的"自信"带偏；便宜的小模型就够</td>
+<td>能看到完整上下文，知道刚才发生了什么；不需要额外模型调用</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td><strong>只能看记录</strong>；条件要写成"能被记录证明"；多一次模型调用</td>
+<td>有"自己给自己打分"的偏见；要靠提示词强迫它提供证据</td>
+</tr>
+<tr>
+<td>防御手段</td>
+<td>条件里写明检查方式</td>
+<td>在系统提示里要求"调用 <code>update_goal</code>
+前必须有当前的文件/命令/测试/产物证据"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="pi社区扩展怎么挂在-loop-上">6. Pi：社区扩展怎么挂在 loop 上</h2>
+<h3 id="先说明一件事">6.1 先说明一件事</h3>
+<p>据我查到的范围，<strong>Pi 核心没有内置
+<code>/goal</code></strong>，是社区用扩展做的。Pi 的包站点 pi.dev
+上至少有几个：<code>pi-agent-goal</code>、<code>@tian.zuo/pi-goal</code>（自述为"Codex
+风格的持久化目标模式"）、<code>@ramarivera/pi-goal</code>。下面的实现细节来自它们的<strong>包主页描述</strong>，我没有逐个读源码，所以只谈它们<strong>声称</strong>怎么做。</p>
+<h3 id="tian.zuopi-goal-的做法据其说明">6.2
+<code>@tian.zuo/pi-goal</code> 的做法（据其说明）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>问题</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>状态存哪</strong></td>
+<td>用 Pi 的自定义条目：每次状态变化 <code>pi.appendEntry()</code>
+追加一条。状态<strong>随会话分支回放</strong>，所以重启、fork、用
+<code>/tree</code> 导航后都能重建；目标就归属于"当前分支"</td>
+</tr>
+<tr>
+<td><strong>怎么让模型知道目标</strong></td>
+<td>每次调模型前，把目标作为一条<strong>临时的 user
+角色消息</strong>注入（续跑、重试也一样），<strong>不提升到
+system/developer
+权限</strong>；系统提示里只放扩展自己的可信指引（怎么审计证据、工具规则）</td>
+</tr>
+<tr>
+<td><strong>模型能做什么</strong></td>
+<td>两个工具：<code>get_goal</code>、<code>update_goal</code>（只能标记完成或阻塞）；暂停、恢复、预算、清除由用户/运行时控制</td>
+</tr>
+<tr>
+<td><strong>怎么续跑</strong></td>
+<td>run
+结束后，<strong>只在线程空闲且没有待处理的用户输入时</strong>，排入<strong>恰好一个</strong>
+follow-up 回合</td>
+</tr>
+<tr>
+<td><strong>防空转</strong></td>
+<td>如果一次续跑<strong>没有任何工具调用</strong>，抑制下一次自动续跑</td>
+</tr>
+<tr>
+<td><strong>预算</strong></td>
+<td>累计 assistant 与工具结果的 token；超预算状态变
+<code>budget-limited</code>，注入"停止并汇报"消息；预算错误在整个 run
+最终稳定、没有重试后才算终态</td>
+</tr>
+<tr>
+<td><strong>完成证据</strong></td>
+<td>完成指引要求在调用 <code>update_goal</code>
+<strong>之前</strong>有当前的文件、命令、测试、基准、产物或调研证据</td>
+</tr>
+</tbody>
+</table>
+<p>对照第 1 章的 loop，几乎每一项都能找到对应的钩子：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th><code>/goal</code> 要做的事</th>
+<th>对应 loop 机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标注入每次请求</td>
+<td><code>transformContext</code> /
+<code>prepareRequest</code>（请求前钩子）</td>
+</tr>
+<tr>
+<td>要停了，续一轮</td>
+<td><strong>follow-up 队列</strong>（外环）或 <code>finishTurn</code>
+返回 <code>continue</code></td>
+</tr>
+<tr>
+<td>用户打断 → 暂停</td>
+<td><code>abort()</code> + 监听 <code>agent_end</code> 里的
+<code>aborted</code></td>
+</tr>
+<tr>
+<td>token 核算</td>
+<td>监听 <code>turn_end</code> / <code>message_end</code> 里的
+<code>usage</code></td>
+</tr>
+<tr>
+<td>持久化与恢复</td>
+<td>会话里的自定义条目（Pi 的 session 层，不在 loop 里）</td>
+</tr>
+<tr>
+<td>工具 <code>get_goal</code>/<code>update_goal</code></td>
+<td>普通 <code>AgentTool</code>；完成时可以带
+<code>terminate</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="示意在-pi-上做一个判官式goal">6.3 示意：在 Pi
+上做一个"判官式"<code>/goal</code></h3>
+<blockquote>
+<p>⚠️ <strong>下面是我根据第 1
+章读到的接口写的示意代码，没有运行过，也不是任何现有扩展的源码</strong>，只用来说明"外环怎么接"。类型和
+API 名字以你使用的 Pi 版本为准。</p>
+</blockquote>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">goal</span>: &#123; <span class="attr">condition</span>: <span class="built_in">string</span>; <span class="attr">idleRounds</span>: <span class="built_in">number</span> &#125; | <span class="literal">null</span> = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">MAX_IDLE</span> = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> agent = <span class="keyword">new</span> <span class="title class_">Agent</span>(&#123;</span><br><span class="line">  <span class="comment">// …model、tools、convertToLlm 等…</span></span><br><span class="line">  <span class="attr">finishTurn</span>: <span class="title function_">async</span> (turn) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!goal) <span class="keyword">return</span>;                          <span class="comment">// 没有目标，走默认行为</span></span><br><span class="line">    <span class="keyword">if</span> (turn.<span class="property">toolResults</span>.<span class="property">length</span> &gt; <span class="number">0</span>) <span class="keyword">return</span>;    <span class="comment">// 这一轮还在调工具，说明没到&quot;要停&quot;的时候</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// agent 这一轮没调工具：本来要停了 → 请&quot;判官&quot;看看</span></span><br><span class="line">    <span class="keyword">const</span> verdict = <span class="keyword">await</span> <span class="title function_">judge</span>(goal.<span class="property">condition</span>, turn.<span class="property">context</span>.<span class="property">messages</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (verdict.<span class="property">met</span>) &#123; goal = <span class="literal">null</span>; <span class="keyword">return</span>; &#125;                       <span class="comment">// 达成：放行</span></span><br><span class="line">    <span class="keyword">if</span> (verdict.<span class="property">impossible</span> || ++goal.<span class="property">idleRounds</span> &gt; <span class="variable constant_">MAX_IDLE</span>) &#123;       <span class="comment">// 不可能 / 空转太多：硬停</span></span><br><span class="line">      goal = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">action</span>: <span class="string">&quot;end&quot;</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 没达成：造一条 user 消息，排进 follow-up，外环取到就会再来一轮</span></span><br><span class="line">    agent.<span class="title function_">followUp</span>(&#123;</span><br><span class="line">      <span class="attr">role</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">      <span class="attr">content</span>: [&#123; <span class="attr">type</span>: <span class="string">&quot;text&quot;</span>, <span class="attr">text</span>: <span class="string">`目标尚未达成：<span class="subst">$&#123;verdict.reason&#125;</span>。请继续。`</span> &#125;],</span><br><span class="line">      <span class="attr">timestamp</span>: <span class="title class_">Date</span>.<span class="title function_">now</span>(),</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这段示意里体现的三个要点，正是前面三种实现的共同骨架：</p>
+<ol type="1">
+<li><strong>挂点</strong>：turn
+收尾（<code>finishTurn</code>）或"要停了"（follow-up 外环）；</li>
+<li><strong>续跑靠造消息</strong>：因为 loop 不会凭空续跑，要补一条 user
+消息；</li>
+<li><strong>必须有熔断</strong>：<code>impossible</code>
+与空转计数，否则"判官"一直说"没完成"就会无限循环。</li>
+</ol>
+<hr />
+<h2 id="横向对比">7. 横向对比</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Claude Code</strong></th>
+<th><strong>Codex</strong></th>
+<th><strong>Pi 社区扩展</strong>（据说明）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现位置</td>
+<td>内置，封装 Stop hook</td>
+<td>内置，五层系统</td>
+<td>扩展，挂在 loop 钩子/队列上</td>
+</tr>
+<tr>
+<td>谁判定完成</td>
+<td><strong>独立小模型</strong>读对话记录</td>
+<td>模型自己 <code>update_goal(complete)</code></td>
+<td>模型自己（要求给证据）</td>
+</tr>
+<tr>
+<td>条件/目标存哪</td>
+<td>会话里（hook 状态）</td>
+<td><strong>SQLite</strong>（<code>thread_goals</code>）</td>
+<td><strong>会话自定义条目</strong>（随分支回放）</td>
+</tr>
+<tr>
+<td>续跑触发</td>
+<td>Stop hook 返回 <code>ok:false</code></td>
+<td>事件总线 <code>MaybeContinueIfIdle</code></td>
+<td>空闲时排一个 follow-up</td>
+</tr>
+<tr>
+<td>空转保护</td>
+<td>连续几轮无工具调用 → 停并警告；hook 8 次上限</td>
+<td>续跑无工具调用 → <code>continuation_suppressed</code></td>
+<td>续跑无工具调用 → 抑制下一次</td>
+</tr>
+<tr>
+<td>预算</td>
+<td>写在条件里（<code>or stop after 20 turns</code>），由评估者判断</td>
+<td><strong>运行时硬预算</strong>：token、时间</td>
+<td>token 预算，越界注入"停止并汇报"</td>
+</tr>
+<tr>
+<td>中断/恢复</td>
+<td>恢复会话时条件保留、计数重置</td>
+<td>中断自动暂停，恢复自动激活</td>
+<td>暂停/恢复命令；状态随分支回放</td>
+</tr>
+<tr>
+<td>目标的"权威层级"</td>
+<td>就是一条被评估的条件</td>
+<td>工具规范限制模型只能创建/完成</td>
+<td><strong>刻意不提升到 system</strong>，放 user 角色</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="共同的设计原则归纳非任何一家的原话">8.
+共同的设计原则（归纳，非任何一家的原话）</h2>
+<ol type="1">
+<li><strong>外环与内环分离。</strong> 内环是"模型 +
+工具"，外环是"该不该停"。<code>/goal</code> 只改外环，不动内环。</li>
+<li><strong>完成条件必须可验证。</strong>
+无论谁来判，都要有<strong>能出现在记录里的证据</strong>：测试输出、退出码、文件数量。</li>
+<li><strong>一定要有熔断。</strong> 三家都做了"无进展就停"：无工具调用 →
+抑制续跑 / 停止循环。预算（token、轮数、时间）是第二道保险。</li>
+<li><strong>权限不对称。</strong>
+模型最多能"声明完成"，<strong>不能自己给自己续命或改预算</strong>——暂停、恢复、预算由用户和运行时控制。</li>
+<li><strong>状态要持久并可恢复。</strong>
+会话重启、分支切换、用户中断之后，目标应该有明确的归宿（保留/暂停/清除），而不是悄悄丢失。</li>
+<li><strong>目标不能冒充系统指令。</strong> 目标是用户给的，注入时用
+user 角色，别提升权限。</li>
+<li><strong>续跑必须"造一条消息"。</strong> loop
+不会凭空再转一圈，需要新的输入。</li>
+</ol>
+<hr />
+<h2 id="局限与风险">9. 局限与风险</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>风险</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>评估者被"记录"骗</strong></td>
+<td>Claude Code
+的评估者只看对话记录。如果模型在记录里<strong>声称</strong>"测试全过"但并没真跑，评估者无从发现。所以条件要写成<strong>必须有命令输出作证据</strong></td>
+</tr>
+<tr>
+<td><strong>模型自评偏乐观</strong></td>
+<td>Codex/Pi
+扩展由干活的模型自己声明完成，靠提示词要求证据，没有独立复核</td>
+</tr>
+<tr>
+<td><strong>目标漂移</strong></td>
+<td>长时间运行中上下文被压缩，早期的约束可能丢失；把关键约束写进条件里，并让它每轮汇报进度</td>
+</tr>
+<tr>
+<td><strong>成本失控</strong></td>
+<td>每个 turn 都消耗
+token；评估也有成本（通常相对主任务可忽略，官方这么说）。务必设
+turn/时间/token 上限</td>
+</tr>
+<tr>
+<td><strong>副作用</strong></td>
+<td>目标<strong>不改变权限模式</strong>。无人值守需要配合 auto
+mode；否则每次工具调用仍要你确认。而一旦放开，就要考虑它会不会做出不可逆的事——删除、强推、发布</td>
+</tr>
+<tr>
+<td><strong>条件写得不可达</strong></td>
+<td>条件永远不可能满足时，只靠评估者判断 <code>impossible</code>
+或熔断；写条件时最好有"达不到就停下并报告"的出口</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="给这个博客的启示什么条件适合当-goal">10.
+给这个博客的启示：什么条件适合当 <code>/goal</code></h2>
+<p>我的博客发布流程里，有现成的<strong>可验证终态</strong>，非常适合当
+<code>/goal</code> 条件：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">/goal python3 tools/blog.py 退出码为 0（0 个 ERROR），并且 ./run.sh 输出了 &quot;Deploy done&quot;，</span><br><span class="line">      并且 git status 里只有我这次改动的笔记。或者 15 轮后停下并汇报。</span><br></pre></td></tr></table></figure>
+<p>对照第 4.4 节的写法：<strong>一个可度量的终态</strong>（检查通过 +
+部署成功）、<strong>一个可展示的证据</strong>（命令输出）、<strong>一个约束</strong>（不动别的文件）、<strong>一个上限</strong>（15
+轮）。</p>
+<p>而不适合的是"把这篇文章写好"这类没有客观终态的目标——评估者没有东西可判，会要么过早放行，要么无限要求"再改改"。</p>
+<hr />
+<h2 id="术语表">11. 术语表</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agent Loop</strong></td>
+<td>"调模型 → 执行工具 → 把结果喂回模型"的循环，直到模型不再调工具</td>
+</tr>
+<tr>
+<td><strong>Turn（回合）</strong></td>
+<td>一次模型回复 + 它发起的所有工具调用与结果</td>
+</tr>
+<tr>
+<td><strong>内环 / 外环</strong></td>
+<td>Pi 的 <code>runLoop</code> 里：内环处理工具与 steering，外环处理
+follow-up</td>
+</tr>
+<tr>
+<td><strong>Steering</strong></td>
+<td>在 agent 干活时插入的消息，每个 turn
+结束后被取走，影响下一次请求</td>
+</tr>
+<tr>
+<td><strong>Follow-up</strong></td>
+<td>排队的后续消息，等 agent 本来要停时才被取走</td>
+</tr>
+<tr>
+<td><strong><code>finishTurn</code></strong></td>
+<td>Pi 的回合收尾钩子，可返回
+<code>end</code>/<code>continue</code></td>
+</tr>
+<tr>
+<td><strong>Harness（外壳）</strong></td>
+<td>包在模型外面、提供工具并管理上下文的那一层，Claude Code
+官方用这个词称呼自己</td>
+</tr>
+<tr>
+<td><strong><code>ResultMessage</code></strong></td>
+<td>Claude Code / Agent SDK 里标志一次循环结束的消息，带
+<code>subtype</code>、费用、用量、session ID</td>
+</tr>
+<tr>
+<td><strong>Stop hook</strong></td>
+<td>Claude Code
+在模型要结束一轮回复时触发的钩子，可阻止停止并反馈理由</td>
+</tr>
+<tr>
+<td><strong>Prompt-based hook</strong></td>
+<td>用小模型而非脚本做判断的 hook，返回 <code>{ok, reason}</code></td>
+</tr>
+<tr>
+<td><strong>评估者（evaluator）</strong></td>
+<td><code>/goal</code> 里读对话记录、判断条件是否满足的小模型</td>
+</tr>
+<tr>
+<td><strong><code>update_goal</code></strong></td>
+<td>Codex/Pi 扩展里让模型声明目标完成的工具</td>
+</tr>
+<tr>
+<td><strong><code>continuation_suppressed</code></strong></td>
+<td>Codex 中防止"无进展"续跑连环触发的标志</td>
+</tr>
+<tr>
+<td><strong>Compaction（压缩）</strong></td>
+<td>上下文过长时对旧内容做摘要，完整流程见我的 Pi Compaction 笔记</td>
+</tr>
+</tbody>
+</table>
+<p>延伸阅读：[[AI Agent/Agent Skill
+完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]]、[[AI
+Agent/MCP 完全指南：它是什么、怎么来的、为什么管用|MCP
+完全指南]]、[[Pi/Pi Architecture：拆解 Coding Agent 的内部架构|Pi
+Architecture]]。</p>
+<hr />
+<h2 id="附参考来源">附：参考来源</h2>
+<ul>
+<li>Pi 源码（本文读取的是 2026-10-01 的主分支）：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JhZGxvZ2ljL3BpLW1vbm8=">badlogic/pi-mono<i class="fa fa-external-link-alt"></i></span>，<code>packages/agent/src/agent-loop.ts</code>、<code>agent.ts</code>、<code>types.ts</code></li>
+<li>Claude Code 官方文档：<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9ob3ctY2xhdWRlLWNvZGUtd29ya3M=">How Claude
+Code works<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9hZ2VudC1zZGsvYWdlbnQtbG9vcA==">How the
+agent loop works（Agent SDK）<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9nb2Fs">Keep Claude working toward a
+goal<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9ob29rcy1ndWlkZQ==">Automate
+actions with hooks<i class="fa fa-external-link-alt"></i></span></li>
+<li>Claude Code <code>/goal</code> 的第三方解读：<span class="exturl" data-url="aHR0cHM6Ly9iYXJ0bG9taWVqa3J1cGEuZGV2L2FydGljbGVzL2NsYXVkZS1jb2RlLWdvYWwtY29tbWFuZC8=">Bartłomiej
+Krupa<i class="fa fa-external-link-alt"></i></span></li>
+<li>Codex <code>/goal</code> 实现分析（第三方，GitHub Gist）：<span class="exturl" data-url="aHR0cHM6Ly9naXN0LmdpdGh1Yi5jb20vcGF0bGVlbWFuL2IxYjU3NjgzOTNmOWJmMmY2MDg2NWIxZGVmZWViODE5">How
+OpenAI Codex implements the /goal slash command<i class="fa fa-external-link-alt"></i></span>；功能发布信息参考 <span class="exturl" data-url="aHR0cHM6Ly9jb2RleC5kYW5pZWx2YXVnaGFuLmNvbS8yMDI2LzA1LzAzL2NvZGV4LWNsaS1nb2FsLW1vZGUtcGVyc2lzdGVudC1vYmplY3RpdmVzLXRva2VuLWJ1ZGdldHMtYWdlbnRpYy1sb29wcy8=">Goal
+Mode in Codex CLI<i class="fa fa-external-link-alt"></i></span></li>
+<li>Pi 社区扩展（包主页）：<a
+target="_blank" rel="noopener" href="https://pi.dev/packages/@tian.zuo/pi-goal"><span class="citation"
+data-cites="tian.zuo/pi-goal">@tian.zuo/pi-goal</span></a>、<a
+target="_blank" rel="noopener" href="https://pi.dev/packages/@ramarivera/pi-goal"><span
+class="citation"
+data-cites="ramarivera/pi-goal">@ramarivera/pi-goal</span></a>、<span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvcGFja2FnZXMvcGktYWdlbnQtZ29hbA==">pi-agent-goal<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<blockquote>
+<p><strong>关于可信度的说明</strong>：第 1 章（Pi 的
+loop）来自我直接阅读的源码，但<strong>第 1.3
+节的代码是我精简过的示意</strong>，不是原文；第 2 章（Claude Code 的
+loop）和第 4 章（Claude Code 的
+<code>/goal</code>）依据官方文档，<strong>Claude Code
+闭源，我没有读过它的实现</strong>，2.10 的对比表里 Claude Code
+一列只代表文档所述；第 5 章（Codex）与第 6.2 节（Pi
+扩展）来自第三方分析和包主页描述，<strong>我没有读过对应的源码</strong>；第
+6.3 节的代码是<strong>我写的、未运行过的示意</strong>；第 7、8、9
+章的对比和原则是我的归纳。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Claude-Code/" rel="tag"><i class="fa fa-tag"></i> Claude-Code</a>
+              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
+              <a href="/tags/Codex/" rel="tag"><i class="fa fa-tag"></i> Codex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/df0ca73b.html" rel="prev" title="MCP 完全指南：它是什么、怎么来的、为什么管用">
+                  <i class="fa fa-angle-left"></i> MCP 完全指南：它是什么、怎么来的、为什么管用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/1856ebd1.html" rel="next" title="Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何">
+                  Jev 完全指南：TypeSafe 的 System One 模型怎么用、效果如何 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

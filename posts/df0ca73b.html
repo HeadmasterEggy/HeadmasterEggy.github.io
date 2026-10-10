@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="讲清楚 Model Context Protocol：它解决的 M×N 集成问题、2024 年发布以来的规范演进（含 2026-07-28 的无状态改造）、 Host&#x2F;Client&#x2F;Server 架构、工具&#x2F;资源&#x2F;提示三大原语、OAuth 授权、与 Skill 和 Function Calling 的区别，以及安全风险。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP 完全指南：它是什么、怎么来的、为什么管用">
+<meta property="og:url" content="https://qiao1.top/posts/df0ca73b.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="讲清楚 Model Context Protocol：它解决的 M×N 集成问题、2024 年发布以来的规范演进（含 2026-07-28 的无状态改造）、 Host&#x2F;Client&#x2F;Server 架构、工具&#x2F;资源&#x2F;提示三大原语、OAuth 授权、与 Skill 和 Function Calling 的区别，以及安全风险。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-01T13:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.479Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Claude-Code">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/df0ca73b.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/df0ca73b.html","path":"posts/df0ca73b.html","title":"MCP 完全指南：它是什么、怎么来的、为什么管用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MCP 完全指南：它是什么、怎么来的、为什么管用 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/df0ca73b.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%89%88%E6%9C%AC"><span class="nav-text">0. 一句话版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E7%9C%8B%E4%B8%80%E4%B8%AA%E7%9C%BC%E5%89%8D%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">1. 先看一个眼前的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-mcpmn-%E9%97%AE%E9%A2%98"><span class="nav-text">2. 为什么需要 MCP：M×N 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B2%A1%E6%9C%89%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%97%B6%E4%BB%A3"><span class="nav-text">2.1 没有协议的时代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%83%E5%80%9F%E9%89%B4%E4%BA%86%E8%B0%81"><span class="nav-text">2.2 它借鉴了谁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%83%E5%92%8C-function-calling-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">2.3 它和 Function Calling
+的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89%E5%8F%91%E5%B1%95%E6%97%B6%E9%97%B4%E7%BA%BF"><span class="nav-text">3. 来龙去脉：发展时间线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E7%89%88%E6%9C%AC%E5%AE%98%E6%96%B9%E7%89%88%E6%9C%AC%E5%8F%B7%E4%BB%A5%E6%97%A5%E6%9C%9F%E5%91%BD%E5%90%8D"><span class="nav-text">3.1
+规范版本（官方版本号，以日期命名）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E4%BA%8B%E4%BB%B6"><span class="nav-text">3.2 关键事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1%E4%B8%BB%E7%BA%BF"><span class="nav-text">3.3 一条主线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E5%88%B0%E5%BA%95%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="nav-text">4. 协议到底长什么样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="nav-text">4.1 三个角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">4.2 两层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%83%BD%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%89%E7%A7%8D%E5%8E%9F%E8%AF%AD"><span class="nav-text">4.3 服务器能提供的三种原语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E4%BA%A4%E4%BA%92%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="nav-text">4.4 一次真实交互是什么样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%B9%E6%88%90%E6%97%A0%E7%8A%B6%E6%80%81"><span class="nav-text">4.5 2026-07-28：为什么改成&quot;无状态&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E6%9C%BA%E5%88%B6"><span class="nav-text">4.6 扩展机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E7%94%A8%E4%B8%8Amcp-%E7%9A%84"><span class="nav-text">5. 原理：模型是怎么&quot;用上&quot;MCP 的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E9%93%BE%E8%B7%AF"><span class="nav-text">5.1 完整链路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#description-%E5%8F%88%E6%98%AF%E8%B7%AF%E7%94%B1%E8%A7%84%E5%88%99"><span class="nav-text">5.2 description
+又是路由规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%B9%89%E5%90%83%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-text">5.3 代价：工具定义吃上下文</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%AE%89%E5%85%A8%E5%9C%B0%E8%AE%A4%E4%BA%BA"><span class="nav-text">6.
+授权：远程服务器怎么安全地&quot;认人&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E8%89%B2"><span class="nav-text">6.1 角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E7%AE%80%E5%8C%96"><span class="nav-text">6.2 流程（简化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E6%9D%A1%E7%A1%AC%E8%A7%84%E5%88%99%E8%A7%84%E8%8C%83%E5%8E%9F%E6%96%87%E8%A6%81%E6%B1%82"><span class="nav-text">6.3 几条硬规则（规范原文要求）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E7%9B%B8%E9%82%BB%E6%A6%82%E5%BF%B5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">7. 和相邻概念的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcp-%E4%B8%8E-skill%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E9%80%89"><span class="nav-text">8. MCP 与 Skill：到底怎么选</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%89%8B%E6%80%8E%E4%B9%88%E7%94%A8%E6%80%8E%E4%B9%88%E5%86%99"><span class="nav-text">9. 动手：怎么用、怎么写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-claude-code-%E9%87%8C%E6%8E%A5%E4%B8%80%E4%B8%AA-mcp-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">9.1 在 Claude Code 里接一个
+MCP 服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E5%86%99%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8python-sdk-%E7%9A%84%E5%B8%B8%E8%A7%81%E5%86%99%E6%B3%95"><span class="nav-text">9.2
+自己写一个最小服务器（Python SDK 的常见写法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7%E6%97%B6%E7%9A%84%E5%87%A0%E7%82%B9%E7%BB%8F%E9%AA%8C%E5%BD%92%E7%BA%B3"><span class="nav-text">9.3 设计工具时的几点经验（归纳）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9"><span class="nav-text">10. 局限与安全风险</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E5%BC%BA%E8%B0%83%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-text">10.1 规范强调的原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E7%9A%84%E6%94%BB%E5%87%BB%E9%9D%A2%E5%BD%92%E7%BA%B3%E9%9D%9E%E8%A7%84%E8%8C%83%E5%8E%9F%E6%96%87"><span class="nav-text">10.2
+具体的攻击面（归纳，非规范原文）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="nav-text">10.3 实践建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%88%B0%E8%BF%99%E4%B8%AA%E5%8D%9A%E5%AE%A2"><span class="nav-text">11. 回到这个博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">12. 术语表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90"><span class="nav-text">附：参考来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/df0ca73b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MCP 完全指南：它是什么、怎么来的、为什么管用 | Joey">
+      <meta itemprop="description" content="讲清楚 Model Context Protocol：它解决的 M×N 集成问题、2024 年发布以来的规范演进（含 2026-07-28 的无状态改造）、 Host&#x2F;Client&#x2F;Server 架构、工具&#x2F;资源&#x2F;提示三大原语、OAuth 授权、与 Skill 和 Function Calling 的区别，以及安全风险。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MCP 完全指南：它是什么、怎么来的、为什么管用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-01 13:00:00" itemprop="dateCreated datePublished" datetime="2026-10-01T13:00:00Z">2026-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>24 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">讲清楚 Model Context Protocol：它解决的 M×N 集成问题、2024 年发布以来的规范演进（含 2026-07-28 的无状态改造）、 Host/Client/Server 架构、工具/资源/提示三大原语、OAuth 授权、与 Skill 和 Function Calling 的区别，以及安全风险。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>写于 2026-10-01。协议细节依据 modelcontextprotocol.io
+官方文档与规范（当前最新版本号为
+<code>2026-07-28</code>）；发展时间线中的早期日期与厂商采用情况来自第三方汇总，文中已标明。MCP
+迭代很快，<strong>写代码前请以官方规范为准</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="一句话版本">0. 一句话版本</h2>
+<p><strong>MCP（Model Context Protocol）是一个开放协议，规定了"AI
+应用"如何以统一方式连接"外部系统"（数据、工具、工作流）。</strong>
+官方的比喻是 <strong>AI 应用的 USB-C
+接口</strong>：设备和外设不用互相适配，都遵守同一个接口标准就能连。</p>
+<p>记三件事：</p>
+<ol type="1">
+<li><strong>解决的问题</strong>：M 个 AI 应用 × N 个外部系统，原本要写
+M×N 套对接；有了协议，变成 M+N。</li>
+<li><strong>形态</strong>：Client–Server 架构，消息是 JSON-RPC
+2.0，传输方式有 stdio（本地进程）和 Streamable HTTP（远程）。</li>
+<li><strong>服务端提供三类东西</strong>：<strong>Tools</strong>（模型可调用的函数）、<strong>Resources</strong>（供读取的上下文数据）、<strong>Prompts</strong>（可复用的提示模板）。</li>
+</ol>
+<p>MCP
+<strong>只管"上下文怎么交换"</strong>，不管模型怎么用这些上下文——官方原话大意是它"不规定
+AI 应用如何使用 LLM 或管理所提供的上下文"。</p>
+<hr />
+<h2 id="先看一个眼前的例子">1. 先看一个眼前的例子</h2>
+<p>我现在用的 Claude Code
+会话里，工具列表里有一大堆名字长这样的东西：</p>
+<figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line">mcp<span class="emphasis">__Claude_Browser__</span>navigate</span><br><span class="line">mcp<span class="emphasis">__terminal__</span>run<span class="emphasis">_in_terminal</span></span><br><span class="line"><span class="emphasis">mcp__computer-use__app_screenshot</span></span><br><span class="line"><span class="emphasis">mcp__claude-in-chrome__read_</span>page</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><code>mcp__&lt;服务器名&gt;__&lt;工具名&gt;</code> 就是 Claude Code
+给 MCP
+工具起名的约定。每个"服务器"是一个独立的程序：有的跑在本机（控制浏览器、终端、桌面），有的在云端（Figma、Notion、GitHub
+等需要登录授权的连接器）。<strong>Claude Code 本身不知道怎么操作
+Figma，它只是个 MCP Host：连上 Figma 的 MCP
+服务器，问它"你有什么工具"，然后把这些工具交给模型用。</strong></p>
+<p>另外一个有意思的现象：这些工具里很多一开始只显示名字，要先调一次"ToolSearch"才能拿到完整参数定义再使用——这是为了<strong>省上下文</strong>，后面第
+5 章会解释为什么这是 MCP 的一个真实痛点。</p>
+<hr />
+<h2 id="为什么需要-mcpmn-问题">2. 为什么需要 MCP：M×N 问题</h2>
+<h3 id="没有协议的时代">2.1 没有协议的时代</h3>
+<p>大模型要"做事"，得能调用外部能力。2023 年 6 月起 OpenAI 提出的
+Function Calling
+让模型能输出结构化的函数调用，各家随后都有类似机制。但：</p>
+<ul>
+<li><strong>每个 AI 应用</strong>（IDE、聊天客户端、Agent
+框架）都要自己写<strong>每个外部系统</strong>的对接代码；</li>
+<li><strong>每个外部系统</strong>（GitHub、Slack、数据库）也得为每个 AI
+应用各做一套插件。</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">没有协议：                         有 MCP：</span><br><span class="line"> AI 应用 <span class="selector-tag">A</span> ──┬── GitHub             AI 应用 <span class="selector-tag">A</span> ─┐            ┌─ GitHub MCP server</span><br><span class="line"> AI 应用 <span class="selector-tag">A</span> ──┼── Slack              AI 应用 <span class="selector-tag">B</span> ─┼── MCP ──────┼─ Slack MCP server</span><br><span class="line"> AI 应用 <span class="selector-tag">B</span> ──┼── GitHub             AI 应用 C ─┘            └─ 数据库 MCP server</span><br><span class="line"> AI 应用 <span class="selector-tag">B</span> ──┼── Slack</span><br><span class="line"> ...  M × N 套对接                    M + N 套实现</span><br></pre></td></tr></table></figure>
+<h3 id="它借鉴了谁">2.2 它借鉴了谁</h3>
+<p>官方规范里明确写道：MCP 的灵感来自 <strong>LSP（Language Server
+Protocol）</strong>。LSP
+让"支持一门语言"和"编辑器"解耦——写一个语言服务器，所有支持 LSP
+的编辑器都能用。MCP 把同样的思路用在"AI 应用 × 外部上下文"上。</p>
+<h3 id="它和-function-calling-的关系">2.3 它和 Function Calling
+的关系</h3>
+<p>Function Calling
+是<strong>模型层</strong>的能力：模型怎么表达"我要调用函数 X，参数是
+Y"。MCP
+是<strong>应用层</strong>的协议：这些函数<strong>从哪来、怎么发现、怎么执行</strong>。二者是上下两层，不是替代关系——Host
+把 MCP 服务器提供的工具转换成模型 API 里的工具定义，模型用 Function
+Calling 的方式调用，Host 再把调用转发给 MCP 服务器执行。</p>
+<hr />
+<h2 id="来龙去脉发展时间线">3. 来龙去脉：发展时间线</h2>
+<h3 id="规范版本官方版本号以日期命名">3.1
+规范版本（官方版本号，以日期命名）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>版本</th>
+<th>主要内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2024-11-05</strong></td>
+<td>初版：Client–Server 架构、JSON-RPC 2.0、三大原语（tools / resources
+/ prompts）、两种传输（stdio、HTTP+SSE）</td>
+</tr>
+<tr>
+<td><strong>2025-03-26</strong></td>
+<td>引入 <strong>OAuth 2.1 授权</strong>；用 <strong>Streamable
+HTTP</strong> 取代 HTTP+SSE；工具注解、音频内容、参数补全</td>
+</tr>
+<tr>
+<td><strong>2025-06-18</strong></td>
+<td>结构化工具输出、<strong>Elicitation</strong>（服务器向用户追问信息）、资源链接、MCP
+服务器被归类为 OAuth 资源服务器</td>
+</tr>
+<tr>
+<td><strong>2025-11-25</strong></td>
+<td>授权引入 OpenID Connect Discovery、图标元数据、JSON Schema 2020-12
+等</td>
+</tr>
+<tr>
+<td><strong>2026-07-28</strong>（当前）</td>
+<td><strong>协议无状态化</strong>、<code>server/discover</code>、Multi
+Round-Trip Requests、Tasks 与 Apps 扩展机制、正式的特性弃用政策</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>上表以第三方整理为底稿，并与官方 changelog 交叉核对过 2026-07-28
+一版的内容（见第 4.5
+节）；更早几个版本的细节以官方各版本规范页为准。</p>
+</blockquote>
+<h3 id="关键事件">3.2 关键事件</h3>
+<ul>
+<li><strong>2024-11 下旬</strong>：Anthropic 开源发布
+MCP（据公开资料，由 David Soria Parra 与 Justin Spahr-Summers 在
+Anthropic 创建），同时放出 Python / TypeScript SDK
+和一批参考服务器（Google Drive、Slack、GitHub、Git、Postgres
+等）。首批合作方包括 Block、Apollo，以及
+Zed、Replit、Codeium、Sourcegraph 等开发工具。（各来源对发布日期有 11-25
+与 11-26 的出入，这里只写"11 月下旬"。）</li>
+<li><strong>2025-03 ~ 05</strong>：据第三方汇总，OpenAI 在 Agents SDK
+里支持 MCP，Microsoft 把它接入 Copilot Studio
+并逐步成为各平台的一等公民，Google 也表态让 Gemini 支持
+MCP——<strong>竞争对手相继采用，使它从"Anthropic
+的协议"变成了行业事实标准。</strong></li>
+<li><strong>2025-09</strong>：官方 MCP
+Registry（服务器注册表）预览上线。</li>
+<li><strong>2025-12</strong>：Anthropic 把 MCP 捐给 Linux Foundation
+旗下新成立的 <strong>Agentic AI Foundation（AAIF）</strong>，据报道由
+Anthropic、Block、OpenAI
+共同发起——协议治理从单一公司转向中立基金会。</li>
+<li><strong>2026-07-28</strong>：规范大改（无状态），见 4.5。</li>
+</ul>
+<h3 id="一条主线">3.3 一条主线</h3>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">2023 </span>  Function Calling：模型能<span class="string">&quot;表达&quot;</span>调用</span><br><span class="line"><span class="number">2024</span>-<span class="number">11</span> MCP：把<span class="string">&quot;工具从哪来、怎么接&quot;</span>标准化（Client–Server，本地为主）</span><br><span class="line"><span class="number">2025</span>-<span class="number">03</span> 加上 OAuth 与 Streamable HTTP：走向<span class="string">&quot;远程、多租户、需授权&quot;</span>的服务</span><br><span class="line"><span class="number">2025</span>-<span class="number">06</span>~<span class="number">11</span> 结构化输出、Elicitation：交互更丰富、授权更完善</span><br><span class="line"><span class="number">2025</span>-<span class="number">12</span> 捐给基金会：中立治理</span><br><span class="line"><span class="number">2026</span>-<span class="number">07</span> 无状态化：为大规模部署（负载均衡、无服务器）铺路</span><br></pre></td></tr></table></figure>
+<p>可以看出方向：<strong>从"本地进程间的小玩具"演变成"可大规模部署的远程服务协议"</strong>。</p>
+<hr />
+<h2 id="协议到底长什么样">4. 协议到底长什么样</h2>
+<h3 id="三个角色">4.1 三个角色</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>角色</th>
+<th>是什么</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Host（宿主）</strong></td>
+<td>面向用户的 AI 应用，负责协调一个或多个 Client</td>
+<td>Claude Code、Claude Desktop、VS Code、Cursor</td>
+</tr>
+<tr>
+<td><strong>Client（客户端）</strong></td>
+<td>Host
+里的连接器组件，<strong>每连一个服务器就实例化一个</strong>，维持专用连接</td>
+<td>VS Code 连 Sentry 就有一个 Client，连文件系统服务器再有一个</td>
+</tr>
+<tr>
+<td><strong>Server（服务器）</strong></td>
+<td>提供上下文和能力的程序，<strong>本地还是远程都叫
+server</strong></td>
+<td>本地的 filesystem server；Sentry 官方的远程 server</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">┌────────────── Host（AI 应用）──────────────┐</span><br><span class="line">│  <span class="built_in">Client</span> <span class="number">1</span> ──── 专用连接 ──── <span class="built_in">Server</span> A（本地，stdio）</span><br><span class="line">│  <span class="built_in">Client</span> <span class="number">2</span> ──── 专用连接 ──── <span class="built_in">Server</span> B（本地，stdio）</span><br><span class="line">│  <span class="built_in">Client</span> <span class="number">3</span> ──── 专用连接 ──┐</span><br><span class="line">│  <span class="built_in">Client</span> <span class="number">4</span> ──── 专用连接 ──┴─ <span class="built_in">Server</span> C（远程，Streamable HTTP，服务多个 <span class="built_in">Client</span>）</span><br><span class="line">└──────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h3 id="两层结构">4.2 两层结构</h3>
+<ul>
+<li><strong>数据层（内层）</strong>：基于 <strong>JSON-RPC 2.0</strong>
+的消息格式与语义——发现、原语（tools / resources /
+prompts）、通知、进度。</li>
+<li><strong>传输层（外层）</strong>：消息怎么送达——连接建立、成帧、认证。</li>
+</ul>
+<p>两种传输：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>传输</th>
+<th>适用</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>stdio</strong></td>
+<td>本地：Host 把服务器当子进程启动，通过标准输入输出通信</td>
+<td>零网络开销；通常一对一；<strong>服务器以你的用户权限运行</strong></td>
+</tr>
+<tr>
+<td><strong>Streamable HTTP</strong></td>
+<td>远程：POST 发请求，可选用 SSE 流式返回</td>
+<td>一个服务器服务很多客户端；支持 Bearer Token、API Key 等；规范推荐用
+OAuth</td>
+</tr>
+</tbody>
+</table>
+<p>（早期的 HTTP+SSE 传输已被弃用，新实现应使用 Streamable HTTP。）</p>
+<h3 id="服务器能提供的三种原语">4.3 服务器能提供的三种原语</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>原语</th>
+<th>是什么</th>
+<th>谁来控制</th>
+<th>典型例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tools</strong></td>
+<td>可执行的函数</td>
+<td><strong>模型</strong>决定何时调用</td>
+<td>查数据库、发消息、操作文件</td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>提供上下文的数据源</td>
+<td>应用/用户选择放进上下文</td>
+<td>文件内容、数据库表结构、API 响应</td>
+</tr>
+<tr>
+<td><strong>Prompts</strong></td>
+<td>可复用的提示模板</td>
+<td><strong>用户</strong>显式触发</td>
+<td>带示例的系统提示、工作流模板</td>
+</tr>
+</tbody>
+</table>
+<p>每种原语都有统一的方法：<code>*/list</code> 发现，<code>*/get</code>
+获取，<code>tools/call</code>
+执行。比如一个数据库服务器可以：提供<strong>查询工具</strong>，暴露<strong>表结构资源</strong>，再附带一个<strong>含
+few-shot 示例的提示</strong>。</p>
+<p>客户端也能向服务器提供能力：目前核心的是
+<strong>Elicitation</strong>（服务器中途向用户追问信息或请求确认）。</p>
+<h3 id="一次真实交互是什么样">4.4 一次真实交互是什么样</h3>
+<p>下面是官方文档里的简化例子（2026-07-28 版）。</p>
+<p><strong>① 工具发现</strong>——客户端问有哪些工具：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;jsonrpc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.0&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> <span class="attr">&quot;method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tools/list&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;_meta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;io.modelcontextprotocol/protocolVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2026-07-28&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>服务器返回每个工具的 <code>name</code>、<code>description</code> 和
+<strong><code>inputSchema</code>（JSON Schema）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;weather_current&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Get current weather information for any location worldwide&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;inputSchema&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="attr">&quot;units&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;enum&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;metric&quot;</span><span class="punctuation">,</span><span class="string">&quot;imperial&quot;</span><span class="punctuation">,</span><span class="string">&quot;kelvin&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;location&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>② 工具调用</strong>——模型决定调用后，Host 通过 Client
+发出：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;jsonrpc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.0&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span> <span class="attr">&quot;method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tools/call&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;weather_current&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="string">&quot;San Francisco&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;units&quot;</span><span class="punctuation">:</span> <span class="string">&quot;imperial&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>③ 返回结果</strong>——一个 <code>content</code>
+数组，可以是文本、图片、资源等：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;jsonrpc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.0&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;result&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;resultType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;complete&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Current weather in San Francisco: 68°F, partly cloudy…&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">]</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>整个流程对模型是透明的</strong>：模型看到的只是"有一个叫
+<code>weather_current</code> 的工具，参数如此"，调用后得到一段文本。MCP
+的全部工作都发生在 Host 与服务器之间。</p>
+<h3 id="为什么改成无状态">4.5 2026-07-28：为什么改成"无状态"</h3>
+<p>之前（到 2025-11-25）的流程是：连接建立后先 <code>initialize</code>
+握手协商版本和能力，服务器再通过 <code>Mcp-Session-Id</code>
+维持会话。<strong>会话是有状态的，意味着请求必须落到同一台服务器</strong>，不利于负载均衡和无服务器部署。</p>
+<p>2026-07-28 版的主要改动（来自官方 changelog）：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>改动</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>移除协议级会话</strong>与 <code>Mcp-Session-Id</code></td>
+<td>列表接口不再随连接而异；需要跨调用状态的，由服务器发"句柄"，作为普通工具参数传递</td>
+</tr>
+<tr>
+<td><strong>移除 <code>initialize</code> 握手</strong></td>
+<td><strong>每个请求自带</strong>协议版本和客户端能力（放在
+<code>_meta</code> 字段），服务器逐请求独立处理</td>
+</tr>
+<tr>
+<td><strong>新增 <code>server/discover</code></strong></td>
+<td>服务器必须实现，用来声明支持的版本、能力、身份；客户端可选地在最前面调一次，结果可缓存</td>
+</tr>
+<tr>
+<td><strong><code>subscriptions/listen</code></strong></td>
+<td>取代原来的 GET 端点和 resources
+订阅：一个长连接流，客户端<strong>主动声明</strong>想收哪些变更通知</td>
+</tr>
+<tr>
+<td><strong>Multi Round-Trip Requests</strong></td>
+<td>取代"服务器反向发请求"：服务器返回
+<code>input_required</code>，客户端带着答案<strong>重试原请求</strong></td>
+</tr>
+<tr>
+<td><strong>Tasks 移出核心</strong></td>
+<td>长任务变成官方扩展：轮询 <code>tasks/get</code></td>
+</tr>
+<tr>
+<td><strong>缓存提示</strong></td>
+<td>列表类结果必带
+<code>ttlMs</code>、<code>cacheScope</code>，减少轮询</td>
+</tr>
+<tr>
+<td><strong>弃用 Roots、Sampling、Logging</strong></td>
+<td>保留一个弃用窗口（政策要求至少 12 个月）；建议直接对接 LLM 供应商
+API、用 stderr/OpenTelemetry 打日志</td>
+</tr>
+<tr>
+<td><strong>Dynamic Client Registration 弃用</strong></td>
+<td>授权侧改推 Client ID Metadata Documents</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这是我的归纳：整体方向是"<strong>让 MCP 服务器像普通 HTTP API
+一样好部署</strong>"——无状态请求可以随便打到任意实例后面，配合缓存头就能放到
+CDN/网关之后。</p>
+</blockquote>
+<h3 id="扩展机制">4.6 扩展机制</h3>
+<p>核心协议之外，规范定义了<strong>可选扩展</strong>（双方协商启用）。官方列出的包括：</p>
+<ul>
+<li><strong>Tasks</strong>：长任务（轮询、中途输入、持久句柄）。</li>
+<li><strong>MCP
+Apps</strong>：在对话里直接渲染交互式界面（图表、表单、视频播放器）。</li>
+<li><strong>Skills over MCP</strong>：通过 MCP 发现和使用结构化的 Agent
+工作流说明——<strong>也就是说，上一篇的 Skill 与 MCP
+正在融合</strong>（见第 8 章）。</li>
+</ul>
+<hr />
+<h2 id="原理模型是怎么用上mcp-的">5. 原理：模型是怎么"用上"MCP 的</h2>
+<h3 id="完整链路">5.1 完整链路</h3>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">启动      Host 读配置 → 为每个 <span class="keyword">server</span> 建立 Client → <span class="keyword">server</span>/discover</span><br><span class="line">发现      tools/list（及 resources / prompts）→ 汇总成统一的&quot;工具注册表&quot;</span><br><span class="line">呈现给模型  把每个工具的 <span class="type">name</span> + description + inputSchema 放进模型 API 的 tools 参数</span><br><span class="line">模型决策   模型输出&quot;调用 weather_current(...)&quot;（普通的 <span class="keyword">Function</span> Calling）</span><br><span class="line">路由执行   Host 找到该工具属于哪个 Client → tools/<span class="keyword">call</span> → <span class="keyword">Server</span> 真正执行</span><br><span class="line">回灌      结果（content）作为工具结果放回对话 → 模型继续</span><br></pre></td></tr></table></figure>
+<p>关键认识：<strong>模型对 MCP 一无所知</strong>。它面对的永远是"一组带
+JSON Schema 的工具"。MCP 是 Host
+与外部系统之间的<strong>管道标准</strong>。这也解释了为什么同一个 MCP
+服务器能被不同厂商的不同模型使用。</p>
+<h3 id="description-又是路由规则">5.2 <code>description</code>
+又是路由规则</h3>
+<p>和 Skill 一样，模型选哪个工具、怎么填参数，完全靠工具的
+<code>description</code> 与 <code>inputSchema</code> 理解。所以：</p>
+<ul>
+<li>工具名称要清晰（官方示例建议 <code>calculator_arithmetic</code>
+而不是 <code>calculate</code>）；</li>
+<li>描述要写"做什么、什么时候用"；</li>
+<li>Schema 里每个参数的 <code>description</code>
+也是给模型看的提示词。</li>
+</ul>
+<h3 id="代价工具定义吃上下文">5.3 代价：工具定义吃上下文</h3>
+<p>这是 MCP
+实践中最现实的问题：<strong>所有已连接服务器的所有工具定义，默认全量放进上下文。</strong></p>
+<ul>
+<li>一个服务器十几二十个工具，每个带完整 Schema，很容易占掉几千上万
+token；</li>
+<li>连几个服务器，工具上百个，既<strong>费
+token</strong>，又会<strong>降低模型选对工具的准确率</strong>；</li>
+<li>中间结果（比如先读一个大文档、再把内容塞进另一个工具）还会反复穿过模型的上下文。</li>
+</ul>
+<p>业界的应对方式（这一段是行业做法的归纳，细节各家不同）：</p>
+<ol type="1">
+<li><strong>按需加载工具定义</strong>：初始只给工具名，需要时再取完整
+Schema。官方客户端最佳实践里也有"progressive tool
+discovery（渐进式工具发现）"；本会话里看到的 "ToolSearch"
+就是这种做法。</li>
+<li><strong>让模型写代码来编排工具</strong>：不是一个一个调用工具，而是让模型生成一段程序，在沙箱里批量调用并只返回最终结果——中间数据不进上下文。我另一篇笔记讲的
+DeepSeek Harness 的 PTC 模式就是这个思路：[[AI Agent/DeepSeek
+Harness：PTC 模式是如何用 TypeScript 编排工具调用的|DeepSeek
+Harness：PTC 模式与 TypeScript 工具编排]]。</li>
+<li><strong>缓存</strong>：服务器按确定顺序返回工具列表（规范建议），有利于客户端缓存和模型的
+prompt cache 命中。</li>
+</ol>
+<blockquote>
+<p>这是个有意思的对照：<strong>Skill
+的核心设计就是"渐进式披露"来省上下文，而 MCP
+的原生设计是"全量暴露"，所以两边都在互相借鉴对方的优点</strong>——MCP
+加上渐进式工具发现，Skill 加上 MCP 的远程分发。</p>
+</blockquote>
+<hr />
+<h2 id="授权远程服务器怎么安全地认人">6.
+授权：远程服务器怎么安全地"认人"</h2>
+<p>stdio
+本地服务器通常直接从环境变量里取凭证，规范说它<strong>不应</strong>走下面这套流程。<strong>远程（HTTP）服务器</strong>才用
+OAuth
+授权，规范里授权是<strong>可选</strong>的，但一旦支持，应遵循规范。</p>
+<h3 id="角色">6.1 角色</h3>
+<ul>
+<li><strong>MCP 服务器</strong> = OAuth 2.1
+<strong>资源服务器</strong>（接受并校验访问令牌）；</li>
+<li><strong>MCP 客户端</strong> = OAuth 2.1
+<strong>客户端</strong>（代表用户去请求受保护资源）；</li>
+<li><strong>授权服务器</strong>：与用户交互、签发令牌，可以和 MCP
+服务器是同一个，也可以是独立的。</li>
+</ul>
+<h3 id="流程简化">6.2 流程（简化）</h3>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">1</span>. 客户端不带令牌访问 MCP 服务器 → <span class="number">401</span> + WWW-Authenticate（指向元数据地址）</span><br><span class="line"><span class="attribute">2</span>. 客户端读取<span class="string">&quot;受保护资源元数据&quot;</span>（RFC <span class="number">9728</span>）→ 得知授权服务器在哪</span><br><span class="line"><span class="attribute">3</span>. 客户端读取授权服务器元数据（RFC <span class="number">8414</span> / OIDC Discovery）</span><br><span class="line"><span class="attribute">4</span>. 客户端取得 client_id：Client ID Metadata Documents（推荐）/ 预注册 / 动态注册（已弃用）</span><br><span class="line"><span class="attribute">5</span>. 生成 PKCE 参数，带上 resource 参数（RFC <span class="number">8707</span>），打开浏览器让用户授权</span><br><span class="line"><span class="attribute">6</span>. 回调拿到授权码 → 校验 iss（RFC <span class="number">9207</span>）→ 换取访问令牌</span><br><span class="line"><span class="attribute">7</span>. 之后每个请求都带 Authorization: Bearer &lt;token&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="几条硬规则规范原文要求">6.3 几条硬规则（规范原文要求）</h3>
+<ul>
+<li>令牌<strong>必须放在 Authorization
+头</strong>，<strong>不得</strong>放进 URL 查询串；</li>
+<li>令牌必须是<strong>签发给这个服务器本身</strong>的（resource /
+audience
+绑定），服务器<strong>不得接受或转发其他令牌</strong>——防止"令牌透传"和混淆代理攻击；</li>
+<li>客户端发请求必须带 <code>resource</code> 参数标明目标服务器；</li>
+<li>权限不够时返回 <code>403</code> +
+<code>insufficient_scope</code>，客户端可走<strong>逐步升级授权</strong>（step-up）；</li>
+<li>遵循最小权限原则：只申请当前操作需要的 scope。</li>
+</ul>
+<hr />
+<h2 id="和相邻概念的区别">7. 和相邻概念的区别</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>它是什么</th>
+<th>与 MCP 的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Function Calling / Tool Use</strong></td>
+<td>模型 API 层：怎么表达和接收工具调用</td>
+<td>下层。MCP 工具最终都被转成这种形式交给模型</td>
+</tr>
+<tr>
+<td><strong>ChatGPT 插件（2023）</strong></td>
+<td>单厂商的插件机制</td>
+<td>MCP 是跨厂商开放协议，且不绑定某个产品</td>
+</tr>
+<tr>
+<td><strong>直接调 REST API</strong></td>
+<td>应用自己对接每个服务</td>
+<td>MCP 把"发现 + 描述 + 调用"标准化，AI 应用不必为每个服务写适配</td>
+</tr>
+<tr>
+<td><strong>LSP</strong></td>
+<td>编辑器 ↔︎ 语言服务器</td>
+<td>MCP 的灵感来源，思路相同、领域不同</td>
+</tr>
+<tr>
+<td><strong>Skill（Agent Skill）</strong></td>
+<td>教模型"怎么做"的手册，按需读取，可带脚本</td>
+<td>互补：MCP 给<strong>手</strong>，Skill 给<strong>手册</strong>。见第
+8 章</td>
+</tr>
+<tr>
+<td><strong>Subagent</strong></td>
+<td>隔离上下文的子执行者</td>
+<td>正交。子代理内部也可以用 MCP 工具</td>
+</tr>
+<tr>
+<td><strong>A2A（Agent2Agent）等</strong></td>
+<td>Agent 之间互相通信的协议</td>
+<td>层次不同：MCP 是 Agent↔︎工具/数据；A2A 是 Agent↔︎Agent（本文未逐项查证
+A2A 的细节）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mcp-与-skill到底怎么选">8. MCP 与 Skill：到底怎么选</h2>
+<p>我上一篇讲 Skill 时给过一个对照：[[AI Agent/Agent Skill
+完全指南：它是什么、怎么来的、为什么管用|Agent Skill
+完全指南]]。把两者放一起：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>MCP</strong></th>
+<th><strong>Skill</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>给模型什么</td>
+<td><strong>能力</strong>（能调用什么外部功能/数据）</td>
+<td><strong>知识</strong>（遇到这类任务该怎么做）</td>
+</tr>
+<tr>
+<td>本质</td>
+<td>运行中的<strong>程序/服务</strong> + 协议</td>
+<td>磁盘上的<strong>文件夹</strong>（Markdown + 可选脚本）</td>
+</tr>
+<tr>
+<td>上下文成本</td>
+<td>工具定义默认<strong>全量</strong>常驻（可优化为按需）</td>
+<td>简介常驻，正文<strong>按需</strong>加载</td>
+</tr>
+<tr>
+<td>需要部署吗</td>
+<td>要（起进程或有远程服务）</td>
+<td>不要，拷文件即可</td>
+</tr>
+<tr>
+<td>能访问外部系统吗</td>
+<td><strong>能</strong>，这正是它的目的，并带授权机制</td>
+<td>自身不能；只能让模型用已有工具做</td>
+</tr>
+<tr>
+<td>适合</td>
+<td>连接 Figma、GitHub、数据库、内部系统</td>
+<td>公司流程、写作规范、操作手册、"用 X 工具时的最佳实践"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>典型的组合方式</strong>：MCP 提供"能操作 Figma 的工具"；Skill
+写明"在我们公司，把设计转成代码时先查设计系统 token、命名遵循
+…、完成后跑 …"。工具负责"能不能做"，手册负责"做得对不对"。</p>
+<p><strong>怎么选</strong>：</p>
+<ul>
+<li>要<strong>访问外部系统/数据</strong> →
+MCP（或一个脚本，若只有你自己用）；</li>
+<li>要<strong>固化流程/规范/经验</strong> → Skill；</li>
+<li>只是几条"永远成立"的规矩 → <code>AGENTS.md</code> /
+<code>CLAUDE.md</code>；</li>
+<li><strong>必须 100% 发生</strong>的动作 → Hook /
+脚本，不要指望模型自觉。</li>
+</ul>
+<p>趋势上两者在融合：MCP 规范里已经列出 <strong>Skills over MCP</strong>
+扩展，设想通过 MCP 来发现和分发 Skill；Skill 里也可以写"怎么用某个 MCP
+服务器"。</p>
+<hr />
+<h2 id="动手怎么用怎么写">9. 动手：怎么用、怎么写</h2>
+<blockquote>
+<p>命令与 SDK
+接口细节变化较快，下面是常见形态，<strong>以官方文档为准</strong>。</p>
+</blockquote>
+<h3 id="在-claude-code-里接一个-mcp-服务器">9.1 在 Claude Code 里接一个
+MCP 服务器</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 远程服务器（Streamable HTTP）</span></span><br><span class="line">claude mcp add --transport http &lt;名字&gt; &lt;URL&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地服务器（stdio：Host 把它当子进程启动）</span></span><br><span class="line">claude mcp add &lt;名字&gt; -- npx -y &lt;某个-mcp-server-包&gt;</span><br><span class="line"></span><br><span class="line">claude mcp list      <span class="comment"># 查看已配置的服务器</span></span><br></pre></td></tr></table></figure>
+<p>项目级配置通常放在仓库根目录的 <code>.mcp.json</code>，形如：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;filesystem&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@modelcontextprotocol/server-filesystem&quot;</span><span class="punctuation">,</span> <span class="string">&quot;/path/to/allowed/dir&quot;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>接入之后，工具会以 <code>mcp__&lt;服务器名&gt;__&lt;工具名&gt;</code>
+出现。需要登录的远程服务器会走第 6 章的 OAuth 流程。</p>
+<h3 id="自己写一个最小服务器python-sdk-的常见写法">9.2
+自己写一个最小服务器（Python SDK 的常见写法）</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;把两个整数相加。当用户要求做加法时使用。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    mcp.run()   <span class="comment"># 默认 stdio</span></span><br></pre></td></tr></table></figure>
+<p>SDK 会根据函数签名<strong>自动生成
+<code>inputSchema</code></strong>，用函数的 docstring 作为
+<code>description</code>——所以 <strong>docstring
+就是写给模型看的提示词</strong>。官方提供 Python、TypeScript 等多语言
+SDK，以及调试工具 <strong>MCP Inspector</strong>，可以不接任何 AI
+应用就直接测试你的服务器。</p>
+<h3 id="设计工具时的几点经验归纳">9.3 设计工具时的几点经验（归纳）</h3>
+<ol type="1">
+<li><strong>工具要少而精</strong>：每个工具的定义都吃上下文；不要把 REST
+API 的几十个接口一股脑包成几十个工具。</li>
+<li><strong>按"任务"而不是按"接口"设计</strong>：一个工具完成一件有意义的事，比让模型串联五次调用更可靠。</li>
+<li><strong>名称与描述写清楚</strong>，参数给 <code>description</code>
+和 <code>enum</code>。</li>
+<li><strong>返回精简的结果</strong>：别把几万字原始数据直接返回，先在服务端过滤、摘要。</li>
+<li><strong>有副作用的操作要可确认</strong>：可以用 Elicitation
+让用户确认；Host 一般也会在调用前请求授权。</li>
+<li><strong>工具列表保持确定的顺序</strong>，利于缓存。</li>
+</ol>
+<hr />
+<h2 id="局限与安全风险">10. 局限与安全风险</h2>
+<p>规范开篇就说得很直白：MCP
+通过<strong>任意数据访问和代码执行路径</strong>提供能力，因此带来重要的安全与信任问题，而且
+<strong>"协议本身无法在协议层强制执行这些安全原则"</strong>，需要实现者自己做好。</p>
+<h3 id="规范强调的原则">10.1 规范强调的原则</h3>
+<ol type="1">
+<li><strong>用户同意与控制</strong>：用户必须明确同意并理解所有数据访问与操作。</li>
+<li><strong>数据隐私</strong>：Host
+在把用户数据暴露给服务器前必须获得明确同意，不得擅自转发。</li>
+<li><strong>工具安全</strong>：<strong>工具等同于任意代码执行</strong>；工具行为的描述（包括注解）应被视为<strong>不可信</strong>，除非来自可信服务器；调用任何工具前必须获得用户明确同意。</li>
+</ol>
+<h3 id="具体的攻击面归纳非规范原文">10.2
+具体的攻击面（归纳，非规范原文）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>风险</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>提示注入（间接）</strong></td>
+<td>工具返回的内容（网页、邮件、工单）里夹带指令，诱导模型执行别的操作。<strong>工具结果是数据，不是指令。</strong></td>
+</tr>
+<tr>
+<td><strong>工具投毒</strong></td>
+<td>恶意服务器在工具 <code>description</code>
+里写入隐藏指令，模型读到就照做</td>
+</tr>
+<tr>
+<td><strong>"地毯式更换"（rug pull）</strong></td>
+<td>服务器先以无害工具获得批准，之后通过变更通知悄悄改掉工具定义</td>
+</tr>
+<tr>
+<td><strong>本地服务器 = 以你的权限跑任意程序</strong></td>
+<td>stdio 服务器是你机器上的进程，<code>npx 某个包</code>
+等同于执行该包</td>
+</tr>
+<tr>
+<td><strong>混淆代理 / 令牌透传</strong></td>
+<td>服务器拿着不是发给自己的令牌去访问别的服务——规范明确禁止接受或转发其他令牌</td>
+</tr>
+<tr>
+<td><strong>过度授权</strong></td>
+<td>一个令牌给了太宽的 scope；规范要求最小权限与逐步升级</td>
+</tr>
+<tr>
+<td><strong>上下文膨胀</strong></td>
+<td>工具太多既费钱，又降低选对工具的概率（见 5.3）</td>
+</tr>
+<tr>
+<td><strong>跨服务器组合</strong></td>
+<td>多个服务器同时连着时，一个服务器的内容可能影响模型对另一个服务器工具的使用（数据外泄路径）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="实践建议">10.3 实践建议</h3>
+<ul>
+<li><strong>只装来源可信的服务器</strong>；第三方 stdio
+服务器像安装软件一样审查；</li>
+<li><strong>读写分离、最小权限</strong>：只给需要的
+scope，能只读就只读；</li>
+<li><strong>危险操作保持人工确认</strong>，别全局"自动批准"；</li>
+<li>把工具结果当<strong>不可信输入</strong>；</li>
+<li>对远程服务器检查它的授权方式与数据留存政策；</li>
+<li>保持工具集精简，不用的服务器及时断开。</li>
+</ul>
+<hr />
+<h2 id="回到这个博客">11. 回到这个博客</h2>
+<ul>
+<li>我的 AGENTS.md 里"<strong>密钥绝不进仓库或前端</strong>"这条规矩，对
+MCP 同样适用：MCP 服务器的令牌和 API Key
+应该放在环境变量或密钥管理里，<strong>不要写进 <code>.mcp.json</code>
+提交到仓库</strong>（项目级配置会随源码一起推送）。</li>
+<li>看板喵目前是自己的 Cloudflare Worker 接口，没必要为了"用
+MCP"而改造。<strong>一个可选的想法</strong>：如果以后想让别的 Agent
+直接检索我的笔记（比如"按标签列文章""读某篇全文"），可以把这些能力包成一个远程
+MCP 服务器——但要先想清楚认证与限流，否则等于把内容接口公开。</li>
+<li>做判断时可以直接套第 8 章的选择表：<strong>要连系统用
+MCP，要固化流程用 Skill，要永远成立的规矩放
+AGENTS.md，要必须发生的动作写脚本。</strong></li>
+</ul>
+<hr />
+<h2 id="术语表">12. 术语表</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCP</strong></td>
+<td>Model Context Protocol，连接 AI 应用与外部系统的开放协议</td>
+</tr>
+<tr>
+<td><strong>Host / Client / Server</strong></td>
+<td>宿主应用 / 宿主内每个连接的连接器 / 提供上下文的程序</td>
+</tr>
+<tr>
+<td><strong>JSON-RPC 2.0</strong></td>
+<td>MCP 的消息格式（请求、响应、无需响应的通知）</td>
+</tr>
+<tr>
+<td><strong>stdio / Streamable HTTP</strong></td>
+<td>两种传输：本地子进程标准输入输出 / 远程 HTTP + 可选 SSE 流</td>
+</tr>
+<tr>
+<td><strong>Tools / Resources / Prompts</strong></td>
+<td>服务器的三大原语：可执行函数 / 上下文数据 / 提示模板</td>
+</tr>
+<tr>
+<td><strong>inputSchema</strong></td>
+<td>工具参数的 JSON Schema，既是校验规则也是给模型看的说明</td>
+</tr>
+<tr>
+<td><strong>Elicitation</strong></td>
+<td>服务器中途向用户追问或请求确认</td>
+</tr>
+<tr>
+<td><strong>Sampling / Roots / Logging</strong></td>
+<td>已在 2026-07-28 弃用的客户端特性</td>
+</tr>
+<tr>
+<td><strong><code>server/discover</code></strong></td>
+<td>服务器声明版本、能力与身份的必备请求</td>
+</tr>
+<tr>
+<td><strong><code>_meta</code></strong></td>
+<td>每个请求携带协议版本、客户端能力等元数据的字段</td>
+</tr>
+<tr>
+<td><strong>Tasks / MCP Apps / Skills over MCP</strong></td>
+<td>官方扩展：长任务 / 对话内交互界面 / 通过 MCP 分发技能</td>
+</tr>
+<tr>
+<td><strong>OAuth 2.1 / PRM / PKCE</strong></td>
+<td>授权框架 / 受保护资源元数据（RFC 9728）/ 防授权码截获</td>
+</tr>
+<tr>
+<td><strong>AAIF</strong></td>
+<td>Agentic AI Foundation，Linux Foundation 旗下，2025-12 起托管
+MCP</td>
+</tr>
+<tr>
+<td><strong>MCP Inspector</strong></td>
+<td>官方调试工具，直接连服务器测试</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附参考来源">附：参考来源</h2>
+<ul>
+<li>官方介绍：<span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9kb2NzL2dldHRpbmctc3RhcnRlZC9pbnRybw==">What
+is MCP?<i class="fa fa-external-link-alt"></i></span></li>
+<li>官方架构文档：<span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9kb2NzL2xlYXJuL2FyY2hpdGVjdHVyZQ==">Architecture
+overview<i class="fa fa-external-link-alt"></i></span></li>
+<li>规范（最新）：<span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9zcGVjaWZpY2F0aW9uL2xhdGVzdA==">Specification<i class="fa fa-external-link-alt"></i></span>，其中
+<span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9zcGVjaWZpY2F0aW9uLzIwMjYtMDctMjgvY2hhbmdlbG9n">2026-07-28
+Key Changes<i class="fa fa-external-link-alt"></i></span> 与 <span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9zcGVjaWZpY2F0aW9uLzIwMjYtMDctMjgvYmFzaWMvYXV0aG9yaXphdGlvbg==">Authorization<i class="fa fa-external-link-alt"></i></span></li>
+<li>第三方版本与采用时间线（仅作参考）：<span class="exturl" data-url="aHR0cHM6Ly9oaWRla2F6dS1rb25pc2hpLmNvbS9lbnRyeS9tY3Bfc3BlY2lmaWNhdGlvbl92ZXJzaW9uX3RpbWVsaW5lLmh0bWw=">hidekazu-konishi：MCP
+Specification Version Timeline<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTW9kZWxfQ29udGV4dF9Qcm90b2NvbA==">Wikipedia：Model
+Context Protocol<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<blockquote>
+<p><strong>关于可信度的说明</strong>：第 4 章（协议结构、2026-07-28
+变更）、第 6 章（授权）和第 10.1 节直接依据官方文档；第 3
+章的早期发布日期、厂商采用与基金会捐赠来自第三方汇总，各来源之间日期略有出入；第
+5.3、第 7、第 9、10.2 节含我的归纳与经验判断，已尽量标明；A2A 与 Claude
+Code 命令行细节未逐项对照官方页面核实。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Claude-Code/" rel="tag"><i class="fa fa-tag"></i> Claude-Code</a>
+              <a href="/tags/MCP/" rel="tag"><i class="fa fa-tag"></i> MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/fcc443a7.html" rel="prev" title="Agent Skill 完全指南：它是什么、怎么来的、为什么管用">
+                  <i class="fa fa-angle-left"></i> Agent Skill 完全指南：它是什么、怎么来的、为什么管用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/39b4d2df.html" rel="next" title="&#x2F;goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起">
+                  /goal 是如何实现的：从 Pi 与 Claude Code 的 Agent Loop 说起 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

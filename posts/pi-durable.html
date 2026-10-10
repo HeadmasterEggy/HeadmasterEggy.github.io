@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="梳理 Pi Durable 的会话、任务检查点、工具重放、并发、多客户端、扩展、上下文压缩和存储边界，并说明它与 Pi Coding Agent 的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pi Durable 详解：让 Agent 在崩溃后继续工作">
+<meta property="og:url" content="https://qiao1.top/posts/pi-durable.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="梳理 Pi Durable 的会话、任务检查点、工具重放、并发、多客户端、扩展、上下文压缩和存储边界，并说明它与 Pi Coding Agent 的关系。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-10T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:45:20.668Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Pi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/pi-durable.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/pi-durable.html","path":"posts/pi-durable.html","title":"Pi Durable 详解：让 Agent 在崩溃后继续工作"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Pi Durable 详解：让 Agent 在崩溃后继续工作 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/pi-durable.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E5%88%86%E6%B8%85-pi-coding-agent-%E5%92%8C-pi-durable"><span class="nav-text">1. 先分清 Pi Coding Agent
+和 Pi Durable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8Bharnessconversationtaskcommit"><span class="nav-text">2.
+核心执行模型：Harness、Conversation、Task、Commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B4%A9%E6%BA%83%E5%90%8E%E7%A9%B6%E7%AB%9F%E6%81%A2%E5%A4%8D%E5%88%B0%E5%93%AA%E9%87%8C"><span class="nav-text">3. 崩溃后究竟恢复到哪里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E5%A4%9A%E4%BC%9A%E8%AF%9D%E4%B8%8E%E5%A4%9A%E4%BA%BA%E6%8E%A5%E5%85%A5"><span class="nav-text">4. 并发、多会话与多人接入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extension%E6%80%8E%E6%A0%B7%E6%8A%8A%E6%A1%86%E6%9E%B6%E5%8F%98%E6%88%90%E8%87%AA%E5%B7%B1%E7%9A%84-agent"><span class="nav-text">5.
+Extension：怎样把框架变成自己的 Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E4%BC%9A%E8%AF%9D%E5%90%8E%E5%8F%B0%E5%8E%8B%E7%BC%A9reset-%E4%B8%8E-handoff"><span class="nav-text">6. 长会话：后台压缩、Reset 与
+Handoff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%AF%9D%E4%B9%8B%E5%A4%96%E7%9A%84%E5%BA%94%E7%94%A8%E7%8A%B6%E6%80%81%E4%B9%9F%E8%83%BD%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">7.
+对话之外的应用状态也能持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E4%B8%8E%E8%BF%90%E8%A1%8C%E8%BE%B9%E7%95%8C"><span class="nav-text">8. 存储与运行边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E5%88%A4%E6%96%AD%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%80%BC%E5%BE%97%E9%87%87%E7%94%A8"><span class="nav-text">9. 我的判断：什么时候值得采用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/pi-durable.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Pi Durable 详解：让 Agent 在崩溃后继续工作 | Joey">
+      <meta itemprop="description" content="梳理 Pi Durable 的会话、任务检查点、工具重放、并发、多客户端、扩展、上下文压缩和存储边界，并说明它与 Pi Coding Agent 的关系。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pi Durable 详解：让 Agent 在崩溃后继续工作
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-10-10 00:00:00 / Modified: 12:45:20" itemprop="dateCreated datePublished" datetime="2026-10-10T00:00:00Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">梳理 Pi Durable 的会话、任务检查点、工具重放、并发、多客户端、扩展、上下文压缩和存储边界，并说明它与 Pi Coding Agent 的关系。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2026 年 10 月 1 日，Earendil 在发布 Pi 1.0 的同时介绍了实验性软件包
+<strong>Pi
+Durable</strong>。它面向长期运行、能跨进程重启、可从多个界面访问的 Agent
+应用。本文依据 <span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方介绍《Pi Durable》<i class="fa fa-external-link-alt"></i></span>
+与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZA==">当前仓库
+README<i class="fa fa-external-link-alt"></i></span> 整理；截至 2026 年 10 月 10 日，README 仍明确标注
+<strong>Experimental</strong>，API 可能随版本变化。</p>
+<p>一句话说，<strong>Pi Durable
+把对话、模型调用、工具调用和应用状态都放进可持久化的执行系统里</strong>。进程中途退出后，程序重新打开同一份存储，便能找回未完成的工作，并按规则继续。但这不代表任何外部操作都可以无条件重跑。</p>
+<span id="more"></span>
+<h2 id="先分清-pi-coding-agent-和-pi-durable">1. 先分清 Pi Coding Agent
+和 Pi Durable</h2>
+<p>Pi Coding Agent
+主要是人在本地或远程终端里操作的编码助手。程序退出后，使用者可以查看会话并指示它继续。Pi
+Durable 则是<strong>搭建 Agent
+应用的框架</strong>：一个长期运行的服务可以同时承载多个对话，让
+Slack、网页或其他客户端接入，在崩溃和重新部署之后恢复工作。官方明确说，Pi
+Durable 不取代 Pi Coding Agent；它与后者共享 <code>pi-ai</code>
+等组件及简洁、可改造的设计取向。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>维度</th>
+<th>Pi Coding Agent</th>
+<th>Pi Durable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主要场景</td>
+<td>人在终端里使用编码 Agent</td>
+<td>开发长期运行、跨界面接入的 Agent 应用</td>
+</tr>
+<tr>
+<td>会话和工作</td>
+<td>以交互式编码会话为中心</td>
+<td>对话、模型轮次、工具调用和自定义流程都纳入持久任务系统</td>
+</tr>
+<tr>
+<td>进程中断</td>
+<td>使用者查看并继续</td>
+<td>重开存储后由任务调度器恢复未完成工作</td>
+</tr>
+<tr>
+<td>多人接入</td>
+<td>不是核心场景</td>
+<td>多个客户端可观察并引导同一对话</td>
+</tr>
+<tr>
+<td>产品形态</td>
+<td>可以直接使用的编码工具</td>
+<td>需要开发者配置存储、环境、工具和应用入口的框架</td>
+</tr>
+</tbody>
+</table>
+<p>如果你读过 [[Pi/Pi Architecture：拆解 Coding Agent 的内部架构|Pi
+Coding Agent 架构]]，可以把 Durable
+理解为在“模型与工具循环”外，进一步明确<strong>持久状态、任务调度、故障恢复和多客户端订阅</strong>的应用层。这个理解是架构对照，不表示两者内部实现完全相同。</p>
+<h2 id="核心执行模型harnessconversationtaskcommit">2.
+核心执行模型：Harness、Conversation、Task、Commit</h2>
+<p>官方对 Harness
+的定义很直接：它包含存储，以及并行运行一个或多个模型对话所需的机制；工具和工具运行的环境也由它提供。核心对象可这样理解：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">应用客户端提交输入</span><br><span class="line">        ↓</span><br><span class="line">Harness 管理多个 Conversation</span><br><span class="line">        ↓</span><br><span class="line">每个输入触发 Generation Task</span><br><span class="line">        ↓</span><br><span class="line">模型给出答案或 Tool Call</span><br><span class="line">        ↓</span><br><span class="line">Tool Task 执行；结果入库；必要时继续下一轮模型调用</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Conversation</strong>：一份由不可变条目组成的对话记录。它保存所选模型、思考级别、扩展、工具、额外指令和工作目录。一个
+Harness 可以同时运行多个 Conversation。</li>
+<li><strong>Task</strong>：能保存检查点的工作单元。模型请求、工具调用、上下文压缩都是内建
+Task；应用也可以定义自己的 Task。</li>
+<li><strong>Commit</strong>：原子写入边界。一次提交可同时追加对话条目、更新应用文档、创建任务；要么都成功，要么都不写入。</li>
+<li><strong>Execution Environment</strong>：工具实际访问文件、Shell
+或其他资源的地方。Harness
+可在一台机器上运行，工具的环境可通过适配器放在另一台机器上。</li>
+</ul>
+<p>因此，“Agent
+恢复”并不是重新把所有历史消息喂给模型，然后希望模型猜出上一步。系统保存了<strong>具体任务及其状态</strong>，重启后知道哪些任务尚未完成。参见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZCNjb25jZXB0cw==">README
+的概念和恢复章节<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="崩溃后究竟恢复到哪里">3. 崩溃后究竟恢复到哪里</h2>
+<p>Pi Durable
+在每个任务步骤之间保存检查点。进程退出后，应用重新以相同存储打开
+Harness，调用
+<code>resume()</code>，调度器会继续未完成的任务。未完成的输入仍在队列里；客户端用同一个
+<code>requestId</code> 重试输入，会拿到原有
+Submission，而不是再提交一次。</p>
+<p>不同工作有不同恢复策略：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>中断位置</th>
+<th>恢复行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型请求途中</td>
+<td>重新发送请求；先前的部分回答保留在记录中并标记为中止</td>
+</tr>
+<tr>
+<td>声明 <code>replay: "safe"</code> 的工具途中</td>
+<td>可以重新运行该工具</td>
+</tr>
+<tr>
+<td>未声明安全重放的工具途中</td>
+<td>不自动重做；把“调用被中断”及已保存输出告知模型</td>
+</tr>
+<tr>
+<td>排队的用户输入</td>
+<td>仍留在队列；可用 <code>requestId</code> 找回原提交</td>
+</tr>
+</tbody>
+</table>
+<p>这里要把两种“只执行一次”分开：<strong><code>requestId</code>
+保证的是重复提交同一输入不会产生第二个
+Submission；它不保证外部副作用只发生一次。</strong>
+比如模型调用了支付服务，支付成功后进程却在本地记账前崩溃，仅靠 Harness
+无法知道钱是否已扣。外部接口仍应使用幂等键、状态查询或补偿操作。官方自定义付款任务示例就在扣款时使用基于
+Task ID 的幂等键，并在中止时定义退款步骤。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方崩溃恢复与任务示例<i class="fa fa-external-link-alt"></i></span></p>
+<p>还有一个细节：部分回答和工具输出为了流式展示会定期提交，README
+写明默认<strong>至多每 100
+毫秒提交一次</strong>。崩溃可能丢失尚未提交的最后一小段流式进度；已提交的记录仍保持一致。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZCN3YXRjaGluZy1hLWNvbnZlcnNhdGlvbg==">README
+的观察会话说明<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="并发多会话与多人接入">4. 并发、多会话与多人接入</h2>
+<p>一个 Harness 可以并行跑很多 Conversation，而每个 Conversation
+可选不同模型、工具权限、指令和工作目录。对话也可以从某条历史消息处分叉：子对话看到父对话到该点为止的历史，不必复制整份记录。官方举例，一个
+Slack
+频道是主对话，某条消息下的讨论线程则从该消息分叉；两边能同时继续。</p>
+<p><strong>子 Agent 不是 Durable 内建的一类特殊对象。</strong>
+应用可以把它实现为由某个工具任务创建和拥有的
+Conversation。子对话独立运行、恢复和计费；父工具可以等待它完成。如果父任务中止，所有权关系决定子任务是否连带中止。后台
+Task 则可继续运行，让主对话先进入空闲状态，例如等待明天触发的提醒。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方多会话、子 Agent
+与任务所有权说明<i class="fa fa-external-link-alt"></i></span></p>
+<p>一个忙碌的对话收到新输入时，应用有三种常见选择：默认排到当前运行结束后作为下一轮输入；用
+<code>whenBusy: "steer"</code>
+在当前工具轮结束后加入正在进行的工作；或用
+<code>whenBusy: "reject"</code>
+拒绝。多个客户端可同时订阅对话视图，看到已有记录、当前回答、工具输出、排队消息和用量；晚加入的客户端先取当前状态，再接收增量变化。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZCNidXN5LWNvbnZlcnNhdGlvbnM=">README：Busy
+Conversations<i class="fa fa-external-link-alt"></i></span></p>
+<p>这里的“多人”指<strong>多个使用者或界面访问同一
+Agent</strong>。它不意味着多个 Harness
+进程可以同时写同一份存储；当前存储设计要求一份存储在一个时刻由一个进程拥有。</p>
+<h2 id="extension怎样把框架变成自己的-agent">5.
+Extension：怎样把框架变成自己的 Agent</h2>
+<p>一个 Extension
+是有名字的一组组件，可以带来<strong>系统提示词片段、工具、Hook、工具包装器和自定义
+Task</strong>。应用把扩展安装进 Registry；每个 Conversation
+保存它选择的扩展和工具名称，而不是把代码本身序列化进去。</p>
+<p>这带来几种能力：</p>
+<ol type="1">
+<li><strong>按对话配置工具。</strong> 主 Agent 能读写文件，审阅 Agent
+可以只给只读工具；某个聊天线程允许搜索问题，却不允许部署。</li>
+<li><strong>让提示词随项目变化。</strong>
+系统提示词片段会在请求前重新组装；变化会在对话记录中留下位置，因此重启或分叉仍能知道模型当时看到什么。</li>
+<li><strong>拦截模型与工具流程。</strong> Hook
+可改写请求、阻止工具调用、修改结果，也能参与压缩流程。一个 Hook
+在崩溃后可能再次执行，因此已经做出的审批决定应写入任务 memo。</li>
+<li><strong>运行时更换实现。</strong> 重新安装同名 Extension
+后，正在执行的工具调用继续使用原实现，之后的调用使用新实现；重启后的
+Conversation 也会解析新进程安装的实现。</li>
+</ol>
+<p>这就是作者所说的 <em>malleable</em>：运行中的 Agent
+应用可以演进，而对话与任务状态继续存在。它同时要求开发者认真管理工具语义和变更兼容性，尤其是尚未完成的长期任务。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方 Extensions、Hooks 与
+Malleable 章节<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="长会话后台压缩reset-与-handoff">6. 长会话：后台压缩、Reset 与
+Handoff</h2>
+<p>Durable
+会保留历史消息，但模型每次请求仍受上下文窗口限制。接近限制时，它可以启动<strong>后台压缩任务</strong>总结较旧内容；对话继续进行，摘要通常在下一轮边界放入上下文。只有下一次模型请求实在放不下时，才必须等待摘要完成。如果提供商仍报上下文过长，Harness
+会压缩后再试一次。旧记录不会因压缩而删除。</p>
+<p><code>reset()</code>
+更彻底：它开始一段新上下文，可选带一份交接说明；工具也能通过
+<code>control: { handoff }</code>
+请求相同动作。旧内容退出模型的当前视野，但仍保存在存储中，应用可以提供历史搜索工具。它让长期服务在必要时“给自己写交接，再继续做事”。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方 Compaction
+章节<i class="fa fa-external-link-alt"></i></span></p>
+<p>这里与 [[Pi/Pi Compaction：上下文压缩的完整流程|普通 Pi 的
+Compaction]] 属于相同的问题域，但触发时机、后台任务和恢复实现要按
+Durable 的文档单独理解，不能把两套机制的参数和行为直接混用。</p>
+<h2 id="对话之外的应用状态也能持久化">7.
+对话之外的应用状态也能持久化</h2>
+<p>Agent
+应用往往还有待办、计划、工单状态或沙箱配置。如果这些信息只在另一个内存对象里，可能出现“对话说任务已完成，待办表却没更新”的不一致。Pi
+Durable 的 <strong>Document</strong> 是与 Transcript 一起存储的类型化
+JSON 状态；两者可在同一个 Commit 里更新。</p>
+<p>Document
+还可定义分叉语义：新对话继承父对话在<strong>分叉时</strong>的值、继承父对话<strong>当前</strong>的值，或从一个<strong>新初始值</strong>开始。界面可以订阅已提交的
+Document 状态，例如实时显示待办列表。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方 Durable application
+state 章节<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="存储与运行边界">8. 存储与运行边界</h2>
+<p>Pi Durable 提供内存、SQLite、JSONL，以及 Cloudflare Durable Object
+SQLite
+适配方式。内存后端适合示例与测试，<strong>不会跨重启保存</strong>；SQLite
+使用 WAL，README 指出进程崩溃后提交可恢复，但
+<code>synchronous=NORMAL</code> 下断电或主机故障可能丢失最新提交；JSONL
+可用 <code>fsync: true</code>
+在提交标记前落盘。存储接口也允许自己实现其他后端，并用仓库提供的一致性测试验证。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZCNzdG9yYWdl">README：Storage<i class="fa fa-external-link-alt"></i></span></p>
+<p>另一个运行边界是：当前所谓“能在任何地方运行”，具体指有 JavaScript
+运行时的环境。默认 Node Execution Environment 给工具本地文件与
+Shell；如果 Harness
+与工具要运行在不同机器上，需要实现或接入合适的远程执行环境。<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">官方 Long runs anywhere
+章节<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="我的判断什么时候值得采用">9. 我的判断：什么时候值得采用</h2>
+<p>如果需求只是<strong>一个人在终端中使用编码助手</strong>，Pi Coding
+Agent
+已经给出了成品体验。若应用必须长期运行、进程重启后自动续做、同时服务多个用户或界面，并要求工具、对话与业务状态能统一追踪，Pi
+Durable 的抽象就更贴切。</p>
+<p>最值得借鉴的不是“自动重试”四个字，而是它把责任分清了：<strong>Harness
+持久化任务意图和状态；工具明确声明能否重放；外部服务通过幂等或补偿处理副作用；客户端通过提交
+ID 和状态订阅恢复交互。</strong> 这几个环节缺一个，长时间运行的 Agent
+都可能在故障后重复执行或遗失工作。</p>
+<p>目前仍需谨慎的地方也很具体：软件包尚处实验阶段；每份存储仅允许一个拥有者进程；SQLite
+的最新提交在主机故障场景下有特定耐久边界；自定义工具的外部副作用仍由应用设计负责。它适合做原型和有明确恢复需求的应用，但不能仅因为名字叫
+Durable，就把整个业务流程视为天然“恰好执行一次”。</p>
+<p><strong>资料</strong>：<span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktZHVyYWJsZS8=">Earendil 官方介绍<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9kdXJhYmxlL1JFQURNRS5tZA==">Pi
+Durable README<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9lYXJlbmRpbC5jb20vcG9zdHMvcGktMS0wLw==">Pi 1.0
+发布文章<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/8e2cf97.html" rel="prev" title="ChatGPT Intelligent UI 拆解：从 DIL 到交互界面">
+                  <i class="fa fa-angle-left"></i> ChatGPT Intelligent UI 拆解：从 DIL 到交互界面
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/fc3938a9.html" rel="next" title="AI 开发工作流：轻量约束、端到端测试与人工审查">
+                  AI 开发工作流：轻量约束、端到端测试与人工审查 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

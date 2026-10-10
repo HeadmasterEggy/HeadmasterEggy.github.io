@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="从 SKILL.md 的结构到渐进式披露的原理，讲清楚 Agent Skill 是什么、2025 年如何诞生并成为开放标准、 和 CLAUDE.md、MCP、Hook、Subagent 有什么区别，以及怎么写好一个 skill。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent Skill 完全指南：它是什么、怎么来的、为什么管用">
+<meta property="og:url" content="https://qiao1.top/posts/fcc443a7.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="从 SKILL.md 的结构到渐进式披露的原理，讲清楚 Agent Skill 是什么、2025 年如何诞生并成为开放标准、 和 CLAUDE.md、MCP、Hook、Subagent 有什么区别，以及怎么写好一个 skill。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-01T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.479Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Agent-Skill">
+<meta property="article:tag" content="Claude-Code">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/fcc443a7.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/fcc443a7.html","path":"posts/fcc443a7.html","title":"Agent Skill 完全指南：它是什么、怎么来的、为什么管用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agent Skill 完全指南：它是什么、怎么来的、为什么管用 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/fcc443a7.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%89%88%E6%9C%AC"><span class="nav-text">0. 一句话版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E7%9C%8B%E4%B8%80%E4%B8%AA%E6%88%91%E8%87%AA%E5%B7%B1%E7%9A%84%E7%9C%9F%E5%AE%9E%E4%BE%8B%E5%AD%90"><span class="nav-text">1. 先看一个我自己的真实例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-skill%E5%AE%83%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">2. 为什么需要
+skill：它解决的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%85%88%E5%A4%A9%E5%B1%80%E9%99%90"><span class="nav-text">2.1 大模型的两个先天局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A4%E5%89%8D%E7%9A%84%E5%90%84%E7%A7%8D%E8%A7%A3%E6%B3%95%E5%90%84%E8%87%AA%E7%9A%84%E7%97%9B%E7%82%B9"><span class="nav-text">2.2 此前的各种解法，各自的痛点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89%E5%8F%91%E5%B1%95%E6%97%B6%E9%97%B4%E7%BA%BF"><span class="nav-text">3. 来龙去脉：发展时间线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%8F%B220222025%E5%90%84%E7%A7%8D%E7%BB%99%E6%A8%A1%E5%9E%8B%E5%96%82%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%B0%9D%E8%AF%95"><span class="nav-text">3.1
+前史（2022–2025）：各种&quot;给模型喂上下文&quot;的尝试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent-skills-%E6%AD%A3%E5%BC%8F%E5%8F%91%E5%B8%83"><span class="nav-text">3.2 2025-10-16：Agent Skills
+正式发布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86-%E7%BB%84%E7%BB%87%E7%BA%A7%E7%AE%A1%E7%90%86"><span class="nav-text">3.3 2025-12-18：开放标准 + 组织级管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B4%E6%88%90%E7%86%9F%E4%B8%8E%E8%9E%8D%E5%90%88"><span class="nav-text">3.4 2026 年：成熟与融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E7%BA%BF%E9%80%9F%E8%A7%88"><span class="nav-text">3.5 时间线速览</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA-skill-%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="nav-text">4. 一个 skill 长什么样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84agentskills.io-%E8%A7%84%E8%8C%83"><span class="nav-text">4.1 目录结构（agentskills.io
+规范）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skill.md-%E7%9A%84-frontmatter"><span class="nav-text">4.2 SKILL.md 的
+frontmatter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-text">4.3 正文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%BD%E7%9A%84-description-%E4%B8%8E%E5%9D%8F%E7%9A%84-description"><span class="nav-text">4.4 好的 description 与坏的
+description</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E5%B0%B1%E7%AE%A1%E7%94%A8"><span class="nav-text">5. 原理：为什么这样就管用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%B8%90%E8%BF%9B%E5%BC%8F%E6%8A%AB%E9%9C%B2progressive-disclosure"><span class="nav-text">5.1
+核心：渐进式披露（Progressive Disclosure）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E6%98%AF%E6%80%8E%E4%B9%88%E5%8F%91%E7%94%9F%E7%9A%84"><span class="nav-text">5.2 &quot;触发&quot;是怎么发生的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-skill-%E5%BF%85%E9%A1%BB%E9%85%8D%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="nav-text">5.3 为什么 skill
+必须配&quot;文件系统 + 代码执行&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skill-%E5%86%85%E5%AE%B9%E8%BF%9B%E5%85%A5%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B9%8B%E5%90%8E"><span class="nav-text">5.4 skill 内容进入上下文之后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93%E5%AE%83%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%E4%B8%8D%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">5.5 小结：它到底是什么、不是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-claude-code-%E9%87%8Cskill-%E5%A4%9A%E5%87%BA%E6%9D%A5%E7%9A%84%E6%9C%AC%E4%BA%8B"><span class="nav-text">6. 在 Claude Code 里，skill
+多出来的本事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BE%E5%93%AA%E9%87%8C-%E8%B0%81%E4%BC%98%E5%85%88"><span class="nav-text">6.1 放哪里 &amp; 谁优先</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%81%E8%83%BD%E8%A7%A6%E5%8F%91%E4%B8%A4%E4%B8%AA%E5%BC%80%E5%85%B3"><span class="nav-text">6.2 谁能触发：两个开关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8-frontmatter"><span class="nav-text">6.3 其他常用 frontmatter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E6%96%87%E6%B3%A8%E5%85%A5"><span class="nav-text">6.4 动态上下文注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E7%89%B9%E6%80%A7"><span class="nav-text">6.5 实用特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86%E4%B8%8E%E7%94%9F%E6%80%81"><span class="nav-text">7. 开放标准与生态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E7%9B%B8%E9%82%BB%E6%A6%82%E5%BF%B5%E7%9A%84%E5%8C%BA%E5%88%AB%E6%9C%80%E5%AE%B9%E6%98%93%E6%B7%B7%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-text">8.
+和相邻概念的区别（最容易混的部分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%86%99%E5%87%BA%E5%A5%BD-skill"><span class="nav-text">9. 怎么写出好 skill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E4%B8%8E%E9%A3%8E%E9%99%A9%E5%A6%82%E5%AE%9E%E8%AF%B4"><span class="nav-text">10. 局限与风险（如实说）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%8A%9B%E5%B1%80%E9%99%90"><span class="nav-text">10.1 能力局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E9%87%8D%E7%82%B9"><span class="nav-text">10.2 安全风险（重点）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%88%B0%E8%BF%99%E4%B8%AA%E5%8D%9A%E5%AE%A2%E7%8E%B0%E7%8A%B6%E8%AF%84%E4%BB%B7%E4%B8%8E%E5%BB%BA%E8%AE%AE"><span class="nav-text">11.
+回到这个博客：现状评价与建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-text">12. 术语表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90"><span class="nav-text">附：参考来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/fcc443a7.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agent Skill 完全指南：它是什么、怎么来的、为什么管用 | Joey">
+      <meta itemprop="description" content="从 SKILL.md 的结构到渐进式披露的原理，讲清楚 Agent Skill 是什么、2025 年如何诞生并成为开放标准、 和 CLAUDE.md、MCP、Hook、Subagent 有什么区别，以及怎么写好一个 skill。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agent Skill 完全指南：它是什么、怎么来的、为什么管用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-01 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-01T12:00:00Z">2026-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>25 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">从 SKILL.md 的结构到渐进式披露的原理，讲清楚 Agent Skill 是什么、2025 年如何诞生并成为开放标准、 和 CLAUDE.md、MCP、Hook、Subagent 有什么区别，以及怎么写好一个 skill。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>写于 2026-10-01。事实部分主要依据 Anthropic
+官方文档与工程博客、agentskills.io 规范、Claude Code
+文档；个别生态数据来自第三方文章，文中已标明。凡是"我的理解/推断"也会明说。</p>
+</blockquote>
+<hr />
+<h2 id="一句话版本">0. 一句话版本</h2>
+<p><strong>Skill 是一个文件夹，里面有一份写给 AI
+的"工作手册"（<code>SKILL.md</code>），可选地附带脚本和参考资料。AI
+平时只看到每份手册的"标题 +
+一句话简介"，判断当前任务相关时，才把整份手册读进来照着做。</strong></p>
+<p>没有任何神秘的东西：不是微调模型，不是插件系统，不是新的模型能力。它本质上是<strong>一套"按需把文字塞进上下文"的约定</strong>，聪明之处全在"按需"二字。</p>
+<p>如果你只想记三件事：</p>
+<ol type="1">
+<li><strong>形态</strong>：<code>目录/SKILL.md</code>，顶部
+YAML（<code>name</code> + <code>description</code>），下面是 Markdown
+正文。</li>
+<li><strong>机制</strong>：渐进式披露（progressive
+disclosure）——先给目录，用到再翻页，再用到再翻附录。</li>
+<li><strong>意义</strong>：把"人类专家脑子里的流程知识"变成<strong>可复用、可版本管理、可分享</strong>的文件，而不用每次重新写一大段提示词。</li>
+</ol>
+<hr />
+<h2 id="先看一个我自己的真实例子">1. 先看一个我自己的真实例子</h2>
+<p>我这个博客仓库里就有 5 个 skill，放在
+<code>.agent/skills/</code>：</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">.agent<span class="operator">/</span>skills<span class="symbol">/</span></span><br><span class="line">├── blog-maintain<span class="symbol">/SKILL.md</span>          <span class="comment"># 改笔记后：检查 → 修复 → 发布</span></span><br><span class="line">├── blog-cat-agent<span class="symbol">/SKILL.md</span>         <span class="comment"># 看板喵 + Worker 的维护</span></span><br><span class="line">├── blog-verify-ui<span class="symbol">/SKILL.md</span>         <span class="comment"># 本地预览 + 浏览器验证</span></span><br><span class="line">├── hexo-dependency-audit<span class="symbol">/SKILL.md</span>  <span class="comment"># npm 依赖审计</span></span><br><span class="line">└── use-secrets-safely<span class="symbol">/SKILL.md</span>     <span class="comment"># 安全使用密钥文件</span></span><br><span class="line">.claude<span class="operator">/</span>skills<span class="operator">/</span><span class="symbol">&lt;name&gt;</span> <span class="operator">-&gt;</span> ..<span class="operator">/</span>..<span class="operator">/</span>.agent<span class="operator">/</span>skills<span class="operator">/</span><span class="symbol">&lt;name&gt;</span>   <span class="comment"># 符号链接，Claude Code 通过它发现</span></span><br></pre></td></tr></table></figure>
+<p>打开 <code>use-secrets-safely/SKILL.md</code>，顶部是：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">use-secrets-safely</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">用户把</span> <span class="string">API</span> <span class="string">key/密码放在某个文件里让你用时……任何涉及密钥文件的任务都应先看这个</span> <span class="string">skill。</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<p>下面是 39 行的正文：七个步骤，每步给出具体的
+<code>grep</code>/<code>curl</code> 命令。</p>
+<p>现在对照一下 AI 实际发生了什么（本次会话的系统提示里就能看到）：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>阶段</th>
+<th>发生什么</th>
+<th>占用上下文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>会话开始</td>
+<td>系统提示里列出所有 skill 的 <code>name: description</code>
+一行行清单</td>
+<td>每个 skill 一两行</td>
+</tr>
+<tr>
+<td>我说"key 在 ~/Downloads/x.txt，帮我设上"</td>
+<td>AI 对照清单，发现 <code>use-secrets-safely</code> 的描述匹配</td>
+<td>无变化</td>
+</tr>
+<tr>
+<td>AI 调用 <code>Skill</code> 工具</td>
+<td>39 行正文被读进对话</td>
+<td>约几百 token</td>
+</tr>
+<tr>
+<td>执行中</td>
+<td>按步骤跑命令；如果有 <code>scripts/</code>
+就运行脚本，只有输出进上下文</td>
+<td>只有输出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这就是 skill 的全部。</strong>
+后面的章节只是在解释"为什么这样设计"和"这样设计的边界在哪"。</p>
+<hr />
+<h2 id="为什么需要-skill它解决的问题">2. 为什么需要
+skill：它解决的问题</h2>
+<h3 id="大模型的两个先天局限">2.1 大模型的两个先天局限</h3>
+<ol type="1">
+<li><strong>没有你的流程知识。</strong> 模型懂
+PDF，但不知道"你们公司的报表模板"；懂 Hexo，但不知道"我的博客发布前要跑
+<code>tools/blog.py</code>、有 ERROR 不能发"。</li>
+<li><strong>上下文窗口是稀缺资源。</strong>
+把所有流程知识都塞进系统提示，既贵又会稀释注意力——指令越多，每条被遵守的概率越低。</li>
+</ol>
+<h3 id="此前的各种解法各自的痛点">2.2 此前的各种解法，各自的痛点</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>方案</th>
+<th>做法</th>
+<th>痛点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>长系统提示 / 自定义指令</td>
+<td>所有规矩写在一起，每次全量加载</td>
+<td>越写越长；无关任务也付 token；难维护</td>
+</tr>
+<tr>
+<td>复制粘贴提示词</td>
+<td>每次手动贴</td>
+<td>重复劳动；版本混乱；无法团队共享</td>
+</tr>
+<tr>
+<td>RAG（检索增强）</td>
+<td>向量库按相似度捞片段</td>
+<td>捞的是<strong>片段</strong>不是<strong>流程</strong>；要搭基础设施；步骤顺序容易丢</td>
+</tr>
+<tr>
+<td>微调</td>
+<td>把知识训进权重</td>
+<td>贵、慢、不可审计、更新要重训</td>
+</tr>
+<tr>
+<td>自定义 GPT / Projects</td>
+<td>绑定一批文件和指令</td>
+<td>绑定在某个产品里，粒度粗（整个项目），不可组合</td>
+</tr>
+<tr>
+<td>工具 / MCP</td>
+<td>给模型"手"（能调接口）</td>
+<td>解决"能做什么"，不解决"该怎么做"</td>
+</tr>
+<tr>
+<td><code>CLAUDE.md</code> / <code>AGENTS.md</code></td>
+<td>项目级常驻说明</td>
+<td>常驻、全量加载，只适合"永远成立"的规矩</td>
+</tr>
+</tbody>
+</table>
+<p>Skill
+的定位正是<strong>填这条缝</strong>：既要<strong>按需加载</strong>（省上下文），又要<strong>是流程/手册而非碎片</strong>（可靠），还要<strong>纯文件</strong>（好版本管理、好分享）。</p>
+<p>官方的比喻很准确：它像<strong>给新员工准备的入职手册</strong>——不需要新员工背下来，需要时翻到对应章节就行。</p>
+<hr />
+<h2 id="来龙去脉发展时间线">3. 来龙去脉：发展时间线</h2>
+<h3 id="前史20222025各种给模型喂上下文的尝试">3.1
+前史（2022–2025）：各种"给模型喂上下文"的尝试</h3>
+<blockquote>
+<p>这一段按我的知识整理，具体日期以公开记录为准，仅作脉络参考。</p>
+</blockquote>
+<ul>
+<li><strong>2022–2023</strong>：提示工程、ChatGPT 插件（2023
+初）、Function Calling（2023 年 6
+月）。模型第一次能"调用外部能力"。</li>
+<li><strong>2023 年 11 月</strong>：自定义 GPT。第一次把"指令 + 知识文件
++ 工具"打包成可分享的东西，但绑死在 ChatGPT 产品里。</li>
+<li><strong>2024 年</strong>：Claude
+Projects（项目级知识库）；<strong>MCP（Model Context Protocol）于 2024
+年 11 月发布</strong>，给"模型接外部系统"定了开放标准。</li>
+<li><strong>2025 年上半年</strong>：Claude Code 等命令行 coding agent
+兴起。<code>CLAUDE.md</code>（项目常驻说明）、自定义 slash
+command（<code>.claude/commands/*.md</code>，一个 Markdown
+就是一条可复用提示词）成为开发者的日常。同时 OpenAI 系推动
+<code>AGENTS.md</code> 这类跨工具的项目说明约定。</li>
+</ul>
+<p>此时已有的积木：<strong>常驻说明</strong>（CLAUDE.md）、<strong>手动触发的提示词</strong>（slash
+command）、<strong>外部工具</strong>（MCP）。缺的是：<strong>一份说明书，AI
+能自己决定什么时候翻开，而且能带着脚本和资料一起走。</strong></p>
+<h3 id="agent-skills-正式发布">3.2 2025-10-16：Agent Skills
+正式发布</h3>
+<p>Anthropic 在工程博客《Equipping agents for the real world with Agent
+Skills》中公开介绍。动机原文意思是：通用 agent
+很强，但缺少领域专长与组织上下文，需要"更可组合、可扩展、可移植"的方式去装备它们。</p>
+<p>首发内容：</p>
+<ul>
+<li><strong>规范</strong>：目录 + <code>SKILL.md</code> + YAML 元数据 +
+渐进式披露。</li>
+<li><strong>预置技能</strong>：PowerPoint、Excel、Word、PDF
+四个文档技能（claude.ai 上创建文件的能力背后就是它们）。</li>
+<li><strong>自定义技能</strong>：Claude Code 里放进
+<code>~/.claude/skills/</code> 或 <code>.claude/skills/</code>
+即可；claude.ai 里上传 zip；API 里通过 <code>/v1/skills</code>
+上传。</li>
+<li>同期 Claude Code 网页版上线，也支持 Skills（第三方时间线汇总为
+2025-10-20）。</li>
+</ul>
+<blockquote>
+<p>一个有意思的点：官方明确说 PDF 技能的原型场景是——Claude 很懂
+PDF，但没法直接操作 PDF 表单，于是把"怎么操作"写成脚本 +
+说明，打包成技能。<strong>也就是说 skill 一开始就不只是文字，而是"文字 +
+可执行代码"。</strong></p>
+</blockquote>
+<h3 id="开放标准-组织级管理">3.3 2025-12-18：开放标准 + 组织级管理</h3>
+<ul>
+<li>Anthropic 把规范独立发布到
+<strong>agentskills.io</strong>，作为<strong>开放标准</strong>，并提供校验工具
+<code>skills-ref</code>。</li>
+<li>同期补上组织管理（管理员统一下发/管理）、合作伙伴技能目录等"生命周期"功能。</li>
+<li>此后数周到数月，主流编码 agent 陆续支持同一格式：OpenAI
+Codex、Google Gemini CLI、GitHub Copilot、Cursor、JetBrains Junie
+等（据第三方文章统计，到 2026 年 4 月已有 30+
+工具采用；"下载量/技能数量"一类数字各家说法不一，不要当精确数据）。</li>
+<li><code>.agents/skills/</code>
+成为跨工具的事实目录约定——<strong>这正是我仓库里把真身放
+<code>.agent/skills/</code>、再给 Claude Code
+做符号链接的原因</strong>（见 <code>AGENTS.md</code>）。</li>
+</ul>
+<h3 id="年成熟与融合">3.4 2026 年：成熟与融合</h3>
+<ul>
+<li><strong>Slash command 并入 skill</strong>：Claude Code
+文档现在明确写着"自定义命令已合并进
+skill"。<code>.claude/commands/deploy.md</code> 仍能用，但
+<code>.claude/skills/deploy/SKILL.md</code>
+功能更多（可带支持文件、可控制谁能触发、可限制工具、可 fork
+子代理）。<strong>一个 skill 既是"AI 自动翻开的手册"，也是"你敲
+<code>/名字</code> 触发的命令"。</strong></li>
+<li><strong>Claude Code 里的 skill
+能力大幅扩展</strong>：参数、动态上下文注入、<code>context: fork</code>、<code>paths</code>
+条件加载、描述预算与诊断命令（<code>/skill-doctor</code>）、嵌套目录发现等（详见第
+6 章）。</li>
+<li><strong>API 层面</strong>：据 Claude Platform
+发布说明的第三方汇总，Skills 与 <code>/v1/skills</code> 在 2026-08-19
+脱离 beta。（单一来源，需要精确信息请查官方 release notes。）</li>
+<li><strong>官方后续方向</strong>（来自 2025
+年那篇博客）：继续完善创建/编辑/发现/分享的全生命周期；探索与 MCP
+的互补关系；<strong>让 agent 自己创建、编辑、评估
+skill</strong>——也就是把"一次成功的做法"沉淀成下次可用的能力。</li>
+</ul>
+<h3 id="时间线速览">3.5 时间线速览</h3>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="number">2022</span>-<span class="number">23</span>  提示工程 / 插件 / Function Calling</span><br><span class="line"><span class="number">2023</span>-<span class="number">11</span>  自定义 GPT（打包指令+知识，但产品内封闭）</span><br><span class="line"><span class="number">2024</span>-<span class="number">11</span>  MCP：给模型接外部系统的开放协议</span><br><span class="line"><span class="symbol">2025 </span>H1  CLAUDE.md、slash command、AGENTS.md：项目级常驻说明与手动提示词</span><br><span class="line"><span class="number">2025</span>-<span class="number">10</span>-<span class="number">16</span>  ★ Agent Skills 发布（SKILL.md + 渐进式披露 + 文档技能）</span><br><span class="line"><span class="number">2025</span>-<span class="number">12</span>-<span class="number">18</span>  ★ 开放标准 agentskills.io + 组织级管理</span><br><span class="line"><span class="symbol">2026 </span>H1  多家 coding agent 跟进；slash command 并入 skill</span><br><span class="line"><span class="number">2026</span>-<span class="number">08</span>  Skills API 脱离 beta（第三方汇总）</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="一个-skill-长什么样">4. 一个 skill 长什么样</h2>
+<h3 id="目录结构agentskills.io-规范">4.1 目录结构（agentskills.io
+规范）</h3>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">skill-name<span class="symbol">/</span></span><br><span class="line">├── SKILL.md       <span class="comment"># 必需：元数据 + 指令</span></span><br><span class="line">├── scripts<span class="symbol">/</span>       <span class="comment"># 可选：可执行脚本（Python / Bash / JS …）</span></span><br><span class="line">├── references<span class="symbol">/</span>    <span class="comment"># 可选：按需读取的参考文档</span></span><br><span class="line">└── assets<span class="symbol">/</span>        <span class="comment"># 可选：模板、图片、数据文件</span></span><br></pre></td></tr></table></figure>
+<p>只有 <code>SKILL.md</code>
+是必需的，其余目录只是<strong>推荐约定</strong>，你可以放任何文件。</p>
+<h3 id="skill.md-的-frontmatter">4.2 <code>SKILL.md</code> 的
+frontmatter</h3>
+<p><strong>开放标准里的字段：</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>字段</th>
+<th>必需</th>
+<th>约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>✅</td>
+<td>≤64 字符；小写字母/数字/连字符；不能以连字符开头结尾，不能有连续
+<code>--</code>；<strong>必须与目录名一致</strong></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>✅</td>
+<td>≤1024 字符；要同时说清"做什么"和"什么时候用"</td>
+</tr>
+<tr>
+<td><code>license</code></td>
+<td></td>
+<td>许可证名或随附文件</td>
+</tr>
+<tr>
+<td><code>compatibility</code></td>
+<td></td>
+<td>≤500 字符；环境要求（需要 git/docker/联网等）</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td></td>
+<td>任意字符串键值对，给工具自定义用</td>
+</tr>
+<tr>
+<td><code>allowed-tools</code></td>
+<td></td>
+<td>预批准工具列表（实验性，各实现不一）</td>
+</tr>
+</tbody>
+</table>
+<p>Anthropic 自家平台额外限制：<code>name</code> 不能含
+"anthropic"、"claude" 这类保留词。</p>
+<p>我仓库 <code>AGENTS.md</code> 里写的"frontmatter 必须有
+<code>name</code>，与目录同名，和
+<code>description</code>"——正是这个规范。</p>
+<h3 id="正文">4.3 正文</h3>
+<p>规范对正文<strong>没有格式限制</strong>，"写任何对 agent
+完成任务有帮助的东西"。推荐包含：步骤、输入输出示例、常见边界情况。官方建议<strong>主文件控制在
+500 行以内</strong>，更长的内容拆到 <code>references/</code>
+里，并且<strong>引用层级只做一层</strong>（<code>SKILL.md</code> →
+参考文件，别再层层嵌套）。</p>
+<h3 id="好的-description-与坏的-description">4.4 好的 description 与坏的
+description</h3>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 好：说了做什么 + 什么时候用 + 含用户会说的关键词</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">Extracts</span> <span class="string">text</span> <span class="string">and</span> <span class="string">tables</span> <span class="string">from</span> <span class="string">PDF</span> <span class="string">files,</span> <span class="string">fills</span> <span class="string">PDF</span> <span class="string">forms,</span> <span class="string">merges</span> <span class="string">PDFs.</span> <span class="string">Use</span> <span class="string">when</span> <span class="string">working</span> <span class="string">with</span> <span class="string">PDF</span> <span class="string">documents</span> <span class="string">or</span> <span class="string">when</span> <span class="string">the</span> <span class="string">user</span> <span class="string">mentions</span> <span class="string">PDFs,</span> <span class="string">forms,</span> <span class="string">or</span> <span class="string">extraction.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 差：太泛，AI 无从判断</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">Helps</span> <span class="string">with</span> <span class="string">PDFs.</span></span><br></pre></td></tr></table></figure>
+<p>我仓库里的写法也是同一思路，比如
+<code>blog-maintain</code>："新增、修改、移动、删除
+<code>source/_posts</code>
+下的笔记……后使用：先跑检查再自动发布"——既有触发场景，又有动作概述。</p>
+<hr />
+<h2 id="原理为什么这样就管用">5. 原理：为什么这样就管用</h2>
+<h3 id="核心渐进式披露progressive-disclosure">5.1
+核心：渐进式披露（Progressive Disclosure）</h3>
+<p>这个词来自 UI
+设计：<strong>先给用户最少的必要信息，需要时再展开细节</strong>。Skill
+把它用在上下文管理上，分三层：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>层级</th>
+<th>何时加载</th>
+<th>大致成本</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1 元数据</strong></td>
+<td>会话启动，永远在</td>
+<td>每个 skill 约 100 token</td>
+<td><code>name</code> + <code>description</code></td>
+</tr>
+<tr>
+<td><strong>L2 指令</strong></td>
+<td>skill 被触发时</td>
+<td>建议 &lt;5000 token</td>
+<td><code>SKILL.md</code> 正文</td>
+</tr>
+<tr>
+<td><strong>L3+ 资源</strong></td>
+<td>正文里引用到、且确实需要时</td>
+<td>用到前为 0</td>
+<td><code>references/</code>、<code>assets/</code>；脚本<strong>运行</strong>而非读取</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────── 上下文窗口 ───────────────────────────┐</span><br><span class="line">│ 系统提示                                                          │</span><br><span class="line">│   ├─ <span class="selector-tag">skill</span> <span class="selector-tag">A</span>: 一句话简介   ← <span class="selector-tag">L1</span>，常驻，极便宜                       │</span><br><span class="line">│   ├─ <span class="selector-tag">skill</span> <span class="selector-tag">B</span>: 一句话简介                                           │</span><br><span class="line">│   └─ <span class="selector-tag">skill</span> <span class="selector-tag">C</span>: 一句话简介                                           │</span><br><span class="line">│                                                                    │</span><br><span class="line">│ 对话……                                                            │</span><br><span class="line">│   └─ <span class="selector-attr">[触发 B]</span> <span class="selector-tag">B</span> 的 <span class="selector-tag">SKILL</span><span class="selector-class">.md</span> 全文 ← <span class="selector-tag">L2</span>，只在相关时才进来              │</span><br><span class="line">│        └─ <span class="selector-attr">[需要时]</span> <span class="selector-tag">B</span>/<span class="selector-tag">references</span>/<span class="selector-tag">schema</span><span class="selector-class">.md</span> ← <span class="selector-tag">L3</span>，再按需翻开          │</span><br><span class="line">│        └─ <span class="selector-attr">[需要时]</span> 运行 <span class="selector-tag">B</span>/<span class="selector-tag">scripts</span>/<span class="selector-tag">check</span><span class="selector-class">.py</span> → 只有输出进上下文        │</span><br><span class="line">└────────────────────────────────────────────────────────────────────┘</span><br><span class="line">        磁盘上的其余文件：不占一个 <span class="selector-tag">token</span></span><br></pre></td></tr></table></figure>
+<p><strong>这带来三个直接好处：</strong></p>
+<ol type="1">
+<li><strong>装得起很多 skill</strong>：装 50 个，常驻成本也只是 50
+个简介。</li>
+<li><strong>单个 skill 可以很大</strong>：一个 skill 里放整套 API
+文档也行，没用到的文件零成本。官方的说法是"可打包内容实际上没有上限"。</li>
+<li><strong>脚本比让模型现写代码更省、更稳</strong>：脚本代码本身<strong>不进上下文</strong>，只有执行结果进；而且是确定性的，不会每次写得不一样。</li>
+</ol>
+<h3 id="触发是怎么发生的">5.2 "触发"是怎么发生的？</h3>
+<p>这是最容易被误解的地方。<strong>没有关键词匹配器，没有向量检索，没有路由模块。</strong>
+机制很朴素：</p>
+<ol type="1">
+<li>宿主程序（Claude Code / claude.ai / API）启动时扫描 skill
+目录，把每个 skill 的 <code>name</code> + <code>description</code>
+拼进模型能看到的内容里（Claude Code 里是一个叫 <code>Skill</code>
+的工具，工具说明里列着所有可用 skill）。</li>
+<li>模型像做阅读理解一样，<strong>用自己的语言理解能力</strong>判断："用户这个请求，哪个
+skill 的描述对得上？"</li>
+<li>判断为相关，就调用 <code>Skill</code> 工具（或用 bash
+<code>cat SKILL.md</code>），宿主把正文返回给它。</li>
+<li>模型读完正文，按里面的步骤继续干活。</li>
+</ol>
+<p>所以：</p>
+<ul>
+<li><strong><code>description</code>
+就是路由规则本身</strong>，写得好不好直接决定触发率。这也是为什么官方反复强调"要写清什么时候用"。</li>
+<li>触发是<strong>概率性</strong>的，不是
+100%。这是下面"局限"一章的根源。</li>
+<li>你也可以<strong>绕过判断，手动触发</strong>：Claude Code 里敲
+<code>/skill-name</code>。</li>
+</ul>
+<blockquote>
+<p>这是我的归纳而非官方原话：skill
+机制把"选择该用哪个能力"这件事，从<strong>工程代码</strong>转移给了<strong>模型的语言理解</strong>。优点是不需要写任何路由逻辑、新增
+skill 零成本；缺点是触发不够确定。</p>
+</blockquote>
+<h3 id="为什么-skill-必须配文件系统-代码执行">5.3 为什么 skill
+必须配"文件系统 + 代码执行"</h3>
+<p>渐进式披露要成立，模型得有<strong>自己去翻文件的能力</strong>——能
+<code>cat</code> 一个文件、能运行一个脚本。这就是为什么：</p>
+<ul>
+<li>在 <strong>API</strong> 上用 skill，需要同时开启代码执行工具（skill
+住在沙箱容器里）。</li>
+<li>在 <strong>Claude Code</strong>
+里天然成立（本来就能读写文件、跑命令）。</li>
+<li>官方原话：skill
+在"模型能访问虚拟机/文件系统"的环境里运行，"像你为新同事整理的入职资料"。</li>
+</ul>
+<p>换句话说，<strong>skill 是"agent +
+文件系统"这个范式的产物</strong>。没有文件系统的纯聊天模型，就没办法按需翻页。</p>
+<h3 id="skill-内容进入上下文之后">5.4 skill 内容进入上下文之后</h3>
+<p>以 Claude Code 为例（官方文档所述）：</p>
+<ul>
+<li>触发后，渲染好的 <code>SKILL.md</code>
+作为<strong>一条消息</strong>进入对话，<strong>之后各轮一直留在上下文里</strong>（不会每轮重读磁盘）。所以它是"整个任务期间的<strong>常驻指令</strong>"，写法上应该是"每次编辑后都跑测试"，而不是"跑测试"这种一次性步骤。</li>
+<li><strong>上下文压缩（compaction）时</strong>：被调用过的 skill
+会重新附上，但<strong>每个只保留前约 5000 token，总预算约 25000
+token</strong>。→ <strong>最重要的规则写在最前面。</strong></li>
+<li>同一个 skill
+再次调用，渲染结果相同就只提示"已加载"，不重复塞入。</li>
+</ul>
+<h3 id="小结它到底是什么不是什么">5.5 小结：它到底是什么、不是什么</h3>
+<p><strong>是</strong>：磁盘上的文本 +
+一套"何时、如何读进上下文"的约定。 <strong>不是</strong>： -
+不是训练/微调——模型权重一点没变； - 不是代码插件——<code>SKILL.md</code>
+本身不执行，只是被<strong>读</strong>；执行的是 skill
+里<strong>引用的脚本</strong>，由 agent 通过 bash 跑； -
+不是权限系统——skill
+本身不赋予新能力，它只是教模型"用现有能力怎么做"（<code>allowed-tools</code>
+可以预批准工具，但那是宿主的权限配置，不是 skill 魔法）。</p>
+<hr />
+<h2 id="在-claude-code-里skill-多出来的本事">6. 在 Claude Code 里，skill
+多出来的本事</h2>
+<blockquote>
+<p>以下来自 Claude Code 官方文档。版本相关的细节变化较快，以
+<code>code.claude.com/docs/en/skills</code> 为准。</p>
+</blockquote>
+<h3 id="放哪里-谁优先">6.1 放哪里 &amp; 谁优先</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>位置</th>
+<th>路径</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>企业</td>
+<td>托管设置目录</td>
+<td>部署机器上的所有人（最高优先）</td>
+</tr>
+<tr>
+<td>个人</td>
+<td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+<td>你机器上所有项目</td>
+</tr>
+<tr>
+<td>项目</td>
+<td><code>&lt;repo&gt;/.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+<td>当前仓库（可随 git 共享）</td>
+</tr>
+<tr>
+<td>嵌套</td>
+<td><code>&lt;子目录&gt;/.claude/skills/…</code></td>
+<td>Claude 访问到该子目录时才加载（适合 monorepo）</td>
+</tr>
+<tr>
+<td>插件</td>
+<td><code>&lt;plugin&gt;/skills/…</code></td>
+<td>命名空间为 <code>/插件名:技能名</code></td>
+</tr>
+<tr>
+<td>内置</td>
+<td>Claude Code 自带</td>
+<td>可被自定义同名覆盖</td>
+</tr>
+</tbody>
+</table>
+<p>同名时：企业 &gt; 个人 &gt; 项目。</p>
+<h3 id="谁能触发两个开关">6.2 谁能触发：两个开关</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>配置</th>
+<th>效果</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认</td>
+<td>AI 自动触发，你也能 <code>/名字</code> 手动触发</td>
+<td>大多数 skill</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation: true</code></td>
+<td><strong>只有你</strong>能手动触发，AI 不会自己用</td>
+<td>有副作用的操作：部署、提交、发消息</td>
+</tr>
+<tr>
+<td><code>user-invocable: false</code></td>
+<td>只有 AI 能用，不出现在 <code>/</code> 菜单</td>
+<td>纯背景知识</td>
+</tr>
+</tbody>
+</table>
+<p>→ 我的 <code>./run.sh</code> 发布流程如果想"必须我点头才发"，就是
+<code>disable-model-invocation</code> 的典型场景（目前我选择让 AI
+自动发布，见 AGENTS.md 规矩 1，所以保持默认即可）。</p>
+<h3 id="其他常用-frontmatter">6.3 其他常用 frontmatter</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>when_to_use</code></td>
+<td>追加的触发说明（与 description 合计上限约 1536 字符）</td>
+</tr>
+<tr>
+<td><code>argument-hint</code> / <code>arguments</code></td>
+<td>参数提示 / 命名参数，正文里用
+<code>$ARGUMENTS</code>、<code>$0</code>、<code>$name</code> 引用</td>
+</tr>
+<tr>
+<td><code>allowed-tools</code> / <code>disallowed-tools</code></td>
+<td><strong>仅在本 skill 生效的那一轮</strong>预批准/移除工具</td>
+</tr>
+<tr>
+<td><code>model</code> / <code>effort</code></td>
+<td>本 skill 使用的模型 / 思考力度</td>
+</tr>
+<tr>
+<td><code>context: fork</code> + <code>agent</code></td>
+<td>在<strong>隔离的子代理</strong>里执行（看不到当前对话历史，适合大量读文件的调查型任务）</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>glob 条件：只有操作匹配的文件时才自动加载</td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>触发时注册钩子</td>
+</tr>
+</tbody>
+</table>
+<h3 id="动态上下文注入">6.4 动态上下文注入</h3>
+<p>正文里写
+<code>!`git diff HEAD`</code>，这条命令会在<strong>模型看到内容之前</strong>由本机执行，输出直接替换占位符。这样
+skill 一加载，模型看到的就是"当前真实状态"而不是"请你去运行 git
+diff"。命令失败（非零退出）会中止整个 skill 调用。</p>
+<h3 id="实用特性">6.5 实用特性</h3>
+<ul>
+<li><strong>实时变更检测</strong>：改 <code>SKILL.md</code>
+当场生效，无需重启（新建顶层 skills 目录除外）。</li>
+<li><strong>描述预算</strong>：所有 skill 的描述列表占上下文的约
+1%。超了就按"最近最少用"压缩描述，<strong>名字永远保留</strong>。<code>/skill-doctor</code>、<code>/context</code>
+可以查成本。可把不常用的设成 <code>name-only</code>。</li>
+<li><strong>堆叠触发</strong>：<code>/skill1 /skill2 arg</code>
+可以连着用。</li>
+</ul>
+<hr />
+<h2 id="开放标准与生态">7. 开放标准与生态</h2>
+<ul>
+<li><strong>规范</strong>：agentskills.io，由 Anthropic
+发起并开源；有参考校验库
+<code>skills-ref validate ./my-skill</code>。</li>
+<li><strong>互通的关键</strong>：只要遵守"目录 + <code>SKILL.md</code> +
+两个必需字段"，同一个 skill 理论上能被不同 agent
+读取。各家在<strong>扩展字段</strong>（如 Claude Code 的
+<code>context: fork</code>）上不同，所以规范里
+<code>compatibility</code>、<code>metadata</code>、<code>allowed-tools(实验性)</code>
+这类字段就是留给差异的。</li>
+<li><strong>目录约定</strong>：<code>.agents/skills/</code>（跨工具）与
+<code>.claude/skills/</code>（Claude Code）。我仓库的做法——真身放
+<code>.agent/skills/</code>，<code>.claude/skills/</code>
+放符号链接——就是为了"一份文件，多个 agent 都能读"。</li>
+<li><strong>来源</strong>：Anthropic 官方仓库
+<code>anthropics/skills</code>（含开源示例，如 Claude API
+技能）、社区仓库、技能市场/注册表。数量增长很快，但<strong>质量参差</strong>，见安全一章。</li>
+</ul>
+<hr />
+<h2 id="和相邻概念的区别最容易混的部分">8.
+和相邻概念的区别（最容易混的部分）</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>解决什么</th>
+<th>何时加载</th>
+<th>谁触发</th>
+<th>能带代码</th>
+<th>典型例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>系统提示 / 提示词</strong></td>
+<td>一次性指令</td>
+<td>立即</td>
+<td>你</td>
+<td>否</td>
+<td>"用中文回答"</td>
+</tr>
+<tr>
+<td><strong>CLAUDE.md / AGENTS.md</strong></td>
+<td>项目<strong>永远成立</strong>的规矩与背景</td>
+<td>会话开始，全量</td>
+<td>自动</td>
+<td>否</td>
+<td>"改完博客要发布""密钥不进仓库"</td>
+</tr>
+<tr>
+<td><strong>Skill</strong></td>
+<td><strong>某类任务</strong>的流程与资料</td>
+<td>按需，分层</td>
+<td>AI 判断或你 <code>/</code></td>
+<td><strong>是</strong></td>
+<td><code>blog-maintain</code>、<code>use-secrets-safely</code></td>
+</tr>
+<tr>
+<td><strong>Slash command（旧）</strong></td>
+<td>手动触发的提示词模板</td>
+<td>你敲时</td>
+<td>你</td>
+<td>否</td>
+<td>已并入 skill</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>让模型<strong>连接</strong>外部系统/数据</td>
+<td>工具定义常驻（可能很大）</td>
+<td>AI 调用</td>
+<td>是（服务端）</td>
+<td>连 GitHub、数据库</td>
+</tr>
+<tr>
+<td><strong>Subagent（子代理）</strong></td>
+<td>隔离上下文做子任务</td>
+<td>派发时</td>
+<td>AI/你</td>
+<td>是</td>
+<td>Explore、Plan</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td><strong>必须</strong>发生的确定性动作</td>
+<td>事件触发</td>
+<td><strong>系统</strong>，不靠模型判断</td>
+<td>是</td>
+<td>每次写文件前跑 lint</td>
+</tr>
+<tr>
+<td><strong>Plugin</strong></td>
+<td>把以上各种<strong>打包分发</strong></td>
+<td>安装时</td>
+<td>—</td>
+<td>是</td>
+<td>内含 skills + MCP + hooks</td>
+</tr>
+</tbody>
+</table>
+<p>几句话理清：</p>
+<ul>
+<li><strong>CLAUDE.md vs
+Skill</strong>：前者是"宪法"（永远生效，所以要短），后者是"各科手册"（用到才翻，可以长）。我的
+AGENTS.md 里"项目规矩"属于前者；"怎么发布、怎么验证 UI"属于后者——而且
+AGENTS.md 里用一张表把 skill
+指出来，正是"宪法里放目录，细节放手册"。</li>
+<li><strong>MCP vs Skill</strong>：MCP
+给模型<strong>新的手</strong>（能调什么接口）；Skill
+教模型<strong>怎么用手</strong>（什么顺序、注意什么）。两者互补——官方也说在探索二者的配合。</li>
+<li><strong>Hook vs Skill</strong>：Skill
+是"建议"，靠模型遵守，可能漏；<strong>必须每次都发生</strong>的事（比如"有
+ERROR 不许发布"如果要做到 100%）应该用 hook
+或脚本强制。官方排障建议里也是这个思路。</li>
+<li><strong>Skill vs Subagent</strong>：Skill
+是<strong>知识</strong>，默认在当前对话里生效；Subagent
+是<strong>隔离的执行者</strong>。两者可以结合：<code>context: fork</code>
+让 skill 的内容成为子代理的任务。</li>
+</ul>
+<hr />
+<h2 id="怎么写出好-skill">9. 怎么写出好 skill</h2>
+<p>结合官方最佳实践与我仓库里已有的写法：</p>
+<ol type="1">
+<li><strong>description 是第一优先级。</strong> 写清 ① 做什么 ②
+什么时候用 ③ 用户可能说的词。一个 skill
+再好，描述写偏了就等于不存在。</li>
+<li><strong>正文像写给聪明但新来的同事。</strong>
+给流程、给命令、给判断标准；别写模型本来就知道的常识。每一段都问：<strong>删掉它，AI
+会犯错吗？</strong> 不会就删。</li>
+<li><strong>把易变的、体量大的放到
+<code>references/</code></strong>，正文只放"主流程 + 指路"。正文 &lt;
+500 行。</li>
+<li><strong>能脚本化的用脚本。</strong>
+确定性操作（校验、格式转换、批处理）写成
+<code>scripts/</code>，正文只说"运行它"。我仓库的
+<code>tools/blog.py</code> 就是这种思路。</li>
+<li><strong>最重要的规则写在最前面</strong>（压缩上下文时只保留前约 5000
+token）。</li>
+<li><strong>一个 skill 只管一类任务。</strong>
+别做"万能手册"，否则描述写不准、触发也不准。</li>
+<li><strong>给判断标准，不只给步骤。</strong> 如
+<code>use-secrets-safely</code>
+的"能不读就不读；读也只读遮住的形状"——原则 + 步骤，AI
+遇到没写到的情况也能推理。</li>
+<li><strong>验证它真的被触发、真的被遵守。</strong>
+用不同说法的提示词测；不触发就改描述；中途不遵守就把关键规则前置或改成
+hook。</li>
+<li><strong>有副作用的 skill 加
+<code>disable-model-invocation</code></strong>，让人来按按钮。</li>
+<li><strong>迭代</strong>：每次发现 AI
+在这类任务里反复犯同样的错，就把纠正写进对应 skill——skill
+是"把经验沉淀成文件"的最佳容器。</li>
+</ol>
+<hr />
+<h2 id="局限与风险如实说">10. 局限与风险（如实说）</h2>
+<h3 id="能力局限">10.1 能力局限</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>缓解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>该触发时没触发</strong></td>
+<td>触发靠模型判断 <code>description</code>，是概率性的</td>
+<td>优化描述；用 <code>/名字</code> 手动触发；关键规则放 CLAUDE.md</td>
+</tr>
+<tr>
+<td><strong>触发了但中途不遵守</strong></td>
+<td>skill 只是上下文里的文字，不是强制逻辑；上下文很长时可能被稀释</td>
+<td>规则表述成"整个任务期间"；必须执行的用 hook/脚本</td>
+</tr>
+<tr>
+<td><strong>压缩后丢内容</strong></td>
+<td>重新附加时每个 skill 只保留前约 5000 token</td>
+<td>重要的写前面；必要时重新触发</td>
+</tr>
+<tr>
+<td><strong>装太多，描述被截断</strong></td>
+<td>描述列表有约 1% 上下文的预算</td>
+<td>精简描述；不常用的设
+<code>name-only</code>；<code>/skill-doctor</code> 查成本</td>
+</tr>
+<tr>
+<td><strong>不跨产品同步</strong></td>
+<td>claude.ai、API、Claude Code 各自独立存放</td>
+<td>各处分别上传；或用文件 + 插件分发</td>
+</tr>
+<tr>
+<td><strong>运行环境差异</strong></td>
+<td>API 沙箱无网络、不能装包；Claude Code 有完整本机网络</td>
+<td>按目标环境设计脚本，用 <code>compatibility</code> 字段声明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="安全风险重点">10.2 安全风险（重点）</h3>
+<p>官方原话的核心：<strong>把 skill 当作安装软件来对待。</strong></p>
+<ul>
+<li>skill = 指令 + 代码。恶意 skill
+可以引导模型调用工具、执行脚本、外传数据；</li>
+<li>会拉取外部 URL 的 skill
+风险更高——<strong>抓回来的内容本身可能带提示注入</strong>，而且依赖的外部内容可能随时间变化；</li>
+<li>只用自己写的或来源可信的；<strong>第三方 skill
+要逐个文件审计</strong>（<code>SKILL.md</code>、脚本、图片、资源），留意意料之外的网络请求、文件访问；</li>
+<li>企业版可以对上传的自定义 skill 做内容扫描（不覆盖 API
+上传的）。</li>
+<li>Skill
+<strong>不在零数据保留（ZDR）范围内</strong>：定义与执行数据按标准留存政策处理。</li>
+</ul>
+<p>对我的博客：我的 5 个 skill
+是自己写的、不拉外部内容，风险低；以后从网上装别人的 skill
+前，务必先读一遍。</p>
+<hr />
+<h2 id="回到这个博客现状评价与建议">11.
+回到这个博客：现状评价与建议</h2>
+<p><strong>现状做得对的地方：</strong></p>
+<ul>
+<li>结构合规：每个 skill 都是
+<code>&lt;name&gt;/SKILL.md</code>，名字与目录同名，描述有触发场景。</li>
+<li>"AGENTS.md 放常驻规矩 + 表格指向 skill"——正是渐进式披露的实践。</li>
+<li>真身放 <code>.agent/skills/</code>、符号链接到
+<code>.claude/skills/</code>——跨 agent 兼容。</li>
+<li>每个 skill 都只有 40–60 行，远低于 500 行建议。</li>
+</ul>
+<p><strong>可以考虑的改进（都是可选的）：</strong></p>
+<ol type="1">
+<li><strong>把"必须发生"的约束从 skill
+提升为强制机制</strong>：例如"检查有 ERROR 不得发布"，现在靠
+<code>blog-maintain</code> 的文字约定 +
+<code>run.sh</code>；<code>run.sh</code> 里如果已经 <code>exit 1</code>
+拦截就最稳。</li>
+<li><strong>有副作用的 skill 评估是否加
+<code>disable-model-invocation</code></strong>：目前我明确选择"改完自动发布"，所以保持现状合理；但如果以后某个
+skill 涉及
+<code>wrangler secret put</code>、强推之类，可单独加开关。</li>
+<li><strong>按需拆分 <code>references/</code></strong>：如果
+<code>blog-cat-agent</code> 将来变长，把 Worker 提示词、限流参数等拆到
+<code>references/</code>，主文件留流程。</li>
+<li><strong>给每个 skill 加一两个"典型触发语"到
+description</strong>，提升自动触发率（例如 <code>blog-verify-ui</code>
+加"帮我看看页面""截图确认"之类用户会说的话）。</li>
+<li><strong>定期用 <code>/skill-doctor</code></strong> 看哪些 skill
+从不被触发，描述该改还是该删。</li>
+</ol>
+<hr />
+<h2 id="术语表">12. 术语表</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Skill / Agent Skill</strong></td>
+<td>目录 + <code>SKILL.md</code> 构成的可复用能力包</td>
+</tr>
+<tr>
+<td><strong>SKILL.md</strong></td>
+<td>skill 的入口文件：YAML 元数据 + Markdown 指令</td>
+</tr>
+<tr>
+<td><strong>frontmatter</strong></td>
+<td>文件顶部 <code>---</code> 包裹的 YAML 部分</td>
+</tr>
+<tr>
+<td><strong>Progressive disclosure（渐进式披露）</strong></td>
+<td>分层按需加载：元数据 → 正文 → 资源</td>
+</tr>
+<tr>
+<td><strong>触发（trigger / invoke）</strong></td>
+<td>skill 正文被读进上下文的时刻，可由 AI 判断或用户手动
+<code>/名字</code></td>
+</tr>
+<tr>
+<td><strong>上下文窗口（context window）</strong></td>
+<td>模型一次能"看到"的全部文字，稀缺资源</td>
+</tr>
+<tr>
+<td><strong>压缩（compaction）</strong></td>
+<td>上下文过长时自动总结旧内容，skill 会被截断重附</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>Model Context Protocol，模型连接外部工具/数据的开放协议</td>
+</tr>
+<tr>
+<td><strong>Subagent / fork</strong></td>
+<td>在隔离上下文中运行的子代理</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td>在特定事件（如写文件前）由系统强制执行的动作，不依赖模型判断</td>
+</tr>
+<tr>
+<td><strong>Plugin</strong></td>
+<td>把 skills、MCP、hooks 等打包分发的单位</td>
+</tr>
+<tr>
+<td><strong>AGENTS.md / CLAUDE.md</strong></td>
+<td>项目级常驻说明，永远加载</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="附参考来源">附：参考来源</h2>
+<ul>
+<li>Anthropic 工程博客：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9lbmdpbmVlcmluZy9lcXVpcHBpbmctYWdlbnRzLWZvci10aGUtcmVhbC13b3JsZC13aXRoLWFnZW50LXNraWxscw==">Equipping
+agents for the real world with Agent Skills<i class="fa fa-external-link-alt"></i></span>（2025-10-16
+发布，2025-12-18 更新）</li>
+<li>Claude 平台文档：<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5jbGF1ZGUuY29tL2RvY3MvZW4vYWdlbnRzLWFuZC10b29scy9hZ2VudC1za2lsbHMvb3ZlcnZpZXc=">Agent
+Skills 概览<i class="fa fa-external-link-alt"></i></span></li>
+<li>开放标准规范：<span class="exturl" data-url="aHR0cHM6Ly9hZ2VudHNraWxscy5pby9zcGVjaWZpY2F0aW9u">agentskills.io/specification<i class="fa fa-external-link-alt"></i></span></li>
+<li>Claude Code 文档：<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9za2lsbHM=">Use Skills in Claude
+Code<i class="fa fa-external-link-alt"></i></span></li>
+<li>官方示例仓库：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FudGhyb3BpY3Mvc2tpbGxz">github.com/anthropics/skills<i class="fa fa-external-link-alt"></i></span></li>
+<li>第三方时间线与生态统计（仅作参考，数字请自行核实）：<span class="exturl" data-url="aHR0cHM6Ly93d3cudmVyZGVudC5haS9ndWlkZXMvY2xhdWRlLXNraWxscy1hbm5vdW5jZW1lbnQtbmV3cw==">Verdent
+时间线<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9ub3F0YS50bi9lbi9uZXdzL3NraWxsLW1kLW9wZW4tc3RhbmRhcmQtMzAtYWktY29kaW5nLXRvb2xzLWFkb3B0aW9uLTIwMjY=">noqta：30+
+工具采用<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<blockquote>
+<p><strong>关于可信度的说明</strong>：第 3.1 节"前史"和第 8
+章的对比表是我基于已有知识的整理；第 3.2–3.3 节、第 4–6
+章直接依据上面列出的官方/规范来源；"Skills API 2026-08 脱离 beta"和"30+
+工具采用"来自第三方，单一来源，未经官方页面交叉验证。</p>
+</blockquote>
+<hr />
+<p>延伸阅读：[[AI Agent/MCP 完全指南：它是什么、怎么来的、为什么管用|MCP
+完全指南]]——skill 教模型"怎么做"，MCP
+给模型"能做什么"，两篇合起来才是完整的 Agent 能力栈。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Agent-Skill/" rel="tag"><i class="fa fa-tag"></i> Agent-Skill</a>
+              <a href="/tags/Claude-Code/" rel="tag"><i class="fa fa-tag"></i> Claude-Code</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/259a9a22.html" rel="prev" title="Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件">
+                  <i class="fa fa-angle-left"></i> Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/df0ca73b.html" rel="next" title="MCP 完全指南：它是什么、怎么来的、为什么管用">
+                  MCP 完全指南：它是什么、怎么来的、为什么管用 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

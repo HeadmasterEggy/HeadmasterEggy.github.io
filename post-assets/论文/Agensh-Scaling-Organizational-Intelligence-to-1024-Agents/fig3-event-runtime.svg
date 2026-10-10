@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" font-family="-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" role="img" aria-label="Agensh 的事件驱动运行时与两条投递路径">
+<title>Agensh 的事件驱动运行时与两条投递路径</title>
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/></marker>
+<marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#059669"/></marker>
+<marker id="arO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+<marker id="arB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+</defs>
+<rect width="960" height="500" fill="#ffffff"/>
+<text x="480.0" y="30" font-size="17" fill="#1f2937" text-anchor="middle" font-weight="bold" >事件驱动运行时：每个工作者一套 router + 持久队列 + dispatcher</text>
+<rect x="30" y="70" width="150" height="60" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="105" y="96" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >Gitea</text><text x="105" y="114" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >仓库 / issue / PR 事件</text>
+<rect x="30" y="160" width="150" height="60" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="105" y="186" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >Mattermost</text><text x="105" y="204" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >频道 / 私信（断线补取）</text>
+<rect x="235" y="95" width="130" height="100" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="300" y="128" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >Router</text><text x="300" y="148" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >监听并写入队列</text>
+<line x1="182" y1="100" x2="233" y2="130" stroke="#1f2937" stroke-width="1.6" marker-end="url(#ar)"/>
+<line x1="182" y1="190" x2="233" y2="160" stroke="#1f2937" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="420" y="95" width="150" height="100" rx="10" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="495" y="124" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >持久事件队列</text><text x="495" y="144" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >唯一 event_id</text><text x="495" y="164" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >→ 去重</text>
+<line x1="367" y1="145" x2="418" y2="145" stroke="#1f2937" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="625" y="95" width="150" height="100" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+<text x="700" y="124" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >Dispatcher</text><text x="700" y="144" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >排序、合并成</text><text x="700" y="164" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >下一条提示词</text>
+<line x1="572" y1="145" x2="623" y2="145" stroke="#1f2937" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="820" y="95" width="110" height="100" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="875" y="132" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >工作者</text><text x="875" y="154" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal" >持久会话</text>
+<line x1="777" y1="145" x2="818" y2="145" stroke="#1f2937" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M700,197 C700,250 495,250 495,197" fill="none" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+<text x="600" y="262" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="normal" >投递失败：退避重试；重启后未完成事件回队列，恢复原会话</text>
+<rect x="30" y="300" width="430" height="170" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="245" y="326" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold" >轮次之间：事件排队，下一轮开头一起送达</text>
+<text x="50" y="356" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 轮内到达的事件先留在队列</text><text x="50" y="378" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 一轮结束后才标记 sent</text><text x="50" y="400" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 频道消息、工作区通知、近期共享上下文</text><text x="50" y="422" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 都在新一轮开头追加进提示词</text>
+<rect x="500" y="300" width="430" height="170" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="715" y="326" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="bold" >轮次之中：只在工具返回处插入</text>
+<text x="520" y="356" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 包装在所有基础设施工具调用外面</text><text x="520" y="378" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 把待处理私信 + 新的共享上下文条目</text><text x="520" y="400" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 追加进工具返回的结果里</text><text x="520" y="422" font-size="13" fill="#6b7280" text-anchor="start" font-weight="normal" >· 作用于 MCP 工具返回，不打断运行中的进程</text>
+<text x="495" y="488" font-size="12" fill="#ea580c" text-anchor="middle" font-weight="bold" >存活保障：空闲 10 分钟 → 提示继续工作；一轮没写共享上下文 → 追加提醒，要求发布有用发现</text>
+</svg>

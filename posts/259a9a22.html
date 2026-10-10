@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="逐节精读微软研究院 Agensh 技术报告：五步协作循环、Git + 消息 + 共享上下文三层基础设施、完整 Worker 提示词与事件驱动运行时、ProgramBench 五任务及 1,024 Agent 实验的分任务数据，以及结果的适用边界。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件">
+<meta property="og:url" content="https://qiao1.top/posts/259a9a22.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="逐节精读微软研究院 Agensh 技术报告：五步协作循环、Git + 消息 + 共享上下文三层基础设施、完整 Worker 提示词与事件驱动运行时、ProgramBench 五任务及 1,024 Agent 实验的分任务数据，以及结果的适用边界。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig2-cooperation-loop.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig3-event-runtime.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig6-startup-ramp.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig4-scaling-per-task.svg">
+<meta property="og:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig5-pandoc-1024.svg">
+<meta property="article:published_time" content="2026-09-30T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.594Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="paper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qiao1.top/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/259a9a22.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/259a9a22.html","path":"posts/259a9a22.html","title":"Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/259a9a22.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%AE%BA%E6%96%87%E8%A6%81%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-text">一、论文要解决什么问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8E%E5%8D%95-agent-%E5%88%B0%E5%A4%9A-agent"><span class="nav-text">1.1 背景：从单 Agent 到多 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E5%81%9A%E6%B3%95orchestratorworker"><span class="nav-text">1.2
+现有做法：orchestrator–worker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E4%B8%AD%E5%A4%AE%E6%8C%87%E6%8C%A5%E7%9A%84%E5%87%86%E7%A1%AE%E5%90%AB%E4%B9%89"><span class="nav-text">1.3 “无中央指挥”的准确含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E7%9A%84%E8%B4%A1%E7%8C%AE%E4%B8%80%E8%A7%88"><span class="nav-text">1.4 论文的贡献一览</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cagensh-%E7%9A%84%E7%BB%93%E6%9E%84%E6%AF%8F%E4%B8%AA-agent-%E8%B7%91%E5%90%8C%E4%B8%80%E5%A5%97%E4%BA%94%E6%AD%A5%E5%BE%AA%E7%8E%AF"><span class="nav-text">二、Agensh
+的结构：每个 Agent 跑同一套五步循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%B8%89%E5%B1%82%E7%BB%84%E7%BB%87%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-text">三、三层组织基础设施</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%B7%A5%E4%BD%9C%E5%8C%BA"><span class="nav-text">3.1 共享工作区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3%E4%B8%A4%E7%A7%8D%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">3.2 消息接口：两种优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B8%A6%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%BF%BD%E5%8A%A0%E5%BC%8F%E8%AE%B0%E5%BD%95%E6%9D%BF"><span class="nav-text">3.3
+共享上下文：带类型的追加式记录板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AE%9E%E7%8E%B0%E5%8F%A0%E5%9C%A8%E5%8D%95-agent-harness-%E4%B8%8A%E7%9A%84%E4%B8%80%E5%B1%82"><span class="nav-text">四、实现：叠在单 Agent
+Harness 上的一层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E9%99%84%E5%BD%95%E9%87%8C%E7%9A%84%E7%BB%86%E8%8A%82worker-%E6%8F%90%E7%A4%BA%E8%AF%8D%E4%B8%8E%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="nav-text">五、附录里的细节：Worker
+提示词与运行时</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#worker-%E6%8F%90%E7%A4%BA%E8%AF%8D%E9%99%84%E5%BD%95-a"><span class="nav-text">5.1 Worker 提示词（附录 A）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E9%99%84%E5%BD%95-b.1"><span class="nav-text">5.2 事件驱动运行时（附录 B.1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E4%B8%A4%E6%9D%A1%E6%8A%95%E9%80%92%E8%B7%AF%E5%BE%84%E9%99%84%E5%BD%95-b.2"><span class="nav-text">5.3
+共享上下文的两条投递路径（附录 B.2）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%AE%9E%E9%AA%8C%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1"><span class="nav-text">六、实验怎么设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF-programbench"><span class="nav-text">6.1 为什么是 ProgramBench</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%85%8D%E7%BD%AE%E9%99%84%E5%BD%95-c"><span class="nav-text">6.2 实验配置（附录 C）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E7%BB%93%E6%9E%9C"><span class="nav-text">七、结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E4%B8%AA%E4%BB%BB%E5%8A%A11128-%E4%B8%AA-agent"><span class="nav-text">7.1 五个任务、1→128 个 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E4%BB%BB%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%9B%BE-5"><span class="nav-text">7.2 分任务数据（图 5）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%97%A9%E8%BE%BE%E5%88%B0%E5%90%8C%E6%A0%B7%E6%88%90%E7%BB%A9%E5%9B%BE-6"><span class="nav-text">7.3 “更早达到同样成绩”（图 6）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent%E5%8F%AA%E5%9C%A8-pandoc-%E5%8D%95%E9%A1%B9%E6%89%A9%E5%B1%95"><span class="nav-text">7.4 1,024 Agent：只在
+pandoc 单项扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E4%BD%9C%E8%80%85%E8%A7%82%E5%AF%9F%E5%88%B0%E7%9A%84%E6%B6%8C%E7%8E%B0%E5%8D%8F%E4%BD%9C"><span class="nav-text">八、作者观察到的“涌现协作”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">九、相关工作与定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B7%E8%BF%99%E9%A1%B9%E5%B7%A5%E4%BD%9C"><span class="nav-text">十、如何评价这项工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="nav-text">十一、一句话总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/259a9a22.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件 | Joey">
+      <meta itemprop="description" content="逐节精读微软研究院 Agensh 技术报告：五步协作循环、Git + 消息 + 共享上下文三层基础设施、完整 Worker 提示词与事件驱动运行时、ProgramBench 五任务及 1,024 Agent 实验的分任务数据，以及结果的适用边界。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agensh 论文精读：没有中央指挥，1024 个 Agent 如何协作写软件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-30 12:00:00" itemprop="dateCreated datePublished" datetime="2026-09-30T12:00:00Z">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper/" itemprop="url" rel="index"><span itemprop="name">Paper</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>8.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>30 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">逐节精读微软研究院 Agensh 技术报告：五步协作循环、Git + 消息 + 共享上下文三层基础设施、完整 Worker 提示词与事件驱动运行时、ProgramBench 五任务及 1,024 Agent 实验的分任务数据，以及结果的适用边界。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>原论文</strong>：<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDkuMjY3ODE=">Agensh: Scaling Organizational
+Intelligence to 1,024 Agents<i class="fa fa-external-link-alt"></i></span>，Zhihao Zhan*、Ting Song*、Li
+Dong†、Shaohan Huang、Jianxun Lian、Yan Xia†、Furu Wei†（* 同等贡献，†
+通讯作者），Microsoft Research，arXiv:2609.26781v1，2026 年 9 月 22
+日，标注为 Technical report。<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzI2MDkuMjY3ODE=">PDF<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9ha2EubXMvQWdlbnNo">项目主页<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9BZ2Vuc2g=">代码<i class="fa fa-external-link-alt"></i></span></p>
+<p>如果让大量编码 Agent
+同时完成一个大任务，瓶颈未必是它们各自写代码的速度，也可能是中央 Agent
+分配工作、消解冲突和合并成果的能力。Agensh
+的尝试是：<strong>去掉负责派工的中央指挥，让每个工作者自行寻找任务，并用共享基础设施维持协作。</strong></p>
+<p>论文最醒目的数字是：在“无互联网、六小时重建
+<code>pandoc</code>”的实验中，1 个 Agent 的最终测试通过率为
+<strong>33.89%</strong>，1,024 个为
+<strong>55.06%</strong>。但这不等于“任何任务上堆到 1,024 个 Agent
+都有效”：1,024 Agent 的实验只覆盖
+<code>pandoc</code>；五任务对比最多扩展到 128
+个，且分任务看并不单调。下面按“问题—机制—提示词与运行时—实验—协作现象—局限”逐节拆解。文中的
+6
+张图是我根据论文内容<strong>自己绘制</strong>的示意图与数据图，不是论文原图；数据来自论文正文与图
+5，启动曲线是推算值。</p>
+<span id="more"></span>
+<h2 id="一论文要解决什么问题">一、论文要解决什么问题</h2>
+<h3 id="背景从单-agent-到多-agent">1.1 背景：从单 Agent 到多 Agent</h3>
+<p>论文开篇的判断是：单 Agent
+系统能感知上下文、通过工具行动、更新状态并迭代地推进目标，但它受限于<strong>一个上下文窗口、一条动作流、一份记忆流</strong>，顺序执行在复杂真实任务上延迟很高。要突破这些限制，就需要扩展
+Agent 数量。作者引用的是 Kim 等人的 <em>Towards a science of scaling
+agent systems</em>（arXiv:2512.08296），把“Agent
+数量”视为继模型能力、推理预算之后的又一个扩展维度。</p>
+<h3 id="现有做法orchestratorworker">1.2
+现有做法：orchestrator–worker</h3>
+<p>现有的多 Agent Harness，如 Codex sub-agent、Claude Code sub-agent 与
+agent teams、Copilot 的 <code>/fleet</code> 命令、Kimi Agent
+Swarm，普遍采用 <strong>orchestrator–worker</strong>：一个主 Agent
+负责规划、拆解任务、分派给并行的工作者，并管理它们。论文（第 1
+节）指出这种结构通常需要一个经过训练的编排者才能拆得好，而且<strong>整体的可扩展性从根本上受限于编排者管理工作者、整合其贡献的能力</strong>。图
+2 用“星形 + 中心 Orchestrator”对比“星形 +
+中心是轻量基础设施”来表达这一点：Agensh 里中心不是一个会思考的
+Agent，而是共享工作区、消息接口和共享上下文。</p>
+<h3 id="无中央指挥的准确含义">1.3 “无中央指挥”的准确含义</h3>
+<p>这里的“无中央指挥”有明确含义：没有一个主 Agent
+为全体工作者逐项派工和合并。它<strong>不意味着</strong>没有共同目标、规则、共享状态或事件分发系统。恰好相反，论文的核心贡献是用一套基础设施承接这些协作工作。所有工作者共享同一个用户目标，运行相同的协作协议；每个人都可以发现任务、声明负责范围、实现、验证、合并，然后继续找下一件事。Agensh
+改变的是<strong>组织层</strong>，不是底层语言模型。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig1-orchestrator-vs-agensh.svg"
+alt="orchestrator–worker 与 Agensh 的组织方式对比" />
+<figcaption aria-hidden="true">orchestrator–worker 与 Agensh
+的组织方式对比</figcaption>
+</figure>
+<p><em>图 1　两种组织方式对比（自绘，参考论文图 2
+的思路）：左边所有协调都经过中央
+Orchestrator，右边中心只是共享工作区、消息接口与共享上下文。</em></p>
+<h3 id="论文的贡献一览">1.4 论文的贡献一览</h3>
+<ol type="1">
+<li>提出 Agensh：一个<strong>没有中央编排者</strong>的、可扩展的多 Agent
+组织 Harness，由“协作循环 + 轻量组织基础设施”组成；</li>
+<li>在 ProgramBench 上最难的五个任务上，用同一个模型与 Harness 验证
+1→128 个 Agent 的扩展效果（平均通过率 19.31%→28.78%，约 49%
+相对提升），并展示更大的组织能<strong>更早</strong>达到相近的通过率；</li>
+<li>在 <code>pandoc</code> 上把规模扩展到 1,024 个
+Agent（33.89%→55.06%）；</li>
+<li>从工作轨迹中归纳出随规模逐步出现的自组织协作形态：同伴协调 →
+多人集成 → 标准化流程 → 组织级角色专业化。</li>
+</ol>
+<h2 id="二agensh-的结构每个-agent-跑同一套五步循环">二、Agensh
+的结构：每个 Agent 跑同一套五步循环</h2>
+<p>论文第 2.1 节、图 3
+给每个工作者规定了一个<strong>并发、异步</strong>重复的循环：</p>
+<ol type="1">
+<li><strong>Gather
+context，收集上下文</strong>：读取共同目标、当前状态、同伴进度、消息和已积累的发现，弄清已经完成了什么、还剩什么；也与环境交互，识别并规划自己接下来有用的步骤。</li>
+<li><strong>Claim
+sub-task，认领子任务</strong>：自己提出要做的子任务，并把
+<code>CLAIM</code>
+追加到共享上下文中公布。如果两个工作者的认领重叠或冲突，鼓励他们通过私信解决。</li>
+<li><strong>Take
+action，执行</strong>：通过可用工具在本地解决该子任务；一旦确认了可能帮助其他人的发现，就通过共享上下文汇报中间进展。</li>
+<li><strong>Verify
+results，验证</strong>：把本地进展与子任务的验收标准对照，不满足就修改做法直到满足。</li>
+<li><strong>Merge
+progress，合并进展</strong>：把成果合并进共享工作区，并发布一条更新，说明改了什么、背后的想法、验证证据，好让同伴在此基础上继续。如果合并被冲突阻塞，就先吸收最新的同伴进展、解决冲突，再合并一次。</li>
+</ol>
+<p>合并后回到第一步，基于新集成的工作和最新的同伴更新选择下一个子任务。三个关键设计点：</p>
+<ul>
+<li><strong>子任务的发现与分配是自组织的</strong>：工作者自己提出、自己认领，没有人替它决定。</li>
+<li><strong>完全异步</strong>：每个工作者继续往下走，不等所有同伴完成一轮迭代。</li>
+<li><strong>进展逐步累积</strong>：发现和已验证的贡献通过共享基础设施沉淀下来，推动整个组织走向用户目标。</li>
+</ul>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig2-cooperation-loop.svg"
+alt="Agensh 五步协作循环与组织基础设施" />
+<figcaption aria-hidden="true">Agensh
+五步协作循环与组织基础设施</figcaption>
+</figure>
+<p><em>图 2　五步协作循环与三层基础设施（自绘，参考论文图 3、图
+4）：绿色虚线是异步读取，橙色实线是并发写入。</em></p>
+<p>用一个简化例子理解：重建文档转换器时，有人探索表格行为并认领解析模块，有人探索命令行参数，有人修复构建脚本。各自验证后通过
+PR
+合入主分支；遇到相同文件或接口，再发消息协商。这是对论文机制的说明性例子，<strong>不是论文报告的一条具体执行轨迹</strong>。</p>
+<h2 id="三三层组织基础设施">三、三层组织基础设施</h2>
+<p>论文第 2.2 节、图 4 把基础设施拆成三块，各自解决不同的协作问题：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>组件</th>
+<th>要解决的问题</th>
+<th>论文中的实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>共享工作区</td>
+<td>保存拟议、进行中和已集成的工作；支持并发写入与异步读取；保留版本历史；把合并冲突暴露给工作者去回退和解决</td>
+<td>Git 平台
+<strong>Gitea</strong>：工作者在私有检出和分支上修改，把贡献集成到主分支；Git
+记录变更来源、检测文本合并冲突，并为所有工作者提供 issue 和 PR</td>
+</tr>
+<tr>
+<td>消息接口</td>
+<td>协调进行中的工作、解决归属重叠、处理依赖冲突</td>
+<td><strong>Mattermost</strong>：共享任务频道承载团队公告；私信用于紧急的一对一沟通；保留对话历史并异步投递</td>
+</tr>
+<tr>
+<td>共享上下文</td>
+<td>保存可复用的发现与工作意向</td>
+<td>思路来自 <strong>DeLM</strong>（Mao &amp;
+Mirhoseini，arXiv:2606.10662），但调整了工具格式与工作者指令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="共享工作区">3.1 共享工作区</h3>
+<p>要求是“一个支持并发写、异步读的文件系统”。选 Git
+的理由很实际：分支隔离让工作者能各自开发，PR
+让成果以可追溯的方式进入主分支，冲突则以文本合并冲突的形式暴露出来，让工作者自己回退解决。</p>
+<h3 id="消息接口两种优先级">3.2 消息接口：两种优先级</h3>
+<ul>
+<li>较低优先级的<strong>共享任务频道消息</strong>：在<strong>每轮循环开始时</strong>交给工作者；</li>
+<li>较高优先级的<strong>私信</strong>：在<strong>每次基础设施工具调用结束时</strong>交付。</li>
+</ul>
+<p>这样，工作者能及时处理重叠认领、协商依赖、请求帮助，而同伴同时继续工作。</p>
+<h3 id="共享上下文带类型的追加式记录板">3.3
+共享上下文：带类型的追加式记录板</h3>
+<p>工作者发布简短、有类型的记录：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OBSERVED</code></td>
+<td>观察到的行为</td>
+</tr>
+<tr>
+<td><code>FACT</code></td>
+<td>已确认的事实</td>
+</tr>
+<tr>
+<td><code>FAIL</code></td>
+<td>被证伪的尝试（附录提示词称其为“价值最高的条目：它阻止同伴在这个方向上继续花预算”）</td>
+</tr>
+<tr>
+<td><code>CLAIM</code></td>
+<td>正在负责的范围</td>
+</tr>
+<tr>
+<td><code>PATCH_SUMMARY</code></td>
+<td>已完成改动的摘要，含 <code>files=</code> / <code>idea=</code> /
+<code>evidence=</code></td>
+</tr>
+</tbody>
+</table>
+<p>后端是一个<strong>追加式数据库</strong>，保留近期记忆；为支持更长的任务视野，论文新增了
+<strong>context grep
+工具</strong>，让工作者能搜索“近期记忆”之外的完整历史记录。新的共享上下文条目被视为<strong>更高优先级更新</strong>，会在其他每个工作者“下一次基础设施工具调用返回”时被转发，使同伴的发现在整个组织内可见。</p>
+<h2 id="四实现叠在单-agent-harness-上的一层">四、实现：叠在单 Agent
+Harness 上的一层</h2>
+<p>论文第 2.3 节强调，Agensh 是叠加在<strong>单 Agent Harness
+之上的组织层</strong>，而不是替代品：</p>
+<ul>
+<li><strong>单 Agent Harness
+负责</strong>：一个工作者的会话状态、调用模型、执行工具、产出下一步响应——也就是“一个工作者如何推理和行动”；</li>
+<li><strong>Agensh
+负责</strong>：工作者身份、协作协议、事件路由、稳健分发、共享工作区访问、消息、共享上下文，以及恢复与存活机制——也就是“有多少工作者接收事件、共享状态、协调，并反复向共同目标贡献”。</li>
+</ul>
+<p>单 Agent 循环与多 Agent
+协作循环之间的接口<strong>刻意保持最小且即插即用</strong>：协作循环是通过<strong>每个工作者提示词里的工作流指令</strong>实现的，而非硬编码进运行时；完整提示词见附录
+A，除工作者 ID 外每个工作者完全相同。因此，Agensh
+可以通过轻量的、针对具体 Harness 的适配器，接到 Claude Code、Copilot
+等不同底层 Harness，而不必改变协作循环、共享服务或底层 Harness 的 Agent
+循环。论文实验使用 Copilot。</p>
+<p>这个分层也解释了论文的“自组织”：它主要改变<strong>谁决定下一项任务，以及成果如何流入集体状态</strong>，并未展示训练一个全新的单体模型。</p>
+<h2 id="五附录里的细节worker-提示词与运行时">五、附录里的细节：Worker
+提示词与运行时</h2>
+<p>正文没有展开、但对理解“为什么这套东西能跑起来”很重要的信息，都在附录
+A、B 里。</p>
+<h3 id="worker-提示词附录-a">5.1 Worker 提示词（附录 A）</h3>
+<p>1,024 Agent 配置下，<code>pbench-team1-worker1</code>
+收到的提示词结构如下（其他工作者只有 ID 不同）：</p>
+<p><strong>身份与环境</strong>：“你有 1,024 个同伴。”工作记录在
+Gitea：<strong>issue #1
+就是任务</strong>，工作者为自己认领的方向开自己的 issue，用 PR
+提交工作；在 Mattermost 的 <code>pbench-task</code>
+频道里交流，“要简短、具体”；发现写在共享上下文记录板上。私信会在对方<strong>当前这一轮内</strong>送达，因此适合处理“两个人正要改同一个东西”的碰撞；其他一切用频道。</p>
+<p><strong>记录板规则</strong>：记录板会在每一轮开始时渲染进提示词；每条限
+100 字符，<code>PATCH_SUMMARY</code> 限 300 字符，长版本放
+<code>detail</code> 里，同伴可
+<code>board_unfold</code>。<code>board_read</code>
+返回近期完整记录板（最多最近 2,000 条），<code>board_grep</code>
+在完整历史里按关键词搜索，逗号是 OR、<code>&amp;</code> 是 AND（例如
+<code>a&amp;b,c&amp;d</code> 表示 (a AND b) OR (c AND
+d)）。“不要重新推导同伴的 <code>FACT</code>，不要重试被记为
+<code>FAIL</code> 的东西。”</p>
+<p><strong>团队定位</strong>：“1024
+个编码者，地位平等。你认领要做的东西，你做，你合并，你选下一件事。”合并到
+<code>main</code> 之前先同步最新
+<code>main</code>；与同伴同步以避免重复；始终专注于复现参考程序，只有当你的信息会大幅影响别人的工作时才动用协调工具。</p>
+<p><strong>任务</strong>（ProgramBench
+逆向重建）：容器里有一个预编译的参考程序
+<code>/opt/pbench/executable</code>，只能运行它来观察行为（<code>--help</code>、各种输入、边界用例），<strong>不能读取其字节</strong>（权限
+<code>root:root 0111</code>，<code>cat</code>/<code>od</code>/<code>objdump</code>
+都会被拒绝），“别试图反编译，那是作弊”。</p>
+<p><strong>三条铁律</strong>（违反任何一条整个任务作废）：</p>
+<ol type="1">
+<li><strong>完全自主</strong>：整个团队自己定义需求、拆解、完成，没有外部输入；不要在
+Mattermost 上等指示，“答案永远是：把重建往前推”。</li>
+<li><strong>无互联网</strong>：集群离线，<code>git clone</code>
+原项目源码、<code>pip install</code>、<code>npm i</code>
+远程包都会失败；只能用容器里已有的工具链（gcc / make / python / node
+等）。</li>
+<li><strong>硬交付约束</strong>：仓库<strong>根目录</strong>必须有可执行的
+<code>compile.sh</code>，运行后产出根目录下名为
+<code>./executable</code> 的文件。评测器会打包 repo HEAD → 解压 →
+<strong>删除已提交的 <code>./executable</code></strong> → 运行
+<code>./compile.sh</code> → 用生成的 <code>./executable</code>
+跑隐藏测试。“没有根目录的 <code>compile.sh</code> = 0 分。”</li>
+</ol>
+<p><strong>工作循环</strong>（每步由做这件事的人自己完成）：</p>
+<ol type="1">
+<li>运行参考程序，找出还没构建的部分；</li>
+<li>在共享上下文里以 <code>CLAIM</code> 宣布要认领的区域；</li>
+<li>在该区域上运行参考程序（<code>ulimit -v 67108864</code>
+限制内存），基于当前 <code>main</code>
+写出复现其行为的代码，实现期间不必与他人同步代码；</li>
+<li>用相同输入运行参考程序与自己的构建并对比；</li>
+<li>推分支、开 PR、合并到 <code>main</code>；若合并被拒绝，先把最新
+<code>main</code> 合进自己的分支，重新检查再推；</li>
+<li>用 <code>PATCH_SUMMARY</code> 在记录板上说明完成了什么，回到第 1
+步。</li>
+</ol>
+<p><strong>事件与中途到达的条目</strong>：环境以
+<code>[event]</code>（含
+<code>event_id</code>、<code>source</code>、<code>kind</code>、<code>observed_at</code>、<code>summary</code>）通知工作者；事件只陈述事实，怎么办由工作者自己决定。私信与同伴的新记录板条目会<strong>中途</strong>附加到你正在等待的工具结果上，其他一切排队到本轮结束后送达。中途到达的记录板条目的处理规则：<code>FAIL</code>
+→ 如果你正在做这件事就停下；<code>FACT</code>/<code>OBSERVED</code> →
+拿来用；与你正在构建的内容相同的 <code>CLAIM</code> →
+撞车，用私信解决；其他 <code>CLAIM</code> → 继续做自己的。</p>
+<p><strong>杂项</strong>：构建所需的一切都要提交，评分器从
+<code>main</code> 的全新克隆构建，不会调用仓库外的二进制；数据路径用
+<code>dirname(realpath(argv[0]))</code> 解析。其余“MCP、git
+CLI、shell、curl、写文件，手边有什么用什么；工具不够就找一个，没有就自己造”。</p>
+<p>从这份提示词能看出两点：一是<strong>协议高度依赖自然语言约定</strong>（认领、<code>FAIL</code>
+的处理、撞车时用私信）而非运行时强制；二是任务提示词里已经内置了“铁律”，多
+Agent 系统并非在一片空白里自己涌现出全部规则。</p>
+<h3 id="事件驱动运行时附录-b.1">5.2 事件驱动运行时（附录 B.1）</h3>
+<p>每个工作者由<strong>事件</strong>驱动，而不是由中央调度的步骤序列驱动：</p>
+<ul>
+<li>每个工作者配一个 <strong>router（路由器）</strong>，监听 Gitea
+的仓库活动和 Mattermost 的消息。Gitea
+侧由服务端事件触发，拉取比“上次处理通知”更新的通知；Mattermost
+侧有实时连接，断线重连后会补取错过的消息。</li>
+<li>新活动到来时，监听器把事件写入该工作者的<strong>持久队列</strong>并唤醒
+<strong>dispatcher（分发器）</strong>；每个事件有唯一 ID
+用于<strong>去重</strong>。</li>
+<li>分发器每次被唤醒，会<strong>排序、合并</strong>队列里待处理的事件，拼成下一条提示词，投递到工作者的<strong>持久会话</strong>，一轮结束后把事件标记为已发送。工作者一轮进行中到达的事件留在队列里，下一轮再送。</li>
+<li><strong>失败重试</strong>：投递失败会以逐渐变长的间隔重试；路由器重启后，未完成的事件回到队列，工作者之前的会话被恢复。</li>
+<li><strong>存活保障</strong>：工作者空闲 <strong>10
+分钟</strong>，空闲检测器会发提示让它继续工作；如果一轮完成后没有产生任何共享上下文条目，会追加一条提醒，让它发布有用的发现。</li>
+</ul>
+<h3 id="共享上下文的两条投递路径附录-b.2">5.3
+共享上下文的两条投递路径（附录 B.2）</h3>
+<ul>
+<li><strong>新一轮开始时</strong>：路由器把排队的工作区通知、到达的消息和最近的共享上下文追加进提示词；</li>
+<li><strong>一轮进行中</strong>：包装在所有基础设施工具调用外面的一层，把待处理的私信和新的共享上下文条目<strong>追加到工具返回的结果里</strong>。</li>
+</ul>
+<p>论文特别说明：这条路径作用于 <strong>MCP
+工具返回</strong>，不会打断任意正在运行的进程。也就是说，“实时”只是<strong>在工具返回的边界插入新信息</strong>，而不是强行中断工作者。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig3-event-runtime.svg"
+alt="事件驱动运行时与两条投递路径" />
+<figcaption aria-hidden="true">事件驱动运行时与两条投递路径</figcaption>
+</figure>
+<p><em>图 3　附录 B
+的事件驱动运行时（自绘）：事件先进持久队列，轮次之间与轮次之中有两条不同的送达路径。</em></p>
+<h2 id="六实验怎么设计">六、实验怎么设计</h2>
+<h3 id="为什么是-programbench">6.1 为什么是 ProgramBench</h3>
+<p><strong>ProgramBench</strong>（Yang 等，<em>Can language models
+rebuild programs from scratch?</em>，arXiv:2605.03546）要求 Agent
+在<strong>禁用互联网</strong>的条件下，仅凭参考软件的行为，在 <strong>6
+小时</strong>预算内从头重建它，用来测试“复杂长视野任务上的 Agent
+软件工程”。作者从其 200
+个实例中，按官方扩展结果里“最先进模型的平均测试通过率”挑出<strong>最难的五个</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>领域</th>
+<th style="text-align: right;">文件数</th>
+<th style="text-align: right;">代码行数</th>
+<th style="text-align: right;">代码体积 (MB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FFmpeg</code></td>
+<td>多媒体处理</td>
+<td style="text-align: right;">10,090</td>
+<td style="text-align: right;">1,549,005</td>
+<td style="text-align: right;">75.51</td>
+</tr>
+<tr>
+<td><code>gromacs</code></td>
+<td>分子模拟</td>
+<td style="text-align: right;">8,982</td>
+<td style="text-align: right;">815,539</td>
+<td style="text-align: right;">47.30</td>
+</tr>
+<tr>
+<td><code>pandoc</code></td>
+<td>文档转换</td>
+<td style="text-align: right;">2,767</td>
+<td style="text-align: right;">104,336</td>
+<td style="text-align: right;">4.86</td>
+</tr>
+<tr>
+<td><code>PHP-src</code></td>
+<td>语言解释器</td>
+<td style="text-align: right;">26,266</td>
+<td style="text-align: right;">2,812,757</td>
+<td style="text-align: right;">119.76</td>
+</tr>
+<tr>
+<td><code>ctags</code></td>
+<td>代码索引</td>
+<td style="text-align: right;">7,313</td>
+<td style="text-align: right;">246,228</td>
+<td style="text-align: right;">9.15</td>
+</tr>
+</tbody>
+</table>
+<p>注意：这张表是<strong>参考仓库</strong>的规模（表 1）。Agent
+并不需要复刻每一行，评测的是重建程序在隐藏测试上的通过率，报告的指标是
+ProgramBench 的 <strong>canonical-kept pass
+rate</strong>。因此这些数字表示<strong>通过的测试比例</strong>，不是“完成整套产品”的概率。</p>
+<h3 id="实验配置附录-c">6.2 实验配置（附录 C）</h3>
+<ul>
+<li><strong>模型与 Harness</strong>：所有配置都使用
+<code>gpt-5.6-sol</code>（<code>high</code> 推理强度）、相同的
+Harness（Copilot）、相同的工作者协议和评测配置；单 Agent Harness
+的最大输入 token 为 <strong>272,000</strong>，最大输出 token 为
+<strong>128,000</strong>。</li>
+<li><strong>时间</strong>：按 ProgramBench 准备 Agent 容器，总时限
+<strong>6 小时</strong>，运行官方评测。</li>
+<li><strong>错峰启动</strong>：为减少“抢同一块范围”的争用，前 <strong>1
+小时每 30 秒</strong>启动一个 Agent，之后<strong>每 3
+秒</strong>启动一个。记第一个 Agent 启动的时刻为 <code>t</code>，则
+<code>t + 6h</code> 时所有 Agent
+终止并导出提交。按这个节奏估算（<strong>这是我根据论文描述做的推算，论文没有明说</strong>），1,024
+个 Agent 大约要到 1 小时 45 分钟左右才全部上线，也就是说千人规模在整场 6
+小时里并不是一开始就“满员”。</li>
+<li><strong>部署</strong>：1,024 个工作者分布在 <strong>16
+个节点</strong>上，每个节点 64 个。</li>
+<li><strong>收尾提醒</strong>：结束前 45
+分钟发送统一提醒（停止分派新功能，确保根目录构建可用、已有工作已合并，把开着的
+PR 落地，不能合并就说明并继续）；结束前 5
+分钟发第二条（把能合并的合并完然后停下，确认默认分支上
+<code>bash compile.sh &amp;&amp; ./executable</code>
+能运行，并发布最终状态）。</li>
+<li><strong>单 Agent 基线</strong>：论文承认单 Agent
+在实践中很难持续跑满 6
+小时，所以给基线加了一个“停止钩子”提示，要求它别被之前计划的范围束缚，去拿参考程序在没试过的输入上运行，从交互中派生新任务，“把这
+6 小时用满”；与它配对的是多 Agent
+组织里的<strong>空闲检测器</strong>，工作者空闲 10
+分钟后收到类似的提示（把差距补上，而不是“别被之前 <code>CLAIM</code>
+的范围束缚”）。</li>
+</ul>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig6-startup-ramp.svg"
+alt="1024 与 128 个 Agent 的启动爬坡曲线" />
+<figcaption aria-hidden="true">1024 与 128 个 Agent
+的启动爬坡曲线</figcaption>
+</figure>
+<p><em>图 4　按附录 C 的启动节奏推算的在线 Agent
+数（自绘；满员时间为推算值，论文未直接给出）。</em></p>
+<h2 id="七结果">七、结果</h2>
+<h3 id="五个任务1128-个-agent">7.1 五个任务、1→128 个 Agent</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Agent 数</th>
+<th style="text-align: right;">五任务平均最终通过率</th>
+<th style="text-align: right;">相对 1 Agent 的百分点变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">19.31%</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">20.68%</td>
+<td style="text-align: right;">+1.37</td>
+</tr>
+<tr>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">26.52%</td>
+<td style="text-align: right;">+7.21</td>
+</tr>
+<tr>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">28.78%</td>
+<td style="text-align: right;">+9.47</td>
+</tr>
+</tbody>
+</table>
+<p>从 1 个增至 128 个，平均分增加 <strong>9.47
+个百分点</strong>，相对基线约提高 <strong>49%</strong>。</p>
+<h3 id="分任务数据图-5">7.2 分任务数据（图 5）</h3>
+<p>平均值掩盖了很多信息。下面是我从图 5
+读出的每个任务数字（验证过：每一列取平均都与上表的平均值吻合）：</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr>
+<th>任务</th>
+<th style="text-align: right;">1 Agent</th>
+<th style="text-align: right;">8</th>
+<th style="text-align: right;">32</th>
+<th style="text-align: right;">128</th>
+<th>观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FFmpeg</code></td>
+<td style="text-align: right;">6.54</td>
+<td style="text-align: right;">11.97</td>
+<td style="text-align: right;">13.22</td>
+<td style="text-align: right;">12.89</td>
+<td>8→32 略升，128 反而略低于 32，接近饱和</td>
+</tr>
+<tr>
+<td><code>gromacs</code></td>
+<td style="text-align: right;">19.69</td>
+<td style="text-align: right;">19.37</td>
+<td style="text-align: right;">19.37</td>
+<td style="text-align: right;">22.12</td>
+<td>1→32 基本持平（甚至略低），到 128 才上升</td>
+</tr>
+<tr>
+<td><code>pandoc</code></td>
+<td style="text-align: right;">33.89</td>
+<td style="text-align: right;">41.75</td>
+<td style="text-align: right;">43.11</td>
+<td style="text-align: right;">50.94</td>
+<td>最干净的单调上升</td>
+</tr>
+<tr>
+<td><code>PHP-src</code></td>
+<td style="text-align: right;">10.63</td>
+<td style="text-align: right;">11.86</td>
+<td style="text-align: right;">12.23</td>
+<td style="text-align: right;">12.35</td>
+<td>缓慢爬升，绝对值始终在 12% 上下</td>
+</tr>
+<tr>
+<td><code>ctags</code></td>
+<td style="text-align: right;">25.82</td>
+<td style="text-align: right;">18.47</td>
+<td style="text-align: right;">44.69</td>
+<td style="text-align: right;">45.62</td>
+<td><strong>8 个 Agent 比 1 个还低</strong>，32 个时跳升</td>
+</tr>
+<tr>
+<td><strong>平均</strong></td>
+<td style="text-align: right;">19.31</td>
+<td style="text-align: right;">20.68</td>
+<td style="text-align: right;">26.52</td>
+<td style="text-align: right;">28.78</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig4-scaling-per-task.svg"
+alt="五个任务在 1/8/32/128 个 Agent 下的最终通过率" />
+<figcaption aria-hidden="true">五个任务在 1/8/32/128 个 Agent
+下的最终通过率</figcaption>
+</figure>
+<p><em>图 5　分任务折线（自绘，数据读自论文图 5）：ctags 在 8 个 Agent
+时低于单 Agent，gromacs 到 32 个才持平后上升。</em></p>
+<p>几点值得注意：</p>
+<ul>
+<li>论文说“五个任务的最终得分总体呈上升趋势”，从 1 到 128
+确实五个任务全部上升，但<strong>中间点并不单调</strong>：<code>ctags</code>
+在 8 个 Agent 时下降近 7.4 个百分点，<code>gromacs</code> 在 8、32
+个时略低于单 Agent，<code>FFmpeg</code> 在 128 个时略低于 32 个。</li>
+<li>平均值的提升在很大程度上来自 <code>pandoc</code>（+17.05）和
+<code>ctags</code>（+19.80）；<code>PHP-src</code> 只涨了 1.72
+个百分点，<code>FFmpeg</code> 涨了 6.35 个百分点，<code>gromacs</code>
+涨了 2.43 个百分点。</li>
+<li>绝对水平依然不高：<code>FFmpeg</code> 和 <code>PHP-src</code> 在 128
+个 Agent 下也只有 12–13% 左右。</li>
+</ul>
+<h3 id="更早达到同样成绩图-6">7.3 “更早达到同样成绩”（图 6）</h3>
+<p>图 6
+展示前两小时的通过率随时间的变化。论文的说法是：前两小时里，更大的组织更早达到相近的通过率。以
+<code>pandoc</code> 为例，128 个 Agent 在 <strong>30
+分钟</strong>检查点就超过 30%，32 个 Agent 与 8 个 Agent 分别在
+<strong>60 分钟</strong>和 <strong>90 分钟</strong>检查点才首次超过；单
+Agent 的曲线在前两小时始终低于这个阈值。作者据此认为，增加 Agent
+数量不仅提升最终质量，也缩短了达到特定水平所需的时间。注意这里是<strong>离散检查点</strong>，不能解读为精确到分钟的首次达到时间；同时图
+6 的各任务曲线形态差异很大，例如 <code>FFmpeg</code> 单 Agent
+很早就进入平台期，<code>ctags</code> 的 32 与 128 个 Agent
+明显领先。</p>
+<h3 id="agent只在-pandoc-单项扩展">7.4 1,024 Agent：只在
+<code>pandoc</code> 单项扩展</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Agent 数</th>
+<th style="text-align: right;"><code>pandoc</code> 六小时最终通过率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">33.89%</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">41.75%</td>
+</tr>
+<tr>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">43.11%</td>
+</tr>
+<tr>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">50.94%</td>
+</tr>
+<tr>
+<td style="text-align: right;">1,024</td>
+<td style="text-align: right;">55.06%</td>
+</tr>
+</tbody>
+</table>
+<p>1,024 个 Agent 比 128 个高 <strong>4.12 个百分点</strong>，比单 Agent
+高 <strong>21.17 个百分点</strong>。相邻档位之间的增量依次是
+1→8：+7.86，8→32：+1.36，32→128：+7.83，128→1,024：+4.12（8→32
+这一段几乎持平，曲线并不光滑）；从 128 到 1,024
+增加八倍工作者，成绩继续增长，但边际收益明显小于 1→128
+的跨度。论文用这组数据证明其系统<strong>可以在该任务上扩展到千人规模并继续提高分数</strong>；它没有证明千人规模在所有任务、所有预算下都是最合算的选择。</p>
+<figure>
+<img data-src="/post-assets/%E8%AE%BA%E6%96%87/Agensh-Scaling-Organizational-Intelligence-to-1024-Agents/fig5-pandoc-1024.svg"
+alt="pandoc 上 1 到 1024 个 Agent 的通过率与涌现协作形态" />
+<figcaption aria-hidden="true">pandoc 上 1 到 1024 个 Agent
+的通过率与涌现协作形态</figcaption>
+</figure>
+<p><em>图 6　<code>pandoc</code>
+上的扩展曲线，以及各规模下论文归纳的协作形态（自绘，参考论文图
+1）。</em></p>
+<h2 id="八作者观察到的涌现协作">八、作者观察到的“涌现协作”</h2>
+<p>论文第 3.2 节强调：所有工作者遵循同一套循环、拿到同样的提示词（仅 ID
+不同），但随着组织变大，新的自组织形态逐渐出现，范围从“协调实现”扩展到“管理集成”“标准化流程”“形成专业角色”（对应图
+1 右侧的四级阶梯：Peer coordination → Multi-worker integration →
+Standardized workflows → Specialized roles）。</p>
+<ul>
+<li><strong>8 人：与同伴协调实现。</strong>
+工作者可以约定一个具体的技术接口，各自独立实现符合该接口的部分；也能自己发现并解决认领重叠。<code>gromacs</code>
+中，有工作者公布了模块接口，其他人独立实现遵循它的命令模块；<code>FFmpeg</code>
+中，有工作者在与同伴讨论重叠问题后改变范围，去做互补的工作。</li>
+<li><strong>32 人：多人共同管理集成。</strong>
+多个工作者可以共同推进一个技术贡献。<code>PHP-src</code>
+中，几位同伴起初认可了某个贡献，随后另一位发现具体反例，先前的认可被撤回，作者修复后同伴再次审阅，最后由一位同伴合并。工作者在管理集成上变得更活跃，参与交流的同伴范围也更广。</li>
+<li><strong>128 人：自发专业化与流程标准化。</strong>
+工作者根据相关经验选择审阅者并重复使用这些审阅关系；也能把“整合某个贡献”的责任移交给一位同伴，由其解决冲突、验证合并后的工作并合并。<code>pandoc</code>
+中，两位工作者建立了一个标准化集成协议：作者更新并测试分支，然后把
+commit hash
+发给同伴验证并合并，此协议后来被其他工作者沿用。几次失败之后，工作者进一步修订协议：约定授权同伴执行<strong>整个更新、测试、检查、合并</strong>的循环，同伴明确接受并对新的
+PR 执行了这一修订后的流程。</li>
+<li><strong>1,024 人：组织规模的角色专业化。</strong>
+多个工作者承担同类的专门角色或在同一技术领域积累专长。<code>pandoc</code>
+中多位工作者担任集成者；一个工作者可以联系多个候选集成者，选择<strong>第一个有效回应者</strong>，取消其他请求，只有在选定之后才把代码交给对方去集成。在同一技术领域专门化的工作者，也能在另一位工作者的尝试失败后接手工作，从而避免对单个工作者的依赖，增强组织的稳健性。</li>
+</ul>
+<p>论文的解读是：这些形式的协作<strong>完全是自组织的</strong>——工作者自己选择合作者、划分责任、建立并修订工作流。但这些是<strong>从轨迹中观察到的定性案例</strong>，没有统一的量化统计；不能据此断言每次
+1,024 Agent 的运行都会出现同样的组织形态。</p>
+<h2 id="九相关工作与定位">九、相关工作与定位</h2>
+<p>论文第 4 节把相关工作分成两类：</p>
+<p><strong>多 Agent 组织与协作 Harness</strong> - <strong>Claude
+Code</strong>：支持持久的 agent teams，但协作仍围绕一个固定的 lead
+会话——由它派生其他 Agent、管理共享任务、协调 Agent 间消息； -
+<strong>Codex</strong>：用带委派的并行工作者的子 Agent
+工作流，结果路由回父 Agent 汇总； - <strong>Kimi Agent
+Swarm</strong>：训练一个编排者来拆解任务、调度并行子 Agent
+以降低延迟，但仍是 orchestrator–worker 的并行方案。 - Agensh
+研究的是另一种组织结构：自组织的工作者<strong>共同承担</strong>发现任务、协调依赖、整合结果的责任，并通过持久的工作循环推进。</p>
+<p><strong>共享上下文与去中心化协作</strong> - <strong>DeLM</strong>
+把异步工作者、任务队列和共享上下文结合起来，让 Agent
+在累积的进展上继续工作，而无需把每个更新都经过中央控制器；Agensh
+的共享上下文直接借鉴其核心想法； - <strong>ChatCollab</strong> 把人和 AI
+作为对等参与者放进 Slack
+协调角色、请求和进度；<strong>SlackAgents</strong> 把 AI Agent 嵌入
+Slack 工作区做沟通与任务编排； - 就共享工作区而言，Carlini 的“用一队并行
+Claude 构建 C 编译器”实验用 Git 仓库和任务锁文件协调 <strong>16
+个</strong> Claude Agent，工作者自选任务并合并改动，没有编排
+Agent；<strong>STORM</strong> 把多 Agent
+编码重新表述为状态管理问题，用强制局部状态一致、写入时检测陈旧或冲突编辑的共享工作区替代相互隔离的
+worktree。</p>
+<h2 id="十如何评价这项工作">十、如何评价这项工作</h2>
+<p><strong>我认为最有价值的点</strong>：论文把大规模并行 Agent
+的难题从“怎样让一个主 Agent
+管理更多下属”转向“怎样让工作者持续看到共同状态，并对认领、验证、合并负责”。<code>CLAIM</code>
+降低重复劳动，<code>FAIL</code> 传播负面知识，PR
+与验证证据让成果进入可追溯的共享状态，事件驱动运行时保证了 1,024
+个会话“不死、不丢、不重”。这种设计思路对需要长时间、多模块并行开发的任务有参考价值；而且它是通过<strong>提示词
++
+通用工具（Git、聊天、记录板）</strong>实现，而不是训练新模型，工程上更容易迁移。</p>
+<p><strong>读结果时需要保留的边界</strong>：</p>
+<ol type="1">
+<li><strong>任务范围有限。</strong> 五个任务都是离线程序重建；1,024
+Agent 只测了
+<code>pandoc</code>。结果尚不能直接推广到产品开发、网页研究、写作或其他软件任务。</li>
+<li><strong>分任务结果并不单调，平均数有被少数任务拉动的成分。</strong>
+见 7.2：<code>ctags</code> 8 人时低于单 Agent，<code>gromacs</code>
+前三档持平，<code>FFmpeg</code> 与 <code>PHP-src</code>
+增益小、绝对水平低。“持续增加 Agent
+就稳定大幅提升”这个措辞，比分任务数据显示的更强。</li>
+<li><strong>没有给出经济性结论。</strong>
+论文报告通过率和到达某个通过率的时间，没有系统报告
+token、算力、消息量、PR 数量或每提高一个百分点的成本。1,024 个各带 272k
+上下文的会话跑 6 小时，成本显然远高于单
+Agent；更高的成绩不自动等于更省钱。</li>
+<li><strong>组件贡献未隔离。</strong> 论文固定了模型和 Harness
+来比较人数，但没有消融实验分别量化共享上下文、消息、事件路由、Git、提示词的作用，也没有与“orchestrator–worker”基线在同样
+Agent
+数下做直接对比——尽管引言正是把后者的可扩展性瓶颈当作动机。因此“去掉中央指挥本身带来多少收益”，从数据上无法回答。</li>
+<li><strong>统计不确定性未展示。</strong>
+文中给出的是各配置的成绩和轨迹，没有多随机种子重复、置信区间或显著性分析。尤其
+128→1,024 的 4.12 个百分点差距，<code>ctags</code> 8
+人时的下降，都不能仅凭一次运行判断稳定程度。</li>
+<li><strong>基线与多 Agent 的干预并不完全对称。</strong> 单 Agent
+有“持续工作”停止钩子，多 Agent 有空闲检测器；多 Agent
+还有错峰启动和统一收尾提醒。这些设置有其合理性，但也说明结果依赖大量运行控制细节。</li>
+<li><strong>任务提示词里内置了不少规则。</strong>
+例如“完全自主”“别等指示”“先运行参考程序”“<code>FAIL</code>
+要停手”，这些是“自组织”的先决条件，协作行为并非从零涌现。</li>
+<li><strong>“无中央指挥”是组织概念。</strong>
+系统仍有共享服务、相同规则、统一时限和收尾提醒，这些本身就是关键工程投入。</li>
+<li><strong>涌现观察是案例性的。</strong> 第 3.2
+节的四个层级来自若干条轨迹的挑选，没有说明发生频率，也没有与未出现这些行为的运行对比。</li>
+</ol>
+<h2 id="十一一句话总结">十一、一句话总结</h2>
+<p>Agensh 展示了一种<strong>让多个 Agent
+自行认领任务、共享发现、互相处理冲突并完成验证合并</strong>的组织方式：一层薄薄的组织
+Harness（一段相同的提示词 + Gitea、Mattermost 与追加式共享记录板 +
+事件驱动的分发与恢复），叠在现成的单 Agent Harness
+上。在论文给定的六小时离线程序重建实验中，增加 Agent
+数量带来了更高的平均测试通过率（1→128：19.31%→28.78%），也更早达到相近成绩，<code>pandoc</code>
+上扩展到 1,024
+个仍在上升（33.89%→55.06%）；但分任务数据并不单调，千人规模的证据目前只有
+<code>pandoc</code>
+一项。下一步若要判断它是否适合实际工程，还需要成本、重复试验、组件消融、与
+orchestrator 基线的同规模对照和更多任务类型的证据。</p>
+<p><strong>资料</strong>：<span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzI2MDkuMjY3ODE=">论文 PDF<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDkuMjY3ODE=">arXiv 页面<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9ha2EubXMvQWdlbnNo">项目主页<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9BZ2Vuc2g=">Agensh 代码仓库<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDUuMDM1NDY=">ProgramBench 论文<i class="fa fa-external-link-alt"></i></span> · <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDYuMTA2NjI=">DeLM 论文<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/paper/" rel="tag"><i class="fa fa-tag"></i> paper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/b5aa6984.html" rel="prev" title="留学预算与外卖收入记账">
+                  <i class="fa fa-angle-left"></i> 留学预算与外卖收入记账
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/fcc443a7.html" rel="next" title="Agent Skill 完全指南：它是什么、怎么来的、为什么管用">
+                  Agent Skill 完全指南：它是什么、怎么来的、为什么管用 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

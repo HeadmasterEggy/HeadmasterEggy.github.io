@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细解释 DeepSeek Harness 的 PTC（Programmatic Tool Calling）模式，以及它如何让模型用一段 TypeScript 程序组合多个工具调用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的">
+<meta property="og:url" content="https://qiao1.top/posts/f4a29123.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="详细解释 DeepSeek Harness 的 PTC（Programmatic Tool Calling）模式，以及它如何让模型用一段 TypeScript 程序组合多个工具调用。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-14T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T12:40:21.479Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="DeepSeek">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/f4a29123.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/f4a29123.html","path":"posts/f4a29123.html","title":"DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/f4a29123.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">270</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ptc-%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">PTC 到底是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%A7%8D-mode-%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">四种 mode 分别做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#standard-mode%E5%8A%9F%E8%83%BD%E5%AE%8C%E6%95%B4%E7%9A%84%E9%BB%98%E8%AE%A4%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-text">Standard
+mode：功能完整的默认工作模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ptc-mode%E8%AE%A9%E7%A8%8B%E5%BA%8F%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7"><span class="nav-text">PTC mode：让程序编排工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minimal-mode%E6%9C%80%E5%B0%8F%E5%8C%96%E7%9A%84%E7%BC%96%E7%A0%81-agent"><span class="nav-text">Minimal mode：最小化的编码
+Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#creator-mode%E5%88%9B%E5%BB%BA%E5%92%8C%E5%AE%9E%E9%AA%8C%E8%87%AA%E5%AE%9A%E4%B9%89-agent"><span class="nav-text">Creator
+mode：创建和实验自定义 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9"><span class="nav-text">如何选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cordis-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">Cordis 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#context%E6%8F%92%E4%BB%B6%E5%85%B1%E4%BA%AB%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-text">Context：插件共享的上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plugin%E7%8B%AC%E7%AB%8B%E7%9A%84%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97"><span class="nav-text">Plugin：独立的功能模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#service%E6%8F%92%E4%BB%B6%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-text">Service：插件提供的服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event%E6%8F%92%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="nav-text">Event：插件之间的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lifecycle%E6%8F%92%E4%BB%B6%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Lifecycle：插件的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E7%BB%84%E5%90%88%E5%92%8C%E6%97%B6%E9%97%B4%E7%BB%84%E5%90%88"><span class="nav-text">“空间组合”和“时间组合”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cordis-%E4%B8%8E-deepseek-harness-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">Cordis 与 DeepSeek Harness
+的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">普通工具调用的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptc-%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-text">PTC 如何改变调用流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tools.xxx-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">tools.xxx() 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1-ptc-%E8%B0%83%E7%94%A8%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">一次 PTC 调用的执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-ptc-%E6%9C%89%E7%94%A8"><span class="nav-text">为什么 PTC 有用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%8F%E5%B0%91%E6%A8%A1%E5%9E%8B%E5%BE%80%E8%BF%94"><span class="nav-text">减少模型往返</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%B7%A5%E5%85%B7%E5%86%85%E9%83%A8%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE"><span class="nav-text">在工具内部处理数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%BE%AA%E7%8E%AF%E5%88%86%E6%94%AF%E5%92%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">支持循环、分支和错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E5%B9%B6%E8%A1%8C%E8%B0%83%E7%94%A8"><span class="nav-text">可以并行调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptc-%E4%B8%8E%E6%99%AE%E9%80%9A%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">PTC 与普通工具调用的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptc-%E4%B8%8D%E6%98%AF%E8%AE%A9-typescript-%E5%8F%96%E4%BB%A3%E6%A8%A1%E5%9E%8B"><span class="nav-text">PTC 不是让 TypeScript
+取代模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-text">需要注意的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E6%AC%A1%E8%BF%90%E8%A1%8C%E9%83%BD%E6%98%AF%E6%96%B0%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-text">每次运行都是新的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E6%9C%89%E8%BE%93%E5%87%BA%E4%BC%9A%E5%9B%9E%E5%88%B0%E6%A8%A1%E5%9E%8B"><span class="nav-text">只有输出会回到模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typescript-%E4%B8%8D%E6%98%AF%E5%AE%8C%E6%95%B4%E9%A1%B9%E7%9B%AE%E7%BC%96%E8%AF%91"><span class="nav-text">TypeScript 不是完整项目编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E8%83%BD%E5%8A%9B%E4%B8%8D%E7%AD%89%E4%BA%8E%E7%BB%9D%E5%AF%B9%E5%AE%89%E5%85%A8"><span class="nav-text">代码执行能力不等于绝对安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AF%A5%E7%94%A8-ptc"><span class="nav-text">什么时候该用 PTC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">223</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">270</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/f4a29123.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的 | Joey">
+      <meta itemprop="description" content="详细解释 DeepSeek Harness 的 PTC（Programmatic Tool Calling）模式，以及它如何让模型用一段 TypeScript 程序组合多个工具调用。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DeepSeek Harness：PTC 模式是如何用 TypeScript 编排工具调用的
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-09-14 12:00:00" itemprop="dateCreated datePublished" datetime="2026-09-14T12:00:00Z">2026-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-10 12:40:21" itemprop="dateModified" datetime="2026-10-10T12:40:21Z">2026-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>16 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">详细解释 DeepSeek Harness 的 PTC（Programmatic Tool Calling）模式，以及它如何让模型用一段 TypeScript 程序组合多个工具调用。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="ptc-到底是什么">PTC 到底是什么</h2>
+<p>DeepSeek Harness 的 PTC 模式，官方英文页面称为 <strong>Code
+Mode</strong>。PTC 通常被解释为 <em>Programmatic Tool
+Calling</em>，意思是“通过程序调用工具”。</p>
+<p>它不是让模型帮你写一个需要保存的 TypeScript
+文件，而是让模型临时生成一段 TypeScript
+程序，用这段程序编排多个工具调用，然后由 Harness 执行它。</p>
+<p>可以把它概括成一句话：</p>
+<blockquote>
+<p>普通模式是“模型调用工具”；PTC
+模式是“模型写一个小程序，而小程序调用工具”。</p>
+</blockquote>
+<p>模型仍然负责理解需求、规划步骤和生成代码；TypeScript
+则负责循环、分支、并发、错误捕获以及中间数据处理。</p>
+<h2 id="四种-mode-分别做什么">四种 mode 分别做什么</h2>
+<p>截图中的四个 mode，本质上是四套不同的 Agent
+preset。它们不是四个不同的模型，而是决定当前 Agent
+能看到哪些工具、怎样调用工具，以及是否可以检查和改造运行时。</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>核心能力</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard mode</td>
+<td>完整工具集，直接调用工具</td>
+<td>日常编码和一般 Agent 任务</td>
+</tr>
+<tr>
+<td>PTC mode</td>
+<td>通过 TypeScript 程序编排工具</td>
+<td>批量、重复和多步骤任务</td>
+</tr>
+<tr>
+<td>Minimal mode</td>
+<td>持久 Shell 加文件编辑</td>
+<td>简单编码、基准测试和最小环境</td>
+</tr>
+<tr>
+<td>Creator mode</td>
+<td>检查运行时并创建自定义 preset</td>
+<td>开发和实验 Agent 配置</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standard-mode功能完整的默认工作模式">Standard
+mode：功能完整的默认工作模式</h3>
+<p>Standard mode 可以看作普通的全功能编码
+Agent。它通常直接向模型提供文件编辑、Shell、文件搜索、网页搜索、Skills、计划、目标、子
+Agent 和工作流等能力。</p>
+<p>例如用户说：</p>
+<blockquote>
+<p>查看项目结构，修改登录页面，然后运行测试。</p>
+</blockquote>
+<p>Standard mode 会让模型按步骤直接调用搜索、编辑和 Shell 工具：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">模型 → 搜索文件</span><br><span class="line">工具 → 返回结果</span><br><span class="line">模型 → 读取文件</span><br><span class="line">工具 → 返回内容</span><br><span class="line">模型 → 编辑文件</span><br><span class="line">工具 → 返回结果</span><br><span class="line">模型 → 运行测试</span><br><span class="line">工具 → 返回结果</span><br></pre></td></tr></table></figure>
+<p>它的优点是直观、可观察，每一次工具调用都清楚地展示出来。读取少量文件、修改一个功能或执行几个明确步骤时，Standard
+mode 往往是最容易理解和排错的选择。</p>
+<h3 id="ptc-mode让程序编排工具">PTC mode：让程序编排工具</h3>
+<p>PTC mode 就是本文重点讨论的模式。它把工具调用入口收敛为
+<code>run_code</code>，然后向模型提供一个 TypeScript
+SDK。模型可以在一段程序里循环调用工具、并行执行独立任务、捕获错误并整理结果。</p>
+<p>例如批量检查 50
+个文件时，模型可以生成一个程序，在程序内部完成读取和过滤，最后只返回问题列表，而不必把每个文件的完整内容都逐次送回模型。</p>
+<p>因此，PTC mode 更像是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">模型负责设计程序</span><br><span class="line">        ↓</span><br><span class="line">run_code 执行程序</span><br><span class="line">        ↓</span><br><span class="line">程序调用多个工具</span><br><span class="line">        ↓</span><br><span class="line">程序过滤、聚合结果</span><br><span class="line">        ↓</span><br><span class="line">模型读取最终结果</span><br></pre></td></tr></table></figure>
+<p>它尤其适合批处理和长工作流，但如果只是调用一个工具，使用 PTC
+的编排优势就不明显了。PTC 的详细机制见下文。</p>
+<h3 id="minimal-mode最小化的编码-agent">Minimal mode：最小化的编码
+Agent</h3>
+<p>Minimal mode 只保留两类核心能力：持久 Bash
+和文件编辑器。官方页面将它描述为一个使用 persistent bash 与
+<code>str_replace_editor</code> 的双工具编码 Agent。</p>
+<p>它不是功能更强的模式，而是刻意减少能力后的最小运行环境。这样做有两个价值：</p>
+<ul>
+<li>工具越少，模型面对的选择越少，行为更容易分析。</li>
+<li>不同模型可以在相近的工具条件下进行编码能力测试。</li>
+</ul>
+<p>可以把它理解成一个非常精简的工作台：模型通过 Shell
+查看和操作环境，通过编辑器修改文件，没有完整模式中的搜索、计划、子 Agent
+和工作流等额外能力。</p>
+<p>适合的场景包括：</p>
+<ul>
+<li>测试模型最基本的读文件、改文件和运行命令能力</li>
+<li>调试一个 Agent 是否依赖某个高级工具</li>
+<li>在最小权限和最小工具集下运行简单编码任务</li>
+</ul>
+<h3 id="creator-mode创建和实验自定义-agent">Creator
+mode：创建和实验自定义 Agent</h3>
+<p>Creator mode 面向的是 Harness 开发者，而不是普通使用者。它包含
+Standard mode 的完整能力，并额外提供运行时检查、Cordis 插件实验和 preset
+创作指导。</p>
+<p>这里的 preset，可以理解为一套 Agent
+配置：它规定使用哪些插件、提供哪些工具、采用哪一种工具呈现方式，以及如何组织会话、工作流和运行策略。</p>
+<p>Creator mode 的典型流程是：</p>
+<ol type="1">
+<li>检查当前 Harness 已加载的运行时和插件。</li>
+<li>在内存中试验某个 Cordis 插件。</li>
+<li>组合需要的模型、工具、Skills 和执行能力。</li>
+<li>创建一个新的 Agent preset。</li>
+<li>用新的 preset 运行和验证任务。</li>
+</ol>
+<p>所以，Creator mode
+不是“回答质量更高的模式”，而是“用来制造其他模式的开发模式”。如果只是想让
+Agent 帮你写代码，通常不需要选它；如果想研究插件组合或定制自己的
+Agent，它才是合适的入口。</p>
+<h3 id="如何选择">如何选择</h3>
+<p>可以用下面的简单规则：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">日常写代码、改项目       → Standard mode</span><br><span class="line">批量处理、多步编排       → PTC mode</span><br><span class="line">测试最小工具集           → Minimal mode</span><br><span class="line">开发插件、制作 preset    → Creator mode</span><br></pre></td></tr></table></figure>
+<p>四种 mode 也可以按“抽象程度”来理解：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Minimal     只给模型最基本的工具</span><br><span class="line">    ↓</span><br><span class="line">Standard    给模型完整的现成能力</span><br><span class="line">    ↓</span><br><span class="line">PTC         让模型用程序组合这些能力</span><br><span class="line">    ↓</span><br><span class="line">Creator     让开发者重新组合并创建这些能力</span><br></pre></td></tr></table></figure>
+<p>这四者不是简单的“低级到高级”关系。PTC 并不一定比 Standard
+更强，Minimal 也不只是 Standard
+的残缺版本；它们针对的是不同的控制方式、调试需求和使用场景。</p>
+<h2 id="cordis-是什么">Cordis 是什么</h2>
+<p>Cordis 是 DeepSeek Harness 底层使用的 TypeScript
+插件框架。可以把它理解为 Harness 的“插件运行时”或“操作系统内核”。</p>
+<p>DeepSeek Harness 负责提供 Agent 能力，而 Cordis
+负责把这些能力加载、连接、管理和卸载起来。模型、工具、文件访问、Agent
+loop 等能力，都可以作为插件挂载到同一个共享上下文中。</p>
+<p>可以用下面的关系来理解：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Cordis       = 插件运行时 / 内核</span><br><span class="line">DeepSeek     = 模型</span><br><span class="line">Harness      = Agent 应用</span><br><span class="line">工具插件     = 文件、Shell、网页、MCP 等能力</span><br></pre></td></tr></table></figure>
+<p>这也是 DeepSeek Harness
+所说的“一切皆插件”：模型、工具、Skills、会话、沙箱、存储、循环、调度器和
+UI，都可以被替换或重新组合，而不必把逻辑硬编码在 Harness 核心里。</p>
+<h3 id="context插件共享的上下文">Context：插件共享的上下文</h3>
+<p>Cordis 用 <code>Context</code>
+作为插件之间共享服务的容器。概念上，运行中的 Harness
+可能通过上下文暴露这些服务：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">ctx.<span class="property">llm</span>       <span class="comment">// 模型服务</span></span><br><span class="line">ctx.<span class="property">tools</span>     <span class="comment">// 工具注册表</span></span><br><span class="line">ctx.<span class="property">sessions</span>  <span class="comment">// 会话管理</span></span><br><span class="line">ctx.<span class="property">logger</span>    <span class="comment">// 日志服务</span></span><br></pre></td></tr></table></figure>
+<p>插件不需要直接导入另一个插件的具体实现，而是通过 <code>ctx</code>
+获取它需要的服务。这样可以替换服务的实现，同时保持插件接口不变。</p>
+<h3 id="plugin独立的功能模块">Plugin：独立的功能模块</h3>
+<p>一个最简单的 Cordis 插件可以这样写：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> name = <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">apply</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;hello from my first plugin&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在配置文件中加载它：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&quot;./hello.ts&quot;</span></span><br></pre></td></tr></table></figure>
+<p>Cordis 加载配置后，会调用插件的 <code>apply(ctx)</code>
+函数。插件可以在这里注册服务、监听事件或增加工具。</p>
+<h3 id="service插件提供的服务">Service：插件提供的服务</h3>
+<p>服务是插件对外提供的长期能力，例如
+<code>ctx.tools</code>、<code>ctx.llm</code> 和
+<code>ctx.sessions</code>。插件可以通过 <code>inject</code>
+声明依赖：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> plugin = <span class="title class_">Object</span>.<span class="title function_">assign</span>(</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">apply</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">    ctx.<span class="property">logger</span>.<span class="title function_">info</span>(<span class="string">&quot;plugin started&quot;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">inject</span>: [<span class="string">&quot;logger&quot;</span>]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这表示该插件需要 <code>logger</code> 服务，Cordis
+会等依赖准备完成后再启动它。因此，插件的启动顺序由依赖关系决定，而不是简单依赖配置文件中的排列顺序。</p>
+<h3 id="event插件之间的通信">Event：插件之间的通信</h3>
+<p>插件还可以通过事件进行通信，而不需要互相直接调用：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">apply</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">  ctx.<span class="title function_">on</span>(<span class="string">&quot;app/ready&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Application is ready&quot;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当其他插件触发 <code>app/ready</code> 时，这个监听器就会执行：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">ctx.<span class="title function_">emit</span>(<span class="string">&quot;app/ready&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这种方式可以降低插件之间的耦合，让多个独立能力通过事件协作。</p>
+<h3 id="lifecycle插件的生命周期">Lifecycle：插件的生命周期</h3>
+<p>Cordis 不只是负责加载插件，也负责管理插件的生命周期：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">加载 → 启动 → 运行 → 停止 → 清理副作用</span><br></pre></td></tr></table></figure>
+<p>例如，一个插件可能注册事件监听器、定时器或上下文修改。当插件被卸载时，相关资源也应该被清理，避免监听器和定时任务继续残留。</p>
+<h3 id="空间组合和时间组合">“空间组合”和“时间组合”</h3>
+<p>Cordis 背后的设计论文使用了 <strong>spatiotemporal
+composability</strong>（时空可组合性）这个概念。这里的“空间”和“时间”指的是软件组件的两个维度。</p>
+<p>空间可组合性，指插件可以声明彼此的依赖关系：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Agent Loop</span><br><span class="line">   ↓ 依赖</span><br><span class="line">Tool Registry</span><br><span class="line">   ↓ 依赖</span><br><span class="line">MCP Server</span><br></pre></td></tr></table></figure>
+<p>Cordis 根据这些依赖决定哪些插件应该激活，以及何时激活。</p>
+<p>时间可组合性，指插件被卸载后，它产生的副作用也应当能够被撤销：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">加载插件</span><br><span class="line">  → 注册服务</span><br><span class="line">  → 注册事件</span><br><span class="line">  → 添加定时器</span><br><span class="line"></span><br><span class="line">卸载插件</span><br><span class="line">  → 移除服务</span><br><span class="line">  → 移除事件</span><br><span class="line">  → 清理定时器</span><br></pre></td></tr></table></figure>
+<p>这让插件可以动态加入和退出，而不是只能在程序启动时一次性加载。</p>
+<h3 id="cordis-与-deepseek-harness-的关系">Cordis 与 DeepSeek Harness
+的关系</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">DeepSeek 模型</span><br><span class="line">      ↓</span><br><span class="line">DeepSeek Harness</span><br><span class="line">      ↓</span><br><span class="line">Agent Loop、工具、会话、沙箱、工作流、UI</span><br><span class="line">      ↓</span><br><span class="line">Cordis</span><br><span class="line">      ↓</span><br><span class="line">Context、Service、Event、Plugin Lifecycle</span><br></pre></td></tr></table></figure>
+<p>更简单地说：</p>
+<blockquote>
+<p>Harness 定义 Agent 能做什么；Cordis
+定义这些能力如何被装配和运行。</p>
+</blockquote>
+<p>PTC
+模式也建立在这个插件化思路上：<code>run_code</code>、工具注册表、代码运行时和工具调度器，都是可以被
+Cordis 管理和组合的能力模块。</p>
+<h2 id="普通工具调用的问题">普通工具调用的问题</h2>
+<p>假设用户提出这样的请求：</p>
+<blockquote>
+<p>找出项目里所有 TODO，读取相关文件，然后给我一个汇总。</p>
+</blockquote>
+<p>在普通模式中，过程大致是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">模型 → glob(&quot;**/*.ts&quot;)</span><br><span class="line">工具 → 返回文件列表</span><br><span class="line"></span><br><span class="line">模型 → read_file(&quot;a.ts&quot;)</span><br><span class="line">工具 → 返回文件内容</span><br><span class="line"></span><br><span class="line">模型 → read_file(&quot;b.ts&quot;)</span><br><span class="line">工具 → 返回文件内容</span><br><span class="line"></span><br><span class="line">模型 → grep(&quot;TODO&quot;)</span><br><span class="line">工具 → 返回结果</span><br><span class="line"></span><br><span class="line">模型 → 总结</span><br></pre></td></tr></table></figure>
+<p>每次调用工具，都需要经过一次“模型决定 → 工具执行 →
+结果回到模型”的循环。文件数量一多，模型往返次数和上下文中的中间结果都会增加。</p>
+<h2 id="ptc-如何改变调用流程">PTC 如何改变调用流程</h2>
+<p>在 PTC 模式下，模型主要看到一个特殊工具：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">run_code</span><br></pre></td></tr></table></figure>
+<p>Harness 同时会在系统提示词中提供一份 TypeScript SDK
+声明，告诉模型当前有哪些工具、每个工具需要什么参数以及会返回什么类型的数据。</p>
+<p>于是模型可能生成这样的程序：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> files = <span class="keyword">await</span> tools.<span class="title function_">glob</span>(&#123;</span><br><span class="line">  <span class="attr">pattern</span>: <span class="string">&quot;**/*.ts&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> results = <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(</span><br><span class="line">  files.<span class="title function_">map</span>(<span class="function"><span class="params">file</span> =&gt;</span></span><br><span class="line">    tools.<span class="title function_">read_file</span>(&#123;</span><br><span class="line">      <span class="attr">path</span>: file,</span><br><span class="line">      <span class="attr">limit</span>: <span class="number">10000</span></span><br><span class="line">    &#125;)</span><br><span class="line">  )</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> todos = results.<span class="title function_">flatMap</span>(<span class="function"><span class="params">result</span> =&gt;</span></span><br><span class="line">  result.<span class="property">content</span></span><br><span class="line">    .<span class="title function_">split</span>(<span class="string">&quot;\\n&quot;</span>)</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">line</span> =&gt;</span> line.<span class="title function_">includes</span>(<span class="string">&quot;TODO&quot;</span>))</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  <span class="attr">filesChecked</span>: files.<span class="property">length</span>,</span><br><span class="line">  todos</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>模型实际发给 Harness 的，是一次外层调用：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Find TODO comments across TypeScript files&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="string">&quot;const files = await tools.glob(...); ...&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>Harness 收到这段代码后，会启动代码运行时，执行
+TypeScript，并把程序里的
+<code>tools.glob()</code>、<code>tools.read_file()</code>
+映射为真正的工具调用。最后，只有程序的 <code>return</code> 值和
+<code>console.log()</code> 输出会作为结果回到模型。</p>
+<h2 id="tools.xxx-是什么"><code>tools.xxx()</code> 是什么</h2>
+<p><code>tools.xxx()</code> 不是普通的 JavaScript 函数，而是 Harness
+注入给程序的异步工具绑定。例如：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> tools.<span class="title function_">bash</span>(&#123;</span><br><span class="line">  <span class="attr">command</span>: <span class="string">&quot;git status --short&quot;</span>,</span><br><span class="line">  <span class="attr">description</span>: <span class="string">&quot;Check git status&quot;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> tools.<span class="title function_">read_file</span>(&#123;</span><br><span class="line">  <span class="attr">path</span>: <span class="string">&quot;/project/package.json&quot;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>概念上，Harness 会为模型提供类似下面的类型声明：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">const</span> <span class="attr">tools</span>: &#123;</span><br><span class="line">  <span class="title function_">glob</span>(<span class="attr">args</span>: &#123;</span><br><span class="line">    <span class="attr">pattern</span>: <span class="built_in">string</span></span><br><span class="line">  &#125;): <span class="title class_">Promise</span>&lt;<span class="built_in">string</span>[]&gt;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">read_file</span>(<span class="attr">args</span>: &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="built_in">string</span></span><br><span class="line">    <span class="attr">limit</span>?: <span class="built_in">number</span></span><br><span class="line">  &#125;): <span class="title class_">Promise</span>&lt;&#123;</span><br><span class="line">    <span class="attr">content</span>: <span class="built_in">string</span></span><br><span class="line">  &#125;&gt;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">bash</span>(<span class="attr">args</span>: &#123;</span><br><span class="line">    <span class="attr">command</span>: <span class="built_in">string</span></span><br><span class="line">    <span class="attr">description</span>: <span class="built_in">string</span></span><br><span class="line">  &#125;): <span class="title class_">Promise</span>&lt;&#123;</span><br><span class="line">    <span class="attr">stdout</span>: <span class="built_in">string</span></span><br><span class="line">    <span class="attr">exitCode</span>: <span class="built_in">number</span></span><br><span class="line">  &#125;&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这让模型能够按照工具的参数和返回类型来写程序。需要注意的是：这些声明只在
+<code>run_code</code> 程序内部有效。在 PTC 模式下，模型不能直接调用
+<code>read_file</code>，只能在 <code>run_code</code> 中间接调用它。</p>
+<h2 id="一次-ptc-调用的执行过程">一次 PTC 调用的执行过程</h2>
+<p>一次完整的 PTC 调用可以拆成下面几步：</p>
+<ol type="1">
+<li>模型理解用户目标，决定需要哪些工具。</li>
+<li>模型生成一段 TypeScript 程序。</li>
+<li>Harness 把程序交给代码运行时执行。</li>
+<li>程序通过 <code>tools.xxx(args)</code> 调用实际工具。</li>
+<li>每个内部工具调用仍会经过权限、策略、执行和审计流程。</li>
+<li>程序在本地过滤、合并和压缩中间结果。</li>
+<li><code>return</code> 或 <code>console.log()</code>
+的内容回到模型。</li>
+</ol>
+<p>因此，PTC 不是绕过工具系统，而是增加了一层“程序化编排”。</p>
+<h2 id="为什么-ptc-有用">为什么 PTC 有用</h2>
+<h3 id="减少模型往返">减少模型往返</h3>
+<p>普通模式可能是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">调用 A → 回模型</span><br><span class="line">调用 B → 回模型</span><br><span class="line">调用 C → 回模型</span><br><span class="line">调用 D → 回模型</span><br></pre></td></tr></table></figure>
+<p>PTC 可以变成：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">模型生成程序 → 一次执行 A、B、C、D → 回模型</span><br></pre></td></tr></table></figure>
+<p>这对批量读取文件、批量查询
+API、检查多个目录或处理多条数据尤其有用。</p>
+<h3 id="在工具内部处理数据">在工具内部处理数据</h3>
+<p>普通模式下，读取 100 个文件后，100 份内容可能都要进入模型上下文；PTC
+可以先在程序中筛选：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> files = <span class="keyword">await</span> tools.<span class="title function_">glob</span>(&#123;</span><br><span class="line">  <span class="attr">pattern</span>: <span class="string">&quot;**/*.ts&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> matches = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> file <span class="keyword">of</span> files) &#123;</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> tools.<span class="title function_">read_file</span>(&#123;</span><br><span class="line">    <span class="attr">path</span>: file</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (result.<span class="property">content</span>.<span class="title function_">includes</span>(<span class="string">&quot;TODO&quot;</span>)) &#123;</span><br><span class="line">    matches.<span class="title function_">push</span>(&#123;</span><br><span class="line">      file,</span><br><span class="line">      <span class="attr">count</span>: result.<span class="property">content</span>.<span class="title function_">split</span>(<span class="string">&quot;TODO&quot;</span>).<span class="property">length</span> - <span class="number">1</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> matches</span><br></pre></td></tr></table></figure>
+<p>文件全文只在这段程序内部流转，模型最终只看到
+<code>matches</code>。这能减少上下文噪声和不必要的 token 消耗。</p>
+<h3 id="支持循环分支和错误处理">支持循环、分支和错误处理</h3>
+<p>模型不必每遇到一个失败就重新规划一次。程序可以捕获错误并继续处理：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> urls = [</span><br><span class="line">  <span class="string">&quot;https://example.com/a&quot;</span>,</span><br><span class="line">  <span class="string">&quot;https://example.com/b&quot;</span>,</span><br><span class="line">  <span class="string">&quot;https://example.com/c&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> results = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> url <span class="keyword">of</span> urls) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> page = <span class="keyword">await</span> tools.<span class="title function_">fetch_url</span>(&#123; url &#125;)</span><br><span class="line"></span><br><span class="line">    results.<span class="title function_">push</span>(&#123;</span><br><span class="line">      url,</span><br><span class="line">      <span class="attr">ok</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">title</span>: page.<span class="property">title</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    results.<span class="title function_">push</span>(&#123;</span><br><span class="line">      url,</span><br><span class="line">      <span class="attr">ok</span>: <span class="literal">false</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> results</span><br></pre></td></tr></table></figure>
+<h3 id="可以并行调用">可以并行调用</h3>
+<p>彼此独立的只读任务可以使用 <code>Promise.all()</code>：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> [a, b, c] = <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>([</span><br><span class="line">  tools.<span class="title function_">read_file</span>(&#123; <span class="attr">path</span>: <span class="string">&quot;src/a.ts&quot;</span> &#125;),</span><br><span class="line">  tools.<span class="title function_">read_file</span>(&#123; <span class="attr">path</span>: <span class="string">&quot;src/b.ts&quot;</span> &#125;),</span><br><span class="line">  tools.<span class="title function_">read_file</span>(&#123; <span class="attr">path</span>: <span class="string">&quot;src/c.ts&quot;</span> &#125;)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  <span class="attr">a</span>: a.<span class="property">content</span>.<span class="property">length</span>,</span><br><span class="line">  <span class="attr">b</span>: b.<span class="property">content</span>.<span class="property">length</span>,</span><br><span class="line">  <span class="attr">c</span>: c.<span class="property">content</span>.<span class="property">length</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但写文件、提交代码和删除文件等有副作用的操作通常应该串行执行。Harness
+会依据工具的并发安全属性进行调度；当前配置中的
+<code>maxParallelSubCalls</code> 默认值为 10，设为 1
+可以恢复严格串行执行。</p>
+<h2 id="ptc-与普通工具调用的区别">PTC 与普通工具调用的区别</h2>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>普通模式</th>
+<th>PTC 模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型直接看到</td>
+<td>每一个工具</td>
+<td>主要是 <code>run_code</code></td>
+</tr>
+<tr>
+<td>调用方式</td>
+<td>一次调用一个工具</td>
+<td>一段程序调用多个工具</td>
+</tr>
+<tr>
+<td>控制逻辑</td>
+<td>每轮由模型决定</td>
+<td>由生成的程序控制</td>
+</tr>
+<tr>
+<td>中间结果</td>
+<td>经常回到模型上下文</td>
+<td>默认留在程序内部</td>
+</tr>
+<tr>
+<td>循环和分支</td>
+<td>需要多轮模型决策</td>
+<td>直接写进程序</td>
+</tr>
+<tr>
+<td>并行处理</td>
+<td>逐步处理或由运行时决定</td>
+<td>可以用 <code>Promise.all()</code> 表达</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>少量、简单调用</td>
+<td>批量、重复、多步骤工作流</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ptc-不是让-typescript-取代模型">PTC 不是让 TypeScript
+取代模型</h2>
+<p>两者分工不同：</p>
+<p>模型负责：</p>
+<ul>
+<li>理解用户目标</li>
+<li>设计执行策略</li>
+<li>生成 TypeScript 程序</li>
+<li>解释最终结果</li>
+<li>根据结果决定是否继续</li>
+</ul>
+<p>TypeScript 负责：</p>
+<ul>
+<li>循环和条件判断</li>
+<li>批量调用工具</li>
+<li>并行处理独立任务</li>
+<li>捕获和处理错误</li>
+<li>过滤、聚合和压缩数据</li>
+</ul>
+<p>换句话说，模型负责制定一个短程序，Harness
+负责让这个短程序可靠地调用工具。</p>
+<h2 id="需要注意的限制">需要注意的限制</h2>
+<h3 id="每次运行都是新的状态">每次运行都是新的状态</h3>
+<p>一次 <code>run_code</code> 结束后，程序里的变量就会消失。PTC
+不是一个默认持久化的
+REPL，不能假设上一次运行定义的变量在下一次运行中仍然存在。</p>
+<h3 id="只有输出会回到模型">只有输出会回到模型</h3>
+<p>程序内部读取到的数据，如果没有通过 <code>return</code> 或
+<code>console.log()</code>
+输出，模型就看不到。因此程序应该主动提取摘要，而不是无差别地返回全部内容。</p>
+<h3 id="typescript-不是完整项目编译">TypeScript 不是完整项目编译</h3>
+<p>PTC
+执行的是面向工具编排的短程序，类型主要用于帮助模型生成正确代码。不能默认它可以像项目源码一样导入任意
+npm 包、访问完整的构建环境或维护长期进程。</p>
+<h3 id="代码执行能力不等于绝对安全">代码执行能力不等于绝对安全</h3>
+<p>PTC 可以间接调用 Bash 等高权限工具，因此安全边界仍然取决于 Harness
+的沙箱、权限策略和工具配置。它不应该被理解为一个天然安全的代码沙箱。</p>
+<h2 id="什么时候该用-ptc">什么时候该用 PTC</h2>
+<p>适合使用 PTC 的任务包括：</p>
+<ul>
+<li>扫描大量文件并汇总结果</li>
+<li>批量调用多个只读 API</li>
+<li>对多条数据执行相同处理</li>
+<li>需要循环、分支或错误恢复的工作流</li>
+<li>中间数据很多，但最终只需要一个摘要</li>
+</ul>
+<p>如果只是读取一个文件、执行一个命令或修改一个位置，普通工具调用往往更直观。PTC
+的价值主要在于：把复杂的多轮工具交互，压缩成一次模型生成和一次程序执行。</p>
+<h2 id="总结">总结</h2>
+<p>DeepSeek Harness 的 PTC 模式，本质上是一个“程序化工具调用”层：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">用户目标</span><br><span class="line">   ↓</span><br><span class="line">模型生成 TypeScript 编排程序</span><br><span class="line">   ↓</span><br><span class="line">run_code 执行程序</span><br><span class="line">   ↓</span><br><span class="line">tools.xxx() 调用真实工具</span><br><span class="line">   ↓</span><br><span class="line">程序过滤和汇总结果</span><br><span class="line">   ↓</span><br><span class="line">只有最终输出回到模型</span><br></pre></td></tr></table></figure>
+<p>它的核心优势不是“会写
+TypeScript”，而是让模型拥有了一种更紧凑、更可组合的工具使用方式。对于复杂
+Agent
+来说，模型负责决策，程序负责执行细节，这种分工可以显著改善批量任务和长工作流的效率。</p>
+<p>参考资料：</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kZWVwc2Vlay5jb20vaGFybmVzcy8=">DeepSeek Harness
+官方介绍<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RlZXBzZWVrLWFpL2RlZXBzZWVrLWhhcm5lc3MvYmxvYi9tYXN0ZXIvcGFja2FnZXMvY29yZS90b29scy9SRUFETUUubWQ=">DeepSeek
+Harness 工具系统与 PTC 文档<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RlZXBzZWVrLWFpL2RlZXBzZWVrLWhhcm5lc3MvYmxvYi9tYXN0ZXIvcGFja2FnZXMvY29kZS1ydW50aW1lL1JFQURNRS5tZA==">DeepSeek
+Harness Code Runtime 文档<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RlZXBzZWVrLWFpL2RlZXBzZWVrLWhhcm5lc3MvYmxvYi9tYXN0ZXIvdmVuZG9yL2NvcmRpcy9SRUFETUUubWQ=">Cordis
+官方 README<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RlZXBzZWVrLWFpL2RlZXBzZWVrLWhhcm5lc3MvYmxvYi9tYXN0ZXIvZG9jcy9jb3JkaXMtdHV0b3JpYWwvaW5kZXgubWQ=">Cordis
+入门教程<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzI2MDguMjU1MTI=">Cordis：A Programming
+Paradigm for Spatiotemporal Composability<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RlZXBzZWVrLWFpL2RlZXBzZWVrLWhhcm5lc3M=">DeepSeek
+Harness 官方源码仓库<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/DeepSeek/" rel="tag"><i class="fa fa-tag"></i> DeepSeek</a>
+              <a href="/tags/TypeScript/" rel="tag"><i class="fa fa-tag"></i> TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-lab-notes-1-6.html" rel="prev" title="ELEC5620 Lab 1–6 总结：从选题到运行时对象模型">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Lab 1–6 总结：从选题到运行时对象模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/csys5030-week05-jidt-software.html" rel="next" title="CSYS5030 Week 05 The JIDT Software 讲课总结">
+                  CSYS5030 Week 05 The JIDT Software 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">977k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">59:14</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
