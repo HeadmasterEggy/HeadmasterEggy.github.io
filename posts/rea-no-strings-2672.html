@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="记录我为 REA 提交并被合并的一项 CLI 修复：让 Apktool 的 --no-strings 选项按文档工作，并用边界测试验证参数解析与请求映射。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="REA 开源贡献：修复 Apktool CLI 的 --no-strings 参数">
+<meta property="og:url" content="https://qiao1.top/posts/rea-no-strings-2672.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="记录我为 REA 提交并被合并的一项 CLI 修复：让 Apktool 的 --no-strings 选项按文档工作，并用边界测试验证参数解析与请求映射。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Open-Source">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/rea-no-strings-2672.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/rea-no-strings-2672.html","path":"posts/rea-no-strings-2672.html","title":"REA 开源贡献：修复 Apktool CLI 的 --no-strings 参数"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>REA 开源贡献：修复 Apktool CLI 的 --no-strings 参数 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/rea-no-strings-2672.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">274</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">228</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3%E5%8F%82%E6%95%B0%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87-cli-%E8%A7%A3%E6%9E%90"><span class="nav-text">问题：文档参数无法通过 CLI
+解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E8%BE%B9%E7%95%8C%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81%E6%95%B4%E6%9D%A1%E5%8F%82%E6%95%B0%E8%B7%AF%E5%BE%84"><span class="nav-text">用边界测试验证整条参数路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E-issue-%E5%88%B0%E5%90%88%E5%B9%B6"><span class="nav-text">从 issue 到合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%AC%A1%E9%AA%8C%E8%AF%81%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-text">这次验证的边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%94%B6%E8%8E%B7"><span class="nav-text">我的收获</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-text">相关链接</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">228</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">274</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/rea-no-strings-2672.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="REA 开源贡献：修复 Apktool CLI 的 --no-strings 参数 | Joey">
+      <meta itemprop="description" content="记录我为 REA 提交并被合并的一项 CLI 修复：让 Apktool 的 --no-strings 选项按文档工作，并用边界测试验证参数解析与请求映射。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          REA 开源贡献：修复 Apktool CLI 的 --no-strings 参数
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-13 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-13T12:00:00Z">2026-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>5 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">记录我为 REA 提交并被合并的一项 CLI 修复：让 Apktool 的 --no-strings 选项按文档工作，并用边界测试验证参数解析与请求映射。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这次我为开源项目 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVh">REA<i class="fa fa-external-link-alt"></i></span>
+提交了一项小型修复。问题出在 Apktool CLI：文档里写了
+<code>--no-strings</code>，实际使用时却会被命令行解析器当成未知参数，导致分析请求没有发出去。</p>
+<p>维护者已经合并了 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNw==">PR #2707<i class="fa fa-external-link-alt"></i></span>，对应的 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2lzc3Vlcy8yNjcy">Issue #2672<i class="fa fa-external-link-alt"></i></span>
+也关闭了。下面记录问题是怎样定位、修复和验证的，以及这次验证没有覆盖什么。</p>
+<h2 id="问题文档参数无法通过-cli-解析">问题：文档参数无法通过 CLI
+解析</h2>
+<p>REA 的 Apktool
+命令支持配置是否把资源字符串纳入输出。<code>--no-strings</code>
+的含义是关闭字符串投影；使用者按文档传入这个参数时，CLI 却在请求进入
+provider 之前就报未知选项。</p>
+<p>关键在于布尔选项的声明方式。命令行解析器把 <code>--no-strings</code>
+视为名为 <code>strings</code>
+的布尔选项的否定形式。原来的声明却把选项本身命名为
+<code>no-strings</code>，使解析器无法把文档里的否定写法和 schema
+对上。于是参数在边界处就被拒绝了。</p>
+<p>这不是 Apktool 解码结果不正确，而是 CLI
+参数声明与解析器约定不一致。明确这个边界后，修复就可以保持很小：声明正向布尔选项
+<code>strings</code>，默认值为
+<code>true</code>，再把解析结果映射到请求中的
+<code>include_strings</code>。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="attr">strings</span>: &#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;boolean&quot;</span>,</span><br><span class="line">  <span class="attr">default</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">description</span>: <span class="string">&quot;Include resource strings; --no-strings disables the string projection.&quot;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请求映射则是：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="attr">include_strings</span>: options.<span class="property">strings</span>,</span><br></pre></td></tr></table></figure>
+<p>这样，省略参数时默认保留字符串；传入 <code>--no-strings</code>
+时，CLI 将 <code>strings</code> 设为 <code>false</code>，并把该值传给
+provider。具体改动可以在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNy9maWxlcw==">PR
+的文件变更<i class="fa fa-external-link-alt"></i></span>中查看。</p>
+<h2 id="用边界测试验证整条参数路径">用边界测试验证整条参数路径</h2>
+<p>我新增了
+<code>tests/boundary/cli/apktoolBooleanOptions.test.ts</code>。测试通过项目实际的
+CLI 参数解析入口运行命令，并用 inert fake provider
+接收请求，因此可以检查参数是否被解析，以及解析结果是否传到了 provider
+边界。</p>
+<p>测试覆盖了三个行为：</p>
+<ol type="1">
+<li>传入 <code>--no-strings</code> 后，provider 收到的
+<code>include_strings</code> 为 <code>false</code>。</li>
+<li>省略该选项时，默认值映射为 <code>true</code>。</li>
+<li>CLI 帮助中包含 <code>--no-strings</code> 这一文档写法。</li>
+</ol>
+<p>修复前，我在基线版本上运行新增测试，确认 <code>--no-strings</code>
+会以未知参数失败；不传这个选项的默认路径则通过。这个失败帮助把问题定位到
+CLI 参数 schema，而不是 provider 内部的资源处理。</p>
+<p>修复后，我运行了聚焦的 CLI 边界测试和快速检查：</p>
+<ul>
+<li><code>npm run test:focused -- tests/boundary/cli/apktoolBooleanOptions.test.ts tests/boundary/cli/apktoolCli.test.ts</code>：7
+项测试通过。</li>
+<li><code>npm run check:fast</code>：通过。</li>
+<li><code>git diff --check</code>：通过。</li>
+</ul>
+<h2 id="从-issue-到合并">从 issue 到合并</h2>
+<p>这次改动遵循了仓库的贡献流程：先围绕已有 issue
+复现一个边界问题，再用测试刻画预期的 CLI
+行为，提交范围明确的实现和验证，最后通过 PR 交给维护者审查。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNw==">PR #2707<i class="fa fa-external-link-alt"></i></span>
+的标题是
+<code>fix(apktool): accept --no-strings CLI option</code>，维护者于 2026
+年 10 月 13 日合并。REA 的 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2Jsb2IvbWFpbi9DT05UUklCVVRJTkcubWQ=">贡献指南<i class="fa fa-external-link-alt"></i></span>也强调，贡献应限定在清楚的范围内；涉及权限、目标执行或副作用的能力变更，需要先把未决的范围和授权问题说清楚。相比之下，这次改动只修复已有
+CLI 选项的解析与映射，边界明确，适合做成独立的小 PR。</p>
+<h2 id="这次验证的边界">这次验证的边界</h2>
+<p>测试使用的是 inert fake provider。它验证了 CLI
+接受参数，并把正确的布尔值放进请求；<strong>它没有启动真实 Apktool
+provider，也没有用 APK
+文件执行端到端解码</strong>。因此这次证据支持的是“CLI
+参数行为已修复”，不能据此声称真实 APK 解码流程也经过了本次验证。</p>
+<p>这个区分很重要：测试通过说明我们验证过的边界符合预期，不会自动扩展成对整个下游执行链路的保证。对于一个范围很窄的
+CLI
+修复，先把参数解析、默认值和请求映射测清楚，已经覆盖了本次改动直接拥有的行为。</p>
+<h2 id="我的收获">我的收获</h2>
+<p>这次贡献让我再次看到，开源项目里的有价值改动不一定要新增大型功能。一个文档参数和实际
+CLI
+行为不一致，也会让使用者卡在工作流的入口。把现象缩小到具体边界，写出能复现问题的测试，再用最小改动恢复约定，维护者就更容易审查，也更容易判断修复是否足够。</p>
+<p>对我来说，参与贡献的关键不只是“改了代码”，还包括给出可以复查的证据：问题链接、测试行为、检查结果、合并记录，以及没有验证到的部分。这样其他开发者可以从
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNw==">PR<i class="fa fa-external-link-alt"></i></span>
+直接追溯实现和讨论。</p>
+<h2 id="相关链接">相关链接</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVh">REA 项目仓库<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2lzc3Vlcy8yNjcy">Issue
+#2672：文档中的字符串省略选项阻止 Android 资源解码<i class="fa fa-external-link-alt"></i></span></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/morluto/rea/pull/2707">PR #2707：接受
+<code>--no-strings</code> CLI 选项（已合并）</a></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2Jsb2IvbWFpbi9DT05UUklCVVRJTkcubWQ=">REA
+贡献指南<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Open-Source/" rel="tag"><i class="fa fa-tag"></i> Open-Source</a>
+              <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c07d9ac7.html" rel="prev" title="我的 Vibe Coding 工作流：从 session log 到 skill 迭代">
+                  <i class="fa fa-angle-left"></i> 我的 Vibe Coding 工作流：从 session log 到 skill 迭代
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/f28dec87.html" rel="next" title="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作">
+                  Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">991k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">60:05</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
