@@ -1,0 +1,3041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作">
+<meta property="og:url" content="https://qiao1.top/posts/f28dec87.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Codex">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/f28dec87.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/f28dec87.html","path":"posts/f28dec87.html","title":"Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/f28dec87.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">273</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">227</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E7%9C%8B%E6%95%B4%E6%9D%A1%E9%93%BE%E8%B7%AF"><span class="nav-text">先看整条链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AA-shell-%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-text">1.
+工具调用不是直接启动一个 shell 子进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%90%E7%BA%BF%E7%A8%8B%E6%9C%89%E7%8B%AC%E7%AB%8B%E8%BA%AB%E4%BB%BD%E4%B9%9F%E4%BF%9D%E7%95%99%E7%88%B6%E5%AD%90%E6%9D%A5%E6%BA%90%E5%85%B3%E7%B3%BB"><span class="nav-text">2.
+子线程有独立身份，也保留父子来源关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#child-%E5%AE%9E%E9%99%85%E6%8B%BF%E5%88%B0%E4%BB%80%E4%B9%88%E9%A6%96%E6%9D%A1%E6%B6%88%E6%81%AF%E9%85%8D%E7%BD%AE%E5%92%8C%E5%8E%86%E5%8F%B2"><span class="nav-text">2.1 child
+实际拿到什么：首条消息、配置和历史</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%8F%97%E5%AE%B9%E9%87%8F%E4%B8%8E%E7%99%BB%E8%AE%B0%E6%9C%BA%E5%88%B6%E6%8E%A7%E5%88%B6"><span class="nav-text">3. 并行受容量与登记机制控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait_agent-%E7%AD%89%E5%BE%85%E7%9A%84%E6%98%AF%E6%B4%BB%E5%8A%A8%E4%B8%8D%E6%98%AF-join"><span class="nav-text">4. wait_agent
+等待的是活动，不是 join</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BC%9A%E8%AF%9D%E4%B8%BA%E4%BB%80%E4%B9%88%E8%B5%B0-v2%E7%89%88%E6%9C%AC%E9%80%89%E6%8B%A9%E9%A1%BA%E5%BA%8F"><span class="nav-text">一个会话为什么走
+V2：版本选择顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v2-%E5%B7%A5%E5%85%B7%E8%A1%A8%E9%9D%A2%E4%B9%9F%E5%8F%97%E9%85%8D%E7%BD%AE%E6%8E%A7%E5%88%B6"><span class="nav-text">V2 工具表面也受配置控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#send_message-%E6%8E%92%E9%98%9Ffollowup_task-%E8%A7%A6%E5%8F%91%E6%96%B0%E4%B8%80%E8%BD%AE"><span class="nav-text">5.
+send_message 排队，followup_task
+触发新一轮</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%85%B3%E9%97%AD%E4%B8%8E%E6%81%A2%E5%A4%8D%E6%98%AF%E4%B8%8D%E5%90%8C%E5%8A%A8%E4%BD%9C"><span class="nav-text">中断、关闭与恢复是不同动作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E9%80%9A%E7%9F%A5%E6%8C%89-agent-%E7%89%88%E6%9C%AC%E5%88%86%E6%B5%81"><span class="nav-text">6. 完成通知按 agent 版本分流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ui-%E6%98%BE%E7%A4%BA%E7%9A%84%E6%98%AF%E5%8D%8F%E4%BD%9C%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%8A%95%E5%BD%B1"><span class="nav-text">7. UI 显示的是协作事件的投影</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E6%A1%8C%E9%9D%A2%E7%AB%AF%E7%9A%84-subagents-%E9%9D%A2%E6%9D%BF%E5%A6%82%E4%BD%95%E8%AF%BB%E5%8F%96%E5%92%8C%E6%89%93%E5%BC%80-child"><span class="nav-text">7.1
+本机桌面端的 Subagents 面板如何读取和打开 child</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E4%BB%A3%E5%BF%AB%E7%85%A7%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E5%92%8C%E8%A1%A5%E5%85%A8"><span class="nav-text">7.2 后代快照如何发现和补全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E7%89%88%E6%9C%AC%E6%BA%90%E7%A0%81%E4%B8%AD%E7%9A%84-app-server-%E4%B8%8E-state-db"><span class="nav-text">同版本源码中的 app-server
+与 state DB</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work-%E7%95%8C%E9%9D%A2%E7%9A%84%E6%B4%BB%E5%8A%A8%E5%8D%A1%E7%89%87"><span class="nav-text">7.3 Work 界面的活动卡片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E5%8A%A8%E4%BA%8B%E4%BB%B6%E6%80%8E%E6%A0%B7%E8%BF%9B%E5%85%A5%E6%A1%8C%E9%9D%A2%E7%8A%B6%E6%80%81"><span class="nav-text">7.4 活动事件怎样进入桌面状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E7%89%88%E6%9C%AC%E4%B8%8E%E5%AE%98%E6%96%B9%E6%BA%90%E7%A0%81-tag-%E5%AF%B9%E7%85%A7"><span class="nav-text">8. 本机版本与官方源码 tag 对照</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E7%9B%B4%E6%8E%A5%E8%A7%82%E5%AF%9F"><span class="nav-text">本机直接观察</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%AC%E5%BC%80%E6%BA%90%E7%A0%81%E4%BA%A4%E5%8F%89%E6%A0%B8%E5%AF%B9"><span class="nav-text">匹配版本的公开源码交叉核对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90-agent-%E8%87%AA%E5%B7%B1%E6%98%AF%E5%90%A6%E8%BF%98%E8%83%BD%E7%BB%A7%E7%BB%AD-spawn%E5%8F%96%E5%86%B3%E4%BA%8E%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-text">8.1 子
+Agent 自己是否还能继续 spawn，取决于模型能力元数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v2-%E7%9A%84%E9%80%92%E5%BD%92%E5%B1%82%E7%BA%A7%E4%B8%8E%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="nav-text">8.2 V2 的递归层级与资源限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B-cli-%E4%B8%8E%E6%A1%8C%E9%9D%A2%E5%86%85%E5%B5%8C-cli-%E4%B8%8D%E6%98%AF%E5%90%8C%E4%B8%80%E4%B8%AA%E7%9B%AE%E6%A0%87"><span class="nav-text">8.3 独立 CLI 与桌面内嵌
+CLI 不是同一个目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E5%81%9C%E8%AF%B7%E6%B1%82%E5%92%8C%E6%B8%85%E7%90%86%E8%B4%A3%E4%BB%BB%E6%98%AF%E4%B8%A4%E6%AD%A5"><span class="nav-text">8.4 关停请求和清理责任是两步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work-%E5%AD%90-agent-%E9%9D%A2%E6%9D%BF%E8%B4%9F%E8%B4%A3%E6%9F%A5%E7%9C%8B%E4%B8%8D%E8%B4%9F%E8%B4%A3%E4%B8%AD%E6%96%AD"><span class="nav-text">8.5 Work 子 Agent
+面板负责查看，不负责中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%AF%B9%E8%AF%9D%E5%81%9C%E6%AD%A2%E4%BC%9A%E7%94%B1%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%BB%A7%E7%BB%AD%E6%B8%85%E7%90%86%E6%B4%BB%E8%B7%83%E5%90%8E%E4%BB%A3"><span class="nav-text">8.6
+主对话停止会由桌面客户端继续清理活跃后代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2%E7%BA%A7%E8%81%94%E4%BE%9D%E8%B5%96-best-effort-%E7%9A%84%E5%90%8E%E4%BB%A3%E6%8B%93%E6%89%91%E5%8F%91%E7%8E%B0"><span class="nav-text">8.7 停止级联依赖
+best-effort 的后代拓扑发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E4%B8%AD%E6%96%AD%E4%BC%9A%E6%A0%A1%E9%AA%8C-turn-%E8%BA%AB%E4%BB%BD%E5%B9%B6%E6%B8%85%E7%90%86%E5%85%B3%E8%81%94%E6%89%A7%E8%A1%8C"><span class="nav-text">8.8 本地中断会校验 turn
+身份，并清理关联执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E6%A1%A3%E5%89%8D%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E5%81%9C%E6%AD%A2%E4%B8%8E%E6%99%AE%E9%80%9A%E4%B8%AD%E6%96%AD%E4%B8%8D%E6%98%AF%E5%90%8C%E4%B8%80%E4%B8%AA%E5%85%A5%E5%8F%A3"><span class="nav-text">8.9
+归档前的运行时停止与普通中断不是同一个入口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#composer-stop-%E6%8C%89%E9%92%AE%E6%8E%A5%E5%88%B0-user-stop-%E4%B8%AD%E6%96%AD"><span class="nav-text">8.10 composer Stop
+按钮接到 user-stop 中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E6%94%B6%E5%88%B0-delta-%E5%90%8E%E6%8C%89-conversation-%E5%86%99%E5%85%A5%E6%9C%AC%E5%9C%B0-thread-store"><span class="nav-text">8.11
+窗口收到 delta 后按 conversation 写入本地 thread store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread-store-%E8%BF%9B%E5%85%A5-transcript-%E6%8A%95%E5%BD%B1%E4%BD%86%E4%B8%8D%E7%AD%89%E4%BA%8E%E5%B7%B2%E8%AF%81%E6%98%8E%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6"><span class="nav-text">8.12
+thread store 进入 transcript 投影，但不等于已证明屏幕绘制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%95%E5%BD%B1%E7%BB%93%E6%9E%9C%E8%BF%9B%E5%85%A5-transcript-%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6"><span class="nav-text">8.13 投影结果进入 transcript
+列表组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transcript-%E8%A1%8C%E7%BB%84%E4%BB%B6%E7%BB%A7%E7%BB%AD%E8%BF%9B%E5%85%A5-turn-content-renderer"><span class="nav-text">8.14 transcript
+行组件继续进入 turn-content renderer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#turn-content-%E6%8A%8A-subagent-activity-%E6%8E%A5%E5%88%B0-inline-ui"><span class="nav-text">8.15
+turn-content 把 subagent activity 接到 inline UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline-group-helper-%E5%A6%82%E4%BD%95%E5%90%88%E5%B9%B6-activity-%E4%B8%8E-child-snapshot"><span class="nav-text">8.16
+inline group helper 如何合并 activity 与 child snapshot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline-%E8%A1%8C%E7%82%B9%E5%87%BB%E5%90%8E%E7%9A%84%E7%9B%AE%E6%A0%87%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AF%BC%E8%88%AA"><span class="nav-text">8.17 inline
+行点击后的目标解析与导航</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline-child-rows-%E4%BC%9A%E6%8A%91%E5%88%B6%E9%87%8D%E5%A4%8D%E7%9A%84%E7%A9%BA-prompt-spawn-%E5%8D%A1%E7%89%87"><span class="nav-text">8.18 inline
+child rows 会抑制重复的空 prompt spawn 卡片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work-%E9%9D%A2%E6%9D%BF%E5%92%8C%E6%9C%AC%E5%9C%B0%E9%9D%A2%E6%9D%BF%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84-child-%E8%AF%A6%E6%83%85%E8%B7%AF%E5%BE%84"><span class="nav-text">8.19 Work
+面板和本地面板使用不同的 child 详情路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work-%E9%9D%A2%E6%9D%BF%E7%8A%B6%E6%80%81%E6%9D%A5%E8%87%AA-conversation-%E6%B6%88%E6%81%AF%E6%8A%95%E5%BD%B1"><span class="nav-text">8.20 Work 面板状态来自
+conversation 消息投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work-%E8%AF%A6%E6%83%85%E8%B7%9F%E9%9A%8F%E5%BD%93%E5%89%8D%E5%88%86%E6%94%AF%E6%8A%95%E5%BD%B1%E5%9B%9E%E5%A4%8D%E5%A4%96%E9%93%BE%E7%AD%96%E7%95%A5%E7%94%B1%E4%B8%8A%E6%B8%B8%E4%BC%A0%E5%85%A5"><span class="nav-text">8.21 Work
+详情跟随当前分支投影，回复外链策略由上游传入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E7%BC%A9%E7%95%A5%E9%A2%84%E8%A7%88%E5%A4%8D%E7%94%A8-final-response-%E7%BC%93%E5%AD%98"><span class="nav-text">8.22 标签缩略预览复用
+final-response 缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%9B%9E%E5%A4%8D%E6%9F%A5%E8%AF%A2%E8%BF%9B%E5%85%A5%E5%85%B1%E4%BA%AB%E8%AF%B7%E6%B1%82%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">8.23
+最终回复查询进入共享请求客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E8%BF%9E%E5%90%8E%E7%9A%84-subagent-delta-%E8%BF%87%E6%BB%A4%E9%9B%86%E5%90%88%E6%B2%A1%E6%9C%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%BB%E5%8A%A8%E5%9B%9E%E5%A1%AB%E7%82%B9"><span class="nav-text">8.24
+重连后的 subagent delta 过滤集合没有客户端主动回填点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A-transport-%E9%87%8D%E8%BF%9E%E4%BC%9A%E4%BF%9D%E7%95%99%E5%B7%B2%E7%99%BB%E8%AE%B0%E7%9A%84-child-id"><span class="nav-text">8.25 普通 transport
+重连会保留已登记的 child ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remote-host-%E7%9A%84%E6%98%BE%E5%BC%8F%E9%87%8D%E8%BF%9E%E4%BC%9A%E6%9B%BF%E6%8D%A2-connection-%E5%AE%9E%E4%BE%8B"><span class="nav-text">8.26 Remote host
+的显式重连会替换 connection 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remote-connection-%E6%B3%A8%E5%86%8C%E5%B7%B2%E6%9C%89%E7%AA%97%E5%8F%A3%E4%B8%8D%E7%AD%89%E4%BA%8E%E9%87%8D%E6%94%BE-child-%E7%8A%B6%E6%80%81"><span class="nav-text">8.27 Remote
+connection 注册已有窗口，不等于重放 child 状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA-app-server-%E4%B8%8E-remote-host-%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84-connection-%E5%88%9B%E5%BB%BA%E5%85%A5%E5%8F%A3"><span class="nav-text">8.28
+本机 app-server 与 remote host 使用不同的 connection 创建入口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadlist-%E6%81%A2%E5%A4%8D%E4%BC%9A%E8%AF%9D%E4%B8%8D%E4%BC%9A%E7%9B%B4%E6%8E%A5%E7%99%BB%E8%AE%B0-connection-%E7%9A%84-child-%E8%BF%87%E6%BB%A4%E9%9B%86%E5%90%88"><span class="nav-text">8.29
+thread&#x2F;list 恢复会话，不会直接登记 connection 的 child
+过滤集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA-rollout-%E8%AE%B0%E5%BD%95%E5%90%8C%E6%97%B6%E5%8C%85%E5%90%AB-v1-%E4%B8%8E-v2-subagent"><span class="nav-text">8.30 本机 rollout
+记录同时包含 V1 与 V2 subagent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v2-%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%BC%9A%E8%A2%AB%E6%8C%89%E9%9C%80%E5%8D%B8%E8%BD%BD%E4%BD%86%E4%B8%AD%E6%96%AD%E7%8A%B6%E6%80%81%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%83%BD%E9%87%8D%E8%BD%BD"><span class="nav-text">8.31 V2
+子线程会被按需卸载，但中断状态不一定能重载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alpha.9-app-server-%E5%BF%AB%E7%85%A7%E8%BF%98%E6%9C%89%E4%B8%80%E6%9D%A1%E7%94%B1%E6%97%A0%E8%AE%A2%E9%98%85%E4%B8%94%E7%A9%BA%E9%97%B2%E8%A7%A6%E5%8F%91%E7%9A%84-child-%E5%8D%B8%E8%BD%BD%E8%B7%AF%E5%BE%84"><span class="nav-text">8.32
+alpha.9 app-server 快照还有一条由“无订阅且空闲”触发的 child
+卸载路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92%E4%BC%9A-pin-residentspawn-%E5%8F%96%E6%B6%88%E6%B8%85%E7%90%86%E5%BB%B6%E4%BC%B8%E5%88%B0%E6%9C%80%E7%BB%88-await"><span class="nav-text">8.33
+消息投递会 pin resident，spawn 取消清理延伸到最终 await</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#host-%E6%B6%88%E6%81%AF%E7%9A%84-sender-context-%E6%9C%89%E6%9D%A5%E6%BA%90%E6%A0%A1%E9%AA%8Cchild-%E8%AE%BE%E7%BD%AE%E5%8C%BA%E5%88%86%E7%9C%81%E7%95%A5%E5%92%8C%E7%A9%BA%E5%80%BC"><span class="nav-text">8.34
+host 消息的 sender context 有来源校验，child 设置区分“省略”和“空值”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spawn_agent-%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%8F%82%E6%95%B0%E8%BF%9B%E5%85%A5-child-%E9%85%8D%E7%BD%AE%E5%92%8C%E9%A6%96%E8%BD%AE%E8%BE%93%E5%85%A5"><span class="nav-text">8.35
+spawn_agent 从工具参数进入 child 配置和首轮输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E6%9D%A1%E6%B6%88%E6%81%AF%E6%8E%A5%E7%BA%B3turn-task-%E5%90%AF%E5%8A%A8%E5%92%8C%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E6%98%AF%E4%B8%89%E4%B8%AA%E6%97%B6%E7%82%B9"><span class="nav-text">8.36
+首条消息接纳、turn task 启动和模型推理是三个时点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A7%94%E6%89%98%E6%B6%88%E6%81%AF%E5%85%88%E6%88%90%E4%B8%BA-child-%E7%9A%84-agentmessage-%E5%8E%86%E5%8F%B2%E5%86%8D%E8%BF%9B%E5%85%A5-sampling-prompt"><span class="nav-text">8.37
+委托消息先成为 child 的 AgentMessage 历史，再进入 sampling
+prompt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#child-%E6%AD%A3%E5%9C%A8%E9%87%87%E6%A0%B7%E6%97%B6%E6%94%B6%E5%88%B0%E5%8D%8F%E4%BD%9C%E6%B6%88%E6%81%AF%E5%8F%AF%E8%83%BD%E5%9C%A8-item-%E8%BE%B9%E7%95%8C%E8%A7%A6%E5%8F%91-follow-up"><span class="nav-text">8.38
+child 正在采样时收到协作消息，可能在 item 边界触发 follow-up</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA-v2-turn_finished-%E5%85%A5%E5%8F%A3%E4%B8%8E%E8%A3%85%E7%AE%B1-future"><span class="nav-text">8.39 本机 V2
+turn_finished 入口与装箱 future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E8%BF%94%E5%9B%9E%E7%9A%84-vtable-%E5%AE%9A%E4%BD%8D-v2-completion-future-poll"><span class="nav-text">8.40 从返回的
+vtable 定位 V2 completion future poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-agentcontrol-%E6%96%B9%E6%B3%95%E8%A1%A8%E4%BA%A4%E5%8F%89%E6%A0%B8%E5%AF%B9-turn_finished-%E6%A7%BD%E4%BD%8D"><span class="nav-text">8.41 用
+AgentControl 方法表交叉核对 turn_finished
+槽位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-arm64-%E5%9C%B0%E5%9D%80%E6%9E%84%E9%80%A0%E8%BF%BD%E8%B8%AA-agentcontrol-%E6%96%B9%E6%B3%95%E8%A1%A8%E5%BC%95%E7%94%A8"><span class="nav-text">8.42 从 ARM64
+地址构造追踪 AgentControl 方法表引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E6%A0%B8%E4%B8%80%E4%B8%AA-0x80-%E9%97%B4%E6%8E%A5%E8%B0%83%E7%94%A8%E5%80%99%E9%80%89"><span class="nav-text">8.43 复核一个 +0x80
+间接调用候选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E9%99%A4-completion-future-%E5%86%85%E9%83%A8%E7%9A%84-tracing-callsite-%E5%BC%95%E7%94%A8"><span class="nav-text">8.44 排除
+completion future 内部的 tracing callsite 引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8D%E6%9C%AA%E7%9F%A5"><span class="nav-text">仍未知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">227</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/f28dec87.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作 | Joey">
+      <meta itemprop="description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-13 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-13T12:00:00Z">2026-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>35k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>2:06</span>
+    </span>
+</div>
+
+            <div class="post-description">结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Codex 的 subagent 看起来像“主 Agent 派出几个小 Agent
+并行工作”。从实现证据看，更准确的模型是：<strong>父 Agent
+通过协作工具请求创建一个有独立线程身份的子 Agent；共享的 Agent
+控制器负责登记、调度、通信和回收父子关系；客户端再把这些状态呈现成活动列表。</strong></p>
+<p>本文结合本机 ChatGPT 桌面应用内置 <code>codex-cli</code>
+的静态分析、应用资源中的 UI JavaScript，以及 OpenAI <code>codex</code>
+仓库与本机版本号一致的源码 tag
+交叉整理。版本号相同提高了源码对照的可信度，但没有签名构建清单证明本机二进制确由该
+commit 构建；因此我仍把本机观察和源码解释分开说明。</p>
+<h2 id="先看整条链路">先看整条链路</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  M[父 Agent 模型] --&gt;|spawn_agent| H[工具 handler]</span><br><span class="line">  H --&gt; C[AgentControl]</span><br><span class="line">  C --&gt;|容量检查、预留和来源配置| T[ThreadManager]</span><br><span class="line">  T --&gt;|创建独立 thread 与 spawn edge| S[Child session]</span><br><span class="line">  C --&gt;|首条消息 TriggerTurn| S</span><br><span class="line">  H --&gt;|V2 返回 task_name| M</span><br><span class="line"></span><br><span class="line">  C --&gt;|Started / completed 活动项| P[app-server 事件协议]</span><br><span class="line">  P --&gt;|item/started、item/completed| D[桌面 conversation state]</span><br><span class="line">  D --&gt; U[活动列表与 Subagents UI]</span><br><span class="line"></span><br><span class="line">  S --&gt;|完成结果通信| B[父线程 mailbox]</span><br><span class="line">  S --&gt;|child status / history| Q[thread state 与 history]</span><br><span class="line">  B --&gt; W[父 Agent 的 wait / 后续轮次]</span><br><span class="line">  Q --&gt; U</span><br><span class="line"></span><br><span class="line">  S --&gt;|final answer| F[/flora/subagent/thread/turns]</span><br><span class="line">  F --&gt; U</span><br></pre></td></tr></table></figure>
+<p>图中是几条相互关联但不等价的路径：工具返回、活动事件、父线程
+mailbox、thread 状态/history 和 Work 面板的 final-response query
+各有自己的数据契约。<code>wait_agent</code> 不是等待一个“child 对象 join
+完成”的单一同步点；child 完成也不意味着每个 UI 查询已经拿到 final
+answer。控制器与 mailbox 的语义来自匹配版本源码，事件映射和 UI/query
+路径来自本机桌面 bundle
+静态分析；箭头表示代码中的数据/调用关系，不表示一次实测请求的严格时间顺序。</p>
+<p>上图中从工具处理器到子线程创建、持久化关系和首条输入的步骤，来自版本
+tag
+源码；本机二进制中也能找到相应符号和校验字符串，但静态反汇编没有独立证明所有异步分支的具体运行顺序。</p>
+<h2 id="工具调用不是直接启动一个-shell-子进程">1.
+工具调用不是直接启动一个 shell 子进程</h2>
+<p>该版本源码中的 V2 <code>spawn</code> handler 会把模型给出的 agent
+描述整理成
+<code>SpawnRequest</code>，其中包含发起者、配置、初始消息、父子关系及
+fork 选项，然后交给
+<code>agent_control.spawn(...)</code>。初始消息被指定为触发 child
+新一轮执行的输入。可对照 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">V2
+spawn handler<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>spawn 成功后的模型可见工具结果也不是 child 的 thread id：结果 JSON
+返回规范化的 <code>task_name</code>，并按
+<code>hide_spawn_agent_metadata</code> 决定是否附加
+nickname；内部控制器和 Started 活动则仍持有真实
+<code>agent_thread_id</code>。所以工具结果里的任务名是 agent path
+标识，不能当作可传给 V1 <code>wait</code> 或其他 thread-id
+参数的值。这里描述的是工具输出结构和协议字段，不代表 UI
+一定向用户显示了同一组值。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">V2
+spawn 结果构造<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29uZmlnL21vZC5ycw==">V2
+默认配置<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvcHJvdG9jb2wvc3JjL3Byb3RvY29sLnJz">活动协议字段<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>对照 V1 handler，工具结果的身份契约不同：它返回
+<code>agent_id</code>（child thread ID 字符串）和可选 nickname。V1 还在
+spawn 前后发出 <code>CollabAgentToolCall</code> turn item，携带
+sender/receiver thread IDs、prompt、模型、reasoning effort 与 agent
+状态；成功后再把 thread ID 写进模型可见的
+<code>agent_id</code>。因此旧版 <code>wait_agent.targets</code>
+可以直接使用 spawn 返回的 ID；V2 的 <code>task_name</code>
+则不能这样用。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzL3NwYXduLnJz">V1
+spawn handler<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzL3dhaXQucnM=">V1
+wait handler<i class="fa fa-external-link-alt"></i></span>。这是匹配版本源码中的协议差异；它不证明桌面 UI
+怎样渲染该 turn item。</p>
+<p>时序上，控制器先等待 spawn edge 写入，再提交 child 的首条输入，提交
+residency/registry 预留并返回 <code>LiveAgent</code>；V2 handler
+收到成功结果后才发 <code>Started</code> 活动。因此这个 Started
+表示创建与输入 admission 已成功到达控制层，不是 child
+已经开始推理或完成任务的证明。输入被接纳后何时实际获得执行
+permit，属于后续调度路径。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">控制器
+spawn 顺序<i class="fa fa-external-link-alt"></i></span> 与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">handler
+的 Started 发射<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>控制器的 <code>spawn_agent_internal</code> 随后会：</p>
+<ul>
+<li>取得 agent-tree membership，并确定 parent thread；</li>
+<li>计算适用的 multi-agent 版本并检查执行容量；</li>
+<li>向 registry 预留 slot；</li>
+<li>解析继承的 environment、插件设置和执行策略；</li>
+<li>生成 <code>SessionSource::SubAgent(ThreadSpawn { ... })</code> 及
+AgentMetadata；</li>
+<li>按需准备 fork history，再调用 <code>ThreadManager</code> 创建 child
+thread；</li>
+<li>持久化 thread-spawn edge，之后提交首条输入。</li>
+</ul>
+<p>这条路径表明 Codex 的抽象中心是 <strong>thread/session 与 agent
+tree</strong>。被分析的调用路径没有显示“每个 subagent 再启动一份独立
+codex
+可执行文件”的证据；但仅凭这段静态证据，也不应把它扩大成对所有平台、所有运行模式的绝对断言。相关实现见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">AgentControl
+spawn 流程<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="子线程有独立身份也保留父子来源关系">2.
+子线程有独立身份，也保留父子来源关系</h2>
+<p>child 并非只是在父会话里追加一段带标签的对话。它有自己的 thread
+id、session source 和 agent path；source 元数据记录父
+thread、层级和路径。控制器还会把 spawn edge
+持久化，供后续恢复和父子关系查找使用。</p>
+<p>“有独立线程身份”不等于“完全隔离”。创建时仍可能从父级继承环境选择、插件禁用列表、执行策略和动态工具；如果请求指定
+fork
+mode，还会准备历史记录。公开源码注释特别指出：复制对话历史不应改变发起
+spawn 的那一轮原有能力。具体继承项取决于请求、配置及当前
+feature，不能把它简化成“所有上下文都复制”或“子 Agent 从零开始”。</p>
+<p>在新 thread 建好并建立关系后，控制器才提交初始输入；代码分别处理普通
+user input 和 inter-agent communication。V2
+下还会解析模型信息等启动配置。此后 child 作为独立执行单元继续跑自己的
+agent loop。</p>
+<h3 id="child-实际拿到什么首条消息配置和历史">2.1 child
+实际拿到什么：首条消息、配置和历史</h3>
+<p>V2 <code>spawn_agent</code> 的 <code>message</code> 会成为 child
+的第一条 <code>AgentInput::Message</code>，并以 <code>TriggerTurn</code>
+模式触发新一轮执行。处理器还会依调用来源把它包装为
+<code>AgentMessage::Plaintext</code> 或
+<code>AgentMessage::Encrypted</code>；这是源码选择的输入类型，不足以单独推断后续传输或模型侧的解密细节。也就是说，<code>fork_turns: "none"</code>
+仍会收到显式传入的 <code>message</code>，只是不会 fork 父线程历史。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">V2
+spawn handler<i class="fa fa-external-link-alt"></i></span> 与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyLnJz">消息类型选择<i class="fa fa-external-link-alt"></i></span>。</p>
+<p><code>fork_turns</code> 的默认值是
+<code>all</code>；<code>none</code> 表示新建上下文，<code>all</code>
+表示完整历史
+fork。兼容旧调用的正整数也会被接受，但实现并不会按数字截取轮数。V2
+已拒绝旧参数
+<code>fork_context</code>。新建上下文时，代码可能保留父线程的 paginated
+history 模式；只有 V2 dynamic-tools 功能开启时，才复制父会话的 dynamic
+tools。完整历史 fork 则读取 parent model context，再过滤某些
+AgentMessage、父会话专属元数据及可能需要替换的指令片段。它不是把 rollout
+文件原样复制过去。相关分支见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">参数解析<i class="fa fa-external-link-alt"></i></span>
+和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">fork
+/ fresh thread 创建<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>child 的基础配置从发起 spawn 时的 live turn
+构造，会同步当时生效的模型/provider/reasoning、developer
+instructions、approval policy、reviewer、工作目录和 permission
+profile。请求指定的模型或 reasoning effort，以及已配置的 subagent
+默认值，会经过模型目录和能力校验后应用。<code>agent_type</code> 对应的
+role
+在此基础上再叠加有限配置：源码允许角色提供指令、模型、性格、服务等级，或关闭部分
+feature/skill；角色不能替换父会话的 authority。完整历史 fork
+默认继承父角色；V2 显式指定 <code>agent_type</code> 时才应用角色覆盖，V1
+则拒绝这种组合。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY2hpbGRfY29uZmlnLnJz">child
+配置准备<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvcm9sZS5ycw==">role
+配置覆盖<i class="fa fa-external-link-alt"></i></span>。这些是匹配版本源码定义的组装规则，并不证明某个在线 child
+实际解析到的值。</p>
+<p>工具集合也不是把父 Agent 的 registry 整体复制给 child。child session
+保存被选中的 dynamic-tool snapshot；每轮再结合 child 自己的 turn
+config、environment snapshot、MCP binding、extensions 和 dynamic tools
+构造 tool router。role 对 feature 的覆盖只收集对
+shell、apps、plugins、memory、request-permissions 等指定 feature
+的关闭操作；角色文件里的开启项不会通过这段 overlay
+被应用。因此可以确认动态工具存在明确的 V2 条件继承，而其他可用工具由
+child 配置与当时的 MCP/extension/model
+条件共同决定。源码不足以列出某个实际 child 当时看到的完整工具清单。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">session
+初始化<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJz">每轮工具路由构建<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvc3BlY19wbGFuLnJz">工具注册计划<i class="fa fa-external-link-alt"></i></span>
+和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvcm9sZS5ycw==">role
+feature overlay<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>再看模型收到的工具 contract：V2 schema 要求 <code>task_name</code> 和
+<code>message</code>；<code>agent_type</code>、模型和 reasoning
+覆盖是否出现，取决于构造工具时的
+options。工具描述会列出配置中的用户角色和内置角色，部分角色描述还会注明模型或
+reasoning 已锁定。这里有个值得记录的描述差异：schema 文本说
+<code>fork_turns</code> 只支持 <code>all</code> 和
+<code>none</code>，但实际 parser 也接受正整数，并把它映射成完整历史
+fork，不会据数字限制历史轮数。schema
+把该字段定义为字符串而没有枚举校验，因此这是模型可见描述比实际 parser
+更窄。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3NwZWMucnM=">V2
+工具 schema<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvcm9sZS5ycw==">角色描述构造<i class="fa fa-external-link-alt"></i></span>
+与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">fork
+参数解析<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="并行受容量与登记机制控制">3. 并行受容量与登记机制控制</h2>
+<p>spawn 不只是创建 thread。控制器会先登记 membership、检查 execution
+capacity，并通过 registry 预留 spawn slot；V2 resident 模式还有对应的
+residency slot。成功后才 commit 这些登记。源码也有
+<code>PendingSpawn</code>，在创建尚未完成时暂时持有 agent-tree
+membership，避免一个“待完成 spawn”失去树上的归属。</p>
+<p>execution capacity 对应的是正在执行的 V2 子 Agent turn：session 用
+effective V2 max-thread 设置初始化 limiter；turn 开始时取得 RAII
+guard，并由 task 持有到执行结束。spawn 阶段的 capacity 检查、turn 的执行
+permit、registry 的 thread 记账和 resident slot 是不同层的控制。</p>
+<p>本机二进制字符串里出现了
+<code>max_concurrent_threads_per_session</code>、<code>min_wait_timeout_ms</code>、<code>max_wait_timeout_ms</code>
+等配置名，以及“pending spawn must own agent-tree
+membership”一类错误文本。这些只能证明该构建包含相关配置与防护逻辑；没有检查运行时最终配置，不能据此给出具体并发上限。</p>
+<p>spawn
+路径还为失败和取消准备了回滚边界。线程建好后，<code>PendingSpawn</code>
+暂时持有 child 与 agent-tree membership；只有首条输入被接收后才
+<code>disarm</code> 并提交 registry/residency
+reservation。若此前发生错误，drop 清理会异步移除并停止 child、尽可能丢弃
+rollout，等待可能尚未结束的 spawn-edge 写入，再把边标成 closed 并释放
+membership。未提交的 registry reservation 也会通过 drop 归还计数与预留
+path。这里是源码规定的清理流程，不是本次故障注入的运行时观察。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bl9ndWFyZC5ycw==">spawn
+guard<i class="fa fa-external-link-alt"></i></span> 与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvcmVnaXN0cnkucnM=">registry
+reservation<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="wait_agent-等待的是活动不是-join">4. <code>wait_agent</code>
+等待的是活动，不是 join</h2>
+<p>V2 <code>wait_agent</code> 没有 <code>targets</code> 参数。它按当前
+sub-turn 找到对应的 turn state，然后订阅 session input queue 的
+activity；订阅发生在检查 pending activity
+之前，避免错过已经排队的活动。已有的 user input 或 function-call output
+被归为 steer；pending inter-agent communication 被归为
+mailbox，若两类都在 pending turn state 中，steer
+优先。新消息成功加入当前 turn mailbox、session mailbox 入队或显式
+mailbox 通知会发布 mailbox activity；新输入并入 turn queue 会发布
+steer。若已有 pending activity，handler 立即返回；否则等待 watch channel
+变化或 deadline。结果分为 mailbox activity、被新输入
+steer、超时三类。超时来自请求值或配置默认值：低于配置下限会抬到下限，高于上限则返回参数错误；源码默认下限为
+10 秒、默认值 30 秒、硬上限 1 小时，配置可改变这些值。channel 是 watch
+型，重复变化可能合并，handler 读取唤醒时的当前 activity。</p>
+<p>因此 V2 版本不是按 child ID 做 <code>join(child)</code>：它不查看某个
+child 的终态，mailbox activity 或 steer
+都可能结束本次等待；<code>timed_out</code> 只在 deadline/channel
+关闭时为 true。实际 V2 completion result 使用单独的 inter-agent message
+路径，等待被 mailbox activity
+唤醒也不等同于父模型已经消费了结果。具体实现见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3dhaXQucnM=">V2
+wait handler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9pbnB1dF9xdWV1ZS5ycw==">input
+queue activity<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29uZmlnL21vZC5ycw==">timeout
+defaults<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>同名 legacy <code>wait_agent</code> 是另一种契约：它接收
+<code>targets</code> thread ID 列表并订阅各目标的
+status，最先到达终态的目标会结束等待；多个目标同时已终态或在首次完成时已就绪的结果可以一起返回。没有目标时不会等待，timeout
+必须为正数，再 clamp 到默认范围。结果包含已观察到的目标状态和
+<code>timed_out</code>。所以需要区分版本：V1 是“等指定 child 状态”，V2
+是“等当前 turn 的输入队列活动”。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzL3dhaXQucnM=">legacy
+wait handler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3dhaXQucnM=">V2
+wait handler<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3NwZWMucnM=">tool
+schemas<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>V2 工具说明称 mailbox 更新会返回“哪些 agent 有更新”的摘要，但当前
+handler 的实现只返回固定的三种 <code>message</code> 和
+<code>timed_out</code>，输出 schema 也没有 agent
+列表或更新内容字段。因此这段说明不能当成实际 wait 结果会指出具体
+child；具体消息内容仍需从 parent turn 的 mailbox/model context
+读取。这是匹配 tag
+内部的描述与返回结构差异，不代表某次在线会话的模型行为。</p>
+<p>还有一个时序边界：<code>wait_agent</code> 的初始 pending 检查通过
+<code>has_pending_mailbox_items()</code> 判断 session mailbox
+是否非空，这个检查不读取当前 turn 的
+<code>MailboxDeliveryPhase</code>。但真正把 mailbox 通信加入当前 turn
+输入队列时，会检查该阶段；队列读取路径也只在 <code>CurrentTurn</code>
+时才 drain mailbox。助手输出可见 final-answer 文本后，源码会把 mailbox
+delivery 推迟到
+<code>NextTurn</code>（若仍有明确的同轮工作则保留当前轮）；后续工具调用、需要
+follow-up 的模型输出或新 steer 输入会重新开放当前轮。于是，wait 因
+mailbox
+队列活动而返回，并不保证该消息能进入当前这次模型请求；它可能仍留待下一轮。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9pbnB1dF9xdWV1ZS5ycw==">mailbox
+phase 与输入队列<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc3RyZWFtX2V2ZW50c191dGlscy5ycw==">final-answer
+阶段切换<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3dhaXQucnM=">V2
+wait<i class="fa fa-external-link-alt"></i></span>。这是匹配 tag 的静态源码结论，尚未通过在线 session
+时序实验验证。</p>
+<p>本机二进制中还能找到
+<code>spawn</code>、<code>wait</code>、<code>list_agents</code>、<code>send_message</code>、<code>followup_task</code>、<code>interrupt_agent</code>
+等 V2 handler 名称，也能找到 legacy agent handler
+符号。它们说明构建中存在这些操作面；不同版本、feature flag
+和产品界面暴露哪些工具，需要另外确认。</p>
+<h3 id="一个会话为什么走-v2版本选择顺序">一个会话为什么走
+V2：版本选择顺序</h3>
+<p>在这份匹配版本源码里，<code>features.multi_agent_v2</code>
+的显式配置覆盖会选 V2；全局 agent 功能明确禁用时选择 Disabled。否则新
+child 会先尝试从 parent/source 或 fork/resume history
+继承版本，再回退到配置特性：Collab 对应 V1，没有开启则
+Disabled。旧历史若没有记录版本元数据，会按 V1 恢复。turn
+初始化还会读取模型元数据作为候选版本，但配置覆盖优先；会话确定版本后会记入
+session 状态。</p>
+<p>所以二进制里存在 V2 handler，并不能证明某一个窗口或会话实际用了
+V2。最终分支还取决于 feature/config、模型元数据、parent/history 继承和
+session 初始化。后来我对本次研究所用的 Codex Desktop
+会话做了结构化核对：rollout 的 <code>session_meta</code> 标记
+<code>originator=Codex Desktop</code>、版本
+<code>0.162.0-alpha.17.2</code>，48 条 <code>turn_context</code>
+全部记录 <code>multi_agent_version=v1</code>。桌面 app-server
+正在使用的本机状态库中，该 thread 没有
+<code>agent_path</code>，<code>thread_spawn_edges</code>
+没有指向它或从它发出的边；thread-history 投影中也没有
+<code>collabAgentToolCall</code> 或 <code>subAgentActivity</code>
+项。因此，现有证据支持“本次研究会话记录为 V1，且没有观察到子 agent
+或持久化 spawn
+关系”；它不代表其他会话或桌面默认值，也不排除未写入这些记录面的其他执行路径。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29uZmlnL21vZC5ycw==">Config
+版本优先级<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdGhyZWFkX21hbmFnZXIucnM=">spawn
+版本继承与回退<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">历史版本恢复<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>紧接着我做了一个反向验证：用同一嵌入式 CLI 启动全新的
+<code>exec</code>，传入
+<code>--ignore-user-config --enable multi_agent --disable multi_agent_v2</code>，只要求创建一个固定回复的
+child。单独运行的 <code>features list --disable multi_agent_v2</code>
+显示 V2 为 <code>false</code>；<code>debug models</code> 的输出也把
+<code>gpt-6.1-sol</code> 标成 <code>v1</code>。但该新 exec 的 rollout
+<code>turn_context</code> 仍记录
+<code>multi_agent_version=v2</code>，实际 spawn 调用使用 V2 形状并只返回
+<code>task_name</code>，child 正常返回固定文本。匹配 tag 的 selector
+代码说明，关闭 <code>multi_agent_v2</code> 只会取消配置对 V2
+的强制选择；只要 agents 仍启用，它会继续检查当前 turn 的
+<code>ModelInfo.multi_agent_version</code>，缺值时才回退到 feature
+fallback。源码还澄清了观测口径：<code>codex debug models</code>
+会自行构造配置和模型管理器，再输出一次
+<code>raw_model_catalog</code>；会话则从其模型管理器取活动目录，按当前模型名匹配候选并生成
+<code>ModelInfo</code>。两个调用位于独立命令/会话上下文，不能把 debug
+输出当作该 turn 实际消费的元数据快照。匹配 tag 的
+<code>with_config_overrides</code> 不会改写
+<code>multi_agent_version</code>，所以配置覆盖不是目前已知的差异来源。只读检查本机模型缓存时，只取出
+<code>gpt-6.1-sol</code> 的版本字段和缓存时间：该缓存记录为
+<code>v1</code>，<code>fetched_at=2026-10-13T10:35:56Z</code>；而探针
+rollout 创建于 <code>10:28:48Z</code>，所以这是探针之后的目录快照。匹配
+tag 的默认缓存 TTL 为 300
+秒；源码和时间戳说明缓存会刷新，但不揭示探针当时 session
+内存里的目录值。当前可确认的是：这次 turn 最终得到的版本与单独
+<code>debug models</code>
+输出的版本不同；可能的目录/上下文差异有源码路径支撑，但尚未直接观测本次会话使用的候选
+<code>ModelInfo</code>，因此具体差异来源仍未知。<code>--disable multi_agent_v2</code>
+不是已验证的强制 V1 方法。证据来自本机 CLI rollout/命令输出及匹配 tag 的
+<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/session/mod.rs#L4019-L4031"><code>resolve_multi_agent_version_for_model</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/config/mod.rs#L1487-L1512"><code>multi_agent_version_for_model</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/cli/src/main.rs#L2093-L2121"><code>debug models</code>
+实现</a>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvbW9kZWxzLW1hbmFnZXIvc3JjL21hbmFnZXIucnMjTDIxMi1MMjI0">模型目录候选匹配<i class="fa fa-external-link-alt"></i></span>
+与 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/models-manager/src/model_info.rs#L19-L58"><code>ModelInfo</code>
+配置覆盖</a>。静态源码确认 selector
+的输入/优先级和两种查询的处理流程，不确认本次 turn
+实际采用的目录内容；该探针仅代表本次新建 <code>exec</code>。</p>
+<h3 id="v2-工具表面也受配置控制">V2 工具表面也受配置控制</h3>
+<p>匹配 tag 的 <code>MultiAgentV2Config::default()</code>
+中，<code>wait_agent_enabled</code>、<code>expose_spawn_agent_model_overrides</code>
+默认开启，<code>disable_direct_message</code>
+默认关闭，<code>hide_spawn_agent_metadata</code> 和
+<code>non_code_mode_only</code>
+默认开启。这是源码默认值，解析后的配置可以覆盖。tool plan 还会先检查当前
+turn 是否允许 collaboration tools、版本是否为
+V2；<code>non_code_mode_only</code> 会在
+<code>ToolExposure::DirectModelOnly</code> 与 <code>Direct</code>
+之间选择。<code>disable_direct_message</code> 会同时省略
+<code>send_message</code> 和 <code>followup_task</code>，而
+<code>wait_agent_enabled</code> 单独控制 <code>wait_agent</code>
+是否注册。spawn schema 里的 agent type、model、reasoning
+字段还受各自配置控制。</p>
+<p>这些规则解释了为什么只看到某个 handler 的二进制字符串，无法推出当前
+session 的模型实际收到了哪些工具。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29uZmlnL21vZC5ycw==">V2
+默认配置<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvc3BlY19wbGFuLnJz">tool
+plan 注册条件<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3NwZWMucnM=">spawn
+schema<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="send_message-排队followup_task-触发新一轮">5.
+<code>send_message</code> 排队，<code>followup_task</code>
+触发新一轮</h2>
+<p>这两个工具共用一条消息处理路径：先拒绝空白消息，再把目标解析成 thread
+ID，从调用方当前 turn 构造恢复配置，提交
+<code>AgentInput::Message</code>，成功后向调用方会话发出
+<code>Interacted</code> 活动。它们的关键差别是 delivery
+mode：<code>send_message</code> 使用
+<code>QueueOnly</code>，<code>followup_task</code> 使用
+<code>TriggerTurn</code>。这不是两个不同的消息格式，而是两种不同的投递与唤醒策略。</p>
+<p>对已加载的子 Agent，<code>send_message</code> 把普通通信放进它的
+session mailbox；若子 Agent 正在运行且当前 turn 接受 mailbox
+输入，它可能在该 turn
+中收到消息，否则消息留待之后处理。目标未加载时，消息保存在本地 runtime
+mailbox，之后加载 session 再转入输入队列。普通空闲 session 收到
+<code>QueueOnly</code> 消息不会因此自动开新 turn；源码里只有存在 durable
+sleep 时，队列处理才会额外尝试唤醒。</p>
+<p><code>followup_task</code> 则会确保 V2 目标 session
+已加载，并把通信标成 trigger turn。明文消息类型是
+<code>NewTask</code>；加密消息通过通信对象上的 trigger
+标志表达同样的唤醒意图。session 在有待处理 mailbox
+消息且当前空闲时，由共享 pending-work scheduler 创建普通 turn。触发式
+follow-up 还会检查执行容量，并拒绝把 root agent 作为目标。</p>
+<p>如果目标 child 已从内存卸载，恢复使用原 thread ID
+和保存的会话历史/rollout，并要求历史记录仍属于 V2；它不会走 spawn
+路径再造一个
+child。由父代理主动执行的恢复会验证父线程仍在运行、父子关系一致且共享同一
+runtime registry。<code>followup_task</code> 的 sender-driven
+路径没有传入 parent 对象，因此由控制器根据保存的 child
+source、历史和恢复配置重新加载。换句话说，follow-up
+可以唤醒一个已卸载的现有
+child，但“能否恢复”仍受保存状态与当前配置校验约束。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">V2
+恢复实现<i class="fa fa-external-link-alt"></i></span> 和<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9hcGkucnM=">消息发送入口<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>两种恢复入口重建配置的方式并不相同。父线程主动恢复时，controller
+从父线程当前 turn 生成 child 配置，再恢复 child 保存的 reasoning
+effort、model 和 provider；若 source 指定了 agent role，则重新应用
+role，但保留当前 approval policy、cwd 和 permission-profile
+snapshot。执行策略若已不再符合父子继承条件，恢复会失败。缓存的环境选择还要与父线程当前
+ready environment 的 ID、cwd 和 workspace roots 精确匹配；pending/failed
+状态会被拒绝，配置不一致也会被拒绝。对于本地执行器，旧 child
+权限会与当前 owner
+权限求交；远端执行器出现权限变化时则拒绝恢复。这些检查说明恢复不会直接把旧权限当作仍然有效。源码见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">V2
+恢复与环境校验<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>消息工具触发的恢复没有传入 parent 对象。它沿 child 保存的
+<code>ThreadSpawn</code> source
+查找已加载父线程，以便继承环境快照；执行策略只有通过父子兼容检查才会继承。该路径没有从
+parent 对象传入 client MCP extensions。父线程已加载时会读取它的
+inherited instructions；否则回退到共享 instructions
+provider。也就是说，“恢复原 child”明确保留 thread/history
+身份，但运行配置是否从当前父线程重建，取决于调用入口。相关来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">环境与执行策略继承<i class="fa fa-external-link-alt"></i></span>
+与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">V2
+恢复实现<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>因此，<code>send_message</code>
+更像投递一条稍后可读的协作消息，<code>followup_task</code> 更像给指定子
+Agent 安排后续一轮。两者工具调用成功并发出
+<code>Interacted</code>，都只证明通信被接受或留存，不能单凭这个活动断言目标模型已读取消息。以上来自匹配版本源码静态分析，没有在本机实际启动子
+Agent 做运行时验证。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL21lc3NhZ2VfdG9vbC5ycw==">共享消息处理器<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NlbmRfbWVzc2FnZS5ycw==">send_message<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL2ZvbGxvd3VwX3Rhc2sucnM=">followup_task<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9hcGkucnM=">controller
+投递<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9oYW5kbGVycy5ycw==">session
+mailbox 处理<i class="fa fa-external-link-alt"></i></span> 和<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdGFza3MvbW9kLnJz">待处理工作调度器<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3 id="中断关闭与恢复是不同动作">中断、关闭与恢复是不同动作</h3>
+<p>V2 <code>interrupt_agent</code>
+先读取目标当前状态，再派发中断，并把中断前的状态作为工具结果返回；成功路径会在调用方会话上发
+<code>Interrupted</code> 活动。它拒绝 root 和 self
+target。若目标已卸载或内部 session 已结束，中断派发遇到对应的
+not-found/dead
+错误会按成功处理，而且中断路径本身不会为了操作去重载目标。因此这个活动说明工具走完了可接受的中断路径，不单独证明目标当时确有运行中的
+turn 被取消；返回的 status 也是派发前快照。</p>
+<p>中断不会把子 Agent 从树中关闭。显式 <code>close_agent</code>
+才会先把持久化 spawn edge 标为
+closed，再关闭目标及当前仍存活的后代；普通 shutdown
+会移除运行时登记，但源码刻意不在该操作本身关闭 spawn edge。之后的
+<code>followup_task</code> 则走触发新 turn 的消息路径，并确保 V2 子
+Agent session 已加载。因此界面上的 <code>Interrupted</code> 活动、Agent
+当前状态和 spawn-tree
+边是否关闭，应分别理解。以上是匹配版本源码静态路径，没有进行本机中断/恢复实验。见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL2ludGVycnVwdF9hZ2VudC5ycw==">V2
+interrupt handler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9pbnRlcnJ1cHQucnM=">interrupt
+controller<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9sZWdhY3kucnM=">shutdown
+与 close<i class="fa fa-external-link-alt"></i></span> 和<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9hcGkucnM=">触发式消息加载路径<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>状态映射里，显式中断和 budget-limited abort 都会成为
+<code>Interrupted</code>。这个状态在 agent status 逻辑中不算
+final，普通完成消息格式化也会跳过它；因此不能把“被中断”当成“正常完成但结果为空”。不过
+residency 管理采用另一套条件：只要没有活动 turn、durable sleep 或
+trigger-turn mailbox 项，<code>Interrupted</code> 与
+<code>Completed</code>、<code>Errored</code>
+一样可以从内存卸载。结合上面的 spawn edge 语义，这意味着 child
+可以处于非 final、已卸载、关系边仍打开的状态，之后再通过 follow-up
+恢复。相关来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvc3RhdHVzLnJz">状态映射<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbl9wcmVmaXgucnM=">完成消息格式化<i class="fa fa-external-link-alt"></i></span>
+和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9yZXNpZGVuY3kucnM=">residency
+淘汰条件<i class="fa fa-external-link-alt"></i></span>。以上仍是静态源码分析，没有做本机中断、淘汰和恢复实验。</p>
+<p>同一组工具中的 <code>list_agents</code> 也有明确边界：它先从内存
+registry 取得 agent metadata，再查询 thread manager 的已加载 session
+并读取状态；当前没有加载的已知 child 会被跳过。可选
+<code>path_prefix</code> 按调用者自己的 agent path 解析。根 Agent
+只有在其 thread 已加载时才会出现在结果里。因此这个工具适合看当前 runtime
+中可见的 agent 状态，不能当作完整的历史子线程目录；桌面 UI 另有持久化
+<code>thread/list</code> 与历史发现路径。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL2xpc3RfYWdlbnRzLnJz">V2
+list handler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">AgentControl
+list implementation<i class="fa fa-external-link-alt"></i></span> 和<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvcmVnaXN0cnkucnM=">registry
+view<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="完成通知按-agent-版本分流">6. 完成通知按 agent 版本分流</h2>
+<p>与本机 CLI 版本号对应的公开 tag
+源码中，<code>control.rs::maybe_start_completion_watcher</code> 是
+legacy 路径。它只接受带结构性 parent 的 <code>ThreadSpawn</code>
+来源，并先向 agent-tree runtime 登记 watcher 工作；fresh spawn 和 resume
+两个调用点都只在有效版本不是 V2 时启动它。状态订阅先发当前快照，再发
+Tokio watch channel
+合并后的变化；若订阅建立失败，或流结束/出错前没有观察到终态，就回查一次当前状态。<code>Completed</code>、<code>Errored</code>、<code>Shutdown</code>、<code>NotFound</code>
+属于终态；<code>PendingInit</code>、<code>Running</code>、<code>Interrupted</code>
+不属于终态，所以单次 interrupt 不会触发完成通知。树级 shutdown
+取消会中断等待；若最终状态是 <code>Shutdown</code>
+且树正在关闭，也会抑制它，避免把生命周期清理当成 child
+结果。其余终态按路由分支交给 parent：child 有 agent path 且状态显示为 V2
+时，发送 <code>trigger_turn=false</code> 的 inter-agent result
+message；否则注入不启动 parent turn 的
+<code>SubagentNotification</code>。V2 发送错误会被忽略，parent 不存在或
+path/message 构造失败则直接结束。watcher 的 teardown guard
+会随任务完成释放；任务异常退出而未标记完成时，会把 agent-tree shutdown
+记为失败。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">watcher
+实现<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC93YXRjaC5ycw==">状态订阅<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvc3RhdHVzLnJz">终态判定<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9ydW50aW1lLnJz">tree
+runtime 生命周期<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">fresh/resumed
+spawn 调用点<i class="fa fa-external-link-alt"></i></span>。这是匹配 tag 的源码行为，没有捕获在线 watcher
+事件。</p>
+<p>同一版本 tag 中，V2 的调用链是另一条：child session 发出
+<code>TurnComplete</code> 或 <code>TurnAborted</code>
+时，<code>Session::send_event</code> 会进入
+<code>maybe_notify_parent_of_terminal_turn</code>；该方法先要求版本为
+V2、来源是带 agent path 的
+<code>ThreadSpawn</code>，再从终态事件和已记录错误构造
+<code>AgentTurnOutcome</code>，交给
+<code>AgentControl::turn_finished</code>。控制器随后由
+<code>completion.rs::notify_parent_of_terminal_turn</code>
+路由结果。成功完成且有 parent turn id 时会发
+<code>SubAgentActivityKind::Completed</code>，之后按终态构造结果消息并排入
+parent 通信队列，<code>trigger_turn</code> 为 false。错误终态使用相应的
+completion 文案，部分拒绝错误有专门处理。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">Session
+终态事件调用链<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJz">terminal
+outcome 路由实现<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>这条 V2 结果路径还有一个边界：状态映射把普通 <code>Interrupted</code>
+视为非 final，<code>maybe_notify_parent_of_terminal_turn</code>
+因而不会为普通中断调用 <code>turn_finished</code>；它也只响应
+<code>TurnComplete</code> / <code>TurnAborted</code>，所以单独的
+<code>ShutdownComplete</code> 不会由此生成 parent 结果消息。Guardian 的
+<code>TooManyDenials</code> 中断是特例：session 会把它映射为
+<code>Errored</code> 并附带错误类型，再走结果路由。child
+自己的终态事件仍会被发送和记录，但这与父端 completion
+通知是两件事；静态源码不能据此判断桌面 UI
+是否通过其他状态读取及时呈现中断。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">Session
+事件过滤与 outcome 构造<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGMwZTFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvc3RhdHVzLnJz">状态映射<i class="fa fa-external-link-alt"></i></span>
+和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbl9wcmVmaXgucnM=">状态消息格式化<i class="fa fa-external-link-alt"></i></span>。</p>
+<p><code>Completed</code> 活动本身不是结果消息：协议项只有 activity
+id、kind、child thread id 和 agent
+path，没有正文。控制器把它作为即时完成项发到活动接收者的
+session，依次产生 <code>ItemStarted</code> 与
+<code>ItemCompleted</code>；app-server v2 使用 canonical
+<code>TurnItem</code> 生命周期，旧 <code>SubAgentActivity</code> event
+仍为 rollout/raw-event 兼容消费者转发。随后构造的完成文本才是单独的
+<code>InterAgentCommunication</code>，发往结构性 parent。桌面端又把
+child 的状态与 final response 分开读取。因此 “活动显示
+Completed”“结果消息成功入队”“面板取得最终回复”分别代表三件事。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvcHJvdG9jb2wvc3JjL3Byb3RvY29sLnJz">活动协议与项类型<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">活动发射<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvYmVzcG9rZV9ldmVudF9oYW5kbGluZy5ycw==">app-server
+生命周期处理<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>活动发射是 best-effort 且要求 activity recipient 的 session 当时可从
+runtime 取到；路径解析失败或 <code>get_thread</code>/发事件失败只记
+debug 日志，控制器仍继续向结构性 parent 投递结果通信。结果投递另有
+queued/failed 指标。因此如果发起者不是结构性 parent，发起者的 Completed
+活动可能缺失，而结构性 parent
+仍收到结果；两条通道的送达情况需要分别判断。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJz">activity
+recipient 与错误处理<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">runtime
+thread 查找<i class="fa fa-external-link-alt"></i></span>。这是静态源码控制流，不表示本机曾发生该失败。</p>
+<p>完成活动和结果消息也不一定发给同一个 agent。若 child turn 记录的
+<code>initiating_agent_path</code> 与其结构性 parent path
+不同，源码会尝试把 <code>Completed</code> activity 发给这次 follow-up
+的发起者；完成结果消息则仍按 <code>parent_thread_id</code> 发送给结构性
+parent，并保持 <code>trigger_turn=false</code>。trigger turn
+的发起者信息来自 inter-agent 输入的 author，或 turn-start
+options，再写入 turn
+metadata。因此活动归属反映“谁请求这轮任务”，结果归属仍反映“child
+属于谁”。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdGFza3MvbW9kLnJz">turn
+metadata 生成<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuX2lucHV0LnJz">turn
+input<i class="fa fa-external-link-alt"></i></span> 与 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJz">完成路由<i class="fa fa-external-link-alt"></i></span>。这是静态源码路径，未运行嵌套
+child 实验。</p>
+<p>这两套实现都说明：<strong>状态/活动事件与结果消息不是同一个事件</strong>，而且排入
+parent 队列不等于 parent 模型已经消费并整合了答案。客户端另外有一个针对
+<code>/flora/subagent/thread/turns</code>
+的查询模块，会在有可用记录时选择 child 的最新 final
+answer；那属于另一条结果展示/读取路径。尽管版本号相同，公开源码 tag
+与本机安装包之间仍缺少构建来源证明；以上版本分流描述的是被检查的 tag
+源码，并由本机符号/字符串作静态交叉佐证。</p>
+<p>我继续追踪 <code>trigger_turn=false</code> 的结果消息如何进入
+parent。若 parent session 已加载，控制器把通信交给 session
+mailbox；消息可在当前 turn 仍接受 mailbox 输入时进入该
+turn，否则会留在队列里供后续 turn 收取。若 parent
+未加载，消息先保存在本地 agent runtime mailbox，session
+下次加载时再转入输入队列。parent turn
+真正处理队列项时，<code>InterAgentCommunication</code> 会转成带
+author、recipient 和正文的 <code>AgentMessage</code>，写进会话历史与
+rollout，再参与模型上下文构建。因此，<strong>子 Agent
+已完成、完成活动已显示、结果消息已入队、结果已进入父会话上下文、模型实际采样并使用结果</strong>仍是不同阶段。源码能证明路由、队列到历史的转换，不证明某次在线请求确实使用了结果。具体见
+<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control.rs"><code>control.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/mailbox.rs"><code>mailbox.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/session/handlers.rs"><code>handlers.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/session/input_queue.rs"><code>input_queue.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/hook_runtime.rs"><code>hook_runtime.rs</code></a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/protocol/src/protocol.rs"><code>protocol.rs</code></a>。</p>
+<p>再看协议表示时，完成文本的包装层容易造成误读：<code>InterAgentCompletionMessage</code>
+实现的 contextual fragment role 是 <code>assistant</code>，但 V2
+completion 路径只调用它的 <code>render()</code>
+取正文，随后把这段文本放入 <code>InterAgentCommunication</code>。协议的
+<code>to_model_input_item()</code> 最终生成
+<code>ResponseItem::AgentMessage</code>，带 child author 与 parent
+recipient，明文内容是一个 <code>InputText</code>；它不是普通
+<code>ResponseItem::Message { role: "assistant" }</code>。因此应按
+agent-to-agent 消息理解它的身份，而不能仅根据格式化器上的
+<code>role()</code>
+推断父模型历史里的消息类型。<code>record_inter_agent_communication</code>
+会先将该 <code>AgentMessage</code> 准备为 history item、赋 input
+order，再写入 session history 和 rollout，最后发送对应 raw response item
+事件。静态源码能证明这个类型转换与记录次序，不证明任何具体请求实际采样或理解了该文本。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29udGV4dC9pbnRlcl9hZ2VudF9jb21wbGV0aW9uX21lc3NhZ2UucnM=">completion
+message fragment<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvcHJvdG9jb2wvc3JjL3Byb3RvY29sLnJz">communication
+protocol conversion<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">session
+history/rollout recording<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>成功完成结果里的 <code>last_agent_message</code> 也不等于 UI
+查询明确优先的 <code>final_answer</code>。源码将 assistant
+<code>Message</code> 解析成
+<code>AgentMessage</code>；在最终化时，把正文各文本片段拼接，空白正文变成
+<code>None</code>，非空正文成为候选 last message。这个提取没有按
+<code>phase</code> 过滤；phase 在旁边用于判断是否延后 queue-only
+mailbox。随后 turn 逻辑把最近一次采样返回的候选值带进
+<code>TurnComplete</code>，完成通知再复制它作为 payload。相比之下，桌面
+UI 的独立查询明确先找
+<code>phase=final_answer</code>，没有时才退回最近非空 agent
+message。因此源码里的“child completion payload”和 UI 的“优先 final
+answer”是两种选择规则；静态分析不能证明某次运行里最后一条消息属于什么
+phase。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvZXZlbnRfbWFwcGluZy5ycw==">assistant
+item 到 turn item 的映射<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc3RyZWFtX2V2ZW50c191dGlscy5ycw==">turn
+item 最终化与文本提取<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJz">turn
+结果回传<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvd2Vidmlldy9hc3NldHMvY2hhdGdwdC1zdWJhZ2VudC1maW5hbC1yZXNwb25zZS1xdWVyeS1iMmI2ODE2ZTgxZGYuanM=">UI
+final response query<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>结果正文的大小处理也不对称：<code>format_inter_agent_completion_message</code>
+对错误状态的错误文本按 <code>Tokens(900)</code> 截断，常量为 1,000-token
+消息目标并预留 100 tokens 给信封；成功状态则直接复制
+<code>last_agent_message</code>，这层没有同样的截断调用。因此这里只能说错误文案在该格式化层有明确截断，而成功结果没有看到同层截断；不能据此推断完整模型上下文或其他传输层没有自己的预算/限制。见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbl9wcmVmaXgucnM=">完成消息格式化<i class="fa fa-external-link-alt"></i></span>
+和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvY29udGV4dC9pbnRlcl9hZ2VudF9jb21wbGV0aW9uX21lc3NhZ2UucnM=">结果消息结构<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="ui-显示的是协作事件的投影">7. UI 显示的是协作事件的投影</h2>
+<p>应用 JavaScript bundle 中观察到两类相关结构：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>结构</th>
+<th>能看到的字段</th>
+<th>UI 侧用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex_collab_agent_tool_call</code></td>
+<td>tool、status、sender/receiver thread ids、prompt、agentsStates</td>
+<td>表示 spawn、send input、resume、wait、close
+等协作工具调用及其状态</td>
+</tr>
+<tr>
+<td><code>codex_sub_agent_activity</code></td>
+<td><code>agentPath</code>、<code>agentThreadId</code>、kind、id</td>
+<td>表示 started、interacted、completed、interrupted 等子 Agent
+活动</td>
+</tr>
+</tbody>
+</table>
+<p>bundle 把活动状态映射成 waiting、working、done、failed，并分组放进
+Active / Done。换言之，界面列表是控制层事件的呈现结果，不是 Agent
+调度本身；UI 的 <code>completed</code>
+也不等于上文所说的结果消息必然已被主模型消费。</p>
+<h3 id="本机桌面端的-subagents-面板如何读取和打开-child">7.1
+本机桌面端的 Subagents 面板如何读取和打开 child</h3>
+<p>我从本机 <code>app.asar</code> 单独提取并检查了 Codex 专用资源
+<code>local-conversation-subagents-panel-tab-2ab06de7bd1d.js</code>、<code>open-local-conversation-subagents-panel-5abfac9190b9.js</code>、<code>subagents-6af1a27d0027.js</code>、<code>verify-descendant-d02f27822163.js</code>
+和
+<code>chatgpt-subagent-final-response-query-b2b6816e81df.js</code>。这些文件补上了
+UI 到本地 thread store 的若干边界，但静态 bundle
+仍不能证明一次实际会话走过这些路径。</p>
+<ul>
+<li>面板列表调用
+<code>getSubagentDescendantSnapshot(parentConversationId)</code>，并使用返回的后代线程构建列表；状态
+<code>waiting</code> 单独计数，<code>done</code> 进入 Done
+区，其余状态归在 Active
+区。列表只取前四条显示，缩略视图的数据来源则是已加载的后代快照。</li>
+<li>继续追面板打开器和快照订阅后，可以把“看见已有
+child”和“重新发现子树”区分开：列表与 thumbnail 只调用
+<code>getSubagentDescendantSnapshot</code> 读取当前 store
+中已知的后代；该 getter 返回
+<code>isComplete: false</code>，并不主动扫描。面板打开路径本身没有调用
+<code>discoverSubagentDescendantSnapshot</code>。新 spawn 的 item
+通知会另行触发
+<code>discoverForSpawn</code>，这是事件驱动的拓扑发现路径，不能据此说每次打开面板都会重新查询。</li>
+<li>选择 child 会把它的 conversation id 写进面板的 durable
+route；详情视图从该 child 的 thread store 读取模型、reasoning
+effort、status、objective、status summary 和 transcript。这里打开的是
+child 的 thread/transcript 视图，不是重新 spawn 一个 Agent。</li>
+<li>入口来自本地线程页：同一 <code>onOpenSubagentsPanel</code>
+回调被接到线程摘要 popover 和 utility bar；摘要行在存在符合条件的后台
+Agent 时提供无障碍标签为 “Open subagents” 的按钮，打开概览。点具体 child
+头像时，线程页检查 <code>canInteract</code>：可交互的 child
+走直接打开路径；不可交互时打开 Subagents 面板，并把当前 parent 的
+<code>conversationId</code>、解析出的 <code>hostId</code>、被选 child 的
+<code>conversationId</code> 与显示名传给 opener。静态 bundle
+显示的是参数传递，不证明所有 UI 状态下入口都可见。</li>
+<li>这里的 <code>canInteract</code> 是桌面端从 parent turn 中的 subagent
+引用整理出的 UI 路由字段：<code>collabAgentToolCall(spawnAgent)</code>
+会将它设为 true；之后的 collab tool 引用独立地沿用已有 true
+值。<code>resumeAgent</code> 遇到前一引用为 <code>closeAgent</code>
+时的特殊分支只影响归并出的 tool 字段，不会清除
+<code>canInteract</code>。<code>subAgentActivity</code> 则只在 parent
+turn key 相同时保留该字段，否则回落为
+false。面板头像点击用它选择“直接打开 background agent”还是“转到
+Subagents 面板”。它说明客户端如何分流，不足以单独证明服务端授权或 child
+当前是否正在运行。</li>
+<li>两条打开路径的 UI 容器也不同：直接打开器先激活 child 的 thread
+summary、确保首屏已载入，再创建/复用 <code>background-agent</code>
+durable tab；Subagents opener 则创建或更新右侧 <code>subagents</code>
+panel tab，并把 child id 放入其 route 参数。两者都以 child conversation
+id 定位，但一个直接进入 child tab，另一个保留父线程上下文并在侧栏呈现
+child。</li>
+<li>直接标签页的 transcript loader 另有按
+<code>(hostId, threadId)</code> 组成的历史查询；当缓存里没有可显示的
+background-history 数据时，它调用
+<code>loadBackgroundThreadHistoryPage(threadId, {prioritize: true})</code>。渲染时，<code>canInteract</code>
+和 <code>shouldResume</code> 都会在 archived 状态下被关闭，并且仍受 tab
+props 原值约束。面板详情的 transcript renderer 则显式以
+<code>canInteract: false</code>、<code>shouldResume: false</code>
+打开。可据此区分直接 child tab
+与只读侧栏详情的客户端行为；这不是服务端授权或实际请求成功的证据。</li>
+<li>继续追进共享线程 renderer 后，可以看到这两个 props
+对交互的具体影响：<code>canInteract</code> 为 false 时，renderer
+将线程设为只读并隐藏 composer；为 true 且没有 writer conflict 时才显示
+composer。<code>shouldResume</code> 与 <code>canInteract</code> 同时为
+true 时，renderer 才会把当前 child id 交给 resume 状态
+hook；不可用、resume 失败和 writer conflict 分别进入不同的错误/分支
+UI。侧栏详情明确把两项都设为 false，因此它不会通过这条 renderer 路径恢复
+child，也不显示输入框。以上仍是客户端控制流证据，不能推出后端会接受某次输入或
+resume 请求。</li>
+<li>继续看 <code>use-resume-conversation-if-needed</code>：hook 调用共享
+session client 的 <code>resumeConversation</code>，参数包含 child
+conversation id、thread access、当前 collaboration mode、workspace
+roots、权限默认值和可用的已知 catalog entry；它将 model/reasoning effort
+置空，并关闭 thread-goal resume confirmation。失败处理会单独识别 shared
+thread missing、archived session、writer conflict 和普通 resume
+错误；普通可重试错误有退避重试路径（初始 750ms、倍增、上限 60
+秒，计数阈值为 5）。另一个 effect 按 child id 监听共享状态：host
+映射可用且 child 状态满足检查时，它向 desktop bridge 发送
+<code>subagent-thread-full-fidelity-changed</code> enable；effect
+清理时发送 disable。由于 renderer 只有在 <code>canInteract</code> 与
+<code>shouldResume</code> 同时为 true 时才把 child 交给该
+hook，这个启停路径属于可交互 child renderer
+的客户端生命周期。它说明客户端如何尝试接续和提升 child
+数据流，不能证明一次请求成功，也不能据此推断后端内部实现。</li>
+<li>后续检查本机 ChatGPT 桌面包的 Electron 主进程 bundle
+后找到了接收端：webview 发出的
+<code>subagent-thread-full-fidelity-changed</code> 被主进程转交给对应
+host 的 app-server connection，并调用
+<code>setSubagentThreadFullFidelityForSurface(threadId, surfaceId, enabled)</code>；<code>surfaceId</code>
+取自桥接接收方的 <code>e.id</code>。app-server connection 按 child
+thread 保存启用该模式的 surface 集合；同一 child 可有多个
+surface，关闭一个 surface 只移除该 surface，窗口销毁时也会清理它在各
+child 上的登记。这里记录的是桌面客户端的流量订阅状态，不是 child
+的运行状态。</li>
+<li>app-server 只把具有
+<code>source.subAgent.thread_spawn.parent_thread_id</code> 的
+<code>thread/started</code> 线程识别为 subagent。full-fidelity surface
+ID 按 child thread 存在集合里，便于多个 surface
+各自启停和在窗口销毁时清理；但 delta 过滤条件只检查该 child
+是否登记了任意 surface，并不检查通知应发给哪个
+surface。命中放行条件后，通知进入 <code>broadcastToWindows</code>，其
+helper 会遍历所有仍有效的 window listener
+并逐个发送。因此静态代码显示：一个 surface 登记即可让该 child 的五类高频
+delta 在这条 connection 上向所有窗口广播；surface 集合负责启停/清理
+bookkeeping，不负责把接收者限制在登记它的窗口。过滤的五类方法是
+<code>item/agentMessage/delta</code>、<code>item/plan/delta</code>、<code>item/reasoning/summaryTextDelta</code>、<code>item/reasoning/textDelta</code>、<code>item/commandExecution/outputDelta</code>。通知处理器的内部回调和
+host event handler 先于这个 webview
+广播过滤运行。由此可解释客户端为何对后台 child 降低这类广播；可交互
+renderer 注册后则打开该 child 的全窗口 delta
+广播。证据只支持这一安装版本的桌面客户端分发路径，不能推成服务端停止生成或发送，也没有运行时抓包验证。</li>
+<li>该接收端来自本机 ChatGPT <code>26.1007.30912</code>（build
+<code>20156</code>）安装包。<code>app.asar</code> SHA-256 为
+<code>75e397e2280dde93b70a85aa926f4282c728eacc84dfeb15ba7fb6ddd84628af</code>；主进程
+<code>/.vite/build/main-CqEoQDOU.js</code> SHA-256
+<code>09d19386e1f23cf4ccbc950fc40d85a1e8a064a08be588b2a4be6a89f6ada9e6</code>，桥接接收字符串偏移
+<code>2104281</code>；<code>/.vite/build/src-BJv5Mk7n.js</code> SHA-256
+<code>72e2b366d574206f76fc079c79b64c31ce378970a797475ded8709908d338f08</code>，窗口广播
+helper <code>OR</code> 偏移
+<code>1146245</code>、<code>broadcastToWindows</code> 偏移
+<code>1151010</code>、surface 登记方法偏移
+<code>1202228</code>、过滤标记偏移 <code>1257229</code>。发送端 webview
+模块 SHA-256
+<code>2299468dc1ce305855a9fc93cd9d11c2956b60023563d8360483ee2d44a818f4</code>，与此前提取文件相同。以上哈希和偏移用于定位这一安装版本中的静态观察，不代表
+Codex 源码版本或所有平台版本。</li>
+<li>若选中的 child 或祖先尚未载入，打开器会先校验 ancestry 与
+host；在特定缺失分支中，它会 hydrate 父线程（含 turns），并对未载入的
+child 调用
+<code>loadBackgroundThreadHistoryPage</code>。这一步恢复的是用于详情显示的
+thread/history 数据。它与父线程后代拓扑的主动 <code>discover</code>
+是不同调用；静态代码只证明这些显式调用关系，不证明每次历史 hydrate
+都会在运行时引出其他通知。</li>
+<li>打开前的 <code>verify-descendant</code> 会沿
+<code>parentThreadId</code> 向上走到当前 parent，拒绝 parent
+自身、循环祖先链和 host 不匹配的线程；必要时先 hydrate 缺失祖先，再确保
+child 的首屏数据已载入。若详情不是当前 branch 上可用的后代，选择会被清回
+overview。</li>
+<li>对 <code>done</code> child，单独的最终回复 query 请求
+<code>/flora/subagent/thread/turns</code>，参数是 parent
+<code>conversationId</code>、child <code>threadId</code> 和
+<code>limit: 1</code>。它从返回记录末尾向前找非空
+<code>agentMessage</code>，优先返回
+<code>phase === "final_answer"</code> 的文本；没有 final phase
+时退回最近的非空 agent message。该请求以 parent、child 和 activation id
+组成 query key，不在窗口聚焦时自动重取；成功结果使用无限 stale
+time。若当前没有可用回复，查询会抛出专用错误，最多再重试两次，并使用带随机抖动、上限
+1 秒的退避；当 child turn 仍 live 时，重新 mount
+不会触发自动重试。结果不可用时 UI 会显示 loading 或 unavailable
+状态。这些是客户端缓存策略，不表示服务端最终回复何时可用。</li>
+</ul>
+<p>这些观察显示 UI 将<strong>后代发现、child 身份校验、transcript
+hydration 和 final-answer
+拉取</strong>作为独立步骤处理。<code>done</code> 状态与 final response
+数据到达也不是同一件事：详情可以显示
+Done，同时继续异步加载最终回复。接口名和请求路径仅是客户端观察，服务端实现、鉴权和响应的完整语义仍未知。</p>
+<h3 id="后代快照如何发现和补全">7.2 后代快照如何发现和补全</h3>
+<p>继续沿 bundle import 找到 <code>app-shared-8bd9d0399038.js</code>
+中的
+<code>SubagentTopology</code>。<code>getSubagentDescendantSnapshot</code>
+本身只是从 thread store 取已知后代，并附带
+<code>isComplete: false</code>；异步 <code>discover</code> 才会查找和
+reconcile。创建发现任务时会记录一份发现开始时的 runtime
+状态，完成后用它与读取结果合并，避免发现过程中到达的活动状态被旧历史覆盖。相同
+parent 的发现会复用 in-flight
+promise；直接子线程发现和整棵后代发现分别缓存。</p>
+<ul>
+<li>在支持 thread-list filters 的 host 上，发现逻辑用
+<code>thread/list</code> 按
+<code>sourceKinds: ["subAgentThreadSpawn"]</code>、未归档、创建时间倒序分页，且
+<code>useStateDbOnly: true</code>。服务端版本达到
+<code>0.143.0-alpha.16</code> 后请求 <code>ancestorThreadId</code>
+一次取后代；旧版本逐层用 <code>parentThreadId</code>
+查直接子线程并递归扩展。遇到重复 cursor 或查询结果早于 parent
+创建时间会停止继续翻页。</li>
+<li>不支持该过滤能力的 host 会从 child transcript/history 中找 spawn
+id：支持 <code>thread/items/list</code> 的路径读取 item 历史；paginated
+history 则扫描 <code>thread/turns/list</code> 的 turn
+items。可识别的记录包括 <code>subAgentActivity</code> 的
+<code>started/agentThreadId</code> 和 <code>collabAgentToolCall</code>
+的 <code>spawnAgent/receiverThreadIds</code>。</li>
+<li>发现时把已观察到的 spawn id 与历史发现的 id 合并，对尚未纳入快照的
+child 调
+<code>thread/read(includeTurns: false)</code>。读取结果必须匹配请求的
+child id 和预期 parent id；成功后递归发现该 child 的子树。补读最多两个
+child 并发，单个失败或身份不匹配会把整体结果标记为不完整，而不是将 child
+当作不存在。</li>
+<li>对尚未加载且使用 paginated history 的线程，会继续分页读取 turn items
+来重建嵌套 spawn 拓扑；对应读取失败也会保留“不完整”状态。spawn
+事件若只指向一个已在 store 中且 parent 匹配的 child，会先后台 hydrate
+这个 child 再发现其子树；否则退回对 parent 做完整发现。</li>
+<li>runtime item 事件流收到 <code>collabAgentToolCall(spawnAgent)</code>
+或 <code>subAgentActivity(started)</code> 时会触发
+<code>discoverForSpawn</code>。因此面板读取的 store
+快照和事件驱动的后台发现是两条协作路径；静态代码只证明存在该触发器，不代表每次面板打开都会重新查询。</li>
+</ul>
+<p>这揭示了列表数据的两层语义：快照是<strong>目前已知</strong>的后代集合，发现结果另有完整性标志；面板可以先展示已加载
+child，同时后台补查遗漏的后代。<code>thread/list</code> 的过滤参数和
+<code>thread/read</code> 都是客户端向 app-server
+发出的调用观察，不能据此断言服务端如何存储 parent-child
+关系、如何授权，或所有 host 均走相同路径。</p>
+<h4 id="同版本源码中的-app-server-与-state-db">同版本源码中的 app-server
+与 state DB</h4>
+<p>继续沿 <code>rust-v0.162.0-alpha.17.2</code> tag
+检查服务端实现后，可以把上面的客户端查询和一个具体存储路径对应起来：<code>thread/list</code>
+把 <code>parentThreadId</code>、<code>ancestorThreadId</code>
+转为直接子线程/后代关系过滤，两者不能同时指定。thread store 将查询传给
+state DB；后代查询通过递归 SQLite CTE 沿 <code>thread_spawn_edges</code>
+展开，再与 thread 表连接。<code>SubAgentThreadSpawn</code> source kind
+在 app-server 侧通过 session source 做过滤。</p>
+<p>spawn 路径会把 parent-child 边 upsert 到本地 agent graph store；child
+为 ephemeral 时跳过持久化。创建 spawn edge 的异步任务会在发送 child
+首条输入前被等待，因此在这个源码快照里，后代列表依赖的关系边早于 child
+首次接收任务写入。关键实现可查看 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/app-server/src/request_processors/thread_processor.rs"><code>thread_processor.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/state/src/runtime/threads.rs"><code>state/src/runtime/threads.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/thread-store/src/local/list_threads.rs"><code>thread-store/src/local/list_threads.rs</code></a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/spawn.rs"><code>control/spawn.rs</code></a>。</p>
+<p>spawn edge 另有 <code>open/closed</code> 生命周期：<code>open</code>
+表示 child 仍是 live 或 resumable 的图节点；显式
+<code>close_agent</code> 会先关闭 edge 再 shutdown，而普通
+<code>shutdown_live_agent</code>
+刻意不关闭它。因此这条持久关系状态不能直接当作 UI 的 working/done/failed
+状态。</p>
+<p>这是同版本号公开源码对客户端观察的解释，不是对本机 app-server
+进程的直接观测；没有签名构建元数据证明安装包一定来自该
+commit，也没有从桌面 bundle 单独确认每个 host
+都使用这一路径。因而它收窄了“tag
+的存储/过滤语义未知”，但不把它提升为当前安装实例的运行时事实。</p>
+<h3 id="work-界面的活动卡片">7.3 Work 界面的活动卡片</h3>
+<p>我又检查了 <code>subagents-525abfd8ce99.js</code> 和
+<code>chatgpt-subagents-panel-e608a4ff5e56.js</code>。前者从当前
+conversation state 读取 subagent 列表；卡片缩略视图最多显示四个
+child，选中 child 时使用同一 final-response query，并把预览截为 1,000
+个字符。右侧面板把 waiting/working 放在 Active，把 done/failed 放在
+Done；完成态详情异步加载 final response，失败态展示 status message 或
+unavailable 提示。这说明 activity 卡片和详情面板共享 conversation-scoped
+子 Agent 状态，但预览、状态分组和 final response 是不同的展示层。</p>
+<p>同时排查了名字相近的 <code>hosted-thread-launch</code> 资源：它是 MCP
+connector/thread app 的通用 opener，向 <code>/ps/mcp</code> 转发
+<code>tools/call</code>、<code>tools/list</code>、<code>resources/read</code>
+请求，没有发现 subagent spawn 调用。文件名中的 hosted/thread
+不能作为其实现 subagent 启动的证据。</p>
+<h3 id="活动事件怎样进入桌面状态">7.4 活动事件怎样进入桌面状态</h3>
+<p>沿着 Core 到 app-server 再到桌面 bundle 追踪后，可以把 UI
+更新链路具体化。Core 的
+<code>AgentControl::emit_sub_agent_activity</code> 为一个
+<code>TurnItem::SubAgentActivity</code> 连续发出
+<code>ItemStarted</code> 和 <code>ItemCompleted</code>。app-server v2
+将这两个规范 item 事件转为 <code>item/started</code> 与
+<code>item/completed</code> 通知；v2 路径会跳过旧的
+<code>EventMsg::SubAgentActivity</code> 生命周期事件，避免把
+legacy/raw-event 通道当成桌面主路径。桌面共享 bundle 收到 typed item
+通知后更新 conversation turn；完成 <code>spawnAgent</code> 调用项或
+<code>subAgentActivity(started)</code> 活动项后，会调用
+<code>SubagentTopology.discoverForSpawn</code>，再去发现或刷新
+child。</p>
+<p><code>SubAgentActivity</code> 的业务 kind 包括
+<code>started</code>、<code>interacted</code>、<code>interrupted</code>、<code>completed</code>；V2
+的 spawn、消息投递和 interrupt handler
+分别发出前三种记录。每条活动记录自身都会立即走完
+<code>ItemStarted</code>/<code>ItemCompleted</code>。所以协议层的
+<code>ItemCompleted</code> 表示活动记录已结束，不表示 child Agent
+已完成。</p>
+<p>另一个容易忽略的边界是接收方：spawn、interact、interrupt
+活动被写入发起工具调用的 session/turn；child
+完成时，完成活动会写入可解析出的 initiating thread，找不到时退回
+structural parent。child 的最终结果则单独通过 inter-agent communication
+发给 structural parent。于是活动记录中“受影响的
+child”和“承载记录的会话”可以不是同一个线程，尤其在嵌套协作时更要区分。这个静态链路解释了活动如何推动
+UI 状态刷新，但本机没有捕获桌面端实时通知流，也没有据此证明每种 host
+都走相同路由。源码依据：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">活动发射<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">spawn<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL21lc3NhZ2VfdG9vbC5ycw==">interact<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL2ludGVycnVwdF9hZ2VudC5ycw==">interrupt<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJz">完成路由<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvYmVzcG9rZV9ldmVudF9oYW5kbGluZy5ycw==">app-server
+事件处理<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci1wcm90b2NvbC9zcmMvcHJvdG9jb2wvZXZlbnRfbWFwcGluZy5ycw==">v2
+event mapping<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci1wcm90b2NvbC9zcmMvcHJvdG9jb2wvdjIvaXRlbS5ycw==">v2
+item conversion<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>桌面端把这些 activity 投影为独立时间线卡片：<code>started</code>
+显示为 active，<code>interacted</code> 显示为 updated
+并标记为消息事件，<code>interrupted</code> 和 <code>completed</code>
+显示为对应状态；名称取自 Agent path 最后一个非 root 段。这个卡片还会经过
+background-subagents 开关和当前 Agent path filter。它不是 child
+的权威运行状态；面板的 Active/Done 分组来自单独的 thread/topology
+状态。尤其是 <code>interrupt_agent</code>
+的返回契约明确给出“派发前的状态”，并说明 Agent
+仍可接受后续消息和任务；<code>interrupted</code> activity 记录的是
+interrupt 操作成功受理，并不证明线程已经进入终态。换句话说，activity
+卡片解释“发生了什么操作”，child 状态解释“线程目前怎样”。这些映射来自安装
+bundle 与匹配 tag 源码的静态证据。</p>
+<h2 id="本机版本与官方源码-tag-对照">8. 本机版本与官方源码 tag 对照</h2>
+<p>本机 CLI 版本是 <code>0.162.0-alpha.17.2</code>；OpenAI
+仓库中存在同名 tag <code>rust-v0.162.0-alpha.17.2</code>，其 peeled
+commit 为 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/740e5af33c71225640e0c1c1555c514c2c93ab74"><code>740e5af33c71225640e0c1c1555c514c2c93ab74</code></a>。我对照了该
+tag 下的 V2 spawn
+handler、<code>AgentControl::spawn_agent_internal</code>、session
+terminal-event 路由、<code>turn_finished</code> completion delivery 与
+legacy completion watcher。源码中可直接看到：只有非 V2 spawn 会启动
+watcher；V2 child 的终态由 session 事件路径转交控制器。</p>
+<p>远端 GitHub tag ref 已复核指向该 annotated tag 对象和 peeled
+commit；但 <code>git verify-tag</code> 返回 no signature，peeled commit
+的签名检查也显示未签名。因此这是从 OpenAI GitHub 仓库取得的版本 tag
+对照，不是密码学签名的 release attestation。结合本机虽有 OpenAI
+代码签名但没有 build manifest/source revision，仍无法证明二进制由该
+commit 构建。这一步把原先“当前 main
+的实现可能与本机版本不同”的不确定性缩小为“同版本号源码 tag
+可用于解释本机构建，但构建来源尚未被签名元数据证明”。本机 SHA-256 为
+<code>0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28</code>，Mach-O
+UUID 为
+<code>2CE1483B-FF35-344F-9958-9D48FFE5D5ED</code>；这些身份值和符号可用只读脚本复核。</p>
+<p>我进一步对本机 arm64 Mach-O 的
+<code>multi_agents_v2::spawn::Handler::handle</code>
+做了定点反汇编。该符号位于
+<code>0x105083d2c</code>，调用目标中可解析出共享的
+<code>thread_spawn_source</code>、<code>resolve_usage_hints</code>，以及记录
+spawn 失败的两个 helper。它直接证明安装二进制包含 V2 spawn
+handler，并连到这些命名路径；仅凭符号和调用点，不能证明 helper
+的全部语义，也不能证明该二进制就是由上述 tag
+构建。反汇编是在本机对已识别 SHA-256
+的二进制做的静态检查，没有实际启动子 Agent。</p>
+<p>用该 CLI 单独运行 <code>features list</code> 时，解析结果显示
+<code>multi_agent=true</code>、<code>multi_agent_v2=false</code>、<code>multi_agent_v2_dynamic_tools=false</code>。这只是当前
+CLI 调用读取到的用户配置状态，不是桌面会话实际生效配置；尝试读取本地
+app-server daemon 版本时，默认 control socket 不存在。因此桌面端是否启用
+V2、使用哪组模型元数据和工具暴露设置仍未知。</p>
+<p>我又做了一次受控 CLI 实测：在 <code>/tmp</code> 以只读 sandbox
+运行持久化 <code>exec</code>，显式启用 <code>multi_agent_v2</code>
+并忽略用户配置，让 parent 只创建一个
+child、等待它返回固定字符串。rollout 里记录了实际的
+<code>spawn_agent</code> 和 <code>wait_agent</code> 调用；spawn
+的工具结果只含 <code>task_name</code>，随后 parent 收到
+<code>Started</code> / <code>Completed</code> 子 Agent
+活动，并收到来自独立 child path 的 <code>AgentMessage</code>
+<code>CHILD_PROBE_OK</code>。child rollout 的 source 记录其 parent
+关联和 depth 1。这证明本机 CLI 在这组明确覆盖下能实际运行 V2
+协作链路；它不是桌面对话 trace，也不能说明桌面默认配置会选 V2。</p>
+<p>同样设置下使用 <code>--ephemeral</code> 的尝试无法创建 child，parent
+返回
+<code>spawn_agent failed because no rollout was found for the thread</code>。这次对照提示该
+spawn 路径依赖已落盘的 parent rollout；是否所有 host 和 ephemeral
+模式都如此，还没有验证。成功实验只读
+<code>/tmp</code>，没有修改项目文件，但 CLI 在 Codex session store
+里留下了 parent 和 child 的正常会话记录。</p>
+<h3 id="本机直接观察">本机直接观察</h3>
+<ul>
+<li>ChatGPT.app 内嵌 CLI 的 <code>--version</code> 输出为
+<code>codex-cli 0.162.0-alpha.17.2</code>，目标是 arm64 Mach-O。 外层
+ChatGPT.app 版本/build 为 <code>26.1007.30912</code> /
+<code>20156</code>；CodexCLI.app 的代码签名验证通过，签名主体为 OpenAI
+OpCo, LLC，并带有 Apple notarization ticket。</li>
+<li>该二进制
+SHA-256：<code>0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28</code>。
+本次 <code>codesign --verify --deep --strict</code> 返回 valid on
+disk，签名时间为 2026-10-08 18:10:22。CLI 自身 Info.plist 只有通用
+bundle version <code>1</code>；检查的 bundle 路径中未找到 dSYM 或 build
+manifest，选定字符串扫描也没有找到 source
+revision。代码签名证明签署者与文件完整性，不证明它来自哪个公开源码
+commit。</li>
+<li>符号表包含
+<code>LocalAgentControl::prepare_thread_spawn</code>、<code>maybe_start_completion_watcher</code>、<code>validate_loaded_v2_child</code>、<code>persist_thread_spawn_edge_for_source</code>、<code>restore_v2_agent_metadata</code>、<code>resume_agent_from_rollout</code>
+等名字。</li>
+<li>本轮再将匹配 tag 的多 Agent 专属错误文本与本机 Mach-O
+字符串表交叉比对：V1 spawn 的深度限制文案，以及 child model 的
+service-tier、reasoning 校验错误都逐字存在。这为该源码 tag
+与本机构建内容相关提供额外佐证，但字符串可被保留或复用，仍不能证明整个二进制由此
+commit 构建，也不能证明相应分支在桌面会话中执行。</li>
+<li>本机 Mach-O 的 <code>LC_FUNCTION_STARTS</code> 把 watcher 命名入口
+<code>0x1049d8348</code> 与下一个函数起点 <code>0x1049d8694</code>
+区分开：入口函数体只有 <code>0x34c</code> 字节，并在
+<code>0x1049d8478</code> 直接调用
+<code>LocalAgentRuntime::admit_start</code>；<code>render_input_preview</code>
+这个下一个命名符号到 <code>0x1049dd484</code>
+才开始，中间还有多个匿名函数起点。因此此前按“到下一命名符号”为止扫描的内容不能整体归到
+watcher。</li>
+<li>对 <code>LC_FUNCTION_STARTS</code>
+切出的精确区间重新反汇编后，<code>0x1049d8694</code> 显示为带多个 await
+状态的异步 poll 状态机，并在 <code>0x1049d8af4</code> 调用
+<code>0x1049d9dcc</code>。后者包含
+<code>LocalAgentRuntime::admit_start</code>、<code>AgentRegistry::agent_metadata_for_thread</code>、<code>Mailboxes::enqueue</code>、<code>emit_agent_communication_send</code>
+等具名调用；这些调用与匹配源码中 watcher 向 V2 parent 发送 queue-only
+completion result 的路径相吻合。结合源码的
+<code>tokio::spawn(async move { watcher.await; teardown.complete(); })</code>
+结构，这是外层 spawned future、内层 watcher future及其 V2
+完成通信分支的强源码相关证据。由于二进制没有 DWARF/future
+类型名，仍不能把匿名函数与 Rust
+源码逐指令等同；也没有证明该路径在当前桌面会话中实际执行。</li>
+<li>二进制字符串含有多 agent V2 配置字段、工具错误文本及
+<code>codex.multi_agent.result_delivery</code> 等指标名。</li>
+<li>针对应用 bundle 的两个子 Agent UI 模块，可见协作工具/活动 schema 和
+final-answer
+查询逻辑。该分析只覆盖被提取的目标资源，不代表遍历了整个桌面应用。</li>
+<li>本轮额外静态提取了 Codex Subagents 面板、后代校验和最终回复查询的 5
+个目标资源；其 SHA-256
+与分析边界记录在公开证据仓库。结论仅描述资源中的调用与展示逻辑，没有运行
+UI 或请求服务端。</li>
+<li>继续沿 import 检查
+<code>app-shared-8bd9d0399038.js</code>，静态恢复了
+<code>SubagentTopology</code> 的快照、发现、历史回退、分页补拓扑、child
+身份检查和并发上限逻辑。随后检查匹配版本源码，确认该 tag 的 app-server
+relation filter、state DB 递归 <code>thread_spawn_edges</code>
+查询，以及 spawn 后等待 edge
+写入再发送首条输入的顺序。提取文件哈希和源码链接见公开证据仓库；没有运行
+app-server 请求。</li>
+<li>本轮再检查 Work 界面的 thumbnail 与 right-side panel
+两个模块，确认缩略卡片复用 conversation-scoped 子 Agent 状态，完成 child
+的预览复用 final-response query，并观察到 1,000
+字符预览截断。另检查一个名称相近的 hosted-thread-launch
+模块，确认它只处理 MCP connector 请求，未发现 subagent spawn
+路径。资源哈希和边界记录在公开证据仓库。</li>
+<li>后续用 REA 对本机 <code>app.asar</code>
+做了全包静态扫描：分析器完成了 16,240 个源文件的解析并重建应用图。ASAR
+声明的 <code>permissions.node</code>
+哈希与伴随文件实测哈希不一致，因此采用 <code>record-and-continue</code>
+并把该原生文件标记为不可信；大型启动 bundle
+的语义图受资源上限影响，保留了静态和模块事实。这个全包结果没有提供可用的子
+Agent 定向调用链，本文 UI 结论仍限定在上面明确检查的模块。</li>
+</ul>
+<p>以上关于 app bundle、UI 和 watcher
+的结论来自静态文件观察，不是运行时抓包。另有后文单列的受控 CLI V2 spawn
+实验；它没有观测桌面 UI 或本机 watcher
+是否启动。<code>maybe_start_completion_watcher</code>
+的命名入口反汇编确认了
+<code>admit_start</code>；<code>LC_FUNCTION_STARTS</code>
+进一步将其与后续匿名函数分开，纠正了把下一个命名符号之前整个区间都当作
+watcher 的边界误读。进一步的定点反汇编将 <code>0x1049d8694</code> 与
+<code>0x1049d9dcc</code> 识别为强相关的外层/内层异步 future
+候选，并把后者的 mailbox/通信调用与 V2 completion-result
+路径对应起来；匿名 future
+到具体源码语句的映射仍不是逐指令证明。精确终态、取消和 parent
+通知语义由匹配版本源码得出，桌面会话是否执行该路径仍未知。</p>
+<h3 id="匹配版本的公开源码交叉核对">匹配版本的公开源码交叉核对</h3>
+<p>上文的精确处理顺序来自 <code>openai/codex</code> 的版本 tag
+<code>rust-v0.162.0-alpha.17.2</code>，peeled commit 为 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/740e5af33c71225640e0c1c1555c514c2c93ab74"><code>740e5af33c71225640e0c1c1555c514c2c93ab74</code></a>。版本号匹配加上本机符号/字符串交叉检查，使该
+tag 成为高可信源码参照；但没有签名构建元数据证明本机二进制确由该 commit
+产生，所以它仍不能替代逐指令语义证明。官方<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL2FnZW50cy1hcGkvbXVsdGktYWdlbnQ=">多
+Agent 指南<i class="fa fa-external-link-alt"></i></span>也可帮助理解用户可见的上下文隔离与 parent coordination
+心智模型，但不是桌面版内部实现规格。</p>
+<h3 id="子-agent-自己是否还能继续-spawn取决于模型能力元数据">8.1 子
+Agent 自己是否还能继续 spawn，取决于模型能力元数据</h3>
+<p>源码把“当前会话采用 V2”与“此 turn
+注册协作工具”分成两道检查。根线程通过 <code>collab_tools_enabled</code>
+的 agent-path 条件；非根 V2 child 还要求当前 model metadata 明确标记支持
+V2。于是 child 的历史/会话版本是 V2，并不自动意味着它能继续
+spawn、发消息或管理下级 Agent：如果它当前选用的模型没有 V2
+能力标记，这组协作工具不会注册。V1 则使用单独的下一层深度限制。</p>
+<p>另一个容易混淆的开关是
+<code>non_code_mode_only</code>。开启时，spawn、消息和管理工具使用
+<code>DirectModelOnly</code>：它们进入普通模型可见工具列表，但不会进入
+Code Mode 的嵌套工具集合；关闭时采用 <code>Direct</code>，Code Mode
+可用时也允许从嵌套工具面调用。这个枚举只描述工具计划的曝光面，不足以证明本机某次对话的实际配置或模型请求内容。</p>
+<p>在 V2 下，<code>disable_direct_message</code> 会同时去掉
+<code>send_message</code> 与
+<code>followup_task</code>，<code>wait_agent_enabled</code> 则单独控制
+<code>wait_agent</code>；<code>interrupt_agent</code> 和
+<code>list_agents</code> 仍在通过协作门控时注册。最终 router
+还会用所需管理工具是否全部实际暴露来计算
+<code>can_manage_children</code>。对外部 session，若关闭直接消息，router
+还要求配置的消息板 <code>post</code> 工具可用，否则工具计划会报错；内部
+session 不走这项校验。依据为匹配 tag 的 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/spec_plan.rs"><code>spec_plan.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/tools/src/tool_executor.rs"><code>tool_executor.rs</code></a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/router.rs"><code>router.rs</code></a>。这些是静态源码规则；本机
+resolved config 和模型能力值仍未知。</p>
+<p>模型选择列表使用的判断又不同：V2 下只排除模型目录中<strong>明确标记为
+Disabled</strong> 的 preset，因此元数据缺失或标为 V1
+并不会被这项过滤自动排除；但 child
+自己要拿到继续协作的工具，前述运行时门控要求其当前模型明确标记
+<code>Some(V2)</code>。所以“能在 spawn 的模型选项中选择”不等于“child
+可递归 spawn
+或管理下级”。这是两个源码谓词的边界，并非我观察到的本机实际故障；本机会话拿到的模型目录元数据仍未知。依据
+<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/child_config.rs"><code>child_config.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/handlers/multi_agents_spec.rs"><code>multi_agents_spec.rs</code></a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/spec_plan.rs"><code>spec_plan.rs</code></a>。</p>
+<h3 id="v2-的递归层级与资源限制">8.2 V2 的递归层级与资源限制</h3>
+<p>匹配版本源码中，<code>agent_max_depth</code> 被 V1 的协作工具门控及
+legacy spawn/resume 路径使用；V2 的 <code>collab_tools_enabled</code>
+没有比较 depth。V2 child 的 <code>ThreadSpawn</code>
+来源仍逐层记录递增深度，但本次检查到的 V2
+工具注册路径不把它当最大层级限制。换言之，若 child 模型明确支持 V2
+且资源允许，它在源码规则上可以继续拥有协作工具；这不是说真实任务可无限递归。</p>
+<p>V2 资源控制分开管理：<code>max_concurrent_threads_per_session</code>
+形成 V2 effective agent-thread capacity（扣除 root），spawn 用它预留
+residency slot；session scoped execution limiter 另行约束活跃 V2 child
+turn，创建前也会先检查 execution capacity。V2 residency spawn 不会再给
+registry spawn reservation 附加第二个 max-thread
+限额。因此这里可确认的是“检查到的 V2 工具门控无显式最大深度，运行中的
+child 受 residency/execution 容量控制”，不能推导出历史 child
+总数也被同一个数封顶。来源为 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/spec_plan.rs"><code>spec_plan.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/config/mod.rs"><code>config/mod.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/spawn.rs"><code>control/spawn.rs</code></a>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/execution.rs"><code>control/execution.rs</code></a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/residency.rs"><code>control/residency.rs</code></a>。配置实际值和运行时容量未观测。</p>
+<p>源码默认的 <code>max_concurrent_threads_per_session</code> 是 4，扣掉
+root 后 effective child capacity 为 3。显式
+<code>features.multi_agent_v2.max_concurrent_threads_per_session</code>
+优先于旧的
+<code>agents.max_concurrent_threads_per_session</code>；后者会先加回
+root，再进入统一容量计算。这些是默认值与解析优先级，不代表我已读取本机当前对话的
+resolved config。来源仍是匹配 tag 的 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/config/mod.rs"><code>config/mod.rs</code></a>。</p>
+<h3 id="独立-cli-与桌面内嵌-cli-不是同一个目标">8.3 独立 CLI 与桌面内嵌
+CLI 不是同一个目标</h3>
+<p>继续核对本机安装后发现，PATH 中的 <code>codex</code>
+实际指向独立安装包，版本为 <code>0.162.1</code>；ChatGPT.app 内嵌的 CLI
+仍是 <code>0.162.0-alpha.17.2</code>，且当前观察到的桌面进程运行在
+<code>exec-server --remote</code> 模式。因此前面的桌面 bundle、rollout
+和 UI 观察仍以 app 内嵌版本为准；独立 CLI 的 live probe 不能当成桌面
+host 的行为证据。</p>
+<p>我把公开源码对照扩展到 <code>rust-v0.162.1</code>，其 peeled commit
+是 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/092d3acd6bec3e3a14bdc7e7a2810ab628ab759d"><code>092d3acd6bec3e3a14bdc7e7a2810ab628ab759d</code></a>。与此前
+app 内嵌版本对应的源码快照比较，agent tree
+的关停状态现在带有结构化报告：每条失败记录操作名、可选 thread
+ID，以及具体阶段和稳定错误类别；意外丢弃未完成的清理 guard
+也会被记录。每棵 tree 最多保留 64 条，更多失败只累计数量。child spawn
+取消清理中的停止 child、丢弃持久化记录和关闭 spawn edge，以及 residency
+停止失败，都会进入这套报告；等待者要等已登记的 tree
+操作排空后才能取得最终报告。</p>
+<p>这是 <code>0.162.1</code> 公开源码中的静态差异，没有在本机诱发
+teardown 失败，也没有针对独立 CLI <code>0.162.1</code> 做 live
+spawn。它说明生命周期收尾有结构化诊断路径，不改变前面描述的正常
+spawn、消息和等待链路。官方<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9yZWxlYXNlcy90YWcvcnVzdC12MC4xNjIuMQ==">0.162.1
+release notes<i class="fa fa-external-link-alt"></i></span>列出的修复是异步多行问题与后台 server feature
+设置兼容性；上面的 subagent teardown 内容是源码对照发现，不是 release
+notes 明列的功能。版本对照也不等于本机二进制构建来源证明。</p>
+<h3 id="关停请求和清理责任是两步">8.4 关停请求和清理责任是两步</h3>
+<p><code>0.162.1</code> 还公开了
+<code>ThreadManager::request_agent_tree_shutdown(thread_id)</code>。它只能从已加载
+thread 取得该 session 的 local runtime；成功后立即关闭该 tree 的新
+membership admission、取消共享 cancellation token、关闭 mailbox，并返回
+<code>AgentTreeShutdown</code>。调用方再调用 <code>wait()</code> 或
+<code>wait_detailed()</code>，等待关停 fence
+之前已登记的工作排空。<code>admit_start</code> 在创建 membership
+前后各检查一次 fence，因此与关停同时发生的新启动会被纳入等待或以
+<code>RuntimeShutdown</code> 拒绝。</p>
+<p>membership 覆盖的不只是 child spawn：源码将 session startup 与
+session loop、fresh spawn、agent resume、V2 child reload、legacy
+completion watcher，以及 resident eviction 等工作登记进同一棵 tree。取消
+startup 时，<code>SessionStartupGuard</code> 会先停止 session I/O
+或清理已建 session，再 discard 尚未提交的 persistence；session loop
+则持有单独 teardown guard。未正常完成的 guard 会成为
+<code>GuardAbandoned</code> 报告项。报告最多保留 64
+条失败，额外部分通过计数表示；<code>wait()</code>
+只给通用错误，<code>wait_detailed()</code> 才返回结构化明细。</p>
+<p>这个 handle 的语义是“封住并等待当前
+runtime”，不是代替调用方完成所有卸载：API 文档明确把 registry removal
+与调用方负责的 persistence handoff 留给调用方；跨这个 runtime 的同一
+thread ID 顶层 load/resume 也必须由调用方另行串行化。结合 subagent
+创建时把 parent 的同一个 <code>LocalAgentRuntime</code> 传给
+child，可推得：若调用方把某个 child thread ID 交给此
+API，拿到的仍是父、该 child、同 runtime siblings
+共用的关停状态；它不是只关 child 子树的句柄。它也不等于
+<code>close_agent</code> 的图操作：后者先尝试把目标 spawn edge 标成
+closed，再遍历目标和 live descendants，逐个执行 agent shutdown。公开
+app-server 的 idle-thread unload 又是第三种路径：对单个
+<code>CodexThread</code> 调 <code>shutdown_and_wait()</code>，成功后以
+thread identity 条件从 manager 移除。当前 <code>rust-v0.162.1</code>
+仓库内没有 <code>request_agent_tree_shutdown</code>
+的生产调用点；因此只能确认 host/SDK 可调用该 runtime 级接口，不能证明
+ChatGPT 桌面用它关闭 subagent tree。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvY29yZS9zcmMvdGhyZWFkX21hbmFnZXIvc2h1dGRvd24ucnMjTDEwNS1MMTQ3">shutdown
+API<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9ydW50aW1lLnJzI0wyNzQtTDMwMg==">membership
+与 admission fence<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvY29yZS9zcmMvY29kZXhfZGVsZWdhdGUucnMjTDgxLUwxMzA=">child
+复用 parent runtime<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9zdGFydHVwLnJzI0wzMi1MMTA1">startup
+cleanup<i class="fa fa-external-link-alt"></i></span>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/092d3acd6bec3e3a14bdc7e7a2810ab628ab759d/codex-rs/core/src/agent/control/legacy.rs#L48-L123"><code>close_agent</code>
+tree traversal</a> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9saWZlY3ljbGUucnMjTDQxOS1MNDg5">app-server
+per-thread idle unload<i class="fa fa-external-link-alt"></i></span>。以上是静态源码结论；没有调用该 API
+或制造关停竞态。</p>
+<h3 id="work-子-agent-面板负责查看不负责中断">8.5 Work 子 Agent
+面板负责查看，不负责中断</h3>
+<p>为确认桌面端的“停止/关闭”入口，我重新从本机
+<code>ChatGPT.app/Contents/Resources/app.asar</code> 提取 Work 子 Agent
+面板与缩略卡片模块，并复核 SHA-256
+与证据台账一致。<code>chatgpt-subagents-panel</code> 读取
+conversation-scoped 子 Agent 状态，将 waiting/working 放入 Active，将
+done/failed 放入 Done；用户选择某个 child
+后，面板导航到其详情，显示状态、委派任务和最终回复。缩略卡片也只读取这些状态并显示至多四个
+child。在这两个定向模块中没有发现中断/关闭调用或对应按钮回调；能看到的回调是列表选择、返回详情列表等导航行为。这个结论只限于这两个被检查的
+Work 面板资源，不能排除桌面其他界面、键盘操作或远端 host
+存在生命周期入口。</p>
+<p>这和源码里的两个工具语义也不同：V2 <code>interrupt_agent</code>
+是协作模型工具，它对目标当前任务发
+<code>Op::Interrupt</code>，返回派发前的状态并记录
+<code>Interrupted</code> 活动；它不关闭持久 spawn edge。V1/legacy 的
+<code>close_agent</code> 会关闭关系边并停止目标及其 live
+descendants。因而从这里能确认的是：本机 Work 面板的这两块 UI 资源呈现子
+Agent
+状态与结果，源码定义了独立的模型侧中断/关闭操作；尚无证据表明面板按钮会调用其中任一操作，也未从桌面应用运行时观察到用户按下停止后的协议请求。依据为本机两个
+bundle 资源及匹配版本 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/handlers/multi_agents_v2/interrupt_agent.rs"><code>interrupt_agent</code>
+handler</a>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9pbnRlcnJ1cHQucnM=">V2
+interrupt control<i class="fa fa-external-link-alt"></i></span>、<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/tools/handlers/multi_agents/close_agent.rs"><code>close_agent</code>
+handler</a> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9sZWdhY3kucnM=">legacy
+subtree shutdown<i class="fa fa-external-link-alt"></i></span>。均为静态观察，没有执行 UI 操作或发送中断。</p>
+<h3 id="主对话停止会由桌面客户端继续清理活跃后代">8.6
+主对话停止会由桌面客户端继续清理活跃后代</h3>
+<p>继续沿共享 <code>app-shared-8bd9d0399038.js</code> 的
+<code>interruptConversation</code> 追踪后，发现上一节的边界需要补全：子
+Agent 面板本身没有停止按钮，但桌面会话管理器在中断一个 conversation
+后，会在符合条件时调用
+<code>interruptSubagentDescendants</code>。当来源是
+<code>user-stop</code>，它把后代清理排到 scheduler
+后台；其他来源会等待后代清理结束。例外包括递归清理本身和本地 stream role
+为 follower 的会话。耐久线程的 <code>thread/stop</code>
+路径也在成功后执行后代中断：用户发起时后台调度，其它调用方同步等待。</p>
+<p>后代清理不是给根线程发一个“shutdown whole tree”请求。客户端先用当前
+descendant snapshot 对已知的 active child 调用自身的
+<code>interruptConversation(..., "descendant-cleanup")</code>，并记录已处理
+ID；随后再跑一次 descendant discovery，对仍标记 active 且未处理的
+child，先尝试本地 conversation 中断。若 child 不在本地 store
+或该调用未能处理，则读取它最近一页 turn；只有最新 turn 状态为
+<code>inProgress</code> 时，才单独发
+<code>turn/interrupt</code>，参数含该 child 的 thread ID 与 turn
+ID。对后代列表使用 <code>Promise.all</code> 并发处理。递归调用的
+<code>descendant-cleanup</code>
+来源会阻止再次触发一轮嵌套级联，因此一次根级遍历覆盖整棵已发现子树而不会无限递归。</p>
+<p>服务端 <code>turn/interrupt</code> handler 则只加载请求里指定的
+thread，校验该 thread 的 active turn ID，然后向该 thread 提交一个
+<code>Op::Interrupt</code>；它本身没有树遍历。因而“停止 parent
+会连带尝试中断 descendants”是桌面客户端编排出来的行为，不是 app-server
+对单个 <code>turn/interrupt</code>
+的隐式传播。此处“尝试”很重要：清理有发现失败、子请求失败和后台异步窗口；用户停止可能先返回而后代仍在清理，日志会记录失败。这个源码路径是对内嵌
+app.asar 的静态恢复，尚未实际点击停止，也没有远端 host 的运行时
+trace。证据文件为 <a
+target="_blank" rel="noopener" href="https://github.com/HeadmasterEggy/codex-subagent-reverse-engineering/blob/main/evidence/subagent-flow.md"><code>app-shared-8bd9d0399038.js</code></a>（SHA-256
+<code>607ad0866dd25ed3764711b4467a9b60708353a599485b5249ff4cbe0e870245</code>）；服务端对照为匹配版本
+<a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/app-server/src/request_processors/turn_processor.rs#L1610-L1671"><code>turn_interrupt_inner</code></a>。</p>
+<h3 id="停止级联依赖-best-effort-的后代拓扑发现">8.7 停止级联依赖
+best-effort 的后代拓扑发现</h3>
+<p>继续追 <code>subagentTopology.discover</code> 后，发现级联会先拿
+thread store 中已知的 descendants 快照，再请求重新发现。当前桌面 host
+的路径会用 <code>thread/list</code> 的 spawn-source 过滤和
+ancestor/parent 关系分页（每页最多 200 条）；在不支持该过滤的 host
+上，则结合内存里观察到的 spawn 活动，以及从持久化 history 提取的
+<code>subAgentActivity.started</code> / <code>spawnAgent</code> receiver
+IDs，逐层读取并校验 child thread。cloud history 通过
+<code>thread/items/list</code> 分页，paginated history 通过
+<code>thread/turns/list</code> 读取活动记录；子树读取并发上限为
+2，并检查 child 的 thread 身份与 parent 关系。</p>
+<p>发现器会用 <code>isComplete</code> 标记 cursor 异常、历史读取失败或
+child 缺失等不完整情况。但停止 helper 只读取
+<code>descendantThreads</code>，没有检查
+<code>isComplete</code>；因此部分发现仍会继续中断已经找到的 active
+child，同时遗漏未发现后代的可能性保留。这让 8.6
+节的“best-effort”不只是中断请求可能失败，也包括停止前的树枚举本身可能不完整。证据仍限于本机
+bundle 的静态代码，没有注入发现错误或在运行中的桌面会话验证覆盖率。</p>
+<h3 id="本地中断会校验-turn-身份并清理关联执行">8.8 本地中断会校验 turn
+身份，并清理关联执行</h3>
+<p>本地 owner 执行 <code>interruptConversationSelf</code>
+时，会先检查当前最新的 in-progress turn；若调用方提供了
+<code>expectedTurnId</code>，它必须仍与该活跃 turn
+相同，否则返回空结果，避免误中断已经变化的 turn。确认后才发单线程
+<code>turn/interrupt</code> 并将本地 turn 标为
+interrupted，同时安排清理该 turn 的 Node REPL 执行。user-stop
+会把这些执行清理作为后台工作启动；如果没有活跃 turn，则清理后台 terminal
+后返回空结果。后代级联把空结果视为“未处理”，因此会再查最新持久
+turn，必要时按 thread ID 与 turn ID
+发直接中断。该身份校验和清理行为是客户端 bundle
+静态证据，没有在线竞态实验。</p>
+<p>多窗口的 stream follower 不直接在自己的窗口中断 owner 正在运行的
+turn：它通过 desktop IPC 把 <code>thread-follower-interrupt-turn</code>
+请求转给 owner，由 owner 的 manager 执行中断及其后代级联，所以 follower
+自己的 <code>finally</code> 不再重复清理。若 owner
+超时、不可用或协议版本不匹配，follower 会清除失效的 stream
+ownership、把会话标为 needs-resume，再退回本地中断；ownership
+清除后不再是 follower，因此同一外层流程仍会尝试后代清理。以上是 bundle
+中的路由控制流推导，未模拟多窗口断连竞态。</p>
+<h3 id="归档前的运行时停止与普通中断不是同一个入口">8.9
+归档前的运行时停止与普通中断不是同一个入口</h3>
+<p>继续追 bundle 里的 <code>stopThread</code>
+调用点后发现，<code>CHn</code> 虽然把它包装成 user
+stop，但当前资源中唯一找到的实际调用点位于
+<code>beforeArchiveConversation</code> 的受限运行时分支。归档一个符合
+subagent 来源条件的线程时，durable 模式会走后代中断；非 durable
+模式则先请求暂停受限 runtime，只有暂停成功且允许中断活动 turn 时，才调用
+<code>stopThread</code> 并通过回调记录被中断的
+turn。它属于归档前清理路径，不能据此称为子 Agent 面板里的停止按钮。</p>
+<p>共享 manager 的 <code>stopThread</code> 自身又按 host/thread
+模式分流：durable 路径向指定 thread 发
+<code>thread/stop</code>，随后安排或等待后代清理；该方法不可用时或非
+durable 时，转为
+<code>interruptConversation(..., "user-stop")</code>。常规中断的后代级联逻辑已在前文说明。composer
+上的普通 Stop 回调与本节归档回调是不同入口；前者的静态调用链见 8.10
+节。没有操作实际 UI，因此没有真实点击的运行时 trace。</p>
+<h3 id="composer-stop-按钮接到-user-stop-中断">8.10 composer Stop
+按钮接到 user-stop 中断</h3>
+<p>在本机 <code>app-primary</code> bundle 中，composer 的提交按钮组件在
+<code>submitButtonMode="stop"</code> 时创建 Stop 按钮，点击时调用传入的
+<code>onStop</code>。Codex composer adapter 将外层 <code>onStop</code>
+包装成自己的 <code>handleStop</code> 后传回组件；会话组件传入的 handler
+再调用本地停止处理器。对本地 composer，如果回调没有显式 conversation
+ID，就使用当前解析出的 host；如果提供了 ID，则从应用状态中查出对应
+host。处理器把 <code>conversationId</code> 和 <code>hostId</code> 传给
+<code>yda</code>；后者优先使用注入的 client，否则按显式 host ID
+或应用状态中的 host 映射取 conversation manager，再调用
+<code>interruptConversation(conversationId, "user-stop", expectedTurnId)</code>。</p>
+<p>因此按钮路径为：<strong>composer Stop → <code>onStop</code> → Codex
+composer adapter → 会话停止 handler → <code>yda</code> → host manager
+<code>interruptConversation(..., "user-stop")</code></strong>。它不经过
+<code>beforeArchiveConversation</code> 或
+<code>stopThread</code>。归档调用仍是独立路径；仅当
+<code>stopThread</code> 选择非 durable 或 <code>thread/stop</code>
+不可用的回退分支时，才可能在 manager 内部汇合到
+<code>interruptConversation</code>。<code>user-stop</code>
+成功后，manager 还可能在后台尝试中断子 Agent
+后代；这是尽力清理，并受中断结果和 expected-turn
+检查影响，不代表原子地关闭整棵子树。以上都来自静态代码，本机没有实际点击按钮或观察运行时路由；按钮只在
+composer 当前状态将 <code>submitButtonMode</code> 设为 <code>stop</code>
+时显示。bundle 哈希、提取资源及偏移记录在公开证据报告中。</p>
+<p>进一步看按钮的显示条件，组件将模式计算为
+<code>Yo != null || (!Hs &amp;&amp; $t &amp;&amp; (Oe || !qo)) ? "stop" : "submit"</code>。周边
+props 能确认 <code>Hs</code> 表示 <code>thread-goal-continuation</code>
+阻止原因，<code>$t</code> 是
+<code>isResponseInProgress</code>，<code>qo</code>
+是传给提交阻止判断的内容标志。<code>Yo</code> 还会作为
+<code>workingConversationId</code> 传给
+composer（在另一个可见性条件下回退到当前 conversation
+ID）；<code>Oe</code> 来自共享状态
+<code>Sw</code>，并参与提交禁用判断。继续沿 import
+映射确认，<code>Sw</code> 对应 <code>app-initial</code> 导出的
+conversation-scoped <code>eYt</code> 状态单元，默认是
+<code>null</code>。同一模块的派生 selector 会把它保存的 message ID 与
+conversation 消息树对照；相邻持久化逻辑的 key 明确为
+<code>chatgpt-image-generation-stops-v1</code>，并用
+conversation/account
+维度读写停止记录。因此这项状态属于图像生成停止标记，而非 subagent
+专属状态。其他 bundle
+消费者在该标记为真时会阻止用户消息提交、让页面生成以
+<code>unavailable</code> 失败，并使图像编辑动作提前退出；一些异步
+composer
+结果也会把它作为失效条件。代码显示这是共享的取消/停止门控，但尚未定位本次
+Stop UI
+场景中的具体写入调用点，无法从当前静态证据判断其置位时机。因而非空工作会话
+ID 会直接选择 Stop；否则还要看响应、goal
+continuation、该图像生成停止标记和输入内容条件。该条件是 UI
+逻辑的静态证据，不代表真实会话中按钮一定出现。</p>
+<h3 id="窗口收到-delta-后按-conversation-写入本地-thread-store">8.11
+窗口收到 delta 后按 conversation 写入本地 thread store</h3>
+<p>继续追 full-fidelity 通知从 Electron 广播进入 renderer
+后的处理。<code>app-shared</code> 的 app-server 通知分发器先让
+<code>Ktn</code> 处理
+<code>item/agentMessage/delta</code>、<code>item/plan/delta</code>、reasoning
+delta 和 command output delta 等事件，然后再调用
+<code>events.emitNotification</code>。<code>Ktn</code>
+将这些事件交给当前窗口的
+<code>itemStreamState.handleNotification</code>。这一步是每个收到 IPC 的
+renderer 内部处理，不是 renderer 间共享一个 UI store。</p>
+<p><code>itemStreamState</code> 从参数取出
+<code>threadId</code>、<code>turnId</code>、<code>itemId</code> 和
+delta，并以 <code>Y(threadId)</code> 作为 <code>conversationId</code>
+放入本地队列；此 bundle 中 <code>Y(e)</code> 是恒等函数。文本队列在
+scheduler/frame flush 时应用，command output 队列的 flush interval 是 50
+ms。flush 会先按 conversation 分组，再查当前窗口的
+<code>threadStore.conversations</code>；会话不存在，或其 canonical
+history islands / turns 总数为 0 时，整组跳过。文本 delta 进一步按 turn
+找到实体，再按 item ID 和类型更新 agent message、plan 或 reasoning
+内容；command output 则只应用到匹配的 commandExecution item，缺失 item
+会被丢弃并记录调试日志。</p>
+<p>因此完整边界是：一个 child 有已登记的 full-fidelity surface，会放行该
+child 的五类高频 delta 到所有存活的窗口监听器；各窗口收到后仍按 thread
+ID 在自己的已加载 conversation store 中选择性处理。IPC
+广播并不意味着每个窗口都有该 child
+的状态、完成了状态更新，或最终把内容渲染给用户。这里是安装包静态代码结论，没有捕获实际多窗口通知，也没有验证
+store 更新后的 React 展示。</p>
+<p>所检 <code>app-shared-8bd9d0399038.js</code> SHA-256 为
+<code>607ad0866dd25ed3764711b4467a9b60708353a599485b5249ff4cbe0e870245</code>；通知分发与
+<code>emitNotification</code> 位于字节偏移
+<code>2884087</code>，<code>itemStreamState</code> 调度入口
+<code>Ktn</code> 位于 <code>2885455</code>，该函数定义位于
+<code>2821429</code>；<code>itemStreamState</code> 类从
+<code>2843620</code> 开始，队列创建从 <code>2846879</code>
+开始，文本/output 应用分别从 <code>2849058</code> 和
+<code>2847234</code> 开始；<code>Z0t</code> 的 history-island/turn 计数
+guard 位于 <code>2518740</code>。可复核摘录及边界列在公开证据报告。</p>
+<h3 id="thread-store-进入-transcript-投影但不等于已证明屏幕绘制">8.12
+thread store 进入 transcript 投影，但不等于已证明屏幕绘制</h3>
+<p>继续沿直接子线程页检查 renderer 数据消费者。当前本地线程组件的
+<code>YA</code> 提供 transcript/search helper 所需的
+<code>getConversationState</code>：它以当前 conversation ID 读取
+<code>Uu</code> selector 的 <code>conversationTurns</code>，并附上
+model/provider 信息。可见列表路径把 <code>visibleTurnEntries</code>
+和渲染参数交给 <code>Qy</code>，由它返回列表用的 entries；完整 history
+的内容搜索 helper 则走 <code>SA</code>，把 turn items
+投影为搜索项。<code>SA</code> 的结果进入内容搜索组件的
+<code>getItems</code>，不是可见 transcript
+列表的直接数据源。前一节写入本地 thread store 的 delta 位于这些
+conversation-scoped 消费路径的上游。</p>
+<p>可见列表路径现在静态连接为“IPC 到达 → thread store 更新 →
+conversation turn selector → <code>Qy</code> entries →
+虚拟化列表/行组件”。列表组件把 <code>cn</code> 作为 <code>entries</code>
+prop 传给虚拟化列表；普通列表分支把同一数组交给 <code>dy</code>，并指定
+<code>$k</code> 为 <code>RowComponent</code>。<code>$k</code> 为每个
+entry 创建 <code>tA</code> 行元素；<code>tA</code> 再创建
+<code>Sy</code> transcript 元素，并传入
+turn、turnState、transcriptBlock、turn requests、key 和 subagent 相关
+props。未加载完整 history 时仍有不同的 history/preview
+分支。这些只能证明静态 React element 构造和 props 传递，不能证明 React
+最终 commit、DOM 绘制，或某个 delta 在具体 child 页可见。</p>
+<p>资源 <code>local-conversation-thread-c8c5e92ea89e.js</code> SHA-256
+为
+<code>ee192ab3f19d493d64580f7690c94b05c589fe59c1757984e1c5a076976a47eb</code>。<code>SA</code>
+的搜索项投影从字节偏移 <code>280259</code> 开始，其调用在
+<code>297146</code> 附近，结果由 <code>xn()</code>
+交给内容搜索组件；可见 transcript 的 <code>Qy</code> 调用在
+<code>294632</code>。<code>cn</code> 的列表分支分别从
+<code>303058</code> 和 <code>303465</code> 开始；<code>$k</code> 定义于
+<code>259415</code>，在 <code>261242</code> 创建 <code>tA</code>
+行元素；<code>tA</code> 定义于 <code>262402</code>，约在
+<code>265681</code> 创建 <code>Sy</code> 元素。<code>YA</code> 的
+conversation-scoped <code>getConversationState</code> 从
+<code>305808</code> 开始，其中 <code>Uu(...).conversationTurns</code>
+访问位于 <code>305836</code>。这些偏移属于该安装包中的单一资源。</p>
+<h3 id="投影结果进入-transcript-列表组件">8.13 投影结果进入 transcript
+列表组件</h3>
+<p>继续追 <code>Qy</code> 的返回值：线程组件把结果命名为
+<code>en</code>，在相应 history/timeline 条件下将它交给 <code>zD</code>
+转成 <code>cn</code>；其余分支直接使用 <code>en</code>。组件随后把
+<code>cn</code> 作为 <code>entries</code> 传给 <code>lA</code>
+虚拟化列表，或传给 <code>dy</code> 列表并指定 <code>$k</code> 作为
+<code>RowComponent</code>。<code>$k</code> 为每个 entry 创建
+<code>tA</code> 行元素；<code>tA</code> 又创建 <code>Sy</code>
+transcript 元素并传入 turn、turnState、transcriptBlock、turn requests 和
+subagent 标志等 props。由此静态调用链到达 transcript 行组件的 React
+element props。需区分：<code>SA</code> 是内容搜索投影，经
+<code>xn()</code> 交给搜索组件的
+<code>getItems</code>；它不是可见列表的数据源。</p>
+<p>这仍是 bundle 中的静态数据流，不代表 React
+在某次具体运行中已提交该树，更不代表浏览器完成了绘制或用户实际看到
+delta。能证明的是“renderer 代码把 entries
+交给虚拟化/行列表组件”，不能证明某个 child 页面、某个窗口或某个 delta
+实际可见；当前没有 Electron DOM/React commit 运行时记录。</p>
+<p>新增定位点：<code>Qy</code> 结果赋给 <code>en</code>
+的调用附近为字节偏移 <code>294588</code>；timeline/history 分支生成
+<code>cn</code> 位于 <code>295687</code>；列表选择从 <code>303058</code>
+开始，虚拟化列表接收 <code>entries: cn</code>；另一分支从
+<code>303465</code> 开始并传入
+<code>RowComponent: $k</code>（<code>$k</code> 定义于
+<code>259415</code>）。资源 SHA-256 仍为
+<code>ee192ab3f19d493d64580f7690c94b05c589fe59c1757984e1c5a076976a47eb</code>。</p>
+<h3 id="transcript-行组件继续进入-turn-content-renderer">8.14 transcript
+行组件继续进入 turn-content renderer</h3>
+<p>沿 <code>Sy</code> 的导入继续检查同一安装包的
+<code>local-conversation-turn-632904a8790c.js</code>（SHA-256
+<code>f16c75de8c65e6849f3976cc8e0efec198e7b063ec81ce514ff85b348967b376</code>）。线程页资源把该模块导出的
+<code>t</code> 命名为 <code>Sy</code>；导出的 <code>xl</code> 是
+memoized turn renderer。它根据已有 <code>turnState</code> 或
+<code>mcpTurn</code>、turn requests 生成/复用 turn projection，再把
+turn、投影结果、turn
+identity、<code>isBackgroundSubagentsEnabled</code>、<code>excludedSubagentThreadIds</code>、<code>transcriptBlock</code>
+等属性传给内层 <code>Lc</code> turn-content renderer。<code>Lc</code> 在
+subagent activity inline group 的构造中继续使用后台 Agent 开关与 thread
+ID 等状态。</p>
+<p>这把静态路径从 transcript row 推进到处理 turn 内容的 React
+组件边界，并证明 subagent 专用开关/排除列表作为 props
+到达这一层。它仍只证明 bundle 中的函数与 React element 构造，不证明
+<code>Lc</code> 在某次运行已挂载、实际选择了某个 subagent
+activity，或完成 DOM 绘制。该资源 <code>xl</code> 的实现位于约
+<code>87237</code>，内层 <code>Lc</code> 定义位于约
+<code>58160</code>；位置仅适用于所列 SHA-256。</p>
+<h3 id="turn-content-把-subagent-activity-接到-inline-ui">8.15
+turn-content 把 subagent activity 接到 inline UI</h3>
+<p>继续检查 <code>Lc</code> 的 activity item 分支和
+<code>subagentActivityItemGroups</code> 处理。对于
+<code>type: subagent-activity</code> 且 <code>isMessage</code> 为 false
+的 activity，renderer 不走通用 activity-unit 渲染，而是按 item key
+取此前准备的 inline activity content。与此同时，在后台 Agent
+功能开启且不处于指定的紧凑/折叠上下文时，renderer 把 activity
+groups、当前 turn key、background-agent snapshot 和
+<code>excludedSubagentThreadIds</code> 交给 <code>da</code>；返回 groups
+再按 <code>anchorItemId</code> 放到对应 activity item 旁，或作为独立
+inline 内容输出。行组件 <code>Mc</code> 将每组 rows/status 映射成
+<code>Ta</code> inline group React element。</p>
+<p>这说明 transcript renderer 对 subagent activity 有单独的 UI
+分流，并将 child rows 锚定到 turn activity
+或独立显示；排除列表也参与该路径。这里只能确认静态调用条件和元素构造，不能确认某一组在具体会话里被选中、展开或绘制。对应调用区间约
+<code>17600</code>、<code>63500</code>、<code>68400</code>，inline group
+行组件约 <code>57800</code>，均基于上一节列出的资源 SHA-256。</p>
+<h3 id="inline-group-helper-如何合并-activity-与-child-snapshot">8.16
+inline group helper 如何合并 activity 与 child snapshot</h3>
+<p>继续跟进 <code>da</code> 的导入，定位到共享资源
+<code>webview/assets/sites-end-resource-78b98c374310.js</code>（SHA-256
+<code>4897e9b701726b0874a5036157ea32eb85932a04669ab9e205b820623f8be4a3</code>）。导出的
+<code>bE</code> helper 先把当前 <code>backgroundAgents</code>
+快照限制到当前 <code>turnKey</code>，去除
+<code>excludedSubagentThreadIds</code>，并要求 child
+有有效显示名；随后把快照和 transcript 中的 activity groups 合并，按
+conversation ID 去重。已有 activity group 会保留锚点；未被这些 groups
+表示的当前 turn child 会作为无锚点 group 追加。没有 activity groups
+时，仍可仅凭 child snapshot 生成 standalone group。</p>
+<p>helper 会依据 child snapshot、当前 turn 和后续 activity
+归并显示名与状态。group 状态优先级是 interrupted、updated、全部 child
+已完成，最后才是 active。<code>Mc</code> 生成 inline group，行组件
+<code>wE</code> 在上下文的 <code>canOpen(row)</code> 为真时生成带有
+“Open … subagent” 标签的 button，并绑定 open
+回调；否则生成非按钮行。这证明 bundle
+里存在条件式可打开行的元素构造，不代表本次运行中确实出现按钮或用户触发了它。helper
+定义位于资源约字节偏移 <code>248649</code>；所有偏移仅对上述 hash
+有效。</p>
+<p>这是对前一节 activity-to-inline-UI 路径的静态实现补全。没有运行
+UI、检查 DOM 或验证具体会话中的合并结果；也不据此推断服务端权限或 child
+当前可交互状态。</p>
+<h3 id="inline-行点击后的目标解析与导航">8.17 inline
+行点击后的目标解析与导航</h3>
+<p>继续追 <code>Mc</code> 的 context 回调，发现它将 child conversation
+ID 和显示名交给 local-thread context 的 <code>open</code>。线程页
+context 在 <code>local-conversation-thread-c8c5e92ea89e.js</code>
+中构造：先调用 <code>open-target-622f980eb330.js</code> 的
+<code>h</code> 解析并校验目标；目标存在时，调用调用方提供的
+opener，或回退到 <code>WE</code> 的默认后台 Agent opener。默认路径先以
+<code>addToRecent: false</code> 激活 child thread
+summary，再按当前窗口模式路由到后台 Agent tab 或传给相应 host 的 thread
+opener。</p>
+<p><code>open-target</code> 的解析顺序是：当前父 conversation 的
+background-agent snapshot、父 thread history 中的 spawn/activity
+记录，最后查询 child ancestry 并重新校验 history。spawn 记录需匹配父
+thread 与 receiver ID，并校验已知 parent identity；匹配的
+<code>collabAgentToolCall(spawnAgent)</code> 目标返回
+<code>canInteract: true</code>。只有
+<code>subAgentActivity(started)</code> 证据的目标返回
+<code>canInteract: false</code>，名字取自 activity path。独立
+<code>canOpen</code> 谓词允许已在 background-agent snapshot 中的
+child，或父 history 中有对应 spawn/start 记录的 child
+显示按钮；但点击后仍须由目标解析器拿到可验证目标，失败时不导航。这使“行可点击”“child
+身份已解析”和“child 可交互”成为三个不同条件。</p>
+<p>资源 SHA-256：<code>open-target-622f980eb330.js</code> 为
+<code>04a527af414610472558067a99e6827f4ae73c732f0f5b2ee4b5101d66a5719d</code>；线程页资源仍为
+<code>ee192ab3f19d493d64580f7690c94b05c589fe59c1757984e1c5a076976a47eb</code>；turn
+renderer 仍为
+<code>f16c75de8c65e6849f3976cc8e0efec198e7b063ec81ce514ff85b348967b376</code>。入口分别约在
+open-target 字节偏移 <code>260</code>、线程页 context 构造
+<code>315432</code>、默认 opener <code>181440</code>、turn context 消费
+<code>57360</code>。这是静态调用链；没有实际点击、导航或验证 host
+的服务端授权行为。</p>
+<h3 id="inline-child-rows-会抑制重复的空-prompt-spawn-卡片">8.18 inline
+child rows 会抑制重复的空 prompt spawn 卡片</h3>
+<p>继续检查同一共享资源导出的 <code>vE</code>（在 turn renderer 中以
+<code>pa</code> 调用）。在后台 Agent 展示分支，它收集当前 turn
+中有可用名称的 child ID，来源包括当前 background-agent snapshot 与有效的
+<code>subagent-activity</code> 项；然后只过滤满足全部条件的
+<code>multi-agent-action(spawnAgent)</code>：状态为 completed、prompt
+缺失或为空、receiver 列表非空，而且所有 receiver 都已由 inline child
+rows 表示。带有 prompt 文本、没有 receiver 或仍有 receiver 未被表示的
+spawn 项会保留。</p>
+<p>因此这是对 transcript 活动展示的定向去重，避免已由 child rows
+表达的空 prompt spawn 卡片重复出现；不能据此说原始 turn item 或持久化
+history 被删除。helper 定义位于
+<code>sites-end-resource-78b98c374310.js</code> 约字节偏移
+<code>247217</code>，turn renderer 调用位于
+<code>local-conversation-turn-632904a8790c.js</code> 约
+<code>62217</code>。静态 bundle
+证据；未验证不同数据组合的实际屏幕表现。</p>
+<h3 id="work-面板和本地面板使用不同的-child-详情路径">8.19 Work
+面板和本地面板使用不同的 child 详情路径</h3>
+<p>继续检查 Work 的
+<code>chatgpt-subagents-panel-e608a4ff5e56.js</code>（SHA-256
+<code>406de5e3b812c5fb5a60ab34c01085e829d13c69fec6eb0d11c22e830d231442</code>）。面板从当前
+conversation 的 subagent 集合读取行，只有 <code>status === "done"</code>
+的 child 进入 Done，其余状态都留在 Active。选择已完成 child
+后，客户端创建以 parent conversation ID、child thread ID 和 activation
+ID 为 key 的 final-response 查询；三者齐备时才启用请求，读取
+<code>/flora/subagent/thread/turns</code>，参数为
+<code>conversationId</code>、<code>threadId</code> 和
+<code>limit: 1</code>。</p>
+<p>查询解析返回 turn 的 items 时从尾部向前扫描，优先取非空的
+<code>agentMessage</code> 且 <code>phase === "final_answer"</code>；没有
+final-answer 项时，退回最新的非空 agent
+message。若当前还没有回复，则抛出专用的“尚不可用”错误并最多重试两次；成功结果被视为无限期新鲜，且不会因窗口重新聚焦而自动刷新。详情区用查询结果优先于快照
+<code>statusMessage</code>，两者都没有时再展示 loading 或
+unavailable。这里说明的是客户端取数和 UI 状态，不证明
+<code>/flora/...</code> 服务端何时写入数据、如何授权或怎样选择
+turns。</p>
+<p>这条 Work 面板路径和 local conversation 的
+<code>local-conversation-subagents-panel-tab-2ab06de7bd1d.js</code>（SHA-256
+<code>345278adc9f056901c6e0b8d64c98b09d6d3e12019c2ec20be8567b100196eef</code>）不是同一套详情加载逻辑。后者也按
+<code>done</code> 与非 <code>done</code> 分组，但选择 child 后进入本地
+transcript 组件，并将 row 的 <code>canInteract</code> 传入；没有使用上述
+final-response 查询。因此两个界面即使都叫
+Subagents，也不能据名称推断它们读同一份数据或提供相同交互。</p>
+<p>Work 面板的 selection/detail/list 映射约位于
+<code>chatgpt-subagents-panel-e608a4ff5e56.js</code> 字节偏移
+<code>537</code>、<code>2554</code>、<code>3186</code>，row 投影约
+<code>4991</code>；查询模块
+<code>chatgpt-subagent-final-response-query-b2b6816e81df.js</code>
+的解析器与 queryFn 约在 <code>169</code>、<code>633</code>。local panel
+detail/list 分组约在
+<code>615</code>、<code>2232</code>。以上均为本机提取 bundle
+的静态证据；没有打开面板或请求 endpoint。</p>
+<h3 id="work-面板状态来自-conversation-消息投影">8.20 Work 面板状态来自
+conversation 消息投影</h3>
+<p>继续解析 Work 面板 import，把它传给的 <code>p</code> 函数定位到
+<code>app-initial-6350d04672d0.js</code> 中的 <code>vin</code>（SHA-256
+<code>604b5d2de4fbb41f3d0dc5b3662129c558e1c7b8aac8cc87225286f58dcfaf8f</code>）。该
+selector 只在输入消息含 <code>codex_sub_agent_activity</code> 或
+<code>codex_collab_agent_tool_call</code> 元数据时返回投影；它会
+schema-parse 这些记录，产生 subagent rows、每个 thread 的 activation
+ID，以及按 transcript 消息归并出的 activity groups。Work 面板拿投影的
+<code>subagents</code> 做 Active/Done 列表，并把 activation ID
+放进最终回复 query key。因此列表状态和 final-response
+文本不是同一次取数。</p>
+<p>状态 reducer 从 activity path/thread ID 与协作工具的 receiver ID 建
+child row。<code>pendingInit</code> 映射为 waiting，<code>running</code>
+为
+working，<code>completed</code>、<code>interrupted</code>、<code>shutdown</code>
+为 done，<code>errored</code>、<code>notFound</code> 为 failed；spawn 有
+prompt
+时会保留。<code>spawnAgent</code>、<code>sendInput</code>、<code>resumeAgent</code>
+的 tool state 可把 receiver 标成 working；完成的 <code>wait</code>
+会把当前 waiting/working children 标为 done。父 turn 仍在运行时，若
+child 的最后事件早于最近一条 user message 边界，也会被视为 done；父 turn
+不运行时，剩余 waiting/working 行同样关闭为 done。activity 自身的
+completed/interrupted 事件也会把对应 child 设为 done。</p>
+<p>这解释了 Work 面板如何从传入的 conversation
+消息构造状态快照，但不证明后端 thread 此刻的真实生命周期，也不等于独立的
+final-response API 返回了结果。selector <code>vin</code> 约在字节偏移
+<code>1786793</code>，状态归并 <code>yin</code> 约
+<code>1787726</code>，activity 分组 <code>bin</code> 约
+<code>1789278</code>，metadata parser <code>Sin</code> 约
+<code>1790359</code>、tool status 映射 <code>Ein</code> 约
+<code>1791077</code>。仅静态检查安装 bundle；未采集 live selector
+值或实际面板渲染。</p>
+<h3 id="work-详情跟随当前分支投影回复外链策略由上游传入">8.21 Work
+详情跟随当前分支投影，回复外链策略由上游传入</h3>
+<p>补看 <code>chatgpt-subagents-panel-e608a4ff5e56.js</code>
+的详情分支。面板用当前 conversation 投影出的 <code>subagents</code>
+列表按 <code>threadId</code> 查找已选 child；如果仍有选中的
+ID、但当前列表没有对应 row，就显示“这个子 agent
+在当前分支中已不可用”。返回按钮会清空选中
+ID。这说明详情的可见性跟当前分支提供的列表绑定；静态代码不能说明 row
+缺失的原因，也不能证明 child 在其他分支或服务端是否仍存在。</p>
+<p>对已完成 child，详情组件把 <code>shouldBlockExternalEgress</code>
+传给 Markdown renderer：值为 true 时使用
+<code>externalResourcePolicy: "restricted"</code>，否则为
+<code>"allow"</code>。在这个面板资源中没有追到该 prop
+的计算来源，也没有确认两种 policy
+的完整行为，所以这里只记录“面板把条件传给
+renderer”，不把它扩大解释为已验证的网络权限结论。</p>
+<p>相关逻辑位于同一资源（SHA-256
+<code>406de5e3b812c5fb5a60ab34c01085e829d13c69fec6eb0d11c22e830d231442</code>）约字节偏移
+<code>537</code>（selection 与缺失 row 分支）、<code>6004</code>（详情
+renderer）、<code>6442</code>（分支不可用文案）、<code>7757</code>（policy
+条件）。仅静态 bundle 检查；没有切换分支、打开面板或访问外链。</p>
+<h3 id="标签缩略预览复用-final-response-缓存">8.22 标签缩略预览复用
+final-response 缓存</h3>
+<p>继续追踪 Work Subagents 面板的标签缩略图
+<code>subagents-525abfd8ce99.js</code>（SHA-256
+<code>d7e724ae5d94e68233966a03fb35e3291c39d8d80b633673bf139991f360a7cd</code>）。缩略图会从同一
+conversation 投影中解析选中的 child；若 child 已
+<code>done</code>，它读取 final-response query
+的缓存，使用与详情查询相同的 parent conversation ID、child thread
+ID、activation ID 和 live-turn 状态构造
+key。它优先展示缓存回复，其次使用 row 的
+<code>statusMessage</code>；只有 active child 才会用 delegated prompt
+作为回退。选中的文本会截断到 1000 个字符，状态图标/标签则独立来自 child
+status。</p>
+<p>这说明详情面板与缩略图可以复用客户端 query
+cache，并以不同方式投影同一条回复数据；它不证明缩略图触发了额外 endpoint
+请求，也不证明服务端返回了何种具体回复。缩略图投影约在字节偏移
+<code>619</code>，缓存查询约 <code>3162</code>，回退选择与 1000
+字符截断约 <code>3537</code>；active/non-active 列表判定 helper
+<code>H</code> 约 <code>2616</code>。仅静态 bundle
+检查，未渲染缩略图或观察网络请求。</p>
+<h3 id="最终回复查询进入共享请求客户端">8.23
+最终回复查询进入共享请求客户端</h3>
+<p>再从
+<code>chatgpt-subagent-final-response-query-b2b6816e81df.js</code> 跟进
+<code>safeGet</code>，定位到共享 bundle
+<code>app-shared-8bd9d0399038.js</code>（SHA-256
+<code>607ad0866dd25ed3764711b4467a9b60708353a599485b5249ff4cbe0e870245</code>）。调用把
+<code>/flora/subagent/thread/turns</code> 和
+<code>{conversationId, threadId, limit: 1}</code> 作为 query
+参数交给共享客户端；客户端将它映射为 <code>GET</code>，通过统一 URL
+builder 序列化 query，并把 request-client 默认 headers 与单次调用的
+<code>additionalHeaders</code> 合并。这个 query call site 没有传入
+<code>additionalHeaders</code>，所以请求走默认头配置。</p>
+<p>对该 <code>/flora/...</code> route，共享客户端默认 headers 还包括
+<code>OAI-Language: en</code>、<code>X-OpenAI-Attach-Auth: 1</code>、<code>X-OpenAI-Attach-Integrity-State: 1</code>
+和 <code>originator: Codex Desktop</code>。这里两个
+<code>Attach-*</code> 值是请求层的附加标志，不是凭据或 integrity
+数据本身；静态 bundle 没有显示后续请求层实际附加的材料。</p>
+<p>请求构造后，共享 bundle 调用注入的
+<code>e6.httpFetch.fetch(requestId, request, signal)</code> service
+并等待响应；取消时以同一 request ID 调
+<code>cancel</code>。追主进程时发现它在隐藏目录
+<code>.vite/build/main-CqEoQDOU.js</code> 中，之前的默认 ripgrep
+搜索漏掉了隐藏目录。主进程 <code>fetchHttp</code> 将相对 route
+解析到配置的 backend URL，解析 <code>X-OpenAI-Attach-*</code>
+flags，再进入 <code>performDesktopFetch</code>（文件 SHA-256
+<code>09d19386e1f23cf4ccbc950fc40d85a1e8a064a08be588b2a4be6a89f6ada9e6</code>；约字节偏移
+<code>691815</code>、<code>701789</code>、<code>694247</code>）。</p>
+<p>主进程把 <code>X-OpenAI-Attach-Auth: 1</code> 解释为需要附带
+auth：它从缓存或 app-server 获取 token，并仅在该标记启用时加入
+authorization headers；同时会拒绝不在桌面 auth allowlist 中的
+URL。allowlist 包含 OpenAI/ChatGPT 域名及配置的 backend
+origin，但静态证据没有给出本次 <code>/flora/...</code> route
+在运行时解析出的 URL。共享 header
+parser（<code>.vite/build/src-CP7XXlpZ.js</code>，SHA-256
+<code>79623d50989f9efbcb8e5752c56b3cc608a0f5993c05112e03e11b718ac7a586</code>，约偏移
+<code>87900–88328</code>）按大小写不敏感方式读取控制字段并从 headers
+对象删除。因此这些 <code>X-OpenAI-Attach-*</code> 是 renderer→host 的
+IPC 控制字段，不会以同名 HTTP headers
+转发；<code>X-OpenAI-Expected-Account-Id</code> 也会被取出删除，并由
+host 与 token 内账号 ID
+比对，不一致就中止请求。<code>X-OpenAI-Attach-Integrity-State: 1</code>
+是另一条路径：host 从 scoped state 读取 integrity 值放入
+<code>X-OAI-IS</code>，并根据响应中的有效 <code>X-OAI-IS-Update</code>
+条件更新状态。更新采用 expected/current
+值比较，避免较旧请求的响应覆盖较新的状态；状态值需符合有长度上限的
+<code>ois1.&lt;segment&gt;.&lt;segment&gt;.&lt;segment&gt;</code>
+格式。主进程 host 初始化该 store，观察到的 auth-mode/account-reset
+分支会清掉它。auth/store 逻辑约在 <code>655416</code>、请求 headers
+处理约 <code>694247–696000</code>、host 初始化与 reset 约
+<code>3316000–3317800</code>，URL allowlist 约 <code>702944</code>。</p>
+<p>再追 URL helper 到
+<code>.vite/build/bootstrap-CooIJpZm.js</code>（SHA-256
+<code>d1ab6d0bb5aabf4d56a3cb39d979dc1145e41b47be6821b967cba3802af3fbf0</code>）：非空的
+<code>CODEX_API_BASE_URL</code> 优先作为 base（去掉末尾斜线）；否则
+<code>CODEX_API_ENDPOINT=localhost</code> 选 development
+base，其他情形选 production base。bundle 中的默认值分别是
+<code>http://localhost:8000/api</code> 与
+<code>https://chatgpt.com/backend-api</code>，相对 route 再拼到所选
+base。随后若 workspace routing 不是 <code>legacy</code>，host 会用
+<code>routing.workspace.backendOrigin</code> 替换 origin，同时保留 path
+和 query；legacy 路径保留原 URL（helper 约在
+<code>11850–13500</code>）。所以代码里能还原默认值和覆写规则，但没有读取本机环境变量或实际
+routing state，不能断言当前安装运行时最终请求的 host。</p>
+<p>所以现在已静态还原到“webview 请求 → host URL/base 选择与路由改写 →
+host 附加请求材料的规则”，但没有读取或记录任何 credential
+值，也没有捕获真实请求 headers。服务端授权/branch 校验、endpoint
+如何选数据、final answer 何时可用仍未知；本次没有实际发送请求。共享
+bundle 的 URL/query 组装、请求发送、<code>safeGet</code> wrapper 和
+default header builder 分别约在偏移
+<code>3391383</code>、<code>3392031</code>、<code>3396050</code>、<code>3391067</code>；header
+名常量初始化约在 <code>1914622</code>。</p>
+<h3 id="重连后的-subagent-delta-过滤集合没有客户端主动回填点">8.24
+重连后的 subagent delta 过滤集合没有客户端主动回填点</h3>
+<p>继续检查 Electron app-server connection
+的初始化和恢复路径。<code>src-BJv5Mk7n.js</code> 中
+<code>subagentThreadIds</code> 是每个 connection 实例上的空
+<code>Set</code>；静态 bundle 里唯一的 <code>add</code>
+出现在通知分发：收到 <code>thread/started</code>，且
+<code>source.subAgent.thread_spawn.parent_thread_id</code>
+为字符串时，才登记该 child ID。connection dispose
+会清空此集合。对这个过滤集合没有找到从 thread snapshot、thread list 或
+history 主动回填已有 child ID 的代码。</p>
+<p>这把此前的未知项缩小为两层：客户端模块没有显示主动
+preload/backfill。再对照匹配的公开 app-server tag
+<code>rust-v0.162.0-alpha.17.2</code>（commit
+<code>740e5af33c71225640e0c1c1555c514c2c93ab74</code>）：<code>thread/start</code>
+和 <code>thread/fork</code> 路径显式发送 <code>thread/started</code>（<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDE2MzgtTDE2NTU=">start<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDU0NjgtTDU0OTI=">fork<i class="fa fa-external-link-alt"></i></span>）；<code>thread/resume</code>
+的完成路径发送 resume response，之后可发送 token usage、goal snapshot 和
+idle lifecycle event，没有显式发送 <code>thread/started</code>（<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDQxODQtTDQyMzA=">resume<i class="fa fa-external-link-alt"></i></span>）。扫描该
+tag 的 app-server Rust 源码，另一个 <code>thread/started</code>
+生产发送点用于 review-thread 恢复。由此可知，这份公开 app-server
+源码的普通 resume handler
+不会主动重发该通知；但本机桌面构建是否使用完全相同的 server
+revision、重连时是否走别的注册/初始化路径，仍未证明。因此尚不能断言真实重连一定漏过滤，也不能把此源码行为直接当成本机运行时实测。</p>
+<p>再用公开 tag <code>rust-v0.162.1</code>（commit
+<code>092d3acd6bec3e3a14bdc7e7a2810ab628ab759d</code>）独立交叉检查，结果相同：<code>thread/start</code>
+和 <code>thread/fork</code> 会发送 <code>ThreadStarted</code>（<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDE2MzgtTDE2NTU=">start<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDU0MTUtTDU0MjM=">fork<i class="fa fa-external-link-alt"></i></span>）；冷恢复路径只发送
+resume response、可能的 token usage、goal snapshot 和 idle
+lifecycle，没有显式重发 <code>ThreadStarted</code>（<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzA5MmQzYWNkNmJlYzNlM2ExNGJkYzdlN2EyODEwYWI2MjhhYjc1OWQvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9wcm9jZXNzb3IucnMjTDQyMDYtTDQyMzA=">resume<i class="fa fa-external-link-alt"></i></span>）。运行中线程的
+resume 也通过 listener 返回响应，没有显式重发该通知。这提高了“resume
+handler 本身不补发”的可信度，但仍不能证明本机桌面端精确对应上述任一
+revision，也不能排除其他初始化链路重放；真实 remote connection
+replacement 的结果仍待运行时证据。</p>
+<p>证据位于本机 <code>src-BJv5Mk7n.js</code>（SHA-256
+<code>72e2b366d574206f76fc079c79b64c31ce378970a797475ded8709908d338f08</code>）：connection
+字段初始化约偏移 <code>1189433</code>，dispose 与清理约
+<code>1219027</code>，通知登记和后续过滤约
+<code>1252395–1252969</code>。这是安装 bundle
+的静态观察；没有触发重连，也没有采集运行时通知。</p>
+<p>客户端 resume 本身会恢复另一类状态，不能和 connection 的 subagent
+过滤集合混为一谈。<code>app-shared-8bd9d0399038.js</code>（SHA-256
+<code>607ad0866dd25ed3764711b4467a9b60708353a599485b5249ff4cbe0e870245</code>）中的
+<code>resumeConversation</code> 先读取线程 metadata，再发
+<code>thread/resume</code>；收到响应后把 thread 的
+<code>source</code>、<code>threadSource</code>、runtime
+status、历史等合并到 conversation store，最后广播 conversation
+snapshot（关键偏移约
+<code>2922470</code>、<code>2936270</code>、<code>2941699</code>、<code>2940000</code>）。这是
+conversation/thread hydration，不会直接写入另一个 bundle 中
+connection-local 的 <code>subagentThreadIds</code>。可交互 child
+renderer 另由
+<code>use-resume-conversation-if-needed-cd15159177f0.js</code>（SHA-256
+<code>2299468dc1ce305855a9fc93cd9d11c2956b60023563d8360483ee2d44a818f4</code>）通过
+host bridge 发送 full-fidelity surface enable，effect cleanup 时
+disable（约偏移 <code>5428</code>）；这条 surface 登记路径也不等于 child
+ID 登记。结合前述 connection bundle 唯一的 set insertion
+点，这个安装版本没有发现 resume metadata/history/snapshot 或 surface
+enable 反向补齐 <code>subagentThreadIds</code> 的路径。静态 bundle
+证据；没有实际恢复连接、观测通知或验证过滤结果。</p>
+<h3 id="普通-transport-重连会保留已登记的-child-id">8.25 普通 transport
+重连会保留已登记的 child ID</h3>
+<p>继续追 <code>AppServerConnection</code>
+的断线和重启生命周期，修正上一节留下的疑点。transport
+关闭时，客户端把底层 connection 置空，重置 initialized 状态、host
+metadata、请求队列和 auth cache，再通过同一个
+<code>AppServerConnection</code> 实例重新走
+<code>ensureReady</code>；显式 <code>stopProcess</code> 也停止 transport
+并重置初始化状态。两条路径都没有清除
+<code>subagentThreadIds</code>。清理该集合的代码在
+<code>dispose()</code>：实例被标记为 disposed 后才清集合。</p>
+<p>所以，已有 child ID
+在普通断线重连或该实例内的进程重启后仍留在集合中；“普通重连会因没有重新收到
+<code>thread/started</code> 而必然丢失 subagent delta
+登记”不是当前代码支持的结论。真正还未知的是：桌面 host 在什么情况下会
+dispose 并替换 connection 实例，以及若旧 child
+仍然相关，新实例是否通过未发现的路径重新登记。<code>thread/resume</code>
+单独不主动填充过滤集合这一静态观察仍成立，但它不等价于普通 reconnect
+会丢状态。</p>
+<p>证据在 <code>src-BJv5Mk7n.js</code>（SHA-256
+<code>72e2b366d574206f76fc079c79b64c31ce378970a797475ded8709908d338f08</code>）：<code>handleTransportClosed</code>
+约偏移 <code>1232157</code>、<code>stopProcess</code> 约
+<code>1231052</code>、同实例 <code>ensureReady</code> 约
+<code>1219879</code>，<code>dispose</code> 中清集合约
+<code>1218256–1219032</code>。偏移只适用于该文件
+hash。仅静态检查，没有触发真实断线、重连或进程重启。</p>
+<h3 id="remote-host-的显式重连会替换-connection-实例">8.26 Remote host
+的显式重连会替换 connection 实例</h3>
+<p>继续追 Electron host 的 registry
+后，找到了实例销毁重建的具体路径。remote host 的
+<code>connectRemoteConnection</code> 若发现旧 connection
+已注册，会先调用
+<code>disposeRemoteConnection</code>；该方法调用旧实例的
+<code>dispose()</code> 并从 registry 移除。随后 host 创建新的
+<code>AppServerConnection</code>，注册后才调用
+<code>connect()</code>。因此这个操作会得到新的空
+<code>subagentThreadIds</code>，而同一 host 已有的 activity
+集合不会由旧实例自然保留。</p>
+<p>另有两种生命周期值得区分：<code>ensureRemoteConnectionConnected</code>
+对已存在但未连接的对象调用原实例
+<code>.connect()</code>，会保留集合；remote connection reconciliation
+在配置不再匹配、关闭 auto-connect 或 host 消失时会 dispose
+现有实例，配置需重建时再创建新实例。新实例的 app-server 通知处理仍从
+<code>thread/started</code> 登记 child；本次静态检查没有发现 registry
+replacement 后回放活动 child ID 的代码。</p>
+<p>这把疑点收窄为实际的 host replacement 场景，而不是普通 transport
+抖动。但仍没有实测 remote child
+是否会跨显式连接替换继续产生通知，也没有证明没有其他未定位的初始化路径。Electron
+host bundle <code>main-CqEoQDOU.js</code> SHA-256 为
+<code>09d19386e1f23cf4ccbc950fc40d85a1e8a064a08be588b2a4be6a89f6ada9e6</code>；<code>connectRemoteConnection</code>/<code>ensureRemoteConnectionConnected</code>
+约在偏移 <code>3078700–3079500</code>，reconciliation 约在
+<code>3064000–3066000</code>，<code>createAndRegisterRemoteConnection</code>/<code>disposeRemoteConnection</code>
+约在 <code>3353500</code>。只做静态检查，未在实际 remote host
+上断开、重连或重建连接。</p>
+<h3 id="remote-connection-注册已有窗口不等于重放-child-状态">8.27 Remote
+connection 注册已有窗口，不等于重放 child 状态</h3>
+<p>继续追 <code>createAndRegisterRemoteConnection</code>：创建新
+connection 后，Electron 会遍历
+<code>registeredWindows</code>，对每个已有窗口调用
+<code>registerWebviewWindow</code>。但 connection
+侧这个方法只登记窗口监听、安装销毁清理，并发送 connection-state
+snapshot；没有遍历 child conversation、发送
+<code>thread/started</code>，也没有回放
+<code>subagent-thread-full-fidelity-changed</code>。后者由单独的 IPC
+接收分支处理，只更新 connection 上按 thread 与 surface 维护的
+full-fidelity 表，不会向 <code>subagentThreadIds</code> 添加 child
+ID。对 connection bundle 的全量引用搜索还发现，唯一直接向该集合添加 ID
+的位置，是接收符合 <code>UR(n)</code> 条件的 <code>thread/started</code>
+通知；<code>UR</code> 要求
+<code>source.subAgent.thread_spawn.parent_thread_id</code>
+为字符串。其余引用用于初始化、dispose 清理或 membership filtering。因此
+bundle 内没有第二条 snapshot/IPC 直接回填入口，但 server/transport
+是否重放符合条件的通知仍未知。</p>
+<p>renderer 的 <code>use-resume-conversation-if-needed</code> effect
+会观察两个派生值：child 所属的 host ID，以及它的
+<code>subagentParentThreadId</code>。后者来自 conversation 的
+<code>parentThreadId</code> 或 source 中的 parent ID，并保存在
+loaded/archived thread title state；host selector 则结合 conversation 的
+manager/summary host 解析，并带有 host-list
+fallback。两个值都可用时，effect 才向该 host 发送
+<code>subagent-thread-full-fidelity-changed(enabled: true)</code>，并在清理时发送
+<code>enabled: false</code>。继续追 <code>app-shared</code> 的 store
+实现后，可以确认 <code>watch</code> 由 effect atom 支撑：订阅会挂载
+effect
+并安排一次初始检查，之后被读取的状态变化会让它再次运行。因此新挂载或重建的
+watcher 能用已有的 parent/host 关系重发 enable。但 React effect
+的依赖仍只有 child conversation ID 与 store 对象，Electron connection
+实例/registry 不在依赖中；单独替换 connection 不会重挂这个
+watcher。已检查的新连接注册路径会广播 connection state，但没有更新
+conversation 的 parent relation。其他路径是否会改变 watcher
+的两个值，或另行回填 child ID，仍未知。</p>
+<p>证据位置：<code>main-CqEoQDOU.js</code> 中 host registry replacement
+约偏移 <code>3353690</code>；<code>src-BJv5Mk7n.js</code>（SHA-256
+<code>72e2b366d574206f76fc079c79b64c31ce378970a797475ded8709908d338f08</code>）中
+<code>subagentThreadIds</code> 初始化约 <code>1189433</code>、dispose
+清理约 <code>1219032</code>、唯一 <code>thread/started</code> 添加点约
+<code>1252400</code>、过滤查询约 <code>1252969</code>；<code>UR</code>
+检查 <code>source.subAgent.thread_spawn.parent_thread_id</code> 约
+<code>1154174</code>；<code>registerWebviewWindow</code> 约
+<code>1196846</code>、surface setter 约 <code>1198170</code>，IPC
+receiver 约 <code>2104239</code>。renderer 模块
+<code>use-resume-conversation-if-needed-cd15159177f0.js</code> SHA-256
+为
+<code>2299468dc1ce305855a9fc93cd9d11c2956b60023563d8360483ee2d44a818f4</code>，sender
+effect 约偏移 <code>5325</code>。共享 store bundle
+<code>app-shared-8bd9d0399038.js</code> SHA-256 为
+<code>607ad0866dd25ed3764711b4467a9b60708353a599485b5249ff4cbe0e870245</code>：<code>q6t</code>
+从 conversation/source 推导 parent relation 约在偏移
+<code>2620356</code>，<code>titleState</code> 为 loaded/archived
+状态保留该关系约在 <code>2632928</code>；host selector <code>F3</code>
+约 <code>5689682</code>，parent selector <code>Wsi</code> 约
+<code>5694550</code>。watch 实现中 <code>Ost</code> 通过
+<code>store.sub</code> 挂载 effect atom 约
+<code>1679810</code>，<code>wst</code> effect/mount hook 约
+<code>1678048</code>，<code>Nk</code> 的 watch wrapper 约
+<code>1684368</code>，predicate watcher <code>Xst</code> 约
+<code>1684904</code>。偏移只对对应文件 hash 有效。只检查静态
+bundle，没有实际替换 remote connection。</p>
+<h3
+id="本机-app-server-与-remote-host-使用不同的-connection-创建入口">8.28
+本机 app-server 与 remote host 使用不同的 connection 创建入口</h3>
+<p>继续追 Electron 主进程 bundle 的 connection owner，发现前面的
+<code>createAndRegisterRemoteConnection</code> 结论需要限定为 remote
+host。<code>main-CqEoQDOU.js</code>（SHA-256
+<code>09d19386e1f23cf4ccbc950fc40d85a1e8a064a08be588b2a4be6a89f6ada9e6</code>）中，host
+manager 构造时直接调用
+<code>createAppServerConnection(localHostId)</code> 创建本机 app-server
+connection（约偏移 <code>3302289</code>），随后把这个对象加入
+<code>appServerConnectionRegistry</code>（约
+<code>3303344</code>）。如果配置了 durable thread
+host，则由另一段构造逻辑单独创建和注册（约
+<code>3306487</code>）。<code>createAndRegisterRemoteConnection</code>（约
+<code>3353690</code>）由 remote connection handler 使用，因此它的
+dispose/replace 行为不能直接套到本机 connection 上。</p>
+<p>2026-10-14 的一次脱敏进程快照同时看到桌面主进程下有本机 embedded
+Codex CLI <code>app-server</code>，以及另一个以
+<code>exec-server --remote</code> 连接云端 environments endpoint
+的进程。进程参数中的环境/session
+标识不记录。这个快照证明当时两种进程并存；它不说明具体 subagent thread
+或通知由哪个 host 承载，也不代表所有会话的固定拓扑。</p>
+<p>继续沿 manager 生命周期追踪，在同一 <code>main-CqEoQDOU.js</code>
+中只找到一个 <code>new hXe(...)</code> 构造调用点（约偏移
+<code>3358549</code>），位于主进程启动流程。manager 的
+<code>dispose()</code>（约偏移 <code>3344603</code>）会取得 registry
+中全部 host ID，对每个已注册连接调用 <code>dispose()</code>，随后移除
+connection 和 execution-host 注册；本机 connection 已在该 registry
+注册，因此若退出时仍在其中，也会进入这段清理循环。不过循环没有逐个等待
+connection 的 <code>dispose()</code> 完成。</p>
+<p>正常 <code>will-quit</code> 路径（约偏移
+<code>3384353</code>）会先阻止立即退出、刷新状态并处理其他服务，再通过
+<code>flushAndDisposeContext</code> 调用 manager 清理。这个回调会等待
+manager 和另一个 service manager 的 <code>dispose()</code>，并在
+<code>finally</code> 刷新 tracing；外层等待最多 5
+秒，超时后退出流程仍可继续。更新安装的 immediate-exit
+路径也复用这个回调和 5 秒等待。因此静态代码证明的是“退出流程会启动
+manager/connection 清理”，不能据此断言异步 connection
+清理一定在进程退出前全部完成。</p>
+<p>综合来看，同一 connection 实例的普通 transport 重连保留
+<code>subagentThreadIds</code>；remote host 显式替换会创建新实例，bundle
+中未发现直接回填旧 child ID 的入口；本机 connection
+有独立的创建/注册路径，并会在 manager 退出清理中被调用
+<code>dispose()</code>。主 bundle 中单一 manager
+构造点支持应用重新启动时再次创建 manager，但 child
+线程是否跨应用退出继续运行、其 parent/host 关系如何重新发现、新
+connection 如何重新收到 child 通知，仍没有证据。以上是静态 bundle
+检查和一次脱敏进程快照；没有重启、断开连接或采集通知。</p>
+<p>新增退出生命周期证据位于同一 <code>main-CqEoQDOU.js</code>：manager
+<code>dispose()</code> 约偏移 <code>3344603</code>，唯一
+<code>new hXe(...)</code> 调用点约 <code>3358549</code>，normal
+<code>will-quit</code> handler 约 <code>3384353</code>，启动流程传入
+<code>flushAndDisposeContext</code> 约
+<code>3812129</code>；update-install immediate-exit 调用点约
+<code>3374211</code> 与 <code>3814882</code>。manager
+清理循环会调用所有已注册 connection 的 <code>dispose()</code> 并移除
+registry entry，但没有 await 每个 connection；退出封装最多等待 5
+秒。只证明清理会被启动，不能证明每个异步 dispose
+在进程退出前结束。完整边界和复核方法见<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5L2NvZGV4LXN1YmFnZW50LXJldmVyc2UtZW5naW5lZXJpbmcvYmxvYi9tYWluL2V2aWRlbmNlL3N1YmFnZW50LWZsb3cubWQ=">公开证据记录<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3
+id="threadlist-恢复会话不会直接登记-connection-的-child-过滤集合">8.29
+<code>thread/list</code> 恢复会话，不会直接登记 connection 的 child
+过滤集合</h3>
+<p>继续沿 connection bundle
+核对列表与通知注册的关系。<code>src-BJv5Mk7n.js</code>（SHA-256
+<code>72e2b366d574206f76fc079c79b64c31ce378970a797475ded8709908d338f08</code>）里的
+<code>listThreads()</code> 只是 <code>thread/list</code> 请求包装（约
+byte offset <code>1205725</code>）；conversation list helper 则通过
+<code>sendRequest</code> 发 <code>thread/list</code> 并消费返回 rows（约
+<code>438282</code>）。两条路径都没有写入 connection-local 的
+<code>subagentThreadIds</code>。全 bundle 唯一直接添加 child ID
+的位置仍是满足 subAgent source 条件的 <code>thread/started</code>
+路由（约 <code>1256453</code>）。因此列表与 history hydration 可以恢复
+conversation 数据，但不能据此推断通知过滤集合也被回填。</p>
+<p>还发现一条特殊的 prewarm 通知路径。对安装包内所有 JS
+做引用搜索后，只找到一个 <code>prewarmThreadStart()</code>
+调用方：conversation prewarm manager，它用新会话参数预先准备普通
+<code>thread/start</code>（<code>src-BJv5Mk7n.js</code> 约 byte offset
+<code>900036–900508</code>；<code>main-CqEoQDOU.js</code> 请求适配器约
+<code>733031</code>），没有找到 subagent 创建路径调用它。若某请求标记了
+<code>prewarmThread</code>，成功响应会把返回 thread 放入 tracker（约
+<code>1259615</code>）。其原始 <code>thread/started</code>
+到达时，<code>suppressThreadStarted()</code> 会让通用路由提前返回（约
+<code>1255164</code>），早于 child ID 登记条件。稍后收到
+<code>turn/start</code> 时，客户端会发布合成的
+<code>thread/started</code>；该回调只调用内部 notification handlers
+并向窗口广播（约 <code>1197380</code>），没有再进入
+<code>routeIncomingMessage</code>，所以合成通知本身不会写入
+<code>subagentThreadIds</code>。</p>
+<p>这是条件路径分析。当前客户端调用图指向普通 conversation
+预热，没有证据表明 subagent 会进入该流程；不能排除服务端或未包含在此
+bundle 的其它调用方。后续是否另有生命周期事件登记 child
+也仍未知。仅静态检查，没有发起请求、重连或采集通知。</p>
+<h3 id="本机-rollout-记录同时包含-v1-与-v2-subagent">8.30 本机 rollout
+记录同时包含 V1 与 V2 subagent</h3>
+<p>为确认静态客户端路径是否对应本机真实会话，我对
+<code>/Users/joey/.codex/sessions</code> 下 178 个 rollout JSONL
+文件做了一次只读结构扫描，共解析 98,709
+条记录；扫描过程只统计元数据与事件类型，没有输出或保存提示词、回答正文、线程
+ID 或账号标识。</p>
+<p>在 CLI 版本 <code>0.162.0-alpha.17.2</code> 且
+<code>originator=Codex Desktop</code> 的记录中，找到 23 个 user-thread
+rollout 和 16 个 subagent-thread rollout。16 个 child 元数据记录都包含
+parent-thread ID，且各自都能匹配到这批 23 个 user-thread 的本地
+ID。Child 元数据中 13 个标记为 V1，3 个标记为 V2。对应
+<code>turn_context</code> 记录中，parent 有 217 条 V1、20 条 V2；child
+有 31 条 V1、14 条 V2。这些是 context 记录条数，不是唯一线程数或唯一
+turn 数。</p>
+<p>这项观察证明当前本机样本中确实存在桌面端 V1 与 V2 subagent
+记录，也与前文单独检查的 48 个 turn context 全为 V1
+的研究会话并不矛盾：两者是不同的 rollout
+集合。它不能证明全局默认版本、样本完整性或其他 host
+的行为；<code>thread_source</code>、父子 ID
+和版本字段只说明持久化记录中的关系，不能单独证明某个 UI 面板曾显示该
+child。记录只在本机扫描，未把 rollout
+内容或标识写入博客和公开证据库。</p>
+<h3 id="v2-子线程会被按需卸载但中断状态不一定能重载">8.31 V2
+子线程会被按需卸载，但中断状态不一定能重载</h3>
+<p>我把本机匹配版本与公开源码快照对齐后，发现一项明确的版本差异。本机桌面内嵌
+CLI 是 <code>0.162.0-alpha.17.2</code>（源码参照 commit
+<code>740e5af33c71225640e0c1c1555c514c2c93ab74</code>）；公开 tag
+<code>rust-v0.162.0-alpha.20</code>（commit <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/15c477d788a575de432f661def200ae7bc4a835e"><code>15c477d788a575de432f661def200ae7bc4a835e</code></a>）和
+<code>rust-v0.163.0-alpha.9</code>（commit <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/4753ce3d19df9ffa58353736c4ffde49ed071589"><code>4753ce3d19df9ffa58353736c4ffde49ed071589</code></a>）都包含
+V2 residency 驱逐和加载路径。完整 Git 历史显示这两个 tag
+的关系不是线性升级：共同祖先为
+<code>c333d755d44d4eb764cffd2bd862d86d790e91e6</code>，<code>git rev-list --left-right --count alpha.20...alpha.9</code>
+为
+<code>1 166</code>。因此下面是两个公开快照的对照；只能把该路径的出现时间界定为“最迟
+alpha.20 已存在”，不能据此认定具体引入提交或本机桌面运行了这些实现。</p>
+<p>容量达到上限时，resident
+队列从最久未触达的候选开始尝试卸载。它跳过被保护的线程，并要求候选仍是同一个已登记
+runtime，且处于 <code>Completed</code>、<code>Errored</code> 或
+<code>Interrupted</code> 状态，没有活动
+turn、持久睡眠或待处理的触发式邮件。卸载时会等待线程退出，阻止并发投递；把尚未读取的
+queue-only 邮件放回 mailbox，并将 environment selections 暂存在本地
+agent registry，最后移除 runtime 和 residency
+记录。找不到可卸载对象时会返回 residency capacity 错误。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzE1YzQ3N2Q3ODhhNTc1ZGU0MzJmNjYxZGVmMjAwYWU3YmM0YTgzNWUvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9yZXNpZGVuY3kucnM=">alpha.20
+residency<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>重载不是所有被卸载 child 的保证。恢复路径会检查 agent registry
+元数据、持久化 thread/history、V2
+标记与父子来源一致性；如果由父线程发起，还要求父线程仍在同一个 registry
+中登记、正在运行且属于
+V2。随后会重建配置，并重新校验父线程派生的执行策略和环境权限，再恢复原
+thread ID。更关键的是，alpha.20
+的测试明确覆盖了一个反例：<code>Interrupted</code> child
+可以通过卸载资格检查，但卸载后调用重载仍得到
+<code>ThreadNotFound</code>。所以运行时驱逐与可恢复性是两件事，不能把它概括成“子线程都能休眠后恢复”。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzE1YzQ3N2Q3ODhhNTc1ZGU0MzJmNjYxZGVmMjAwYWU3YmM0YTgzNWUvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">alpha.20
+reload<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzE1YzQ3N2Q3ODhhNTc1ZGU0MzJmNjYxZGVmMjAwYWU3YmM0YTgzNWUvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9yZXNpZGVuY3lfdGVzdHMucnM=">interrupted
+child 测试<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>这部分来自后续上游源码及其测试，不是对本机 <code>.17.2</code>
+的动态观测；也没有证明 agent registry 能跨 Codex
+进程重启保留。完整版本差异和边界见<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5L2NvZGV4LXN1YmFnZW50LXJldmVyc2UtZW5naW5lZXJpbmcvYmxvYi9tYWluL2V2aWRlbmNlL3N1YmFnZW50LWZsb3cubWQ=">公开证据记录<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3
+id="alpha.9-app-server-快照还有一条由无订阅且空闲触发的-child-卸载路径">8.32
+alpha.9 app-server 快照还有一条由“无订阅且空闲”触发的 child
+卸载路径</h3>
+<p>继续对照 <code>.162.0-alpha.20</code> 与 <code>.163.0-alpha.9</code>
+两个源码快照后，我确认容量驱逐之外还有一条 app-server
+生命周期路径。<code>.163.0-alpha.9</code> 的 listener 会识别同时满足 V2
+和 <code>SessionSource::SubAgent</code> 的
+child；当它没有订阅客户端、且线程状态持续 inactive 达到配置的
+<code>thread_unload_delay</code>，便登记 pending-unload guard，再委托
+core 的 <code>try_evict_v2_thread</code>。成功卸载后清理 listener/watch
+状态并发出 <code>thread/closed</code>。普通非 V2 线程仍走 app-server
+原有的 <code>unload_thread_without_subscribers</code>。对照
+<code>.162.0-alpha.20</code>，该快照的 listener 还没有这个 V2
+专用分支。</p>
+<p>因此需要分开看两种触发原因：core residency
+达到容量时会尝试驱逐；app-server 也会因 child 长时间没有订阅者且处于
+inactive 状态而卸载。它们最后调用共享的 core
+卸载实现，但入口和调度条件不同。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9saWZlY3ljbGUucnM=">alpha.9
+lifecycle listener<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzE1YzQ3N2Q3ODhhNTc1ZGU0MzJmNjYxZGVmMjAwYWU3YmM0YTgzNWUvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvcmVxdWVzdF9wcm9jZXNzb3JzL3RocmVhZF9saWZlY3ljbGUucnM=">alpha.20
+对照<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>同一版本新增的 <code>disconnected_v2_child_lifecycle</code>
+测试覆盖断连期间创建 child：没有已初始化客户端时，listener
+仍能为已加载、非 ephemeral 的 V2 child
+建立后台生命周期监听；测试确认仍在运行的 child 不会过早收到关闭，并在
+idle deadline 后通过父线程实际调用 <code>followup_task</code>，检查
+child 下一次模型输入仍包含它之前的 assistant 回复。测试还检查断连的
+parent 和 child runtime
+最终会释放。这些是源码中的测试断言，我没有在本机运行该测试或触发真实断连。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvYXBwLXNlcnZlci9zcmMvbWVzc2FnZV9wcm9jZXNzb3JfdGhyZWFkX2xpZmVjeWNsZV90ZXN0cy5ycw==">alpha.9
+lifecycle 测试<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>这表明 alpha.9 公开快照把 app-server idle 生命周期接到了 V2
+的安全卸载与恢复机制；它仍不能证明本机 <code>.17.2</code>
+桌面构建使用这份实现，或本机真实 child 经历过该路径。完整版本差异见<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5L2NvZGV4LXN1YmFnZW50LXJldmVyc2UtZW5naW5lZXJpbmcvYmxvYi9tYWluL2V2aWRlbmNlL3N1YmFnZW50LWZsb3cubWQ=">公开证据记录<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3 id="消息投递会-pin-residentspawn-取消清理延伸到最终-await">8.33
+消息投递会 pin resident，spawn 取消清理延伸到最终 await</h3>
+<p>在 alpha.9 快照里，向已加载的 V2 子线程发送消息前会取得 residency
+read pin；pin 会核对 thread runtime 仍是 registry 中的同一个实例，并更新
+LRU。这样 eviction 不能在投递期间移除该 runtime。冷恢复的 child
+会在发送前按需加载；本地刚被 eviction 的 child
+则有区别：<code>QueueOnly</code> 可不加载 runtime、直接把消息排入持久化
+mailbox，<code>TriggerTurn</code> 会先尝试加载，再提交 follow-up。</p>
+<p>所以 delivery receipt
+代表控制层接受了投递，不证明模型已读取或执行消息。这里也区分了冷恢复和本地
+eviction 的邮件处理策略。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9hcGkucnMjTDEwMC1MMTcw">alpha.9
+send path<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9yZXNpZGVuY3kucnMjTDE1Ni1MMTcz">residency
+pin<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>spawn 方面，child 首条输入通过 admission 后，控制器仍先 await 最终
+status 和 config 读取；这些步骤完成后才 commit registry/residency 预留并
+disarm <code>PendingSpawn</code>，紧接着通知 thread
+已创建。因此取消发生在这两个最终读取期间时，临时 guard
+仍负责清理；commit/disarm 之后的 tool-result 发布则在该 guard
+边界之外。这是源码规定的所有权顺序，不是我做过取消故障注入后的运行时观察。源码：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycyNMOTM3LUw5NzQ=">alpha.9
+spawn path<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3
+id="host-消息的-sender-context-有来源校验child-设置区分省略和空值">8.34
+host 消息的 sender context 有来源校验，child 设置区分“省略”和“空值”</h3>
+<p>alpha.9 的 turn-input admission 只识别特定 host message-delivery
+工具产生的独立 function-call output，再尝试为被投递的消息补充 sender
+context。投递结果里的 source thread ID 只用于定位
+sender，不作为消息内容的授权证明。sender runtime 未加载时，代码会向 host
+thread store 请求最新 model context，最多等待 5 秒；检查返回 thread ID
+和 session metadata 后，从历史中重建最多三组最新的本地 user/assistant
+交流。tool bodies、继承来的历史和 verified answer 不会作为 sender
+对话复制；不完整的 user message
+也不会当作完整文本传入。授权失败、读失败或超时会退化为不附加这段上下文，而不是无限等待。</p>
+<p>这解释了为什么被委托任务有时能带上最近的真实对话作为上下文，同时不能把工具返回体伪装成用户原话。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuX2lucHV0LnJzI0wzNjMtTDM4NA==">turn-input
+admission<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zZW5kZXJfY29udGV4dC5ycyNMMjItTDE0Nw==">sender-context
+capture<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>spawn 时，parent 优先从 subagent session source
+解析，缺少时才使用显式 parent
+option；这个选择发生在版本判定、execution-capacity
+检查和设置继承之前。<code>disabled_plugin_ids</code>
+也保留了输入差别：调用方省略时沿用当前 parent
+的设置，明确传入空数组则表示 child 这一轮选择不禁用任何 plugin。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycyNMNjc2LUw3MTA=">parent
+resolution<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycyNMNzM2LUw3OTc=">plugin
+inheritance<i class="fa fa-external-link-alt"></i></span>。这些都是 alpha.9 源码规定的行为，不代表本机
+<code>.17.2</code> 的动态观测。</p>
+<h3 id="spawn_agent-从工具参数进入-child-配置和首轮输入">8.35
+<code>spawn_agent</code> 从工具参数进入 child 配置和首轮输入</h3>
+<p>与前文匹配 <code>.162</code> 源码时确认的参数行为相同，alpha.9 的 V2
+schema 仍要求 <code>task_name</code> 与 <code>message</code>，并描述
+<code>fork_turns</code> 仅支持 <code>all</code> /
+<code>none</code>；<code>agent_type</code>、<code>model</code>、<code>reasoning_effort</code>
+则按构造选项决定是否暴露。这个独立分支快照的 handler 还明确使用
+<code>deny_unknown_fields</code>，并把被解析到的
+<code>fork_context</code> 作为不支持参数返回错误。它没有把 schema
+限制扩展为枚举校验：缺省/空白仍按
+<code>all</code>，旧正整数仍映射到完整历史
+fork，不会按数字截取轮数。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3NwZWMucnMjTDEwOC1MMTYz">V2
+tool schema<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3NwZWMucnMjTDY0OS1MNjgz">参数定义<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJzI0wxMDUtTDE5Mg==">handler
+与结果<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJzI0wyMDEtTDIzOQ==">参数解析<i class="fa fa-external-link-alt"></i></span>。这是跨
+branched tags 的静态源码核对，不代表线性版本演进。</p>
+<p>handler 根据工具调用来源转换初始消息，再进入共享的
+<code>thread_spawn::spawn</code>。这一层拒绝空白消息，准备 V2 child
+配置，并将用户提供的 <code>task_name</code> 接到父 agent path
+后形成规范路径。<code>ThreadSpawn</code> session source 同时记录 parent
+thread ID、递增后的 depth、规范路径和 role。child 配置以正在执行的 turn
+与捕获的 step settings 为依据：刷新实际 model/provider/reasoning 与 base
+instructions 来源，再应用请求或配置默认的 model、reasoning、role
+规则，并复制当前 turn 的 approval policy、reviewer、cwd 和 permission
+profile。显式 model 与 reasoning effort
+会经过可用性/支持级别校验。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdGhyZWFkX3NwYXduLnJzI0w1OC1MMTY2">共享
+spawn<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY2hpbGRfY29uZmlnLnJzI0w1Mi1MMTIx">配置准备<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY2hpbGRfY29uZmlnLnJzI0wxMzItTDIwMg==">运行时与共享配置<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY2hpbGRfY29uZmlnLnJzI0wyMDQtTDI2MA==">model
+override 校验<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>是否继承历史与 child 是否立即开始工作是两件事：无论
+<code>fork_turns</code> 选 fresh 还是 full-history，首条
+<code>AgentInput::Message</code> 都使用
+<code>TriggerTurn</code>。full-history 分支还会校验 spawn
+call/source，并先 flush parent rollout，再读取可 fork
+的历史快照；它不是简单复制一个内存列表。controller 返回已接纳的 child
+后，handler 才发出带真实 child thread ID 与规范路径的
+<code>Started</code> activity。回给模型的工具结果则是 task
+path，可按设置附带 nickname；它不把内部 thread ID 当作 task name
+返回。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdGhyZWFkX3NwYXduLnJzI0wxMzctTDE2Ng==">首条输入与
+spawn options<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycyNMMTAxNS1MMTA4OA==">fork
+history 准备<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJzI0wxNTMtTDE5Mg==">activity
+与工具结果<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>这条调用链来自公开 <code>rust-v0.163.0-alpha.9</code>
+源码静态分析。它说明该快照如何把参数、父 turn 配置和首条消息交给
+child；不能据此断言本机安装包就是此
+commit，也不能断言某次模型调用实际选择了哪些可选参数。</p>
+<h3 id="首条消息接纳turn-task-启动和模型推理是三个时点">8.36
+首条消息接纳、turn task 启动和模型推理是三个时点</h3>
+<p>alpha.9 的 spawn 顺序还能再分细一点。controller 创建并登记 child
+runtime 后，才提交首条 <code>TriggerTurn</code> communication。已加载的
+child 通过有序的 <code>Op::InterAgentCommunication</code> 进入 session
+handler；handler 先把消息放入 mailbox，再让共享 pending-work scheduler
+决定是否启动 turn。child 空闲时，scheduler 会取出 mailbox 输入、构造
+turn context 并调用 <code>start_task</code>。后者记录 turn 已开始、登记
+active task，再用 <code>tokio::spawn</code> 启动异步 task
+future。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycyNMMjM2LUwzMjM=">communication
+submission<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9oYW5kbGVycy5ycyNMODAtTDk3">mailbox
+handler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdGFza3MvbW9kLnJzI0w0NTItTDU0OA==">pending-work
+scheduler<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvdGFza3MvbW9kLnJzI0wyODctTDQyNQ==">task
+registration<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>因此，空闲 child 的首轮 turn task 会在 spawn 完成前被登记并交给 Tokio
+执行；<code>spawn</code> 随后才读取 status/config、提交
+registry/residency
+reservation、解除临时清理责任并通知客户端。这里能证明“初始输入已接纳”和“turn
+task 已提交运行”，不能证明模型请求已在 <code>spawn_agent</code>
+返回前发出，更不能证明模型已经读完任务或完成工作。若 child
+当时不能启动新 turn，mailbox 接纳也不等同于立即推理。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycyNMOTM3LUw5ODU=">spawn
+admission 与 client notification<i class="fa fa-external-link-alt"></i></span>。这是 alpha.9
+的源码时序；没有在本机触发 live delegation、延迟推理或取消故障注入。</p>
+<h3
+id="委托消息先成为-child-的-agentmessage-历史再进入-sampling-prompt">8.37
+委托消息先成为 child 的 <code>AgentMessage</code> 历史，再进入 sampling
+prompt</h3>
+<p>RegularTask 消费 mailbox 中的
+<code>TurnInput::InterAgentCommunication</code> 时，输入记录器把它转换为
+<code>ResponseItem::AgentMessage</code>，写入 conversation history 与
+rollout；恢复历史时也用同一个转换函数重建该消息。明文消息以文本内容和
+author/recipient 字段进入 AgentMessage。加密消息则把 ciphertext
+保留在独立字段，并带有模型可见的
+<code>NEW_TASK</code>/<code>MESSAGE</code> 类型、task name、sender 和
+payload 边界提示。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvaG9va19ydW50aW1lLnJzI0w3MTYtTDc3MQ==">输入记录<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvcHJvdG9jb2wvc3JjL3Byb3RvY29sLnJzI0w5ODctTDEwMTk=">通信到
+AgentMessage 的转换<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9yb2xsb3V0X3JlY29uc3RydWN0aW9uLnJzI0w1MTMtTDUyMA==">rollout
+重建<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>首轮普通采样前，<code>run_turn</code> 会先处理可能的 pre-sampling
+compaction、MCP/plugin/context 准备和 turn-start
+hooks，再记录输入；随后从完整 conversation history 构造 sampling request
+输入、调用 <code>build_prompt</code>，最后进入
+<code>ModelClientSession::stream</code>。若采样前 compaction
+出错，源码也会先保留/记录 pending input 再退出。因此“task
+已启动”与“provider client
+已发出采样请求”之间还隔着这些准备步骤；即使走到
+<code>.stream(...)</code>，静态代码也不能证明远端服务已收到请求或模型已生成
+token。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0wxODEtTDIyMw==">turn
+前置处理<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0wyNTktTDM3OA==">输入记录与
+turn-start hooks<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0w1MjUtTDU0NA==">历史构造
+request<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0wyNjAwLUwyNjE3">provider
+stream 调用<i class="fa fa-external-link-alt"></i></span>。这里分析的是 alpha.9 core path，没有捕获真实 provider
+请求，也不推断远端模型如何解释 AgentMessage。</p>
+<h3 id="child-正在采样时收到协作消息可能在-item-边界触发-follow-up">8.38
+child 正在采样时收到协作消息，可能在 item 边界触发 follow-up</h3>
+<p>alpha.9 的 response loop 并不是每收到一条新 mailbox
+消息就立即取消当前模型请求。它在一个输出 item 完成后才检查：assistant
+<code>Message</code> 的 phase 为 <code>commentary</code> 或
+<code>partial_answer</code>，或者当前 item 是
+<code>Reasoning</code>，才属于可触发 mailbox preemption
+的边界；<code>AgentMessage</code>、工具调用和工具输出不在这个检查集合里。若此时已有
+mailbox 消息且 <code>defer_mailbox_preemption</code> 没启用，当前
+sampling request 会以 <code>needs_follow_up</code> 结束，让后续 request
+处理排队消息。该检查发生在 item 边界，不是 token 边界。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0wyODA0LUwyODY4">response
+loop<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>同一 tag 的 feature spec 将 <code>defer_mailbox_preemption</code>
+标为默认关闭。对应的场景测试夹具把流式响应暂停在 reasoning、commentary
+或 partial-answer item 后，排入两条 <code>trigger_turn=false</code> 的
+child 消息，再继续返回 <code>update_plan</code>
+工具调用。断言区分两种策略：未启用 defer 时记录
+mailbox-preemption；启用时保留当前 response，让工具结果和两条 agent
+消息一起进入下一次模型请求。两种配置都预期两次模型请求。这里引用的是源码和测试夹具，不代表我执行了测试或在真实
+child 上观察到该行为；本机桌面会话的 feature 配置仍未知。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvZmVhdHVyZXMvc3JjL2xpYi5ycyNMMTQ5OC1MMTUwNQ==">feature
+spec<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS90ZXN0cy9zdWl0ZS9zY2VuYXJpb3NfbWFpbGJveF9wcmVlbXB0aW9uX3Rlc3RzLnJzI0wzNS1MMTk3">场景测试夹具<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>外层 <code>run_turn</code> 进一步说明 follow-up
+如何进入下一次采样：当 sampling 返回
+<code>needs_follow_up</code>，它先让 input queue 把 mailbox
+消息接纳到当前 turn；完成当前采样与工具处理后，再检查 pending input
+并决定是否继续循环。因此可以从源码闭合 alpha.9 内部“item 边界命中 → 当前
+sampling 收尾 → mailbox 接纳 → 下一 sampling
+step”的控制流。它仍是源码路径，不是本机桌面运行观测。来源：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzQ3NTNjZTNkMTlkZjlmZmE1ODM1MzczNmM0ZmZkZTQ5ZWQwNzE1ODkvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi90dXJuLnJzI0w1NTAtTDU3OA==">外层
+turn loop<i class="fa fa-external-link-alt"></i></span>。</p>
+<h3 id="本机-v2-turn_finished-入口与装箱-future">8.39 本机 V2
+<code>turn_finished</code> 入口与装箱 future</h3>
+<p>继续核对本机嵌入式 CLI 的 V2 终态回传入口。Mach-O 符号表含有
+<code>AgentControl for LocalAgentControl::turn_finished</code> 具名
+arm64 符号，地址为
+<code>0x1049ddce0</code>；<code>LC_FUNCTION_STARTS</code>
+将其精确边界限定为 <code>0x1049ddce0..0x1049ddda0</code>，共
+<code>0xc0</code> 字节。对这段范围单独反汇编，可见它分配一个 8232
+字节对象，并返回对象指针及常量数据指针。</p>
+<p>这与同版本公开源码 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/api.rs#L287-L292"><code>api.rs</code>
+的 <code>turn_finished</code></a> 返回
+<code>Box::pin(self.notify_parent_of_terminal_turn(outcome, trace))</code>
+的形态相符；二进制里还存在三处
+<code>notify_parent_of_terminal_turn</code> closure callsite
+元数据。这些是本机静态二进制观察与同版本源码的对应证据，不是运行时执行证据。</p>
+<p>尚未逐指令确认这个匿名异步 future 的 poll 函数、内部结果分支，或上游
+session
+终态事件调用者。因此目前可以说本机二进制含有与源码相符的具名入口和装箱
+future 构造，不能据此声称完整 V2
+终态到父线程的机器码链已经还原，也不能证明桌面会话实际执行过它。</p>
+<h3 id="从返回的-vtable-定位-v2-completion-future-poll">8.40 从返回的
+vtable 定位 V2 completion future poll</h3>
+<p>继续从 <code>turn_finished</code> 返回的 fat pointer
+追进异步对象。入口在 <code>0x1049ddd58</code> 将常量地址
+<code>0x10dffdd48</code> 放入返回寄存器 <code>x1</code>，与堆对象指针
+<code>x0</code> 一起返回。该地址处的 vtable 数据依次解码为 drop 函数
+<code>0x104cc794c</code>、对象大小 <code>0x2028</code>、对齐
+<code>8</code>，以及 <code>Future::poll</code> 方法指针
+<code>0x1049d1a70</code>。函数起始表将 poll 函数边界限定为
+<code>0x1049d1a70..0x1049d406c</code>，共 <code>0x25fc</code> 字节。</p>
+<p>这个精确范围的反汇编包含 async 状态分派。按 arm64 <code>BL</code>
+指令解码 <code>__TEXT,__text</code> 后，定位到 poll 内两条 formatter
+调用：<code>0x1049d2df0</code> 直接调用
+<code>format_inter_agent_completion_message</code>，<code>0x1049d33c4</code>
+直接调用 <code>format_guardian_interruption_message</code>；定点
+<code>llvm-objdump</code> 与函数符号表确认了指令地址和目标地址（分别为
+<code>0x10587d474</code>、<code>0x10587d248</code>）。completion
+formatter 在二进制中的另一条直接引用 <code>0x104dd4648</code> 位于 poll
+范围之外，不计入这条链。同版本源码 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/control/completion.rs#L27-L125"><code>notify_parent_of_terminal_turn</code></a>
+中的两个消息构造分支与这两条直接调用相符。</p>
+<p>继续看 Guardian 调用前的分支：状态机从 <code>[x19 + 0x1f8]</code>
+读取 64 位值并与 <code>4</code> 比较，再从 <code>[x19 + 0x1d0]</code>
+读取一个字节并与 <code>9</code> 比较；这条路径还检查
+<code>+0x228</code>、<code>+0x1e0</code>
+处的可选指针值。相邻路径会进入普通 completion formatter。同版本源码把
+Guardian formatter 限定在
+<code>(AgentStatus::Errored(_), Some(CodexErrorInfo::TooManyDenials))</code>，其他状态走普通
+formatter。因此机器码控制流与源码的特例分支高度吻合；但我还没有独立解码
+future 捕获字段布局，不能把偏移或比较常量直接断言成某个 Rust enum
+字段/判别值。源码 enum
+的声明顺序不作为机器码布局证明。到这里，<code>turn_finished</code> 的
+poll 入口、异步状态分派、两种 formatter 调用及 Guardian
+特例的控制流关联都有静态证据；具体桌面会话是否执行过它仍未知。见<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJzI0w4NS1MOTg=">源码分支<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvcHJvdG9jb2wvc3JjL3Byb3RvY29sLnJzI0wxNjcxLUwxNzE3">协议状态声明<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>仍未逐状态把机器码映射回源码每个分支，也未隔离
+<code>Session::maybe_notify_parent_of_terminal_turn</code> 到本机
+<code>turn_finished</code>
+的上游机器码调用边。以上只证明安装二进制包含这些结构，不证明桌面会话执行过该路径。</p>
+<h3 id="用-agentcontrol-方法表交叉核对-turn_finished-槽位">8.41 用
+<code>AgentControl</code> 方法表交叉核对 <code>turn_finished</code>
+槽位</h3>
+<p>继续检查本机 Mach-O 中
+<code>AgentControl for LocalAgentControl</code>
+的方法指针布局。两个数据区都呈现 Rust trait-object vtable
+的标准头部：drop 函数指针、对象大小 <code>0x70</code>、对齐
+<code>8</code>，后面接 trait 方法入口。按同版本 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/api.rs"><code>AgentControl</code>
+trait 声明顺序</a>，<code>turn_finished</code> 前有 13
+个方法；因此它应处于 vtable 方法索引 13、距表首 <code>0x80</code>
+字节的位置。两张表在该槽位都指向具名入口
+<code>0x1049ddce0</code>，相邻槽位也分别对应
+<code>record_usage</code>、<code>service_tier</code>、<code>propagate_config_update</code>
+等实现。这与符号表中的
+<code>AgentControl for LocalAgentControl::turn_finished</code>
+名称形成独立交叉验证。</p>
+<p>这确认了 trait 方法表的解释和 <code>turn_finished</code>
+槽位偏移。后续 ARM64 指令扫描找到了表首的 PC-relative 地址构造引用（见
+§8.42）；此前“没有找到直接引用”仅指没有普通原始指针副本。session
+终态事件通过 trait 对象间接调用 <code>+0x80</code>
+槽位的机器码位置仍未隔离。第三个原始指针命中位于 callsite
+元数据交错区，不按第三张 vtable
+计数。因此这仍不是完整调用边或运行时执行证明。分析对象是本机 arm64 CLI
+二进制，来源身份和桌面会话是否走过该路径仍受前文所述限制。</p>
+<h3 id="从-arm64-地址构造追踪-agentcontrol-方法表引用">8.42 从 ARM64
+地址构造追踪 <code>AgentControl</code> 方法表引用</h3>
+<p>虽然二进制中找不到两张 <code>AgentControl</code>
+方法表表首的普通原始指针副本，ARM64 代码会通过 <code>ADRP</code> 加
+<code>ADD</code> 生成这些地址。对已解码的两张表分别找到以下指令位置：表
+A <code>0x10dffdb58</code> 在
+<code>0x1049d8940</code>、<code>0x104ae8a58</code>、<code>0x104ae9060</code>
+被构造；表 B <code>0x10e04ad78</code> 在
+<code>0x1059a63f0</code>、<code>0x1059a6b34</code>
+被构造。<code>0x1049d8940</code> 随后把表 A 写入 watcher
+相关异步状态；另外两条表 A 引用位于
+<code>Session::with_window_and_fork_metadata</code>，表 B 的引用则位于
+<code>Session::rollout_reconstruction::reconstructed_window_from_compaction</code>
+对应的异步区域。这把此前仅从数据布局识别的方法表与 Session/watcher
+的状态构造关联起来。</p>
+<p>在 <code>0x104ae8a58</code>，指令先从表 A 的 <code>+0x18</code>
+读取方法指针，再间接调用。匹配版本 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/blob/740e5af33c71225640e0c1c1555c514c2c93ab74/codex-rs/core/src/agent/api.rs"><code>AgentControl</code>
+trait</a> 中第一个方法是 <code>identity</code>，所以这个调用点证明
+Session 使用该 trait object 调用
+<code>identity</code>，并非终态回调。<code>turn_finished</code> 在
+<code>+0x80</code>；当前新找到的表引用还没有闭合到这个槽位的 Session
+调用点。扫描过程中，若把任意 <code>[object + 0x80]</code> 读取误作
+<code>[vtable + 0x80]</code>，会把普通对象字段和其他 trait 的 drop
+调用误报为候选，因此后续只接受已追踪 vtable
+指针上的槽位读取，并核实其后的间接分支。所有结果仍是本机二进制静态观察，未捕获运行时终态事件。</p>
+<h3 id="复核一个-0x80-间接调用候选">8.43 复核一个 <code>+0x80</code>
+间接调用候选</h3>
+<p>对另一个候选点 <code>0x105947854</code> 做了精确 LLDB 反汇编，并用
+Mach-O <code>LC_FUNCTION_STARTS</code> 确认其边界属于 LLDB
+命名为匿名函数的代码块
+<code>0x105944318..0x10594f06c</code>。符号表把这段代码关联到
+<code>codex_core::session::rollout_reconstruction::reconstructed_window_from_compaction</code>（符号入口
+<code>0x10592e364</code>；候选函数入口距其
+<code>+0x15fb4</code>）；早段还带有
+<code>codex_core::session::turn::try_run_sampling_request</code>
+的源码调用点元数据。候选点处，代码从 <code>[x19 + 0x1620]</code>
+指向的对象偏移 <code>+0x8d0/+0x8d8</code> 读取一对指针，再从第二个指针的
+<code>+0x80</code> 取函数地址并间接调用。</p>
+<p>这补齐了候选指令的函数边界和寄存器/字段数据流，也把它放回 rollout
+reconstruction 代码区；没有证据显示该 fat pointer 属于
+<code>AgentControl</code>，更没有证据把它连到 session
+终态事件。因此这个点不再作为 <code>turn_finished</code>
+调用候选。不能只因为 <code>AgentControl::turn_finished</code> 在该 trait
+的 vtable <code>+0x80</code>，就把所有 <code>+0x80</code>
+间接调用归给它。上游 session 终态处理到 <code>turn_finished</code>
+的机器码调用边仍未定位。静态分析，没有运行时终态事件。</p>
+<h3 id="排除-completion-future-内部的-tracing-callsite-引用">8.44 排除
+completion future 内部的 tracing callsite 引用</h3>
+<p>继续核对 <code>turn_finished</code> poll 中指向
+<code>notify_parent_of_terminal_turn</code> 的数据引用。<code>nm</code>
+将
+<code>0x10e36b5d8</code>、<code>0x10e36b5f0</code>、<code>0x10e36b608</code>
+标为该方法内部嵌套 closure 的 callsite 元数据。poll 范围内的引用点
+<code>0x1049d1ea8</code>、<code>0x1049d1ff4</code>、<code>0x1049d24d8</code>、<code>0x1049d3148</code>、<code>0x1049d37fc</code>
+经 LLDB 定点反汇编后，分别进入 tracing 的 <code>__is_enabled</code>
+检查或 callsite 注册逻辑；附近的
+<code>0x1049d2b60</code>、<code>0x1049d348c</code>、<code>0x1049d3800</code>
+也把相同元数据交给 <code>DefaultCallsite::register</code>。这些引用位于
+<code>turn_finished</code> 异步 future
+自身的日志路径，不能因为数据符号含有
+<code>notify_parent_of_terminal_turn</code> 就解释成 Session 对
+<code>turn_finished</code> 的调用点。</p>
+<p>这排除了一个容易混淆的候选类别，并强化了对 §8.40 中“closure callsite
+metadata”的边界说明；没有找到 Session 到 vtable <code>+0x80</code>
+的间接分支。结论来自本机 arm64
+二进制的符号名和精确指令反汇编，未观察运行时执行；上游调用边仍未定位。</p>
+<h3 id="仍未知">仍未知</h3>
+<ul>
+<li>本机这一构建对应的精确 Codex 源码 commit；同版本 tag
+是强参照，但构建来源尚未被证明。</li>
+<li>运行时实际启用的 multi-agent 版本、feature
+flag、并发/等待配置和权限策略。</li>
+<li>本机反汇编确认 <code>maybe_start_completion_watcher</code>
+入口会调用
+<code>LocalAgentRuntime::admit_start</code>，并已将外层/内层匿名 future
+与源码 watcher
+路径作强相关对应；其精确分支语义仍来自匹配版本源码，且尚未证明本机会话启动过
+watcher。V2 方面已通过返回的 vtable 定位 <code>turn_finished</code> 装箱
+future 的 poll 函数，并发现其调用源码对应的 completion 文案
+formatter；每个 async 状态到源码分支的映射、上游 session caller
+的机器码边，以及桌面会话是否实际执行仍未知。</li>
+<li>不同桌面端版本的 UI bundle、服务端 <code>/flora/...</code>
+接口和远端 executor 的实现细节。</li>
+<li>本机桌面构建与上述公开 app-server commit 的精确对应关系，以及
+connection 实例被销毁替换时是否存在额外 child-ID 注册路径，仍未知；本机
+connection bundle 没有从 snapshot/list/history 主动回填
+<code>subagentThreadIds</code>，公开 tag 的普通
+<code>thread/resume</code> handler 也没有显式重发
+<code>thread/started</code>。同一实例内的普通 transport
+重连会保留该集合；remote host 的显式重连和配置替换会创建新
+connection。新实例注册已有窗口只发送 connection-state snapshot，不重放
+child/full-fidelity 状态。Renderer watcher 会在自身挂载时检查已有
+child/host 状态，依赖状态变化时重跑；connection
+实例不是其依赖。replacement 是否改变 watcher 读取的状态，或触发其他
+child-ID 注册路径，仍未观察。</li>
+<li>面板快照和 <code>/flora/subagent/thread/turns</code>
+的服务端数据来源、branch/权限校验及最终回复缺失时的服务端行为。</li>
+<li>本机安装实例是否实际运行该公开 tag 中的 app-server
+关系查询与排序实现、thread store reconciliation 的完整状态合并规则，以及
+host 不支持过滤时 history endpoint 的服务端行为。</li>
+<li>子 Agent
+在真实任务中的调度时序、资源成本和失败率；目前只有一次固定回复的受控 CLI
+探针，没有对真实任务做等价测量或失败率统计。</li>
+</ul>
+<h2 id="小结">小结</h2>
+<p>目前证据支持一个更精确的图景：spawn 是经共享
+<code>AgentControl</code> 进入统一的线程与 Agent tree 管理流程；child
+有独立 thread/session 标识，同时按策略继承设置或历史；spawn
+关系先被持久化，再投递首条消息；legacy completion watcher 与 V2
+terminal-event forwarding 走不同路径，父子通信、等待、终态消息和 UI
+活动事件是彼此相关但不同的通道。</p>
+<p>最重要的实现细节不是“同时开几个模型”，而是<strong>如何可靠地登记子节点、约束容量、建立可恢复的父子边，并让协作消息与界面活动保持一致</strong>。下一步若要把逆向再推进，需要取得桌面
+host 的运行时配置/事件证据，或继续把本机二进制的 watcher
+异步状态机和公开源码逐段对齐；可复核的采集脚本与证据台账已整理在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5L2NvZGV4LXN1YmFnZW50LXJldmVyc2UtZW5naW5lZXJpbmc=">Codex
+Subagent Reverse Engineering 仓库<i class="fa fa-external-link-alt"></i></span>。文中将受控 CLI
+实测与静态源码/二进制结论分开标注。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Codex/" rel="tag"><i class="fa fa-tag"></i> Codex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c07d9ac7.html" rel="prev" title="我的 Vibe Coding 工作流：从 session log 到 skill 迭代">
+                  <i class="fa fa-angle-left"></i> 我的 Vibe Coding 工作流：从 session log 到 skill 迭代
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/rea-no-strings-contribution.html" rel="next" title="我的一个开源贡献：修复 REA 的 --no-strings 参数">
+                  我的一个开源贡献：修复 REA 的 --no-strings 参数 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">61:55</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
