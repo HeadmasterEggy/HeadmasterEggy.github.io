@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作">
+<meta property="og:url" content="https://qiao1.top/posts/f28dec87.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-13T12:00:00.000Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="Codex">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/f28dec87.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/f28dec87.html","path":"posts/f28dec87.html","title":"Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/f28dec87.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">273</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">229</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E7%9C%8B%E6%95%B4%E6%9D%A1%E9%93%BE%E8%B7%AF"><span class="nav-text">先看整条链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AA-shell-%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-text">1.
+工具调用不是直接启动一个 shell 子进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%90%E7%BA%BF%E7%A8%8B%E6%9C%89%E7%8B%AC%E7%AB%8B%E8%BA%AB%E4%BB%BD%E4%B9%9F%E4%BF%9D%E7%95%99%E7%88%B6%E5%AD%90%E6%9D%A5%E6%BA%90%E5%85%B3%E7%B3%BB"><span class="nav-text">2.
+子线程有独立身份，也保留父子来源关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%8F%97%E5%AE%B9%E9%87%8F%E4%B8%8E%E7%99%BB%E8%AE%B0%E6%9C%BA%E5%88%B6%E6%8E%A7%E5%88%B6"><span class="nav-text">3. 并行受容量与登记机制控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait_agent-%E7%AD%89%E5%BE%85%E7%9A%84%E6%98%AF%E6%B4%BB%E5%8A%A8%E4%B8%8D%E6%98%AF-join"><span class="nav-text">4. wait_agent
+等待的是活动，不是 join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E9%80%9A%E7%9F%A5%E6%8C%89-agent-%E7%89%88%E6%9C%AC%E5%88%86%E6%B5%81"><span class="nav-text">5. 完成通知按 agent 版本分流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ui-%E6%98%BE%E7%A4%BA%E7%9A%84%E6%98%AF%E5%8D%8F%E4%BD%9C%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%8A%95%E5%BD%B1"><span class="nav-text">6. UI 显示的是协作事件的投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E7%89%88%E6%9C%AC%E4%B8%8E%E5%AE%98%E6%96%B9%E6%BA%90%E7%A0%81-tag-%E5%AF%B9%E7%85%A7"><span class="nav-text">7. 本机版本与官方源码 tag 对照</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E7%9B%B4%E6%8E%A5%E8%A7%82%E5%AF%9F"><span class="nav-text">本机直接观察</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%AC%E5%BC%80%E6%BA%90%E7%A0%81%E4%BA%A4%E5%8F%89%E6%A0%B8%E5%AF%B9"><span class="nav-text">匹配版本的公开源码交叉核对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8D%E6%9C%AA%E7%9F%A5"><span class="nav-text">仍未知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">229</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/f28dec87.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作 | Joey">
+      <meta itemprop="description" content="结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-13 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-13T12:00:00Z">2026-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">结合 ChatGPT 桌面版内置 codex-cli、客户端 JavaScript 与公开 Codex 源码，拆解 子 Agent 的创建、上下文继承、协作消息、等待、完成回传和界面状态，并标注版本与证据边界。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Codex 的 subagent 看起来像“主 Agent 派出几个小 Agent
+并行工作”。从实现证据看，更准确的模型是：<strong>父 Agent
+通过协作工具请求创建一个有独立线程身份的子 Agent；共享的 Agent
+控制器负责登记、调度、通信和回收父子关系；客户端再把这些状态呈现成活动列表。</strong></p>
+<p>本文结合本机 ChatGPT 桌面应用内置 <code>codex-cli</code>
+的静态分析、应用资源中的 UI JavaScript，以及 OpenAI <code>codex</code>
+仓库与本机版本号一致的源码 tag
+交叉整理。版本号相同提高了源码对照的可信度，但没有签名构建清单证明本机二进制确由该
+commit 构建；因此我仍把本机观察和源码解释分开说明。</p>
+<h2 id="先看整条链路">先看整条链路</h2>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">父 Agent 的模型选择 spawn_agent</span><br><span class="line">        ↓</span><br><span class="line">工具处理器解析请求、构造 SpawnRequest</span><br><span class="line">        ↓</span><br><span class="line">AgentControl 检查容量并预留 agent-tree membership / spawn slot</span><br><span class="line">        ↓</span><br><span class="line">准备 child 的来源元数据、agent path、继承设置与可选历史</span><br><span class="line">        ↓</span><br><span class="line">ThreadManager 创建 child thread，记录父子 spawn edge</span><br><span class="line">        ↓</span><br><span class="line">把首条消息作为 child 的新一轮输入提交</span><br><span class="line">        ↓</span><br><span class="line">父子通过 send_message / followup_task 等协作</span><br><span class="line">        ↓</span><br><span class="line">child 终止时向 parent 投递结果消息，并发出完成活动事件</span><br><span class="line">        ↓</span><br><span class="line">UI 根据协作工具调用和 sub-agent 活动事件更新列表</span><br></pre></td></tr></table></figure>
+<p>上图中从工具处理器到子线程创建、持久化关系和首条输入的步骤，来自版本
+tag
+源码；本机二进制中也能找到相应符号和校验字符串，但静态反汇编没有独立证明所有异步分支的具体运行顺序。</p>
+<h2 id="工具调用不是直接启动一个-shell-子进程">1.
+工具调用不是直接启动一个 shell 子进程</h2>
+<p>该版本源码中的 V2 <code>spawn</code> handler 会把模型给出的 agent
+描述整理成
+<code>SpawnRequest</code>，其中包含发起者、配置、初始消息、父子关系及
+fork 选项，然后交给
+<code>agent_control.spawn(...)</code>。初始消息被指定为触发 child
+新一轮执行的输入。可对照 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3NwYXduLnJz">V2
+spawn handler<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>控制器的 <code>spawn_agent_internal</code> 随后会：</p>
+<ul>
+<li>取得 agent-tree membership，并确定 parent thread；</li>
+<li>计算适用的 multi-agent 版本并检查执行容量；</li>
+<li>向 registry 预留 slot；</li>
+<li>解析继承的 environment、插件设置和执行策略；</li>
+<li>生成 <code>SessionSource::SubAgent(ThreadSpawn { ... })</code> 及
+AgentMetadata；</li>
+<li>按需准备 fork history，再调用 <code>ThreadManager</code> 创建 child
+thread；</li>
+<li>持久化 thread-spawn edge，之后提交首条输入。</li>
+</ul>
+<p>这条路径表明 Codex 的抽象中心是 <strong>thread/session 与 agent
+tree</strong>。被分析的调用路径没有显示“每个 subagent 再启动一份独立
+codex
+可执行文件”的证据；但仅凭这段静态证据，也不应把它扩大成对所有平台、所有运行模式的绝对断言。相关实现见
+<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">AgentControl
+spawn 流程<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="子线程有独立身份也保留父子来源关系">2.
+子线程有独立身份，也保留父子来源关系</h2>
+<p>child 并非只是在父会话里追加一段带标签的对话。它有自己的 thread
+id、session source 和 agent path；source 元数据记录父
+thread、层级和路径。控制器还会把 spawn edge
+持久化，供后续恢复和父子关系查找使用。</p>
+<p>“有独立线程身份”不等于“完全隔离”。创建时仍可能从父级继承环境选择、插件禁用列表、执行策略和动态工具；如果请求指定
+fork
+mode，还会准备历史记录。公开源码注释特别指出：复制对话历史不应改变发起
+spawn 的那一轮原有能力。具体继承项取决于请求、配置及当前
+feature，不能把它简化成“所有上下文都复制”或“子 Agent 从零开始”。</p>
+<p>在新 thread 建好并建立关系后，控制器才提交初始输入；代码分别处理普通
+user input 和 inter-agent communication。V2
+下还会解析模型信息等启动配置。此后 child 作为独立执行单元继续跑自己的
+agent loop。</p>
+<h2 id="并行受容量与登记机制控制">3. 并行受容量与登记机制控制</h2>
+<p>spawn 不只是创建 thread。控制器会先登记 membership、检查 execution
+capacity，并通过 registry 预留 spawn slot；V2 resident 模式还有对应的
+residency slot。成功后才 commit 这些登记。源码也有
+<code>PendingSpawn</code>，在创建尚未完成时暂时持有 agent-tree
+membership，避免一个“待完成 spawn”失去树上的归属。</p>
+<p>本机二进制字符串里出现了
+<code>max_concurrent_threads_per_session</code>、<code>min_wait_timeout_ms</code>、<code>max_wait_timeout_ms</code>
+等配置名，以及“pending spawn must own agent-tree
+membership”一类错误文本。这些只能证明该构建包含相关配置与防护逻辑；没有检查运行时最终配置，不能据此给出具体并发上限。</p>
+<h2 id="wait_agent-等待的是活动不是-join">4. <code>wait_agent</code>
+等待的是活动，不是 join</h2>
+<p>当前 V2 <code>wait_agent</code> handler 先应用配置里的 timeout
+下限、上限和默认值，然后订阅 session input queue 的
+activity。等待结果分为三类：收到 mailbox activity、被新输入
+steer、达到超时。它返回的状态也明确对应这三种情况。</p>
+<p>因此它不是传统线程库里的 <code>join(child)</code>：它不只是盯着 child
+是否退出，也不保证“所有 child
+都完成后才返回”。一条协作消息就可能唤醒等待；父 Agent
+随后可以读取结果、继续等、给 child 发
+follow-up，或自行整合现有进度。具体实现见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvdG9vbHMvaGFuZGxlcnMvbXVsdGlfYWdlbnRzX3YyL3dhaXQucnM=">V2
+wait handler<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>本机二进制中还能找到
+<code>spawn</code>、<code>wait</code>、<code>list_agents</code>、<code>send_message</code>、<code>followup_task</code>、<code>interrupt_agent</code>
+等 V2 handler 名称，也能找到 legacy agent handler
+符号。它们说明构建中存在这些操作面；不同版本、feature flag
+和产品界面暴露哪些工具，需要另外确认。</p>
+<h2 id="完成通知按-agent-版本分流">5. 完成通知按 agent 版本分流</h2>
+<p>与本机 CLI 版本号对应的公开 tag
+源码中，<code>control.rs::maybe_start_completion_watcher</code> 是
+legacy 路径。它订阅 child
+状态直到终态；订阅流结束或失败时会再查询一次状态。终态出来后，它会把结果送回
+parent：带 V2 agent path 的情况使用 inter-agent completion message 并设
+<code>trigger_turn=false</code>，legacy 情况则注入不启动新 turn 的
+<code>SubagentNotification</code>。树正在关闭时的 shutdown
+通知会被抑制。更关键的是，<code>spawn.rs</code> 调用点明确只在
+<code>multi_agent_version != V2</code> 时启动这个 watcher，因此不能把
+watcher 当作 V2 child 的通用完成机制。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC5ycw==">watcher
+实现<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9zcGF3bi5ycw==">spawn
+调用点<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>同一版本 tag 中，V2 的调用链是另一条：child session 发出
+<code>TurnComplete</code> 或 <code>TurnAborted</code>
+时，<code>Session::send_event</code> 会进入
+<code>maybe_notify_parent_of_terminal_turn</code>；该方法先要求版本为
+V2、来源是带 agent path 的
+<code>ThreadSpawn</code>，再从终态事件和已记录错误构造
+<code>AgentTurnOutcome</code>，交给
+<code>AgentControl::turn_finished</code>。控制器随后由
+<code>completion.rs::notify_parent_of_terminal_turn</code>
+路由结果。成功完成且有 parent turn id 时会发
+<code>SubAgentActivityKind::Completed</code>，之后按终态构造结果消息并排入
+parent 通信队列，<code>trigger_turn</code> 为 false。错误终态使用相应的
+completion 文案，部分拒绝错误有专门处理。见 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvc2Vzc2lvbi9tb2QucnM=">Session
+终态事件调用链<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleC9ibG9iLzc0MGU1YWYzM2M3MTIyNTY0MGUwYzFjMTU1NWM1MTRjMmM5M2FiNzQvY29kZXgtcnMvY29yZS9zcmMvYWdlbnQvY29udHJvbC9jb21wbGV0aW9uLnJz">terminal
+outcome 路由实现<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>这两套实现都说明：<strong>状态/活动事件与结果消息不是同一个事件</strong>，而且排入
+parent 队列不等于 parent 模型已经消费并整合了答案。客户端另外有一个针对
+<code>/flora/subagent/thread/turns</code>
+的查询模块，会在有可用记录时选择 child 的最新 final
+answer；那属于另一条结果展示/读取路径。尽管版本号相同，公开源码 tag
+与本机安装包之间仍缺少构建来源证明；以上版本分流描述的是被检查的 tag
+源码，并由本机符号/字符串作静态交叉佐证。</p>
+<h2 id="ui-显示的是协作事件的投影">6. UI 显示的是协作事件的投影</h2>
+<p>应用 JavaScript bundle 中观察到两类相关结构：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>结构</th>
+<th>能看到的字段</th>
+<th>UI 侧用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex_collab_agent_tool_call</code></td>
+<td>tool、status、sender/receiver thread ids、prompt、agentsStates</td>
+<td>表示 spawn、send input、resume、wait、close
+等协作工具调用及其状态</td>
+</tr>
+<tr>
+<td><code>codex_sub_agent_activity</code></td>
+<td><code>agentPath</code>、<code>agentThreadId</code>、kind、id</td>
+<td>表示 started、interacted、completed、interrupted 等子 Agent
+活动</td>
+</tr>
+</tbody>
+</table>
+<p>bundle 把活动状态映射成 waiting、working、done、failed，并分组放进
+Active / Done。换言之，界面列表是控制层事件的呈现结果，不是 Agent
+调度本身；UI 的 <code>completed</code>
+也不等于上文所说的结果消息必然已被主模型消费。</p>
+<h2 id="本机版本与官方源码-tag-对照">7. 本机版本与官方源码 tag 对照</h2>
+<p>本机 CLI 版本是 <code>0.162.0-alpha.17.2</code>；OpenAI
+仓库中存在同名 tag <code>rust-v0.162.0-alpha.17.2</code>，其 peeled
+commit 为 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/740e5af33c71225640e0c1c1555c514c2c93ab74"><code>740e5af33c71225640e0c1c1555c514c2c93ab74</code></a>。我对照了该
+tag 下的 V2 spawn
+handler、<code>AgentControl::spawn_agent_internal</code>、session
+terminal-event 路由、<code>turn_finished</code> completion delivery 与
+legacy completion watcher。源码中可直接看到：只有非 V2 spawn 会启动
+watcher；V2 child 的终态由 session 事件路径转交控制器。</p>
+<p>这一步把原先“当前 main
+的实现可能与本机版本不同”的不确定性缩小为“同版本号源码 tag
+可用于解释本机构建，但构建来源尚未被签名元数据证明”。本机 SHA-256 为
+<code>0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28</code>，Mach-O
+UUID 为
+<code>2CE1483B-FF35-344F-9958-9D48FFE5D5ED</code>；这些身份值和符号可用只读脚本复核。</p>
+<h3 id="本机直接观察">本机直接观察</h3>
+<ul>
+<li>ChatGPT.app 内嵌 CLI 的 <code>--version</code> 输出为
+<code>codex-cli 0.162.0-alpha.17.2</code>，目标是 arm64 Mach-O。</li>
+<li>该二进制
+SHA-256：<code>0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28</code>。</li>
+<li>符号表包含
+<code>LocalAgentControl::prepare_thread_spawn</code>、<code>maybe_start_completion_watcher</code>、<code>validate_loaded_v2_child</code>、<code>persist_thread_spawn_edge_for_source</code>、<code>restore_v2_agent_metadata</code>、<code>resume_agent_from_rollout</code>
+等名字。</li>
+<li>只读反汇编确认本机 watcher 入口会调用
+<code>LocalAgentRuntime::admit_start</code>；本机符号表没有独立的
+<code>notify_parent_of_terminal_turn</code>
+主函数符号，但存在该函数闭包的 callsite
+metadata。由于优化/内联可能改变符号形态，这不能证明本机缺少该逻辑，也不能证明它被调用。</li>
+<li>二进制字符串含有多 agent V2 配置字段、工具错误文本及
+<code>codex.multi_agent.result_delivery</code> 等指标名。</li>
+<li>针对应用 bundle 的两个子 Agent UI 模块，可见协作工具/活动 schema 和
+final-answer
+查询逻辑。该分析只覆盖被提取的目标资源，不代表遍历了整个桌面应用。</li>
+<li>后续用 REA 对本机 <code>app.asar</code>
+做了全包静态扫描：分析器完成了 16,240 个源文件的解析并重建应用图。ASAR
+声明的 <code>permissions.node</code>
+哈希与伴随文件实测哈希不一致，因此采用 <code>record-and-continue</code>
+并把该原生文件标记为不可信；大型启动 bundle
+的语义图受资源上限影响，保留了静态和模块事实。这个全包结果没有提供可用的子
+Agent 定向调用链，本文 UI 结论仍限定在上面明确检查的模块。</li>
+</ul>
+<p>以上均是静态文件观察，不是运行时抓包或真实 spawn 实验。特别是
+<code>maybe_start_completion_watcher</code>
+这个符号只能证明二进制中存在该方法，不能单靠符号名推出 watcher
+的精确触发条件。</p>
+<h3 id="匹配版本的公开源码交叉核对">匹配版本的公开源码交叉核对</h3>
+<p>上文的精确处理顺序来自 <code>openai/codex</code> 的版本 tag
+<code>rust-v0.162.0-alpha.17.2</code>，peeled commit 为 <a
+target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/740e5af33c71225640e0c1c1555c514c2c93ab74"><code>740e5af33c71225640e0c1c1555c514c2c93ab74</code></a>。版本号匹配加上本机符号/字符串交叉检查，使该
+tag 成为高可信源码参照；但没有签名构建元数据证明本机二进制确由该 commit
+产生，所以它仍不能替代逐指令语义证明。官方<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL2FnZW50cy1hcGkvbXVsdGktYWdlbnQ=">多
+Agent 指南<i class="fa fa-external-link-alt"></i></span>也可帮助理解用户可见的上下文隔离与 parent coordination
+心智模型，但不是桌面版内部实现规格。</p>
+<h3 id="仍未知">仍未知</h3>
+<ul>
+<li>本机这一构建对应的精确 Codex 源码 commit；同版本 tag
+是强参照，但构建来源尚未被证明。</li>
+<li>运行时实际启用的 multi-agent 版本、feature
+flag、并发/等待配置和权限策略。</li>
+<li><code>maybe_start_completion_watcher</code> 在本机版本中创建哪些具体
+watcher、取消和恢复条件是什么；也未从本机反汇编恢复 V2 terminal-event 到
+parent 通知的完整调用链。</li>
+<li>不同桌面端版本的 UI bundle、服务端 <code>/flora/...</code>
+接口和远端 executor 的实现细节。</li>
+<li>子 Agent
+在真实任务中的调度时序、资源成本和失败率；这次没有执行受控实验。</li>
+</ul>
+<h2 id="小结">小结</h2>
+<p>目前证据支持一个更精确的图景：spawn 是经共享
+<code>AgentControl</code> 进入统一的线程与 Agent tree 管理流程；child
+有独立 thread/session 标识，同时按策略继承设置或历史；spawn
+关系先被持久化，再投递首条消息；legacy completion watcher 与 V2
+terminal-event forwarding 走不同路径，父子通信、等待、终态消息和 UI
+活动事件是彼此相关但不同的通道。</p>
+<p>最重要的实现细节不是“同时开几个模型”，而是<strong>如何可靠地登记子节点、约束容量、建立可恢复的父子边，并让协作消息与界面活动保持一致</strong>。下一步若要把逆向再推进，需要把本机二进制的
+watcher 异步状态机和公开源码逐段对齐，或在明确授权的本机 Codex
+会话中做可重复的运行时观察；可复核的采集脚本与证据台账已整理在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5L2NvZGV4LXN1YmFnZW50LXJldmVyc2UtZW5naW5lZXJpbmc=">Codex
+Subagent Reverse Engineering
+仓库<i class="fa fa-external-link-alt"></i></span>。目前这篇笔记没有把静态分析写成运行时结论。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/Codex/" rel="tag"><i class="fa fa-tag"></i> Codex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c07d9ac7.html" rel="prev" title="我的 Vibe Coding 工作流：从 session log 到 skill 迭代">
+                  <i class="fa fa-angle-left"></i> 我的 Vibe Coding 工作流：从 session log 到 skill 迭代
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/rea-no-strings-contribution.html" rel="next" title="我的一个开源贡献：修复 REA 的 --no-strings 参数">
+                  我的一个开源贡献：修复 REA 的 --no-strings 参数 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">60:40</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

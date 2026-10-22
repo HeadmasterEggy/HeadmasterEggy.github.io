@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="记录我为 REA 提交并被合并的 PR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的一个开源贡献：修复 REA 的 --no-strings 参数">
+<meta property="og:url" content="https://qiao1.top/posts/rea-no-strings-contribution.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="记录我为 REA 提交并被合并的 PR">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-13T18:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-22T11:20:02.909Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta property="article:tag" content="CLI">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="开源贡献">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/rea-no-strings-contribution.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/rea-no-strings-contribution.html","path":"posts/rea-no-strings-contribution.html","title":"我的一个开源贡献：修复 REA 的 --no-strings 参数"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我的一个开源贡献：修复 REA 的 --no-strings 参数 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/rea-no-strings-contribution.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">273</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">229</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BC%80%E6%BA%90%E8%B4%A1%E7%8C%AE%E4%BF%AE%E5%A4%8D-rea-%E7%9A%84---no-strings-%E5%8F%82%E6%95%B0"><span class="nav-text">我的一个开源贡献：修复
+REA 的 --no-strings 参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3%E6%94%AF%E6%8C%81%E7%9A%84%E5%8F%82%E6%95%B0%E5%91%BD%E4%BB%A4%E5%8D%B4%E4%B8%8D%E8%AE%A4%E8%AF%86"><span class="nav-text">问题：文档支持的参数，命令却不认识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E5%9B%A0%E6%8A%8A%E5%90%A6%E5%AE%9A%E5%BD%A2%E5%BC%8F%E5%BD%93%E6%88%90%E4%BA%86%E9%80%89%E9%A1%B9%E6%9C%AC%E8%BA%AB"><span class="nav-text">根因：把“否定形式”当成了选项本身</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E8%AE%A9-cli-schema-%E4%B8%8E%E8%AF%B7%E6%B1%82%E8%AF%AD%E4%B9%89%E4%B8%80%E8%87%B4"><span class="nav-text">修复：让 CLI schema
+与请求语义一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E7%9C%9F%E5%AE%9E-cli-%E5%85%A5%E5%8F%A3%E9%AA%8C%E8%AF%81%E8%A1%8C%E4%B8%BA"><span class="nav-text">用真实 CLI 入口验证行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%AC%A1%E8%B4%A1%E7%8C%AE%E7%BB%99%E6%88%91%E7%9A%84%E6%8F%90%E9%86%92"><span class="nav-text">这次贡献给我的提醒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-text">相关链接</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">229</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/rea-no-strings-contribution.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="我的一个开源贡献：修复 REA 的 --no-strings 参数 | Joey">
+      <meta itemprop="description" content="记录我为 REA 提交并被合并的 PR">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我的一个开源贡献：修复 REA 的 --no-strings 参数
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-13 18:00:00" itemprop="dateCreated datePublished" datetime="2026-10-13T18:00:00Z">2026-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-22 11:20:02" itemprop="dateModified" datetime="2026-10-22T11:20:02Z">2026-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" itemprop="url" rel="index"><span itemprop="name">工程实践</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">记录我为 REA 提交并被合并的 PR</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="我的一个开源贡献修复-rea-的---no-strings-参数">我的一个开源贡献：修复
+REA 的 <code>--no-strings</code> 参数</h1>
+<p>最近我给开源项目 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVh">REA<i class="fa fa-external-link-alt"></i></span>
+提交了一个小型 bug fix，PR <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNw==">#2707<i class="fa fa-external-link-alt"></i></span>
+已被合并。改动围绕一个很具体的 CLI 问题：文档写着可以用
+<code>--no-strings</code> 跳过 Android
+字符串资源，但这个参数实际上无法通过命令行解析。</p>
+<p>这次贡献让我完整走了一遍从找到问题、确认复现，到修复、补边界测试、提交
+PR 和等待维护者合并的流程。</p>
+<h2
+id="问题文档支持的参数命令却不认识">问题：文档支持的参数，命令却不认识</h2>
+<p>REA 的命令 <code>decode-android-resources</code> 可以从 APK 中提取
+Android 资源。字符串资源默认会被投影到分析结果里；需要缩小输出时，CLI
+文档提供了 <code>--no-strings</code>，用于关闭这部分内容。</p>
+<p>但实际运行时，CLI 把 <code>--no-strings</code>
+报成未知选项，命令没有进入后续的分析流程。对应的问题记录在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2lzc3Vlcy8yNjcy">issue
+#2672<i class="fa fa-external-link-alt"></i></span>。这类故障表面上像是参数拼写问题，真正需要检查的是：CLI schema
+如何声明布尔值，以及解析器如何把选项映射到应用层请求。</p>
+<h2
+id="根因把否定形式当成了选项本身">根因：把“否定形式”当成了选项本身</h2>
+<p>原实现把 schema 中的属性命名为
+<code>no-strings</code>，并通过取反把它映射为
+<code>include_strings</code>。然而这个 CLI
+的布尔选项约定是声明正向选项，再自动提供 <code>--no-&lt;name&gt;</code>
+形式。</p>
+<p>因此 schema 应声明 <code>strings</code>，而不是
+<code>no-strings</code>。原来的定义和解析器对负向布尔选项的约定不匹配，导致文档中的
+<code>--no-strings</code> 没有被正确识别。</p>
+<h2 id="修复让-cli-schema-与请求语义一致">修复：让 CLI schema
+与请求语义一致</h2>
+<p>我把选项改成正向的 <code>strings</code> 布尔值，默认设为
+<code>true</code>。CLI 根据这个正向定义生成
+<code>--no-strings</code>；命令处理器再把 <code>options.strings</code>
+直接传给 <code>include_strings</code>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">未传 --no-strings  → include_strings: true</span><br><span class="line">传入 --no-strings  → include_strings: false</span><br></pre></td></tr></table></figure>
+<p>这样，默认行为保持不变，关闭选项时也能把清晰的布尔值交给下游。修改只落在
+Apktool CLI 选项定义和参数映射上，没有改变资源分析服务、MCP
+契约或目标访问行为。可以在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNy9maWxlcw==">PR diff<i class="fa fa-external-link-alt"></i></span>
+查看具体改动。</p>
+<h2 id="用真实-cli-入口验证行为">用真实 CLI 入口验证行为</h2>
+<p>我新增了 CLI
+边界测试，通过项目实际使用的命令行解析器调用命令，并注入一个惰性
+provider，捕获最终收到的请求。测试覆盖三个用户可见行为：</p>
+<ol type="1">
+<li>传入 <code>--no-strings</code> 后，请求包含
+<code>include_strings: false</code>。</li>
+<li>省略该参数时，默认请求仍包含
+<code>include_strings: true</code>。</li>
+<li>命令帮助中仍显示 <code>--no-strings</code>。</li>
+</ol>
+<p>这里的重点是测试真实 CLI parser
+到应用请求的边界，而不是只单独测试一个布尔表达式。这样既能证明参数不会再被解析器拒绝，也能确认默认值与帮助文本没有被顺手破坏。</p>
+<p>PR 中记录的验证结果是：相关 CLI 边界测试共 7
+项通过，<code>npm run check:fast</code>
+通过，<code>git diff --check</code> 通过。测试使用惰性
+provider；这次修复没有做真实 Apktool 或真实 APK 集成验证，因此结论限定在
+CLI 参数解析和请求映射这一层。</p>
+<h2 id="这次贡献给我的提醒">这次贡献给我的提醒</h2>
+<p>第一次给陌生仓库贡献代码时，不一定要从“大功能”开始。一个适合入手的问题，往往有清楚的用户症状、可重复的复现方式，以及能限定在一个明确边界内的修复方案。</p>
+<p>这次我处理的链路很短：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">用户命令</span><br><span class="line">  → CLI 布尔选项 schema</span><br><span class="line">  → include_strings 请求字段</span><br><span class="line">  → 边界测试确认默认值与显式关闭行为</span><br></pre></td></tr></table></figure>
+<p>也正因为改动范围小，我可以把注意力放在契约是否一致：帮助里承诺的参数是否真的能解析，解析出的值是否准确到达应用层，省略参数时原默认行为是否保留。</p>
+<p>最终，维护者合并了 PR
+#2707。对我来说，这次贡献的价值不只是修好一个参数，也是在真实项目里练习如何把问题描述、代码边界、验证范围和
+PR 说明对应起来。</p>
+<h2 id="相关链接">相关链接</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVh">REA 项目<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2lzc3Vlcy8yNjcy">问题
+#2672<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL3B1bGwvMjcwNw==">已合并的 PR
+#2707<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21vcmx1dG8vcmVhL2NvbW1pdC8xMWY4Yjc2MjU3ODhkNzQ3ZWFhZGQ1OWFmNmVmZGY4ODU4N2VkMDU4">PR
+合并提交<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+              <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+              <a href="/tags/%E5%BC%80%E6%BA%90%E8%B4%A1%E7%8C%AE/" rel="tag"><i class="fa fa-tag"></i> 开源贡献</a>
+              <a href="/tags/CLI/" rel="tag"><i class="fa fa-tag"></i> CLI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/f28dec87.html" rel="prev" title="Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作">
+                  <i class="fa fa-angle-left"></i> Codex Subagent 逆向笔记：从 spawn_agent 到父子线程协作
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/e4347207.html" rel="next" title="Context 与 Loop：从上下文治理到可验证的 Agent 闭环">
+                  Context 与 Loop：从上下文治理到可验证的 Agent 闭环 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">60:40</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

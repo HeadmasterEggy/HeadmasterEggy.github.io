@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="整理 Chasen《「万字总结」- 我偷来了一份成为 Agent 工程师的学习线路》：按 LLM 基础、Prompt Engineering、RAG、Agent 应用、后端工程和实战项目六个阶段，梳理知识点、项目要求、验收标准与学习文档。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent 工程师学习路线：从 LLM 基础到后端工程与实战项目">
+<meta property="og:url" content="https://qiao1.top/posts/97cd74d0.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="整理 Chasen《「万字总结」- 我偷来了一份成为 Agent 工程师的学习线路》：按 LLM 基础、Prompt Engineering、RAG、Agent 应用、后端工程和实战项目六个阶段，梳理知识点、项目要求、验收标准与学习文档。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-11T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-22T11:20:02.908Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/97cd74d0.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/97cd74d0.html","path":"posts/97cd74d0.html","title":"Agent 工程师学习路线：从 LLM 基础到后端工程与实战项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agent 工程师学习路线：从 LLM 基础到后端工程与实战项目 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/97cd74d0.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">273</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">229</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%9D%A1%E8%B7%AF%E7%BA%BF%E8%AE%A8%E8%AE%BA%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">0. 这条路线讨论的是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#llm-%E5%9F%BA%E7%A1%80%E5%85%88%E7%9C%8B%E6%87%82%E4%B8%80%E6%AC%A1%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8"><span class="nav-text">1. LLM 基础：先看懂一次模型调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E5%86%85%E5%AE%B9"><span class="nav-text">1.1 模型如何生成内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#token-%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3"><span class="nav-text">1.2 Token 与上下文窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%87%E6%A0%B7%E5%8F%82%E6%95%B0"><span class="nav-text">1.3 采样参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%B1%BB%E5%9E%8B%E4%B8%8E-api-%E5%8D%8F%E8%AE%AE"><span class="nav-text">1.4 模型类型与 API 协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="nav-text">1.5 流式输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-text">1.6 结构化输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8"><span class="nav-text">1.7 工具调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BD%AE%E4%BC%9A%E8%AF%9D"><span class="nav-text">1.8 多轮会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#embedding"><span class="nav-text">1.9 Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E9%A1%B9%E7%9B%AE%E5%A4%A7%E6%A8%A1%E5%9E%8B-api-playground"><span class="nav-text">阶段项目：大模型 API
+Playground</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prompt-engineering%E6%8A%8A%E4%BB%BB%E5%8A%A1%E6%9D%90%E6%96%99%E5%92%8C%E9%AA%8C%E6%94%B6%E8%A6%81%E6%B1%82%E8%AF%B4%E6%B8%85%E6%A5%9A"><span class="nav-text">2. Prompt
+Engineering：把任务、材料和验收要求说清楚</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="nav-text">2.1 基本组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BB%BB%E5%8A%A1%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F"><span class="nav-text">2.2 示例与任务组织方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E8%A6%81%E6%B1%82%E9%80%82%E7%94%A8%E4%BA%8E%E6%AF%8F%E4%B8%AA%E9%A1%B9%E7%9B%AE"><span class="nav-text">实践要求（适用于每个项目）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rag%E6%8A%8A%E8%B5%84%E6%96%99%E5%8F%98%E6%88%90%E5%8F%AF%E6%A3%80%E7%B4%A2%E5%8F%AF%E5%BC%95%E7%94%A8%E7%9A%84%E8%AF%81%E6%8D%AE"><span class="nav-text">3.
+RAG：把资料变成可检索、可引用的证据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%88%86%E5%9D%97"><span class="nav-text">3.1 解析与分块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E8%AF%AD%E4%B9%89%E5%85%B3%E9%94%AE%E8%AF%8D%E4%B8%8E%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-text">3.2 检索：语义、关键词与元数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E8%AE%A9%E5%BC%95%E7%94%A8%E5%92%8C%E6%8B%92%E7%AD%94%E9%83%BD%E6%9C%89%E4%BE%9D%E6%8D%AE"><span class="nav-text">3.3 生成：让引用和拒答都有依据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E4%B8%8E%E8%BF%9B%E9%98%B6"><span class="nav-text">3.4 评估与进阶</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E9%A1%B9%E7%9B%AErag-tool-calling-agent"><span class="nav-text">阶段项目：RAG + Tool Calling
+Agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-%E5%BA%94%E7%94%A8%E5%85%88%E7%90%86%E8%A7%A3%E5%BE%AA%E7%8E%AF%E5%86%8D%E8%A1%A5%E7%8A%B6%E6%80%81%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%8E%E8%BE%B9%E7%95%8C"><span class="nav-text">4. Agent
+应用：先理解循环，再补状态、上下文与边界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#agent-loop"><span class="nav-text">4.1 Agent Loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%89%8B%E6%97%B6%E8%A6%81%E9%80%90%E4%B8%AA%E5%A4%84%E7%90%86%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">4.2 动手时要逐个处理的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E9%A1%B9%E7%9B%AE%E7%AE%80%E5%8C%96-coding-agent%E4%BB%8E-0-%E5%88%B0-1-%E5%86%99%E4%B8%80%E4%B8%AA-claude-code"><span class="nav-text">阶段项目：简化
+Coding Agent（“从 0 到 1 写一个 Claude Code”）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B%E8%AE%A9-agent-%E6%88%90%E4%B8%BA%E5%8F%AF%E8%BF%90%E8%A1%8C%E5%8F%AF%E7%BB%B4%E6%8A%A4%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-text">5. 后端工程：让 Agent
+成为可运行、可维护的服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-asyncfastapi-%E4%B8%8E-pydantic"><span class="nav-text">5.1 Python Async、FastAPI 与
+Pydantic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlalchemyalembic-%E4%B8%8E-postgresql"><span class="nav-text">5.2 SQLAlchemy、Alembic 与
+PostgreSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E4%B8%8E%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97"><span class="nav-text">5.3 Redis 与任务队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%AE%B9%E5%99%A8%E5%8C%96%E4%B8%8E-cicd"><span class="nav-text">5.4 测试、容器化与 CI&#x2F;CD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6kubernetes-%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.5 进阶：Kubernetes 与微服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E9%A1%B9%E7%9B%AEai-%E6%9C%8D%E5%8A%A1%E5%90%8E%E7%AB%AF%E7%B3%BB%E7%BB%9F"><span class="nav-text">阶段项目：AI 服务后端系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%8E%A8%E8%BF%9B%E9%A1%BA%E5%BA%8F"><span class="nav-text">6. 实战项目与推进顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E6%8E%A8%E8%8D%90%E7%9A%84%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="nav-text">6.1 作者推荐的开源项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E8%BF%9B%E9%A1%BA%E5%BA%8F"><span class="nav-text">6.2 推进顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%90%8E%E8%A6%81%E7%82%B9"><span class="nav-text">读后要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E6%BA%90%E4%B8%8E%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0"><span class="nav-text">来源与相关笔记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">229</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/97cd74d0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agent 工程师学习路线：从 LLM 基础到后端工程与实战项目 | Joey">
+      <meta itemprop="description" content="整理 Chasen《「万字总结」- 我偷来了一份成为 Agent 工程师的学习线路》：按 LLM 基础、Prompt Engineering、RAG、Agent 应用、后端工程和实战项目六个阶段，梳理知识点、项目要求、验收标准与学习文档。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agent 工程师学习路线：从 LLM 基础到后端工程与实战项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-10-11 12:00:00" itemprop="dateCreated datePublished" datetime="2026-10-11T12:00:00Z">2026-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-10-22 11:20:02" itemprop="dateModified" datetime="2026-10-22T11:20:02Z">2026-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>24 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">整理 Chasen《「万字总结」- 我偷来了一份成为 Agent 工程师的学习线路》：按 LLM 基础、Prompt Engineering、RAG、Agent 应用、后端工程和实战项目六个阶段，梳理知识点、项目要求、验收标准与学习文档。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>想做 AI
+应用开发，常见的困惑不是“资料太少”，而是不知道该按什么顺序学、学到什么程度才算会。这篇长文给出的答案是：每个阶段配一个能交付的项目，再用明确的验收标准检验自己。</p>
+<p>Chasen（<a target="_blank" rel="noopener" href="https://x.com/chasen_liao"><span class="citation"
+data-cites="chasen_liao">@chasen_liao</span></a>）在 X 长文<span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9jaGFzZW5fbGlhby9zdGF0dXMvMjEwOTA4MTMwMTgxOTMxMDU3OA==">《「万字总结」-
+我偷来了一份成为 Agent
+工程师的学习线路》<i class="fa fa-external-link-alt"></i></span>中，整理了一份面试后由面试官提供的《Agent
+工程师入门指南》，并补充了自己的学习心得。本文按原文脉络做结构化总结，保留每个阶段的项目要求和验收标准，并把原文给出的学习文档附在对应知识点下。</p>
+<p><strong>主线：LLM 基础（API Playground）→ Prompt
+Engineering（贯穿所有项目）→ RAG（RAG + Tool Calling Agent）→ Agent
+应用（简化 Coding Agent）→ 后端工程（AI 服务后端系统）→
+开源项目实战。</strong></p>
+<p>原文发布于 2026 年 10 月 11
+日。知识点和项目要求来自那份入门指南；入门取舍、开源项目推荐和起步建议是作者本人的补充。本文的表格和归纳是对原文的整理，没有逐项验证每个外链的当前内容。</p>
+<h2 id="这条路线讨论的是什么">0. 这条路线讨论的是什么</h2>
+<p>作者的背景是：面试一家 AI + web3 公司未通过，反馈是“AI
+方面问题不大，工程能力和计算机基础还不够”，之后又去补了
+MySQL、计算机网络等基础。所以这份路线不只讲
+Agent，也用很大篇幅讲后端。</p>
+<p>路线限定在 <strong>AI
+应用开发</strong>：不训练模型，而是围绕已有模型，把检索、工具、上下文和业务系统连起来，让
+Agent 完成具体任务。</p>
+<p>作者建议带着一个问题读每一部分：<strong>学完之后我能做出什么，又怎样证明自己确实学会了？</strong>
+这也是整份材料最有价值的地方——知识点、学习文档、项目要求和验收标准放在一起。</p>
+<h2 id="llm-基础先看懂一次模型调用">1. LLM 基础：先看懂一次模型调用</h2>
+<p>这是后面所有内容的底座。目标不是研究训练，而是弄清楚一次调用里哪些因素会影响系统行为。</p>
+<h3 id="模型如何生成内容">1.1 模型如何生成内容</h3>
+<p>需要建立的基本认识：Transformer、预训练、指令微调、RLHF /
+RLAIF；自回归生成（Next Token Prediction，根据已有内容预测下一个
+Token）；上下文学习（In-Context
+Learning，模型如何利用当前给出的指令、资料和示例）。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9qYWxhbW1hci5naXRodWIuaW8vaWxsdXN0cmF0ZWQtdHJhbnNmb3JtZXIv">图解
+Transformer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="token-与上下文窗口">1.2 Token 与上下文窗口</h3>
+<ul>
+<li>理解 Tokenization，分清输入 Token、输出 Token、Context
+Window、最大输入 / 输出长度；Token 和汉字、单词之间没有固定换算。</li>
+<li>System
+Prompt、历史消息、工具说明、检索资料都占输入空间，还要给输出留余量。</li>
+<li>请求超限时要有明确策略：裁剪历史、压缩资料还是调整输入。</li>
+<li>上下文长不等于每条信息都被同等利用，原文特别点名 <strong>Lost in the
+Middle</strong>：关键信息放在长上下文中间时容易被忽略。后面学裁剪、摘要、压缩时，要知道自己在解决这个问题。</li>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9oZWxwLm9wZW5haS5jb20vZW4vYXJ0aWNsZXMvNDkzNjg1Ni13aGF0LWFyZS10b2tlbnMtYW5kLWhvdy10by1jb3VudC10aGVt">Token
+与计数<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="采样参数">1.3 采样参数</h3>
+<p>原文列出 Temperature、Top-p、Top-k、Frequency Penalty、Presence
+Penalty、Seed、Stop
+Sequences。学习重点是它们如何影响采样范围、重复倾向和输出终止，以及确定性与创造性之间的取舍。</p>
+<p>两个边界：这份清单不是所有 API 都支持的统一接口；低 Temperature
+也不保证答案正确，Seed 不等于“结果完全一致”的承诺。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnZsbG0uYWkvZW4vdjAuNi40L2Rldi9zYW1wbGluZ19wYXJhbXMuaHRtbA==">vLLM
+SamplingParams（v0.6.4）<i class="fa fa-external-link-alt"></i></span>，实际使用时以所用模型的接口说明为准</li>
+</ul>
+<h3 id="模型类型与-api-协议">1.4 模型类型与 API 协议</h3>
+<p>模型类型要分开看：Chat Model、Reasoning Model、多模态模型、Embedding
+Model（把内容表示成向量）、Rerank
+Model（给候选内容重新排序）、语音与实时模型，各自在应用里处于不同位置。</p>
+<p>接口层面要理解 Chat Completions、Responses、Messages 三种抽象：</p>
+<ul>
+<li>看懂 message / role / content，以及 system、user、assistant、tool
+各自承载什么；</li>
+<li>认得 <code>model</code>、<code>messages</code> /
+<code>input</code>、<code>instructions</code> / system
+prompt、<code>tools</code>、<code>tool_choice</code>、<code>response_format</code>、<code>stream</code>、<code>usage</code>、<code>finish_reason</code>
+等字段，换一种协议也能找到对应信息。</li>
+</ul>
+<p>学习文档：</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvYXBpLXJlZmVyZW5jZS9jaGF0L2NyZWF0ZQ==">Chat
+Completions<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvYXBpLXJlZmVyZW5jZS9yZXNwb25zZXM=">Responses<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvYXBpLXJlZmVyZW5jZS9yZXNwb25zZXMvY3JlYXRl">Responses
+Create<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5jbGF1ZGUuY29tL2RvY3MvZW4vYnVpbGQtd2l0aC1jbGF1ZGUvd29ya2luZy13aXRoLW1lc3NhZ2Vz">Claude
+Messages<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmFudGhyb3BpYy5jb20vZW4vYXBpL2hhbmRsaW5nLXN0b3AtcmVhc29ucw==">Claude
+Stop Reasons<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="流式输出">1.5 流式输出</h3>
+<p>打字机效果只是表面。完整链路包括 SSE、event stream、delta
+增量文本，以及工具参数分段到达、连接中断、用户取消、响应未完成等情况。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvZ3VpZGVzL3N0cmVhbWluZy1yZXNwb25zZXM=">OpenAI
+流式响应<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmFudGhyb3BpYy5jb20vZW4vZG9jcy9idWlsZC13aXRoLWNsYXVkZS9zdHJlYW1pbmc=">Claude
+Streaming<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvYXBpLXJlZmVyZW5jZS9yZXNwb25zZXMtc3RyZWFtaW5n">Responses
+Streaming 事件参考<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="结构化输出">1.6 结构化输出</h3>
+<p>JSON Mode 解决“是不是合法 JSON”；按 Schema 约束的 Structured Outputs
+进一步限定字段、类型和结构。但结构对了不代表内容对，应用仍要处理拒绝、截断、校验失败，以及修复或重试。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9qc29uLXNjaGVtYS5vcmcvdW5kZXJzdGFuZGluZy1qc29uLXNjaGVtYS9iYXNpY3M=">JSON
+Schema 基础<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL3N0cnVjdHVyZWQtb3V0cHV0cw==">Structured
+Outputs<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9vcGVuYWkuY29tL2luZGV4L2ludHJvZHVjaW5nLXN0cnVjdHVyZWQtb3V0cHV0cy1pbi10aGUtYXBpLw==">Structured
+Outputs 介绍文章<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="工具调用">1.7 工具调用</h3>
+<p>核心是区分“模型请求调用工具”和“系统真正执行工具”：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">开发者提供工具描述 + 参数 Schema</span><br><span class="line">    ↓</span><br><span class="line">模型生成调用请求</span><br><span class="line">    ↓</span><br><span class="line">业务系统校验参数并执行</span><br><span class="line">    ↓</span><br><span class="line">结果返回给模型 → 模型继续回答，或请求下一次调用</span><br></pre></td></tr></table></figure>
+<p><code>tool_call_id</code>、参数、tool result
+和错误返回必须一一对应，否则模型拿不到结果或把结果关联错；并行工具调用也要分别返回结果。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL2Z1bmN0aW9uLWNhbGxpbmc=">OpenAI
+Function Calling<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5jbGF1ZGUuY29tL2RvY3MvZW4vYWdlbnRzLWFuZC10b29scy90b29sLXVzZS9vdmVydmlldw==">Claude
+Tool Use<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="多轮会话">1.8 多轮会话</h3>
+<p>独立的生成请求通常不会自动继承应用里的聊天记录。会话连续性由系统负责：自己维护历史，或使用供应商的状态管理接口，无论哪种都要清楚实际传入了什么。涉及历史消息、摘要、短期
+/ 长期记忆、上下文压缩和会话状态。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL2NvbnZlcnNhdGlvbi1zdGF0ZQ==">会话状态<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5jbGF1ZGUuY29tL2RvY3MvZW4vYnVpbGQtd2l0aC1jbGF1ZGUvbWlkLWNvbnZlcnNhdGlvbi1zeXN0ZW0tbWVzc2FnZXM=">Claude
+对话中途的系统消息与工具变更<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="embedding">1.9 Embedding</h3>
+<p>文本向量、语义相似度、向量维度、归一化、Cosine / Dot Product /
+L2、模型选型、批量生成与向量缓存。这是后面 RAG 的基础。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvZ3VpZGVzL2VtYmVkZGluZ3M=">Embedding<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="阶段项目大模型-api-playground">阶段项目：大模型 API
+Playground</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>项目要求</th>
+<th>验收标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一个小应用，支持普通对话、流式响应、结构化输出、工具调用、Embedding
+生成与相似度计算</td>
+<td>能讲清一次请求到响应的完整过程</td>
+</tr>
+<tr>
+<td>每次调用记录模型、输入、输出、Token 用量和耗时</td>
+<td>能解释 message、role、tool call、tool result、stream、usage
+的含义</td>
+</tr>
+<tr>
+<td>对比至少两个模型或两个供应商的 API 差异</td>
+<td>能演示一次完整工具调用，以及结构化输出失败后的处理</td>
+</tr>
+<tr>
+<td>仓库包含 README、运行说明、示例请求和测试用例</td>
+<td>别人能照着文档跑起来</td>
+</tr>
+</tbody>
+</table>
+<p>作者的评价是：这一步做扎实，后面会少很多“框架能跑，但不知道里面发生了什么”的困惑。</p>
+<h2 id="prompt-engineering把任务材料和验收要求说清楚">2. Prompt
+Engineering：把任务、材料和验收要求说清楚</h2>
+<p>这一阶段没有独立项目，而是<strong>贯穿后面所有项目</strong>——Prompt
+的效果只能放在具体任务里验证。</p>
+<h3 id="基本组成">2.1 基本组成</h3>
+<p>Role / System Prompt、Instruction、Context、Input、Output
+Format、Constraints。以知识库助手为例，要写清：回答依据哪些资料、资料不足怎么办、引用如何呈现、哪些请求超出职责。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvZ3VpZGVzL3Byb21wdC1lbmdpbmVlcmluZw==">OpenAI
+Prompt Engineering<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5jbGF1ZGUuY29tL2RvY3MvZW4vYnVpbGQtd2l0aC1jbGF1ZGUvcHJvbXB0LWVuZ2luZWVyaW5nL292ZXJ2aWV3">Claude
+提示词指南<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="示例与任务组织方式">2.2 示例与任务组织方式</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>方法</th>
+<th>关注点</th>
+<th>学习文档</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zero-shot / Few-shot</td>
+<td>用少量贴近真实任务的示例表达分类标准、格式或风格；模型反复误解某个边界时，补例子比堆形容词更好验证</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cucHJvbXB0aW5nZ3VpZGUuYWkvemgvdGVjaG5pcXVlcy9mZXdzaG90">Few-shot<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>CoT</td>
+<td>拆解问题、逐步推理、先分析后回答，用于复杂推理与规划，需用测试确认是否有帮助</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cucHJvbXB0aW5nZ3VpZGUuYWkvemgvdGVjaG5pcXVlcy9jb3Q=">CoT<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>ReAct</td>
+<td>Reasoning +
+Acting：决定是否调用工具、观察结果、根据反馈推进，后面可与 Agent Loop
+对照</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cucHJvbXB0aW5nZ3VpZGUuYWkvemgvdGVjaG5pcXVlcy9yZWFjdA==">ReAct<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>Self-Critique / Reflexion</td>
+<td>对已有结果检查、反思和修正，可用于代码生成、报告复核</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cucHJvbXB0aW5nZ3VpZGUuYWkvemgvdGVjaG5pcXVlcy9yZWZsZXhpb24=">Reflexion<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+</tbody>
+</table>
+<p>两条使用边界：</p>
+<ul>
+<li>对推理模型强行加“请一步一步思考”未必有收益，见 <span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL3JlYXNvbmluZy1iZXN0LXByYWN0aWNlcw==">推理模型提示建议<i class="fa fa-external-link-alt"></i></span>。更稳妥的做法是给清楚的目标、必要材料和验收条件，再用测试决定要不要加示例或拆解流程。</li>
+<li>模型自查之后仍需外部依据：测试结果、引用证据、字段校验或人工复核，不能因为它说“检查完成”就认定正确。</li>
+</ul>
+<h3 id="实践要求适用于每个项目">实践要求（适用于每个项目）</h3>
+<ul>
+<li>每个项目至少记录 <strong>3 组 Prompt
+修改前后的效果对比</strong>，尽量用同一组输入，记录改善了什么、是否引入新的失败，再决定是否保留。</li>
+<li>README 说明：用了哪些结构、System Prompt 和约束为什么这样设、是否用
+Few-shot、怎样控制格式，以及如何处理不确定回答、越界回答和格式错误。</li>
+</ul>
+<h2 id="rag把资料变成可检索可引用的证据">3.
+RAG：把资料变成可检索、可引用的证据</h2>
+<p>需要私有文档、持续更新资料或领域知识时就会用到
+RAG：把外部资料检索出来放进本轮上下文，为回答提供依据。建议按完整链路学：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">文档加载与解析 → 分块 → Embedding → 索引 → 召回 → 重排</span><br><span class="line">    → 上下文组织 → 回答生成 → 引用溯源 → 效果评估</span><br></pre></td></tr></table></figure>
+<h3 id="解析与分块">3.1 解析与分块</h3>
+<ul>
+<li>解析范围：PDF、Word、HTML、Markdown、代码、表格、图片
+OCR、多模态文档，不能一律同样处理。表格行列错位、章节标题丢失、代码被切断，都会让后面检索到也用不上。</li>
+<li>分块方式：固定长度、递归、语义、按 Markdown / Code
+结构、父子分块、滑动窗口与
+overlap。用自己的资料实测：块太小丢上下文，块太大混入噪声，重叠部分带来额外成本。</li>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxsYW1haW5kZXguYWkvZW4vc3RhYmxlL21vZHVsZV9ndWlkZXMvbG9hZGluZy8=">LlamaIndex
+文档加载<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cucGluZWNvbmUuaW8vbGVhcm4vY2h1bmtpbmctc3RyYXRlZ2llcy8=">Pinecone
+分块策略<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxsYW1haW5kZXguYWkvZW4vc3RhYmxlL21vZHVsZV9ndWlkZXMvbG9hZGluZy9ub2RlX3BhcnNlcnMv">LlamaIndex
+节点解析<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="检索语义关键词与元数据">3.2 检索：语义、关键词与元数据</h3>
+<ul>
+<li><strong>向量检索</strong>：结合 Embedding
+选型、维度、归一化和距离度量，掌握 Top-K、相似度阈值和向量缓存。</li>
+<li><strong>向量库</strong>：原文列出
+FAISS、Milvus、Qdrant、Weaviate、Chroma、Pinecone、pgvector、Redis
+Stack，以及 FLAT、IVF、HNSW、PQ
+等索引。入门先选一种，跑通写入、更新、检索、删除，再按数据量、延迟和召回效果学取舍。</li>
+<li><strong>混合检索</strong>：产品型号、报错码、专有名词等问题需要 BM25
+等关键词检索，再学 RRF 融合和多查询改写。</li>
+<li><strong>元数据与权限</strong>：标题、章节、来源、时间戳、版本、用户权限都要抽取管理。权限过滤必须由系统执行，并权衡“先过滤后检索”和“先检索后过滤”，保证未授权资料不会进入上下文或返回给用户。</li>
+<li><strong>Rerank</strong>：召回后再判断哪些片段更贴近问题，理解
+Bi-Encoder 与 Cross-Encoder、粗排 + 精排的二阶段检索；可对比
+bge-reranker、Cohere Rerank、Jina Rerank。</li>
+</ul>
+<p>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvZ3VpZGVzL2VtYmVkZGluZ3M=">Embedding<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cucGluZWNvbmUuaW8vbGVhcm4vdmVjdG9yLWRhdGFiYXNlLw==">向量数据库<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cucGluZWNvbmUuaW8vbGVhcm4vaHlicmlkLXNlYXJjaC8=">Hybrid
+Search<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxsYW1haW5kZXguYWkvZW4vc3RhYmxlL21vZHVsZV9ndWlkZXMvaW5kZXhpbmcvbWV0YWRhdGFfZXh0cmFjdGlvbi8=">LlamaIndex
+Metadata Extraction<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmNvaGVyZS5jb20vZG9jcy9yZXJhbmtpbmc=">Cohere Reranking<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="生成让引用和拒答都有依据">3.3 生成：让引用和拒答都有依据</h3>
+<ul>
+<li>决定放哪些片段、如何排序、是否压缩，并把引用对应回原始位置；留意
+Lost in the Middle。</li>
+<li>明确要求回答依据检索内容；资料没覆盖时说明证据不足。检索结果也可能过时、冲突或不相关。</li>
+<li>RAG 仍可能答错，要<strong>分别检查检索效果和生成效果</strong>。</li>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cucGluZWNvbmUuaW8vbGVhcm4vcmV0cmlldmFsLWF1Z21lbnRlZC1nZW5lcmF0aW9uLw==">RAG
+完整流程<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="评估与进阶">3.4 评估与进阶</h3>
+<ul>
+<li>指标：检索准确率、召回率、答案忠实度、上下文相关性、幻觉率，并用测试集持续验证。学习文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnJhZ2FzLmlvLw==">Ragas<i class="fa fa-external-link-alt"></i></span></li>
+<li>进阶：Query Rewrite、HyDE、Self-Query、Agentic
+RAG、GraphRAG，对应复杂查询、跨文档推理、多轮检索。原则是<strong>先在基础版本里找到具体失败，再决定是否引入</strong>。GraphRAG
+可读 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9ncmFwaHJhZw==">官方项目<i class="fa fa-external-link-alt"></i></span>。</li>
+</ul>
+<h3 id="阶段项目rag-tool-calling-agent">阶段项目：RAG + Tool Calling
+Agent</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>项目要求</th>
+<th>验收标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>支持上传或导入 Markdown / PDF，完成切分、Embedding 和向量检索</td>
+<td>能讲清 RAG 完整链路</td>
+</tr>
+<tr>
+<td>回答能引用来源，资料不足时拒答</td>
+<td>提供检索结果、回答质量和失败案例分析</td>
+</tr>
+<tr>
+<td>至少 2 个工具（如网页搜索、计算器、文件查询、时间查询），由 Agent
+决定是否检索、是否调用工具</td>
+<td>能说明模型工具调用与普通函数调用的区别</td>
+</tr>
+<tr>
+<td>记录每一步的 reasoning 摘要、工具请求、实际返回和最终结果</td>
+<td>过程可复盘（摘要用于解释进展，不等于模型内部推理的完整记录）</td>
+</tr>
+<tr>
+<td>不少于 <strong>20 条测试问题</strong></td>
+<td>作者建议覆盖：直接可查、跨文档、需要工具计算、资料里没有答案、工具失败</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent-应用先理解循环再补状态上下文与边界">4. Agent
+应用：先理解循环，再补状态、上下文与边界</h2>
+<p>到这里可以把前面串起来：Prompt、RAG、工具调用、工作流、状态、记忆、评估和安全如何组合。无论用什么框架，都应能解释这些能力之间的关系。</p>
+<p>一个便于学习的划分（不是严格分类）：<strong>Chatbot 偏对话，Workflow
+偏预先确定的流程，Agent 偏根据任务和反馈动态决定下一步。</strong>
+选哪种取决于任务是否真的需要这种灵活性——很多时候简单流程就够了。</p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9lbmdpbmVlcmluZy9idWlsZGluZy1lZmZlY3RpdmUtYWdlbnRz">Building
+Effective Agents<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9hcnRodXJjaGlhby5hcnQvYmxvZy9haS1hZ2VudC13aGl0ZS1wYXBlci16aC8jMi0lRTQlQkIlODAlRTQlQjklODglRTYlOTglQUYtYWdlbnQ=">Agent
+白皮书中文译文<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="agent-loop">4.1 Agent Loop</h3>
+<p>一句话概括：<strong>模型提出下一步 → 系统执行并返回结果 →
+模型根据新结果继续，直到完成任务或触发停止条件。</strong></p>
+<ul>
+<li>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9jb2RlLmNsYXVkZS5jb20vZG9jcy9lbi9hZ2VudC1zZGsvYWdlbnQtbG9vcA==">Agent
+Loop<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><strong>作者补充：用 Pi 理解 Agent Loop 与 Harness。</strong>
+作者认为 Pi 的 Harness 足够精简，适合作为入口：</p>
+<ol type="1">
+<li>沿一次任务追踪：用户输入如何进入上下文、模型收到哪些消息和工具说明、工具请求如何执行、结果如何回到上下文、模型接着做什么。</li>
+<li>读源码时重点看循环怎样继续、怎样停止，工具失败或任务中断时会发生什么。</li>
+<li>看懂循环后再看 Session、上下文管理、工具和扩展事件，理解 Harness
+的职责：提供运行环境、组织模型能看到的信息、执行它提出的动作、管理结果与任务状态。</li>
+<li>练习：做一个“读取文件并回答问题”的小任务，记录请求、工具调用和结果，再加一个自定义工具，观察它如何进入原有循环。</li>
+</ol>
+<p>学习文档：<span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3Q=">Pi 官方文档<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3BpL2Jsb2IvbWFpbi9wYWNrYWdlcy9hZ2VudC9zcmMvYWdlbnQtbG9vcC50cw==">Pi
+Agent Loop 源码<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3QvZXh0ZW5zaW9ucw==">Pi
+Extensions<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9waS5kZXYvZG9jcy9sYXRlc3Qvc2Rr">Pi
+SDK<i class="fa fa-external-link-alt"></i></span>。作者还推荐了自己和 <a target="_blank" rel="noopener" href="https://x.com/xiaomovps"><span
+class="citation" data-cites="xiaomovps">@xiaomovps</span></a> 关于 Pi
+的帖子。本站相关笔记：[[AI Agent/goal 是如何实现的：从 Pi 的 Agent Loop
+说起|/goal 是如何实现的：从 Pi 的 Agent Loop 说起]]、[[Pi/Pi
+Architecture：拆解 Coding Agent 的内部架构|Pi Architecture]]。</p>
+<h3 id="动手时要逐个处理的问题">4.2 动手时要逐个处理的问题</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>主题</th>
+<th>要回答的问题</th>
+<th>学习文档</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工具设计</td>
+<td>工具怎样描述、参数 Schema
+怎样设计、结果怎样组织、错误怎样返回；能否并行、超时是否重试</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYXBpL2RvY3MvZ3VpZGVzL2Z1bmN0aW9uLWNhbGxpbmc=">Function
+Calling<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>规划与拆解</td>
+<td>Plan-and-Execute、动态重规划、子任务依赖、终止条件；系统层面设最大步数、总超时或调用预算，做不下去时停下并说明原因</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9saWxpYW53ZW5nLmdpdGh1Yi5pby9wb3N0cy8yMDIzLTA2LTIzLWFnZW50Lw==">Lilian
+Weng：LLM Powered Autonomous Agents<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cubGFuZ2NoYWluLmNvbS9ibG9nL3BsYW5uaW5nLWFnZW50cw==">Planning
+Agents<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>状态管理</td>
+<td>会话历史、工具记录、任务进度存在哪；进程中断后怎么知道做到哪一步；区分全局
+/ 局部状态。工具超时不代表操作没完成，写操作要考虑重复执行与恢复</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxhbmdjaGFpbi5jb20vb3NzL3B5dGhvbi9sYW5nZ3JhcGgvcGVyc2lzdGVuY2U=">LangGraph
+Persistence<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5uZ2VzdC5jb20vYmxvZy9kdXJhYmxlLWV4ZWN1dGlvbi1rZXktdG8taGFybmVzc2luZy1haS1hZ2VudHM=">Durable
+Execution<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9sYW5nY2hhaW4tYWkuZ2l0aHViLmlvL2xhbmdncmFwaC9jb25jZXB0cy9sb3dfbGV2ZWwv">LangGraph
+Low-level Concepts<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>Workflow 模式</td>
+<td>Prompt
+Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer
+分别适合什么任务；不必每个项目都用上</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9lbmdpbmVlcmluZy9idWlsZGluZy1lZmZlY3RpdmUtYWdlbnRz">Building
+Effective Agents<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>记忆系统</td>
+<td>短期 / 长期 / 情景 /
+语义记忆，提取、压缩与遗忘。关键区分：<strong>系统存下来的</strong> ≠
+<strong>模型这一轮看到的</strong>，历史仍需选择、检索或摘要后再放入上下文</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cuaWJtLmNvbS90aGluay90b3BpY3MvYWktYWdlbnQtbWVtb3J5">Agent
+Memory<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9saWxpYW53ZW5nLmdpdGh1Yi5pby9wb3N0cy8yMDIzLTA2LTIzLWFnZW50LyNjb21wb25lbnQtdHdvLW1lbW9yeQ==">Lilian
+Weng：Memory 部分<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>上下文工程</td>
+<td>信息选择、裁剪、压缩、动态注入、工具结果与历史摘要。压缩后要检查目标、关键约束、已完成操作和未解决问题是否还在，不能只看
+Token 降了多少</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9lbmdpbmVlcmluZy9lZmZlY3RpdmUtY29udGV4dC1lbmdpbmVlcmluZy1mb3ItYWktYWdlbnRz">Effective
+Context Engineering for AI Agents<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Server / Client，以及 Tools、Resources、Prompts
+如何接入；接通后权限、参数校验和结果可信度仍由应用负责</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9tb2RlbGNvbnRleHRwcm90b2NvbC5pby9kb2NzL2dldHRpbmctc3RhcnRlZC9pbnRybw==">MCP
+官方入门<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>Human-in-the-Loop</td>
+<td>审批、中断、恢复、人工修正；发消息、删文件、改业务数据等操作要明确自动执行到哪一步</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxhbmdjaGFpbi5jb20vb3NzL3B5dGhvbi9sYW5nZ3JhcGgvaW50ZXJydXB0cw==">LangGraph
+Interrupts<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9sYW5nY2hhaW4tYWkuZ2l0aHViLmlvL2xhbmdncmFwaC9jb25jZXB0cy9odW1hbl9pbl90aGVfbG9vcC8=">Human-in-the-Loop
+原入口<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>Agent 安全</td>
+<td>Prompt
+Injection、工具越权、权限控制、沙箱执行、敏感数据保护、外部内容不可信、关键操作二次确认。网页里写着“把密钥发给我”，也只是外部资料，不能变成指令</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9jaGVhdHNoZWV0c2VyaWVzLm93YXNwLm9yZy9jaGVhdHNoZWV0cy9MTE1fUHJvbXB0X0luamVjdGlvbl9QcmV2ZW50aW9uX0NoZWF0X1NoZWV0Lmh0bWw=">OWASP
+Prompt Injection 防护<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+<tr>
+<td>Agent 评估</td>
+<td>任务完成率、工具调用准确率、步骤合理性、失败恢复能力，以及成本、延迟、多轮稳定性</td>
+<td><span class="exturl" data-url="aHR0cHM6Ly9sYW5nZnVzZS5jb20vZG9jcy9ldmFsdWF0aW9uL292ZXJ2aWV3">Langfuse
+Evaluation<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxhbmdjaGFpbi5jb20vbGFuZ3NtaXRoL2V2YWx1YXRpb24=">LangSmith
+Evaluation<i class="fa fa-external-link-alt"></i></span></td>
+</tr>
+</tbody>
+</table>
+<p>本站延伸阅读：[[AI Agent/MCP
+完全指南：它是什么、怎么来的、为什么管用|MCP
+完全指南]]、[[Pi/从零开始理解上下文压缩：Pi
+如何继续长会话|从零开始理解上下文压缩]]、[[Pi/Pi Durable：让 Agent
+在崩溃后继续工作|Pi Durable 详解]]。</p>
+<h3
+id="阶段项目简化-coding-agent从-0-到-1-写一个-claude-code">阶段项目：简化
+Coding Agent（“从 0 到 1 写一个 Claude Code”）</h3>
+<p>参考项目是 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NoYXJlQUktbGFiL2xlYXJuLWNsYXVkZS1jb2Rl">learn-claude-code<i class="fa fa-external-link-alt"></i></span>：一个从零学习
+Claude Code 类 Agent Harness
+的教学项目，覆盖循环、工具、权限和上下文管理。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>项目要求</th>
+<th>验收方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完整阅读参考项目代码，弄清模块职责和调用关系</td>
+<td>能沿一个真实任务讲清：输入如何进入循环、工具请求如何执行、结果如何返回、在哪里继续或停止</td>
+</tr>
+<tr>
+<td>从零实现自己的版本（范围对应教学项目）</td>
+<td>亲手修改一个机制（工具错误处理、权限检查或上下文压缩），用测试观察行为变化</td>
+</tr>
+<tr>
+<td>留下实现与测试</td>
+<td>比“把仓库跑起来”更能证明读懂了</td>
+</tr>
+</tbody>
+</table>
+<h2 id="后端工程让-agent-成为可运行可维护的服务">5. 后端工程：让 Agent
+成为可运行、可维护的服务</h2>
+<p>应用真正被使用后，会遇到多人请求、长任务、会话保存、失败恢复、测试和部署。材料给出了一条
+Python 后端路线。</p>
+<h3 id="python-asyncfastapi-与-pydantic">5.1 Python Async、FastAPI 与
+Pydantic</h3>
+<ul>
+<li><strong>Async</strong>：asyncio、协程、事件循环、任务调度、并发控制、异步
+I/O、超时和取消。要能判断什么时候该用 async、哪些操作会阻塞——加上
+<code>async</code> 不会自动解决性能问题。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcvMy9saWJyYXJ5L2FzeW5jaW8uaHRtbA==">Python
+asyncio<i class="fa fa-external-link-alt"></i></span></li>
+<li><strong>FastAPI</strong>：路由、请求响应模型、Depends
+依赖注入、中间件、异常处理、生命周期、OpenAPI 文档。文档：<span class="exturl" data-url="aHR0cHM6Ly9mYXN0YXBpLnRpYW5nb2xvLmNvbS96aC9sZWFybi8=">FastAPI 学习<i class="fa fa-external-link-alt"></i></span></li>
+<li><strong>Pydantic</strong>：类型标注、BaseModel、Field、嵌套模型、枚举、校验器、配置项、DTO
+设计与序列化。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB5ZGFudGljLmRldi9sYXRlc3Qv">Pydantic<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="sqlalchemyalembic-与-postgresql">5.2 SQLAlchemy、Alembic 与
+PostgreSQL</h3>
+<ul>
+<li>SQLAlchemy 2.0 的模型、关系、查询、事务、连接池与 AsyncSession；用
+Alembic 管理迁移。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnNxbGFsY2hlbXkub3JnL2VuLzIwL29ybS9leHRlbnNpb25zL2FzeW5jaW8uaHRtbA==">SQLAlchemy
+Async<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9hbGVtYmljLnNxbGFsY2hlbXkub3JnL2VuL2xhdGVzdC8=">Alembic<i class="fa fa-external-link-alt"></i></span></li>
+<li>PostgreSQL：表设计、索引、事务和锁，再了解 JSONB、全文检索与
+pgvector。至少要能解释用户、会话、消息、任务如何关联，任务状态何时更新，失败记录如何保留。文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cucG9zdGdyZXNxbC5vcmcvZG9jcy8=">PostgreSQL<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BndmVjdG9yL3BndmVjdG9y">pgvector<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="redis-与任务队列">5.3 Redis 与任务队列</h3>
+<ul>
+<li><strong>Redis</strong>：String、Hash、Set、ZSet、Stream、TTL、Pipeline、Lua、Pub/Sub，以及
+RedisJSON、Vector
+Search。场景包括缓存、限流、分布式锁、会话状态、任务状态、轻量消息流，要分清各场景需要的保证。建议从实际需要的缓存、限流或任务状态入手。文档：<span class="exturl" data-url="aHR0cHM6Ly9yZWRpcy5pby9kb2NzL2xhdGVzdC8=">Redis<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9yZWRpcy5pby9kb2NzL2xhdGVzdC9kZXZlbG9wL2ludGVyYWN0L3NlYXJjaC1hbmQtcXVlcnkv">Redis
+Search and Query<i class="fa fa-external-link-alt"></i></span></li>
+<li><strong>RabbitMQ</strong>：Producer、Consumer、Exchange、Queue、Binding、Routing
+Key、Ack、Prefetch、死信队列、Quorum Queue。对文档导入、批量
+Embedding、长时间 Agent
+任务，要考虑后台执行、进度查询、失败处理，以及重复消费导致的重复操作。文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cucmFiYml0bXEuY29tL3R1dG9yaWFscw==">RabbitMQ Tutorials<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly93d3cucmFiYml0bXEuY29tL2RvY3M=">RabbitMQ 文档<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="测试容器化与-cicd">5.4 测试、容器化与 CI/CD</h3>
+<ul>
+<li><strong>测试</strong>：单元、集成、异步测试、Mock、Fixture、测试数据库、接口测试，包括模型
+API、数据库、消息队列出错的场景。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB5dGVzdC5vcmcvZW4vc3RhYmxlLw==">pytest<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9weXRlc3QtYXN5bmNpby5yZWFkdGhlZG9jcy5pby9lbi9sYXRlc3Qv">pytest-asyncio<i class="fa fa-external-link-alt"></i></span></li>
+<li><strong>Docker</strong>：Dockerfile、镜像构建、环境变量、volume、network、multi-stage
+build，用 Compose 管理本地依赖。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZ2V0LXN0YXJ0ZWQv">Docker 入门<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vY29tcG9zZS8=">Docker Compose<i class="fa fa-external-link-alt"></i></span></li>
+<li><strong>CI/CD</strong>：GitHub Actions 的
+workflow、job、step、trigger、secrets、cache、artifact；先接自动检查和测试，再补构建与部署。文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vZW4vYWN0aW9ucw==">GitHub Actions<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="进阶kubernetes-与微服务">5.5 进阶：Kubernetes 与微服务</h3>
+<ul>
+<li>Kubernetes：Pod、Deployment、Service、Ingress、ConfigMap、Secret、Job、CronJob、HPA、健康检查、滚动发布。文档：<span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL2RvY3MvY29uY2VwdHMv">Kubernetes Concepts<i class="fa fa-external-link-alt"></i></span></li>
+<li>微服务：服务拆分、DDD 边界、同步 / 异步通信、API
+网关、配置管理、服务治理与可观测性，也要算清拆分后的维护成本。文档：<span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvLw==">Microservices.io<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>作者的取舍：这两项放到基础服务跑稳之后，按实际规模再学；学习项目先保持清楚的单体结构。</p>
+<h3 id="阶段项目ai-服务后端系统">阶段项目：AI 服务后端系统</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>组件</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API</td>
+<td>FastAPI 提供 REST API，Pydantic 定义请求与响应</td>
+</tr>
+<tr>
+<td>存储</td>
+<td>PostgreSQL 保存用户、会话、消息和任务</td>
+</tr>
+<tr>
+<td>缓存 / 状态</td>
+<td>Redis 承担缓存或任务状态</td>
+</tr>
+<tr>
+<td>异步任务</td>
+<td>RabbitMQ 或后台任务队列</td>
+</tr>
+<tr>
+<td>环境与质量</td>
+<td>Docker Compose 启动本地环境；单元测试 + 接口测试；至少包含 lint 和
+test 的基础 CI</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收标准</strong>：一条命令启动、能访问 API
+文档、一条命令跑测试；能解释数据库设计、异步任务和错误处理；README
+包含架构说明、启动方式、接口示例和测试说明。</p>
+<h2 id="实战项目与推进顺序">6. 实战项目与推进顺序</h2>
+<h3 id="作者推荐的开源项目">6.1 作者推荐的开源项目</h3>
+<p>原指南的实战项目是 OpenClaw 类产品，作者认为只围着 OpenClaw
+转已经有点落后，于是换成四个切口（分类之间有重叠，不必卡死）：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>切口</th>
+<th>推荐</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coding Agent</td>
+<td>优先 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VhcmVuZGlsLXdvcmtzL3Bp">Pi<i class="fa fa-external-link-alt"></i></span>，对照 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9jb2RleA==">Codex CLI<i class="fa fa-external-link-alt"></i></span></td>
+<td>一次模型调用如何进入工具执行、结果如何回到下一轮，会话、上下文与
+Extension 如何接入；Codex CLI
+作为另一套实现参照，看工具执行、权限和任务状态如何组织</td>
+</tr>
+<tr>
+<td>Working Agent</td>
+<td>体验 <span class="exturl" data-url="aHR0cHM6Ly93d3cud29ya2J1ZGR5LmNuL2RvY3Mvd29ya2J1ZGR5Lw==">WorkBuddy<i class="fa fa-external-link-alt"></i></span>，读源码 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RpZmZlcmVudC1haS9vcGVud29yaw==">OpenWork<i class="fa fa-external-link-alt"></i></span>；多 Agent
+协作可看 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VpZ2VudC1haS9laWdlbnQ=">Eigent<i class="fa fa-external-link-alt"></i></span></td>
+<td>Agent 怎样接任务、执行、等待确认、交付结果；OpenWork
+里任务界面、工作目录与上下文、执行状态、工具连接和最终产物的关系</td>
+</tr>
+<tr>
+<td>OpenClaw 类常驻助手</td>
+<td>先 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hLVURTL25hbm9ib3Q=">nanobot<i class="fa fa-external-link-alt"></i></span>，再 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5jbGF3L29wZW5jbGF3">OpenClaw<i class="fa fa-external-link-alt"></i></span></td>
+<td>nanobot 用 Python 实现、Agent Loop
+易追踪，可串起消息入口、工具调用、会话、记忆和定时任务；再看 OpenClaw
+的常驻 Gateway、多渠道接入、Skills、权限与沙箱</td>
+</tr>
+<tr>
+<td>Personal Agent</td>
+<td>CopilotKit 的 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NvcGlsb3RLaXQvT3BlbkJvdA==">OpenBot<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NvcGlsb3RLaXQvT3BlbkRvdHM=">OpenDots<i class="fa fa-external-link-alt"></i></span></td>
+<td>OpenBot：执行环境隔离、浏览器 / 文件 /
+工具操作经统一网关、权限策略和操作记录；OpenDots：持久会话、后台任务、文字
+/ 语音 / Slack 入口，以及需确认的操作如何暂停与继续</td>
+</tr>
+</tbody>
+</table>
+<p>作者特别提醒的注意事项：</p>
+<ul>
+<li><strong>许可证</strong>：OpenWork 的桌面与核心部分是 MIT，但
+<code>ee/</code> 目录用的是另一份受限许可证（<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RpZmZlcmVudC1haS9vcGVud29yay9ibG9iL2Rldi9lZS9MSUNFTlNF">LICENSE<i class="fa fa-external-link-alt"></i></span>），不能把整个仓库当成
+MIT；OpenBot / OpenDots 源码是 MIT，但运行依赖 CopilotKit Intelligence
+等服务，开源不等于整套免费或无需额外授权。</li>
+<li><strong>安全</strong>：常驻助手类项目先用测试账号和非敏感文件，不要一上来就交出主账号、个人文件和执行权限。</li>
+<li><strong>学法</strong>：不用全学。每个切口挑一个，跑通一个有明确验收条件的任务，能解释执行过程，再做一个可验证的小改动（比如加一个工具或
+Extension），比收藏一堆仓库有用。</li>
+</ul>
+<p>所有实践项目共同的交付要求：代码、文档、运行说明和测试都放进 GitHub
+仓库，交付时提供仓库链接，源码学习项目也一样。</p>
+<h3 id="推进顺序">6.2 推进顺序</h3>
+<p>原文这里给的是一张顺序图，下面是按各阶段项目整理出的顺序：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">① 大模型 API Playground（LLM 基础）</span><br><span class="line">    ↓</span><br><span class="line">② RAG + Tool Calling Agent（RAG + 工具调用）</span><br><span class="line">    ↓</span><br><span class="line">③ 简化 Coding Agent（Agent Loop / Harness）</span><br><span class="line">    ↓</span><br><span class="line">④ AI 服务后端系统（承载前面的能力）</span><br><span class="line">    ↓</span><br><span class="line">⑤ 开源 Agent 项目实战（每个切口挑一个）</span><br><span class="line"></span><br><span class="line">Prompt 设计贯穿全程：每个项目至少 3 组修改前后对比</span><br></pre></td></tr></table></figure>
+<p>起步与推进建议：</p>
+<ul>
+<li>已经会后端：直接从 API Playground 开始，同时补模型基础。</li>
+<li>编程基础不稳：先补 Python、Git、HTTP、JSON
+和基本接口开发，再做第一阶段（作者根据自身经历补充）。</li>
+<li>向量索引算法、Advanced
+RAG、复杂记忆、Kubernetes、微服务：等基础项目产生具体需求后再深入。</li>
+<li>项目可以复用：让后端服务承载前面的 RAG 和 Agent
+能力，逐步补状态、测试和部署，不必为每个项目重复搭壳子。</li>
+<li>每个仓库都应能回答：输入是什么、输出是什么、成功标准是什么、哪里容易失败、失败后如何处理。</li>
+<li>让 AI
+帮忙写实现之后，亲手跑一个正常案例和一个异常案例，再试着解释执行过程。</li>
+</ul>
+<h2 id="读后要点">读后要点</h2>
+<ol type="1">
+<li><strong>以项目为刻度。</strong>
+每个阶段都对应一个可交付项目和验收清单，“学会”的标准是能解释、能修改、能验证，而不是读完文档。</li>
+<li><strong>先看懂原始调用，再用框架。</strong> API Playground 把
+message、tool call、stream、usage 这些概念落到实处，后面学 RAG 和 Agent
+时就不会只停留在框架表面。</li>
+<li><strong>系统负责边界。</strong> 结构化输出不保证内容正确，RAG
+不保证不答错，模型自查不等于验证，权限过滤和外部内容隔离必须由系统执行——几乎每一节都在重复这个原则。</li>
+<li><strong>Agent 工程师也是后端工程师。</strong>
+状态持久化、异步任务、测试和部署占了路线的很大比例，这也呼应了作者自己“AI
+没问题、工程能力不足”的面试反馈。</li>
+<li><strong>先基础、后进阶。</strong>
+GraphRAG、复杂记忆、K8s、微服务都被放在“遇到具体问题之后”，避免一开始就陷入复杂度。</li>
+</ol>
+<h2 id="来源与相关笔记">来源与相关笔记</h2>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9jaGFzZW5fbGlhby9zdGF0dXMvMjEwOTA4MTMwMTgxOTMxMDU3OA==">Chasen：「万字总结」-
+我偷来了一份成为 Agent 工程师的学习线路（原帖及长文）<i class="fa fa-external-link-alt"></i></span></li>
+<li>[[AI Agent/AI 开发工作流：轻量约束、端到端测试与人工审查|AI
+开发工作流：轻量约束、端到端测试与人工审查]]</li>
+<li>[[AI Agent/Agent Skill
+完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]]</li>
+<li>[[Pi/Pi Compaction：上下文压缩的完整流程|Pi
+Compaction：上下文压缩的完整流程]]</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/fc3938a9.html" rel="prev" title="AI 开发工作流：轻量约束、端到端测试与人工审查">
+                  <i class="fa fa-angle-left"></i> AI 开发工作流：轻量约束、端到端测试与人工审查
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c07d9ac7.html" rel="next" title="我的 Vibe Coding 工作流：从 session log 到 skill 迭代">
+                  我的 Vibe Coding 工作流：从 session log 到 skill 迭代 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">60:40</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

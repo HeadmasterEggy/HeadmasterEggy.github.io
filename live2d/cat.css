@@ -1,0 +1,205 @@
+/* 看板猫：右下角布局（覆盖 waifu.css 的默认左下角）+ 聊天面板。
+   配色全部取自博客主题（NexT）的 CSS 变量，强调色用 NexT 的橙色 #fc6423，随明暗模式自动切换。 */
+
+/* 尺寸与旧版一致（旧 live2d 挂件 180×300 画布里的猫约 95px 宽）；位置离开右下角，整只猫（含脚）完整露出 */
+/* 位置由 init.js 里的拖动逻辑写入 --cat-r / --cat-b（离右、下边缘的距离），默认 72px */
+#waifu { left: auto; right: var(--cat-r, 72px); }
+#waifu.waifu-active { bottom: var(--cat-b, 72px); transform: none; }
+#waifu.waifu-active:hover { transform: translateY(-3px); }
+html.cat-ready #waifu { transition: transform .3s ease-in-out; } /* 入场动画结束后，拖动/缩放时位置立即生效 */
+html.cat-dragging #waifu, html.cat-dragging #cat-dock, html.cat-dragging #cat-chat { transition: none !important; }
+html.cat-dragging { user-select: none; -webkit-user-select: none; }
+html.cat-anim #waifu { transition: right .45s cubic-bezier(.34, 1.3, .64, 1), bottom .45s cubic-bezier(.34, 1.3, .64, 1), transform .3s ease-in-out !important; }
+html.cat-anim #cat-dock { transition: right .45s cubic-bezier(.34, 1.3, .64, 1), bottom .45s cubic-bezier(.34, 1.3, .64, 1), transform .4s cubic-bezier(.34, 1.4, .64, 1), opacity .25s ease !important; }
+#live2d { touch-action: none; }
+#live2d { width: 180px; height: 180px; }
+#waifu-tool { display: none; } /* 不用自带的工具按钮，入口是下面的“问问猫”按钮 */
+
+/* 猫说话的气泡：向左展开，避免超出右边界；配色跟博客一致 */
+#waifu-tips {
+  left: auto; right: 10px; margin: -30px 0; width: 220px;
+  color: var(--text-color, #555);
+  background: color-mix(in srgb, var(--content-bg-color, #fff) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-color, #555) 18%, transparent);
+  box-shadow: 0 6px 20px -6px rgba(0, 0, 0, .35);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+#waifu-tips span { color: #fc6423; }
+
+/* “重新唤起”按钮（不再有关闭入口，仅作兜底）：贴右边 */
+#waifu-toggle { left: auto; right: 0; margin-left: 0; margin-right: -100px; justify-content: flex-start; transition: margin-right 1s; }
+#waifu-toggle.waifu-toggle-active { margin-left: 0; margin-right: -50px; }
+#waifu-toggle.waifu-toggle-active:hover { margin-left: 0; margin-right: -30px; }
+
+/* ───── 公共变量 ───── */
+#cat-chat, #cat-dock {
+  --c-fg: var(--text-color, #555);
+  --c-muted: color-mix(in srgb, var(--text-color, #555) 62%, transparent);
+  --c-border: color-mix(in srgb, var(--text-color, #555) 16%, transparent);
+  --c-bg: color-mix(in srgb, var(--content-bg-color, #fff) 90%, transparent);
+  --c-card: color-mix(in srgb, var(--text-color, #555) 9%, var(--content-bg-color, #fff));
+  --c-code: color-mix(in srgb, var(--text-color, #555) 13%, transparent);
+  --c-input: var(--body-bg-color, #eee);
+  --c-accent: #fc6423;
+  --c-accent-fg: #fff;
+  --c-me: color-mix(in srgb, #fc6423 20%, var(--content-bg-color, #fff));
+  --c-me-border: color-mix(in srgb, #fc6423 42%, transparent);
+  --c-link: #e0500f;
+  --c-ring: rgba(252, 100, 35, .25);
+  --c-avatar-bg: #e4e0d8; /* 浅暖灰底，让黑猫头像在明暗两种模式下都清晰 */
+  --c-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 12px 32px -8px rgba(0, 0, 0, .3);
+}
+@media (prefers-color-scheme: dark) {
+  #cat-chat, #cat-dock { --c-link: #ff8c5a; --c-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px -8px rgba(0, 0, 0, .6); }
+}
+
+/* ───── 猫脚下的胶囊工具条（参考 Codex 的猫）：聊天 | 随机一篇笔记 ───── */
+#cat-dock {
+  position: fixed; right: calc(var(--cat-r, 72px) + 90px); translate: 50% 0; bottom: calc(var(--cat-b, 72px) - 48px); z-index: 9;
+  display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px;
+  background: var(--c-bg); border: 1px solid var(--c-border); box-shadow: var(--c-shadow);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+  opacity: 0; transform: translateY(8px) scale(.94); pointer-events: none;
+  transition: transform .4s cubic-bezier(.34, 1.4, .64, 1), opacity .25s ease;
+}
+#cat-dock.show { opacity: 1; transform: none; pointer-events: auto; }
+#cat-dock button {
+  all: unset; box-sizing: border-box; display: grid; place-items: center; width: 40px; height: 34px; border-radius: 999px; cursor: pointer;
+  color: var(--c-muted); transition: background .15s, color .15s, transform .15s;
+}
+#cat-dock button:hover { background: var(--c-code); color: var(--c-fg); }
+#cat-dock button:active { transform: scale(.9); }
+#cat-dock button:focus-visible { outline: 2px solid var(--c-accent); outline-offset: -1px; }
+#cat-dock button.active { color: var(--c-accent); }
+#cat-dock .sep { width: 1px; height: 18px; background: var(--c-border); }
+#cat-dock svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ───── 聊天面板 ───── */
+#cat-chat {
+  position: fixed; right: calc(var(--cat-r, 72px) + 198px); bottom: calc(var(--cat-b, 72px) - 44px); z-index: 10; /* 打开时由 agent.js 按可用空间重新定位 */
+  width: 372px; max-width: calc(100vw - 16px); height: min(540px, calc(100vh - 16px));
+  display: flex; flex-direction: column; overflow: hidden;
+  color: var(--c-fg); font-size: 14px; line-height: 1.65;
+  background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 18px; box-shadow: var(--c-shadow);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+  transform-origin: bottom right;
+  visibility: hidden; opacity: 0; pointer-events: none; transform: translateY(12px) scale(.94);
+  transition: transform .4s cubic-bezier(.34, 1.4, .64, 1), opacity .2s ease, visibility 0s linear .4s;
+}
+#cat-chat.open { visibility: visible; opacity: 1; pointer-events: auto; transform: none; transition-delay: 0s; }
+
+/* 头部 */
+#cat-chat .cc-head { display: flex; align-items: center; gap: 10px; padding: 11px 10px 11px 14px; border-bottom: 1px solid var(--c-border); }
+#cat-chat .cc-avatar, #cat-chat .cc-mini { flex: none; border-radius: 50%; background: var(--c-avatar-bg); overflow: hidden; }
+#cat-chat .cc-avatar { width: 36px; height: 36px; }
+#cat-chat .cc-mini { width: 26px; height: 26px; }
+#cat-chat .cc-avatar img, #cat-chat .cc-mini img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#cat-chat .cc-title { flex: 1; min-width: 0; line-height: 1.3; }
+#cat-chat .cc-title b { display: block; font-size: 14px; font-weight: 600; }
+#cat-chat .cc-title span { display: block; font-size: 11.5px; color: var(--c-muted); }
+#cat-chat .cc-icon {
+  all: unset; box-sizing: border-box; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px;
+  color: var(--c-muted); cursor: pointer; transition: background .15s, color .15s, transform .15s;
+}
+#cat-chat .cc-icon:hover { background: var(--c-code); color: var(--c-fg); }
+#cat-chat .cc-icon:active { transform: scale(.92); }
+#cat-chat .cc-icon:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+#cat-chat .cc-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 消息区 */
+#cat-chat .msgs { flex: 1; overflow-y: auto; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--c-border) transparent; }
+#cat-chat .row { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; animation: cc-in .38s cubic-bezier(.22, 1, .36, 1) both; }
+#cat-chat .row.me { justify-content: flex-end; }
+#cat-chat .msg { position: relative; min-width: 0; max-width: calc(100% - 34px); padding: 8px 13px; border-radius: 16px; word-break: break-word; }
+#cat-chat .row.cat .msg { background: var(--c-card); border: 1px solid var(--c-border); border-bottom-left-radius: 5px; }
+#cat-chat .row.me .msg { max-width: 88%; background: var(--c-me); border: 1px solid var(--c-me-border); border-bottom-right-radius: 5px; white-space: pre-wrap; }
+#cat-chat .row.err .msg { color: #dc2626; border-color: rgba(220, 38, 38, .4); background: rgba(220, 38, 38, .08); }
+#cat-chat .copy-all {
+  all: unset; position: absolute; right: -6px; top: -8px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 8px; cursor: pointer;
+  color: var(--c-muted); background: var(--c-bg); border: 1px solid var(--c-border); opacity: 0; transform: scale(.85); transition: opacity .15s, transform .15s;
+}
+#cat-chat .row:hover .copy-all, #cat-chat .copy-all:focus-visible { opacity: 1; transform: none; }
+#cat-chat .copy-all svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 输入中：三个弹跳的点 */
+#cat-chat .dots { display: inline-flex; gap: 4px; padding: 5px 2px; }
+#cat-chat .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--c-muted); animation: cc-bounce 1.1s ease-in-out infinite; }
+#cat-chat .dots i:nth-child(2) { animation-delay: .15s; }
+#cat-chat .dots i:nth-child(3) { animation-delay: .3s; }
+
+/* 快捷提问 */
+#cat-chat .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px 10px; }
+#cat-chat .chips:empty { display: none; }
+#cat-chat .chips button {
+  all: unset; box-sizing: border-box; cursor: pointer; padding: 5px 11px; border-radius: 999px; font-size: 12.5px; color: var(--c-fg);
+  background: var(--c-card); border: 1px solid var(--c-border);
+  animation: cc-in .45s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 60ms + 120ms);
+  transition: border-color .15s, background .15s, transform .15s;
+}
+#cat-chat .chips button:hover { border-color: var(--c-accent); background: var(--c-ring); transform: translateY(-1px); }
+#cat-chat .chips button:active { transform: scale(.96); }
+#cat-chat .chips button:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+
+/* 推荐提问生成中的骨架占位 */
+#cat-chat .chips .skel {
+  width: var(--w); height: 27px; border-radius: 999px; border: 1px solid var(--c-border);
+  background: linear-gradient(100deg, var(--c-card) 30%, var(--c-code) 50%, var(--c-card) 70%); background-size: 240% 100%;
+  animation: cc-in .4s cubic-bezier(.22, 1, .36, 1) both, cc-shimmer 1.4s ease-in-out infinite; animation-delay: calc(var(--i) * 50ms), 0s;
+}
+@keyframes cc-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+
+/* 输入框 */
+#cat-chat form { padding: 8px 12px 12px; }
+#cat-chat .box {
+  display: flex; align-items: flex-end; gap: 6px; padding: 5px 5px 5px 12px; border-radius: 14px;
+  background: var(--c-input); border: 1px solid var(--c-border); transition: border-color .15s, box-shadow .15s;
+}
+#cat-chat .box:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px var(--c-ring); }
+#cat-chat textarea {
+  flex: 1; min-width: 0; max-height: 120px; padding: 6px 0; margin: 0; resize: none; border: 0; outline: 0; background: transparent;
+  font: inherit; color: inherit; line-height: 1.5;
+}
+#cat-chat textarea::placeholder { color: var(--c-muted); }
+#cat-chat .send {
+  all: unset; flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; cursor: pointer;
+  color: var(--c-accent-fg); background: var(--c-accent); transition: transform .15s, opacity .15s, filter .15s;
+}
+#cat-chat .send:hover { filter: brightness(1.08); }
+#cat-chat .send:active { transform: scale(.9); }
+#cat-chat .send:disabled { opacity: .3; cursor: default; filter: none; transform: none; }
+#cat-chat .send:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+#cat-chat .send svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ───── markdown 渲染 ───── */
+#cat-chat .md > :first-child { margin-top: 0; }
+#cat-chat .md > :last-child { margin-bottom: 0; }
+#cat-chat .md p { margin: .45em 0; }
+#cat-chat .md strong { font-weight: 650; }
+#cat-chat .md a { color: var(--c-link); text-decoration: underline; text-decoration-color: currentColor; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: text-decoration-thickness .15s; }
+#cat-chat .md a:hover { text-decoration-thickness: 2px; }
+#cat-chat .md .md-h { margin: .7em 0 .3em; font-weight: 650; line-height: 1.4; }
+#cat-chat .md .md-h1 { font-size: 1.15em; }
+#cat-chat .md .md-h2 { font-size: 1.08em; }
+#cat-chat .md ul, #cat-chat .md ol { margin: .4em 0; padding-left: 1.35em; }
+#cat-chat .md li { margin: .2em 0; padding-left: .1em; }
+#cat-chat .md li::marker { color: var(--c-accent); font-weight: 600; }
+#cat-chat .md li > ul, #cat-chat .md li > ol { margin: .15em 0; }
+#cat-chat .md blockquote { margin: .5em 0; padding: .1em .8em; color: var(--c-muted); border-left: 3px solid var(--c-accent); border-radius: 2px; }
+#cat-chat .md hr { margin: .7em 0; border: 0; border-top: 1px solid var(--c-border); }
+#cat-chat .md code { padding: .1em .4em; border-radius: 6px; font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--c-code); }
+#cat-chat .md pre { position: relative; margin: .55em 0; border-radius: 10px; overflow: hidden; background: var(--highlight-background, #fff); color: var(--highlight-foreground, #000); border: 1px solid var(--c-border); }
+#cat-chat .md pre .bar { display: flex; align-items: center; justify-content: space-between; padding: 3px 6px 3px 12px; font-size: 11px; color: var(--c-muted); background: var(--c-code); }
+#cat-chat .md pre .bar button { all: unset; cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: background .15s, color .15s; }
+#cat-chat .md pre .bar button:hover { background: var(--c-border); color: var(--c-fg); }
+#cat-chat .md pre code { display: block; padding: 10px 12px; overflow-x: auto; background: transparent; color: inherit; white-space: pre; scrollbar-width: thin; }
+#cat-chat .md .tbl { margin: .55em 0; overflow-x: auto; border: 1px solid var(--c-border); border-radius: 10px; }
+#cat-chat .md table { width: 100%; margin: 0; border-collapse: collapse; font-size: 13px; }
+#cat-chat .md th, #cat-chat .md td { padding: 5px 10px; text-align: left; border: 0; border-bottom: 1px solid var(--c-border); }
+#cat-chat .md tr:last-child td { border-bottom: 0; }
+#cat-chat .md th { font-weight: 600; background: var(--c-code); }
+
+@keyframes cc-in { from { opacity: 0; transform: translateY(8px) scale(.97); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes cc-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #cat-chat, #cat-chat *, #cat-dock { animation: none !important; transition-duration: .01ms !important; }
+}

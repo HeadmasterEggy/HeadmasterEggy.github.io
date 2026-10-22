@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详读张立行关于 Context 与 Loop 的实践记录：梳理上下文分层、主脑与执行器、独立 Advisor、经验固化、门禁自检和并发瓶颈，并整理可落地的任务卡与复盘方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Context 与 Loop：从上下文治理到可验证的 Agent 闭环">
+<meta property="og:url" content="https://qiao1.top/posts/e4347207.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="详读张立行关于 Context 与 Loop 的实践记录：梳理上下文分层、主脑与执行器、独立 Advisor、经验固化、门禁自检和并发瓶颈，并整理可落地的任务卡与复盘方法。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-22T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-22T11:28:50.130Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="AI-Agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/e4347207.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/e4347207.html","path":"posts/e4347207.html","title":"Context 与 Loop：从上下文治理到可验证的 Agent 闭环"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Context 与 Loop：从上下文治理到可验证的 Agent 闭环 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/e4347207.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">273</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">229</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%88%E7%9C%8B%E5%85%A8%E5%B1%80%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E5%8F%8D%E9%A6%88%E6%80%8E%E6%A0%B7%E5%BD%A2%E6%88%90%E5%BE%AA%E7%8E%AF"><span class="nav-text">一、先看全局：上下文和反馈怎样形成循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%8F%98%E5%BF%AB%E5%90%8E%E4%BA%BA%E8%BF%98%E6%98%AF%E5%BE%88%E5%BF%99"><span class="nav-text">二、为什么代码生成变快后，人还是很忙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89context-%E6%B2%BB%E7%90%86%E7%BB%99%E4%B8%8D%E5%90%8C%E4%BF%A1%E6%81%AF%E5%AE%89%E6%8E%92%E4%B8%8D%E5%90%8C%E4%BD%8D%E7%BD%AE"><span class="nav-text">三、Context
+治理：给不同信息安排不同位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%98%AF%E4%B8%80%E9%A1%B9%E9%A2%84%E7%AE%97"><span class="nav-text">1. 上下文是一项预算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E7%95%99%E4%B8%8B%E8%B6%B3%E5%A4%9F%E7%9A%84%E8%A1%8C%E4%B8%BA%E8%AF%81%E6%8D%AE"><span class="nav-text">2. 先留下足够的行为证据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E8%A6%81%E8%83%BD%E8%BF%BD%E6%BA%AF%E4%B9%9F%E8%A6%81%E8%83%BD%E5%88%A0%E9%99%A4"><span class="nav-text">3. 规则要能追溯，也要能删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agents%E8%AE%B0%E5%BF%86%E5%92%8C%E4%BA%8B%E6%95%85%E8%AE%B0%E5%BD%95%E5%BA%94%E5%90%84%E5%8F%B8%E5%85%B6%E8%81%8C"><span class="nav-text">4.
+AGENTS、记忆和事故记录应各司其职</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skills-%E5%92%8C%E5%B7%A5%E5%85%B7%E4%B9%9F%E6%9C%89%E4%B8%8A%E4%B8%8B%E6%96%87%E6%88%90%E6%9C%AC"><span class="nav-text">5. Skills 和工具也有上下文成本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%BB%E8%84%91%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%99%A8%E5%88%86%E5%B7%A5%E9%A6%96%E5%85%88%E4%BD%93%E7%8E%B0%E5%9C%A8%E8%BE%93%E5%85%A5%E4%B8%8A"><span class="nav-text">四、主脑与执行器：分工首先体现在输入上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%92%8C-harness-%E5%BA%94%E4%B8%80%E8%B5%B7%E8%AF%84%E4%BC%B0"><span class="nav-text">模型和 Harness 应一起评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94advisor%E8%AE%A9%E7%8B%AC%E7%AB%8B%E5%88%A4%E6%96%AD%E7%9C%9F%E6%AD%A3%E8%BF%9B%E5%85%A5%E6%B5%81%E7%A8%8B"><span class="nav-text">五、Advisor：让独立判断真正进入流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E4%BA%8B%E5%AE%9E%E4%B9%9F%E6%9A%B4%E9%9C%B2%E8%87%AA%E5%B7%B1%E7%9A%84%E5%81%8F%E8%A7%81"><span class="nav-text">给事实，也暴露自己的偏见</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%A4%96%E9%83%A8%E6%9D%A1%E4%BB%B6%E8%A7%A6%E5%8F%91%E5%92%A8%E8%AF%A2"><span class="nav-text">用外部条件触发咨询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADloop%E6%8A%8A%E4%B8%80%E6%AC%A1%E4%BA%8B%E6%95%85%E8%BD%AC%E6%88%90%E4%B8%8B%E6%AC%A1%E5%B0%91%E5%81%9A%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="nav-text">六、Loop：把一次事故转成下次少做一件事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E7%9B%98%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E6%89%8D%E7%AE%97%E9%97%AD%E7%8E%AF"><span class="nav-text">复盘什么时候才算闭环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%B7%A5%E5%85%B7%E4%B9%9F%E8%A6%81%E6%8E%A5%E5%8F%97%E5%A4%8D%E7%9B%98"><span class="nav-text">优化工具也要接受复盘</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E9%AA%8C%E8%AF%81%E4%BD%93%E7%B3%BB%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B9%9F%E4%BC%9A%E9%AA%97%E4%BA%BA"><span class="nav-text">七、验证体系为什么也会骗人</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8E%E6%88%90%E6%9C%AC%E6%A3%80%E6%9F%A5%E4%BC%98%E5%85%88%E5%88%A4%E6%96%AD%E5%9E%8B%E6%A3%80%E6%9F%A5%E8%A1%A5%E8%B6%B3"><span class="nav-text">低成本检查优先，判断型检查补足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%B7%B2%E7%9F%A5%E5%A4%B1%E8%B4%A5%E6%A1%88%E4%BE%8B%E6%A3%80%E9%AA%8C%E9%97%A8%E7%A6%81"><span class="nav-text">用已知失败案例检验门禁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%8E%8B%E7%BC%A9%E4%B8%8E%E9%87%8D%E5%BC%80%E4%BC%9A%E8%AF%9D%E4%BF%9D%E7%95%99%E8%AF%81%E6%8D%AE%E4%B8%A2%E6%8E%89%E6%97%A0%E6%95%88%E6%8E%A8%E7%90%86"><span class="nav-text">八、压缩与重开会话：保留证据，丢掉无效推理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E5%B9%B6%E5%8F%91%E8%A7%84%E6%A8%A1%E6%89%A9%E5%A4%A7%E5%90%8E%E7%93%B6%E9%A2%88%E4%BC%9A%E8%BD%AC%E7%A7%BB"><span class="nav-text">九、并发规模扩大后，瓶颈会转移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BB%8E%E4%B8%AA%E4%BA%BA%E6%8A%80%E5%B7%A7%E5%88%B0%E7%BB%84%E7%BB%87%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">十、从个人技巧到组织工作流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E5%A6%82%E4%BD%95%E4%BB%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%A7%8B"><span class="nav-text">十一、如何从自己的项目开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%8F%AA%E9%80%89%E4%B8%80%E7%A7%8D%E9%87%8D%E5%A4%8D%E5%8F%91%E7%94%9F%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-text">第一步：只选一种重复发生的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%A3%80%E6%9F%A5%E7%9C%9F%E5%AE%9E%E8%BE%93%E5%85%A5"><span class="nav-text">第二步：检查真实输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%86%99%E6%B8%85%E9%AA%8C%E6%94%B6%E4%B8%8E%E5%8D%87%E7%BA%A7%E6%9D%A1%E4%BB%B6"><span class="nav-text">第三步：写清验收与升级条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E6%8A%8A%E5%A4%8D%E5%8F%91%E9%97%AE%E9%A2%98%E5%9B%BA%E5%8C%96%E5%88%B0%E5%90%88%E9%80%82%E5%B1%82"><span class="nav-text">第四步：把复发问题固化到合适层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E6%A3%80%E9%AA%8C%E9%97%AD%E7%8E%AF%E6%98%AF%E5%90%A6%E7%9C%9F%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-text">第五步：检验闭环是否真的工作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E9%98%85%E8%AF%BB%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E6%97%B6%E5%93%AA%E4%BA%9B%E7%BB%93%E8%AE%BA%E5%BA%94%E5%BD%93%E4%BF%9D%E7%95%99%E8%BE%B9%E7%95%8C"><span class="nav-text">十二、阅读这篇文章时，哪些结论应当保留边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E4%B8%8E%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-text">参考资料与延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">229</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/e4347207.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Context 与 Loop：从上下文治理到可验证的 Agent 闭环 | Joey">
+      <meta itemprop="description" content="详读张立行关于 Context 与 Loop 的实践记录：梳理上下文分层、主脑与执行器、独立 Advisor、经验固化、门禁自检和并发瓶颈，并整理可落地的任务卡与复盘方法。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Context 与 Loop：从上下文治理到可验证的 Agent 闭环
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-10-22 12:00:00 / Modified: 11:28:50" itemprop="dateCreated datePublished" datetime="2026-10-22T12:00:00Z">2026-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI-Agent/" itemprop="url" rel="index"><span itemprop="name">AI Agent</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>7.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>29 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">详读张立行关于 Context 与 Loop 的实践记录：梳理上下文分层、主脑与执行器、独立 Advisor、经验固化、门禁自检和并发瓶颈，并整理可落地的任务卡与复盘方法。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>很多人开始使用 Coding Agent
+时，最关心的是模型能不能把代码写出来。使用一段时间后，问题往往变成：为什么每次都要解释同样的约束？为什么修复绕了几轮还没有进展？为什么工具报告成功，交付结果却仍然有问题？</p>
+<p>张立行在《吃一堑，长一智：Agent 时代的两个关键词 Context 与
+Loop》中，把这些问题放进了同一个工程框架：<strong>Context
+影响当前任务如何行动，Loop 决定一次行动能否改善后续任务。</strong></p>
+<p>本文依据作者 2026 年 10 月 4 日发布的<span class="exturl" data-url="aHR0cHM6Ly96ajExMjM1ODEzMjEuY29tL3Bvc3RzLzI2MTAwNC1jb250ZXh0LWFuZC1sb29wLw==">原始长文<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9ieWxpeGluZy9zdGF0dXMvMjEwNjc1NzM3MzgzNDc4MDcyMw==">对应 X
+帖子<i class="fa fa-external-link-alt"></i></span>整理，阅读与核对日期为 2026 年 10 月 22
+日。下文先归纳原文的论证，再补充自己的工程解释、示例和操作模板；标注为“本文建议”的部分，是基于原文延伸的方法。</p>
+<p>原文涉及的通过率、token、咨询次数和并发规模，都是作者对自己系统的记录，本文没有独立复现实验。它们适合帮助理解一个工作流的演化过程，不能直接当作模型排行榜，也不能据此推算其他团队的收益。</p>
+<span id="more"></span>
+<h2
+id="一先看全局上下文和反馈怎样形成循环">一、先看全局：上下文和反馈怎样形成循环</h2>
+<p>可以把一次 Agent 工作理解为四个相互连接的环节：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">任务与环境事实 → 当前上下文 → 执行与验证 → 可追溯的结果</span><br><span class="line">                       ↑                      ↓</span><br><span class="line">                       └── 调整规则、工具和约束 ──┘</span><br></pre></td></tr></table></figure>
+<p>这里有两个不同的问题。</p>
+<p><strong>第一个问题是“现在知道什么”。</strong>
+任务目标、仓库约束、可用工具、历史结论和验收标准，决定 Agent
+如何理解问题。信息缺失会让它猜，信息过量又会让关键约束被淹没。</p>
+<p><strong>第二个问题是“结果改变了什么”。</strong>
+如果这次失败只是留下了一段聊天记录，下一次仍然可能重演。只有结果能推动工具、流程或约束发生改变，经验才进入了系统。</p>
+<p>本文用一个简单例子说明：Agent
+在错误目录里构建失败后，提醒它“注意工作目录”可以解决当次任务；把项目入口、环境检查和构建命令收进一个稳定脚本，则能降低后续所有任务重复踩坑的概率。前者改善当前上下文，后者把反馈固化为可复用能力。</p>
+<p>这也解释了为什么原文同时讨论提示词、Skills、执行器、代码审查、CI
+和机器资源：它们共同决定一次任务从输入到交付的完整路径。</p>
+<h2
+id="二为什么代码生成变快后人还是很忙">二、为什么代码生成变快后，人还是很忙</h2>
+<p>原文认为，编程比较早被 Agent
+改变，与它的经济价值、丰富的训练资料，以及较多可执行的验证手段有关。但写代码的速度提升，不会自动让整个交付过程同比提速。</p>
+<p>如果仍然需要人逐条拆任务、搬运上下文、观察进度、判断是否跑偏、检查结果、反复启动下一轮，那么代码生成越快，人工调度反而越容易成为瓶颈。</p>
+<p>作者用自己的高强度使用记录说明这种变化：即使总 token
+消耗很大，也可能主要是在维持人工盯守；后续工作流的价值，在于减少操作者必须持续介入的环节。<strong>token
+数量和人类时间是两项不同的指标</strong>，原文的 token
+统计还包含缓存读取，不能直接等同于新生成的内容量或费用。</p>
+<p>为保留原文的量感，下面列出几项作者自述。它们彼此不是同口径的实验结果。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>原文记录</th>
+<th>数字</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent-config 的演进规模</td>
+<td>约 1.6 万次提交、1800 多个 issue、近 2000 个合并 PR</td>
+<td>工作记录规模，不等于相同数量的有效能力提升</td>
+</tr>
+<tr>
+<td>当前每日 token 处理量</td>
+<td>约 20 亿至 30 亿，包含缓存读取</td>
+<td>不能直接换算产出、费用或净节省时间</td>
+</tr>
+<tr>
+<td>执行器长期任务通过率</td>
+<td>作者记录约 88% 至 93%</td>
+<td>任务不完全同质，不是严格等难度模型基准</td>
+</tr>
+<tr>
+<td>原生框架与 Pi 的一次配对比较</td>
+<td>12 个任务中结果为 6 比 6</td>
+<td>小样本，不能据此认定框架普遍等价</td>
+</tr>
+</tbody>
+</table>
+<p>这个方向与 Anthropic 的 <span class="exturl" data-url="aHR0cHM6Ly9jbGF1ZGUuY29tL3Jlc291cmNlcy9hcnRpY2xlcy90aGUtYWktbmF0aXZlLXNkbGMtcGxheWJvb2s=">AI
+原生软件交付文章<i class="fa fa-external-link-alt"></i></span>相呼应：当代码生产提速，计划、审查、测试和发布也要一起调整。这里只能说明问题意识相近，不能把某个团队的具体效率数字推广到所有项目。</p>
+<p>本文建议观察三个结果，而不只统计 Agent 写了多少代码：</p>
+<ul>
+<li>一项任务需要人介入多少次，每次介入是补事实、做判断，还是修补工具流程。</li>
+<li>从开始到获得可复核结果需要多久，其中有多少时间在等待、重复或返工。</li>
+<li>同类失败再次出现时，系统是否已有明确的检测与处理办法。</li>
+</ul>
+<h2 id="三context-治理给不同信息安排不同位置">三、Context
+治理：给不同信息安排不同位置</h2>
+<p>“给模型更多上下文”是一条不完整的建议。真正需要回答的是：哪些信息必须常驻，哪些按任务加载，哪些应该查询，哪些应该过期。</p>
+<p>原文涉及的上下文来源，可以整理成下面这张表。用途划分是本文为便于实践所做的归纳。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>信息来源</th>
+<th>适合承载的内容</th>
+<th>需要警惕的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局规则</td>
+<td>跨项目稳定偏好、权限边界、通用交付要求</td>
+<td>把某个仓库的临时规定扩散到所有任务</td>
+</tr>
+<tr>
+<td>仓库规则</td>
+<td>项目结构、正式命令、长期不变量</td>
+<td>把每次事故的完整经过都堆进去</td>
+</tr>
+<tr>
+<td>Skills</td>
+<td>可复用的专项流程与必要参考材料</td>
+<td>没用到的流程也在启动时全部进入上下文</td>
+</tr>
+<tr>
+<td>工具及接口描述</td>
+<td>当前可调用能力、参数和返回结构</td>
+<td>描述膨胀、重复工具、无关输出</td>
+</tr>
+<tr>
+<td>记忆与历史记录</td>
+<td>已验证的偏好、决策及带时间的事实</td>
+<td>旧事实失效、不同客户端保存出互相冲突的版本</td>
+</tr>
+<tr>
+<td>当前任务材料</td>
+<td>目标、证据、范围、验收条件</td>
+<td>只给结论，省略复现方法和约束</td>
+</tr>
+</tbody>
+</table>
+<h3 id="上下文是一项预算">1. 上下文是一项预算</h3>
+<p>作者给主脑和执行器设置了不同的提示材料体积预算，并把预算检查自动化。值得学习的是“预算被实际执行”，而不是照搬某个
+KB 数值。</p>
+<p>文件大小、字符数和模型 token
+数并不等价；语言、编码和分词器都会影响换算。预算也不能只看根目录规则：隐式加载的
+Skills、工具说明和重复注入，同样会占用注意力。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9yZXNlYXJjaC9lZmZlY3RpdmUtY29udGV4dC1lbmdpbmVlcmluZy1mb3ItYWktYWdlbnRz">Anthropic
+的上下文工程文章<i class="fa fa-external-link-alt"></i></span>把上下文视为需要持续筛选的有限资源，并讨论了上下文增长带来的表现下降。因此，审计的对象应当是<strong>模型本次实际收到的输入</strong>，而不只是某几个文件的长度。</p>
+<p>本文建议定期检查：同一条规定是否出现了三次；某个长流程能否改成按需读取；历史结论是否还适用；工具输出是否保留了决定下一步的证据。</p>
+<h3 id="先留下足够的行为证据">2. 先留下足够的行为证据</h3>
+<p>原文把保留行为轨迹放在地基的位置。没有任务输入、工具调用与结果记录，复盘就只能依靠操作者记忆；换模型、改规则之后，也难以比较行为究竟变在哪里。</p>
+<p>本文建议至少能关联任务、代码版本、关键工具结果和最终验收证据。完整日志可能包含私密信息或凭证，应按内容设置访问范围和保留时间；不要把“版本管理”理解为把所有原始日志公开提交。不同工具的默认保留策略也需要在当前版本中核对。</p>
+<h3 id="规则要能追溯也要能删除">3. 规则要能追溯，也要能删除</h3>
+<p>原文强调把规则、工具和 Skills
+纳入版本管理。这样，一次行为变化才有机会追溯到具体输入变化，而不是凭印象争论“模型最近变笨了”。</p>
+<p>另一半同样重要：模型和工具升级后，曾经必要的补丁可能已经失效。规则只有增长、没有删除机制，就会把旧模型的缺点变成新工作流的负担。</p>
+<p>原文也没有把厂商的提示词建议当成无条件通用的答案。同一套流程如果使用不同能力、不同成本或不同回退路径的模型，仍然需要在自己的任务上检验约束是否有用。</p>
+<p>本文建议给临时规则保留来源、适用条件和复查时机。删除一条旧规则前，用曾经触发它的案例做一次回归；回归稳定通过，才有证据减少负担。</p>
+<h3 id="agents记忆和事故记录应各司其职">4.
+AGENTS、记忆和事故记录应各司其职</h3>
+<p>稳定的项目规则适合写进仓库说明；容易变化的事实适合带时间与来源保存；具体失败则先进入可追踪的问题记录。</p>
+<p>例如，“发布前必须执行项目检查”是长期要求；“当前部署停在某个提交”是需要刷新验证的状态；“某次依赖安装失败的完整输出”是诊断证据。把三者混在一个长期提示词里，会让状态越来越难维护。</p>
+<p>记忆还需要考虑跨客户端的一致性。一个事实如果在不同工具里各存一份，修正其中一份并不会自动修正其他副本。原文提到共享文本和索引的做法；本文更关注其原则：明确权威来源，让变化有入口，让旧结论有失效办法。</p>
+<h3 id="skills-和工具也有上下文成本">5. Skills 和工具也有上下文成本</h3>
+<p>原文倾向于把外部 Skill
+的有用经验吸收到自己的流程中，而不是不加选择地全局安装。对所有项目都高频适用的内容才值得常驻，项目专用材料应尽量留在项目内。</p>
+<p>工具选择也类似。CLI
+如果已经能准确完成任务，就值得与额外的工具接口比较：新增能力是什么，描述和输出的成本是什么，权限和认证是否更合适。原文偏好的
+CLI 路线属于具体环境中的取舍，不能推导成“MCP 没有价值”。</p>
+<p>本文建议用一次真实任务检查实际加载结果。目录里看起来只有少量规则，最终输入却可能包含重复说明、整套
+Skills 和与任务无关的长输出。</p>
+<h2
+id="四主脑与执行器分工首先体现在输入上">四、主脑与执行器：分工首先体现在输入上</h2>
+<p>原文把规划、判断和验收更多交给主脑，把范围清楚的实现工作交给执行器。这个分工能否成立，关键在任务边界和输入是否清楚。</p>
+<p>如果执行器同时读到了“你要继续调度其他执行器”的主脑规则，它就可能把一个局部任务再拆成新的组织层级。原文记录过这种递归委派造成的长时间空转。</p>
+<p>因此，公共规范可以共享，角色职责必须单独表达。一个执行器通常需要知道：</p>
+<ul>
+<li>这次要解决的具体问题及已有证据。</li>
+<li>能修改的范围，以及必须保留的行为。</li>
+<li>如何运行、如何验证、如何汇报。</li>
+<li>何时应当停止尝试并返回阻塞原因。</li>
+</ul>
+<p>本文建议使用下面的任务卡。它是本文整理的模板，不是原文逐字内容。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">目标：用户在什么条件下，应当观察到什么结果？</span><br><span class="line">现有证据：复现步骤、错误输出、相关文件或提交。</span><br><span class="line">修改范围：允许改动的位置，以及需要保持的行为。</span><br><span class="line">完成条件：能独立运行的验证步骤与预期结果。</span><br><span class="line">资源边界：允许的工具、环境、并发和尝试预算。</span><br><span class="line">返回内容：改动说明、验证证据、未解决的问题。</span><br><span class="line">升级条件：哪些新事实出现后，需要主脑重新判断？</span><br></pre></td></tr></table></figure>
+<p>“完成条件”尤其重要。只写“修好这个
+bug”，主脑和执行器可能对“修好”有不同理解；明确触发条件和预期结果，才容易验收。</p>
+<h3 id="模型和-harness-应一起评估">模型和 Harness 应一起评估</h3>
+<p>Harness
+可以理解为围绕模型运行的工具调用、会话管理和执行框架。原文讨论的 Pi
+属于这类框架，它本身不是一个模型。</p>
+<p>同一个模型换框架后表现不同，原因可能来自初始任务没有正确送达、规则重复、工具输出结构不同，或者加载了过量材料。原文的对照案例说明：修正输入与加载方式之后，先前的结果可能发生明显变化。</p>
+<p>这意味着“哪个模型更强”与“哪个系统更适合这类任务”是两个问题。任务已经明确时，可以测试较快、较便宜的执行器；问题还需要判断范围、识别错误假设时，更强的推理和更清楚的上下文可能更重要。</p>
+<p>原文包含小规模配对实验和较长期的本地通过率记录，但任务分布、样本量与运行条件限制了结论。本文不据此给具体模型排序。可迁移的做法是：<strong>用自己的失败案例，在任务、验收与预算一致的条件下比较完整系统。</strong></p>
+<h2
+id="五advisor让独立判断真正进入流程">五、Advisor：让独立判断真正进入流程</h2>
+<p>Agent
+连续修复失败时，常见反应是继续补充解释，让它再试一次。但它可能已经围绕一个错误假设建立了整套推理，新增信息也被吸收到原来的解释里。</p>
+<p>原文引入了只读
+Advisor：让一个独立视角阅读必要材料，挑战当前判断，而不是直接接着改代码。</p>
+<p>这里有两个作用需要分开看：更强的模型可能更擅长发现问题；新会话则能减少既有叙事的影响。换模型却完整复制所有历史，不一定获得真正独立的判断。</p>
+<h3 id="给事实也暴露自己的偏见">给事实，也暴露自己的偏见</h3>
+<p>作者提出的一个有意思的做法，是把咨询材料中的事实、自己的判断，以及自己希望得到的答案分别列出。这样
+Advisor 更容易看到哪些部分需要挑战。</p>
+<p>本文建议进一步补上反证问题：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">已验证事实：每条事实附来源或复现方式。</span><br><span class="line">我的解释：我目前认为根因是什么。</span><br><span class="line">我倾向的结论：我希望继续做什么，为什么。</span><br><span class="line">请重点挑战：什么证据能推翻我的解释？</span><br><span class="line">请返回：最关键的替代假设，以及最小验证动作。</span><br></pre></td></tr></table></figure>
+<p>只读权限也有实际意义：让咨询阶段聚焦判断，避免另一个 Agent
+在尚未达成共识时引入新改动。</p>
+<h3 id="用外部条件触发咨询">用外部条件触发咨询</h3>
+<p>如果完全依赖执行者自评“是否需要帮助”，卡住的流程可能一直不升级。原文倾向于用重试次数、新增失败轮次或审计结果等外部条件触发咨询。</p>
+<p>本文建议根据任务风险设置明确预算，例如“同一失败在两次修复后仍然复现，就停止继续改动并提交证据”。这里的次数只是示例，不是所有项目的统一门槛。</p>
+<p>Advisor 也需要接受验证。原文记录过 Advisor
+的判断被实际复现推翻的情况。独立意见的价值，在于提出更好的假设和实验；最终仍然要回到代码、环境和可观察结果。</p>
+<p>原文中较高的否定或部分否定比例，还有明显的样本选择因素：被拿去咨询的本来就多是困难任务。不能据此断言主脑在普通任务上同样经常出错。</p>
+<h2
+id="六loop把一次事故转成下次少做一件事">六、Loop：把一次事故转成下次少做一件事</h2>
+<p>原文的配置与调度系统，是在多个项目的实际失败中逐步长出来的。复盘的重点不只是记住“发生了什么”，而是决定“系统应该因此改变什么”。</p>
+<p>下面按机制归纳几类原文案例；每行末尾是本文总结的改进方向。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>失败形态</th>
+<th>为什么一句提醒不够</th>
+<th>可固化的方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新工作区缺少所需环境，运行路径出错</td>
+<td>每次创建工作区都要重新发现条件</td>
+<td>统一初始化入口，主动检查必要配置</td>
+</tr>
+<tr>
+<td>执行器继续调度执行器，任务越拆越远</td>
+<td>错误职责已经写进角色输入</td>
+<td>从执行器模板中移除调度职责</td>
+</tr>
+<tr>
+<td>压缩后的命令输出被误读为成功</td>
+<td>关键信号在信息处理时丢失</td>
+<td>保留退出状态与关键证据，核对远端结果</td>
+</tr>
+<tr>
+<td>查询状态却返回大量无关信息</td>
+<td>不必要输出反复占用上下文</td>
+<td>提供最小查询接口与输出上限</td>
+</tr>
+<tr>
+<td>问题代码修好了，同类问题又出现</td>
+<td>修复只覆盖了一个实例</td>
+<td>在最靠近失效点的位置增加约束或回归验证</td>
+</tr>
+</tbody>
+</table>
+<p>这张表背后的判断是：<strong>能够交给程序稳定执行的约束，应当尽量变成程序行为。</strong></p>
+<p>例如，某目录禁止写入，单靠提示词需要模型每次都记住；权限边界和路径检查则能在执行时提供直接约束。格式要求可以由格式化工具执行；已知回归可以由针对性检查验证。</p>
+<p>Anthropic 的交付文章也明确区分了 Skill 的指导作用和 Hook
+的确定性执行作用。不过，Hook
+是否能覆盖具体行为，仍取决于安装方式、触发范围和失败处理，不能仅凭“配置了一个
+Hook”就认为风险已经消失。</p>
+<h3 id="复盘什么时候才算闭环">复盘什么时候才算闭环</h3>
+<p>本文建议为一项改进保留四件东西：</p>
+<ol type="1">
+<li>原始失败如何复现，以及造成了什么影响。</li>
+<li>选择了哪一层改进，为什么它能覆盖失效机制。</li>
+<li>用什么案例验证改进有效，包括改进前应当失败的案例。</li>
+<li>后续如何观察它是否仍在工作，何时重新评估成本。</li>
+</ol>
+<p>原文中问题数量下降，是系统演进的一个观察值。仅凭绝对数量还不能证明质量提升：任务量、任务难度、发现和记录问题的方式都可能变化。更有用的追踪还包括同类问题复发率、人工介入时间和验证覆盖情况。</p>
+<h3 id="优化工具也要接受复盘">优化工具也要接受复盘</h3>
+<p>原文还讨论了输出压缩工具：节省输入量可能很可观，但如果关键上下文被裁掉，后续修改就可能更容易出错。</p>
+<p>这里应评估的是净效果。省下的
+token、增加的返工、丢失的证据和维护成本，需要放在同一张账上。这个案例不能直接证明某个工具对其他环境无用，也不意味着应当未经验证就更改现有工具链。</p>
+<h2 id="七验证体系为什么也会骗人">七、验证体系为什么也会骗人</h2>
+<p>这是原文最值得反复读的一部分。流程显示绿色，只能说明某些条件被满足；它是否检查了真正关心的行为，需要另外证明。</p>
+<p>原文记录的异常包括：某种 PR
+状态下模型审查被跳过，却被理解为已经通过；用于确认审查器工作的探测任务持续执行，但认证问题使真正的审查没有发生；多个仓库的状态看似正常，实际需要的审查能力并未启用。</p>
+<p>这些现象揭示了几个不同层次：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">任务被调度</span><br><span class="line">    → 进程启动</span><br><span class="line">    → 认证成功</span><br><span class="line">    → 目标内容被读取</span><br><span class="line">    → 实际检查被执行</span><br><span class="line">    → 结果正确返回</span><br><span class="line">    → 失败能够阻止交付</span><br></pre></td></tr></table></figure>
+<p>链路中的任意前一步成功，都不能替代后面步骤的证明。</p>
+<h3
+id="低成本检查优先判断型检查补足">低成本检查优先，判断型检查补足</h3>
+<p>原文把验证放在成本梯度上考虑：编译、类型检查、静态检查和自动化测试，通常适合尽早执行；模型审查、界面截图与人工判断用于补充难以机械表达的部分。</p>
+<p>具体顺序仍然取决于项目：有些构建非常昂贵，有些行为测试很便宜；前端“功能可用”与“视觉效果正确”也需要不同证据。选择语言和框架时，可自动获得的反馈能力同样是一项工程因素，但还要考虑生态和资源消耗。</p>
+<p>本文建议为每项检查写出一句话：<strong>它能发现什么，发现不了什么。</strong>
+这样就不容易把“测试全绿”误读为“产品的全部要求已经满足”。</p>
+<h3 id="用已知失败案例检验门禁">用已知失败案例检验门禁</h3>
+<p>下面是本文延伸的实践示例：如果一个门禁声称能拦截错误，就给它一个受控的、已知应当失败的输入，观察它是否真正变红。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>要验证的能力</th>
+<th>受控输入示例</th>
+<th>应观察的结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动化测试有效执行</td>
+<td>临时引入会被目标测试覆盖的错误</td>
+<td>目标测试失败，并使检查失败</td>
+</tr>
+<tr>
+<td>审查器读取了代码</td>
+<td>在隔离分支放置明确违反审查目标的变更</td>
+<td>能定位问题，而非只返回通用总结</td>
+</tr>
+<tr>
+<td>必需检查不能被跳过</td>
+<td>使用预先约定的状态或条件触发跳过</td>
+<td>状态明确显示未完成，并阻止交付</td>
+</tr>
+<tr>
+<td>发布结果正确</td>
+<td>核对目标版本或页面的可识别内容</td>
+<td>观察到预期版本，而非只看到推送成功</td>
+</tr>
+</tbody>
+</table>
+<p>这些实验应在隔离环境中进行，保留证据后清理。不要为了测试监控而把故意制造的错误发布到真实用户环境。</p>
+<p>对于模型审查，单次漏报与整个审查链路失效也要区分：前者涉及能力和稳定性，后者涉及是否真正执行。两者需要不同的修复。</p>
+<h2
+id="八压缩与重开会话保留证据丢掉无效推理">八、压缩与重开会话：保留证据，丢掉无效推理</h2>
+<p>原文讨论上下文腐化时，强调过长历史可能使 Agent
+越来越难以摆脱早期判断。它提到的具体使用感受属于作者环境，不能当作所有模型在某个窗口比例上的统一阈值。</p>
+<p>重新开始一段会话时，最重要的是整理交接材料，而不是简单把旧历史再复制一次。</p>
+<p>本文建议保留：任务目标、当前代码状态、已经复现的现象、有效与无效的实验、尚未解决的问题，以及每项结论对应的证据。已经被推翻的解释要明确标记，不要让它重新混入“事实”。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">目标：修复条件 A 下的行为 B。</span><br><span class="line">当前状态：工作区或提交位置；已有改动及需要保留的内容。</span><br><span class="line">已验证：实验 1 排除了原因 X，证据位置如下。</span><br><span class="line">仍未知：原因 Y 尚未测试，下一步只验证这一点。</span><br><span class="line">失败尝试：改法 Z 未解决问题，已恢复或保留在哪里。</span><br></pre></td></tr></table></figure>
+<p>会话重开和文件回退是两件事。清理推理上下文时，仍然要保存真实工作区状态，避免把无效推理与有价值的代码一起丢掉。关于压缩机制，可以继续阅读
+<a href="/posts/8da8c906.html">从零开始理解上下文压缩：Pi
+如何继续长会话</a><!-- [[Pi/从零开始理解上下文压缩：Pi 如何继续长会话|从零开始理解上下文压缩：Pi 如何继续长会话]] -->。</p>
+<h2 id="九并发规模扩大后瓶颈会转移">九、并发规模扩大后，瓶颈会转移</h2>
+<p>当人工不再逐项盯守，系统可能开始受限于 CPU、内存、磁盘、网络和 CI
+队列。原文的大规模执行器与多机器案例，说明的是这种瓶颈迁移，不构成某种硬件配置建议。</p>
+<p>本文建议先看任务结构，再增加并发：</p>
+<ul>
+<li>哪些任务真正独立，哪些会争用同一个工作区或修改同一文件。</li>
+<li>哪些阶段占计算，哪些阶段等待网络，哪些阶段等待人工判断。</li>
+<li>各类任务是否有单独的队列、限流、超时和失败恢复。</li>
+<li>同一依赖能否缓存，验证是否重复执行了没有变化的昂贵步骤。</li>
+</ul>
+<p>多启动一个
+Agent，既增加执行能力，也增加调度、上下文和验收成本。如果没有清楚的工作边界与验证，并发可能只会更快地产生需要人处理的结果。</p>
+<p>操作系统和运行环境也要围绕实际工作选择。原文对纯代码任务与图形界面、移动端任务做了不同取舍；本文更看重环境是否可复现、权限是否清楚，以及目标平台能否被实际验证。</p>
+<h2 id="十从个人技巧到组织工作流">十、从个人技巧到组织工作流</h2>
+<p>文章最后把讨论延伸到 Agent
+开发环境和软件交付生命周期。相关概念也可以对照 Cloudflare 关于 <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNsb3VkZmxhcmUuY29tL2FnZW50LWRldmVsb3BtZW50LWxpZmVjeWNsZS8=">Agent
+Development Lifecycle<i class="fa fa-external-link-alt"></i></span> 的文章阅读。</p>
+<p>对本文而言，一个组织是否适合 Agent
+持续工作，可以沿着三个问题检查：</p>
+<p><strong>信息能否读取？</strong>
+需求、仓库、环境和历史决策是否可访问，来源是否明确，状态是否及时更新。</p>
+<p><strong>行动能否发生？</strong> Agent
+是否有与职责匹配的工具和权限，执行动作是否可追踪，失败是否可恢复。</p>
+<p><strong>结果能否回流？</strong>
+验收、用户反馈和运行故障是否进入后续计划，能否推动具体约束与流程改变。</p>
+<p>只有“能读文档”，容易停在问答；只有“能操作工具”，容易形成无人验收的动作流。读取、执行和反馈连接起来，才可能持续承担交付。</p>
+<p>人仍然需要承担目标选择、价值权衡、产品判断，以及需要明确授权的重大决策。减少机械搬运和重复检查，可以让这些判断获得更多时间。</p>
+<h2 id="十一如何从自己的项目开始">十一、如何从自己的项目开始</h2>
+<p>下面是一条本文整理的渐进路线，适合已有 Agent
+使用经验、但仍然觉得需要频繁盯守的项目。</p>
+<h3
+id="第一步只选一种重复发生的任务">第一步：只选一种重复发生的任务</h3>
+<p>选一个有明确输入和结果的场景，例如修复已复现的回归、更新一类文档，或者完成标准化依赖维护。先记录实际人工介入点，避免同时改造所有流程。</p>
+<h3 id="第二步检查真实输入">第二步：检查真实输入</h3>
+<p>确认任务首次进入执行器时是否完整，角色规则是否混杂，是否加载了无关
+Skills，工具输出是否能支撑下一步判断。先修材料传递问题，再讨论换模型。</p>
+<h3 id="第三步写清验收与升级条件">第三步：写清验收与升级条件</h3>
+<p>把“做完了”表达为可观察结果。为连续失败设置处理办法：停止修改、整理证据、请求独立判断，或者返回需要人决策的范围。</p>
+<h3
+id="第四步把复发问题固化到合适层">第四步：把复发问题固化到合适层</h3>
+<p>能通过初始化脚本解决，就不要每次口头解释；能通过机械约束拦截，就不要只依靠模型记忆。只有需要判断的内容，才保留为规则或咨询流程。</p>
+<h3 id="第五步检验闭环是否真的工作">第五步：检验闭环是否真的工作</h3>
+<p>用已知失败案例检验检测能力，用远端或用户可见结果确认交付，用后续重复任务检验改进能否持续。没有回到实际结果的复盘，仍然只是文档。</p>
+<p>在这一过程中，可以继续参考 <a href="/posts/c07d9ac7.html">我的 Vibe
+Coding 工作流：从 session log 到 skill
+迭代</a><!-- [[AI Agent/我的 Vibe Coding 工作流：从 session log 到 skill 迭代|我的 Vibe Coding 工作流：从 session log 到 skill 迭代]] -->、<a
+href="/posts/fc3938a9.html">AI
+开发工作流：轻量约束、端到端测试与人工审查</a><!-- [[AI Agent/AI 开发工作流：轻量约束、端到端测试与人工审查|AI 开发工作流：轻量约束、端到端测试与人工审查]] -->，把任务记录、专项流程和验收证据连接起来。</p>
+<h2
+id="十二阅读这篇文章时哪些结论应当保留边界">十二、阅读这篇文章时，哪些结论应当保留边界</h2>
+<p>原文是一份密集的实践记录。最容易被过度推广的，是具体模型胜负、token
+规模、成功率和设备数量。它们依赖任务分布、采样方式、上下文配置与统计口径；尤其是缓存读取量、任务完成量和真实经济成本，不能互相替代。</p>
+<p>相比之下，更容易迁移的，是它提出的几类工程问题：</p>
+<ul>
+<li>模型实际看到了哪些材料，是否准确、必要且及时。</li>
+<li>执行角色是否清楚，任务是否有可独立验收的边界。</li>
+<li>失败后是否允许另一种判断进入流程。</li>
+<li>经验是否改变了系统行为，而不仅是增加了一条提醒。</li>
+<li>验证是否被证明有效，跳过和失败是否被正确表达。</li>
+<li>并发带来的收益，是否大于调度、资源与验收成本。</li>
+</ul>
+<p>我认为这篇文章最值得带走的，是一种可以持续追问的工作方式：<strong>当前任务需要什么上下文；这次结果又应该让下一次发生什么变化。</strong>
+两个问题都能得到具体答案时，Agent 才更有机会越用越省心。</p>
+<h2 id="参考资料与延伸阅读">参考资料与延伸阅读</h2>
+<ul>
+<li>张立行：<span class="exturl" data-url="aHR0cHM6Ly96ajExMjM1ODEzMjEuY29tL3Bvc3RzLzI2MTAwNC1jb250ZXh0LWFuZC1sb29wLw==">吃一堑，长一智：Agent
+时代的两个关键词 Context 与 Loop<i class="fa fa-external-link-alt"></i></span>；<span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9ieWxpeGluZy9zdGF0dXMvMjEwNjc1NzM3MzgzNDc4MDcyMw==">原始 X
+帖子<i class="fa fa-external-link-alt"></i></span>。本文主要总结对象，数据与案例均归属于作者的实践记录。</li>
+<li>Anthropic：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYW50aHJvcGljLmNvbS9yZXNlYXJjaC9lZmZlY3RpdmUtY29udGV4dC1lbmdpbmVlcmluZy1mb3ItYWktYWdlbnRz">Effective
+context engineering for AI
+agents<i class="fa fa-external-link-alt"></i></span>。用于核对有限上下文与持续筛选的概念。</li>
+<li>Anthropic：<span class="exturl" data-url="aHR0cHM6Ly9jbGF1ZGUuY29tL3Jlc291cmNlcy9hcnRpY2xlcy90aGUtYWktbmF0aXZlLXNkbGMtcGxheWJvb2s=">The
+AI-native software delivery lifecycle
+playbook<i class="fa fa-external-link-alt"></i></span>。用于对照交付环节、规则维护与 Hook 的执行约束。</li>
+<li>Cloudflare：<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNsb3VkZmxhcmUuY29tL2FnZW50LWRldmVsb3BtZW50LWxpZmVjeWNsZS8=">The
+Agent Development Lifecycle<i class="fa fa-external-link-alt"></i></span>。用于延伸理解开发流程与环境协同。</li>
+<li><a href="/posts/fcc443a7.html">Agent Skill
+完全指南</a><!-- [[AI Agent/Agent Skill 完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]] -->。</li>
+<li><a href="/posts/df0ca73b.html">MCP
+完全指南</a><!-- [[AI Agent/MCP 完全指南：它是什么、怎么来的、为什么管用|MCP 完全指南]] -->。</li>
+<li><a href="/posts/43ae85df.html">Pi Architecture：拆解 Coding Agent
+的内部架构</a><!-- [[Pi/Pi Architecture：拆解 Coding Agent 的内部架构|Pi Architecture：拆解 Coding Agent 的内部架构]] -->。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/rea-no-strings-contribution.html" rel="prev" title="我的一个开源贡献：修复 REA 的 --no-strings 参数">
+                  <i class="fa fa-angle-left"></i> 我的一个开源贡献：修复 REA 的 --no-strings 参数
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-stage2-requirements.html" rel="next" title="ELEC5620 Stage 2 要求总结：评分、Jira、源码提交与现场部署">
+                  ELEC5620 Stage 2 要求总结：评分、Jira、源码提交与现场部署 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">60:40</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
