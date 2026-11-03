@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 12 Unit Review：按需求模型、构建时与运行时设计模型、元模型、开发过程模型四类梳理全课考点与易错点，附各周笔记索引、画图检查清单、贯穿全课的综合建模练习和 Tutorial 12 的 Profile&#x2F;OCL 回顾。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 12 全课复习与考点总览讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week12-unit-review.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 12 Unit Review：按需求模型、构建时与运行时设计模型、元模型、开发过程模型四类梳理全课考点与易错点，附各周笔记索引、画图检查清单、贯穿全课的综合建模练习和 Tutorial 12 的 Profile&#x2F;OCL 回顾。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:55:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:55.458Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="Exam-Review">
+<meta property="article:tag" content="Meta-Modeling">
+<meta property="article:tag" content="Model-Based-Software-Engineering">
+<meta property="article:tag" content="UML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week12-unit-review.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week12-unit-review.html","path":"posts/elec5620-week12-unit-review.html","title":"ELEC5620 Week 12 全课复习与考点总览讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 12 全课复习与考点总览讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week12-unit-review.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-12unit-review-%E5%85%A8%E8%AF%BE%E5%A4%8D%E4%B9%A0%E4%B8%8E%E8%80%83%E7%82%B9%E6%80%BB%E8%A7%88"><span class="nav-text">ELEC5620 Week
+12：Unit Review 全课复习与考点总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%A8%E8%AF%BE%E5%9C%B0%E5%9B%BEunit-review-%E7%AC%AC-2-%E9%A1%B5"><span class="nav-text">一、全课地图（Unit Review 第 2
+页）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E5%91%A8%E7%AC%94%E8%AE%B0%E7%B4%A2%E5%BC%95"><span class="nav-text">1.1 各周笔记索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E9%9C%80%E6%B1%82%E6%A8%A1%E5%9E%8B"><span class="nav-text">二、需求模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E8%AE%B2%E4%B9%89%E5%A4%8D%E4%B9%A0%E9%A1%B5%E5%8E%9F%E6%96%87%E8%A6%81%E7%82%B9"><span class="nav-text">2.1
+三种方法（讲义复习页原文要点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%9B%BE%E5%A4%8D%E4%B9%A0%E9%A1%B5%E7%9A%84%E6%96%B0%E4%BE%8B%E5%AD%90pc-configuration"><span class="nav-text">2.2
+特征图（复习页的新例子：PC Configuration）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case"><span class="nav-text">2.3 Use case</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E5%A4%8D%E4%B9%A0%E9%A1%B5%E6%8F%90%E5%88%B0%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-text">三、架构与设计原则（复习页提到的部分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%97%B6build-time"><span class="nav-text">四、设计模型：构建时（Build-time）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9E%E4%BE%8B%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">4.1 类型、实例、分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96-vs-%E5%85%B3%E8%81%94%E5%A4%8D%E4%B9%A0%E9%A1%B5%E5%BC%BA%E8%B0%83"><span class="nav-text">4.2 泛化 vs 关联（复习页强调）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE%E8%AE%B0%E5%8F%B7%E9%80%9F%E6%9F%A5"><span class="nav-text">4.3 类图记号速查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E5%9B%BE"><span class="nav-text">4.4 包图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile-%E5%9B%BE"><span class="nav-text">4.5 Profile 图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B%E8%BF%90%E8%A1%8C%E6%97%B6runtime"><span class="nav-text">五、设计模型：运行时（Runtime）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.1 为什么需要运行时模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E5%8D%8F%E4%BD%9C%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BB"><span class="nav-text">5.2 对象图、协作、结构化类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E4%B8%BA"><span class="nav-text">5.3 行为</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">六、元模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text">七、开发过程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABtutorial-12-%E8%A6%81%E7%82%B9profile-%E4%B8%8E-ocl-%E5%9B%9E%E9%A1%BE"><span class="nav-text">八、Tutorial 12
+要点：Profile 与 OCL 回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E7%BB%BC%E5%90%88%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0%E6%A8%A1%E6%8B%9F%E7%BB%99%E5%AE%9A%E5%9C%BA%E6%99%AF%E7%94%BB%E6%A8%A1%E5%9E%8B"><span class="nav-text">九、综合建模练习（模拟“给定场景画模型”）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E5%9B%BE"><span class="nav-text">9.1 Use case 图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E8%A7%84%E6%A0%BCbook-appointmentagentic-%E5%86%99%E6%B3%95"><span class="nav-text">9.2 Use case
+规格（Book Appointment，agentic 写法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86"><span class="nav-text">9.3 类图（关键部分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E6%9F%90%E4%B8%80%E6%97%B6%E5%88%BB"><span class="nav-text">9.4 对象图（某一时刻）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E5%8A%A8%E5%9B%BE"><span class="nav-text">9.5 活动图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%9B%BE"><span class="nav-text">9.6 顺序图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BAappointment"><span class="nav-text">9.7 状态机（Appointment）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E5%9B%BE-%E9%83%A8%E7%BD%B2%E5%9B%BE"><span class="nav-text">9.8 包图 &amp; 部署图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile-%E4%B8%8E-ocl"><span class="nav-text">9.9 Profile 与 OCL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BE%8B%E5%8A%A0%E5%88%86%E9%A1%B9"><span class="nav-text">9.10 元模型实例（加分项）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0%E7%AD%96%E7%95%A5%E4%B8%8E%E9%AB%98%E9%A2%91%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">十、期末复习策略与高频易错点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E4%B9%A0%E9%A1%BA%E5%BA%8F%E5%BB%BA%E8%AE%AE"><span class="nav-text">10.1 复习顺序建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E9%A2%91%E6%98%93%E9%94%99%E7%82%B9%E6%B1%87%E6%80%BB"><span class="nav-text">10.2 高频易错点汇总</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-text">结语</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week12-unit-review.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 12 全课复习与考点总览讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 12 Unit Review：按需求模型、构建时与运行时设计模型、元模型、开发过程模型四类梳理全课考点与易错点，附各周笔记索引、画图检查清单、贯穿全课的综合建模练习和 Tutorial 12 的 Profile&#x2F;OCL 回顾。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 12 全课复习与考点总览讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:55:00 / Modified: 04:13:55" itemprop="dateCreated datePublished" datetime="2026-11-03T13:55:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>15 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 12 Unit Review：按需求模型、构建时与运行时设计模型、元模型、开发过程模型四类梳理全课考点与易错点，附各周笔记索引、画图检查清单、贯穿全课的综合建模练习和 Tutorial 12 的 Profile/OCL 回顾。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-12unit-review-全课复习与考点总览">ELEC5620 Week
+12：Unit Review 全课复习与考点总览</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>Unit Review.pdf</code>（47 页）+
+<code>ELEC5620-TUT-12.pdf</code>（30 页，Profile 与 OCL 回顾）。Week 12
+文件夹没有 Lab Note；课程文件夹中没有 Exam Prep 材料。本周无转录稿。</p>
+<p><strong>期末考形式</strong>（见
+[[26-S2-Course/ELEC5620/ELEC5620-Week01-Introduction-Summary|Week 01]]
+1.2）：<strong>闭卷、线下，占
+40%</strong>，<strong>以建模为主——给定场景，画模型、设计模型</strong>；老师明确说<strong>不会考“写出软件架构的定义”这类默写题</strong>。所以本篇按“<strong>会画什么、画对的标准是什么</strong>”来组织。</p>
+</blockquote>
+<hr>
+<h2 id="一全课地图unit-review-第-2-页">一、全课地图（Unit Review 第 2
+页）</h2>
+<p>讲义把整门课归纳成<strong>四类模型</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">对应周次</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Requirement Models</strong></td>
+<td style="text-align: left;">Ad hoc requirements、<strong>feature
+diagram</strong>、<strong>use case overview
+diagram</strong>、<strong>use case specification</strong></td>
+<td style="text-align: left;">W3</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Design Models —
+Build-time</strong></td>
+<td style="text-align: left;"><strong>class
+diagram</strong>、<strong>package diagram</strong>、<strong>profile
+diagram</strong></td>
+<td style="text-align: left;">W5、W8、W11</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Design Models —
+Runtime</strong></td>
+<td style="text-align: left;"><strong>object
+diagram</strong>、<strong>collaboration</strong>、<strong>port</strong>、<strong>structured
+class</strong>、<strong>activity diagram</strong>、<strong>communication
+diagram</strong>、<strong>sequence diagram</strong>、<strong>interaction
+overview diagram</strong>、<strong>state machine diagram</strong></td>
+<td style="text-align: left;">W6、W7</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Meta-Models</strong></td>
+<td style="text-align: left;">元模型、MOF、四层架构、UML
+元模型实例化</td>
+<td style="text-align: left;">W10</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Development Models</strong></td>
+<td style="text-align: left;"><strong>Heavy
+weight</strong>：Waterfall、Spiral；<strong>Light
+weight</strong>：Agile、DevOps</td>
+<td style="text-align: left;">W8、W9</td>
+</tr>
+</tbody>
+</table>
+<p>另外贯穿全课的<strong>架构概念</strong>：架构定义、视点与视图（4+1）、MoC、控制与功能、架构模式（W1、W2、W4、W5）。</p>
+<h3 id="各周笔记索引">1.1 各周笔记索引</h3>
+<ul>
+<li>Week 1：软件架构导论 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week01-Introduction-Summary|Week
+01]]</li>
+<li>Week 2：MBSE 导论 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week02-Introduction-to-MBSE-Summary|Week
+02]]</li>
+<li>Week 3：需求建模 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week03-Requirement-Model-Summary|Week
+03]]</li>
+<li>Week 4：架构设计（上）：视点、MoC、控制 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week04-Architectural-Design-and-Modeling-Summary|Week
+04]]</li>
+<li>Week 5：架构模式 + 结构建模（上） →
+[[26-S2-Course/ELEC5620/ELEC5620-Week05-Architectural-Patterns-and-Modeling-Structure-Summary|Week
+05]]</li>
+<li>Week 6：复杂结构 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week06-Modeling-Structure-Part2-Summary|Week
+06]]</li>
+<li>Week 7：行为建模 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week07-Modeling-Behavior-Summary|Week
+07]]</li>
+<li>Week 8：模型组织 + 敏捷 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week08-Model-Organisation-and-Agile-Summary|Week
+08]]</li>
+<li>Week 9：软件过程模型 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week09-Software-Process-Models-Summary|Week
+09]]</li>
+<li>Week 10：元建模 →
+[[26-S2-Course/ELEC5620/ELEC5620-Week10-Meta-Modeling-Summary|Week
+10]]</li>
+<li>Week 11：Profile 与 OCL →
+[[26-S2-Course/ELEC5620/ELEC5620-Week11-Specialise-a-Modeling-Language-Summary|Week
+11]]</li>
+<li>Lab：Lab 1–6 →
+[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab 1–6
+总结]]</li>
+</ul>
+<hr>
+<h2 id="二需求模型">二、需求模型</h2>
+<h3 id="三种方法讲义复习页原文要点">2.1
+三种方法（讲义复习页原文要点）</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">视角</th>
+<th style="text-align: left;">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ad hoc</strong></td>
+<td style="text-align: left;">混合 what / how / how well</td>
+<td style="text-align: left;">不系统、非正式、易出错（遗漏、冲突、不一致、歧义），但<strong>最常见的起点</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feature analysis</strong></td>
+<td style="text-align: left;"><strong>capability-based
+view</strong></td>
+<td style="text-align: left;">系统 = 一组期望属性</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Use case analysis</strong></td>
+<td style="text-align: left;"><strong>operational view</strong></td>
+<td style="text-align: left;">系统 = 实现利益相关者目标的功能能力</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三者务实结合最好。</strong></p>
+</blockquote>
+<h3 id="特征图复习页的新例子pc-configuration">2.2
+特征图（复习页的新例子：PC Configuration）</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">PC Configuration</span><br><span class="line">├── RAM      ⟨xor⟩  1 GB | 3 GB</span><br><span class="line">├── OS       ⟨xor⟩  Windows 7 | Linux</span><br><span class="line">└── ○ Extras ⟨or, at least one⟩  DVD drive | Printer | Display Screen</span><br><span class="line">Constraint: if (Windows 7) then 3 GB</span><br></pre></td></tr></table></figure>
+<p><strong>练习：一共有多少种合法配置？</strong></p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -3.53ex;" xmlns="http://www.w3.org/2000/svg" width="40.938ex" height="5.53ex" role="img" focusable="false" viewBox="0 -883.9 18094.4 2444.1"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\underbrace{2}_{\text{RAM}} \times \underbrace{2}_{\text{OS}} \times
+\underbrace{(1 + (2^3 - 1))}_{\text{Extras 不选或选 1–3 个}} = 4 \times
+8 = 32
+"><g data-mml-node="munder" data-latex="\underbrace{2}_{\text{RAM}}"><g data-mml-node="TeXAtom" data-latex="\underbrace{2}" data-mjx-texclass="OP" transform="translate(599.6,0)"><g data-mml-node="munder"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" transform="translate(4,4)"><path data-c="23DF" d="M492-120C492-113 489-109 482-109C476-109 473-112 472-117C469-155 441-201 403-201L325-201C289-201 263-230 246-289C229-230 203-201 167-201L89-201C51-201 24-154 20-117C20-112 17-109 10-109C3-109 0-113 0-120C6-180 34-261 89-261L167-261C204-261 232-307 236-344C236-350 239-353 246-353C253-353 256-350 256-345C260-308 287-261 325-261L403-261C458-261 486-180 492-120Z"></path></g></g></g><g data-mml-node="TeXAtom" transform="translate(0,-1017.3) scale(0.707)" data-latex="{\text{RAM}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{RAM}"><path data-c="52" d="M611 501C611 558 580 604 519 639C468 668 411 683 349 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 38 63 38L35 38L35-1C62 2 111 3 183 3C256 3 305 2 332-1L332 38L304 38C269 38 248 41 241 46C234 51 230 63 230 81L230 327L340 327C404 327 451 289 462 235C464 224 465 200 465 165C465 138 466 118 467 106C473 22 546-22 634-22C672-22 699-6 714 25C726 48 732 70 732 91C732 104 726 111 715 111C706 111 700 105 699 92C694 36 673 8 638 8C603 8 591 41 585 70C579 104 575 130 572 147L559 226C544 278 507 316 448 339C524 361 611 415 611 501M470 600C491 581 502 548 502 501C502 463 492 431 473 404C450 373 405 357 336 357L230 357L230 609C230 630 236 641 248 642C255 643 274 644 306 644C385 644 426 641 470 600Z"></path><path data-c="41" d="M583 3L717 0L717 39L695 39C670 39 653 40 646 42C631 47 621 58 615 75L401 694C397 707 390 716 375 716C362 716 353 709 348 694L143 102C129 61 92 39 32 38L32 0L137 3L254 0L254 39C205 39 180 54 180 85C180 92 181 96 182 98L227 225L465 225L516 77C518 71 519 67 519 64C519 47 492 39 437 39L437 0C479 3 528 4 583 3M345 569L451 264L240 264Z" transform="translate(736,0)"></path><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z" transform="translate(1486,0)"></path></g></g></g><g data-mml-node="mo" data-latex="\times" transform="translate(1865.8,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="munder" data-latex="\underbrace{2}_{\text{OS}}" transform="translate(2810.5,0)"><g data-mml-node="TeXAtom" data-latex="\underbrace{2}" data-mjx-texclass="OP" transform="translate(221.6,0)"><g data-mml-node="munder"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mo" transform="translate(4,4)"><path data-c="23DF" d="M492-120C492-113 489-109 482-109C476-109 473-112 472-117C469-155 441-201 403-201L325-201C289-201 263-230 246-289C229-230 203-201 167-201L89-201C51-201 24-154 20-117C20-112 17-109 10-109C3-109 0-113 0-120C6-180 34-261 89-261L167-261C204-261 232-307 236-344C236-350 239-353 246-353C253-353 256-350 256-345C260-308 287-261 325-261L403-261C458-261 486-180 492-120Z"></path></g></g></g><g data-mml-node="TeXAtom" transform="translate(0,-1009.5) scale(0.707)" data-latex="{\text{OS}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{OS}"><path data-c="4F" d="M388-22C484-22 564 15 628 88C690 158 721 242 721 339C721 436 690 521 629 592C564 667 484 705 388 705C292 705 212 667 148 592C87 521 56 436 56 339C56 242 87 159 148 88C213 15 293-22 388-22M557 575C593 522 611 448 611 353C611 230 585 140 533 84C488 36 440 12 389 12C337 12 288 36 243 85C192 141 166 230 166 353C166 472 193 558 247 609C293 651 340 672 388 672C456 672 512 640 557 575Z"></path><path data-c="53" d="M252 669C359 669 422 601 440 466C441 456 447 451 456 451C467 451 472 460 472 478L472 677C472 696 467 705 458 705C452 705 446 700 440 690L408 638C364 680 324 705 251 705C142 705 56 617 56 509C56 417 116 349 187 324L317 292C384 275 428 229 428 154C428 79 376 17 301 17C170 17 93 91 88 218C88 227 83 232 73 232C62 232 56 223 56 204L56 6C56-13 61-22 71-22C77-22 83-17 89-7L121 45C164 0 224-22 302-22C359-22 407-1 444 40C481 81 499 130 499 188C499 235 485 278 458 317C431 356 394 380 349 391L223 422C170 434 127 481 127 544C127 614 182 669 252 669Z" transform="translate(778,0)"></path></g></g></g><g data-mml-node="mo" data-latex="\times" transform="translate(3920.5,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="munder" data-latex="\underbrace{(1 + (2^3 - 1))}_{\text{Extras 不选或选 1–3 个}}" transform="translate(4865.1,0)"><g data-mml-node="TeXAtom" data-latex="\underbrace{(1 + (2^3 - 1))}" data-mjx-texclass="OP" transform="translate(701.2,0)"><g data-mml-node="munder"><g data-mml-node="mrow" data-latex="(1 + (2^3  - 1))"><g data-mml-node="mo" data-latex="("><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(389,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(1111.2,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(2111.4,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="msup" data-latex="2^3" transform="translate(2500.4,0)"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mn" transform="translate(533,413) scale(0.707)" data-latex="3"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g></g><g data-mml-node="mo" data-latex="-" transform="translate(3659.2,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(4659.4,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(5159.4,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(5548.4,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g><g data-mml-node="mo" transform="translate(0,-249)"><path data-c="23DF" d="M510-294L1002-294L1002-188L510-188C385-188 277-179 188-160C99-141 47-112 32-73C29-66 24-62 17-62C6-62 0-67 0-78C0-81 0-84 1-85C26-151 100-204 225-245C325-278 420-294 510-294Z"></path><path data-c="23DF" d="M1000-85C1001-84 1001-81 1001-78C1001-67 995-62 984-62C977-62 971-66 968-73C954-112 902-141 813-160C724-179 616-188 491-188L0-188L0-294L491-294C581-294 676-278 776-245C901-204 975-151 1000-85Z" transform="translate(4936.4,0)"></path><path data-c="23DF" d="M1496-294L2003-294L2003-188L1496-188C1407-188 1317-200 1228-224C1115-255 1039-298 1001-355C963-298 887-255 774-224C685-200 595-188 506-188L0-188L0-294L506-294C649-294 765-303 854-321C941-338 984-366 984-403C984-414 990-419 1001-419C1012-419 1018-414 1018-403C1018-366 1062-338 1150-320C1238-302 1353-294 1496-294Z" transform="translate(1967.2,0)"></path><svg width="1105.2" height="246" x="932" y="-364" viewBox="276.3 -364 1105.2 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(1.668,1)"></path></svg><svg width="1106.2" height="246" x="3900.2" y="-364" viewBox="276.6 -364 1106.2 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(1.669,1)"></path></svg></g></g></g><g data-mml-node="TeXAtom" transform="translate(0,-1318.7) scale(0.707)" data-latex="{\text{Extras 不选或选 1–3 个}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{Extras 不选或选 1–3 个}"><path data-c="45" d="M230 74L230 334L315 334C360 334 388 326 400 311C412 296 418 265 418 218L451 218L451 488L418 488C418 441 412 411 400 396C388 381 360 373 315 373L230 373L230 606C230 642 236 641 275 641L402 641C474 641 522 627 547 598C579 559 583 523 592 450L625 450L596 680L33 680L33 641L61 641C96 641 117 639 124 634C131 629 135 617 135 599L135 81C135 63 131 51 124 46C117 41 96 39 61 39L33 39L33 0L610 0L653 263L620 263C611 208 602 166 591 136C580 106 560 82 530 63C505 47 464 39 406 39L275 39C236 39 230 38 230 74Z"></path><path data-c="78" d="M418 3C441 4 474 3 516 0L516 38C463 38 443 39 422 67L292 235C335 288 364 324 380 343C408 375 447 392 498 393L498 431C470 429 442 428 414 428C377 428 344 429 315 431L315 393C334 391 344 382 344 366C344 357 339 346 330 334L272 262L198 357C193 364 190 369 190 372C190 385 202 392 225 393L225 431L114 428C88 427 56 428 17 431L17 393C53 393 76 390 86 385C96 380 112 363 134 334L229 210C180 147 150 109 139 96C107 57 65 38 12 38L12 0C49 3 77 4 98 3L195 0L195 38C176 41 167 50 167 65C167 69 168 74 170 79C176 92 203 126 251 183L323 89C334 75 340 65 343 59C343 46 331 39 307 38L307 0Z" transform="translate(681,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(1209,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(1598,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(1990,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2490,0)"></path><path data-c="20" d="" transform="translate(2884,0)"></path><text data-variant="normal" transform="translate(3216,0) scale(1,-1)" font-size="884px" font-family="serif">不选或选</text><path data-c="20" d="" transform="translate(7216,0)"></path><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z" transform="translate(7548,0)"></path><path data-c="2013" d="M0 255L499 255L499 277L0 277Z" transform="translate(8048,0)"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(8548,0)"></path><path data-c="20" d="" transform="translate(9048,0)"></path><text data-variant="normal" transform="translate(9380,0) scale(1,-1)" font-size="884px" font-family="serif">个</text></g></g></g><g data-mml-node="mo" data-latex="=" transform="translate(12482.7,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="4" transform="translate(13538.4,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g><g data-mml-node="mo" data-latex="\times" transform="translate(14260.7,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="8" transform="translate(15260.9,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(16038.7,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="32" transform="translate(17094.4,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container></span></p>
+<p>约束 “Windows 7 ⇒ 3 GB” 排除 (Windows 7, 1 GB) 这一组合：OS×RAM
+合法组合从 4 降为 3，所以合法配置 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.52ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 3 \times
+8 = 24"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="3" transform="translate(1055.8,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 3 \times
+8 = 24"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="8" transform="translate(1000.2,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.651ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2055.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 3 \times
+8 = 24"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="24" transform="translate(1055.8,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container></span>。（如果 Extras 是 mandatory 而非 optional，则为 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 500 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3 \times 7 = 21"><g data-mml-node="mn" data-latex="3"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3 \times 7 = 21"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="7" transform="translate(1000.2,0)"><path data-c="37" d="M475 604C482 613 485 626 485 644L243 644C174 644 135 648 128 657C125 660 122 667 120 676L89 676L55 464L88 464C98 520 106 550 112 555C115 558 146 560 205 560L401 560L295 410C214 295 174 171 174 36C174-3 190-22 223-22C256-22 272-3 272 36L272 87C272 239 296 349 343 416Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.651ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2055.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3 \times 7 = 21"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="21" transform="translate(1055.8,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container></span>——<strong>做题时先看清
+Extras 是实心还是空心圆点</strong>。）</p>
+<h3 id="use-case">2.3 Use case</h3>
+<ul>
+<li><strong>概念框架</strong>：Actor（有目标）↔︎ System under
+consideration（有职责支持 actor 目标）↔︎ Other system</li>
+<li><strong>Cockburn 要素</strong>：目标驱动；<strong>trigger</strong>
+开始；以<strong>明确结果</strong>结束（成功/失败场景）；失败从失败点分叉</li>
+<li><strong>模板</strong>：Name / Goal / Level / Precondition / Success
+condition / Failure condition / Trigger + main scenario +
+extensions</li>
+<li><strong>关系</strong>：<code>«include»</code>
+指向被包含用例；<code>«extend»</code> 指向基用例（带 extension
+point）；泛化空心三角指向父</li>
+<li><strong>Agentic use case</strong>（W3）：业务结果目标、权限（能力 ≠
+许可）、可观察成功证据、失败/不确定性作为正常分支、<strong>人工检查点</strong></li>
+</ul>
+<p><strong>画 use case 图检查清单</strong>： - [ ] 系统边界框 + 系统名 -
+[ ] Actor 在框外，是<strong>角色</strong>（名词），外部系统也算 actor -
+[ ] Use case 是<strong>动词 + 名词</strong>的目标，不是 UI 步骤 - [ ]
+include / extend 箭头方向正确，extend 标条件或扩展点 - [ ] 至少一个核心
+use case 写出完整描述（含 extension）</p>
+<hr>
+<h2 id="三架构与设计原则复习页提到的部分">三、架构与设计原则（复习页提到的部分）</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">必会要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Architects and
+Stakeholders</strong>（Kruchten 图）</td>
+<td style="text-align: left;">架构师平衡终端用户、销售、开发经理、开发者、系统管理员的关注点
+→ “Where do we start?”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Architecture and
+Evolution</strong></td>
+<td style="text-align: left;">架构根本性地影响演化能力；架构选择（单机
+vs 分布式）决定新需求落到哪个解</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Viewpoint vs View</strong></td>
+<td style="text-align: left;">视点 = 关注点 + 表示技术；<strong>视图 =
+视点应用于具体系统的结果</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4+1</strong></td>
+<td style="text-align: left;">Logical（类/顺序图）、Development（包图）、Process（活动图，并发）、Physical（部署图）、+1
+Scenarios</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MoC</strong></td>
+<td style="text-align: left;">structure-dominant / procedural / data
+flow；不要混淆 agent 推理循环与系统 MoC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>控制</strong></td>
+<td style="text-align: left;">分离控制与功能；集中控制；星形/递归控制模式</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>模式</strong></td>
+<td style="text-align: left;">pipe-and-filter、shared-data、layering、SOA、MVC；agent
+模式按<strong>不确定性 × 协调</strong>选</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="四设计模型构建时build-time">四、设计模型：构建时（Build-time）</h2>
+<h3 id="类型实例分类器">4.1 类型、实例、分类器</h3>
+<ul>
+<li><strong>Type</strong> 规定一类实体，<strong>instance</strong>
+是其中个体；模型（M1）<code>«represents»</code> 真实世界（M0）</li>
+<li><strong>Classifier</strong>：共享特征 +
+可按特征划分子集合；Class、Association、Interface、UseCase、Behavior、Collaboration、Component、Node……<strong>所有分类器都可作类型</strong></li>
+<li><strong>Class = 对象集合的规格；Association =
+链接集合的规格</strong></li>
+</ul>
+<h3 id="泛化-vs-关联复习页强调">4.2 泛化 vs 关联（复习页强调）</h3>
+<blockquote>
+<p><strong>Generalization 是类之间的关系（不是实例之间的）；Association
+表示实例之间的关系。</strong> 例：<code>Person</code> ◁—
+<code>Adult</code>、<code>Child</code>（泛化）；<code>Adult (parent 1..2) —— (child 0..*) Child</code>（关联）。<strong>类模型抽象掉了所有具体个案。</strong></p>
+</blockquote>
+<h3 id="类图记号速查">4.3 类图记号速查</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">元素</th>
+<th style="text-align: left;">记号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">类</td>
+<td style="text-align: left;">三栏：名 / 属性
+<code>vis name : Type [mult] = default {prop}</code> / 操作
+<code>vis op(p : T) : R</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">可见性</td>
+<td style="text-align: left;"><code>+</code> public、<code>-</code>
+private、<code>#</code> protected、<code>~</code> package</td>
+</tr>
+<tr>
+<td style="text-align: left;">派生属性</td>
+<td style="text-align: left;"><code>/name</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">关联</td>
+<td style="text-align: left;">实线，两端多重性 +
+角色名；导航箭头；端点黑点 = 由对端类拥有</td>
+</tr>
+<tr>
+<td style="text-align: left;">多重性修饰</td>
+<td style="text-align: left;"><code>{unique}</code>（默认）、<code>{ordered}</code>（默认
+unordered）</td>
+</tr>
+<tr>
+<td style="text-align: left;">聚合 / 组合</td>
+<td style="text-align: left;">空心 /
+<strong>实心</strong>菱形在<strong>整体端</strong>；组合 = 删除语义</td>
+</tr>
+<tr>
+<td style="text-align: left;">泛化</td>
+<td style="text-align: left;">实线 + 空心三角指向父；泛化集</td>
+</tr>
+<tr>
+<td style="text-align: left;">接口实现 / 使用</td>
+<td style="text-align: left;">虚线 +
+空心三角（realize）；<code>«uses»</code> 虚线箭头；lollipop /
+socket</td>
+</tr>
+<tr>
+<td style="text-align: left;">依赖</td>
+<td style="text-align: left;">虚线 + 开放箭头，client → supplier</td>
+</tr>
+<tr>
+<td style="text-align: left;">关联类</td>
+<td style="text-align: left;">关联线上虚线挂一个类</td>
+</tr>
+<tr>
+<td style="text-align: left;">约束</td>
+<td style="text-align: left;"><code>{...}</code> 行内或附注（OCL）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="包图">4.4 包图</h3>
+<ul>
+<li>包 ≈ 文件夹，是<strong>命名空间</strong>；限定名
+<code>A::B::C</code></li>
+<li><code>«import»</code>（public，可传递，private
+元素不导入，重名用限定名）、<code>«access»</code>（private，不传递）、<code>«merge»</code>（同名元素合并）</li>
+<li><strong>复习页的 merge 例子</strong>：X{A, D} <code>«merge»</code>
+Y{A, B, C} ⇒ X{A, B, C, D}</li>
+<li>Model（三角形图标，有 viewpoint
+属性）、<code>«modelLibrary»</code></li>
+<li>包含用 ⊕ 或嵌套，<strong>不用黑菱形</strong></li>
+</ul>
+<h3 id="profile-图">4.5 Profile 图</h3>
+<ul>
+<li><code>«profile»</code> 包内：<code>«stereotype»</code> 通过
+<strong>Extension（实线 + 实心三角）</strong> 扩展
+<code>«metaclass» UML::Class / UML::Operation …</code></li>
+<li>构造型的属性 = <strong>tag definitions</strong>；约束用 OCL</li>
+<li>复习页再次给出 <strong>Semaphore</strong>
+例子：<code>«stereotype» Semaphore { limit : Integer; getSema : Operation; relSema : Operation }</code>，约束
+<code>{active-&gt;size() &lt;= limit}</code>、<code>{limit &lt;= MAXlimit}</code></li>
+</ul>
+<hr>
+<h2 id="五设计模型运行时runtime">五、设计模型：运行时（Runtime）</h2>
+<h3 id="为什么需要运行时模型">5.1 为什么需要运行时模型</h3>
+<p>复习页再次放出
+<strong>“这个类图描述了多少种运行时配置？”</strong>——ClassA/ClassB 各有
+left/right 两条 <code>1</code> 对 <code>1</code> 关联，可以是
+<code>a1⇄b1</code>，也可以是 <code>a1→b1→a2→b2→a1</code>
+的环……<strong>无穷多种</strong> ⇒ 类图不足以精确表示运行时结构。</p>
+<h3 id="对象图协作结构化类">5.2 对象图、协作、结构化类</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">元素</th>
+<th style="text-align: left;">要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Object diagram</strong></td>
+<td style="text-align: left;">快照；<code>name : Class</code>（下划线）；只有名称+属性值两栏；<strong>链接没有多重性</strong>；共享对象只画一个</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Collaboration</strong></td>
+<td style="text-align: left;">一组通过<strong>连接器</strong>通信的<strong>角色</strong>；“<strong>角色可以代表一个实例或更抽象的东西</strong>”；不能实例化；受约束角色
+<code>Hamlet : YoungMan</code> vs 无约束 <code>Ghost</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Collaboration Use</strong></td>
+<td style="text-align: left;">应用协作规格：<code>BrokeredSale</code> 中
+<code>wholesale : Sale</code>、<code>retail : Sale</code>，broker
+两次扮演不同角色</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Structured class</strong></td>
+<td style="text-align: left;">外部<strong>端口</strong> + 内部
+<strong>parts /
+connectors</strong>；<strong>委托连接器</strong>连外部端口与内部
+part；可作为单元创建销毁；<strong>一端口一接口</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="行为">5.3 行为</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">主题</th>
+<th style="text-align: left;">必会</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Passive vs Active</strong></td>
+<td style="text-align: left;">被动：被调用就响应（可能冲突）；主动：只在
+receive 时响应（消息队列，RTC）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Action</strong></td>
+<td style="text-align: left;">活动中的原子步骤，圆角矩形</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Activity diagram</strong></td>
+<td style="text-align: left;">初始/活动终止/流终止；decision/merge；fork/join；对象节点、pin；泳道；可中断区域；前后置契约（复习页再次给出
+<strong>Order Processing</strong> 例子）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sequence diagram</strong></td>
+<td style="text-align: left;">生命线、同步（实心箭头）/
+异步（开放箭头）/
+返回（虚线）；<code>alt</code>、<code>opt</code>、<code>loop</code>、<code>par</code>、<code>ref</code>、<code>sd</code>（复习页再次给出
+<strong>ATM-transaction + CheckPin</strong> 例子）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Communication
+diagram</strong></td>
+<td style="text-align: left;">带序号消息，强调链接结构（<code>1 query</code>、<code>2a/2b get</code>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interaction overview</strong></td>
+<td style="text-align: left;">活动图外壳，节点是交互（<code>ref Authorization</code>、<code>ref DoMore</code>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>State machine</strong></td>
+<td style="text-align: left;">初始伪状态、状态、<code>trigger [guard] / action</code>、终止状态；<strong>exit
+→ transition → entry</strong>（复习页再次给出
+<strong>LampOn/LampOff</strong> 例子）；junction vs
+choice；层次状态、组转移、完成转移、正交区域</td>
+</tr>
+</tbody>
+</table>
+<p><strong>状态机动作顺序复习题（复习页例子，答案必背）</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">情况</th>
+<th style="text-align: left;">序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">LampOn 收到 off，转到 LampOff</td>
+<td style="text-align: left;"><code>printf("exiting")</code> →
+<code>printf("to off")</code> → <code>lamp.off()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">LampOff 收到 off（自转移）</td>
+<td style="text-align: left;"><code>printf("exiting")</code> →
+<code>printf("needless")</code> → <code>lamp.off()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">W7 例题：S1::S11 收到 E1 → S2</td>
+<td style="text-align: left;">exS11 → exS1 → act1 → enS2 → enS21</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="六元模型">六、元模型</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">要点</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>定义</strong></td>
+<td style="text-align: left;">规定建模语言<strong>抽象语法</strong>、定义<strong>良构规则</strong>，<strong>独立于具体语法</strong>；<strong>模型是元模型的实例</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DSL</strong></td>
+<td style="text-align: left;">由元模型定义，是自动化、工具支持处理的基础</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>四层</strong></td>
+<td style="text-align: left;">M0 运行时对象 / M1 模型 / M2
+元模型（UML）/ M3 元元模型（MOF，自描述）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>语言组成</strong></td>
+<td style="text-align: left;">抽象语法 + 具体语法 + 语义（+ 映射）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UML
+元模型片段</strong>（复习页版本）</td>
+<td style="text-align: left;">Element ←
+NamedElement{name}；DirectedRelationship{sources 1..<em>, targets
+1..</em>} ← Generalization；Classifier{generalizations 0..<em>, features
+0..</em>}；**TypedElement —types 1..*→ Type<strong>；Class{attributes,
+operations}；</strong>PrimitiveType**</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>图的种类</strong></td>
+<td style="text-align: left;">Structure：Class、Object、Package、Deployment、Composite
+Structure、Profile；Behavior：Activity、Statechart、UseCase、Interaction（Sequence、Communication、Timing、Interaction
+Overview）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>复习页练习（与 W10 相同，必会）</strong>：把
+<code>A [a 0..1] —— [b 0..2] B</code> 画成元模型实例：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">a : AssociationEnd {lowerBound = 0, upperBound = 1} ──target──▶ : Class {name = "A"}</span><br><span class="line">b : AssociationEnd {lowerBound = 0, upperBound = 2} ──target──▶ : Class {name = "B"}</span><br><span class="line">: Association ──ends──▶ a, b</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="七开发过程模型">七、开发过程模型</h2>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Waterfall</th>
+<th style="text-align: left;">Spiral</th>
+<th style="text-align: left;">Agile</th>
+<th style="text-align: left;">DevOps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">类型</td>
+<td style="text-align: left;">重量级</td>
+<td style="text-align: left;">重量级</td>
+<td style="text-align: left;">轻量级</td>
+<td style="text-align: left;">轻量级（敏捷的延伸）</td>
+</tr>
+<tr>
+<td style="text-align: left;">核心</td>
+<td style="text-align: left;">阶段、可预测</td>
+<td style="text-align: left;"><strong>风险</strong></td>
+<td style="text-align: left;">迭代、反馈</td>
+<td style="text-align: left;">交付与运行、自动化</td>
+</tr>
+<tr>
+<td style="text-align: left;">适合</td>
+<td style="text-align: left;">需求稳定、多地点大型工程</td>
+<td style="text-align: left;">复杂高风险</td>
+<td style="text-align: left;">需求多变</td>
+<td style="text-align: left;">持续演化的在线服务</td>
+</tr>
+</tbody>
+</table>
+<p>复习页的一句话动机：<strong>系统太大太复杂，一个人建不出来 ⇒
+需要一个协调人的计划。</strong>
+传统模型：Waterfall、Spiral；敏捷模型：Extreme Programming（以及
+Scrum）。</p>
+<p><strong>Scrum 三三三</strong>：Product Owner / Scrum Master /
+Team；Product Backlog / Sprint Backlog / Impediments List；Planning /
+Daily Scrum / Sprint Review（+
+Retrospective）。<strong>敏捷宣言四对价值</strong>要能写出来。</p>
+<hr>
+<h2 id="八tutorial-12-要点profile-与-ocl-回顾">八、Tutorial 12
+要点：Profile 与 OCL 回顾</h2>
+<p>Tutorial 12 回顾 Week 11 的内容，没有新增知识点：</p>
+<ul>
+<li>特化 UML、SysML/MARTE、Profile 的两种用途、Stereotype 与 tag
+definition</li>
+<li><strong>Semaphore</strong> 和 <strong>AI Agent</strong>
+构造型；<strong>Extension vs Generalization</strong> 记号</li>
+<li><strong>Overlay Profile</strong>（apply/unapply 不改变模型）</li>
+<li>OCL：context/inv、<code>.</code> vs
+<code>-&gt;</code>、数据类型、运算符、集合操作、<code>exists</code>/<code>forAll</code>、pre/post/<code>@pre</code>/body</li>
+<li><strong>HealthcareAgent</strong> 案例：Decision / Controller /
+Service
+三组件；四阶段工作流；<code>«Agent»</code>、<code>«Tool»</code>（扩展
+Operation）、<code>«DataSource»</code> 三个构造型</li>
+</ul>
+<p>详细内容和 OCL 练习见
+[[26-S2-Course/ELEC5620/ELEC5620-Week11-Specialise-a-Modeling-Language-Summary|Week
+11]]。</p>
+<hr>
+<h2 id="九综合建模练习模拟给定场景画模型">九、综合建模练习（模拟“给定场景画模型”）</h2>
+<blockquote>
+<p><strong>场景（自拟，覆盖全课）</strong>：一家<strong>一人 AI
+宠物医院预约公司</strong>。宠物主人在网页上描述宠物症状；<strong>Triage
+Agent</strong> 判断紧急程度：紧急则立即通知值班兽医；不紧急则
+<strong>Booking Agent</strong>
+查询诊所排期系统、给出时段，主人选择后预约；预约需要<strong>兽医批准</strong>后才最终确认；预约前
+24 小时发提醒。诊所排期系统和短信服务是外部系统。</p>
+</blockquote>
+<h3 id="use-case-图">9.1 Use case 图</h3>
+<ul>
+<li>Actors：<strong>Pet
+Owner</strong>、<strong>Vet</strong>、<strong>Clinic Scheduling
+System</strong>、<strong>SMS
+Service</strong>、（时间触发的）<strong>Scheduler</strong></li>
+<li>Use cases：Describe Symptoms、Book Appointment、Approve
+Booking、Send Reminder、Notify Emergency</li>
+<li>关系：<code>Book Appointment --«include»--&gt; Check Availability</code>；<code>Notify Emergency --«extend»--&gt; Describe Symptoms</code>（条件：urgent）</li>
+</ul>
+<h3 id="use-case-规格book-appointmentagentic-写法">9.2 Use case
+规格（Book Appointment，agentic 写法）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;">宠物在合适时间被兽医看诊（<strong>业务结果</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: left;">Authority</td>
+<td style="text-align: left;">Booking Agent
+可<strong>读</strong>排期、<strong>创建待审批预约</strong>；<strong>不能</strong>直接确认预约</td>
+</tr>
+<tr>
+<td style="text-align: left;">Success</td>
+<td style="text-align: left;">兽医批准的预约已确认，主人收到通知</td>
+</tr>
+<tr>
+<td style="text-align: left;">Failure</td>
+<td style="text-align: left;">未确认任何预约；主人收到原因</td>
+</tr>
+<tr>
+<td style="text-align: left;">Extensions</td>
+<td style="text-align: left;">3a {无可用时段} → 提供候补名单；5a
+{兽医拒绝} → 释放时段并通知主人；任意步 {排期系统不可用} → 重试 3
+次后转人工</td>
+</tr>
+<tr>
+<td style="text-align: left;">Human checkpoint</td>
+<td style="text-align: left;">第 5 步兽医批准</td>
+</tr>
+</tbody>
+</table>
+<h3 id="类图关键部分">9.3 类图（关键部分）</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Agent {</span><br><span class="line">        &lt;&lt;abstract&gt;&gt;</span><br><span class="line">        name : String</span><br><span class="line">        maxSteps : Integer</span><br><span class="line">        perceive()</span><br><span class="line">        act()</span><br><span class="line">    }</span><br><span class="line">    class TriageAgent {</span><br><span class="line">        assess(report) : Urgency</span><br><span class="line">    }</span><br><span class="line">    class BookingAgent {</span><br><span class="line">        proposeSlot() : Slot</span><br><span class="line">    }</span><br><span class="line">    class Orchestrator {</span><br><span class="line">        dispatch(request)</span><br><span class="line">    }</span><br><span class="line">    class Appointment {</span><br><span class="line">        status : AppStatus</span><br><span class="line">        time : DateTime</span><br><span class="line">        approve()</span><br><span class="line">        reject()</span><br><span class="line">    }</span><br><span class="line">    class Pet {</span><br><span class="line">        name : String</span><br><span class="line">        species : String</span><br><span class="line">    }</span><br><span class="line">    class Owner {</span><br><span class="line">        name : String</span><br><span class="line">        phone : String</span><br><span class="line">    }</span><br><span class="line">    class SchedulingAPI {</span><br><span class="line">        &lt;&lt;interface&gt;&gt; getSlots()</span><br><span class="line">        book(slot)</span><br><span class="line">    }</span><br><span class="line">    Agent &lt;|-- TriageAgent</span><br><span class="line">    Agent &lt;|-- BookingAgent</span><br><span class="line">    Orchestrator o-- "1..*" Agent</span><br><span class="line">    Owner "1" --&gt; "1..*" Pet : owns</span><br><span class="line">    Pet "1" -- "0..*" Appointment</span><br><span class="line">    BookingAgent ..&gt; SchedulingAPI : uses</span><br></pre></td></tr></table></figure>
+<p>（Mermaid 简化了记号：画在纸上时 <code>Owner ◆— Pet</code>
+是否用组合取决于“删除主人是否删除宠物记录”，要在答案中说明理由。）</p>
+<h3 id="对象图某一时刻">9.4 对象图（某一时刻）</h3>
+<p><code>triage1 : TriageAgent</code>、<code>booking1 : BookingAgent</code>、<code>orch : Orchestrator</code>、<code>alice : Owner {phone = "04xx"}</code>、<code>milo : Pet {species = "cat"}</code>、<code>appt42 : Appointment {status = pendingApproval, time = 2026-11-20 10:00}</code>；链接
+orch—triage1、orch—booking1、alice—milo、milo—appt42。<strong>只画一个
+appt42。</strong></p>
+<h3 id="活动图">9.5 活动图</h3>
+<p>泳道 Owner / Triage Agent / Booking Agent / Vet / Scheduling
+System：Describe symptoms → Assess urgency → ◇ urgent? → [yes] Notify
+vet（flow final 或进入紧急流程）；[no] Get slots → Present slots →
+Select slot → Create pending booking → <strong>Vet approves?</strong> ◇
+→ [yes] Confirm → <strong>fork</strong>（Send confirmation SMS ∥
+Schedule reminder）→ <strong>join</strong> → end；[no] Release slot →
+Notify owner。</p>
+<h3 id="顺序图">9.6 顺序图</h3>
+<p><code>owner → orch: describe(symptoms)</code>；<code>orch → triage1: assess()</code>；<code>alt [urgent]</code>
+<code>orch → vet: notifyEmergency()</code>；<code>[else]</code>
+<code>ref BookAppointment</code>。<code>sd BookAppointment</code>：<code>booking1 → scheduling: getSlots()</code>（同步）……<code>booking1 → vet: requestApproval()</code>（<strong>异步</strong>，开放箭头）；<code>alt [approved]</code>
+/ <code>[rejected]</code>。</p>
+<h3 id="状态机appointment">9.7 状态机（Appointment）</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; Proposed</span><br><span class="line">    Proposed --&gt; PendingApproval : ownerSelects / createBooking()</span><br><span class="line">    PendingApproval --&gt; Confirmed : vetApproves / notifyOwner()</span><br><span class="line">    PendingApproval --&gt; Cancelled : vetRejects / releaseSlot()</span><br><span class="line">    PendingApproval --&gt; Cancelled : after(24h) / releaseSlot()</span><br><span class="line">    Confirmed --&gt; Reminded : when(now &gt;= time - 24h) / sendSMS()</span><br><span class="line">    Reminded --&gt; Completed : visitDone</span><br><span class="line">    Confirmed --&gt; Cancelled : ownerCancels</span><br><span class="line">    Completed --&gt; [*]</span><br><span class="line">    Cancelled --&gt; [*]</span><br></pre></td></tr></table></figure>
+<p>覆盖了 <strong>signal/call 事件、time 事件（after）、change
+事件（when）</strong>——考试中最好三种事件都能体现。</p>
+<h3 id="包图-部署图">9.8 包图 &amp; 部署图</h3>
+<ul>
+<li>包：<code>UI</code>、<code>Agents</code>、<code>Domain</code>、<code>Integration</code>；<code>UI --«import»--&gt; Agents --«import»--&gt; Domain</code>；<code>Agents --«access»--&gt; Integration</code></li>
+<li>部署：<code>«device» Owner Browser</code> —HTTPS—
+<code>«node» App Server {Orchestrator, Agents}</code> —JDBC—
+<code>«node» DB Server</code>；App Server —HTTPS—
+<code>Clinic Scheduling System</code>、<code>SMS Gateway</code>、<code>LLM API</code>（只发去标识化数据）</li>
+</ul>
+<h3 id="profile-与-ocl">9.9 Profile 与 OCL</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">«profile» PetClinicAgent</span><br><span class="line">«stereotype» Tool  ━▶ «metaclass» UML::Operation   { effect : Effect, approvalRequired : Boolean }</span><br><span class="line">«stereotype» Agent ━▶ «metaclass» UML::Class       { maxSteps : Integer }</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">context PetClinicAgent::Tool inv WriteNeedsApproval:</span><br><span class="line">    self.effect = Effect::write implies self.approvalRequired</span><br><span class="line">context Appointment inv OneActivePerPet:</span><br><span class="line">    self.pet.appointment-&gt;select(a | a.status = AppStatus::Confirmed)-&gt;size() &lt;= 1</span><br><span class="line">context Appointment::approve()</span><br><span class="line">    pre:  self.status = AppStatus::PendingApproval</span><br><span class="line">    post: self.status = AppStatus::Confirmed</span><br></pre></td></tr></table></figure>
+<h3 id="元模型实例加分项">9.10 元模型实例（加分项）</h3>
+<p>把类图里的 <code>Pet "1" -- "0..*" Appointment</code> 画成
+<code>: Association</code> + 两个
+<code>: AssociationEnd {lowerBound, upperBound}</code> + 两个
+<code>: Class</code> 的对象图（同 W10 练习）。</p>
+<hr>
+<h2 id="十期末复习策略与高频易错点">十、期末复习策略与高频易错点</h2>
+<h3 id="复习顺序建议">10.1 复习顺序建议</h3>
+<ol type="1">
+<li><strong>先把七种图画熟</strong>：use
+case、类图、对象图、活动图、顺序图、状态机、包图（+部署图、profile
+图）——每种至少徒手画 2 次</li>
+<li><strong>再过概念对比表</strong>：view vs viewpoint、structure vs
+behavior MoC、active vs passive、junction vs choice、include vs
+extend、import vs access vs merge、Extension vs
+Generalization、M0–M3、四种过程模型</li>
+<li><strong>最后看 agentic 部分</strong>：有界自治 use case、agent vs
+service 决策树、agent 模式选型、BDI、agentic 元模型与 HealthcareAgent
+profile——老师每讲都把这部分放在最后，是本学期新增重点</li>
+</ol>
+<h3 id="高频易错点汇总">10.2 高频易错点汇总</h3>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">易错点</th>
+<th style="text-align: left;">正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">include/extend 箭头方向</td>
+<td style="text-align: left;">include → 被包含；extend → 基用例</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">Actor 写成人名或系统内部组件</td>
+<td style="text-align: left;">Actor 是外部角色</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">组合菱形画在部分端</td>
+<td style="text-align: left;">菱形在<strong>整体端</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">对象图写多重性</td>
+<td style="text-align: left;">链接没有多重性</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">共享对象画两次</td>
+<td style="text-align: left;">一个身份只画一个框</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">用 join 合并 decision 分支</td>
+<td style="text-align: left;">decision 配 merge，fork 配 join</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">activity final 与 flow final 混淆</td>
+<td style="text-align: left;">前者全停，后者只停一条</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">顺序图同步/异步箭头</td>
+<td style="text-align: left;">同步实心，异步开放，返回虚线</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;">状态机动作顺序</td>
+<td style="text-align: left;">exit（内→外）→ transition →
+entry（外→内）；自转移也 exit/entry</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">守卫有副作用；choice/junction 混用</td>
+<td style="text-align: left;">守卫纯谓词；依赖前半段计算结果用
+choice</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td style="text-align: left;">正交区域建模并发对象</td>
+<td style="text-align: left;">正交区域只表示同一实体的不同视角</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">包含关系用黑菱形</td>
+<td style="text-align: left;">包包含用 ⊕ 或嵌套</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: left;">«access» 当成可传递</td>
+<td style="text-align: left;">access 是私有导入，不传递</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">Profile 中构造型到元类用空心三角</td>
+<td style="text-align: left;"><strong>Extension 用实心三角</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: left;">OCL 集合用点号</td>
+<td style="text-align: left;">集合用 <code>-&gt;</code>，属性用
+<code>.</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">16</td>
+<td style="text-align: left;">M1/M2 层次说错</td>
+<td style="text-align: left;">问“它是谁的实例”</td>
+</tr>
+<tr>
+<td style="text-align: center;">17</td>
+<td style="text-align: left;">敏捷宣言说成“右边没价值”</td>
+<td style="text-align: left;">右边有价值，左边更重要</td>
+</tr>
+<tr>
+<td style="text-align: center;">18</td>
+<td style="text-align: left;">所有功能都做成 agent</td>
+<td style="text-align: left;">无需上下文判断的用确定性服务；写操作加审批</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="结语">结语</h2>
+<p>讲义最后引用丘吉尔：</p>
+<blockquote>
+<p><strong>“Now this is not the end. It is not even the beginning of the
+end. But it is, perhaps, the end of the beginning.”</strong></p>
+</blockquote>
+<p>并提醒大家填写 <strong>SET（Student Experience of
+Teaching）问卷</strong>，老师希望<strong>至少 67%
+的回复率</strong>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Exam-Review/" rel="tag"><i class="fa fa-tag"></i> Exam-Review</a>
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/Model-Based-Software-Engineering/" rel="tag"><i class="fa fa-tag"></i> Model-Based-Software-Engineering</a>
+              <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+              <a href="/tags/Meta-Modeling/" rel="tag"><i class="fa fa-tag"></i> Meta-Modeling</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week11-specialise-modeling-language.html" rel="prev" title="ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week06-resource-management.html" rel="next" title="INFO6007 Week 06 Resource Management 讲课总结">
+                  INFO6007 Week 06 Resource Management 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

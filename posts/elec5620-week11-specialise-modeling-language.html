@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 11 讲课总结：用 Profile 特化 UML——构造型、标签定义、Extension 记号、Semaphore 与 AI Agent 例子、叠加 Profile、SysML 与 MARTE；OCL 的不变式、集合操作、量词与前后置条件；HealthcareAgent Profile 与约束；agentic DSL 前沿研究。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week11-specialise-modeling-language.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 11 讲课总结：用 Profile 特化 UML——构造型、标签定义、Extension 记号、Semaphore 与 AI Agent 例子、叠加 Profile、SysML 与 MARTE；OCL 的不变式、集合操作、量词与前后置条件；HealthcareAgent Profile 与约束；agentic DSL 前沿研究。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:50:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:54.972Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="DSL">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="OCL">
+<meta property="article:tag" content="Stereotype">
+<meta property="article:tag" content="UML-Profile">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week11-specialise-modeling-language.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week11-specialise-modeling-language.html","path":"posts/elec5620-week11-specialise-modeling-language.html","title":"ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week11-specialise-modeling-language.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-11-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93specialise-a-modeling-language"><span class="nav-text">ELEC5620
+Week 11 讲课总结：Specialise a Modeling Language</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%83%8C%E6%99%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%89%B9%E5%8C%96%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80"><span class="nav-text">一、背景：为什么要特化建模语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%96%B9%E6%B3%95%E5%A4%A7%E6%88%98%E5%88%B0-uml"><span class="nav-text">1.1 从方法大战到 UML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E7%89%B9%E5%8C%96%E8%B7%AF%E7%BA%BF%E7%BB%93%E5%90%88-week-10-%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 两种特化路线（结合 Week
+10 四层架构）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sysml-%E4%B8%8E-marte"><span class="nav-text">1.3 SysML 与 MARTE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8Cuml-profile"><span class="nav-text">二、UML Profile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-text">2.1 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stereotype%E6%9E%84%E9%80%A0%E5%9E%8B"><span class="nav-text">2.2 Stereotype（构造型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E7%BB%99-uml-%E5%8A%A0%E4%B8%80%E4%B8%AA-semaphore-%E6%A6%82%E5%BF%B5"><span class="nav-text">2.3 例子：给 UML 加一个
+Semaphore 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extension-vs-generalization%E8%AE%B0%E5%8F%B7%E6%98%93%E6%B7%B7"><span class="nav-text">2.4 Extension vs
+Generalization（记号易混）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90ai-agent-%E6%9E%84%E9%80%A0%E5%9E%8B"><span class="nav-text">2.5 例子：AI Agent 构造型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89overlay-profile%E5%8F%A0%E5%8A%A0-profile"><span class="nav-text">三、Overlay Profile（叠加
+Profile）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Boclobject-constraint-language"><span class="nav-text">四、OCL：Object Constraint
+Language</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%B1%BB%E5%9B%BE%E9%9C%80%E8%A6%81%E7%BA%A6%E6%9D%9F"><span class="nav-text">4.1 为什么类图需要约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B2%E4%B9%89%E8%B4%AF%E7%A9%BF%E7%9A%84-person-%E7%B1%BB"><span class="nav-text">4.2 讲义贯穿的 Person 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%8E%E4%B8%8D%E5%8F%98%E5%BC%8F"><span class="nav-text">4.3 上下文与不变式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%B1%9E%E6%80%A7%E7%82%B9%E5%8F%B7"><span class="nav-text">4.4 访问属性：点号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">4.5 数据类型与运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E6%93%8D%E4%BD%9C%E4%B8%8E---%E8%AE%B0%E5%8F%B7%E9%87%8D%E7%82%B9"><span class="nav-text">4.6 集合操作与 -&gt;
+记号（重点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8F%E8%AF%8D"><span class="nav-text">4.7 量词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6%E5%90%8E%E7%BD%AE%E6%9D%A1%E4%BB%B6design-by-contract"><span class="nav-text">4.8
+前置条件、后置条件（Design by Contract）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%93%8D%E4%BD%9C"><span class="nav-text">4.9 定义操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ocl-%E7%BB%83%E4%B9%A0%E5%9F%BA%E4%BA%8E-person-%E7%B1%BB%E8%87%AA%E6%8B%9F%E7%94%A8%E4%BA%8E%E5%A4%8D%E4%B9%A0"><span class="nav-text">4.10 OCL 练习（基于 Person
+类，自拟用于复习）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%AE%8C%E6%95%B4%E4%BE%8B%E5%AD%90healthcareagent-profile"><span class="nav-text">五、完整例子：HealthcareAgent
+Profile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-text">5.1 场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E4%B8%8E%E9%9C%80%E6%B1%82"><span class="nav-text">5.2 工作流与需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E5%BB%BA%E6%A8%A1%E4%BB%80%E4%B9%88"><span class="nav-text">5.3 需要建模什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile-%E5%AE%9A%E4%B9%89"><span class="nav-text">5.4 Profile 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ocl-%E7%BA%A6%E6%9D%9F%E8%AE%B2%E4%B9%89%E5%8E%9F%E6%96%87"><span class="nav-text">5.5 OCL 约束（讲义原文）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADagentic-%E8%BD%AF%E4%BB%B6-dsl-%E7%9A%84%E6%9C%80%E6%96%B0%E8%BF%9B%E5%B1%95"><span class="nav-text">六、Agentic 软件 DSL
+的最新进展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83tutorial-11-%E8%A6%81%E7%82%B9"><span class="nav-text">七、Tutorial 11 要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">八、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week11-specialise-modeling-language.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 11 讲课总结：用 Profile 特化 UML——构造型、标签定义、Extension 记号、Semaphore 与 AI Agent 例子、叠加 Profile、SysML 与 MARTE；OCL 的不变式、集合操作、量词与前后置条件；HealthcareAgent Profile 与约束；agentic DSL 前沿研究。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:50:00 / Modified: 04:13:54" itemprop="dateCreated datePublished" datetime="2026-11-03T13:50:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 11 讲课总结：用 Profile 特化 UML——构造型、标签定义、Extension 记号、Semaphore 与 AI Agent 例子、叠加 Profile、SysML 与 MARTE；OCL 的不变式、集合操作、量词与前后置条件；HealthcareAgent Profile 与约束；agentic DSL 前沿研究。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-11-讲课总结specialise-a-modeling-language">ELEC5620
+Week 11 讲课总结：Specialise a Modeling Language</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>11 Specialise a Modeling Langurage.pdf</code>（38
+页，文件名原样）+ <code>ELEC5620-TUT-11.pdf</code>（21 页，PDF
+内封面写作 “Tutorial 10”，内容是元建模与 Profile
+的回顾）。本周文件夹没有 Lab Note。本周无转录稿。</p>
+<p><strong>本周覆盖</strong>（软件建模路线的最后一步）： 1. 为什么要特化
+UML；<strong>Profile 机制</strong> 2. <strong>Stereotype、Tag
+definition、Extension</strong>；信号量与 AI Agent 例子 3.
+<strong>Overlay Profile</strong> 4.
+<strong>OCL</strong>：上下文、不变式、集合、量词、前后置条件 5.
+<strong>HealthcareAgent Profile</strong> 完整例子 6. Agentic DSL
+前沿研究</p>
+</blockquote>
+<p>相关笔记：[[26-S2-Course/ELEC5620/ELEC5620-Week10-Meta-Modeling-Summary|Week
+10
+元建模]]｜[[26-S2-Course/ELEC5620/ELEC5620-Week03-Requirement-Model-Summary|Week
+03 需求建模（agentic use case）]]</p>
+<hr>
+<h2 id="一背景为什么要特化建模语言">一、背景：为什么要特化建模语言</h2>
+<h3 id="从方法大战到-uml">1.1 从方法大战到 UML</h3>
+<p><strong>1990 年代</strong>：Booch OOD、<strong>OMT</strong>（Object
+Modelling
+Technique）、HOOD、Shlaer-Mellor、OODLE、CRC/RDD……<strong>还有约 80
+种其他方法</strong>。UML
+统一了它们，但一种通用语言不可能直接满足所有领域 →
+需要<strong>特化</strong>。</p>
+<h3 id="两种特化路线结合-week-10-四层架构">1.2 两种特化路线（结合 Week
+10 四层架构）</h3>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">路线</th>
+<th style="text-align: left;">做法</th>
+<th style="text-align: left;">位置</th>
+<th style="text-align: left;">代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>重量级：新建元模型</strong></td>
+<td style="text-align: left;">用 MOF 从头定义一个新的 M2
+语言（DSL）</td>
+<td style="text-align: left;">与 UML 平级的 M2</td>
+<td style="text-align: left;">工具、经验都要重建</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>轻量级：UML Profile</strong></td>
+<td style="text-align: left;">在 UML
+元模型上<strong>扩展</strong>（不修改）</td>
+<td style="text-align: left;">挂在 UML（M2）上</td>
+<td style="text-align: left;"><strong>与标准 UML 兼容，可复用 UML
+工具和经验</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>UML 自带语言特化工具包：Profile 机制。</strong> 它允许对 UML
+模型做<strong>领域特定的解释</strong>，同时<strong>与通用（标准）UML
+兼容</strong>。由此派生出 UML for Real Time、UML for Systems
+Engineering、UML for Business Modeling 等。</p>
+</blockquote>
+<h3 id="sysml-与-marte">1.3 SysML 与 MARTE</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Profile</th>
+<th style="text-align: left;">领域</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>SysML</strong></td>
+<td style="text-align: left;"><strong>系统工程</strong></td>
+<td style="text-align: left;">提供捕获<strong>需求</strong>及其与其他系统工程制品关系的概念和关系（如
+requirement 图）；<strong>是 use case 建模的补充</strong>（Friedenthal,
+Moore, Steiner; OMG）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MARTE</strong></td>
+<td style="text-align: left;"><strong>实时与嵌入式</strong>应用</td>
+<td style="text-align: left;">时间、资源、性能建模</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="二uml-profile">二、UML Profile</h2>
+<h3 id="定义">2.1 定义</h3>
+<blockquote>
+<p><strong>Profile</strong>：为<strong>特定领域和平台</strong>定制 UML
+模型的<strong>通用扩展机制</strong>。 Profile 由
+<strong>stereotypes（构造型）、tag definitions（标签定义）和
+constraints（约束）</strong> 定义。</p>
+</blockquote>
+<p><strong>两种用途</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">用途</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>定义领域特定建模语言（DSML）</strong></td>
+<td style="text-align: left;">用构造型给 UML
+元素加上领域含义，形成新的“方言”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>定义可叠加到现有模型上的领域特定视点</strong></td>
+<td style="text-align: left;"><strong>重新解释原有模型</strong>的一种方式（Overlay，见第三节）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stereotype构造型">2.2 Stereotype（构造型）</h3>
+<ul>
+<li>让设计者<strong>扩展 UML
+的词汇表</strong>，从现有元素<strong>派生出新的模型元素</strong></li>
+<li>具有适合特定问题域的<strong>特定属性</strong></li>
+<li><strong>构造型的属性称为 tag
+definitions（标签定义）</strong>；应用构造型时给这些属性赋的值叫 tagged
+values</li>
+</ul>
+<h3 id="例子给-uml-加一个-semaphore-概念">2.3 例子：给 UML 加一个
+Semaphore 概念</h3>
+<p><strong>信号量语义</strong>：一种限制多线程环境中<strong>并发访问数量</strong>的特殊对象。达到上限时，后续访问被挂起，直到某个线程释放信号量，此时<strong>最早被挂起的访问</strong>获得访问权。</p>
+<p><strong>需要的是一种特殊的对象</strong>：拥有 UML
+对象的所有一般特性，但加上精化。</p>
+<p><strong>设计选择</strong>：精化 UML 的 <strong>Class</strong>
+概念——</p>
+<ol type="1">
+<li><strong>“附加”信号量语义</strong>（通过给 Class
+加构造型来隐含）</li>
+<li><strong>添加约束</strong>捕获信号量语义（如达到最大并发数后，后续请求按
+<strong>FIFO</strong> 排队）</li>
+<li><strong>添加特征属性</strong>（如并发上限 <code>limit</code>）</li>
+<li><strong>添加特征操作</strong>（<code>getSemaphore()</code>、<code>releaseSemaphore()</code>）</li>
+</ol>
+<blockquote>
+<p>本质：<strong>创建原元类的一个新“子类”</strong>，带上上述精化。</p>
+</blockquote>
+<p><strong>图形定义</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌──────────────────┐</span><br><span class="line">│  «metaclass»     │</span><br><span class="line">│   UML::Class     │</span><br><span class="line">└────────▲─────────┘</span><br><span class="line">         ┃  Extension（实线 + 实心三角箭头，从构造型指向元类）</span><br><span class="line">┌──────────────────────────┐        ┌─────────────────────────────┐</span><br><span class="line">│ «stereotype»  [可选图标] │ ┄┄┄┄┄  │ {active-&gt;size() &lt;= limit}   │</span><br><span class="line">│ Semaphore                │        │ {limit &lt;= MAXlimit}          │</span><br><span class="line">│ limit : Integer          │        └─────────────────────────────┘</span><br><span class="line">│ getSema : Operation      │              Constraints</span><br><span class="line">│ relSema : Operation      │</span><br><span class="line">└──────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h3 id="extension-vs-generalization记号易混">2.4 Extension vs
+Generalization（记号易混）</h3>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">连接</th>
+<th style="text-align: left;">记号</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Extension</strong></td>
+<td style="text-align: left;"><strong>构造型 → 元类</strong></td>
+<td style="text-align: left;"><strong>实线 +
+实心（黑）三角箭头</strong></td>
+<td style="text-align: left;"><code>«stereotype» Tool ━━▶ «metaclass» UML::Operation</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Generalization</strong></td>
+<td style="text-align: left;">构造型 → 构造型</td>
+<td style="text-align: left;">实线 + <strong>空心</strong>三角箭头</td>
+<td style="text-align: left;"><code>«stereotype» ReviewedTool ──▷ «stereotype» Tool</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>讲义注：构造型的特化只是为了解释记号（可选）。<strong>考试画 profile
+图时，构造型到元类必须用
+Extension（实心箭头），不要画成普通泛化。</strong></p>
+</blockquote>
+<h3 id="例子ai-agent-构造型">2.5 例子：AI Agent 构造型</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">«metaclass» UML::Class</span><br><span class="line">        ▲ (Extension)</span><br><span class="line">«stereotype» Agent</span><br><span class="line">  AIModel   : LLM</span><br><span class="line">  context   : String</span><br><span class="line">  genPlan   : Planer</span><br><span class="line">  startConv : ConvController</span><br><span class="line">约束：{ active-&gt;size() &lt;= limit &lt;= MAX }</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>用法：在类图里把某个类标为 <code>«Agent»</code>，就能给它填
+<code>AIModel</code>、<code>context</code>
+等标签值，工具也能据此做检查或生成代码。</p>
+</blockquote>
+<hr>
+<h2 id="三overlay-profile叠加-profile">三、Overlay Profile（叠加
+Profile）</h2>
+<ul>
+<li>Profile 可作为<strong>叠加机制</strong>，<strong>动态地 apply /
+unapply</strong>，提供 UML 模型的某种视图</li>
+<li>让 UML 模型<strong>从视点定义者的角度被解释</strong></li>
+<li>⚠️ <strong>apply 或 unapply profile 对底层模型没有影响</strong></li>
+</ul>
+<p><strong>例：把 UML
+模型片段重新解释为排队网络，做性能分析</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">原模型：           user1 ──▶ DBase ◀── user2</span><br><span class="line">apply 性能 profile：«client» user1 {arrivalRate = …}</span><br><span class="line">                   «server» DBase {serviceRate = …}</span><br><span class="line">                   «client» user2 {arrivalRate = …}</span><br><span class="line">unapply：          回到原模型，什么都没变</span><br></pre></td></tr></table></figure>
+<p>叠加后可以用排队论计算，例如对单服务器 M/M/1 队列：</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -2.163ex;" xmlns="http://www.w3.org/2000/svg" width="47.086ex" height="5.262ex" role="img" focusable="false" viewBox="0 -1370 20811.9 2326"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\rho = \frac{\lambda_1 + \lambda_2}{\mu},\qquad W = \frac{1}{\mu -
+(\lambda_1+\lambda_2)}\quad(\rho<1)
+"><g data-mml-node="mi" data-latex="\rho"><path data-c="1D70C" d="M361 442C248 442 154 320 129 220L33-169C31-177 30-182 30-185C30-206 40-216 61-216C76-216 89-208 99-193L160 46C183 7 215-13 256-13C322-13 380 19 431 84C478 145 502 210 502 277C502 368 449 442 361 442M359 412C402 412 423 381 423 319C423 292 417 257 406 212C384 127 353 70 314 40C293 24 274 16 255 16C236 16 219 23 206 36C185 57 175 79 175 100C176 107 178 119 182 136C205 231 225 292 241 320C276 381 315 412 359 412Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(794.8,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mfrac" data-latex="\frac{\lambda_1 + \lambda_2}{\mu}" transform="translate(1850.6,0)"><g data-mml-node="mrow" data-latex="\lambda_1  + \lambda_2" transform="translate(220,676)"><g data-mml-node="msub" data-latex="\lambda_1"><g data-mml-node="mi" data-latex="\lambda"><path data-c="1D706" d="M86-13C97-13 109-6 122 9L355 285C390 189 416 117 433 68C444 37 451 19 456 12C467-3 486-11 512-11L533-11C543-10 548-6 548 3C548 5 546 9 542 14C535 21 528 36 520 59L319 621C302 670 261 694 196 694C181 694 174 689 174 679C174 672 180 667 191 664C205 660 214 655 219 649C226 641 236 621 247 589L342 322L72 53C59 40 53 29 53 20C53 2 68-13 86-13Z"></path></g><g data-mml-node="mn" transform="translate(616,-150) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g><g data-mml-node="mo" data-latex="+" transform="translate(1241.8,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="\lambda_2" transform="translate(2242,0)"><g data-mml-node="mi" data-latex="\lambda"><path data-c="1D706" d="M86-13C97-13 109-6 122 9L355 285C390 189 416 117 433 68C444 37 451 19 456 12C467-3 486-11 512-11L533-11C543-10 548-6 548 3C548 5 546 9 542 14C535 21 528 36 520 59L319 621C302 670 261 694 196 694C181 694 174 689 174 679C174 672 180 667 191 664C205 660 214 655 219 649C226 641 236 621 247 589L342 322L72 53C59 40 53 29 53 20C53 2 68-13 86-13Z"></path></g><g data-mml-node="mn" transform="translate(616,-150) scale(0.707)" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g><g data-mml-node="mi" data-latex="\mu" transform="translate(1549.3,-686)"><path data-c="1D707" d="M572 142C572 151 567 156 556 156C548 156 542 149 539 136C519 56 495 16 468 16C451 16 442 30 442 58C442 75 448 109 461 159L489 266C498 302 506 327 512 358L518 386C520 393 521 398 521 400C521 421 510 431 488 431C466 431 452 419 446 394L374 108C374 97 358 77 326 47C304 26 279 16 250 16C204 16 181 43 181 98C181 117 185 144 194 181L236 347C244 378 249 400 251 411C251 432 240 442 218 442C196 442 182 429 175 403L33-169C31-177 30-182 30-185C30-206 41-216 62-216C77-216 89-208 100-193C103-186 120-117 153 14C177-4 208-13 246-13C305-13 344 18 375 54C386 17 419-13 466-13C535-13 556 68 572 142Z"></path></g><rect width="3461.6" height="60" x="120" y="220"></rect></g><g data-mml-node="mo" data-latex="," transform="translate(5552.1,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mspace" data-latex="\qquad" transform="translate(5830.1,0)"></g><g data-mml-node="mi" data-latex="W" transform="translate(7996.8,0)"><path data-c="1D44A" d="M956 680C937 680 872 683 853 683C838 683 830 675 830 660C830 650 836 645 848 644C885 643 903 632 903 610C903 604 899 594 891 579L629 125L594 602C590 638 614 644 659 644C680 644 690 652 690 668C690 678 684 683 671 683C649 683 572 680 550 680C531 680 465 683 446 683C431 683 423 675 423 659C423 649 432 644 451 644C482 644 498 637 499 623L505 548L261 125L225 613C222 638 264 644 296 644C313 644 321 652 321 668C321 678 315 683 303 683C281 683 203 680 181 680C162 680 96 683 77 683C62 683 55 675 55 660C55 649 65 644 84 644C126 644 130 642 132 612L177 7C178-12 185-22 197-22C210-20 215-17 223-2C224-1 224 0 224 1L509 494L545 7C546-12 553-22 565-22C575-22 584-15 592-1L918 562C945 611 964 639 1025 644C1043 646 1048 651 1048 668C1048 678 1043 683 1032 683C1018 683 970 680 956 680Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(9322.6,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mfrac" data-latex="\frac{1}{\mu -
+(\lambda_1+\lambda_2)}" transform="translate(10378.3,0)"><g data-mml-node="mn" data-latex="1" transform="translate(2902.5,676)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mrow" data-latex="\mu -
+(\lambda_1 +\lambda_2 )" transform="translate(220,-708)"><g data-mml-node="mi" data-latex="\mu"><path data-c="1D707" d="M572 142C572 151 567 156 556 156C548 156 542 149 539 136C519 56 495 16 468 16C451 16 442 30 442 58C442 75 448 109 461 159L489 266C498 302 506 327 512 358L518 386C520 393 521 398 521 400C521 421 510 431 488 431C466 431 452 419 446 394L374 108C374 97 358 77 326 47C304 26 279 16 250 16C204 16 181 43 181 98C181 117 185 144 194 181L236 347C244 378 249 400 251 411C251 432 240 442 218 442C196 442 182 429 175 403L33-169C31-177 30-182 30-185C30-206 41-216 62-216C77-216 89-208 100-193C103-186 120-117 153 14C177-4 208-13 246-13C305-13 344 18 375 54C386 17 419-13 466-13C535-13 556 68 572 142Z"></path></g><g data-mml-node="mo" data-latex="-" transform="translate(825.2,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(1825.4,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="msub" data-latex="\lambda_1" transform="translate(2214.4,0)"><g data-mml-node="mi" data-latex="\lambda"><path data-c="1D706" d="M86-13C97-13 109-6 122 9L355 285C390 189 416 117 433 68C444 37 451 19 456 12C467-3 486-11 512-11L533-11C543-10 548-6 548 3C548 5 546 9 542 14C535 21 528 36 520 59L319 621C302 670 261 694 196 694C181 694 174 689 174 679C174 672 180 667 191 664C205 660 214 655 219 649C226 641 236 621 247 589L342 322L72 53C59 40 53 29 53 20C53 2 68-13 86-13Z"></path></g><g data-mml-node="mn" transform="translate(616,-150) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g><g data-mml-node="mo" data-latex="+" transform="translate(3456.2,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="\lambda_2" transform="translate(4456.4,0)"><g data-mml-node="mi" data-latex="\lambda"><path data-c="1D706" d="M86-13C97-13 109-6 122 9L355 285C390 189 416 117 433 68C444 37 451 19 456 12C467-3 486-11 512-11L533-11C543-10 548-6 548 3C548 5 546 9 542 14C535 21 528 36 520 59L319 621C302 670 261 694 196 694C181 694 174 689 174 679C174 672 180 667 191 664C205 660 214 655 219 649C226 641 236 621 247 589L342 322L72 53C59 40 53 29 53 20C53 2 68-13 86-13Z"></path></g><g data-mml-node="mn" transform="translate(616,-150) scale(0.707)" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g><g data-mml-node="mo" data-latex=")" transform="translate(5476,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g><rect width="6065" height="60" x="120" y="220"></rect></g><g data-mml-node="mspace" data-latex="\quad" transform="translate(16683.3,0)"></g><g data-mml-node="mo" data-latex="(" transform="translate(17683.3,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="\rho" transform="translate(18072.3,0)"><path data-c="1D70C" d="M361 442C248 442 154 320 129 220L33-169C31-177 30-182 30-185C30-206 40-216 61-216C76-216 89-208 99-193L160 46C183 7 215-13 256-13C322-13 380 19 431 84C478 145 502 210 502 277C502 368 449 442 361 442M359 412C402 412 423 381 423 319C423 292 417 257 406 212C384 127 353 70 314 40C293 24 274 16 255 16C236 16 219 23 206 36C185 57 175 79 175 100C176 107 178 119 182 136C205 231 225 292 241 320C276 381 315 412 359 412Z"></path></g><g data-mml-node="mo" data-latex="<" transform="translate(18867.1,0)"><path data-c="3C" d="M666-45C683-52 701-39 701-23C701-13 696-6 687-2L153 250L687 502C696 506 701 513 701 522C701 539 693 547 677 547C673 547 669 546 666 545L92 273C82 268 77 261 77 250C77 239 82 232 92 227Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(19922.9,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(20422.9,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container></span></p>
+<p>其中 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="2.059ex" height="1.927ex" role="img" focusable="false" viewBox="0 -694 910 851.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\lambda_i"><g data-mml-node="msub" data-latex="\lambda_i"><g data-mml-node="mi" data-latex="\lambda"><path data-c="1D706" d="M86-13C97-13 109-6 122 9L355 285C390 189 416 117 433 68C444 37 451 19 456 12C467-3 486-11 512-11L533-11C543-10 548-6 548 3C548 5 546 9 542 14C535 21 528 36 520 59L319 621C302 670 261 694 196 694C181 694 174 689 174 679C174 672 180 667 191 664C205 660 214 655 219 649C226 641 236 621 247 589L342 322L72 53C59 40 53 29 53 20C53 2 68-13 86-13Z"></path></g><g data-mml-node="mi" transform="translate(616,-150) scale(0.707)" data-latex="i"><path data-c="1D456" d="M284 621C284 648 271 661 244 661C216 661 188 633 188 605C188 578 202 565 229 565C257 565 284 593 284 621M259 138C237 59 205 19 164 19C151 19 144 28 144 47C144 64 173 150 232 306C240 329 244 347 244 360C244 409 210 445 161 445C118 445 84 420 59 369C39 328 29 301 29 288C29 279 34 275 45 275C58 275 60 281 64 295C87 375 118 415 158 415C171 415 178 406 178 387C178 373 175 357 168 338C145 275 121 208 101 155C86 115 78 88 78 74C78 25 114-11 162-11C205-11 239 14 264 64C283 103 293 130 293 145C293 154 288 159 277 159C274 159 259 150 259 138Z"></path></g></g></g></g></svg></mjx-container></span> 是
+<code>arrivalRate</code>，<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.489ex;" xmlns="http://www.w3.org/2000/svg" width="1.364ex" height="1.489ex" role="img" focusable="false" viewBox="0 -442 603 658"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\mu"><g data-mml-node="mi" data-latex="\mu"><path data-c="1D707" d="M572 142C572 151 567 156 556 156C548 156 542 149 539 136C519 56 495 16 468 16C451 16 442 30 442 58C442 75 448 109 461 159L489 266C498 302 506 327 512 358L518 386C520 393 521 398 521 400C521 421 510 431 488 431C466 431 452 419 446 394L374 108C374 97 358 77 326 47C304 26 279 16 250 16C204 16 181 43 181 98C181 117 185 144 194 181L236 347C244 378 249 400 251 411C251 432 240 442 218 442C196 442 182 429 175 403L33-169C31-177 30-182 30-185C30-206 41-216 62-216C77-216 89-208 100-193C103-186 120-117 153 14C177-4 208-13 246-13C305-13 344 18 375 54C386 17 419-13 466-13C535-13 556 68 572 142Z"></path></g></g></g></svg></mjx-container></span> 是
+<code>serviceRate</code>。（公式为标准排队论补充，讲义只给出
+apply/unapply 示意。）</p>
+<blockquote>
+<p>与 Week 2 的 <strong>Model Transformation</strong>（“UML →
+排队网络模型”的域到域转换）呼应；与 Week 4
+的<strong>视点</strong>呼应——叠加 profile
+就是一种<strong>视点</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="四oclobject-constraint-language">四、OCL：Object Constraint
+Language</h2>
+<h3 id="为什么类图需要约束">4.1 为什么类图需要约束</h3>
+<ul>
+<li>UML
+作为一种<strong>非正式语言</strong>，声明了属性和关系，但<strong>需要对它们的值加上精确规则</strong></li>
+<li><strong>OCL</strong> 是 UML
+语境下表达<strong>关于模型的精确规则</strong>的<strong>形式语言</strong>；补充
+UML 图，描述<strong>有效对象和操作必须满足的条件</strong></li>
+<li>OMG 标准化，用于为 UML
+分类器和对象写<strong>约束和查询</strong></li>
+</ul>
+<p><strong>例</strong>：<code>Adult (+parent 0..*) —— (+child 0..*) Child</code>，多重性写得太宽松，用
+OCL 收紧：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">context Child inv:</span><br><span class="line">    self.parent-&gt;size() &lt;= 2</span><br></pre></td></tr></table></figure>
+<h3 id="讲义贯穿的-person-类">4.2 讲义贯穿的 Person 类</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Person</span><br><span class="line">+name : String</span><br><span class="line">+isMarried : Boolean</span><br><span class="line">+gender : Gender</span><br><span class="line">+age : Integer</span><br><span class="line">+isSenior() : Boolean</span><br><span class="line">自关联：husband 0..1 —— wife 0..1；friend 0..* —— 0..*</span><br></pre></td></tr></table></figure>
+<h3 id="上下文与不变式">4.3 上下文与不变式</h3>
+<ul>
+<li><strong>Context</strong>：约束（也叫<strong>不变式
+invariant</strong>）所作用的类（或对象）——<code>context Person inv: ...</code></li>
+<li>类约束是从<strong>上下文类的一个匿名成员</strong>的视角写的（即
+<code>self</code>）⇒ <strong>对类的所有成员都成立</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">context Person inv:</span><br><span class="line">    ((self.isMarried) and (self.gender = #M))</span><br><span class="line">        implies ((self.wife-&gt;size() = 1) and (self.husband-&gt;size() = 0))</span><br></pre></td></tr></table></figure>
+<p>读法：<strong>已婚男性恰好有一个 wife，没有 husband</strong>。</p>
+<h3 id="访问属性点号">4.4 访问属性：点号</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">self.name        -- 返回 name 字符串</span><br><span class="line">self.isSenior()  -- 返回 True / False</span><br><span class="line">self.friend      -- 返回一个集合：self 的所有朋友</span><br></pre></td></tr></table></figure>
+<h3 id="数据类型与运算符">4.5 数据类型与运算符</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>基本类型</strong></td>
+<td style="text-align: left;">复用
+UML：<strong>Boolean、Integer、String、Real</strong>；支持常见算术和逻辑运算</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>集合类型</strong></td>
+<td style="text-align: left;"><strong>Set、OrderedSet、Bag、Sequence</strong>（都是
+Collection 的子类型）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>模型类型</strong></td>
+<td style="text-align: left;">建模者定义的应用类，如
+Person、Adult、Child、Gender</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数值</strong>：<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code>、<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>、<code>.mod()</code>……
+<strong>逻辑</strong>：<code>not</code>、<code>or</code>、<code>and</code>、<code>xor</code>、<code>=</code>、<code>&lt;&gt;</code>（不等）、<code>implies</code>、<code>if … then … else … endif</code></p>
+<h3 id="集合操作与---记号重点">4.6 集合操作与 <code>-&gt;</code>
+记号（重点）</h3>
+<blockquote>
+<p><strong>对集合应用操作用右箭头
+<code>-&gt;</code></strong>；<strong>访问对象属性用点
+<code>.</code></strong>。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">操作</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>size()</code></td>
+<td style="text-align: left;">集合大小</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>count(v)</code></td>
+<td style="text-align: left;">v 出现的次数</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>includes(v)</code></td>
+<td style="text-align: left;">是否包含 v</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>includesAll(c)</code></td>
+<td style="text-align: left;">是否包含集合 c 的全部元素</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>isEmpty()</code> /
+<code>notEmpty()</code></td>
+<td style="text-align: left;">是否为空 / 非空</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>exists(expr)</code></td>
+<td style="text-align: left;"><strong>至少一个</strong>元素使 expr
+为真</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>forAll(expr)</code></td>
+<td style="text-align: left;"><strong>所有</strong>元素使 expr 为真</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">self.friend-&gt;size()      -- self 的朋友数</span><br><span class="line">self.friend-&gt;isEmpty()   -- self 是否没有朋友</span><br></pre></td></tr></table></figure>
+<h3 id="量词">4.7 量词</h3>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 38%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">OCL</th>
+<th style="text-align: center;">一阶逻辑</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>exists</code></td>
+<td style="text-align: center;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.258ex" height="1.548ex" role="img" focusable="false" viewBox="0 -684 556 684"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\exists"><g data-mml-node="mi" data-latex="\exists"><path data-c="2203" d="M476 0C492 0 500 8 500 24L500 660C500 676 492 684 476 684L80 684C64 684 56 676 56 660C56 645 64 637 80 637L453 637L453 366L80 366C64 366 56 358 56 342C56 326 64 318 80 318L453 318L453 47L80 47C64 47 56 39 56 24C56 8 64 0 80 0Z"></path></g></g></g></svg></mjx-container></span></td>
+<td style="text-align: left;"><code>self.friend-&gt;exists(f : Person \| f.name = 'Bob')</code>
+—— <strong>至少一个朋友叫 Bob</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>forAll</code></td>
+<td style="text-align: center;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0.005ex;" xmlns="http://www.w3.org/2000/svg" width="1.507ex" height="1.552ex" role="img" focusable="false" viewBox="0 -688 666 686"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\forall"><g data-mml-node="mi" data-latex="\forall"><path data-c="2200" d="M356 18L620 651C626 666 622 676 607 682C592 688 582 684 576 670L481 441L185 441L89 670C85 679 78 684 68 684C52 684 38 669 46 651L310 18C314 7 322 2 333 2C344 2 352 7 356 18M205 393L461 393L333 85Z"></path></g></g></g></svg></mjx-container></span></td>
+<td style="text-align: left;"><code>Person.allInstances()-&gt;forAll(p : Person \| p.name &lt;&gt; '')</code>
+—— <strong>任何人的名字都不能是空串</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="前置条件后置条件design-by-contract">4.8
+前置条件、后置条件（Design by Contract）</h3>
+<ul>
+<li>适用于 <strong>Operations、Receptions 和 UML Behaviors</strong></li>
+<li><strong>pre</strong>：操作前必须成立；<strong>post</strong>：操作完成后必须成立</li>
+<li>后置条件中可用 <strong><code>attribute@pre</code></strong>
+引用操作<strong>执行前</strong>的值</li>
+</ul>
+<h3 id="定义操作">4.9 定义操作</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">context &lt;operation-name&gt;(&lt;parameters&gt;) : &lt;return-type&gt;</span><br><span class="line">    [pre:  &lt;Boolean-expr&gt;]</span><br><span class="line">    [post: &lt;Boolean-expr&gt;]</span><br><span class="line">    [body: &lt;expression&gt;]     -- 必须求值为 &lt;return-type&gt; 的一种</span><br><span class="line"></span><br><span class="line">context Person::isSenior() : Boolean</span><br><span class="line">    pre:  age &gt;= 0</span><br><span class="line">    post: age = age@pre      -- 操作完成后 age 不变</span><br><span class="line">    body: (age &gt;= 65)</span><br></pre></td></tr></table></figure>
+<h3 id="ocl-练习基于-person-类自拟用于复习">4.10 OCL 练习（基于 Person
+类，自拟用于复习）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">自然语言规则</th>
+<th style="text-align: left;">OCL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">年龄非负</td>
+<td style="text-align: left;"><code>context Person inv: self.age &gt;= 0</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">不能是自己的朋友</td>
+<td style="text-align: left;"><code>context Person inv: not self.friend-&gt;includes(self)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">已婚者必须至少有一个配偶</td>
+<td style="text-align: left;"><code>context Person inv: self.isMarried implies (self.wife-&gt;size() + self.husband-&gt;size() = 1)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">未成年人不能结婚</td>
+<td style="text-align: left;"><code>context Person inv: self.age &lt; 18 implies not self.isMarried</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">所有朋友都已成年</td>
+<td style="text-align: left;"><code>context Person inv: self.friend-&gt;forAll(f \| f.age &gt;= 18)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>marry(p)</code> 之后双方都已婚</td>
+<td style="text-align: left;"><code>context Person::marry(p : Person) pre: not self.isMarried and not p.isMarried  post: self.isMarried and p.isMarried</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>birthday()</code> 让年龄加 1</td>
+<td style="text-align: left;"><code>context Person::birthday() post: self.age = self.age@pre + 1</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>常见错误</strong>：对集合用 <code>.</code>（应用
+<code>-&gt;</code>）；在 <code>inv</code> 里忘了
+<code>context</code>；<code>implies</code> 前后颠倒；后置条件里该用
+<code>@pre</code> 的地方没用。</p>
+</blockquote>
+<hr>
+<h2 id="五完整例子healthcareagent-profile">五、完整例子：HealthcareAgent
+Profile</h2>
+<h3 id="场景">5.1 场景</h3>
+<ul>
+<li><strong>目标</strong>：安排一次<strong>已批准</strong>的随访预约</li>
+<li><strong>允许的工作</strong>：查看转诊详情、<strong>提议</strong>预约</li>
+<li><strong>Agent 架构</strong>（三个组件）：</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><code>«component» Decision</code></th>
+<th style="text-align: left;"><code>«component» Controller</code></th>
+<th style="text-align: left;"><code>«component» Service</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">提议下一步，使用观察结果</td>
+<td style="text-align: left;"><code>maxSteps</code>、允许的操作</td>
+<td style="text-align: left;">授权调用、<strong>检查审批</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这就是 Week 4 的<strong>控制与功能分离</strong>：Decision（LLM
+推理，功能）只“提议”；Controller 持有控制策略；Service
+在执行点检查审批（机制）。</p>
+</blockquote>
+<h3 id="工作流与需求">5.2 工作流与需求</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Read referral</strong></td>
+<td style="text-align: left;">检查<strong>当前授权和同意</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Propose booking</strong></td>
+<td style="text-align: left;">呈现<strong>确切的动作</strong>供审批</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Commit booking</strong></td>
+<td style="text-align: left;">检查<strong>审批、身份和时段</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Complete or stop</strong></td>
+<td style="text-align: left;">记录结果、<strong>超时或预算耗尽</strong></td>
+</tr>
+</tbody>
+</table>
+<p>需求到模型属性的对应：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">需求</th>
+<th style="text-align: left;">建模为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal and maxSteps</td>
+<td style="text-align: left;"><strong>步数计数器和停止决策</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Audit and timeout</td>
+<td style="text-align: left;"><strong>记录的结果和时间界限</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Purpose and consent policy</td>
+<td style="text-align: left;"><strong>当前同意和访问范围</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="需要建模什么">5.3 需要建模什么</h3>
+<p><strong>方案 A：定义一种建模语言</strong>（Week 10 的路线）</p>
+<ul>
+<li><strong>抽象语法</strong>：Agent 拥有 Tool，使用 DataSource</li>
+<li><strong>具体语法</strong>：与 UML 相同</li>
+<li><strong>语义</strong>：Agent
+通过调用工具协调预约，并<strong>在执行时检查审批</strong>……</li>
+</ul>
+<p><strong>方案 B：定义基于 UML Profile 的 DSML</strong>（本周路线）</p>
+<ul>
+<li><strong>UML 元模型</strong>（Class、Operation）定义 UML 概念</li>
+<li><strong>Stereotype</strong> 为 UML
+元素定义<strong>领域含义</strong></li>
+<li><strong>Extension</strong> 指出<strong>允许扩展的 UML
+元类</strong></li>
+<li><strong>类型化属性</strong>（tag
+definitions）在构造型应用上保存值</li>
+</ul>
+<h3 id="profile-定义">5.4 Profile 定义</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">«profile» HealthcareAgent</span><br><span class="line">┌─────────────────────┐  ┌────────────────────────┐  ┌─────────────────────┐</span><br><span class="line">│ «metaclass»         │  │ «metaclass»            │  │ «metaclass»         │</span><br><span class="line">│ UML::Class          │  │ UML::Operation         │  │ UML::Class          │</span><br><span class="line">└─────────▲───────────┘  └──────────▲─────────────┘  └─────────▲───────────┘</span><br><span class="line">          ┃ Extension               ┃ Extension                ┃ Extension</span><br><span class="line">┌─────────────────────┐  ┌────────────────────────┐  ┌─────────────────────┐</span><br><span class="line">│ «stereotype» Agent  │  │ «stereotype» Tool      │  │ «stereotype»        │</span><br><span class="line">│ goal : String       │  │ effect : Effect        │  │   DataSource        │</span><br><span class="line">│ autonomy : Autonomy │  │ approvalRequired : Bool│  │ resource : String   │</span><br><span class="line">│ maxSteps : Integer  │  │ auditRequired : Bool   │  │ purpose : String    │</span><br><span class="line">│                     │  │ timeoutSec : Integer   │  │ consentRequired:Bool│</span><br><span class="line">└─────────────────────┘  └────────────────────────┘  └─────────────────────┘</span><br></pre></td></tr></table></figure>
+<p><strong>标签定义的取值</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">标签</th>
+<th style="text-align: left;">取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Autonomy</strong>（枚举）</td>
+<td style="text-align: left;"><strong>assist</strong>、<strong>supervised</strong>、<strong>bounded</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Effect</strong>（枚举）</td>
+<td style="text-align: left;">对领域服务数据的 <strong>read</strong> 或
+<strong>write</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>maxSteps</strong></td>
+<td style="text-align: left;">最多提议的工具调用次数，<strong>包括失败的调用</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意 <code>Tool</code> 扩展的是
+<strong>UML::Operation</strong>（工具是 agent 能调用的操作），而
+<code>Agent</code> 和 <code>DataSource</code> 扩展
+<strong>UML::Class</strong>。</p>
+</blockquote>
+<h3 id="ocl-约束讲义原文">5.5 OCL 约束（讲义原文）</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">context HealthcareAgent::Agent</span><br><span class="line">inv GoalPresent: self.goal.size() &gt; 0</span><br><span class="line">inv StepBound:   self.maxSteps &gt;= 1 and self.maxSteps &lt;= 20</span><br><span class="line"></span><br><span class="line">context HealthcareAgent::Tool</span><br><span class="line">inv WriteNeedsApproval: self.effect = HealthcareAgent::Effect::write</span><br><span class="line">                        implies self.approvalRequired</span><br><span class="line">inv AuditRequired:      self.auditRequired</span><br><span class="line">inv PositiveTimeout:    self.timeoutSec &gt; 0</span><br><span class="line"></span><br><span class="line">context HealthcareAgent::DataSource</span><br><span class="line">inv PurposePresent:  self.purpose.size() &gt; 0</span><br><span class="line">inv ConsentRequired: self.consentRequired</span><br></pre></td></tr></table></figure>
+<p>逐条解读：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">约束</th>
+<th style="text-align: left;">对应需求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>GoalPresent</code></td>
+<td style="text-align: left;">每个 agent 必须有明确目标（Week
+3：写业务结果）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>StepBound</code></td>
+<td style="text-align: left;">步数有上界（1–20），防止无限循环、烧
+token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>WriteNeedsApproval</code></strong></td>
+<td style="text-align: left;"><strong>有写效果的工具必须需要审批</strong>——Week
+3 “高影响动作要人工检查点”、Week 5 “High-impact action? → add approval +
+policy” 的<strong>形式化版本</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>AuditRequired</code></td>
+<td style="text-align: left;">所有工具调用都要审计（可重建动作原因，Week
+4 auditability）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PositiveTimeout</code></td>
+<td style="text-align: left;">每个工具有超时</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>PurposePresent</code> /
+<code>ConsentRequired</code></td>
+<td style="text-align: left;">数据源必须说明用途并要求同意（隐私）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意 <code>goal.size()</code> 这里用的是<strong>点号</strong>——因为
+<code>goal</code> 是 String，<code>size()</code> 是 String
+的操作，不是集合操作。对比 <code>self.friend-&gt;size()</code>（集合用
+<code>-&gt;</code>）。</p>
+</blockquote>
+<p><strong>应用示例（M1 模型中）</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">«Agent» FollowUpBookingAgent {goal = "Arrange approved follow-up", autonomy = bounded, maxSteps = 8}</span><br><span class="line">  «Tool» readReferral()   {effect = read,  approvalRequired = false, auditRequired = true, timeoutSec = 10}</span><br><span class="line">  «Tool» commitBooking()  {effect = write, approvalRequired = true,  auditRequired = true, timeoutSec = 30}</span><br><span class="line">«DataSource» ReferralStore {resource = "EHR referrals", purpose = "follow-up scheduling", consentRequired = true}</span><br></pre></td></tr></table></figure>
+<p>如果有人把 <code>commitBooking</code> 的
+<code>approvalRequired</code> 改成
+<code>false</code>，<code>WriteNeedsApproval</code>
+会<strong>在建模工具中直接报错</strong>——这就是“模型是 agent
+控制平面”的意义。</p>
+<hr>
+<h2 id="六agentic-软件-dsl-的最新进展">六、Agentic 软件 DSL
+的最新进展</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">论文</th>
+<th style="text-align: left;">要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Malamas et al., “Toward efficient
+vibe coding: An LLM-based agent for low-code software
+development”</strong>, <em>Journal of Computer Languages</em>
+(2025)</td>
+<td style="text-align: left;"><strong>DSL</strong>
+给领域提供显式的概念、关系和规则；模型用这套词汇描述应用，而不是无限制的程序文本。<strong>低代码平台</strong>提供建模工具，但用户仍需选择、连接元素并满足语言约束。<strong>LLM
+帮助用户在基于 DSL
+的低代码平台中构建模型</strong>——用户描述想要的功能，不必先学会所有建模命令</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Delgado, Burgueño, Clarisó, “A
+framework for assessing the capabilities of code generation of
+constraint DSLs with LLMs”</strong>, <em>JSS</em> (2026)</td>
+<td style="text-align: left;">提出评估 LLM 从文本规格生成 DSL
+代码（<strong>OCL</strong>）的框架，并与 Python
+比较；<strong>区分良构性（well-formedness）与正确性</strong>——语法有效的代码仍可能表达<strong>错误的约束</strong>；<strong>代码修复和多次生成</strong>能提升结果，但
+<strong>Python 整体表现更好</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Wang, Poskitt, Sun, “AgentSpec:
+Customizable runtime enforcement for safe and reliable LLM
+agents”</strong>, <em>ICSE 2026</em></td>
+<td style="text-align: left;">提出一种
+<strong>DSL</strong>，用于规定并<strong>在运行时强制执行</strong> LLM
+agent 的行为限制；规则 = <strong>trigger</strong>（何时适用）+
+<strong>predicate</strong>（检查条件）+
+<strong>enforcement</strong>（违反时如何响应）；在代码执行、具身
+agent、自动驾驶场景中评估；<strong>显著减少不安全动作，运行时开销为毫秒级</strong></td>
+</tr>
+</tbody>
+</table>
+<p>另外：新的会议 <strong>ACM Conference on AI and Agentic Systems
+(CAIS)</strong>——复合 AI 架构、优化和部署的严谨、可复现研究。</p>
+<blockquote>
+<p>与 Week 10/11 的联系：AgentSpec 的 trigger–predicate–enforcement
+本质上就是一个<strong>运行时检查的约束语言</strong>，可以看作把本周 OCL
+约束（<code>WriteNeedsApproval</code>）从<strong>设计时</strong>搬到了<strong>运行时</strong>。第二篇论文提醒：让
+LLM 写 OCL 时，<strong>语法对 ≠ 语义对</strong>，必须验证。</p>
+</blockquote>
+<hr>
+<h2 id="七tutorial-11-要点">七、Tutorial 11 要点</h2>
+<p><code>ELEC5620-TUT-11.pdf</code>（封面写 Tutorial 10）是 <strong>Week
+10 元建模 + Week 11 Profile</strong>
+的回顾，没有新增题目，内容包括：</p>
+<ul>
+<li>元建模语言、MOF、元模型定义、<strong>OMG 四层架构</strong>、UML
+规格三部分、UML
+元模型片段、模型与图的关系、语义（静态/动态，四种定义方法）、命名空间元模型
+—— 详见
+[[26-S2-Course/ELEC5620/ELEC5620-Week10-Meta-Modeling-Summary|Week
+10]]</li>
+<li>特化 UML、SysML、Profile 定义与两种用途、Stereotype、<strong>Overlay
+Profile</strong> —— 即本文第一至三节</li>
+</ul>
+<p><strong>复习用的综合题（自拟）</strong>：为“智能理财 agent”（Week 7
+的例子）设计一个 Profile。</p>
+<blockquote>
+<p><strong>解答思路</strong>： 1. 识别领域概念：Advisor
+agent（Class）、Trade 工具（Operation）、MarketFeed 数据源（Class） 2.
+选择被扩展的元类：<code>«Agent» → UML::Class</code>、<code>«TradeTool» → UML::Operation</code>、<code>«MarketFeed» → UML::Class</code>
+3.
+定义标签：<code>«TradeTool» { maxAmount : Real, effect : Effect, approvalRequired : Boolean }</code>、<code>«Agent» { riskProfile : RiskLevel, maxSteps : Integer }</code>
+4. 写
+OCL：<code>context TradeTool inv: self.effect = Effect::write implies self.approvalRequired</code>；<code>context TradeTool inv: self.maxAmount &gt; 0</code>；<code>context Agent inv: self.riskProfile = RiskLevel::low implies self.maxSteps &lt;= 10</code>
+5. 用
+Extension（实心箭头）画构造型到元类，构造型之间如需特化用空心箭头</p>
+</blockquote>
+<hr>
+<h2 id="八本周考点速记-易错点">八、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>特化 UML 的两条路</strong>：新建元模型（重量级 DSL）vs
+<strong>Profile</strong>（轻量级，与 UML 兼容，复用工具）。</li>
+<li><strong>Profile = stereotypes + tag definitions +
+constraints</strong>；两种用途：<strong>定义 DSML</strong>
+和<strong>叠加领域视点</strong>。</li>
+<li><strong>Stereotype</strong> 扩展 UML 词汇，从现有元素派生；其属性叫
+<strong>tag definitions</strong>。</li>
+<li><strong>Extension（实心三角，构造型→元类）vs
+Generalization（空心三角，构造型→构造型）</strong>。</li>
+<li><strong>Semaphore
+例子四步</strong>：附加语义、加约束（FIFO）、加属性（limit）、加操作（get/release）。</li>
+<li><strong>Overlay profile</strong>：可
+apply/unapply，<strong>不影响底层模型</strong>；例：排队网络性能分析。</li>
+<li><strong>SysML（系统工程，需求建模补充 use
+case）、MARTE（实时嵌入式）</strong>。</li>
+<li><strong>OCL</strong>：<code>context X inv:</code>；<code>self</code>；<strong><code>.</code>
+访问属性，<code>-&gt;</code>
+集合操作</strong>；Set/OrderedSet/Bag/Sequence；<code>exists</code>
+∃、<code>forAll</code>
+∀；<code>implies</code>；<code>allInstances()</code>。</li>
+<li><strong>前后置条件</strong>：<code>pre:</code>、<code>post:</code>、<code>body:</code>、<strong><code>@pre</code></strong>
+取旧值。</li>
+<li><strong>HealthcareAgent
+Profile</strong>：<code>«Agent»</code>（goal、autonomy、maxSteps）、<code>«Tool»</code>（扩展
+<strong>Operation</strong>；effect、approvalRequired、auditRequired、timeoutSec）、<code>«DataSource»</code>（resource、purpose、consentRequired）；关键约束
+<strong>WriteNeedsApproval</strong>。</li>
+<li><strong>前沿</strong>：LLM + DSL 低代码；LLM 生成 OCL
+要区分<strong>良构 vs 正确</strong>；<strong>AgentSpec = trigger +
+predicate + enforcement</strong> 的运行时约束 DSL。</li>
+<li><strong>易错</strong>：把 Extension
+画成普通泛化；集合操作用点号；以为 unapply profile
+会删除模型信息；<code>Tool</code> 扩展的元类写成 Class。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/UML-Profile/" rel="tag"><i class="fa fa-tag"></i> UML-Profile</a>
+              <a href="/tags/Stereotype/" rel="tag"><i class="fa fa-tag"></i> Stereotype</a>
+              <a href="/tags/OCL/" rel="tag"><i class="fa fa-tag"></i> OCL</a>
+              <a href="/tags/DSL/" rel="tag"><i class="fa fa-tag"></i> DSL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week10-meta-modeling.html" rel="prev" title="ELEC5620 Week 10 元建模讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 10 元建模讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week12-unit-review.html" rel="next" title="ELEC5620 Week 12 全课复习与考点总览讲课总结">
+                  ELEC5620 Week 12 全课复习与考点总览讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

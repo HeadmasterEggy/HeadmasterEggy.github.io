@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="INFO6007 Week 07 讲课总结，整理风险的定义与正负风险、五类风险、风险沟通与干系人参与（NHS NPfIT 案例）、 风险偏好与效用函数，风险管理六过程（规划、识别、定性分析、定量分析、规划与实施应对、监控）， 概率影响矩阵、Monte Carlo、决策树与 EMV 计算、威胁与机会的应对策略、风险登记册、敏捷风险管理， Chaos Report 数据，以及本周 tutorial 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INFO6007 Week 07 Risk Management 讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/info6007-week07-risk-management.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="INFO6007 Week 07 讲课总结，整理风险的定义与正负风险、五类风险、风险沟通与干系人参与（NHS NPfIT 案例）、 风险偏好与效用函数，风险管理六过程（规划、识别、定性分析、定量分析、规划与实施应对、监控）， 概率影响矩阵、Monte Carlo、决策树与 EMV 计算、威胁与机会的应对策略、风险登记册、敏捷风险管理， Chaos Report 数据，以及本周 tutorial 的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T14:10:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:10:13.659Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="EMV">
+<meta property="article:tag" content="INFO6007">
+<meta property="article:tag" content="Project-Management">
+<meta property="article:tag" content="Resource-Leveling">
+<meta property="article:tag" content="Risk-Management">
+<meta property="article:tag" content="Risk-Register">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/info6007-week07-risk-management.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/info6007-week07-risk-management.html","path":"posts/info6007-week07-risk-management.html","title":"INFO6007 Week 07 Risk Management 讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>INFO6007 Week 07 Risk Management 讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/info6007-week07-risk-management.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#info6007-week-07-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93risk-management"><span class="nav-text">INFO6007 Week 07
+讲课总结：Risk Management</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AF%E9%A1%B9%E7%9B%AE%E9%A3%8E%E9%99%A9"><span class="nav-text">一、什么是项目风险</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#standish-group-chaos-reportreading-1"><span class="nav-text">Standish Group CHAOS
+Report（Reading 1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="nav-text">风险管理的目标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E9%A3%8E%E9%99%A9%E7%9A%84%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%88%AB"><span class="nav-text">二、风险的类型与类别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E9%A3%8E%E9%99%A9-vs-%E8%B4%9F%E9%A3%8E%E9%99%A9"><span class="nav-text">正风险 vs 负风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E7%B1%BB%E9%A3%8E%E9%99%A9"><span class="nav-text">五类风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-text">风险管理的好处</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E9%A3%8E%E9%99%A9%E6%B2%9F%E9%80%9A%E4%B8%8E%E5%B9%B2%E7%B3%BB%E4%BA%BA%E5%8F%82%E4%B8%8E"><span class="nav-text">三、风险沟通与干系人参与</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E9%99%A9%E6%B2%9F%E9%80%9A"><span class="nav-text">风险沟通</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%AE%A9%E5%B9%B2%E7%B3%BB%E4%BA%BA%E5%8F%82%E4%B8%8E%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86"><span class="nav-text">为什么要让干系人参与风险管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E8%8B%B1%E5%9B%BD-nhs-national-programme-for-itnpfit"><span class="nav-text">案例：英国 NHS
+National Programme for IT（NPfIT）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E9%A3%8E%E9%99%A9%E5%81%8F%E5%A5%BD%E7%BB%84%E7%BB%87%E6%96%87%E5%8C%96%E4%B8%8E%E6%95%88%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-text">四、风险偏好、组织文化与效用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#risk-appetite%E9%A3%8E%E9%99%A9%E5%81%8F%E5%A5%BD"><span class="nav-text">Risk Appetite（风险偏好）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E9%A3%8E%E9%99%A9%E6%96%87%E5%8C%96"><span class="nav-text">三种风险文化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E9%99%A9%E6%95%88%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-text">风险效用函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86%E5%85%AD%E8%BF%87%E7%A8%8B"><span class="nav-text">五、风险管理六过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%92%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86"><span class="nav-text">1. 规划风险管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E9%A3%8E%E9%99%A9"><span class="nav-text">2. 识别风险</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E7%A7%8D%E8%AF%86%E5%88%AB%E6%8A%80%E6%9C%AF"><span class="nav-text">四种识别技术</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E6%80%A7%E9%A3%8E%E9%99%A9%E5%88%86%E6%9E%90"><span class="nav-text">3. 定性风险分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%BD%B1%E5%93%8D%E7%9F%A9%E9%98%B5probability-impact-matrix"><span class="nav-text">概率–影响矩阵（Probability
+Impact Matrix）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E9%87%8F%E9%A3%8E%E9%99%A9%E5%88%86%E6%9E%90"><span class="nav-text">4. 定量风险分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#monte-carlo-%E6%A8%A1%E6%8B%9F"><span class="nav-text">Monte Carlo 模拟</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E6%9E%90%E4%B8%8E-emv"><span class="nav-text">决策树分析与 EMV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E9%81%93%E8%80%83%E8%AF%95%E5%90%8C%E5%9E%8B%E9%A2%98"><span class="nav-text">📝 两道考试同型题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E5%88%92%E4%B8%8E%E5%AE%9E%E6%96%BD%E9%A3%8E%E9%99%A9%E5%BA%94%E5%AF%B9"><span class="nav-text">5 &amp; 6. 规划与实施风险应对</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A8%81%E8%83%81%E7%9A%84%E5%BA%94%E5%AF%B9%E8%B4%9F%E9%A3%8E%E9%99%A9"><span class="nav-text">威胁的应对（负风险）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%BA%E4%BC%9A%E7%9A%84%E5%BA%94%E5%AF%B9%E6%AD%A3%E9%A3%8E%E9%99%A9"><span class="nav-text">机会的应对（正风险）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A3%8E%E9%99%A9%E7%99%BB%E8%AE%B0%E5%86%8Crisk-register"><span class="nav-text">风险登记册（Risk Register）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7%E9%A3%8E%E9%99%A9"><span class="nav-text">6. 监控风险</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E4%BC%A0%E7%BB%9F-vs-%E6%95%8F%E6%8D%B7%E7%9A%84%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86"><span class="nav-text">六、传统 vs 敏捷的风险管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86%E5%AE%9E%E8%B7%B5"><span class="nav-text">敏捷风险管理实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E8%AF%BE%E5%90%8E%E6%A1%88%E4%BE%8B%E9%87%91%E8%9E%8D%E6%9C%8D%E5%8A%A1%E5%85%AC%E5%8F%B8%E4%BA%91%E8%BF%81%E7%A7%BB"><span class="nav-text">七、课后案例：金融服务公司云迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABtutorialweek-7%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%BB%83%E4%B9%A0"><span class="nav-text">八、Tutorial（Week
+7）：资源管理练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#part-a%E4%B8%BA%E6%89%8B%E6%9C%BA%E9%93%B6%E8%A1%8C-app-%E7%94%BB-rbs"><span class="nav-text">Part A：为手机银行 App 画 RBS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-b%E8%AF%86%E5%88%AB%E8%BF%87%E5%BA%A6%E5%88%86%E9%85%8D%E4%B8%8E%E5%88%A9%E7%94%A8%E4%B8%8D%E8%B6%B3%E6%8F%90%E5%87%BA%E8%B5%84%E6%BA%90%E5%B9%B3%E8%A1%A1%E6%96%B9%E6%A1%88"><span class="nav-text">Part
+B：识别过度分配与利用不足，提出资源平衡方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-cqa-%E5%9B%A2%E9%98%9F%E5%A3%AB%E6%B0%94%E4%BD%8E%E8%90%BD"><span class="nav-text">Part C：QA 团队士气低落</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E6%9C%AC%E8%AE%B2%E4%B8%8E%E5%89%8D%E5%90%8E%E7%9A%84%E8%A1%94%E6%8E%A5"><span class="nav-text">十、本讲与前后的衔接</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/info6007-week07-risk-management.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="INFO6007 Week 07 Risk Management 讲课总结 | Joey">
+      <meta itemprop="description" content="INFO6007 Week 07 讲课总结，整理风险的定义与正负风险、五类风险、风险沟通与干系人参与（NHS NPfIT 案例）、 风险偏好与效用函数，风险管理六过程（规划、识别、定性分析、定量分析、规划与实施应对、监控）， 概率影响矩阵、Monte Carlo、决策树与 EMV 计算、威胁与机会的应对策略、风险登记册、敏捷风险管理， Chaos Report 数据，以及本周 tutorial 的 RBS、资源平衡与激励练习。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          INFO6007 Week 07 Risk Management 讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 14:10:00 / Modified: 04:10:13" itemprop="dateCreated datePublished" datetime="2026-11-03T14:10:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/INFO6007/" itemprop="url" rel="index"><span itemprop="name">INFO6007</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>6.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>22 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">INFO6007 Week 07 讲课总结，整理风险的定义与正负风险、五类风险、风险沟通与干系人参与（NHS NPfIT 案例）、 风险偏好与效用函数，风险管理六过程（规划、识别、定性分析、定量分析、规划与实施应对、监控）， 概率影响矩阵、Monte Carlo、决策树与 EMV 计算、威胁与机会的应对策略、风险登记册、敏捷风险管理， Chaos Report 数据，以及本周 tutorial 的 RBS、资源平衡与激励练习。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="info6007-week-07-讲课总结risk-management">INFO6007 Week 07
+讲课总结：Risk Management</h1>
+<blockquote>
+<p><strong>课程</strong>：INFO6007 — Project Management in IT，Semester
+2 2026 <strong>来源</strong>：讲义 PDF + tutorial（无转录稿） -
+<code>Lecture - INFO6007 Week 07 - Risk Management Plan.pdf</code>（63
+页） - <code>Reading 1 - Standish Group Chaos Report.pdf</code>（1995）
+-
+<code>Reading 2 - NHS UK National Programme for IT case study.pdf</code>（Justinia,
+2017） - <code>Tutorial sheet INFO6007 Week 07</code> +
+<code>Answer Sheet Week 07 Tutorial</code></p>
+<p><strong>参考</strong>：Schwalbe, K. (2018). <em>Information
+Technology Project Management</em>, pp. 463–503。</p>
+<p>本讲的主线是
+<strong>风险管理六过程</strong>，前半部分讲风险的「软」面（<strong>沟通、干系人、风险偏好、组织文化</strong>），后半部分讲「硬」工具（<strong>概率影响矩阵、Monte
+Carlo、决策树/EMV</strong>）。NSW 数字驾照案例继续贯穿。</p>
+<p>⚠️ 本周 tutorial 做的是 <strong>Week 6
+资源管理</strong>的练习（见第十一章）；本周的风险内容在 <strong>Week 8
+tutorial</strong> 练。</p>
+<p>📝 <strong>风险是期末必考区</strong>：Practice Exam
+<strong>Q2(c)</strong>（识别两项风险 + 应对策略 +
+具体行动）、<strong>Q3(b)</strong>（EMV
+计算并判断是否批准测试计划），Question Bank
+<strong>Q25</strong>（三项风险 EMV 排序 +
+应急储备）、<strong>Q6.3</strong>（风险偏好 + 治理）。</p>
+</blockquote>
+<hr>
+<h2 id="一什么是项目风险">一、什么是项目风险</h2>
+<blockquote>
+<p><strong>「项目风险是一个不确定的事件或条件，一旦发生，会对一个或多个项目目标（范围、进度、成本、质量）产生正面或负面影响。」</strong></p>
+</blockquote>
+<ul>
+<li><strong>风险的本质是不确定性</strong>——可能发生，也可能不发生</li>
+<li>已经发生的是 <strong>issue（问题）</strong>，不是风险</li>
+<li><strong>IT
+项目尤其动态</strong>：技术快速变化、需求不断演进、网络安全、数据隐私</li>
+</ul>
+<h3 id="standish-group-chaos-reportreading-1">Standish Group CHAOS
+Report（Reading 1）</h3>
+<p>讲义引用：<strong>超过 60% 的 IT
+项目没能达成时间、预算或范围目标，主要原因是风险管理不善。</strong></p>
+<p>Reading 1（1995 年原版）的关键数据：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">结果类型</th>
+<th style="text-align: left;">定义</th>
+<th style="text-align: center;">比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Type 1 Success</strong></td>
+<td style="text-align: left;">按时、按预算、功能完整</td>
+<td style="text-align: center;"><strong>16.2%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Type 2 Challenged</strong></td>
+<td style="text-align: left;">完成但<strong>超预算、超时、功能缩水</strong></td>
+<td style="text-align: center;"><strong>52.7%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Type 3 Impaired</strong></td>
+<td style="text-align: left;"><strong>中途取消</strong></td>
+<td style="text-align: center;"><strong>31.1%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>挑战/失败项目平均成本为原估算的 <strong>189%</strong>，时间为
+<strong>222%</strong>，仅交付约 <strong>61%</strong> 的功能</li>
+<li><strong>大公司最差</strong>：只有 9% 成功，最终只交付约 42%
+的功能</li>
+<li><strong>成功三要素</strong>：<strong>User Involvement（15.9%）&gt;
+Executive Management Support（13.9%）&gt; Clear Statement of
+Requirements（13.0%）</strong></li>
+<li><strong>受挑战首因</strong>：缺乏用户输入、需求不完整、需求变更</li>
+<li><strong>被取消首因</strong>：需求不完整、缺乏用户参与、缺乏资源</li>
+</ul>
+<blockquote>
+<p>💡
+这组数据最好用的地方：论述「为什么需要用户参与/高层支持」时可以直接引用。<strong>用户参与</strong>同时出现在成功因素第一名和失败因素前两名。</p>
+</blockquote>
+<h3 id="风险管理的目标">风险管理的目标</h3>
+<ul>
+<li><strong>尽早识别</strong>潜在风险</li>
+<li>评估<strong>概率和影响</strong></li>
+<li>制定<strong>最小化威胁、最大化机会</strong>的策略</li>
+<li>在整个生命周期<strong>持续监控</strong></li>
+<li><strong>在不确定性下做出明智决策</strong></li>
+</ul>
+<blockquote>
+<p><strong>风险管理不是一次性任务</strong>，而是贯穿生命周期的持续过程；它与范围、进度、成本、质量管理互补，帮助
+PM <strong>摆脱「救火模式」</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="二风险的类型与类别">二、风险的类型与类别</h2>
+<h3 id="正风险-vs-负风险">正风险 vs 负风险</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方面</th>
+<th style="text-align: left;"><strong>Positive Risks</strong></th>
+<th style="text-align: left;"><strong>Negative Risks</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>本质</strong></td>
+<td style="text-align: left;"><strong>机会（opportunities）</strong></td>
+<td style="text-align: left;"><strong>威胁（threats）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>影响</strong></td>
+<td style="text-align: left;">对项目有利</td>
+<td style="text-align: left;">对项目有害</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>应对</strong></td>
+<td style="text-align: left;"><strong>Exploit, enhance, share,
+accept</strong></td>
+<td style="text-align: left;"><strong>Avoid, mitigate, transfer,
+accept</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>例：正风险——云服务商提供促销额度降低基础设施成本；负风险——核心开发者离职。</p>
+</blockquote>
+<h3 id="五类风险">五类风险</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">来源</th>
+<th style="text-align: left;">IT 例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Market</strong></td>
+<td style="text-align: left;">外部市场条件变化</td>
+<td style="text-align: left;">竞争对手抢先发布、用户采用率不及预期</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Financial</strong></td>
+<td style="text-align: left;">资金、预算、成本超支</td>
+<td style="text-align: left;">资金被削减、汇率波动</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Technology</strong></td>
+<td style="text-align: left;">技术的采用、集成或性能</td>
+<td style="text-align: left;">遗留系统集成失败、数据泄露</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>People</strong></td>
+<td style="text-align: left;">人的因素、资源管理、干系人参与</td>
+<td style="text-align: left;">关键人员离职、用户抵制</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Structure/Process</strong></td>
+<td style="text-align: left;">组织流程、治理、项目结构</td>
+<td style="text-align: left;">合规不达标、治理不一致</td>
+</tr>
+</tbody>
+</table>
+<h3 id="风险管理的好处">风险管理的好处</h3>
+<p>提高项目成功率、更好的决策、节约成本和时间、<strong>增强干系人信心</strong>、竞争优势、合规与治理。</p>
+<hr>
+<h2 id="三风险沟通与干系人参与">三、风险沟通与干系人参与</h2>
+<h3 id="风险沟通">风险沟通</h3>
+<blockquote>
+<p>以<strong>清晰、及时、透明</strong>的方式与干系人分享风险（威胁和机会）信息。</p>
+</blockquote>
+<p><strong>目标</strong>：让干系人理解风险及影响；更新风险状态和应对；<strong>在团队、管理层和客户之间建立信任</strong>；支持应对决策。</p>
+<p>有效风险沟通的五个特征：<strong>clear, consistent, timely,
+transparent, action-oriented</strong>。</p>
+<h3 id="为什么要让干系人参与风险管理">为什么要让干系人参与风险管理</h3>
+<ul>
+<li><strong>干系人可能识别出团队不知道的风险</strong></li>
+<li>提高概率/影响评估的准确性</li>
+<li>建立对风险及应对的<strong>共同所有权</strong></li>
+<li><strong>及早参与能减少变革阻力</strong></li>
+</ul>
+<h3 id="案例英国-nhs-national-programme-for-itnpfit">案例：英国 NHS
+National Programme for IT（NPfIT）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">项目</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>启动</strong></td>
+<td style="text-align: left;">2002 年</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>目标</strong></td>
+<td style="text-align: left;">全国电子病历系统、改善医疗 IT
+基础设施、统一 NHS 系统</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>预算</strong></td>
+<td style="text-align: left;">讲义写 <strong>约 £12bn</strong>；Reading
+2 写<strong>初始预算约 £6.2bn</strong>，后续估计总支出约
+£10bn–£11.4bn</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>结局</strong></td>
+<td style="text-align: left;"><strong>2011
+年被放弃/解散</strong>，花费数十亿而大部分目标落空</td>
+</tr>
+</tbody>
+</table>
+<p><strong>识别出的风险</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Technology</td>
+<td style="text-align: left;"><strong>多供应商与遗留系统的集成</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">People</td>
+<td style="text-align: left;"><strong>临床医生抵制新工作流</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Financial</td>
+<td style="text-align: left;">巨额预算超支</td>
+</tr>
+<tr>
+<td style="text-align: left;">Process</td>
+<td style="text-align: left;"><strong>各 NHS
+区域治理不一致</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>风险沟通的失败</strong>： -
+风险<strong>只在高层之间沟通</strong>，一线人员（医生、护士、行政）被排除在外
+- <strong>供应商和 PM 淡化风险以避免政治后果</strong> →
+决策延误，风险<strong>滚雪球</strong> - 议会和公众没有得到准确的风险信息
+→ 失败暴露时声誉受损</p>
+<p><strong>干系人参与的失败</strong>： -
+<strong>临床医生没有被早期纳入风险识别</strong> → 系统与医疗工作流不匹配
+- <strong>供应商激励错位</strong>——只关注合同里程碑，不关注长期风险缓解
+- 政府/议会<strong>介入太晚</strong>，只在危机时刻出现</p>
+<blockquote>
+<p>Reading
+2（Justinia）总结的三大根因：<strong>终端用户参与不足、缺乏分阶段的变革管理、低估项目规模</strong>；以及<strong>中央集权的自上而下决策</strong>不适合地方机构。</p>
+</blockquote>
+<p><strong>讲义的四条教训</strong>： 1.
+<strong>尽早让所有干系人参与</strong>——尤其是要「和系统一起生活」的终端用户
+2. <strong>公开、持续地沟通风险</strong>——隐藏风险会侵蚀信任 3.
+<strong>定制风险沟通</strong>——高层要摘要，技术团队要详细日志，终端用户要实操指导
+4. <strong>透明带来韧性</strong>——宁可承受短期批评，也不要长期崩溃</p>
+<hr>
+<h2 id="四风险偏好组织文化与效用函数">四、风险偏好、组织文化与效用函数</h2>
+<h3 id="risk-appetite风险偏好">Risk Appetite（风险偏好）</h3>
+<blockquote>
+<p>组织为实现目标<strong>愿意接受的不确定程度</strong>。</p>
+</blockquote>
+<p>影响因素：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">因素</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>行业背景</strong></td>
+<td style="text-align: left;"><strong>科技创业公司通常比政府机构风险偏好高</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>财务健康</strong></td>
+<td style="text-align: left;">储备充足的公司能承受更多风险</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>领导心态</strong></td>
+<td style="text-align: left;">冒险型 vs 保守型</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>干系人期望</strong></td>
+<td style="text-align: left;">股东要求高增长 → 风险偏好更高</td>
+</tr>
+</tbody>
+</table>
+<h3 id="三种风险文化">三种风险文化</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">文化</th>
+<th style="text-align: left;">特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Risk-Averse（规避）</strong></td>
+<td style="text-align: left;">回避不确定性，偏好合规、详细审批，<strong>创新慢</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk-Neutral（中性）</strong></td>
+<td style="text-align: left;">务实地平衡机会与威胁</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk-Seeking（追求）</strong></td>
+<td style="text-align: left;">鼓励实验、创新、快速扩张</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>讲义要点：<strong>风险管理必须与组织文化匹配</strong>，否则会失效。</p>
+</blockquote>
+<h3 id="风险效用函数">风险效用函数</h3>
+<p>表示一个人/组织在不确定条件下<strong>对可能结果赋予多少效用（满意度）</strong>。X
+轴是货币价值，Y 轴是效用。</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">偏好</th>
+<th style="text-align: left;">行为</th>
+<th style="text-align: left;">效用曲线形状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Risk averse</strong></td>
+<td style="text-align: left;"><strong>宁要确定的低收益，不要有风险的高收益</strong></td>
+<td style="text-align: left;"><strong>凹（concave）</strong>：收益增加，效用增速递减</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk seeking</strong></td>
+<td style="text-align: left;">愿意冒险博取更高回报</td>
+<td style="text-align: left;"><strong>凸（convex）</strong>：效用增速递增</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk neutral</strong></td>
+<td style="text-align: left;">对风险无所谓，<strong>只看
+EMV</strong></td>
+<td style="text-align: left;"><strong>直线</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>📝 <strong>Question Bank
+Q6.3</strong>（博物馆是否立刻公开含敏感信息/权限未定的照片）：公共文化机构通常<strong>风险规避</strong>，声誉与法律风险的影响远大于「多吸引游客」的收益
+→ 建议对受影响照片采取
+<strong>Avoid（暂不公开）或分批发布</strong>，由<strong>治理层（赞助人 +
+策展人 +
+法务）按权限做最终决定</strong>，并与相关干系人（权利人、社区）沟通。</p>
+</blockquote>
+<hr>
+<h2 id="五风险管理六过程">五、风险管理六过程</h2>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">过程</th>
+<th style="text-align: left;">核心输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>Plan Risk Management</strong></td>
+<td style="text-align: left;">风险管理计划</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>Identify Risks</strong></td>
+<td style="text-align: left;"><strong>初始风险登记册</strong>、风险分解结构</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>Perform Qualitative Risk
+Analysis</strong></td>
+<td style="text-align: left;">优先级排序</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;"><strong>Perform Quantitative Risk
+Analysis</strong></td>
+<td style="text-align: left;">数值化的整体风险暴露</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: left;"><strong>Plan &amp; Implement Risk
+Responses</strong></td>
+<td style="text-align: left;">应对策略、风险责任人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: left;"><strong>Monitor and Control
+Risks</strong></td>
+<td style="text-align: left;">更新的登记册、新风险、残余风险</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>PMBOK 第 6
+版把「规划应对」和「实施应对」拆成两个过程（共七个）；讲义把它们合并成「5
+&amp; 6」，所以说六个过程。</p>
+</blockquote>
+<h3 id="规划风险管理">1. 规划风险管理</h3>
+<p><strong>目的</strong>：定义<strong>如何进行</strong>本项目的风险管理活动。</p>
+<p><strong>目标</strong>： -
+确保风险管理<strong>结构化、一致、划算</strong> -
+<strong>定义角色与职责</strong>（谁管理风险，谁批准应对） -
+确定方法、工具与技术（头脑风暴、Monte Carlo……） -
+<strong>分配资源</strong>（预算、时间、<strong>风险储备</strong>） -
+<strong>设定阈值</strong>（多大的风险可以接受）</p>
+<p><strong>好处</strong>：主动而非被动；对干系人透明；减少意外，节省时间和成本；团队在优先级上达成一致。</p>
+<blockquote>
+<p>NSW
+案例的规划要点：<strong>规模尺度（概率、影响、紧迫性）</strong>、责任人与升级路径、<strong>双周评审
++ 阶段关口 +
+上线准备检查点</strong>；示例规则——<strong>任何「极端」级别的身份、安全、隐私或可用性风险都需要立即处理并升级</strong>。</p>
+</blockquote>
+<h3 id="识别风险">2. 识别风险</h3>
+<p>确定<strong>哪些风险可能影响项目</strong>并记录其特征；<strong>主要产出是初始风险登记册</strong>。项目早期开始，并在整个生命周期持续。完成后可以画出
+<strong>Risk Breakdown
+Structure（风险分解结构）</strong>——<strong>风险类别的层级表示</strong>，帮助系统地想到所有风险来源（例如：项目
+→ 技术/管理/商业/外部 → 具体子类）。</p>
+<h4 id="四种识别技术">四种识别技术</h4>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">技术</th>
+<th style="text-align: left;">做法</th>
+<th style="text-align: left;">优点</th>
+<th style="text-align: left;">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Brainstorming</strong></td>
+<td style="text-align: left;">团队在<strong>不评判</strong>的氛围中自由产出大量风险想法</td>
+<td style="text-align: left;">快、简单、多元视角；适合高不确定性的早期</td>
+<td style="text-align: left;"><strong>可能被声音大的人主导</strong>；依赖主持人</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Delphi technique</strong></td>
+<td style="text-align: left;">专家小组<strong>多轮匿名问卷</strong>直至达成共识</td>
+<td style="text-align: left;"><strong>避免强势人物的影响</strong>；适合复杂不确定项目</td>
+<td style="text-align: left;"><strong>耗时</strong>；依赖真正的专家</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interviewing</strong></td>
+<td style="text-align: left;">对干系人、SME、资深成员做结构化/非结构化访谈</td>
+<td style="text-align: left;"><strong>深入的洞察和背景</strong>；发现不明显的风险</td>
+<td style="text-align: left;">主观；访谈者偏差</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SWOT</strong></td>
+<td style="text-align: left;">内部优势/劣势 + 外部机会/威胁</td>
+<td style="text-align: left;">简单，<strong>内外兼顾，正负风险兼顾</strong></td>
+<td style="text-align: left;">可能过度简化</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Brainstorming vs Delphi
+是常考对比</strong>：核心区别在于<strong>匿名性</strong>——Delphi
+正是为了解决头脑风暴「被大嗓门主导」的缺点。</p>
+</blockquote>
+<p>NSW 案例的初始风险登记册：</p>
+<table>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">ID</th>
+<th style="text-align: left;">风险事件</th>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">触发/证据</th>
+<th style="text-align: left;">责任人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">R1</td>
+<td style="text-align: left;"><strong>上线高峰需求</strong></td>
+<td style="text-align: left;">Technical</td>
+<td style="text-align: left;">响应慢或超出容量阈值</td>
+<td style="text-align: left;">平台负责人</td>
+</tr>
+<tr>
+<td style="text-align: center;">R2</td>
+<td style="text-align: left;"><strong>记录集成错误</strong></td>
+<td style="text-align: left;">Technical</td>
+<td style="text-align: left;">交易失败或数据不匹配</td>
+<td style="text-align: left;">集成负责人</td>
+</tr>
+<tr>
+<td style="text-align: center;">R3</td>
+<td style="text-align: left;">隐私或安全问题</td>
+<td style="text-align: left;">Technical / stakeholder</td>
+<td style="text-align: left;">审查发现或投诉</td>
+<td style="text-align: left;">安全负责人</td>
+</tr>
+<tr>
+<td style="text-align: center;">R4</td>
+<td style="text-align: left;"><strong>试点反馈改善推广</strong>（机会）</td>
+<td style="text-align: left;">Opportunity</td>
+<td style="text-align: left;">积极试点结果或支持趋势</td>
+<td style="text-align: left;">产品负责人</td>
+</tr>
+</tbody>
+</table>
+<h3 id="定性风险分析">3. 定性风险分析</h3>
+<p><strong>基于概率和影响对风险进行主观的优先级排序</strong>；在识别之后、定量分析之前；使用专家判断和定性工具。</p>
+<p><strong>目标</strong>：确定优先级；赋予相对重要性；为应对规划提供输入；<strong>让干系人对严重程度达成一致</strong>。</p>
+<h4 id="概率影响矩阵probability-impact-matrix">概率–影响矩阵（Probability
+Impact Matrix）</h4>
+<p>每个风险评估：<strong>可能性（低/中/高）</strong> 和
+<strong>影响（对成本、时间、范围、质量）</strong>，然后放进网格：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">概率 ↓ / 影响 →</th>
+<th style="text-align: center;">Low</th>
+<th style="text-align: center;">Medium</th>
+<th style="text-align: center;">High</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>High</strong></td>
+<td style="text-align: center;">中</td>
+<td style="text-align: center;">高</td>
+<td style="text-align: center;"><strong>最高</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Medium</strong></td>
+<td style="text-align: center;">低</td>
+<td style="text-align: center;">中</td>
+<td style="text-align: center;">高</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Low</strong></td>
+<td style="text-align: center;">低</td>
+<td style="text-align: center;">低</td>
+<td style="text-align: center;">中</td>
+</tr>
+</tbody>
+</table>
+<p>NSW 案例：R1 高概率 × 高影响 → <strong>EXTREME</strong>，立即处理；R2
+中 × 高 → HIGH；R3 低 × 极高 → HIGH；R4 中等概率 × 中等收益 →
+MODERATE（监控并增强）。</p>
+<blockquote>
+<p>注意
+R3：<strong>低概率但影响极高的风险（安全/隐私）依然是高优先级</strong>——不能只看概率。</p>
+</blockquote>
+<h3 id="定量风险分析">4. 定量风险分析</h3>
+<p><strong>用模型、模拟和统计</strong>对风险对整体目标的影响做数值分析。它能回答：<strong>按期完成的概率是多少？预期成本超支多少？整体风险暴露有多大？</strong>
+并支持<strong>应急储备、预算与进度缓冲</strong>的决策。</p>
+<h4 id="monte-carlo-模拟">Monte Carlo 模拟</h4>
+<ul>
+<li>使用<strong>随机抽样</strong>模拟项目的各种可能结果，<strong>运行成千上万次迭代</strong></li>
+<li>产出<strong>结果的范围（分布）</strong>而非单一估计</li>
+<li>步骤：<strong>① 定义变量</strong>（不确定因素 +
+概率分布：正态、三角、Beta）→ <strong>② 运行模拟</strong> → <strong>③
+分析结果</strong>（例如「80% 把握在 X 天内完成」）</li>
+</ul>
+<h4 id="决策树分析与-emv">决策树分析与 EMV</h4>
+<p>决策树结合<strong>决策分支（选择）</strong>和<strong>机会分支（风险/概率）</strong>，用于计算
+<strong>Expected Monetary Value（期望货币价值）</strong>：</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -2.697ex;" xmlns="http://www.w3.org/2000/svg" width="24.646ex" height="4.847ex" role="img" focusable="false" viewBox="0 -950 10893.6 2142.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{EMV} = \sum_i P_i \times \text{Impact}_i
+"><g data-mml-node="mtext" data-latex="\text{EMV}"><path data-c="45" d="M230 74L230 334L315 334C360 334 388 326 400 311C412 296 418 265 418 218L451 218L451 488L418 488C418 441 412 411 400 396C388 381 360 373 315 373L230 373L230 606C230 642 236 641 275 641L402 641C474 641 522 627 547 598C579 559 583 523 592 450L625 450L596 680L33 680L33 641L61 641C96 641 117 639 124 634C131 629 135 617 135 599L135 81C135 63 131 51 124 46C117 41 96 39 61 39L33 39L33 0L610 0L653 263L620 263C611 208 602 166 591 136C580 106 560 82 530 63C505 47 464 39 406 39L275 39C236 39 230 38 230 74Z"></path><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z" transform="translate(681,0)"></path><path data-c="56" d="M622 581C638 622 674 643 730 644L730 683C687 680 654 679 630 680L513 683L513 645C562 644 586 628 586 599C586 595 584 589 581 581L404 114L218 603C215 613 213 619 213 620C213 636 240 644 294 644L294 683C252 680 204 679 149 680L19 683L19 644C56 644 80 642 91 639C102 636 110 626 116 609L346 2C352-14 361-22 374-22C387-22 396-15 401-1Z" transform="translate(1598,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(2625.8,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="munder" data-latex="\sum_i" transform="translate(3681.6,0)"><g data-mml-node="mo" data-latex="\sum"><path data-c="2211" d="M1265-450L1389-124L1355-124C1336-174 1304-216 1258-250C1145-334 1000-356 791-356L200-356L700 232C707 239 710 246 710 251L244 894L781 894C970 894 1127 870 1230 804C1290 766 1332 719 1356 663L1389 663L1265 950L88 950C70 950 60 947 57 941C56 938 56 926 56 905L581 187L68-415C61-423 57-430 57-435C57-445 67-450 88-450Z"></path></g><g data-mml-node="mi" transform="translate(600,-1084.4) scale(0.707)" data-latex="i"><path data-c="1D456" d="M284 621C284 648 271 661 244 661C216 661 188 633 188 605C188 578 202 565 229 565C257 565 284 593 284 621M259 138C237 59 205 19 164 19C151 19 144 28 144 47C144 64 173 150 232 306C240 329 244 347 244 360C244 409 210 445 161 445C118 445 84 420 59 369C39 328 29 301 29 288C29 279 34 275 45 275C58 275 60 281 64 295C87 375 118 415 158 415C171 415 178 406 178 387C178 373 175 357 168 338C145 275 121 208 101 155C86 115 78 88 78 74C78 25 114-11 162-11C205-11 239 14 264 64C283 103 293 130 293 145C293 154 288 159 277 159C274 159 259 150 259 138Z"></path></g></g><g data-mml-node="msub" data-latex="P_i" transform="translate(5292.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="i"><path data-c="1D456" d="M284 621C284 648 271 661 244 661C216 661 188 633 188 605C188 578 202 565 229 565C257 565 284 593 284 621M259 138C237 59 205 19 164 19C151 19 144 28 144 47C144 64 173 150 232 306C240 329 244 347 244 360C244 409 210 445 161 445C118 445 84 420 59 369C39 328 29 301 29 288C29 279 34 275 45 275C58 275 60 281 64 295C87 375 118 415 158 415C171 415 178 406 178 387C178 373 175 357 168 338C145 275 121 208 101 155C86 115 78 88 78 74C78 25 114-11 162-11C205-11 239 14 264 64C283 103 293 130 293 145C293 154 288 159 277 159C274 159 259 150 259 138Z"></path></g></g><g data-mml-node="mo" data-latex="\times" transform="translate(6483.4,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="msub" data-latex="\text{Impact}_i" transform="translate(7483.6,0)"><g data-mml-node="mtext" data-latex="\text{Impact}"><path data-c="49" d="M180 3C257 3 308 2 333 0L333 39L304 39C268 39 246 41 239 46C232 51 228 63 228 81L228 602C228 620 232 631 239 636C246 641 268 644 304 644L333 644L333 683C308 681 257 680 181 680C104 680 53 681 28 683L28 644L57 644C93 644 115 641 122 636C129 631 133 620 133 602L133 81C133 63 129 51 122 46C115 41 93 39 57 39L28 39L28 0C53 2 104 3 180 3Z"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(361,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(1194,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(1750,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(2250,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(2694,0)"></path></g><g data-mml-node="mi" transform="translate(3116,-229.4) scale(0.707)" data-latex="i"><path data-c="1D456" d="M284 621C284 648 271 661 244 661C216 661 188 633 188 605C188 578 202 565 229 565C257 565 284 593 284 621M259 138C237 59 205 19 164 19C151 19 144 28 144 47C144 64 173 150 232 306C240 329 244 347 244 360C244 409 210 445 161 445C118 445 84 420 59 369C39 328 29 301 29 288C29 279 34 275 45 275C58 275 60 281 64 295C87 375 118 415 158 415C171 415 178 406 178 387C178 373 175 357 168 338C145 275 121 208 101 155C86 115 78 88 78 74C78 25 114-11 162-11C205-11 239 14 264 64C283 103 293 130 293 145C293 154 288 159 277 159C274 159 259 150 259 138Z"></path></g></g></g></g></svg></mjx-container></span></p>
+<p><strong>步骤</strong>：识别决策点 → 列出备选方案 → 为每个结果附上概率
+→ 赋予收益/成本 → 计算每个分支的 EMV → <strong>选 EMV
+最高的方案</strong>。</p>
+<p><strong>讲义例题（Schwalbe Figure 11-7）</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方案</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">计算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Project 1</strong></td>
+<td style="text-align: left;">20% 赚 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="12.318ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 5444.7 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="300,000；80% 亏 "><g data-mml-node="mn" data-latex="300"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1500,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1944.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mi" data-latex="；" transform="translate(3444.7,0)"><text data-variant="italic" transform="scale(1,-1)" font-size="884px" font-family="serif" font-style="italic">；</text></g><g data-mml-node="mn" data-latex="% 亏" transform="translate(4444.7,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container>40,000</td>
+<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="12.068ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 5334 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mn" data-latex="0.2"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(778,0)"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(1278,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mn" data-latex="300{,}000" transform="translate(1667,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(4945,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.034ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2667.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="0.8" transform="translate(1000.2,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(778,0)"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(2278.2,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g></g></g></svg><mjx-break size="0"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.925ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3945 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="40{,}000" transform="translate(778,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(3556,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.674ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3833.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="60{,}000" transform="translate(1055.8,0)"><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.548ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3778.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="32{,}000" transform="translate(1000.2,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="10.916ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4824.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.2(300{,}000)
++ 0.8(-40{,}000) = 60{,}000 - 32{,}000 =
+\mathbf{\$28{,}000}"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{\$28{,}000}" data-mjx-texclass="ORD" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="\$"><path data-c="24" d="M510 210C510 280 478 332 444 366C397 412 342 422 311 428L311 652C334 650 416 643 448 581C399 579 385 543 385 519C385 474 421 456 447 456C465 456 510 466 510 522C510 603 458 690 311 699L311 750L264 750L264 699C116 688 64 585 64 498C64 444 85 397 123 359C171 312 223 302 264 293L264 42C154 52 129 113 123 127C176 127 189 165 189 189C189 236 150 252 127 252C119 252 64 249 64 185C64 107 110 6 264-5L264-56L311-56L311-5C459 9 510 117 510 210M264 439C173 454 144 507 144 546C144 599 185 646 264 652M430 162C430 101 389 50 311 42L311 283C383 271 430 220 430 162Z"></path></g><g data-mml-node="mn" data-latex="28{,}000" transform="translate(575,0)"><path data-c="1D7D0" d="M517 222L470 222C467 202 458 138 444 131C433 125 358 125 342 125L195 125C242 164 294 207 339 240C453 324 517 371 517 466C517 581 413 655 272 655C151 655 57 593 57 503C57 444 105 429 129 429C161 429 201 451 201 501C201 553 159 569 144 573C173 597 211 608 247 608C333 608 379 540 379 465C379 396 341 328 271 257L70 52C57 40 57 38 57 18L57 0L486 0Z"></path><path data-c="1D7D6" d="M526 187C526 295 442 342 393 370C463 406 494 450 494 508C494 610 403 655 289 655C150 655 80 576 80 480C80 436 98 373 176 329C92 292 48 235 48 161C48 40 156-11 285-11C445-11 526 77 526 187M419 507C419 458 393 424 349 395L199 479C183 488 155 505 155 539C155 609 245 616 285 616C369 616 419 575 419 507M440 132C440 48 346 32 289 32C191 32 134 83 134 161C134 239 187 282 222 302L359 226C403 201 440 180 440 132Z" transform="translate(575,0)"></path><path data-c="2C" d="M250 31C250 99 216 156 158 156C112 156 81 121 81 78C81 38 108 0 159 0C191 0 211 17 214 20C206-89 141-142 120-160C114-165 111-168 111-174C111-184 122-194 130-194C145-194 250-108 250 31Z" transform="translate(1150,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(1469,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2044,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2619,0)"></path></g></g></g></g></svg></mjx-container></span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Project 2</strong></td>
+<td style="text-align: left;">20% 亏 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="11.187ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 4944.7 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="50,000；10% 亏 "><g data-mml-node="mn" data-latex="50"><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1000,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1444.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mi" data-latex="；" transform="translate(2944.7,0)"><text data-variant="italic" transform="scale(1,-1)" font-size="884px" font-family="serif" font-style="italic">；</text></g><g data-mml-node="mn" data-latex="% 亏" transform="translate(3944.7,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container>20,000；70% 赚
+$60,000</td>
+<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.045ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3556 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="-10{,}000 -
+2{,}000 + 42{,}000 = \mathbf{\$30{,}000}"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="10{,}000" transform="translate(778,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="7.417ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3278.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="-10{,}000 -
+2{,}000 + 42{,}000 = \mathbf{\$30{,}000}"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="2{,}000" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.548ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3778.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="-10{,}000 -
+2{,}000 + 42{,}000 = \mathbf{\$30{,}000}"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="42{,}000" transform="translate(1000.2,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="10.916ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4824.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="-10{,}000 -
+2{,}000 + 42{,}000 = \mathbf{\$30{,}000}"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="TeXAtom" data-latex="\mathbf{\$30{,}000}" data-mjx-texclass="ORD" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="\$"><path data-c="24" d="M510 210C510 280 478 332 444 366C397 412 342 422 311 428L311 652C334 650 416 643 448 581C399 579 385 543 385 519C385 474 421 456 447 456C465 456 510 466 510 522C510 603 458 690 311 699L311 750L264 750L264 699C116 688 64 585 64 498C64 444 85 397 123 359C171 312 223 302 264 293L264 42C154 52 129 113 123 127C176 127 189 165 189 189C189 236 150 252 127 252C119 252 64 249 64 185C64 107 110 6 264-5L264-56L311-56L311-5C459 9 510 117 510 210M264 439C173 454 144 507 144 546C144 599 185 646 264 652M430 162C430 101 389 50 311 42L311 283C383 271 430 220 430 162Z"></path></g><g data-mml-node="mn" data-latex="30{,}000" transform="translate(575,0)"><path data-c="1D7D1" d="M526 180C526 235 497 321 352 352C421 373 494 430 494 516C494 593 418 655 277 655C158 655 80 591 80 511C80 468 111 441 149 441C194 441 219 473 219 510C219 568 165 579 161 580C196 608 240 616 271 616C354 616 357 552 357 519C357 506 356 375 252 369C211 367 209 366 204 365C194 364 192 354 192 348C192 330 202 330 220 330L264 330C373 330 373 232 373 181C373 134 373 32 269 32C243 32 191 36 143 66C176 75 201 100 201 141C201 186 169 217 125 217C83 217 48 190 48 139C48 49 145-11 274-11C453-11 526 89 526 180Z"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(575,0)"></path><path data-c="2C" d="M250 31C250 99 216 156 158 156C112 156 81 121 81 78C81 38 108 0 159 0C191 0 211 17 214 20C206-89 141-142 120-160C114-165 111-168 111-174C111-184 122-194 130-194C145-194 250-108 250 31Z" transform="translate(1150,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(1469,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2044,0)"></path><path data-c="1D7CE" d="M529 319C529 416 528 655 287 655C46 655 45 417 45 319C45 220 46-11 287-11C527-11 529 219 529 319M401 331C401 275 401 184 394 132C380 39 317 25 287 25C251 25 195 47 182 120C173 172 173 276 173 331C173 403 173 468 181 520C193 609 263 619 287 619C324 619 365 600 384 556C401 519 401 413 401 331Z" transform="translate(2619,0)"></path></g></g></g></g></svg></mjx-container></span></td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>选 Project 2</strong>（EMV 更高）。</p>
+<blockquote>
+<p>💡 <strong>注意 Project 1 的最大收益更高（$300k），但 EMV
+更低</strong>——风险追求者可能会选 Project 1，<strong>风险中性者只看 EMV
+选 Project 2</strong>。这就是效用函数和 EMV 的联系。</p>
+</blockquote>
+<p><strong>NSW 案例的 EMV</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">情景</th>
+<th style="text-align: center;">概率</th>
+<th style="text-align: center;">影响</th>
+<th style="text-align: center;">EMV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">高峰需求应对</td>
+<td style="text-align: center;">30%</td>
+<td style="text-align: center;">A$800k 成本</td>
+<td style="text-align: center;">A$240k</td>
+</tr>
+<tr>
+<td style="text-align: left;">集成返工</td>
+<td style="text-align: center;">25%</td>
+<td style="text-align: center;">A$500k 成本</td>
+<td style="text-align: center;">A$125k</td>
+</tr>
+<tr>
+<td style="text-align: left;">推广延误</td>
+<td style="text-align: center;">15%</td>
+<td style="text-align: center;">A$1.2m 成本</td>
+<td style="text-align: center;">A$180k</td>
+</tr>
+<tr>
+<td style="text-align: left;">试点洞察减少支持（机会）</td>
+<td style="text-align: center;">40%</td>
+<td style="text-align: center;">A$300k 节约</td>
+<td style="text-align: center;"><strong>−A$120k</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="36.705ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 16223.6 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{净预期暴露} = 545\text{k} - 120\text{k} = \text{A}\$425\text{k}
+"><g data-mml-node="mtext" data-latex="\text{净预期暴露}"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">净预期暴露</text></g><g data-mml-node="mo" data-latex="=" transform="translate(5277.8,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="545" transform="translate(6333.6,0)"><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z"></path><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path></g><g data-mml-node="mtext" data-latex="\text{k}" transform="translate(7833.6,0)"><path data-c="6B" d="M422 3C442 4 472 3 511 0L511 39C487 39 469 42 457 47C445 52 431 66 415 89L290 266C287 275 285 278 285 275C285 276 295 285 316 303C351 334 377 354 394 365C425 384 456 394 488 396L488 434C467 432 443 431 416 431C370 431 332 432 301 434L301 396C320 395 330 388 330 375C330 363 323 351 310 339L178 224L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 79C105 60 101 48 94 44C87 40 65 39 28 39L28 0L139 3L251 0L251 39C214 39 193 40 186 44C179 48 175 60 175 79L175 179L233 230L249 206C314 116 347 66 347 57C347 45 335 39 311 39L311 0Z"></path></g><g data-mml-node="mo" data-latex="-" transform="translate(8583.8,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="120" transform="translate(9584,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mtext" data-latex="\text{k}" transform="translate(11084,0)"><path data-c="6B" d="M422 3C442 4 472 3 511 0L511 39C487 39 469 42 457 47C445 52 431 66 415 89L290 266C287 275 285 278 285 275C285 276 295 285 316 303C351 334 377 354 394 365C425 384 456 394 488 396L488 434C467 432 443 431 416 431C370 431 332 432 301 434L301 396C320 395 330 388 330 375C330 363 323 351 310 339L178 224L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 79C105 60 101 48 94 44C87 40 65 39 28 39L28 0L139 3L251 0L251 39C214 39 193 40 186 44C179 48 175 60 175 79L175 179L233 230L249 206C314 116 347 66 347 57C347 45 335 39 311 39L311 0Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(11889.8,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mtext" data-latex="\text{A}" transform="translate(12945.6,0)"><path data-c="41" d="M583 3L717 0L717 39L695 39C670 39 653 40 646 42C631 47 621 58 615 75L401 694C397 707 390 716 375 716C362 716 353 709 348 694L143 102C129 61 92 39 32 38L32 0L137 3L254 0L254 39C205 39 180 54 180 85C180 92 181 96 182 98L227 225L465 225L516 77C518 71 519 67 519 64C519 47 492 39 437 39L437 0C479 3 528 4 583 3M345 569L451 264L240 264Z"></path></g><g data-mml-node="mi" data-latex="\$" transform="translate(13695.6,0)"><path data-c="24" d="M394 474C421 474 443 497 443 527C443 633 370 699 269 705L269 750L230 750L230 704C134 694 56 615 56 511C56 433 101 373 150 346C179 329 191 325 230 316L230 28C155 35 110 71 94 136C98 135 102 135 105 135C133 135 154 156 154 185C154 213 133 234 105 234C98 234 90 232 79 227C64 220 56 205 56 180C56 70 126-3 230-11L230-56L269-56L269-10C320-5 361 18 394 58C427 98 443 144 443 196C443 244 431 285 408 318C390 343 370 362 348 375C318 393 309 395 269 406L269 666C340 661 385 630 404 572C401 573 397 573 394 573C361 573 345 556 345 523C345 495 366 474 394 474M230 665L230 415C168 430 114 469 114 541C114 609 168 657 230 665M269 29L269 306C320 294 353 271 368 236C379 210 385 187 385 167C385 95 334 38 269 29Z"></path></g><g data-mml-node="mn" data-latex="425" transform="translate(14195.6,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path></g><g data-mml-node="mtext" data-latex="\text{k}" transform="translate(15695.6,0)"><path data-c="6B" d="M422 3C442 4 472 3 511 0L511 39C487 39 469 42 457 47C445 52 431 66 415 89L290 266C287 275 285 278 285 275C285 276 295 285 316 303C351 334 377 354 394 365C425 384 456 394 488 396L488 434C467 432 443 431 416 431C370 431 332 432 301 434L301 396C320 395 330 388 330 375C330 363 323 351 310 339L178 224L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 79C105 60 101 48 94 44C87 40 65 39 28 39L28 0L139 3L251 0L251 39C214 39 193 40 186 44C179 48 175 60 175 79L175 179L233 230L249 206C314 116 347 66 347 57C347 45 335 39 311 39L311 0Z"></path></g></g></g></svg></mjx-container></span></p>
+<blockquote>
+<p><strong>机会的 EMV 记为负成本</strong>，从威胁暴露中扣除。</p>
+</blockquote>
+<h4 id="两道考试同型题">📝 两道考试同型题</h4>
+<p><strong>Practice Exam Q3(b)</strong>：25% 概率需 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="16.843ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 7444.7 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="120,000 返工；花
+"><g data-mml-node="mn" data-latex="120"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1500,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mn" data-latex="000" transform="translate(1944.7,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path></g><g data-mml-node="mi" data-latex="返" transform="translate(3444.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">返</text></g><g data-mml-node="mi" data-latex="工" transform="translate(4444.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">工</text></g><g data-mml-node="mi" data-latex="；" transform="translate(5444.7,0)"><text data-variant="italic" transform="scale(1,-1)" font-size="884px" font-family="serif" font-style="italic">；</text></g><g data-mml-node="mi" data-latex="花" transform="translate(6444.7,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">花</text></g></g></g></svg></mjx-container>24,000 的测试可把概率降到 10%。</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="33.688ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 14890 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{不测试：} 0.25 \times 120{,}000 = \$30{,}000
+"><g data-mml-node="mtext" data-latex="\text{不测试：}"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">不测试：</text></g><g data-mml-node="mn" data-latex="0.25" transform="translate(4000,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(778,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g><g data-mml-node="mo" data-latex="\times" transform="translate(6000.2,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="120{,}000" transform="translate(7000.4,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(10556.2,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mi" data-latex="\$" transform="translate(11612,0)"><path data-c="24" d="M394 474C421 474 443 497 443 527C443 633 370 699 269 705L269 750L230 750L230 704C134 694 56 615 56 511C56 433 101 373 150 346C179 329 191 325 230 316L230 28C155 35 110 71 94 136C98 135 102 135 105 135C133 135 154 156 154 185C154 213 133 234 105 234C98 234 90 232 79 227C64 220 56 205 56 180C56 70 126-3 230-11L230-56L269-56L269-10C320-5 361 18 394 58C427 98 443 144 443 196C443 244 431 285 408 318C390 343 370 362 348 375C318 393 309 395 269 406L269 666C340 661 385 630 404 572C401 573 397 573 394 573C361 573 345 556 345 523C345 495 366 474 394 474M230 665L230 415C168 430 114 469 114 541C114 609 168 657 230 665M269 29L269 306C320 294 353 271 368 236C379 210 385 187 385 167C385 95 334 38 269 29Z"></path></g><g data-mml-node="mn" data-latex="30{,}000" transform="translate(12112,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg></mjx-container></span></p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="58.829ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 26002.4 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{测试：} 24{,}000 + 0.10 \times 120{,}000 = 24{,}000 + 12{,}000 =
+\$36{,}000
+"><g data-mml-node="mtext" data-latex="\text{测试：}"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">测试：</text></g><g data-mml-node="mn" data-latex="24{,}000" transform="translate(3000,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(6000.2,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="0.10" transform="translate(7000.4,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z" transform="translate(778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path></g><g data-mml-node="mo" data-latex="\times" transform="translate(9000.7,0)"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="120{,}000" transform="translate(10000.9,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(13556.7,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="24{,}000" transform="translate(14612.4,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g><g data-mml-node="mo" data-latex="+" transform="translate(17612.7,0)"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="12{,}000" transform="translate(18612.9,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(21668.7,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mi" data-latex="\$" transform="translate(22724.4,0)"><path data-c="24" d="M394 474C421 474 443 497 443 527C443 633 370 699 269 705L269 750L230 750L230 704C134 694 56 615 56 511C56 433 101 373 150 346C179 329 191 325 230 316L230 28C155 35 110 71 94 136C98 135 102 135 105 135C133 135 154 156 154 185C154 213 133 234 105 234C98 234 90 232 79 227C64 220 56 205 56 180C56 70 126-3 230-11L230-56L269-56L269-10C320-5 361 18 394 58C427 98 443 144 443 196C443 244 431 285 408 318C390 343 370 362 348 375C318 393 309 395 269 406L269 666C340 661 385 630 404 572C401 573 397 573 394 573C361 573 345 556 345 523C345 495 366 474 394 474M230 665L230 415C168 430 114 469 114 541C114 609 168 657 230 665M269 29L269 306C320 294 353 271 368 236C379 210 385 187 385 167C385 95 334 38 269 29Z"></path></g><g data-mml-node="mn" data-latex="36{,}000" transform="translate(23224.4,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg></mjx-container></span></p>
+<p>→ <strong>纯从 EMV 看不应批准</strong>（<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.441ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1521 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="36k >
+"><g data-mml-node="mn" data-latex="36"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z" transform="translate(500,0)"></path></g><g data-mml-node="mi" data-latex="k" transform="translate(1000,0)"><path data-c="1D458" d="M409 353C409 327 423 314 450 314C485 314 508 345 508 379C508 418 476 445 437 445C392 445 344 415 291 356C250 311 217 282 190 269L291 679C289 688 287 694 274 694C242 694 166 685 154 684C139 682 132 675 132 660C132 650 141 645 159 645C178 645 204 646 204 632L59 43C56 32 55 25 55 21C55 0 66-11 87-11C104-11 117-3 124 12C129 21 147 92 179 226C231 221 286 196 286 146C286 131 279 101 279 91C279 34 316-11 373-11C431-11 470 41 490 145C490 154 485 159 475 159C466 159 460 152 457 138C435 59 408 19 375 19C357 19 348 33 348 61C348 77 360 131 360 147C360 204 314 239 221 253C244 269 270 292 298 322C326 352 346 371 359 382C386 404 412 415 435 415C445 415 453 413 459 409C432 404 409 379 409 353Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 778 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="36k >
+"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g></g></g></svg></mjx-container>30k）。但答题时可补充：EMV
+是长期平均值，若组织<strong>风险规避</strong>、或该缺陷还有声誉/合规等未量化影响，仍可考虑批准——要明确写出假设。</p>
+<p><strong>Question Bank Q25</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">风险</th>
+<th style="text-align: center;">概率</th>
+<th style="text-align: center;">影响</th>
+<th style="text-align: center;">EMV</th>
+<th style="text-align: center;">排名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">切换时供应商宕机</td>
+<td style="text-align: center;">30%</td>
+<td style="text-align: center;">$200,000</td>
+<td style="text-align: center;"><strong>$60,000</strong></td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: left;">法规变化</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">$500,000</td>
+<td style="text-align: center;">$50,000</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td style="text-align: left;">关键工程师流失</td>
+<td style="text-align: center;">50%</td>
+<td style="text-align: center;">$40,000</td>
+<td style="text-align: center;">$20,000</td>
+<td style="text-align: center;">3</td>
+</tr>
+</tbody>
+</table>
+<p>应急储备可按 EMV 合计 <strong>$130,000</strong> 设定；EMV
+的局限：<strong>它是平均值，单个风险发生时实际损失是全额影响</strong>（例如法规变化一旦发生就是
+$500k）；概率和影响本身是估计；忽略风险偏好。</p>
+<h3 id="规划与实施风险应对">5 &amp; 6. 规划与实施风险应对</h3>
+<p><strong>在风险发生之前</strong>决定做什么——主动步骤。目标：降低威胁、增强机会、<strong>指定风险责任人</strong>、确保应对<strong>划算且现实</strong>。</p>
+<h4 id="威胁的应对负风险">威胁的应对（负风险）</h4>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">策略</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Avoid（规避）</strong></td>
+<td style="text-align: left;"><strong>彻底消除威胁</strong></td>
+<td style="text-align: left;">修改范围，<strong>排除高风险功能</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mitigate（减轻）</strong></td>
+<td style="text-align: left;"><strong>降低概率或影响</strong></td>
+<td style="text-align: left;">额外测试降低软件故障风险</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Transfer（转移）</strong></td>
+<td style="text-align: left;"><strong>把责任转给第三方</strong></td>
+<td style="text-align: left;">买保险、外包给有 SLA 保证的供应商</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Accept（接受）</strong></td>
+<td style="text-align: left;">不主动处理，发生后承担后果</td>
+<td style="text-align: left;">低优先级风险；可设应急储备（主动接受）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Escalate（上报）</strong></td>
+<td style="text-align: left;"><strong>风险超出项目范围</strong> →
+上报项目集/组合管理</td>
+<td style="text-align: left;">公司级网络安全风险</td>
+</tr>
+</tbody>
+</table>
+<h4 id="机会的应对正风险">机会的应对（正风险）</h4>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">策略</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Exploit（开拓）</strong></td>
+<td style="text-align: left;"><strong>确保机会一定发生</strong></td>
+<td style="text-align: left;">把最好的资源派给任务，保证提前完成</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Enhance（提高）</strong></td>
+<td style="text-align: left;"><strong>增加概率或影响</strong></td>
+<td style="text-align: left;">团队培训提升生产率</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Share（分享）</strong></td>
+<td style="text-align: left;">与第三方合作获取收益</td>
+<td style="text-align: left;">与另一家公司联合发布产品</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Accept（接受）</strong></td>
+<td style="text-align: left;">机会来了就利用，但不刻意追求</td>
+<td style="text-align: left;">有空闲开发工时才用</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Escalate（上报）</strong></td>
+<td style="text-align: left;">机会超出项目范围 → 上报更高权限</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>对称记忆</strong>：Avoid ↔︎ Exploit（消除 vs 确保）；Mitigate
+↔︎ Enhance（降低 vs 提高）；Transfer ↔︎ Share（转出风险 vs
+分享收益）；Accept 和 Escalate 两边都有。</p>
+<p><strong>Escalation vs Transfer（讲义课后题）</strong>：Transfer
+是把<strong>项目内</strong>风险的<strong>后果/责任</strong>通过合同转给第三方，项目仍需管理它；Escalation
+是承认<strong>这个风险不属于项目层级</strong>，交给项目集/组合/高层负责，<strong>上报后项目不再拥有它</strong>。</p>
+</blockquote>
+<h4 id="风险登记册risk-register">风险登记册（Risk Register）</h4>
+<ul>
+<li>记录<strong>所有已识别风险、特征和计划应对</strong>的核心文档</li>
+<li><strong>活文档</strong>：整个生命周期持续更新</li>
+<li>保证风险<strong>可见、被监控、有责任人</strong></li>
+<li>典型字段：ID、描述、类别、根因/触发器、概率、影响、优先级、<strong>应对策略、责任人</strong>、状态、残余风险</li>
+</ul>
+<p>NSW 案例的应对包：<strong>选择策略 →
+设计行动（负载测试、分阶段发布、保证、回退方案）→ 指定责任人 →
+设定触发器（应急、接受、升级点）</strong>；实施时<strong>被批准的应对要变成有排期、有责任人的工作</strong>，而不是停留在登记册里。</p>
+<h3 id="监控风险">6. 监控风险</h3>
+<p>跟踪已识别风险、<strong>监控残余风险、识别新风险、评估风险过程有效性</strong>；贯穿整个项目。NSW
+案例的五步：<strong>复审登记册 → 检查触发器 → 测试应对效果 →
+识别新风险和残余风险 →
+更新并沟通</strong>；数据来源是试点反馈、事件日志、容量数据、审查发现、支持需求。</p>
+<hr>
+<h2 id="六传统-vs-敏捷的风险管理">六、传统 vs 敏捷的风险管理</h2>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方式</th>
+<th style="text-align: left;">做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Traditional（瀑布）</strong></td>
+<td style="text-align: left;">在启动和规划阶段<strong>预先</strong>识别、分析、规划；风险登记册
++ 正式评审</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Agile</strong></td>
+<td style="text-align: left;">在短周期（sprint）中<strong>迭代</strong>处理；<strong>嵌入日常活动</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hybrid</strong></td>
+<td style="text-align: left;">传统的结构化过程（登记册、概率影响矩阵）+
+敏捷实践（日常监控、自适应应对）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="敏捷风险管理实践">敏捷风险管理实践</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">实践</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Iterative Risk
+Reviews</strong></td>
+<td style="text-align: left;">每个 sprint
+末（回顾会）重审风险；持续交付带来早发现</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk-Based Backlog
+Prioritization</strong></td>
+<td style="text-align: left;"><strong>高不确定性/高风险的故事先做（fail
+fast）</strong>——例如尽早试用新云服务暴露集成风险</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Risk Burn-Down
+Charts</strong></td>
+<td style="text-align: left;">像 sprint
+燃尽图一样跟踪<strong>风险暴露随时间的变化</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Collaborative
+Ownership</strong></td>
+<td style="text-align: left;">风险不由单个「风险经理」管理，而是<strong>团队共担</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>优势</strong>：敏捷——发现快、干系人参与好、适应需求变化；混合——<strong>兼顾灵活性和正式治理</strong>，适合有多干系人、监管方、供应商的大型
+IT 项目。</p>
+<hr>
+<h2 id="七课后案例金融服务公司云迁移">七、课后案例：金融服务公司云迁移</h2>
+<blockquote>
+<p>中型金融服务公司把遗留系统迁到云端，涉及多个供应商、内部团队和严格的合规要求。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 27%">
+<col style="width: 22%">
+<col style="width: 27%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">风险</th>
+<th style="text-align: center;">正/负</th>
+<th style="text-align: left;">类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">供应商 A 可能延迟交付迁移工具</td>
+<td style="text-align: center;">负</td>
+<td style="text-align: left;"><strong>Structure/Process</strong>（或
+Technology，供应商交付）</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">新的客户数据存储法规可能生效</td>
+<td style="text-align: center;">负</td>
+<td style="text-align: left;"><strong>Market</strong>（外部环境）/
+合规</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">无备份时 25% 概率迁移中丢数据</td>
+<td style="text-align: center;">负</td>
+<td style="text-align: left;"><strong>Technology</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">资深开发者考虑离职</td>
+<td style="text-align: center;">负</td>
+<td style="text-align: left;"><strong>People</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">采用 AI
+监控工具可提高可用性、降低迁移后成本</td>
+<td style="text-align: center;"><strong>正</strong></td>
+<td style="text-align: left;"><strong>Technology /
+Financial</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Risk 3 的 EMV</strong>：<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.023ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1778 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.25
+\times 200{,}000 =
+\$50{,}000"><g data-mml-node="mn" data-latex="0.25"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(778,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="9.679ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4278.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.25
+\times 200{,}000 =
+\$50{,}000"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="200{,}000" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1000,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2778,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="9.805ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4333.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.25
+\times 200{,}000 =
+\$50{,}000"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mi" data-latex="\$" transform="translate(1055.8,0)"><path data-c="24" d="M394 474C421 474 443 497 443 527C443 633 370 699 269 705L269 750L230 750L230 704C134 694 56 615 56 511C56 433 101 373 150 346C179 329 191 325 230 316L230 28C155 35 110 71 94 136C98 135 102 135 105 135C133 135 154 156 154 185C154 213 133 234 105 234C98 234 90 232 79 227C64 220 56 205 56 180C56 70 126-3 230-11L230-56L269-56L269-10C320-5 361 18 394 58C427 98 443 144 443 196C443 244 431 285 408 318C390 343 370 362 348 375C318 393 309 395 269 406L269 666C340 661 385 630 404 572C401 573 397 573 394 573C361 573 345 556 345 523C345 495 366 474 394 474M230 665L230 415C168 430 114 469 114 541C114 609 168 657 230 665M269 29L269 306C320 294 353 271 368 236C379 210 385 187 385 167C385 95 334 38 269 29Z"></path></g><g data-mml-node="mn" data-latex="50{,}000" transform="translate(1555.8,0)"><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(2278,0)"></path></g></g></g></svg></mjx-container></span>。显然<strong>在完整备份上花的钱只要低于 $50k
+就值得</strong>（Mitigate）。</p>
+<p><strong>Risk 4
+的应急/回退方案</strong>：知识转移与文档化、结对编程/交叉培训、预先识别内部替补或承包商；也可用留任激励（降低概率）。</p>
+<blockquote>
+<p>以上分类为参考答案（讲义只给了题目），类别归属有一定弹性，关键是给出理由。</p>
+</blockquote>
+<hr>
+<h2 id="八tutorialweek-7资源管理练习">八、Tutorial（Week
+7）：资源管理练习</h2>
+<blockquote>
+<p>本周 tutorial 内容是 <strong>Week 6 资源管理</strong>。</p>
+</blockquote>
+<h3 id="part-a为手机银行-app-画-rbs">Part A：为手机银行 App 画 RBS</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Level 1</th>
+<th style="text-align: left;">Level 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Human Resources</strong></td>
+<td style="text-align: left;">后端开发、前端开发、QA 测试、DevOps
+工程师、项目经理</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Equipment / Tools</strong></td>
+<td style="text-align: left;">笔记本/工作站、服务器/云基础设施、网络设备</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Software / Materials</strong></td>
+<td style="text-align: left;">开发
+IDE、测试工具、项目管理软件、文档工具</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>想拿满分可以再往下画 <strong>Level
+3</strong>（具体人名/工具版本/云实例/许可证数量），讲义说理想的 RBS
+有三层。</p>
+</blockquote>
+<h3 id="part-b识别过度分配与利用不足提出资源平衡方案">Part
+B：识别过度分配与利用不足，提出资源平衡方案</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">成员</th>
+<th style="text-align: center;">分配工时</th>
+<th style="text-align: center;">可用工时</th>
+<th style="text-align: center;">负荷</th>
+<th style="text-align: left;">状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Dev 1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;"><strong>125%</strong></td>
+<td style="text-align: left;"><strong>过度分配 10h</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Dev 2</td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">75%</td>
+<td style="text-align: left;"><strong>利用不足 10h</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">QA 1</td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">87.5%</td>
+<td style="text-align: left;">轻微利用不足</td>
+</tr>
+<tr>
+<td style="text-align: left;">QA 2</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">100%</td>
+<td style="text-align: left;">满负荷</td>
+</tr>
+</tbody>
+</table>
+<p><strong>平衡后</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">成员</th>
+<th style="text-align: center;">分配</th>
+<th style="text-align: center;">可用</th>
+<th style="text-align: left;">状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Dev 1</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: left;">平衡</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dev 2</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: left;">平衡</td>
+</tr>
+<tr>
+<td style="text-align: left;">QA 1</td>
+<td style="text-align: center;">37.5</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: left;">轻微利用不足</td>
+</tr>
+<tr>
+<td style="text-align: left;">QA 2</td>
+<td style="text-align: center;">37.5</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: left;">轻微利用不足</td>
+</tr>
+</tbody>
+</table>
+<p>两种平衡策略： 1. <strong>重新分配（Reallocate）</strong>：把 Dev 1
+的 10 小时合适工作转给 Dev 2——<strong>前提是 Dev 2
+有所需技能，且不影响依赖关系</strong> 2.
+<strong>重新排期（Reschedule）</strong>：如果这些任务必须由 Dev 1
+完成，就把 10
+小时推到有空闲的时段；<strong>优先推迟有浮动时间的任务</strong>；浮动不够时，<strong>完工日期可能要后移</strong></p>
+<p>QA 之间转移 2.5
+小时是<strong>可选的</strong>——两人都没有过度分配。</p>
+<blockquote>
+<p><strong>易错点</strong>：答资源平衡不能只说「转给 Dev
+2」，要写出<strong>技能/依赖的前提假设</strong>，以及<strong>推迟任务对关键路径的影响</strong>——answer
+sheet 两条都写了。</p>
+</blockquote>
+<h3 id="part-cqa-团队士气低落">Part C：QA 团队士气低落</h3>
+<p><strong>提升生产力和士气的策略</strong>： -
+<strong>认可与奖励</strong>：对达成测试目标进行表彰 -
+<strong>培训与技能发展</strong>：工作坊提升信心与效率 -
+<strong>工作量管理</strong>：公平分配任务，避免倦怠 -
+<strong>目标设定与反馈</strong>：清晰可达的目标 + 定期反馈 -
+<strong>团队建设活动</strong>：促进协作和积极文化 -
+<strong>赋权</strong>：让 QA 团队参与测试策略决策</p>
+<p><strong>适用的激励理论</strong>： - <strong>Herzberg
+双因素</strong>：管理<strong>保健因素</strong>（薪资、工作量、工作条件）防止不满；运用<strong>激励因素</strong>（认可、成就、成长机会）提升绩效和士气
+- 或
+<strong>Maslow</strong>：先保证基本需求（薪资、安全的工作环境），再通过认可、培训、职业成长满足<strong>尊重和自我实现</strong></p>
+<blockquote>
+<p>答题技巧：<strong>把每条策略对应到理论的某个因素/层级</strong>，比单独罗列策略更容易拿分。</p>
+</blockquote>
+<hr>
+<h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>风险定义</strong>：不确定的事件或条件，<strong>可正可负</strong>，影响范围/进度/成本/质量；已发生的是
+issue。</li>
+<li><strong>五类风险</strong>：Market / Financial / Technology / People
+/ Structure-Process。</li>
+<li><strong>威胁四策略（+Escalate）</strong>：Avoid / Mitigate /
+Transfer / Accept；<strong>机会四策略（+Escalate）</strong>：Exploit /
+Enhance / Share / Accept。对称记忆。</li>
+<li><strong>Escalate ≠
+Transfer</strong>：上报是风险不属于项目层级；转移是通过合同把后果转给第三方。</li>
+<li><strong>定性（主观排序，概率影响矩阵）vs 定量（数值模型：Monte
+Carlo、决策树/EMV）</strong>。</li>
+<li><strong>EMV = Σ 概率 × 影响</strong>；机会的 EMV
+记为负成本；<strong>风险中性者只看 EMV</strong>。</li>
+<li><strong>「是否值得花钱降风险」</strong>：比较 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="2.44ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1078.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_0 \times I"><g data-mml-node="msub" data-latex="P_0"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mn" transform="translate(675,-150) scale(0.707)" data-latex="0"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.387ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1497.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_0 \times I"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mi" data-latex="I" transform="translate(1000.2,0)"><path data-c="1D43C" d="M497 667C497 678 491 683 478 683L349 680L218 683C202 684 194 676 194 659C194 649 205 644 226 644C269 644 290 639 290 630C290 625 289 620 288 615L155 82C150 60 140 47 125 42C118 40 100 39 69 39C44 39 34 38 34 15C34 5 40 0 53 0L181 3L313 0C329-1 337 7 337 23C337 39 325 39 303 39C264 39 240 37 240 53C240 58 241 65 244 75L376 602C381 623 391 636 406 641C413 643 431 644 462 644C486 644 497 645 497 667Z"></path></g></g></g></svg></mjx-container></span> 与 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="9.05ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4000 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\text{应对成本} + P_1 \times I"><g data-mml-node="mtext" data-latex="\text{应对成本}"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">应对成本</text></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.703ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2078.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\text{应对成本} + P_1 \times I"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="P_1" transform="translate(1000.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mn" transform="translate(675,-150) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.387ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1497.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\text{应对成本} + P_1 \times I"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mi" data-latex="I" transform="translate(1000.2,0)"><path data-c="1D43C" d="M497 667C497 678 491 683 478 683L349 680L218 683C202 684 194 676 194 659C194 649 205 644 226 644C269 644 290 639 290 630C290 625 289 620 288 615L155 82C150 60 140 47 125 42C118 40 100 39 69 39C44 39 34 38 34 15C34 5 40 0 53 0L181 3L313 0C329-1 337 7 337 23C337 39 325 39 303 39C264 39 240 37 240 53C240 58 241 65 244 75L376 602C381 623 391 636 406 641C413 643 431 644 462 644C486 644 497 645 497 667Z"></path></g></g></g></svg></mjx-container></span>（Practice
+Exam Q3b）。</li>
+<li><strong>Brainstorming vs Delphi</strong>：Delphi
+<strong>匿名、多轮</strong>，避免强势人物主导，但耗时。</li>
+<li><strong>风险偏好</strong>：风险规避（凹）/中性（直线）/追求（凸）；行业、财务、领导、干系人影响偏好。</li>
+<li><strong>风险登记册是活文档，每个风险必须有责任人</strong>。</li>
+<li><strong>NHS NPfIT
+教训</strong>：终端用户早参与、透明沟通、定制沟通、透明带来韧性。</li>
+<li><strong>Chaos Report</strong>：成功 16.2% / 受挑战 52.7% / 取消
+31.1%；成功首要因素 = <strong>用户参与</strong>。</li>
+<li><strong>敏捷风险管理</strong>：迭代复审、高风险先做（fail
+fast）、风险燃尽图、共同所有权。</li>
+<li><strong>资源平衡答题</strong>：写出转移工作的技能/依赖前提，以及推迟对关键路径的影响。</li>
+</ol>
+<hr>
+<h2 id="十本讲与前后的衔接">十、本讲与前后的衔接</h2>
+<table>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">Week</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">成本管理</td>
+<td style="text-align: left;"><strong>应急储备</strong>、管理储备</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">资源管理</td>
+<td style="text-align: left;">RBS、资源平衡（<strong>本周
+tutorial</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: left;"><strong>风险管理</strong></td>
+<td style="text-align: left;"><strong>EMV、概率影响矩阵、风险应对、风险登记册</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">采购管理</td>
+<td style="text-align: left;">合同类型 =
+<strong>风险在买卖双方之间的分配</strong>（tutorial 做本周的风险）</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;">治理</td>
+<td style="text-align: left;">风险升级路径、指导委员会</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三处直接呼应</strong>： 1. <strong>EMV
+决定应急储备</strong>——对应 Week 4 的成本基线 + 应急储备 2.
+<strong>Transfer 策略的主要手段就是采购合同</strong>——Week 8 会讲 Fixed
+Price 合同如何把成本风险转给卖方 3. <strong>风险的 Escalate
+依赖治理结构</strong>——Week 9 的指导委员会、赞助人、升级路径</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/INFO6007/" rel="tag"><i class="fa fa-tag"></i> INFO6007</a>
+              <a href="/tags/Project-Management/" rel="tag"><i class="fa fa-tag"></i> Project-Management</a>
+              <a href="/tags/Resource-Leveling/" rel="tag"><i class="fa fa-tag"></i> Resource-Leveling</a>
+              <a href="/tags/Risk-Management/" rel="tag"><i class="fa fa-tag"></i> Risk-Management</a>
+              <a href="/tags/EMV/" rel="tag"><i class="fa fa-tag"></i> EMV</a>
+              <a href="/tags/Risk-Register/" rel="tag"><i class="fa fa-tag"></i> Risk-Register</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week06-resource-management.html" rel="prev" title="INFO6007 Week 06 Resource Management 讲课总结">
+                  <i class="fa fa-angle-left"></i> INFO6007 Week 06 Resource Management 讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/info6007-week08-procurement-management.html" rel="next" title="INFO6007 Week 08 Procurement Management 讲课总结">
+                  INFO6007 Week 08 Procurement Management 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week06-modeling-structure.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:25:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:52.486Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Collaboration">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="Object-Diagram">
+<meta property="article:tag" content="Structured-Class">
+<meta property="article:tag" content="UML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week06-modeling-structure.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week06-modeling-structure.html","path":"posts/elec5620-week06-modeling-structure.html","title":"ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week06-modeling-structure.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-06-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93modeling-structurepart-2-complex-structure"><span class="nav-text">ELEC5620
+Week 06 讲课总结：Modeling Structure（Part 2）—— Complex Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%89%BF%E6%8E%A5%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E7%BB%83%E4%B9%A0"><span class="nav-text">一、承接：基础结构概念练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1"><span class="nav-text">二、为什么需要复杂结构建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E5%B2%81%E5%B0%8F%E5%AD%A9%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%AE%B6"><span class="nav-text">2.1 五岁小孩与计算机科学家</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E5%8D%B7%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%9B%BE%E6%8F%8F%E8%BF%B0%E5%A4%9A%E5%B0%91%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%97%B6%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2
+问卷：一个类图描述多少种运行时配置？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E4%BE%8B%E5%AD%90"><span class="nav-text">2.3 Node 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E4%B8%8D%E4%B8%80%E5%AE%9A"><span class="nav-text">2.4 对象图？不一定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E8%89%B2%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="nav-text">三、角色与协作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E5%8E%9F%E5%9E%8B%E5%AE%9E%E4%BE%8B"><span class="nav-text">3.1 角色：原型实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C"><span class="nav-text">3.2 协作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collaboration-use%E5%8D%8F%E4%BD%9C%E4%BD%BF%E7%94%A8"><span class="nav-text">3.3 Collaboration
+Use（协作使用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C%E6%98%AF%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">3.4 协作是分类器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BBstructured-classes"><span class="nav-text">四、结构化类（Structured
+Classes）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">4.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3"><span class="nav-text">4.2 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3 端口与接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-text">4.4 内部结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BB"><span class="nav-text">4.5 使用结构化类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%89%B9%E5%8C%96%E7%B2%BE%E5%8C%96%E7%BB%93%E6%9E%84"><span class="nav-text">4.6 通过特化精化结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94agentic-ai-%E4%B8%AD%E7%9A%84%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84"><span class="nav-text">五、Agentic AI 中的复杂结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E5%AF%B9%E8%B1%A1%E5%9B%BE%E7%9A%84%E5%85%B3%E9%94%AE%E5%85%83%E7%B4%A0"><span class="nav-text">5.1 Agentic AI
+对象图的关键元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B2%E4%B9%89%E4%BE%8B%E5%AD%90%E4%B8%A4%E4%B8%AA-doctor-agent-%E5%85%B1%E4%BA%AB-belief"><span class="nav-text">5.2 讲义例子：两个 doctor
+agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E4%B8%AD%E7%9A%84%E5%8D%8F%E4%BD%9C%E9%A2%84%E7%BA%A6"><span class="nav-text">5.3 Agentic AI 中的协作：预约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BBhealthcareagent"><span class="nav-text">5.4 Agentic AI
+中的结构化类：HealthcareAgent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%B0%8F%E7%BB%93"><span class="nav-text">六、复杂结构建模小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83tutorial-6-%E8%A6%81%E7%82%B9%E4%B8%8E%E8%A7%A3%E7%AD%94%E6%80%9D%E8%B7%AF"><span class="nav-text">七、Tutorial 6 要点与解答思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E8%AE%B0%E5%8F%B7"><span class="nav-text">7.1 对象图记号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE-vs-%E7%B1%BB%E5%9B%BE%E5%B8%B8%E8%80%83%E5%AF%B9%E6%AF%94"><span class="nav-text">7.2 对象图 vs 类图（常考对比）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E5%AF%B9%E8%B1%A1%E5%9B%BE%E7%9A%84%E4%B8%83%E6%AD%A5"><span class="nav-text">7.3 画对象图的七步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E4%B8%BA%E5%BB%BA%E6%A8%A1%E9%A2%84%E5%91%8Atutorial-6-%E5%90%8E%E5%8D%8A"><span class="nav-text">7.4 行为建模预告（Tutorial 6
+后半）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABlab-6-%E8%A6%81%E7%82%B9"><span class="nav-text">八、Lab 6 要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week06-modeling-structure.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:25:00 / Modified: 04:13:52" itemprop="dateCreated datePublished" datetime="2026-11-03T13:25:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-06-讲课总结modeling-structurepart-2-complex-structure">ELEC5620
+Week 06 讲课总结：Modeling Structure（Part 2）—— Complex Structure</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>5 Modeling Structure part 2.pdf</code>（33 页）+
+<code>ELEC5620-TUT-06.pdf</code>（22 页）+
+<code>ELEC5620-Lab-Note-6.pdf</code>（1 页）。本周无转录稿。</p>
+<p><strong>本周覆盖</strong>： 1. 基础结构概念练习（承接 Week 5） 2.
+<strong>为什么类图不够</strong>：运行时配置的多义性、对象图的局限 3.
+<strong>角色与协作</strong>：MicroHamlet、Collaboration Use、协作继承 4.
+<strong>结构化类</strong>：端口、接口、内部结构、结构精化 5. Agentic AI
+中的对象图、协作和结构化类 6. Tutorial 6：对象图记号与画法 +
+行为建模预告；Lab 6：对象图</p>
+</blockquote>
+<p>相关笔记：[[26-S2-Course/ELEC5620/ELEC5620-Week05-Architectural-Patterns-and-Modeling-Structure-Summary|Week
+05
+架构模式与结构建模（上）]]｜[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab
+1–6 总结]]</p>
+<hr>
+<h2 id="一承接基础结构概念练习">一、承接：基础结构概念练习</h2>
+<p>讲义开头给出 Week 5
+<code>Adult (parents 1..2) —— (children 0..*) Child</code>
+类图上的练习。</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">题目</th>
+<th style="text-align: left;">解答思路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Karl 的 <code>children</code>
+集合是什么？</strong></td>
+<td style="text-align: left;">沿着 Karl
+的所有链接，取另一端（<code>children</code> 端）的对象构成集合。讲义 OCL
+例子 <code>Karl.children-&gt;includes(Cory)</code> 说明 Cory
+在其中；完整集合按 Week 5 图中从 Karl 出发的链接逐个读出。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cory 的 <code>parents</code>
+集合是什么？</strong></td>
+<td style="text-align: left;">反向读：所有以 Cory 为
+<code>children</code> 端的链接，取 <code>parents</code> 端的对象；多重性
+<code>1..2</code> 保证集合有 1 或 2 个元素。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>为什么 Association 是
+classifier？</strong></td>
+<td style="text-align: left;">分类器 =
+对一组<strong>共享特征</strong>、并<strong>可按特征进一步划分</strong>的实体的规格。关联规格了一组<strong>链接</strong>（共享特征：各端类型相同）；链接可以按特征再分类——即<strong>关联特化</strong>（如
+<code>C-accounts</code> 特化
+<code>accounts</code>）；而且关联可以作为链接的<strong>类型</strong>。三点都满足分类器的定义。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>扩展类图，显式表示 Adult
+与儿子、Adult 与女儿的关系</strong></td>
+<td style="text-align: left;">用<strong>泛化集 +
+关联特化</strong>：Child 按 <code>gender</code> 泛化集分出
+<code>Son</code>、<code>Daughter</code>；增加两条关联
+<code>Adult —— sons: Son [0..*]</code> 和
+<code>Adult —— daughters: Daughter [0..*]</code>，端点标注
+<code>{subsets children}</code>，对应的父母端标
+<code>{subsets parents}</code>；原 <code>children</code> 端可标
+<code>{union}</code>。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Adult</span><br><span class="line">    class Child</span><br><span class="line">    class Son</span><br><span class="line">    class Daughter</span><br><span class="line">    Child &lt;|-- Son</span><br><span class="line">    Child &lt;|-- Daughter</span><br><span class="line">    Adult "1..2 parents" -- "0..* children" Child</span><br><span class="line">    Adult "1..2" -- "0..* sons {subsets children}" Son</span><br><span class="line">    Adult "1..2" -- "0..* daughters {subsets children}" Daughter</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="二为什么需要复杂结构建模">二、为什么需要复杂结构建模</h2>
+<h3 id="五岁小孩与计算机科学家">2.1 五岁小孩与计算机科学家</h3>
+<p>问题：<strong>画一辆车</strong>。</p>
+<ul>
+<li>计算机科学家画的是类图式的抽象（Car 有 4 个 Wheel……）</li>
+<li>五岁小孩画的是：<strong>方框代表部件，线代表部件之间的某种连接</strong>——Left
+Front Wheel、Right Front Wheel、Engine、Body、Left/Right Rear Wheel
+按实际位置摆放并连线</li>
+</ul>
+<blockquote>
+<p><strong>Taking a cue from the 5-year
+old</strong>：架构建模更需要“部件 +
+连接”的直观表示——这就是结构化类的思路。</p>
+</blockquote>
+<h3 id="问卷一个类图描述多少种运行时配置">2.2
+问卷：一个类图描述多少种运行时配置？</h3>
+<p>类图：<code>ClassA</code> 与 <code>ClassB</code> 之间有两条关联，A
+端角色 <code>al</code>、<code>ar</code>，B 端角色
+<code>left</code>、<code>right</code>，多重性都是 <code>1</code>。</p>
+<p>可能的运行时配置：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">配置</th>
+<th style="text-align: left;">结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">(1)</td>
+<td style="text-align: left;"><code>a1:ClassA</code> 通过 left 和 right
+两条链接都连到<strong>同一个</strong> <code>b1:ClassB</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">(2)</td>
+<td style="text-align: left;"><code>a1</code> 的 left 连
+<code>b1</code>，<code>b1</code> 的 right 连
+<code>a2</code>，<code>a2</code> 的 left 连
+<code>b2</code>，<code>b2</code> 的 right 连回
+<code>a1</code>……形成<strong>环</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">(3)</td>
+<td style="text-align: left;">等等——环可以任意长</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>答案：<strong>不止一种，实际上有无穷多种</strong>。类图只约束“每个对象恰好有一个
+left 和一个 right”，并不规定它们构成怎样的拓扑。</p>
+</blockquote>
+<h3 id="node-例子">2.3 Node 例子</h3>
+<p>类 <code>Node</code> 有自关联 <code>left 0..1</code> 和
+<code>right 0..1</code>。<strong>同一个类图</strong>既能描述一棵二叉树
+<code>N1 → {N2, N4}, N2 → N3</code>，也能描述一条链
+<code>N1 → N2 → N3</code>。</p>
+<blockquote>
+<p><strong>结论：类图并不总能精确表示运行时结构；有些结构需要在实例层次表示。</strong></p>
+</blockquote>
+<h3 id="对象图不一定">2.4 对象图？不一定</h3>
+<ul>
+<li>对象图表示某个具体系统<strong>在某一时刻的“快照”</strong></li>
+<li>只能作为<strong>例子</strong>，不能作为一般的架构规格（除非定义
+profile）</li>
+<li>例：时刻 T 是 N1–N4，时刻 T+1 多了 N5——两张对象图都只是瞬间</li>
+</ul>
+<blockquote>
+<p>⇒ 需要一种方式来描述<strong>跨时间的“原型实例（prototypical
+instances）”</strong>。答案是<strong>角色（roles）</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="三角色与协作">三、角色与协作</h2>
+<h3 id="角色原型实例">3.1 角色：原型实例</h3>
+<blockquote>
+<p><strong>Role</strong>：在某个更广泛的上下文（<strong>协作</strong>）中，<strong>承担特定职责的实例</strong>的表示。</p>
+</blockquote>
+<ul>
+<li>例：莎士比亚剧中的 <strong>Hamlet</strong> 这个角色</li>
+<li>可以由<strong>不同的实际个体（实例）</strong>来扮演：Laurence
+Olivier、Kenneth Branagh 都演过 Hamlet</li>
+<li>角色记号 <code>Hamlet : YoungMan</code>——角色名 + 类型约束</li>
+</ul>
+<h3 id="协作">3.2 协作</h3>
+<blockquote>
+<p><strong>Collaboration</strong>：描述一组<strong>协作的角色</strong>，它们通过<strong>连接器（connectors，表示通信链接）</strong>通信。</p>
+</blockquote>
+<p><strong>MicroHamlet 协作</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌──────────────── MicroHamlet ────────────────┐</span><br><span class="line">│  Gertrude : OlderWoman ─── Ophelia : YoungWoman │</span><br><span class="line">│            \                 /               │</span><br><span class="line">│             Hamlet : YoungMan                │</span><br><span class="line">│                   │                          │</span><br><span class="line">│                 Ghost        ← unconstrained role（无类型约束）│</span><br><span class="line">└─────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Hamlet : YoungMan</code>
+是<strong>受约束的角色</strong>（必须由 YoungMan 扮演）</li>
+<li><code>Ghost</code> 是<strong>无约束的角色</strong></li>
+<li>线是<strong>连接器</strong></li>
+</ul>
+<p><strong>协作 =
+一个协作对象实例网络，但对象的身份被抽象掉了（只剩角色）</strong>。</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">演出</th>
+<th style="text-align: left;">Gertrude</th>
+<th style="text-align: left;">Ophelia</th>
+<th style="text-align: left;">Hamlet</th>
+<th style="text-align: left;">Ghost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">MicroHamlet (1948)</td>
+<td style="text-align: left;">E. Herlie</td>
+<td style="text-align: left;">J. Simmons</td>
+<td style="text-align: left;"><strong>L. Olivier</strong></td>
+<td style="text-align: left;"><strong>L. Olivier</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">MicroHamlet (1996)</td>
+<td style="text-align: left;">J. Christie</td>
+<td style="text-align: left;">K. Winslet</td>
+<td style="text-align: left;">K. Branagh</td>
+<td style="text-align: left;">B. Blessed</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>两个观察：<strong>同一个实例可以扮演不同角色</strong>（1948 年
+Olivier 同时演 Hamlet 和
+Ghost）；<strong>同一个角色可以由不同实例扮演</strong>（Olivier 和
+Branagh 都演 Hamlet）。具体演出与协作之间是 <code>«abstraction»</code>
+关系。</p>
+</blockquote>
+<p><strong>记号</strong>：教科书里常见用虚线椭圆画协作，但<strong>空间利用率低</strong>，讲义<strong>推荐矩形记号</strong>。</p>
+<h3 id="collaboration-use协作使用">3.3 Collaboration
+Use（协作使用）</h3>
+<p>把一个协作规格<strong>应用</strong>到另一个结构中：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Sale 协作：Buyer —— Seller</span><br><span class="line"></span><br><span class="line">BrokeredSale 协作：</span><br><span class="line">  producer ──(wholesale : Sale)── broker ──(retail : Sale)── consumer</span><br><span class="line">  wholesale 中：producer 扮演 Seller，broker 扮演 Buyer</span><br><span class="line">  retail    中：broker 扮演 Seller，consumer 扮演 Buyer</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>wholesale : Sale</code> 和 <code>retail : Sale</code>
+是两次<strong>协作使用</strong>；<code>broker</code> 在一次里是
+Buyer、在另一次里是 Seller。</p>
+</blockquote>
+<h3 id="协作是分类器">3.4 协作是分类器</h3>
+<ul>
+<li>协作可以通过<strong>继承</strong>来精化 ⇒
+可以定义<strong>通用架构结构</strong></li>
+<li>例：<code>TwoViewMVC</code>（ctrlr、model、view1、view2）被
+<code>ThreeViewMVC</code> 继承并加上 <code>view3</code></li>
+</ul>
+<hr>
+<h2 id="四结构化类structured-classes">四、结构化类（Structured
+Classes）</h2>
+<h3 id="概念">4.1 概念</h3>
+<blockquote>
+<p>结构化类 =
+具有<strong>外部结构（端口交互点）</strong>和<strong>内部（协作）结构</strong>的类；<strong>主要用于架构建模</strong>。</p>
+</blockquote>
+<ul>
+<li>渊源：<strong>架构描述语言（ADL）</strong>——<strong>UML-RT
+profile</strong>（Selic &amp; Rumbaugh,
+1998）、<strong>ACME</strong>（Garlan et
+al.）、<strong>SDL</strong>（ITU-T Z.100）</li>
+<li>直觉：<strong>“打开”一个类，看它的组件在运行时如何连线</strong></li>
+</ul>
+<p>Tutorial 6 的总结图：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">外部结构</th>
+<th style="text-align: left;">内部结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ports</strong>：命名的交互点</td>
+<td style="text-align: left;"><strong>Parts and
+connectors</strong>：内部组件和通信路径</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interfaces</strong>
+描述端口提供或需要的服务</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="端口">4.2 端口</h3>
+<ul>
+<li>对象可以有<strong>多个交互点</strong>，每个专用于特定目的（如数据库对象有
+<strong>Admin 端口</strong> 和多个 <strong>User 端口</strong>）</li>
+<li><strong>Port
+结构模式</strong>：对象为多个（可能同时进行的）协作提供<strong>不同的交互点</strong>；<strong>端口让对象区分不同的外部协作者，而不直接耦合到它们</strong></li>
+</ul>
+<p>讲义例子：<code>objM</code> 的方法里写
+<code>q.setA(d)</code>（通过端口 q 发送），而不是
+<code>objM.setA(d)</code> 直接引用某个对象——objM
+不需要知道端口另一端连的是 objC 还是 objG。</p>
+<h3 id="端口与接口">4.3 端口与接口</h3>
+<ul>
+<li>端口可以<strong>提供（provided）</strong>和/或<strong>需求（required）</strong>接口；一般情况两者兼有，单向端口也很常见</li>
+</ul>
+<p><strong>DataBase 例子</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">端口</th>
+<th style="text-align: left;">接口</th>
+<th style="text-align: left;">方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>adminPort</code> /
+<code>clientPort</code></td>
+<td style="text-align: left;"><code>«interface» DBserver { readDB(recNo), writeDB(recNo, d), notifyOfChange(recNo) }</code></td>
+<td style="text-align: left;"><strong>Provided</strong>（lollipop）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>clientPort</code></td>
+<td style="text-align: left;"><code>«interface» DBclient { change(d) }</code></td>
+<td style="text-align: left;"><strong>Required</strong>（socket，<code>«uses»</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一个端口多个接口？可以，但应避免</strong>：</p>
+<ol type="1">
+<li>会产生<strong>名字冲突</strong>（如 <code>WebServer.read(id)</code>
+与 <code>Library.read(id)</code>），需要消歧机制</li>
+<li>如果接口附带<strong>协议状态机</strong>，语义不清</li>
+<li><strong>为每个接口定义单独的端口问题少得多</strong></li>
+</ol>
+<blockquote>
+<p><strong>端口的一个基本目的就是“角色分离”！</strong></p>
+</blockquote>
+<h3 id="内部结构">4.4 内部结构</h3>
+<ul>
+<li>结构化类可以包含由 <strong>parts</strong> 组成的协作结构，part
+是其他结构化类（或基本类）的<strong>用法</strong></li>
+<li>例：<code>ClassX</code> 内部有
+<code>partF : F</code>，<code>ClassX</code>
+的外部端口通过<strong>委托连接器（delegation
+connector）</strong>连到内部 part 的端口</li>
+<li>讲义问：<strong>类的所有属性都应该成为结构化类中的 part
+吗？</strong> ——
+不。只有那些<strong>在运行时作为协作组件、需要连线</strong>的才作为
+part；普通数据值（如 name: String）仍是属性。</li>
+</ul>
+<h3 id="使用结构化类">4.5 使用结构化类</h3>
+<ul>
+<li>结构化类可以把复杂的架构结构<strong>作为一个单元</strong>来捕获</li>
+<li><strong>可以作为一个单元被创建和销毁</strong></li>
+<li>例：<code>FaxCall</code> 内部有 <code>sender : Fax</code> 和
+<code>receiver : Fax</code>，两者的 <code>remote</code>
+端口相连；<code>FaxCall</code> 的
+<code>sendCtrl</code>、<code>receiveCtrl</code> 端口分别委托到两者的
+<code>c</code> 端口</li>
+</ul>
+<h3 id="通过特化精化结构">4.6 通过特化精化结构</h3>
+<ul>
+<li><strong>架构层面的复用</strong>；适合表示<strong>产品族（产品线）</strong></li>
+<li><code>ProductArchitecture</code>（sender、receiver）→
+<code>ProductA</code>（照搬）、<code>ProductB</code>（加入
+<code>mgr : FaxMgr</code>）</li>
+</ul>
+<blockquote>
+<p>这和 Week 3 的 <strong>feature model / 产品线</strong>
+相呼应：特征模型描述“产品之间有什么差异”，结构化类的特化描述“架构上如何实现这些差异”。</p>
+</blockquote>
+<hr>
+<h2 id="五agentic-ai-中的复杂结构">五、Agentic AI 中的复杂结构</h2>
+<h3 id="agentic-ai-对象图的关键元素">5.1 Agentic AI
+对象图的关键元素</h3>
+<p>对象图用来说明 <strong>AI agent 在运行时如何被实例化</strong>。以 BDI
+建模时，对象通常包括：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类别</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Agent 实例</td>
+<td style="text-align: left;"><code>DoctorAgent1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Belief 对象</td>
+<td style="text-align: left;"><code>KnowledgeBase</code>、<code>UserProfile</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Desire/Goal 对象</td>
+<td style="text-align: left;"><code>BookAppointment</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Intention/Plan 对象</td>
+<td style="text-align: left;"><code>SendReminder</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Environment 对象</td>
+<td style="text-align: left;"><code>HospitalSystem</code></td>
+</tr>
+</tbody>
+</table>
+<p>要分析<strong>同一个类的多个对象之间的关系</strong>：一个 agent
+对象有多个 beliefs，一个 belief 关联多个 agents。</p>
+<h3 id="讲义例子两个-doctor-agent-共享-belief">5.2 讲义例子：两个 doctor
+agent 共享 belief</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    G1["bookAppointment1 : Goal&lt;br/&gt;status = pending"]</span><br><span class="line">    G2["bookAppointment2 : Goal&lt;br/&gt;status = pending"]</span><br><span class="line">    HK["hospitalKnowledge : Belief&lt;br/&gt;type = KnowledgeBase"]</span><br><span class="line">    PP["patientProfile : Belief&lt;br/&gt;type = UserProfile"]</span><br><span class="line">    D1["doctorAgent1 : DoctorAgent"]</span><br><span class="line">    D2["doctorAgent2 : DoctorAgent"]</span><br><span class="line">    P1["scheduleVisit1 : Plan&lt;br/&gt;status = executing"]</span><br><span class="line">    P2["scheduleVisit2 : Plan&lt;br/&gt;status = executing"]</span><br><span class="line">    HS["hospitalSystem : HospitalSystem"]</span><br><span class="line">    D1 -- desires --&gt; G1</span><br><span class="line">    D2 -- desires --&gt; G2</span><br><span class="line">    D1 -- has belief --&gt; HK</span><br><span class="line">    D2 -- has belief --&gt; HK</span><br><span class="line">    D1 -- has belief --&gt; PP</span><br><span class="line">    D2 -- has belief --&gt; PP</span><br><span class="line">    D1 -- intends --&gt; P1</span><br><span class="line">    D2 -- intends --&gt; P2</span><br><span class="line">    P1 -- pursues --&gt; G1</span><br><span class="line">    P2 -- pursues --&gt; G2</span><br><span class="line">    D1 -- operates in --&gt; HS</span><br><span class="line">    D2 -- operates in --&gt; HS</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>每个 agent 有两个 belief；每个 belief 关联两个
+agent。</strong> Tutorial 的快速检查题：<strong>两个 agent 共享同一个
+Belief 对象，要画几个 Belief 框？—— 一个。</strong>
+对象图里一个对象只画一次，多个链接连到它；画两个框就变成了两个不同身份的对象。</p>
+</blockquote>
+<h3 id="agentic-ai-中的协作预约">5.3 Agentic AI 中的协作：预约</h3>
+<p>场景：患者与 booking agent 沟通，agent 确认医生是否有空。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">协作 Booking Appointment：</span><br><span class="line">  Requester : User ── Mediator : Booking Agent ── Provider : User</span><br><span class="line"></span><br><span class="line">协作使用 BA1 : Booking Appointment：</span><br><span class="line">  Patient1 : User   扮演 Requester</span><br><span class="line">  Agent1 : Booking Agent 扮演 Mediator</span><br><span class="line">  Doctor1 : User    扮演 Provider</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意 Patient 和 Doctor 是<strong>同一个类型 User
+的不同实例扮演不同角色</strong>——这正是角色比类更适合描述协作的原因。</p>
+</blockquote>
+<h3 id="agentic-ai-中的结构化类healthcareagent">5.4 Agentic AI
+中的结构化类：HealthcareAgent</h3>
+<p>Agent 是复杂的软件实体，有子组件：<strong>Belief
+Base</strong>（知识、记忆）、<strong>Desire/Goal
+Manager</strong>、<strong>Intention/Plan
+Manager</strong>、<strong>Reasoning/Decision
+Engine</strong>、<strong>Communication
+Interface</strong>。结构化类图描述这些部分如何在内部组织和交互。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌──────────────────────── HealthcareAgent ────────────────────────┐</span><br><span class="line">◻ PatientCommPort                                  HospitalAPIPort ◻</span><br><span class="line">│   │ Input                                          CallAPI │       │</span><br><span class="line">│   ▼                                                        │       │</span><br><span class="line">│  Reasoner : DecisionEngine ──Execute Intention──▶ IntentionHandler : PlanExecutor │</span><br><span class="line">│   ▲ Belief Reasoning              Goal Reasoning ▲                 │</span><br><span class="line">│   │                                              │                 │</span><br><span class="line">│  BeliefBase : KnowledgeStore            GoalManager : DesireManager │</span><br><span class="line">└──────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<ul>
+<li>外部：<code>PatientCommPort</code>（面向患者）和
+<code>HospitalAPIPort</code>（面向医院系统）——<strong>两个端口，两种角色</strong></li>
+<li>内部：四个 part 通过连接器连线；<code>Reasoner</code> 从 BeliefBase
+和 GoalManager 推理，再把 intention 交给 <code>IntentionHandler</code>
+执行</li>
+</ul>
+<hr>
+<h2 id="六复杂结构建模小结">六、复杂结构建模小结</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Collaborations</strong></th>
+<th style="text-align: left;"><strong>Structured classes（和
+components）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">用途</td>
+<td style="text-align: left;">捕获<strong>协作对象的模式</strong></td>
+<td style="text-align: left;"><strong>架构组件</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">组成</td>
+<td style="text-align: left;">角色、连接器</td>
+<td style="text-align: left;"><strong>外部结构（端口）+
+内部结构（parts、connectors）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">封装</td>
+<td style="text-align: left;"><strong>没有封装外壳，不能作为对象实例化</strong></td>
+<td style="text-align: left;"><strong>可以作为一个单元创建和销毁</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>UML 引入 <strong>structured classifiers</strong>
+主要就是为了<strong>架构建模</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="七tutorial-6-要点与解答思路">七、Tutorial 6 要点与解答思路</h2>
+<h3 id="对象图记号">7.1 对象图记号</h3>
+<ul>
+<li><strong>对象标签</strong>：<code>objectName : ClassName</code>（<strong>整体加下划线</strong>）；匿名对象写
+<code>: ClassName</code></li>
+<li><strong>属性槽</strong>：显示<strong>此刻的值</strong>（<code>status = active</code>、<code>mode = assisting</code>）</li>
+<li><strong>链接</strong> = 实线；<strong>链接名</strong>表示含义（has
+belief）</li>
+<li><strong>关联连接类，链接连接对象实例</strong></li>
+</ul>
+<h3 id="对象图-vs-类图常考对比">7.2 对象图 vs 类图（常考对比）</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Class Diagram</th>
+<th style="text-align: left;">Object Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">分栏</td>
+<td style="text-align: left;"><strong>三栏</strong>：名称、属性、操作</td>
+<td style="text-align: left;"><strong>两栏</strong>：名称、属性</td>
+</tr>
+<tr>
+<td style="text-align: left;">名称</td>
+<td style="text-align: left;">只写类名</td>
+<td style="text-align: left;"><code>对象名 : 类名</code> 或
+<code>: 类名</code>（下划线）</td>
+</tr>
+<tr>
+<td style="text-align: left;">属性</td>
+<td style="text-align: left;">列出所有特性（类型）</td>
+<td style="text-align: left;">定义属性的<strong>当前值</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">连接</td>
+<td style="text-align: left;"><strong>关联</strong>：有名称、角色、<strong>多重性</strong>、约束</td>
+<td style="text-align: left;"><strong>链接</strong>：有名称和角色，但<strong>没有多重性</strong>（每条链接都是一对一）</td>
+</tr>
+<tr>
+<td style="text-align: left;">表示</td>
+<td style="text-align: left;">对象的分类</td>
+<td style="text-align: left;">个体实体</td>
+</tr>
+</tbody>
+</table>
+<h3 id="画对象图的七步">7.3 画对象图的七步</h3>
+<ol type="1">
+<li><strong>识别类</strong>：确定场景相关的类</li>
+<li><strong>识别对象</strong>：每个类要包含哪些具体实例</li>
+<li><strong>画对象框</strong>：写对象名</li>
+<li><strong>加属性和值</strong></li>
+<li><strong>画关系</strong>：用线连接对象，必要时用箭头表示方向</li>
+<li><strong>标注关系</strong>：用动词或短语</li>
+<li><strong>审查与精化</strong></li>
+</ol>
+<p>Tutorial 示例（PDF 中为图片）：University Department、Order
+System（类图到对象图）、Company Structure、POS、Writer、Robot Moving
+Behavior、类似通信图的对象结构。</p>
+<h3 id="行为建模预告tutorial-6-后半">7.4 行为建模预告（Tutorial 6
+后半）</h3>
+<ul>
+<li><strong>行为建模</strong>描述系统的<strong>动态行为</strong>：对象如何交互、执行动作，系统如何响应事件</li>
+<li>关键元素：<strong>Actions、Activities、Interactions、State
+Machines</strong></li>
+<li><strong>Actions 和 Activities 用于微观行为；State Machines 和
+Interactions 捕获宏观行为</strong></li>
+<li><strong>Action</strong>：活动中的<strong>单个原子步骤</strong>，不再分解；类型包括通信动作、对象动作、链接动作、结构特性动作、变量动作；例：create
+link、write attribute、destroy object</li>
+</ul>
+<p>（详见 Week 7。）</p>
+<hr>
+<h2 id="八lab-6-要点">八、Lab 6 要点</h2>
+<p><code>ELEC5620-Lab-Note-6.pdf</code>（文件头 “Week 7: Laboratory
+6”）：</p>
+<ul>
+<li><strong>Step
+1</strong>：回顾已有类图，识别需要实例化的关键类；为每个类创建实例，给出<strong>具体名字和属性值</strong></li>
+<li><strong>Step
+2</strong>：用结构建模技术画对象图，展示运行时实例和关系，<strong>重点展示对象之间的协作</strong>（如何交互和通信）</li>
+</ul>
+<p><strong>做 Lab 6 的检查点</strong>（结合本周讲义）：</p>
+<ol type="1">
+<li>对象名必须是 <code>name : Class</code>，并和类图里的类对应</li>
+<li>链接必须对应类图里存在的关联，<strong>数量不违反多重性</strong></li>
+<li>共享对象只画一次（如共享的 Memory/Belief/KnowledgeBase）</li>
+<li>选一个具体场景（某个 use case
+运行到某一时刻），属性值要反映那一刻（如
+<code>status = executing</code>）</li>
+<li>想表达“不依赖具体实例的协作模式”时，用<strong>协作 +
+角色</strong>而不是对象图</li>
+</ol>
+<p>更多常见失分点见
+[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab 1–6 总结]]
+第七节。</p>
+<hr>
+<h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>类图不足以精确描述运行时结构</strong>：同一类图可对应无穷多种运行时配置（A/B
+环、Node 树或链）。</li>
+<li><strong>对象图只是快照</strong>，不能作为一般架构规格。</li>
+<li><strong>角色 =
+原型实例</strong>：在协作中承担职责；同一实例可扮演多个角色，同一角色可由不同实例扮演。</li>
+<li><strong>协作 = 角色 +
+连接器</strong>；对象身份被抽象掉；<strong>不能被实例化</strong>；是分类器，可继承（TwoViewMVC
+→ ThreeViewMVC）；可通过 <strong>collaboration use</strong>
+应用（BrokeredSale）。</li>
+<li><strong>结构化类 = 端口（外部）+
+parts/connectors（内部）</strong>；可作为单元创建销毁；渊源是
+ADL（UML-RT、ACME、SDL）。</li>
+<li><strong>端口</strong>：让对象区分外部协作者而不直接耦合；可提供/需求接口；<strong>一端口一接口</strong>（避免名字冲突、协议状态机语义不清）；<strong>端口的基本目的是角色分离</strong>。</li>
+<li><strong>委托连接器</strong>把外部端口连到内部
+part；不是所有属性都要变成 part。</li>
+<li><strong>结构特化</strong>用于产品族。</li>
+<li><strong>Agentic
+对象图</strong>：Agent、Belief、Goal、Plan、Environment
+对象；<strong>共享对象只画一个框</strong>。</li>
+<li><strong>对象图 vs 类图</strong>：两栏 vs
+三栏；下划线对象名；链接<strong>无多重性</strong>。</li>
+<li><strong>易错</strong>：在对象图里写多重性；对象名不加下划线或缺类名；把协作画成对象图；同一个
+agent 的端口混用多个接口。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+              <a href="/tags/Object-Diagram/" rel="tag"><i class="fa fa-tag"></i> Object-Diagram</a>
+              <a href="/tags/Collaboration/" rel="tag"><i class="fa fa-tag"></i> Collaboration</a>
+              <a href="/tags/Structured-Class/" rel="tag"><i class="fa fa-tag"></i> Structured-Class</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week05-architecture-structure.html" rel="prev" title="ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week07-modeling-behavior.html" rel="next" title="ELEC5620 Week 07 行为建模讲课总结">
+                  ELEC5620 Week 07 行为建模讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

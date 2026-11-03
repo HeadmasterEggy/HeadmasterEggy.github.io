@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 03 讲课总结：需求工程五项活动与常见问题；Ad hoc（Secure Room 规格）、Feature-Oriented（FODA、特征图与跨树约束）、Use Case（Cockburn 模板、extend&#x2F;include）三种建模方法；功能与非功能需求；面向 agentic 软件的有界自治 use case；Tutorial 3 与 Lab 3 解题思路。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 03 需求建模讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week03-requirement-model.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 03 讲课总结：需求工程五项活动与常见问题；Ad hoc（Secure Room 规格）、Feature-Oriented（FODA、特征图与跨树约束）、Use Case（Cockburn 模板、extend&#x2F;include）三种建模方法；功能与非功能需求；面向 agentic 软件的有界自治 use case；Tutorial 3 与 Lab 3 解题思路。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:10:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:50.988Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Agentic-AI">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="Feature-Model">
+<meta property="article:tag" content="Requirement-Modeling">
+<meta property="article:tag" content="Use-Case">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week03-requirement-model.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week03-requirement-model.html","path":"posts/elec5620-week03-requirement-model.html","title":"ELEC5620 Week 03 需求建模讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 03 需求建模讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week03-requirement-model.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-03-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93requirements-modelling"><span class="nav-text">ELEC5620 Week
+03 讲课总结：Requirements Modelling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%9C%80%E6%B1%82%E5%B7%A5%E7%A8%8B%E5%AF%BC%E8%AE%BA"><span class="nav-text">一、需求工程导论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%88%90%E5%8A%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">1.1 软件成功的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%BD%E9%9C%80%E6%B1%82%E7%9A%84%E6%94%B6%E7%9B%8A-vs-%E9%9C%80%E6%B1%82%E9%99%88%E8%BF%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 好需求的收益 vs
+需求陈述的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E4%BA%94%E9%A1%B9%E6%B4%BB%E5%8A%A8"><span class="nav-text">1.3 需求工程的定义与五项活动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90ai-native-healthcare-agency"><span class="nav-text">1.4 例子：AI-native healthcare
+agency</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%89%E7%A7%8D%E9%9C%80%E6%B1%82%E8%A7%84%E6%A0%BC%E6%96%B9%E6%B3%95%E6%80%BB%E8%A7%88"><span class="nav-text">二、三种需求规格方法总览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89ad-hoc-%E6%96%B9%E6%B3%95secure-access-room-%E4%BE%8B%E5%AD%90"><span class="nav-text">三、Ad hoc 方法：Secure
+Access Room 例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-text">3.1 场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%AD%A3%E5%BC%8F%E8%A7%84%E6%A0%BC%E4%B8%89%E6%AE%B5"><span class="nav-text">3.2 非正式规格（三段）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9D%9E%E6%AD%A3%E5%BC%8F%E8%A7%84%E6%A0%BC%E4%B8%8D%E5%A4%9F%E9%87%8D%E7%82%B9"><span class="nav-text">3.3 为什么非正式规格不够（重点）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bfeature-oriented-%E6%96%B9%E6%B3%95"><span class="nav-text">四、Feature-Oriented 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#foda"><span class="nav-text">4.1 FODA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%9B%BE%E7%AC%A6%E5%8F%B7"><span class="nav-text">4.2 特征图符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#secure-room-%E7%9A%84%E7%89%B9%E5%BE%81%E5%9B%BE"><span class="nav-text">4.3 Secure Room 的特征图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent-%E9%85%8D%E7%BD%AE%E7%9A%84%E7%89%B9%E5%BE%81%E5%9B%BE%E8%AE%B2%E4%B9%89%E7%AC%AC%E4%BA%8C%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-text">4.4 Agent
+配置的特征图（讲义第二个例子）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tutorial-3-%E7%9A%84-e-shop-%E4%BE%8B%E5%AD%90"><span class="nav-text">4.5 Tutorial 3 的 E-Shop 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feature-%E5%BB%BA%E6%A8%A1%E5%B0%8F%E7%BB%93"><span class="nav-text">4.6 Feature 建模小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82-vs-%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82"><span class="nav-text">五、功能需求 vs 非功能需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADuse-case-%E6%96%B9%E6%B3%95"><span class="nav-text">六、Use Case 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E6%A1%86%E6%9E%B6"><span class="nav-text">6.1 概念框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cockburn-%E6%96%B9%E6%B3%95%E7%9A%84%E5%85%B3%E9%94%AE%E8%A6%81%E7%B4%A0"><span class="nav-text">6.2 Cockburn 方法的关键要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E6%A8%A1%E6%9D%BFatm-%E4%BE%8B%E5%AD%90"><span class="nav-text">6.3 Use case 模板（ATM 例子）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extendinclude%E6%B3%9B%E5%8C%96"><span class="nav-text">6.4 «extend»、«include»、泛化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E7%AE%80%E5%8D%95%E5%92%8C%E6%95%8F%E6%8D%B7"><span class="nav-text">6.5 保持简单和敏捷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80patient-consults-ai-health-agent"><span class="nav-text">6.6 例子一：Patient
+Consults AI Health Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91-agentic-%E8%BD%AF%E4%BB%B6%E7%9A%84-use-case-%E6%A8%A1%E5%9E%8B%E6%9C%AC%E8%AE%B2%E6%9C%80%E6%96%B0%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-text">6.7 面向
+agentic 软件的 use case 模型（本讲最新的部分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8Cassess-and-coordinate-patient-care%E6%9C%89%E7%95%8C%E8%87%AA%E6%B2%BB%E7%89%88"><span class="nav-text">6.8
+例子二：Assess and coordinate patient care（有界自治版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E5%B0%8F%E7%BB%93"><span class="nav-text">6.9 Use case 小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E9%9C%80%E6%B1%82%E8%A7%84%E6%A0%BC%E6%80%BB%E7%BB%93"><span class="nav-text">七、需求规格总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABtutorial-3-%E8%A6%81%E7%82%B9%E4%B8%8E%E8%A7%A3%E7%AD%94%E6%80%9D%E8%B7%AF"><span class="nav-text">八、Tutorial 3 要点与解答思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E5%9B%BE%E7%BB%84%E4%BB%B6"><span class="nav-text">8.1 Use case 图组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-case-%E6%A8%A1%E6%9D%BFtutorial-%E7%89%88"><span class="nav-text">8.2 Use case 模板（Tutorial 版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E7%94%BB%E6%B3%95%E9%80%9F%E6%9F%A5"><span class="nav-text">8.3 关系画法速查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%A8%A1%E6%9D%BF%E7%BB%99%E5%AE%9A%E5%9C%BA%E6%99%AF%E5%86%99%E4%B8%89%E7%A7%8D%E9%9C%80%E6%B1%82%E6%A8%A1%E5%9E%8B"><span class="nav-text">8.4
+解题模板：给定场景写三种需求模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9Dlab-3-%E8%A6%81%E7%82%B9"><span class="nav-text">九、Lab 3 要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">十、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week03-requirement-model.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 03 需求建模讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 03 讲课总结：需求工程五项活动与常见问题；Ad hoc（Secure Room 规格）、Feature-Oriented（FODA、特征图与跨树约束）、Use Case（Cockburn 模板、extend&#x2F;include）三种建模方法；功能与非功能需求；面向 agentic 软件的有界自治 use case；Tutorial 3 与 Lab 3 解题思路。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 03 需求建模讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:10:00 / Modified: 04:13:50" itemprop="dateCreated datePublished" datetime="2026-11-03T13:10:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>5.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>20 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 03 讲课总结：需求工程五项活动与常见问题；Ad hoc（Secure Room 规格）、Feature-Oriented（FODA、特征图与跨树约束）、Use Case（Cockburn 模板、extend/include）三种建模方法；功能与非功能需求；面向 agentic 软件的有界自治 use case；Tutorial 3 与 Lab 3 解题思路。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-03-讲课总结requirements-modelling">ELEC5620 Week
+03 讲课总结：Requirements Modelling</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>3 Requirement Model.pdf</code>（48 页）+
+<code>ELEC5620-TUT-03.pdf</code>（30 页）+
+<code>ELEC5620-Lab-Note-3.pdf</code>（1 页）。本周无转录稿。</p>
+<p><strong>本周覆盖</strong>： 1.
+需求工程是什么、为什么难、好需求有什么用 2. 三种需求建模方法：<strong>Ad
+hoc → Feature-Oriented → Use Case</strong> 3. 功能需求 vs 非功能需求 4.
+<strong>面向 agentic 软件的 use case 建模</strong>（有界自治） 5.
+Tutorial 3：特征图符号、use case 图组件与关系；Lab
+3：三种方法应用到项目</p>
+</blockquote>
+<p>相关笔记：[[26-S2-Course/ELEC5620/ELEC5620-Week02-Introduction-to-MBSE-Summary|Week
+02 MBSE
+导论]]｜[[26-S2-Course/ELEC5620/ELEC5620-Stage1-Marking-Criteria-and-Lab3|Stage
+1 评分标准与 Lab
+3]]｜[[26-S2-Course/ELEC5620/ELEC5620-Project-Requirement-Example-Healthcare|需求范例（Healthcare）]]</p>
+<hr>
+<h2 id="一需求工程导论">一、需求工程导论</h2>
+<h3 id="软件成功的定义">1.1 软件成功的定义</h3>
+<blockquote>
+<p><strong>Software success</strong> ⇒
+软件<strong>满足其预期目的</strong>的程度。
+<strong>需求建模/需求工程</strong>
+就是<strong>发现这个目的</strong>的过程： -
+识别<strong>利益相关者</strong>及其需要 -
+以<strong>便于分析、沟通和实现</strong>的形式记录下来</p>
+</blockquote>
+<p><strong>内在困难</strong>：</p>
+<ul>
+<li>利益相关者的目标可能<strong>不明确、难以表达</strong></li>
+<li>目标的满足可能受到<strong>他们控制之外的因素</strong>约束</li>
+</ul>
+<blockquote>
+<p>Scott W.
+Ambler：<strong>“提供需求是项目利益相关者的职责，理解和实现需求是开发者的职责。”</strong></p>
+</blockquote>
+<p>讲义还提到 <strong>Human Centered
+Design</strong>（把被设计的人放在过程中心），以及 Canvas 上提供的
+<strong>domain user simulator</strong>（Canvas → Pages → View all
+pages）可以用来模拟领域用户做需求访谈。</p>
+<p>利益相关者关注点图（P. Kruchten）与 Week 1 相同，见
+[[26-S2-Course/ELEC5620/ELEC5620-Week01-Introduction-Summary|Week 01]]
+4.1。这里的问题是：<strong>“Where do we start?”</strong> ——
+答案就是从需求开始。</p>
+<h3 id="好需求的收益-vs-需求陈述的问题">1.2 好需求的收益 vs
+需求陈述的问题</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Benefits of Good Requirement</th>
+<th style="text-align: left;">Issues with Requirement Statement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">清晰的期望（客户更易接受）</td>
+<td style="text-align: left;"><strong>Ambiguity</strong>（歧义）</td>
+</tr>
+<tr>
+<td style="text-align: left;">消除不必要的开发</td>
+<td style="text-align: left;"><strong>Incompleteness</strong>（不完整）</td>
+</tr>
+<tr>
+<td style="text-align: left;">降低项目风险</td>
+<td style="text-align: left;"><strong>Conflict</strong>（冲突）</td>
+</tr>
+<tr>
+<td style="text-align: left;">更早发现真实缺陷</td>
+<td style="text-align: left;"><strong>Difference in
+priority</strong>（优先级不同）</td>
+</tr>
+<tr>
+<td style="text-align: left;">更快开发、更好维护</td>
+<td style="text-align: left;"><strong>Perceived stakeholders
+urgency</strong>（利益相关者感知的紧迫性）</td>
+</tr>
+<tr>
+<td style="text-align: left;">测试策略更容易制定、设计更健壮</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Iron
+triangle</strong>：time、effort (quality)、money</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="需求工程的定义与五项活动">1.3 需求工程的定义与五项活动</h3>
+<blockquote>
+<p><strong>(Software) Requirements
+Engineering</strong>：通过<strong>识别利益相关者及其需要</strong>，并以<strong>便于分析、沟通和后续实现</strong>的形式记录下来，从而<strong>发现软件系统目的</strong>的过程。（Nuseibeh
+&amp; Easterbrook）</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">活动</th>
+<th style="text-align: left;">关键问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Eliciting</strong>（获取）</td>
+<td style="text-align: left;">要解决什么问题？<strong>系统边界在哪里？</strong>
+利益相关者是谁、目标是什么？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Modelling and
+analysing</strong>（建模与分析）</td>
+<td style="text-align: left;">用模型表示、检查冲突与遗漏</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Communicating</strong>（沟通）</td>
+<td style="text-align: left;">让各方理解</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Agreeing</strong>（达成一致）</td>
+<td style="text-align: left;">验证并确认</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Evolving</strong>（演化）</td>
+<td style="text-align: left;">需求随时间变化</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>捕获的东西需要<strong>沟通、验证并与利益相关者达成一致</strong>；<strong>建模是支持这些目标的常用技术（但不是唯一的）</strong>。</p>
+<p>Henry Ford：<strong>“If I had asked people what they wanted, they
+would have said faster horses.”</strong> ——
+用户说出的是解决方案，需求工程要挖出背后的目的。</p>
+</blockquote>
+<h3 id="例子ai-native-healthcare-agency">1.4 例子：AI-native healthcare
+agency</h3>
+<p>讲义用一个“AI 原生医疗代理”贯穿本讲：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">角色</th>
+<th style="text-align: left;">职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Clinical
+director</strong>（人）</td>
+<td style="text-align: left;">拥有判断、安全和审批</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Intake agent</strong></td>
+<td style="text-align: left;">收集症状和上下文</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Evidence agent</strong></td>
+<td style="text-align: left;">检索已批准的临床指南</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Care agent</strong></td>
+<td style="text-align: left;">起草下一步并准备转诊</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operations agent</strong></td>
+<td style="text-align: left;">更新记录、排期和随访队列</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Running
+goal</strong>：分诊患者咨询、协调照护，<strong>但不移除临床医生的问责</strong>。</p>
+<p><strong>Agent 如何选择下一步行动</strong>：</p>
+<ul>
+<li>模型解读<strong>目标和当前状态</strong>；<strong>工具</strong>让它读数据、在外部系统中行动</li>
+<li><strong>指令和策略</strong>约束它的选择</li>
+<li>循环：<strong>plan → act → observe → adjust</strong></li>
+<li>在条件要求时<strong>必须停止、询问或移交</strong></li>
+</ul>
+<blockquote>
+<p>对需求的含义：<strong>需求描述的是结果（outcome）；允许的决策权必须显式写出。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二三种需求规格方法总览">二、三种需求规格方法总览</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">视角</th>
+<th style="text-align: left;">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>“Ad hoc” analysis</strong></td>
+<td style="text-align: left;">混合视角</td>
+<td style="text-align: left;">混合了 what / how / how well
+等各种需求；<strong>不系统、非正式、易出错</strong>（遗漏、冲突、不一致、歧义）；但<strong>通常是最常见的起点</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feature analysis</strong></td>
+<td style="text-align: left;"><strong>capability-based
+view</strong>（能力视角）</td>
+<td style="text-align: left;">系统被看作一组<strong>期望属性（features）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Use case analysis</strong></td>
+<td style="text-align: left;"><strong>operational
+view</strong>（操作视角）</td>
+<td style="text-align: left;">系统被看作一组<strong>实现利益相关者目标的功能能力</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三者务实地结合通常是最好的方法。</strong></p>
+</blockquote>
+<hr>
+<h2 id="三ad-hoc-方法secure-access-room-例子">三、Ad hoc 方法：Secure
+Access Room 例子</h2>
+<h3 id="场景">3.1 场景</h3>
+<p>一个<strong>只允许授权人员停留的房间</strong>。设备：Fingerprint
+scanner、Fingerprint database、Access Control Software、Door、Motion
+detector、Horn、Panic button、Enable button、连接 Police Station
+的电话线。</p>
+<h3 id="非正式规格三段">3.2 非正式规格（三段）</h3>
+<ol type="1">
+<li><strong>上电即启用</strong>。房间内的人<strong>任何时候</strong>可以按
+<strong>panic</strong>
+按钮呼叫警察（如遇抢劫）：通过电话线给警察发消息，<strong>不响警报</strong>。</li>
+<li>系统启用时有人开门，必须在<strong>开门后 30
+秒内</strong>扫描食指来解除系统。30 秒内无有效指纹 → <strong>警报响 +
+给警察发消息</strong>，消息包含安装时向警方登记的 <strong>8 位系统
+ID</strong>。</li>
+<li>系统未启用时，<strong>最后离开的人按 Enable 按钮</strong>，有
+<strong>45
+秒</strong>离开后系统启用。启用状态下运动传感器检测到<strong>从窗户进入</strong>
+→ 警报响 + 通知警察。</li>
+</ol>
+<h3 id="为什么非正式规格不够重点">3.3 为什么非正式规格不够（重点）</h3>
+<p>文本的非正式性使得以下事情很难做到：</p>
+<ol type="1">
+<li>识别需求之间潜在的<strong>冲突和不一致</strong></li>
+<li>确定单个需求之间的<strong>相互依赖</strong></li>
+<li>确保<strong>覆盖所有需求</strong></li>
+<li><strong>准确理解</strong>需要实现什么</li>
+<li>把需求<strong>追溯</strong>到实现（以及反向）</li>
+<li>为<strong>全面测试</strong>提供基础</li>
+</ol>
+<blockquote>
+<p>因此需要<strong>更系统、更精确</strong>的规格方法；需求还需要是<strong>电子形式</strong>的，方便检索、链接和追溯。</p>
+</blockquote>
+<p><strong>练习：在上面的规格里找问题</strong>（解答思路）：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>不完整</strong></td>
+<td style="text-align: left;">指纹扫描失败几次算失败？30
+秒内扫了错误指纹怎么办？Panic 之后系统状态如何恢复？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>歧义</strong></td>
+<td style="text-align: left;">“last person leaving the room”
+系统怎么知道是最后一个人？“entry through a window” 和 “person inside
+moving” 如何区分？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>潜在冲突</strong></td>
+<td style="text-align: left;">45
+秒离开窗口内有人开门进来，是否要求扫描？Panic 不响警报 vs
+窗户入侵响警报，同时发生时如何处理？</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>混合了 how</strong></td>
+<td style="text-align: left;">“message is sent over the telephone line”
+规定了实现手段</td>
+</tr>
+</tbody>
+</table>
+<p>Tutorial 3 补充：Ad hoc
+图是<strong>临时性的图</strong>，主要用于快速表达想法和讨论——<strong>灵活、快速、沟通高效</strong>，但<strong>缺乏结构</strong>，不适合正式文档、难以追踪、难以识别冲突与依赖、可能遗漏需求、实现和测试基础不清晰。Tutorial
+建议画 Ad hoc 图时按 <strong>What / How / How well</strong>
+三类去标注需求。</p>
+<hr>
+<h2 id="四feature-oriented-方法">四、Feature-Oriented 方法</h2>
+<h3 id="foda">4.1 FODA</h3>
+<ul>
+<li><strong>Feature-Oriented Domain Analysis</strong>，由 <strong>SEI 于
+1990 年</strong>提出，用于分析领域（概念及其关系）</li>
+<li>和<strong>类建模有些相似，但更一般</strong></li>
+<li><strong>需求分析只是领域分析的一种</strong>：被构建系统的领域</li>
+</ul>
+<blockquote>
+<p><strong>Feature</strong>：软件系统<strong>突出的、用户可见的</strong>方面、质量或特征。
+更严格的定义（Czarnecki &amp;
+Eisenecker）：<strong>领域概念的一个属性，与某些领域利益相关者相关，并用于区分该概念的不同实例。</strong></p>
+</blockquote>
+<h3 id="特征图符号">4.2 特征图符号</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">常见画法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Mandatory</strong></td>
+<td style="text-align: left;">子特征<strong>必须选</strong></td>
+<td style="text-align: left;">实心圆点</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Optional</strong></td>
+<td style="text-align: left;">子特征<strong>可选可不选</strong></td>
+<td style="text-align: left;">空心圆点</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Or</strong></td>
+<td style="text-align: left;">子特征中<strong>至少选一个</strong></td>
+<td style="text-align: left;">实心扇形</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Alternative (xor)</strong></td>
+<td style="text-align: left;">子特征中<strong>恰好选一个</strong></td>
+<td style="text-align: left;">空心扇形</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cross-tree
+constraint</strong></td>
+<td style="text-align: left;">跨分支的依赖/互斥</td>
+<td style="text-align: left;"><code>requires</code> /
+<code>excludes</code> 或逻辑式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="secure-room-的特征图">4.3 Secure Room 的特征图</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Secure Room Software</span><br><span class="line">├── ● Security Validation</span><br><span class="line">│     └── ● Fingerprint Identification</span><br><span class="line">├── ● Violation Notification</span><br><span class="line">│     ├── ● Audible Alarm</span><br><span class="line">│     └── ● Police Notification</span><br><span class="line">└── ○ Manual Control</span><br><span class="line">      └── ● Manual Alarm (panic)</span><br></pre></td></tr></table></figure>
+<p>（● = mandatory，○ = optional；讲义图中 Manual Control
+为可选分支。）</p>
+<h3 id="agent-配置的特征图讲义第二个例子">4.4 Agent
+配置的特征图（讲义第二个例子）</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Agent Product</span><br><span class="line">├── Autonomy configuration   ⟨xor: Draft only | Auto reply⟩</span><br><span class="line">├── Tools                    ⟨Read tools, ○ Write tools⟩</span><br><span class="line">└── Required controls        ⟨or, at least one: Budget cap | Audit log | Approval gate | ...⟩</span><br><span class="line"></span><br><span class="line">Constraint: if (Write tools) then Approval gate</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个例子把 agent
+的“自治程度”和“控制措施”建成可变点：<strong>有写权限的工具，就必须有审批门</strong>——这是典型的
+cross-tree constraint。</p>
+</blockquote>
+<h3 id="tutorial-3-的-e-shop-例子">4.5 Tutorial 3 的 E-Shop 例子</h3>
+<ul>
+<li>根特征 <strong>E-Shop</strong>
+标识一条<strong>软件产品线（SPL）</strong></li>
+<li>实现 <strong>Catalogue、Payment、Security</strong>，以及可选的
+<strong>Search</strong></li>
+<li>Security：<strong>High 或 Standard 二选一</strong>（xor）</li>
+<li>Payment：<strong>Bank Transfer、Credit Card
+或两者</strong>（or）</li>
+<li><strong>跨树约束</strong>：包含 Credit Card
+的系统<strong>必须</strong>采用 High security</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">E-Shop</span><br><span class="line">├── ● Catalogue</span><br><span class="line">├── ● Payment      ⟨or⟩ Bank Transfer | Credit Card</span><br><span class="line">├── ● Security     ⟨xor⟩ High | Standard</span><br><span class="line">└── ○ Search</span><br><span class="line">Constraint: Credit Card ⇒ High</span><br></pre></td></tr></table></figure>
+<p>可以把合法配置数一下：Payment 有 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="2.119ex" height="2.452ex" role="img" focusable="false" viewBox="0 -833.9 936.6 1083.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="2^2-1=3"><g data-mml-node="msup" data-latex="2^2"><g data-mml-node="mn" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><g data-mml-node="mn" transform="translate(533,363) scale(0.707)" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="2^2-1=3"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(1000.2,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.52ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="2^2-1=3"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="3" transform="translate(1055.8,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g></g></g></svg></mjx-container></span> 种，Security 2 种，Search 2
+种，共 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 500 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3\times2\times2=12"><g data-mml-node="mn" data-latex="3"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3\times2\times2=12"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3\times2\times2=12"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.651ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2055.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="3\times2\times2=12"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="12" transform="translate(1055.8,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container></span>
+种；加上约束后，含 Credit Card 的 2 种 Payment 选项只能配 High：<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="2.011ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 889 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="("><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(389,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.274ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1889.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(1000.2,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(1500.2,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1000.2,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.52ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(1\times2 + 2\times1)\times2 = 8"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="8" transform="translate(1055.8,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path></g></g></g></svg></mjx-container></span>
+种合法产品。</p>
+<blockquote>
+<p><strong>Feature model</strong>
+是一条产品线所有产品的<strong>紧凑表示</strong>，常作为生成文档、schema、代码片段的输入。</p>
+</blockquote>
+<h3 id="feature-建模小结">4.6 Feature 建模小结</h3>
+<ul>
+<li>关注<strong>期望的产品能力</strong></li>
+<li><strong>静态方法</strong>：没有说明特征<strong>如何被使用/实现</strong>
+⇒ <strong>不容易发现特征之间的潜在冲突</strong></li>
+<li>特别适合：<strong>需求工作的起点</strong>；存在<strong>大量可变性</strong>的情况
+⇒ <strong>产品族</strong>，<strong>对架构师非常重要</strong></li>
+</ul>
+<hr>
+<h2 id="五功能需求-vs-非功能需求">五、功能需求 vs 非功能需求</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">功能需求（FR）</th>
+<th style="text-align: left;">非功能需求（NFR）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">回答</td>
+<td style="text-align: left;">系统<strong>做什么（what）</strong></td>
+<td style="text-align: left;">系统<strong>做得多好（how
+well）</strong>，对“怎么做”加约束</td>
+</tr>
+<tr>
+<td style="text-align: left;">关注</td>
+<td style="text-align: left;">系统功能</td>
+<td style="text-align: left;">性能特征：可访问性、可靠性、延迟等</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>但对很多系统来说，两者并不总是可分的。</strong> “Compute the
+optimal route for a data packet” 与 “Compute the optimal route for a
+data packet <strong>in 4 μsec</strong>”
+可能是<strong>两个完全不同的系统</strong>——时间约束改变了算法和架构选择。</p>
+</blockquote>
+<p><strong>Agentic 软件的需求例子</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">FR</th>
+<th style="text-align: left;">NFR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Agent <strong>shall</strong> check
+reported symptoms for emergency warning signs</td>
+<td style="text-align: left;">Low latency</td>
+</tr>
+<tr>
+<td style="text-align: left;">根据自然语言生成内容</td>
+<td style="text-align: left;">高准确率的 LLM 模型（NLP 与 CV）</td>
+</tr>
+<tr>
+<td style="text-align: left;">与人对话</td>
+<td style="text-align: left;">用户友好的人机交互（CHI）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="六use-case-方法">六、Use Case 方法</h2>
+<h3 id="概念框架">6.1 概念框架</h3>
+<blockquote>
+<p><strong>Use
+case</strong>：为了达成一个<strong>明确定义的目标</strong>而与系统进行的交互——这个目标<strong>对
+actor 有价值</strong>。</p>
+</blockquote>
+<ul>
+<li><strong>Actor</strong>：有<strong>目标</strong>；与系统交互以达成一个或多个目标的实体（<strong>人或系统</strong>）</li>
+<li><strong>System under
+consideration</strong>：有<strong>职责</strong>支持 actor
+的目标；也可能与<strong>其他系统</strong>交互</li>
+<li>Use case
+处于<strong>非正式（用户想要什么）与正式（工程师实现什么）之间的边界上</strong></li>
+<li>作用：<strong>给出需求的上下文</strong>、<strong>促进达成一致</strong>、是<strong>一组可能的场景</strong></li>
+</ul>
+<p>UML 的 use case
+图只是一个<strong>速记表示</strong>——<strong>重要（也是困难）的部分是把
+use case 本身写清楚</strong>。讲义里的元模型多重性：Actor <code>1</code>
+— <code>0..*</code> Use case <code>0..*</code> — <code>1..*</code> Other
+system。</p>
+<h3 id="cockburn-方法的关键要素">6.2 Cockburn 方法的关键要素</h3>
+<ol type="1">
+<li>Use case <strong>由 actor 的目标驱动</strong>并围绕它定义</li>
+<li>Use case <strong>以 actor 的一个动作开始（trigger）</strong></li>
+<li>Use case <strong>总是以明确结果结束</strong>：目标达成或未达成
+<ul>
+<li><strong>Success scenarios</strong>（通常一个 main success
+scenario）</li>
+<li><strong>Failure scenarios</strong>（complications）</li>
+</ul></li>
+<li>每一步都可能成功或失败；<strong>导致失败的条件作为对应失败场景的开头</strong>；失败场景<strong>从失败点分叉</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    P[Precondition] --&gt; S1[STEP 1]</span><br><span class="line">    S1 -- success --&gt; S2[STEP 2]</span><br><span class="line">    S1 -- failure cond 1 --&gt; F11[STEP F1.1] --&gt; F12[STEP F1.2] --&gt; G2[Goal achieved: SUCCESS]</span><br><span class="line">    S2 -- success --&gt; S3[STEP 3] --&gt; G1[Goal achieved: SUCCESS]</span><br><span class="line">    S2 -- failure cond 2 --&gt; F21[STEP F2.1] --&gt; X[Goal not achieved: FAILURE]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：失败分支<strong>不一定</strong>以失败告终——恢复后也可能达成目标。</p>
+</blockquote>
+<h3 id="use-case-模板atm-例子">6.3 Use case 模板（ATM 例子）</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Goal</th>
+<th style="text-align: left;">Level</th>
+<th style="text-align: left;">Precondition</th>
+<th style="text-align: left;">Success</th>
+<th style="text-align: left;">Failure</th>
+<th style="text-align: left;">Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Withdraw cash from ATM</td>
+<td style="text-align: left;">Obtain cash</td>
+<td style="text-align: left;">User（System 层面）</td>
+<td style="text-align: left;">User has ATM-readable card</td>
+<td style="text-align: left;">Cash dispensed to user</td>
+<td style="text-align: left;">Cash not dispensed despite valid
+request</td>
+<td style="text-align: left;">Insertion of card in ATM</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Main scenario</strong>：1. 登录 ATM → 2. 选择取款 → 3.
+指定金额 → 4. ATM 出钞 → 5. 登出</p>
+<p><strong>Extension
+scenario</strong>（当某一步失败条件成立时启动）：在第 4 步
+<code>{Insufficient cash on hand}</code> → 1. 通知用户 → 2.
+用户登出。</p>
+<h3 id="extendinclude泛化">6.4 «extend»、«include»、泛化</h3>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">箭头方向</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>«extend»</strong></td>
+<td style="text-align: left;">给 use case
+<strong>加一个可选步骤，且不影响原 use case 的规格</strong>；需要
+<strong>extension point</strong></td>
+<td style="text-align: left;"><strong>从扩展用例指向基用例</strong>（虚线箭头）</td>
+<td style="text-align: left;"><code>Update Branch Balance --«extend»--&gt; Withdraw Cash</code>，扩展点
+X1（第 4 步之后），条件 <code>[service successful]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>«include»</strong></td>
+<td style="text-align: left;">场景中某一步本身是一个<strong>子 use
+case</strong>（有自己的目标、actor）；主用例<strong>依赖</strong>子用例的功能</td>
+<td style="text-align: left;"><strong>从基用例指向被包含用例</strong>（虚线箭头）</td>
+<td style="text-align: left;"><code>Withdraw Cash --«include»--&gt; Login</code>（Login：询问
+PIN → 输入 PIN → 验证 PIN …）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Generalization</strong></td>
+<td style="text-align: left;">父子关系，子用例是父用例的增强</td>
+<td style="text-align: left;">实线 +
+<strong>空心三角</strong>指向父用例</td>
+<td style="text-align: left;"><code>Pay by Card</code> →
+<code>Pay</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    W((Withdraw Cash&lt;br/&gt;ext. point: X1))</span><br><span class="line">    L((Login))</span><br><span class="line">    U((Update Branch Balance))</span><br><span class="line">    W -. "«include»" .-&gt; L</span><br><span class="line">    U -. "«extend» [service successful]" .-&gt; W</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>讲义特别提醒：“Note the direction of the arrow!”</strong> ——
+<strong>extend 指向基用例，include 指向被包含用例。</strong>
+这是考试和作业最常见的错误。</p>
+<p>记忆：<strong>include
+是“我必须用到它”</strong>（基用例知道子用例）；<strong>extend
+是“它可以插进我”</strong>（基用例不知道扩展的存在，只暴露扩展点）。</p>
+</blockquote>
+<h3 id="保持简单和敏捷">6.5 保持简单和敏捷</h3>
+<ul>
+<li>Use case
+应该<strong>让利益相关者容易理解</strong>，以便他们能推理</li>
+<li><strong>避免实现细节、保持非正式</strong>（不是所有利益相关者都是技术专家）</li>
+<li>用<strong>易读的文本形式</strong></li>
+</ul>
+<h3 id="例子一patient-consults-ai-health-agent">6.6 例子一：Patient
+Consults AI Health Agent</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;">患者得到症状的解决方案</td>
+</tr>
+<tr>
+<td style="text-align: left;">Level</td>
+<td style="text-align: left;">User-goal</td>
+</tr>
+<tr>
+<td style="text-align: left;">Primary Actor</td>
+<td style="text-align: left;">Patient</td>
+</tr>
+<tr>
+<td style="text-align: left;">Preconditions</td>
+<td style="text-align: left;">患者可访问 AI Health Agent；Agent
+可访问诊所排期系统</td>
+</tr>
+<tr>
+<td style="text-align: left;">Success postcondition</td>
+<td style="text-align: left;">患者获得治疗建议（轻症）<strong>或</strong>确认的医生预约（严重/不确定）</td>
+</tr>
+<tr>
+<td style="text-align: left;">Failure postcondition</td>
+<td style="text-align: left;">Agent 未能给出方案</td>
+</tr>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">用户启动 AI Agent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Main success scenario</strong>：1 发起对话 → 2 Agent
+问候并询问症状 → 3 描述症状 → 4 Agent
+追问（严重度、持续时间、病史、过敏）→ 5 患者回答 → 6 Agent
+对照医学指南分析 → 7 判断 (a) 轻症可居家/自我用药，或 (b) 需专业评估 → 8
+若 7a：给出治疗建议 → 9 若 7b：预约医生 → 10 结束对话。</p>
+<p><strong>Extensions</strong>：</p>
+<ul>
+<li><strong>5.a</strong> {描述不清或不完整} → 反复澄清直到信息足够</li>
+<li><strong>7.c</strong> {症状危急} →
+<strong>立即呼叫急救</strong>，而不是预约</li>
+<li><strong>8.a</strong> {患者不理解建议} → 换种说法并提供教育资源</li>
+</ul>
+<p><strong>Nested use case（第 9 步）</strong>：查询医生空闲时段 →
+患者确认时间 → 预约并提供确认信息。</p>
+<h3 id="面向-agentic-软件的-use-case-模型本讲最新的部分">6.7 面向
+agentic 软件的 use case 模型（本讲最新的部分）</h3>
+<blockquote>
+<p><strong>对 agentic 软件，use case 模型应该强调“有界自治（bounded
+autonomy）”和“可观察的结果”——而不只是固定的交互序列。</strong></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">要素</th>
+<th style="text-align: left;">写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Actor goal</strong></td>
+<td style="text-align: left;">写<strong>业务结果</strong>，如 “deliver
+an evidence-backed weekly brief”，而不是 “run the research agent”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Authority</strong></td>
+<td style="text-align: left;">明确 agent
+可以<strong>读、写、发送、购买或修改</strong>什么。<strong>把能力（capability）和权限（permission）分开</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Success conditions</strong></td>
+<td style="text-align: left;">定义<strong>可观察的成功证据</strong>，而不是精确的推理路径</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Failure and
+uncertainty</strong></td>
+<td style="text-align: left;">把<strong>缺数据、证据冲突、工具不可用、低置信度结果</strong>建模为<strong>正常分支</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Human checkpoints</strong></td>
+<td style="text-align: left;">标出 agent
+<strong>何时必须询问、获得批准、移交或停止</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="例子二assess-and-coordinate-patient-care有界自治版">6.8
+例子二：Assess and coordinate patient care（有界自治版）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;"><strong>安全的下一步</strong>被及时准备好</td>
+</tr>
+<tr>
+<td style="text-align: left;">Level</td>
+<td style="text-align: left;">User goal</td>
+</tr>
+<tr>
+<td style="text-align: left;">Primary actor</td>
+<td style="text-align: left;">Patient</td>
+</tr>
+<tr>
+<td style="text-align: left;">Preconditions</td>
+<td style="text-align: left;">患者身份与同意已确认；已批准的指南与排期工具可用</td>
+</tr>
+<tr>
+<td style="text-align: left;">Success postcondition</td>
+<td style="text-align: left;"><strong>经临床医生批准</strong>的指导已发送；记录已更新</td>
+</tr>
+<tr>
+<td style="text-align: left;">Failure postcondition</td>
+<td style="text-align: left;"><strong>未发送任何建议</strong>；已向临床医生报警并说明原因</td>
+</tr>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">患者提交新的健康咨询</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Main success scenario（bounded autonomy）</strong>： 0.
+患者确认身份、同意和当前症状 1. Intake agent
+检查<strong>急症警示信号</strong> 2. Agent 结构化症状、病史和上下文 3.
+Evidence agent 检索已批准的临床指南 4. Care agent 起草分诊摘要和下一步
+5. <strong>Checker 验证依据（grounding）、隐私和安全约束</strong> 6.
+Agent 准备回复（<strong>但不发送</strong>） 7.
+<strong>临床医生审核、修改并批准</strong> 8. Agent
+发送指导并更新健康记录</p>
+<p><strong>显式建模失败与移交</strong>：</p>
+<ul>
+<li><strong>Emergency red flag</strong> →
+<strong>停止自动化，立即通知医生</strong></li>
+<li><strong>5.a</strong> {指南冲突} → 询问医生</li>
+<li><strong>Clinical context missing</strong> → 请求一次，然后移交</li>
+<li><strong>7.a</strong> {未获批准} →
+保存草稿，<strong>不发送建议</strong></li>
+</ul>
+<blockquote>
+<p><strong>对比 6.6 与 6.8</strong>：前者 agent
+直接给建议、直接预约；后者 agent
+<strong>只起草，人类审批后才发送</strong>，失败后置条件是“什么都没发”。这就是“Requirements
+describe the outcome; permitted decision-making is
+explicit”的具体体现，也是项目 Stage 1 写 use case 时应该采用的写法。</p>
+</blockquote>
+<h3 id="use-case-小结">6.9 Use case 小结</h3>
+<ul>
+<li>流行且经过验证的需求规格方法，<strong>变体很多</strong>；本课采用<strong>略作修改的
+Cockburn 变体</strong></li>
+<li>是一种<strong>操作性</strong>方法，适合作为<strong>设计阶段的前端</strong></li>
+<li>通常用 <strong>UML 交互建模（如顺序图）</strong>
+来补充——<strong>但两者不同：use case 更抽象</strong></li>
+</ul>
+<hr>
+<h2 id="七需求规格总结">七、需求规格总结</h2>
+<ul>
+<li><strong>不充分的需求规格可能是软件项目失败的最大来源</strong></li>
+<li>正确获取需求很难，最好通过<strong>与利益相关者持续互动</strong>来完成（敏捷/演化式开发）；<strong>架构师在需求获取中起关键作用</strong></li>
+<li><strong>feature-based + use-case based
+结合</strong>通常是系统化定义需求的最佳选择</li>
+<li><strong>需求建模是需求工程中一小步但关键的一步</strong>：使需求与设计等其他制品之间的<strong>可追溯性</strong>可以被自动支持</li>
+<li>前沿：<strong>用 LLM
+自动生成需求模型</strong>（讲义列了三篇论文链接）</li>
+</ul>
+<hr>
+<h2 id="八tutorial-3-要点与解答思路">八、Tutorial 3 要点与解答思路</h2>
+<h3 id="use-case-图组件">8.1 Use case 图组件</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Actor</strong></td>
+<td style="text-align: left;">与系统交互的用户：可以是<strong>人、组织、外部系统</strong>；必须是<strong>产生或消费数据的外部对象</strong>；<strong>用名词命名</strong>；是<strong>业务中的角色</strong>（一个用户可扮演多个角色，如教授既是
+instructor 又是 researcher）；actor <strong>触发</strong> use
+case；对系统有<strong>职责（输入）</strong>和<strong>期望（输出）</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Use case</strong></td>
+<td style="text-align: left;">椭圆；系统功能（自动或手工过程）；<strong>动词
++ 名词</strong>命名（Do Something）；<strong>每个 actor 必须连到某个 use
+case，但有些 use case 可以不连 actor</strong>（如被 include/extend
+的子用例）；可被扩展</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Communication link</strong></td>
+<td style="text-align: left;">actor 与 use case
+之间的<strong>实线</strong>，表示双方通过消息通信</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>System boundary</strong></td>
+<td style="text-align: left;">由需求文档定义，代表整个系统范围；大型系统（如
+ERP）中每个模块（人事、工资、会计）可以各自是边界，整体边界包含所有模块</td>
+</tr>
+</tbody>
+</table>
+<h3 id="use-case-模板tutorial-版">8.2 Use case 模板（Tutorial 版）</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Goal</th>
+<th style="text-align: left;">Level</th>
+<th style="text-align: left;">Precondition</th>
+<th style="text-align: left;">Success Condition</th>
+<th style="text-align: left;">Failure Condition</th>
+<th style="text-align: left;">Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">User Login</td>
+<td style="text-align: left;">User successfully logs in</td>
+<td style="text-align: left;">User goal level</td>
+<td style="text-align: left;">User is registered</td>
+<td style="text-align: left;">登录并跳转主页</td>
+<td style="text-align: left;">密码错误时显示错误信息</td>
+<td style="text-align: left;">用户点击登录按钮</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关系画法速查">8.3 关系画法速查</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">线型</th>
+<th style="text-align: left;">箭头指向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">«extend»</td>
+<td style="text-align: left;">虚线 + 开放箭头，标
+<code>&lt;&lt;extend&gt;&gt;</code></td>
+<td style="text-align: left;"><strong>基用例</strong>（扩展用例在箭尾）</td>
+</tr>
+<tr>
+<td style="text-align: left;">«include»</td>
+<td style="text-align: left;">虚线 + 开放箭头，标
+<code>&lt;&lt;include&gt;&gt;</code></td>
+<td style="text-align: left;"><strong>子用例</strong>（被包含者）</td>
+</tr>
+<tr>
+<td style="text-align: left;">Generalization</td>
+<td style="text-align: left;">实线 + 空心三角</td>
+<td style="text-align: left;"><strong>父用例</strong>（子用例在箭尾）</td>
+</tr>
+</tbody>
+</table>
+<p>Tutorial 给了 E-Shop、Vehicle Sales System 等示例图（PDF
+中为图片，文本未提取）。</p>
+<h3 id="解题模板给定场景写三种需求模型">8.4
+解题模板：给定场景写三种需求模型</h3>
+<ol type="1">
+<li><strong>Ad hoc</strong>：先自由列出所有需求，按 <strong>What / How /
+How well</strong> 标注；找出歧义、遗漏、冲突</li>
+<li><strong>Feature model</strong>：把 What
+类需求归成<strong>能力树</strong>，标 mandatory/optional/or/xor；把 How
+well 中涉及可选配置的写成<strong>跨树约束</strong></li>
+<li><strong>Use case</strong>：从每个 actor
+的<strong>目标</strong>出发画 use case 图；为核心 use case 写模板 + main
+scenario + extensions；agentic 功能要写 <strong>authority 与 human
+checkpoint</strong></li>
+<li><strong>一致性检查</strong>：每个 use case 能映射回某个
+feature；每个 mandatory feature 至少被一个 use case 覆盖</li>
+</ol>
+<hr>
+<h2 id="九lab-3-要点">九、Lab 3 要点</h2>
+<p><code>ELEC5620-Lab-Note-3.pdf</code>（文件头标注 “Week 4: Laboratory
+3”）要求把本周三种方法应用到自己的项目：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Part</th>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>Ad-Hoc</strong></td>
+<td style="text-align: left;">非正式、灵活地描述和分析需求——<strong>初始定义</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>Feature-Oriented</strong></td>
+<td style="text-align: left;">把需求<strong>系统地精化</strong>为具体特征</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>Use Case</strong></td>
+<td style="text-align: left;">确保特征<strong>满足用户的期望与交互</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>三种方法<strong>互补</strong>：Ad-Hoc 给初步定义，Feature
+系统化精化，Use Case 检验用户交互。</p>
+</blockquote>
+<p>它与 Stage 1 评分表的一一对应关系见
+[[26-S2-Course/ELEC5620/ELEC5620-Stage1-Marking-Criteria-and-Lab3|Stage
+1 评分标准与 Lab 3]]；三种模型之间的对应检查见
+[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab 1–6 总结]]
+第四节。</p>
+<hr>
+<h2 id="十本周考点速记-易错点">十、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>需求工程五活动</strong>：elicit、model &amp;
+analyse、communicate、agree、evolve；elicitation
+三问：问题、<strong>系统边界</strong>、利益相关者与目标。</li>
+<li><strong>需求陈述五问题</strong>：ambiguity、incompleteness、conflict、priority
+差异、感知的紧迫性。</li>
+<li><strong>三种方法的视角</strong>：Ad
+hoc（混合、最常见起点）、Feature（<strong>capability
+view</strong>、静态）、Use case（<strong>operational
+view</strong>）；<strong>结合使用最好</strong>。</li>
+<li><strong>非正式规格不够的六个原因</strong>：冲突、依赖、覆盖、精确理解、追溯、测试基础。</li>
+<li><strong>Feature
+定义</strong>：突出的、用户可见的特征；用于区分概念实例。<strong>特征图四种关系</strong>：mandatory、optional、or（≥1）、xor（=1）+
+跨树约束。</li>
+<li><strong>Feature 模型缺点</strong>：静态，看不出特征如何使用 →
+难发现冲突；<strong>优点</strong>：适合起点和<strong>产品族/可变性</strong>。</li>
+<li><strong>FR vs NFR</strong>：what vs how
+well；<strong>并非总可分</strong>（4 μs 例子）。</li>
+<li><strong>Cockburn</strong>：目标驱动、trigger
+开始、明确结果结束、失败从失败点分叉。</li>
+<li><strong>箭头方向</strong>：«extend»
+<strong>指向基用例</strong>；«include»
+<strong>指向被包含用例</strong>；泛化<strong>指向父</strong>。</li>
+<li><strong>Agentic use case
+五要素</strong>：业务结果目标、<strong>权限（能力 ≠
+许可）</strong>、可观察成功证据、失败与不确定性作为正常分支、<strong>人工检查点</strong>。</li>
+<li><strong>易错</strong>：use case 命名用“动词 + 名词”；actor
+用名词且是角色；不要把 UI 步骤画成 use case；agent
+本身一般在系统内部，不画成外部 actor（除非是外部系统）。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/Requirement-Modeling/" rel="tag"><i class="fa fa-tag"></i> Requirement-Modeling</a>
+              <a href="/tags/Use-Case/" rel="tag"><i class="fa fa-tag"></i> Use-Case</a>
+              <a href="/tags/Agentic-AI/" rel="tag"><i class="fa fa-tag"></i> Agentic-AI</a>
+              <a href="/tags/Feature-Model/" rel="tag"><i class="fa fa-tag"></i> Feature-Model</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week02-mbse.html" rel="prev" title="ELEC5620 Week 02 模型驱动软件工程导论讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 02 模型驱动软件工程导论讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week04-architectural-design.html" rel="next" title="ELEC5620 Week 04 架构设计与建模（上）讲课总结">
+                  ELEC5620 Week 04 架构设计与建模（上）讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

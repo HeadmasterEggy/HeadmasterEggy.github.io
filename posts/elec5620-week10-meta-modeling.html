@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 10 元建模讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week10-meta-modeling.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:45:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:54.399Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="LangChain">
+<meta property="article:tag" content="MOF">
+<meta property="article:tag" content="Meta-Modeling">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="UML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week10-meta-modeling.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week10-meta-modeling.html","path":"posts/elec5620-week10-meta-modeling.html","title":"ELEC5620 Week 10 元建模讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 10 元建模讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week10-meta-modeling.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-10-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93meta-modeling"><span class="nav-text">ELEC5620 Week 10
+讲课总结：Meta-Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80meta-%E6%B8%B8%E6%88%8F"><span class="nav-text">一、“Meta” 游戏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%8D%E6%98%AF%E4%B8%80%E5%8F%AA%E7%83%9F%E6%96%97"><span class="nav-text">1.1 这不是一只烟斗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A2%AB%E5%BB%BA%E6%A8%A1%E4%BA%8B%E7%89%A9"><span class="nav-text">1.2 模型与被建模事物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E9%93%81%E5%9B%BE%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80"><span class="nav-text">1.3 地铁图：模型与建模语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%87%8D%E7%82%B9"><span class="nav-text">二、建模语言的核心组成（重点）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E6%A8%A1%E5%9E%8Bmof-%E4%B8%8E%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-text">三、元模型、MOF 与四层架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E4%B8%8E-mof"><span class="nav-text">3.1 元建模语言与 MOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E5%BF%85%E4%BC%9A"><span class="nav-text">3.2 什么是元模型（定义必会）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metaconfusion"><span class="nav-text">3.3 Metaconfusion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omg-%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84%E5%BF%85%E8%80%83"><span class="nav-text">3.4 OMG 四层架构（必考）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Buml-%E7%9A%84%E8%A7%84%E6%A0%BC%E4%B8%8E%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">四、UML 的规格与元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E8%AF%AD%E8%A8%80%E8%A7%84%E6%A0%BC%E7%9A%84%E4%B8%89%E9%83%A8%E5%88%86"><span class="nav-text">4.1 UML 语言规格的三部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%83%E6%A8%A1%E5%9E%8B%E7%89%87%E6%AE%B5%E7%AE%80%E5%8C%96"><span class="nav-text">4.2 UML 元模型片段（简化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">4.3 元建模能做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8%E7%9A%84%E5%9B%BE%E5%8F%AA%E6%98%AF%E8%A7%86%E5%9B%BE"><span class="nav-text">4.4
+模型是怎么存储的：图只是视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E5%85%B3%E8%81%94%E7%9A%84%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BE%8B%E5%BF%85%E4%BC%9A%E9%A2%98%E5%9E%8B"><span class="nav-text">4.5
+练习：关联的元模型实例（必会题型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%B7%E4%BD%93%E8%AF%AD%E6%B3%95%E5%9B%BE%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-text">4.6 UML 具体语法：图的种类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%AF%AD%E8%A8%80%E8%AF%AD%E4%B9%89"><span class="nav-text">五、语言语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E4%B9%89%E4%B8%8E%E5%8A%A8%E6%80%81%E8%AF%AD%E4%B9%89"><span class="nav-text">5.1 静态语义与动态语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%84%E5%AE%9A%E8%AF%AD%E4%B9%89"><span class="nav-text">5.2 如何规定语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fumlexecutable-uml-foundation"><span class="nav-text">5.3 fUML（Executable UML
+Foundation）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADuml-%E5%85%83%E6%A8%A1%E5%9E%8B%E9%80%89%E8%AF%BB"><span class="nav-text">六、UML 元模型选读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.1 命名空间元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E7%BA%A6%E6%9D%9F%E6%B3%A8%E9%87%8A%E7%9A%84%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.2 依赖、约束、注释的元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9E%E4%BE%8B%E4%B8%8E%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">6.3 类型、实例与分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%B8%8E%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%85%B3%E7%B3%BB%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.4 结构与行为的关系（元模型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#classifier-behaviour-vs-method"><span class="nav-text">6.5 Classifier behaviour vs
+Method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83agentic-%E8%BD%AF%E4%BB%B6%E7%9A%84%E5%85%83%E5%BB%BA%E6%A8%A1"><span class="nav-text">七、Agentic 软件的元建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80%E4%B8%AA%E6%96%B9%E6%A1%86%E4%B8%8D%E5%A4%9F%E7%B2%BE%E7%A1%AE"><span class="nav-text">7.1 问题：一个方框不够精确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7-agent-%E7%B1%BBm1"><span class="nav-text">7.2 健康 agent 类（M1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A%E8%BF%99%E4%B8%AA%E7%B1%BB%E8%A1%A8%E7%A4%BA%E6%88%90-m2-%E5%85%83%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-text">7.3 把这个类表示成 M2
+元类的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91-agentic-%E8%BD%AF%E4%BB%B6%E7%9A%84%E9%A2%86%E5%9F%9F%E5%85%83%E6%A8%A1%E5%9E%8B%E8%AE%B2%E4%B9%89%E6%9C%80%E5%90%8E%E4%B8%80%E9%A1%B5"><span class="nav-text">7.4 面向 agentic
+软件的领域元模型（讲义最后一页）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABtutorial-10-%E8%A6%81%E7%82%B9rag-%E4%B8%8E-langchain"><span class="nav-text">八、Tutorial 10 要点：RAG 与
+LangChain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rag"><span class="nav-text">8.1 RAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langchain-%E7%94%9F%E6%80%81"><span class="nav-text">8.2 LangChain 生态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langgraph-agent%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%BE%AA%E7%8E%AF"><span class="nav-text">8.3 LangGraph
+agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langchain-%E4%B8%AD%E7%9A%84-rag"><span class="nav-text">8.4 LangChain 中的 RAG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week10-meta-modeling.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 10 元建模讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 10 元建模讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:45:00 / Modified: 04:13:54" itemprop="dateCreated datePublished" datetime="2026-11-03T13:45:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>17 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法/具体语法/语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain/LangGraph 工具调用循环。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-10-讲课总结meta-modeling">ELEC5620 Week 10
+讲课总结：Meta-Modeling</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>10 Meta-Modeling.pdf</code>（47 页）+
+<code>ELEC5620-TUT-10.pdf</code>（19 页）。Week 10 文件夹中没有单独的
+Lab Note（文件头写 “Week 10: Laboratory 9” 的 Lab Note 9 放在 Week 9
+文件夹，已在
+[[26-S2-Course/ELEC5620/ELEC5620-Week09-Software-Process-Models-Summary|Week
+09]] 中总结）。本周无转录稿。</p>
+<p><strong>本周覆盖</strong>： 1. “Meta” 游戏：模型、被建模事物、元模型
+2. <strong>建模语言的核心组成</strong>：具体语法、抽象语法、语义 3.
+<strong>元模型、MOF、OMG 四层架构</strong> 4. UML
+规格格式、元模型片段、模型存储、练习 5.
+<strong>语义</strong>：静态/动态、定义方法、fUML 6. UML
+元模型选读：命名空间、依赖、约束、类型实例、分类器、结构与行为 7.
+<strong>Agentic 软件的元模型</strong> 8. Tutorial 10：<strong>RAG 与
+LangChain</strong></p>
+</blockquote>
+<p>相关笔记：[[26-S2-Course/ELEC5620/ELEC5620-Week05-Architectural-Patterns-and-Modeling-Structure-Summary|Week
+05
+结构建模基础]]｜[[26-S2-Course/ELEC5620/ELEC5620-Week08-Model-Organisation-and-Agile-Summary|Week
+08 模型组织]]</p>
+<hr>
+<h2 id="一meta-游戏">一、“Meta” 游戏</h2>
+<h3 id="这不是一只烟斗">1.1 这不是一只烟斗</h3>
+<p>讲义借用 Magritte 的画 <em>La Trahison des images</em>：</p>
+<ol type="1">
+<li>问：<strong>这是一只烟斗吗？</strong></li>
+<li>答：<strong>不，这是一只烟斗的图画。</strong>（注意：我们在用一张图来描述一张图）</li>
+<li>再问：<strong>这是“一只烟斗的图画”吗？</strong>——画框里的画（被建模的东西）vs
+外面的说明（模型）</li>
+</ol>
+<blockquote>
+<p>层层嵌套的“关于……的描述”就是 <strong>meta</strong>
+的含义：<strong>元模型是描述模型的模型。</strong></p>
+</blockquote>
+<h3 id="模型与被建模事物">1.2 模型与被建模事物</h3>
+<p>与 Week 5 一样：<strong>Batmobile
+玩具（模型，M1）<code>«represents»</code> 真实
+Batmobile（被建模世界，M0）</strong>。我们常对两者用同一个词，要小心区分。</p>
+<h3 id="地铁图模型与建模语言">1.3 地铁图：模型与建模语言</h3>
+<ul>
+<li><strong>里昂地铁图</strong>是一个<strong>模型</strong></li>
+<li>问：<strong>用来规定这个模型的（建模）语言是什么？</strong></li>
+<li>答：<strong>图例（Legend）</strong>——Light rail line、Metro
+line、Station、River
+各自的画法。<strong>图例就是元模型</strong>（它定义了这种图里可以出现哪些概念、怎么画）</li>
+</ul>
+<hr>
+<h2 id="二建模语言的核心组成重点">二、建模语言的核心组成（重点）</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class ModelingLanguage</span><br><span class="line">    class ConcreteSyntax</span><br><span class="line">    class AbstractSyntax</span><br><span class="line">    class SemanticsDomain</span><br><span class="line">    class ConcreteSyntaxMapping</span><br><span class="line">    class SemanticsMapping</span><br><span class="line">    ModelingLanguage "1" --&gt; "0..*" ConcreteSyntax</span><br><span class="line">    ModelingLanguage "1" --&gt; "1" AbstractSyntax</span><br><span class="line">    ModelingLanguage "0..1" --&gt; "1..*" SemanticsDomain</span><br><span class="line">    ConcreteSyntaxMapping --&gt; ConcreteSyntax</span><br><span class="line">    ConcreteSyntaxMapping --&gt; AbstractSyntax</span><br><span class="line">    SemanticsMapping --&gt; AbstractSyntax</span><br><span class="line">    SemanticsMapping --&gt; SemanticsDomain</span><br></pre></td></tr></table></figure>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">组成</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">例子（UML）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Abstract
+Syntax（抽象语法）</strong></td>
+<td style="text-align: left;">语言的<strong>概念</strong>、特性和相互关系——<strong>与表示法无关</strong></td>
+<td style="text-align: left;">Class、Attribute、Association……</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Concrete
+Syntax（具体语法）</strong></td>
+<td style="text-align: left;"><strong>记号</strong>：图形、文本、表格</td>
+<td style="text-align: left;">类画成三栏矩形，泛化画成空心三角</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Concrete Syntax
+Mapping</strong></td>
+<td style="text-align: left;">具体语法 ↔︎ 抽象语法的映射</td>
+<td style="text-align: left;">“三栏矩形”表示一个 Class</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Semantics
+Domain（语义域）</strong></td>
+<td style="text-align: left;">意义所在的领域</td>
+<td style="text-align: left;">运行时对象、链接、执行轨迹</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Semantics Mapping</strong></td>
+<td style="text-align: left;">抽象语法 → 语义域的映射</td>
+<td style="text-align: left;">一个 Class 表示一组具有相同特性的对象</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>一种语言<strong>恰好一个抽象语法</strong>，但<strong>可以有多个具体语法</strong>（图形、文本）——这就是
+Week 5 提示“<strong>不是图形 vs
+文本语法的问题</strong>”的答案：<strong>建模语言的本质在抽象语法和语义</strong>。</p>
+<p>讲义特别提醒：<strong>这张图本身就是用
+UML（一种建模语言）在描述建模语言</strong>——这就是 <strong>META
+MODELING</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="三元模型mof-与四层架构">三、元模型、MOF 与四层架构</h2>
+<h3 id="元建模语言与-mof">3.1 元建模语言与 MOF</h3>
+<ul>
+<li><strong>元建模语言</strong>：用来规定建模语言的建模语言；这类模型叫<strong>元模型（Meta
+Models / Metamodels）</strong></li>
+<li>广泛使用的标准化元建模语言：<strong>MOF（Meta Object
+Facility）</strong>，由 <strong>OMG</strong> 标准化</li>
+<li><strong>MOF 实际上是 UML 的子集</strong>：
+<ul>
+<li>UML <strong>结构建模（类模型）</strong>的子集</li>
+<li>UML <strong>模型组织</strong>概念的子集</li>
+<li><strong>没有行为建模</strong>（这些模型只是规格）</li>
+<li><strong>使用相同的记号</strong></li>
+</ul></li>
+</ul>
+<h3 id="什么是元模型定义必会">3.2 什么是元模型（定义必会）</h3>
+<blockquote>
+<p><strong>Metamodel</strong>：规定建模语言<strong>抽象语法</strong>、并定义<strong>良构（well-formed）模型规则</strong>的模型，<strong>独立于具体语法</strong>。
+- UML 的抽象语法包含
+class、attribute、operation、association、dependency
+等构造及它们之间的关系 -
+<strong>元模型与模型是类—实例关系：每个模型都是元模型的一个实例</strong>
+- <strong>真实世界元素由模型描述，模型由元模型描述</strong> - 在 MDSE
+中，<strong>领域特定建模语言（DSL）由元模型定义</strong>，元模型是<strong>自动化、工具支持的模型处理</strong>的基础</p>
+</blockquote>
+<h3 id="metaconfusion">3.3 Metaconfusion</h3>
+<p>说 “pipe”
+时我们指的是哪一个？——<strong>真实的烟斗、烟斗的图画，还是“烟斗的图画”这个概念？</strong>
+元层次很容易混淆，所以需要明确的分层。</p>
+<h3 id="omg-四层架构必考">3.4 OMG 四层架构（必考）</h3>
+<table>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">层</th>
+<th style="text-align: left;">名称</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">例子</th>
+<th style="text-align: left;">所在</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>M3</strong></td>
+<td style="text-align: left;"><strong>Meta-Meta-Model</strong></td>
+<td style="text-align: left;"><strong>MOF</strong></td>
+<td style="text-align: left;"><code>Class(MOF)</code></td>
+<td style="text-align: left;">建模工具</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M2</strong></td>
+<td style="text-align: left;"><strong>Meta-Model</strong></td>
+<td style="text-align: left;"><strong>UML</strong>、CWM 等语言定义</td>
+<td style="text-align: left;"><code>Class</code>、<code>Association</code></td>
+<td style="text-align: left;">建模工具</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M1</strong></td>
+<td style="text-align: left;"><strong>Model</strong></td>
+<td style="text-align: left;">用户模型</td>
+<td style="text-align: left;"><code>Customer { id }</code>、<code>CustomerOrder { item, quantity }</code></td>
+<td style="text-align: left;">模型仓库</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M0</strong></td>
+<td style="text-align: left;"><strong>Real Objects</strong></td>
+<td style="text-align: left;">运行时实例</td>
+<td style="text-align: left;"><code>&lt;sawdust&gt; &lt;2 tons&gt;</code>、<code>&lt;lard&gt;</code>、<code>&lt;DeliIceCream&gt; &lt;5 tons&gt;</code>（内存中的
+01011）</td>
+<td style="text-align: left;">计算机内存、运行环境</td>
+</tr>
+</tbody>
+</table>
+<p>层间关系：</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="82.748ex" height="3.042ex" role="img" focusable="false" viewBox="0 -1144.5 36574.7 1344.5"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{M0} \xrightarrow{\ \text{«representedBy»}\ } \text{M1}
+\xrightarrow{\ \text{«specifiedBy»}\ } \text{M2} \xrightarrow{\
+\text{«specifiedBy»}\ } \text{M3} \xrightarrow{\ \text{«specifiedBy»}\ }
+\text{M3（自描述）}
+"><g data-mml-node="mtext" data-latex="\text{M0}"><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(917,0)"></path></g><g data-mml-node="TeXAtom" data-latex="\xrightarrow{\ \text{«representedBy»}\ }" data-mjx-texclass="REL" transform="translate(1694.8,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="undefined"></g><g data-mml-node="mover"><g data-mml-node="mo"><path data-c="2192" d="M496 234C503 237 507 243 507 250C507 257 503 263 496 266C448 282 403 316 362 368C334 403 315 444 306 491C303 504 296 510 283 510C267 510 259 502 259 485L260 483L260 482C277 395 321 326 393 274L0 274L0 226L393 226C321 174 277 105 260 18L260 17L259 15C259-2 267-10 283-10C296-10 303-4 306 9C315 56 334 97 362 132C403 184 448 218 496 234Z" transform="translate(5755.1,0)"></path><svg width="5825.1" height="188" x="0" y="156" viewBox="1456.3 156 5825.1 188"><path data-c="2190" d="M0 226L337 226L337 274L0 274Z" transform="scale(25.928,1)"></path></svg></g><g data-mml-node="mpadded" transform="translate(0,687.4) scale(0.707)"><g transform="translate(278,-200)"><g data-mml-node="mtext" data-latex="\ "><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{«representedBy»}" transform="translate(332,0)"><path data-c="AB" d="M430 0C439 0 444 5 444 14L444 16C425 96 395 171 353 242C396 313 426 388 444 467L444 469C444 478 439 483 430 483L428 483C421 483 417 480 416 474C386 388 340 314 278 252C276 250 275 247 274 242C274 237 276 233 279 232C341 169 387 95 416 10C418 3 422 0 428 0M267 0C276 0 281 5 281 14L281 16C262 96 232 171 190 242C233 313 263 388 281 467L281 469C281 478 276 483 267 483L265 483C259 483 255 480 253 474C223 389 177 315 115 252C113 250 112 247 111 242C111 237 113 233 116 232C178 169 224 95 253 10C255 3 259 0 265 0Z"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(556,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(948,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(1392,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(1948,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2340,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2784,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3178,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(3622,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(4178,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4567,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(5011,0)"></path><path data-c="42" d="M478 358C548 376 624 432 624 512C624 565 599 607 549 640C506 669 456 683 401 683L36 683L36 644L64 644C99 644 120 641 127 636C134 631 138 620 138 602L138 81C138 63 134 51 127 46C120 41 99 39 64 39L36 39L36 0L427 0C484 0 535 16 579 48C627 83 651 129 651 185C651 278 563 342 478 358M521 512C521 428 451 370 367 370L228 370L228 609C228 645 233 644 272 644L394 644C468 644 521 586 521 512M544 186L544 160C542 137 529 111 504 84C478 54 442 39 395 39L272 39C233 39 228 38 228 74L228 340L409 340C490 340 544 270 544 186Z" transform="translate(5567,0)"></path><path data-c="79" d="M113-205C168-205 212-167 243-90L416 332C433 372 463 392 508 392L508 431C475 428 449 427 430 428L341 431L341 393C372 392 387 379 387 354C387 348 385 341 381 332L286 98L180 354C177 362 175 368 174 371C174 385 193 392 230 392L230 431L118 428C94 427 61 428 19 431L19 392C72 392 85 394 99 360L246 1L222-55C195-119 176-175 113-175C99-175 87-171 76-164C99-159 110-144 110-120C110-90 95-75 64-75C34-75 19-90 19-121C19-170 64-205 113-205Z" transform="translate(6275,0)"></path><path data-c="BB" d="M441 233L445 242L441 251C379 314 333 389 303 474C301 480 297 483 291 483L289 483C280 483 275 478 275 469L275 467C292 388 323 313 366 242C323 171 292 96 275 16L275 14C275 5 280 0 289 0L291 0C297 0 301 3 303 10C332 95 378 169 441 233M278 233L282 242L278 251C216 314 170 388 140 474C139 480 135 483 128 483L126 483C117 483 112 478 112 469L112 467C129 388 160 313 203 242C160 171 129 96 112 16L112 14C112 5 117 0 126 0L128 0C134 0 138 3 140 10C169 95 215 169 278 233Z" transform="translate(6803,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(7691,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mspace" transform="translate(8023,0)"></g></g></g></g></g><g data-mml-node="mtext" data-latex="\text{M1}" transform="translate(8234.7,0)"><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z"></path><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z" transform="translate(917,0)"></path></g><g data-mml-node="TeXAtom" data-latex="\xrightarrow{\ \text{«specifiedBy»}\ }" data-mjx-texclass="REL" transform="translate(9929.5,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="undefined"></g><g data-mml-node="mover"><g data-mml-node="mo"><path data-c="2192" d="M496 234C503 237 507 243 507 250C507 257 503 263 496 266C448 282 403 316 362 368C334 403 315 444 306 491C303 504 296 510 283 510C267 510 259 502 259 485L260 483L260 482C277 395 321 326 393 274L0 274L0 226L393 226C321 174 277 105 260 18L260 17L259 15C259-2 267-10 283-10C296-10 303-4 306 9C315 56 334 97 362 132C403 184 448 218 496 234Z" transform="translate(4828.1,0)"></path><svg width="4898.1" height="188" x="0" y="156" viewBox="1224.5 156 4898.1 188"><path data-c="2190" d="M0 226L337 226L337 274L0 274Z" transform="scale(21.802,1)"></path></svg></g><g data-mml-node="mpadded" transform="translate(0,687.4) scale(0.707)"><g transform="translate(278,-200)"><g data-mml-node="mtext" data-latex="\ "><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{«specifiedBy»}" transform="translate(332,0)"><path data-c="AB" d="M430 0C439 0 444 5 444 14L444 16C425 96 395 171 353 242C396 313 426 388 444 467L444 469C444 478 439 483 430 483L428 483C421 483 417 480 416 474C386 388 340 314 278 252C276 250 275 247 274 242C274 237 276 233 279 232C341 169 387 95 416 10C418 3 422 0 428 0M267 0C276 0 281 5 281 14L281 16C262 96 232 171 190 242C233 313 263 388 281 467L281 469C281 478 276 483 267 483L265 483C259 483 255 480 253 474C223 389 177 315 115 252C113 250 112 247 111 242C111 237 113 233 116 232C178 169 224 95 253 10C255 3 259 0 265 0Z"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(556,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(950,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1506,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(1950,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2394,0)"></path><path data-c="66" d="M265 705C176 705 110 633 110 544L110 434L33 434L33 396L110 396L110 79C110 60 107 48 100 44C93 40 71 39 34 39L34 0L149 3C191 4 234 3 277 0L277 39L253 39C220 39 199 41 192 46C185 51 182 63 182 81L182 396L294 396L294 434L179 434L179 545C179 605 210 675 265 675C273 675 280 674 287 672C272 664 264 650 264 631C264 600 279 584 310 584C341 584 357 600 357 632C357 677 310 705 265 705Z" transform="translate(2672,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2978,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3256,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(3700,0)"></path><path data-c="42" d="M478 358C548 376 624 432 624 512C624 565 599 607 549 640C506 669 456 683 401 683L36 683L36 644L64 644C99 644 120 641 127 636C134 631 138 620 138 602L138 81C138 63 134 51 127 46C120 41 99 39 64 39L36 39L36 0L427 0C484 0 535 16 579 48C627 83 651 129 651 185C651 278 563 342 478 358M521 512C521 428 451 370 367 370L228 370L228 609C228 645 233 644 272 644L394 644C468 644 521 586 521 512M544 186L544 160C542 137 529 111 504 84C478 54 442 39 395 39L272 39C233 39 228 38 228 74L228 340L409 340C490 340 544 270 544 186Z" transform="translate(4256,0)"></path><path data-c="79" d="M113-205C168-205 212-167 243-90L416 332C433 372 463 392 508 392L508 431C475 428 449 427 430 428L341 431L341 393C372 392 387 379 387 354C387 348 385 341 381 332L286 98L180 354C177 362 175 368 174 371C174 385 193 392 230 392L230 431L118 428C94 427 61 428 19 431L19 392C72 392 85 394 99 360L246 1L222-55C195-119 176-175 113-175C99-175 87-171 76-164C99-159 110-144 110-120C110-90 95-75 64-75C34-75 19-90 19-121C19-170 64-205 113-205Z" transform="translate(4964,0)"></path><path data-c="BB" d="M441 233L445 242L441 251C379 314 333 389 303 474C301 480 297 483 291 483L289 483C280 483 275 478 275 469L275 467C292 388 323 313 366 242C323 171 292 96 275 16L275 14C275 5 280 0 289 0L291 0C297 0 301 3 303 10C332 95 378 169 441 233M278 233L282 242L278 251C216 314 170 388 140 474C139 480 135 483 128 483L126 483C117 483 112 478 112 469L112 467C129 388 160 313 203 242C160 171 129 96 112 16L112 14C112 5 117 0 126 0L128 0C134 0 138 3 140 10C169 95 215 169 278 233Z" transform="translate(5492,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(6380,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mspace" transform="translate(6712,0)"></g></g></g></g></g><g data-mml-node="mtext" data-latex="\text{M2}" transform="translate(15542.4,0)"><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z"></path><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z" transform="translate(917,0)"></path></g><g data-mml-node="TeXAtom" data-latex="\xrightarrow{\
+\text{«specifiedBy»}\ }" data-mjx-texclass="REL" transform="translate(17237.1,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="undefined"></g><g data-mml-node="mover"><g data-mml-node="mo"><path data-c="2192" d="M496 234C503 237 507 243 507 250C507 257 503 263 496 266C448 282 403 316 362 368C334 403 315 444 306 491C303 504 296 510 283 510C267 510 259 502 259 485L260 483L260 482C277 395 321 326 393 274L0 274L0 226L393 226C321 174 277 105 260 18L260 17L259 15C259-2 267-10 283-10C296-10 303-4 306 9C315 56 334 97 362 132C403 184 448 218 496 234Z" transform="translate(4828.1,0)"></path><svg width="4898.1" height="188" x="0" y="156" viewBox="1224.5 156 4898.1 188"><path data-c="2190" d="M0 226L337 226L337 274L0 274Z" transform="scale(21.802,1)"></path></svg></g><g data-mml-node="mpadded" transform="translate(0,687.4) scale(0.707)"><g transform="translate(278,-200)"><g data-mml-node="mtext" data-latex="\ "><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{«specifiedBy»}" transform="translate(332,0)"><path data-c="AB" d="M430 0C439 0 444 5 444 14L444 16C425 96 395 171 353 242C396 313 426 388 444 467L444 469C444 478 439 483 430 483L428 483C421 483 417 480 416 474C386 388 340 314 278 252C276 250 275 247 274 242C274 237 276 233 279 232C341 169 387 95 416 10C418 3 422 0 428 0M267 0C276 0 281 5 281 14L281 16C262 96 232 171 190 242C233 313 263 388 281 467L281 469C281 478 276 483 267 483L265 483C259 483 255 480 253 474C223 389 177 315 115 252C113 250 112 247 111 242C111 237 113 233 116 232C178 169 224 95 253 10C255 3 259 0 265 0Z"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(556,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(950,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1506,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(1950,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2394,0)"></path><path data-c="66" d="M265 705C176 705 110 633 110 544L110 434L33 434L33 396L110 396L110 79C110 60 107 48 100 44C93 40 71 39 34 39L34 0L149 3C191 4 234 3 277 0L277 39L253 39C220 39 199 41 192 46C185 51 182 63 182 81L182 396L294 396L294 434L179 434L179 545C179 605 210 675 265 675C273 675 280 674 287 672C272 664 264 650 264 631C264 600 279 584 310 584C341 584 357 600 357 632C357 677 310 705 265 705Z" transform="translate(2672,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2978,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3256,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(3700,0)"></path><path data-c="42" d="M478 358C548 376 624 432 624 512C624 565 599 607 549 640C506 669 456 683 401 683L36 683L36 644L64 644C99 644 120 641 127 636C134 631 138 620 138 602L138 81C138 63 134 51 127 46C120 41 99 39 64 39L36 39L36 0L427 0C484 0 535 16 579 48C627 83 651 129 651 185C651 278 563 342 478 358M521 512C521 428 451 370 367 370L228 370L228 609C228 645 233 644 272 644L394 644C468 644 521 586 521 512M544 186L544 160C542 137 529 111 504 84C478 54 442 39 395 39L272 39C233 39 228 38 228 74L228 340L409 340C490 340 544 270 544 186Z" transform="translate(4256,0)"></path><path data-c="79" d="M113-205C168-205 212-167 243-90L416 332C433 372 463 392 508 392L508 431C475 428 449 427 430 428L341 431L341 393C372 392 387 379 387 354C387 348 385 341 381 332L286 98L180 354C177 362 175 368 174 371C174 385 193 392 230 392L230 431L118 428C94 427 61 428 19 431L19 392C72 392 85 394 99 360L246 1L222-55C195-119 176-175 113-175C99-175 87-171 76-164C99-159 110-144 110-120C110-90 95-75 64-75C34-75 19-90 19-121C19-170 64-205 113-205Z" transform="translate(4964,0)"></path><path data-c="BB" d="M441 233L445 242L441 251C379 314 333 389 303 474C301 480 297 483 291 483L289 483C280 483 275 478 275 469L275 467C292 388 323 313 366 242C323 171 292 96 275 16L275 14C275 5 280 0 289 0L291 0C297 0 301 3 303 10C332 95 378 169 441 233M278 233L282 242L278 251C216 314 170 388 140 474C139 480 135 483 128 483L126 483C117 483 112 478 112 469L112 467C129 388 160 313 203 242C160 171 129 96 112 16L112 14C112 5 117 0 126 0L128 0C134 0 138 3 140 10C169 95 215 169 278 233Z" transform="translate(5492,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(6380,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mspace" transform="translate(6712,0)"></g></g></g></g></g><g data-mml-node="mtext" data-latex="\text{M3}" transform="translate(22850,0)"><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(917,0)"></path></g><g data-mml-node="TeXAtom" data-latex="\xrightarrow{\ \text{«specifiedBy»}\ }" data-mjx-texclass="REL" transform="translate(24544.8,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="undefined"></g><g data-mml-node="mover"><g data-mml-node="mo"><path data-c="2192" d="M496 234C503 237 507 243 507 250C507 257 503 263 496 266C448 282 403 316 362 368C334 403 315 444 306 491C303 504 296 510 283 510C267 510 259 502 259 485L260 483L260 482C277 395 321 326 393 274L0 274L0 226L393 226C321 174 277 105 260 18L260 17L259 15C259-2 267-10 283-10C296-10 303-4 306 9C315 56 334 97 362 132C403 184 448 218 496 234Z" transform="translate(4828.1,0)"></path><svg width="4898.1" height="188" x="0" y="156" viewBox="1224.5 156 4898.1 188"><path data-c="2190" d="M0 226L337 226L337 274L0 274Z" transform="scale(21.802,1)"></path></svg></g><g data-mml-node="mpadded" transform="translate(0,687.4) scale(0.707)"><g transform="translate(278,-200)"><g data-mml-node="mtext" data-latex="\ "><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{«specifiedBy»}" transform="translate(332,0)"><path data-c="AB" d="M430 0C439 0 444 5 444 14L444 16C425 96 395 171 353 242C396 313 426 388 444 467L444 469C444 478 439 483 430 483L428 483C421 483 417 480 416 474C386 388 340 314 278 252C276 250 275 247 274 242C274 237 276 233 279 232C341 169 387 95 416 10C418 3 422 0 428 0M267 0C276 0 281 5 281 14L281 16C262 96 232 171 190 242C233 313 263 388 281 467L281 469C281 478 276 483 267 483L265 483C259 483 255 480 253 474C223 389 177 315 115 252C113 250 112 247 111 242C111 237 113 233 116 232C178 169 224 95 253 10C255 3 259 0 265 0Z"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(556,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(950,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1506,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(1950,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2394,0)"></path><path data-c="66" d="M265 705C176 705 110 633 110 544L110 434L33 434L33 396L110 396L110 79C110 60 107 48 100 44C93 40 71 39 34 39L34 0L149 3C191 4 234 3 277 0L277 39L253 39C220 39 199 41 192 46C185 51 182 63 182 81L182 396L294 396L294 434L179 434L179 545C179 605 210 675 265 675C273 675 280 674 287 672C272 664 264 650 264 631C264 600 279 584 310 584C341 584 357 600 357 632C357 677 310 705 265 705Z" transform="translate(2672,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2978,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3256,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(3700,0)"></path><path data-c="42" d="M478 358C548 376 624 432 624 512C624 565 599 607 549 640C506 669 456 683 401 683L36 683L36 644L64 644C99 644 120 641 127 636C134 631 138 620 138 602L138 81C138 63 134 51 127 46C120 41 99 39 64 39L36 39L36 0L427 0C484 0 535 16 579 48C627 83 651 129 651 185C651 278 563 342 478 358M521 512C521 428 451 370 367 370L228 370L228 609C228 645 233 644 272 644L394 644C468 644 521 586 521 512M544 186L544 160C542 137 529 111 504 84C478 54 442 39 395 39L272 39C233 39 228 38 228 74L228 340L409 340C490 340 544 270 544 186Z" transform="translate(4256,0)"></path><path data-c="79" d="M113-205C168-205 212-167 243-90L416 332C433 372 463 392 508 392L508 431C475 428 449 427 430 428L341 431L341 393C372 392 387 379 387 354C387 348 385 341 381 332L286 98L180 354C177 362 175 368 174 371C174 385 193 392 230 392L230 431L118 428C94 427 61 428 19 431L19 392C72 392 85 394 99 360L246 1L222-55C195-119 176-175 113-175C99-175 87-171 76-164C99-159 110-144 110-120C110-90 95-75 64-75C34-75 19-90 19-121C19-170 64-205 113-205Z" transform="translate(4964,0)"></path><path data-c="BB" d="M441 233L445 242L441 251C379 314 333 389 303 474C301 480 297 483 291 483L289 483C280 483 275 478 275 469L275 467C292 388 323 313 366 242C323 171 292 96 275 16L275 14C275 5 280 0 289 0L291 0C297 0 301 3 303 10C332 95 378 169 441 233M278 233L282 242L278 251C216 314 170 388 140 474C139 480 135 483 128 483L126 483C117 483 112 478 112 469L112 467C129 388 160 313 203 242C160 171 129 96 112 16L112 14C112 5 117 0 126 0L128 0C134 0 138 3 140 10C169 95 215 169 278 233Z" transform="translate(5492,0)"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(6380,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mspace" transform="translate(6712,0)"></g></g></g></g></g><g data-mml-node="mtext" data-latex="\text{M3（自描述）}" transform="translate(30157.7,0)"><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z"></path><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z" transform="translate(917,0)"></path><text data-variant="normal" transform="translate(1417,0) scale(1,-1)" font-size="884px" font-family="serif">（自描述）</text></g></g></g></svg></mjx-container></span></p>
+<blockquote>
+<p><strong>MOF 用自己来定义自己</strong>（M3 的 specifiedBy
+指回自身），所以不需要 M4。</p>
+</blockquote>
+<p><strong>判断层次的方法</strong>：问“它是什么的实例？”</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">东西</th>
+<th style="text-align: left;">它是…的实例</th>
+<th style="text-align: left;">所在层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">某个订单对象
+<code>&lt;DeliIceCream, 5 tons&gt;</code></td>
+<td style="text-align: left;"><code>CustomerOrder</code></td>
+<td style="text-align: left;">M0</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>CustomerOrder</code> 类</td>
+<td style="text-align: left;">UML 的 <code>Class</code></td>
+<td style="text-align: left;">M1</td>
+</tr>
+<tr>
+<td style="text-align: left;">UML 的 <code>Class</code> 概念</td>
+<td style="text-align: left;">MOF 的 <code>Class</code></td>
+<td style="text-align: left;">M2</td>
+</tr>
+<tr>
+<td style="text-align: left;">MOF 的 <code>Class</code></td>
+<td style="text-align: left;">MOF 自身</td>
+<td style="text-align: left;">M3</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="四uml-的规格与元模型">四、UML 的规格与元模型</h2>
+<h3 id="uml-语言规格的三部分">4.1 UML 语言规格的三部分</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">部分</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">定义方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Abstract Syntax</strong></td>
+<td style="text-align: left;">概念、特性及相互关系</td>
+<td style="text-align: left;"><strong>MOF 元模型 +
+附加约束</strong>（OCL）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Concrete Syntax</strong></td>
+<td style="text-align: left;">记号（图、文本、表格）</td>
+<td style="text-align: left;"><strong>UML
+的具体语法定义不完整、是非正式的</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Language Semantics</strong></td>
+<td style="text-align: left;">UML 模型及其概念的意义</td>
+<td style="text-align: left;"><strong>英语（+ fUML 模型 +
+数学模型）</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="uml-元模型片段简化">4.2 UML 元模型片段（简化）</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Element</span><br><span class="line">    class NamedElement {</span><br><span class="line">        name : String</span><br><span class="line">    }</span><br><span class="line">    class DirectedRelationship</span><br><span class="line">    class Generalization</span><br><span class="line">    class Classifier</span><br><span class="line">    class Feature</span><br><span class="line">    class TypedElement</span><br><span class="line">    class Class</span><br><span class="line">    class Attribute</span><br><span class="line">    class Operation</span><br><span class="line">    Element &lt;|-- NamedElement</span><br><span class="line">    Element &lt;|-- DirectedRelationship</span><br><span class="line">    DirectedRelationship --&gt; "1..*" Element : sources</span><br><span class="line">    DirectedRelationship --&gt; "1..*" Element : targets</span><br><span class="line">    DirectedRelationship &lt;|-- Generalization</span><br><span class="line">    NamedElement &lt;|-- Classifier</span><br><span class="line">    Classifier --&gt; "0..*" Generalization : generalizations</span><br><span class="line">    Classifier --&gt; "0..*" Feature : features</span><br><span class="line">    Classifier &lt;|-- Class</span><br><span class="line">    Class --&gt; "0..*" Attribute : attributes</span><br><span class="line">    Class --&gt; "0..*" Operation : operations</span><br><span class="line">    Feature &lt;|-- Attribute</span><br><span class="line">    Feature &lt;|-- Operation</span><br><span class="line">    TypedElement &lt;|-- Attribute</span><br><span class="line">    TypedElement &lt;|-- Operation</span><br></pre></td></tr></table></figure>
+<p><strong>读法</strong>（讲义原话整理）：<strong>每个类都是可泛化的，并且是一个
+NamedElement；类由属性和操作组成；属性和操作都是
+TypedElement，有一个（基本）类型。</strong></p>
+<h3 id="元建模能做什么">4.3 元建模能做什么</h3>
+<blockquote>
+<p>元建模<strong>定义用来构造模型的概念、关系和规则</strong>——为精确描述软件提供<strong>共享语言</strong>。</p>
+</blockquote>
+<ul>
+<li><strong>定义建模概念、规定关系</strong></li>
+<li><strong>检查模型有效性，支持自动化</strong></li>
+<li><strong>元建模就是对模型建模</strong></li>
+<li><strong>支持模型复用、一致性和变更分析</strong></li>
+</ul>
+<h3 id="模型是怎么存储的图只是视图">4.4
+模型是怎么存储的：图只是视图</h3>
+<p>一张类图：<code>A { a1 : Integer }</code>，<code>B { get_a1() : Integer }</code>，<code>B</code>
+泛化
+<code>A</code>。在模型仓库里它是<strong>一个对象网络</strong>（每个对象都是
+M2 元类的实例）：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">:Class {name="A"} ──attributes[1]──▶ :Attribute {name="a1"} ──types[1]──▶ :PrimitiveType {name="Integer"}</span><br><span class="line">      ▲ targets[1]</span><br><span class="line">:Generalization</span><br><span class="line">      │ sources[1]</span><br><span class="line">:Class {name="B"} ──operations[1]──▶ :Operation {name="get_a1"} ──types[1]──▶ :PrimitiveType {name="Integer"}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>UML
+图只是底层模型的选择性视图</strong>；<strong>模型是复杂的节点网络</strong>。</p>
+</blockquote>
+<p><strong>模型元素的两种创建方式</strong>：</p>
+<ul>
+<li><strong>间接</strong>：在图中创建新元素</li>
+<li><strong>直接</strong>：通过程序（<strong>API</strong>）或模型浏览器直接插入模型</li>
+</ul>
+<p><strong>图通常与模型分离</strong>——同一个模型元素可以出现在多张图里，也可以不出现在任何图里（这就是
+Week 4 “view 只是模型的一个视图”在工具层面的体现）。</p>
+<h3 id="练习关联的元模型实例必会题型">4.5
+练习：关联的元模型实例（必会题型）</h3>
+<p><strong>附加元模型片段</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">DirectedRelationship ◁── Association ──ends (2)──▶ AssociationEnd</span><br><span class="line">AssociationEnd ──target (1)──▶ Classifier</span><br><span class="line">AssociationEnd : modifier : EndType, lowerBound : Integer, upperBound : Integer</span><br><span class="line">AssociationEnd 也是 TypedElement</span><br><span class="line">«enumeration» EndType { composite, aggregate, simple }</span><br></pre></td></tr></table></figure>
+<p><strong>题目</strong>：把类图 <code>A [a 0..1] ——— [b 0..2] B</code>
+表示为元模型实例（对象图）。</p>
+<p><strong>讲义解答</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    AS[": Association"]</span><br><span class="line">    EA["a : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 1"]</span><br><span class="line">    EB["b : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 2"]</span><br><span class="line">    CA[": Class&lt;br/&gt;name = A"]</span><br><span class="line">    CB[": Class&lt;br/&gt;name = B"]</span><br><span class="line">    AS -- ends --&gt; EA</span><br><span class="line">    AS -- ends --&gt; EB</span><br><span class="line">    EA -- target --&gt; CA</span><br><span class="line">    EB -- target --&gt; CB</span><br></pre></td></tr></table></figure>
+<p>（两个端点的 <code>modifier</code> 都是
+<code>simple</code>，因为没有菱形。）</p>
+<blockquote>
+<p><strong>解题方法</strong>：①
+图上的每个“符号”找到对应的<strong>元类</strong>（框 → Class，线 →
+Association，线端 → AssociationEnd）；② 每个元类实例画成
+<code>name : MetaClass</code>；③
+图上的文字（名字、多重性）填成<strong>属性槽</strong>；④
+元模型中的关联变成<strong>链接</strong>。如果题目里有黑菱形，对应端的
+<code>modifier = composite</code>。</p>
+</blockquote>
+<h3 id="uml-具体语法图的种类">4.6 UML 具体语法：图的种类</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">UML Diagram</span><br><span class="line">├── Structure Diagram</span><br><span class="line">│   ├── Class Diagram          ├── Instance (Object) Diagram</span><br><span class="line">│   ├── Package Diagram        ├── Deployment Diagram</span><br><span class="line">│   ├── Composite Structure    ├── Collaboration Diagram</span><br><span class="line">│   └── Profile Diagram</span><br><span class="line">└── Behavior Diagram</span><br><span class="line">    ├── Activity Diagram       ├── Statechart Diagram     ├── UseCase Diagram</span><br><span class="line">    └── Interaction Diagram</span><br><span class="line">        ├── Sequence           ├── Communication</span><br><span class="line">        ├── Timing             └── Interaction Overview</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<strong>Use Case 图归在行为图下</strong>；<strong>Profile
+图归在结构图下</strong>（Week 11 会用到）。</p>
+</blockquote>
+<hr>
+<h2 id="五语言语义">五、语言语义</h2>
+<h3 id="静态语义与动态语义">5.1 静态语义与动态语义</h3>
+<blockquote>
+<p><strong>Semantics = 语言语句的意义。</strong></p>
+</blockquote>
+<p>例：类图
+<code>Person { +name : String, +gender : eGender }</code>，自关联
+<code>friends 0..*</code>；<code>Adult</code> 特化
+<code>Person</code>，有 <code>voterRegNo : Integer</code>，自关联
+<code>adultFriends 0..*</code>。对应的文本：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">class Person { public name : String; public gender : eGender }</span><br><span class="line">class Adult specializes Person { protected voterRegNo : Integer }</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Static semantics</strong></td>
+<td style="text-align: left;"><strong>存在什么</strong>（结构）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dynamic semantics</strong></td>
+<td style="text-align: left;"><strong>发生什么</strong>（行为）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>同一个语义可以用图形或文本两种具体语法表达——再次说明具体语法不是本质。</p>
+</blockquote>
+<h3 id="如何规定语义">5.2 如何规定语义</h3>
+<ul>
+<li>用一种<strong>语义已经定义好的语言</strong>来规定语义</li>
+<li>计算机语言运行时语义的方法有很多：<strong>非正式自然语言描述最常见</strong>；以及
+<strong>denotational（指称）、translational（翻译）、operational（操作）、axiomatic（公理）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">思路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Denotational</strong></td>
+<td style="text-align: left;">把每个构造映射到数学对象（如函数）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Translational</strong></td>
+<td style="text-align: left;">翻译到另一种语义已知的语言（如生成
+Java）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operational</strong></td>
+<td style="text-align: left;">定义一个解释器/抽象机如何一步步执行</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Axiomatic</strong></td>
+<td style="text-align: left;">用逻辑公理/前后置条件描述</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fumlexecutable-uml-foundation">5.3 fUML（Executable UML
+Foundation）</h3>
+<ul>
+<li>OMG 标准，为<strong>有运行时表现的标准 UML
+概念子集</strong>定义<strong>动态语义</strong></li>
+<li>建模语言的语义可以写成<strong>用标准化可执行建模语言编写的程序</strong>——<strong>操作（解释）方法</strong></li>
+<li><strong>fUML 本身的语义用公理方式定义</strong></li>
+<li>呼应 Week 2 的 <strong>Model
+Execution</strong>：“不可执行的模型就像没有引擎的车”</li>
+</ul>
+<hr>
+<h2 id="六uml-元模型选读">六、UML 元模型选读</h2>
+<h3 id="命名空间元模型">6.1 命名空间元模型</h3>
+<ul>
+<li>命名空间是<strong>包含一组可按名识别的 NamedElement</strong>
+的模型元素</li>
+<li><strong>NameSpace 本身是 NamedElement</strong>，可以拥有其他
+NamedElement</li>
+<li><strong>每个 NamedElement 至多被一个 NameSpace 拥有</strong></li>
+<li>NameSpace 拥有 <strong>PackageImport</strong>；可以拥有
+<strong>Constraints</strong></li>
+</ul>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="96.131ex" height="3.125ex" role="img" focusable="false" viewBox="0 -1133.1 42489.9 1381.1"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\text{NamedElement} \xleftarrow{\ \text{ownedMember } 0..*\ }
+\text{Namespace} \;(\text{Namespace} \sqsubseteq
+\text{NamedElement}),\qquad \text{namespace} : 0..1
+"><g data-mml-node="mtext" data-latex="\text{NamedElement}"><path data-c="4E" d="M576 15C585.6 1 589 0 596 0C613 0 614 7 614 30L614 575C614 592 618 606 626 619C637 636 667 644 716 644L716 683L596 680L477 683L477 644C526 644 556 636 567 619C575 606 579 592 579 575L579 166L237 668C230 678 220 683 205 683L33 683L33 644L66 644C106 644 128 642 133 638C134 637 135 632 135 624L135 108C135 91 131 77 123 64C112 47 82 39 33 39L33 0L152 3L272 0L272 39C223 39 193 47 182 64C174 77 170 91 170 108L170 611Z"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(750,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(1250,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2083,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(2527,0)"></path><path data-c="45" d="M230 74L230 334L315 334C360 334 388 326 400 311C412 296 418 265 418 218L451 218L451 488L418 488C418 441 412 411 400 396C388 381 360 373 315 373L230 373L230 606C230 642 236 641 275 641L402 641C474 641 522 627 547 598C579 559 583 523 592 450L625 450L596 680L33 680L33 641L61 641C96 641 117 639 124 634C131 629 135 617 135 599L135 81C135 63 131 51 124 46C117 41 96 39 61 39L33 39L33 0L610 0L653 263L620 263C611 208 602 166 591 136C580 106 560 82 530 63C505 47 464 39 406 39L275 39C236 39 230 38 230 74Z" transform="translate(3083,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(3764,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4042,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(4486,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(5319,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(5763,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(6319,0)"></path></g><g data-mml-node="TeXAtom" data-latex="\xleftarrow{\ \text{ownedMember } 0..*\ }" data-mjx-texclass="REL" transform="translate(6985.8,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="undefined"></g><g data-mml-node="mover"><g data-mml-node="mo"><path data-c="2190" d="M114 226L507 226L507 274L114 274C185 325 230 395 247 482L247 486C247 502 239 510 223 510C211 510 204 504 201 491C190 444 171 403 144 368C103 316 59 282 11 266C4 263 0 257 0 250C0 243 4 237 11 234C59 218 103 184 144 132C171 97 190 56 201 9C204-4 211-10 223-10C239-10 247-2 247 14L247 18C230 105 185 175 114 226Z"></path><svg width="6456.6" height="188" x="437" y="156" viewBox="1614.1 156 6456.6 188"><path data-c="2190" d="M0 226L337 226L337 274L0 274Z" transform="scale(28.739,1)"></path></svg></g><g data-mml-node="mpadded" transform="translate(0,683.8) scale(0.707)"><g transform="translate(556,-200)"><g data-mml-node="mtext" data-latex="\ "><path data-c="A0" d=""></path></g><g data-mml-node="mtext" data-latex="\text{ownedMember }" transform="translate(332,0)"><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z"></path><path data-c="77" d="M620 332C634 371 662 392 703 393L703 431C672 428 646 427 627 428L531 431L531 393C569 392 588 377 588 349C588 345 587 339 584 330L497 89L403 353C400 362 399 367 399 370C399 385 418 393 457 393L457 431L350 428C330 427 299 428 258 431L258 393C293 393 314 388 321 379C324 376 332 359 343 328L262 102L172 354C169 363 167 368 167 370C167 385 187 393 226 393L226 431L114 428L18 431L18 393C67 393 80 394 91 361L216 13C222-3 230-11 240-11C251-11 259-4 264 11L360 279L457 10C462-4 470-11 481-11C488-10 496-3 504 10Z" transform="translate(500,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(1222,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1778,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(2222,0)"></path><path data-c="4D" d="M175 108L175 622L407 24C413 8 421 0 430 0C439 0 446 7 452 21L689 630L689 81C689 63 685 51 678 46C671 41 650 39 615 39L587 39L587 0C614 2 663 3 733 3C803 3 852 2 879 0L879 39L851 39C816 39 795 41 788 46C781 51 777 63 777 81L777 602C777 620 781 631 788 636C795 641 816 644 851 644L879 644L879 683L708 683C681 683 679 682 671 662L458 115L247 659C238 679 235 683 208 683L37 683L37 644L65 644C100 644 121 641 128 636C135 631 139 620 139 602L139 108C139 91 135 77 127 64C116 47 86 39 37 39L37 0L157 3L277 0L277 39C204 39 175 51 175 108Z" transform="translate(2778,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(3695,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(4139,0)"></path><path data-c="62" d="M298-11C360-11 413 11 456 56C499 101 521 154 521 217C521 278 501 332 460 377C419 422 369 445 308 445C259 445 215 426 178 387L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 0L136 0L169 58C201 12 244-11 298-11M294 19C253 19 219 38 194 77C185 90 181 104 181 117L181 320C181 333 184 344 191 354C220 395 257 415 304 415C345 415 378 395 404 354C422 324 431 279 431 218C431 110 393 19 294 19Z" transform="translate(4972,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(5528,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(5972,0)"></path><path data-c="A0" d="" transform="translate(6364,0)"></path></g><g data-mml-node="mn" data-latex="0." transform="translate(7028,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path></g><g data-mml-node="mo" data-latex="." transform="translate(7806,0)"><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z"></path></g><g data-mml-node="mo" data-latex="*" transform="translate(8084,0)"><path data-c="2217" d="M404 372C397 372 390 370 385 366L267 279L282 425C285 445 269 462 250 462C231 462 215 445 218 425L233 279L115 366C110 370 103 372 96 372C78 372 63 357 63 339C63 325 70 315 83 309L217 250L83 191C70 185 63 175 63 161C63 143 78 128 96 128C103 128 110 130 115 134L233 221L218 75C215 55 231 39 250 39C269 39 285 55 282 75L267 221L385 134C390 130 397 128 404 128C415 128 424 133 431 142C446 162 435 183 417 191L283 250L417 309C430 315 437 325 437 339C437 357 422 372 404 372Z"></path></g><g data-mml-node="mtext" data-latex="\ " transform="translate(8584,0)"><path data-c="A0" d=""></path></g><g data-mml-node="mspace" transform="translate(8916,0)"></g></g></g></g></g><g data-mml-node="mtext" data-latex="\text{Namespace}" transform="translate(14157.1,0)"><path data-c="4E" d="M576 15C585.6 1 589 0 596 0C613 0 614 7 614 30L614 575C614 592 618 606 626 619C637 636 667 644 716 644L716 683L596 680L477 683L477 644C526 644 556 636 567 619C575 606 579 592 579 575L579 166L237 668C230 678 220 683 205 683L33 683L33 644L66 644C106 644 128 642 133 638C134 637 135 632 135 624L135 108C135 91 131 77 123 64C112 47 82 39 33 39L33 0L152 3L272 0L272 39C223 39 193 47 182 64C174 77 170 91 170 108L170 611Z"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(750,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(1250,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2083,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2527,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(2921,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(3477,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(3977,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4421,0)"></path></g><g data-mml-node="mspace" data-latex="\;" transform="translate(19022.1,0)"></g><g data-mml-node="mo" data-latex="(" transform="translate(19300.1,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mtext" data-latex="\text{Namespace}" transform="translate(19689.1,0)"><path data-c="4E" d="M576 15C585.6 1 589 0 596 0C613 0 614 7 614 30L614 575C614 592 618 606 626 619C637 636 667 644 716 644L716 683L596 680L477 683L477 644C526 644 556 636 567 619C575 606 579 592 579 575L579 166L237 668C230 678 220 683 205 683L33 683L33 644L66 644C106 644 128 642 133 638C134 637 135 632 135 624L135 108C135 91 131 77 123 64C112 47 82 39 33 39L33 0L152 3L272 0L272 39C223 39 193 47 182 64C174 77 170 91 170 108L170 611Z"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(750,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(1250,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2083,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2527,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(2921,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(3477,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(3977,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4421,0)"></path></g><g data-mml-node="mo" data-latex="\sqsubseteq" transform="translate(24831.9,0)"><path data-c="2291" d="M678 87L123 87L123 579L678 579C694 579 702 587 702 603C702 619 694 627 678 627L100 627C84 627 76 619 76 603L76 63C76 47 84 39 100 39L678 39C694 39 702 47 702 63C702 76 691 87 678 87M678-80L100-80C84-80 76-88 76-103C76-119 84-127 100-127L678-127C694-127 702-119 702-103C702-91 691-80 678-80Z"></path></g><g data-mml-node="mtext" data-latex="\text{NamedElement}" transform="translate(25887.7,0)"><path data-c="4E" d="M576 15C585.6 1 589 0 596 0C613 0 614 7 614 30L614 575C614 592 618 606 626 619C637 636 667 644 716 644L716 683L596 680L477 683L477 644C526 644 556 636 567 619C575 606 579 592 579 575L579 166L237 668C230 678 220 683 205 683L33 683L33 644L66 644C106 644 128 642 133 638C134 637 135 632 135 624L135 108C135 91 131 77 123 64C112 47 82 39 33 39L33 0L152 3L272 0L272 39C223 39 193 47 182 64C174 77 170 91 170 108L170 611Z"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(750,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(1250,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2083,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(2527,0)"></path><path data-c="45" d="M230 74L230 334L315 334C360 334 388 326 400 311C412 296 418 265 418 218L451 218L451 488L418 488C418 441 412 411 400 396C388 381 360 373 315 373L230 373L230 606C230 642 236 641 275 641L402 641C474 641 522 627 547 598C579 559 583 523 592 450L625 450L596 680L33 680L33 641L61 641C96 641 117 639 124 634C131 629 135 617 135 599L135 81C135 63 131 51 124 46C117 41 96 39 61 39L33 39L33 0L610 0L653 263L620 263C611 208 602 166 591 136C580 106 560 82 530 63C505 47 464 39 406 39L275 39C236 39 230 38 230 74Z" transform="translate(3083,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(3764,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4042,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(4486,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(5319,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(5763,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(6319,0)"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(32595.7,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(32984.7,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mspace" data-latex="\qquad" transform="translate(33262.7,0)"></g><g data-mml-node="mtext" data-latex="\text{namespace}" transform="translate(35429.4,0)"><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(556,0)"></path><path data-c="6D" d="M315 413C361 413 384 378 384 307L384 79C384 60 381 48 374 44C367 40 344 38 307 38L307 0L423 3L538 0L538 38C501 38 479 40 472 44C465 48 461 60 461 79L461 259C461 339 513 413 590 413C637 413 660 378 660 307L660 79C660 60 656 48 649 44C642 40 619 38 582 38L582 0L698 3L813 0L813 38C781 38 760 39 750 42C740 45 736 52 736 64L736 251C736 298 734 331 731 350C721 411 676 442 597 442C534 442 487 413 455 354C441 413 397 442 322 442C259 442 211 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L148 3L263 0L263 38C226 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 238 413 315 413Z" transform="translate(1056,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1889,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2333,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(2727,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(3283,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(3783,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4227,0)"></path></g><g data-mml-node="mo" data-latex=":" transform="translate(40378.1,0)"><path data-c="3A" d="M192 375C192 405 169 431 139 431C109 431 86 405 86 375C86 345 109 319 139 319C169 319 192 345 192 375M192 56C192 86 169 112 139 112C109 112 86 86 86 56C86 26 109 0 139 0C169 0 192 26 192 56Z"></path></g><g data-mml-node="mn" data-latex="0." transform="translate(40933.9,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path></g><g data-mml-node="mn" data-latex=".1" transform="translate(41711.9,0)"><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z"></path><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z" transform="translate(278,0)"></path></g></g></g></svg></mjx-container></span></p>
+<h3 id="依赖约束注释的元模型">6.2 依赖、约束、注释的元模型</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">元素</th>
+<th style="text-align: left;">元模型要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Dependency</strong></td>
+<td style="text-align: left;">一般地，<strong>任意两个 NamedElement
+之间</strong>都可以画依赖（client、supplier 都是 NamedElement）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Constraint</strong></td>
+<td style="text-align: left;">通过
+<strong>ValueSpecification</strong>（包含表达式的元素）表达；其所属命名空间可以是
+Class、Package、Interface 等</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Comment</strong></td>
+<td style="text-align: left;"><strong>可以附在任何模型元素上</strong>，在元模型根部（Element
+拥有 ownedComment）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="类型实例与分类器">6.3 类型、实例与分类器</h3>
+<ul>
+<li><strong>Type vs
+Instance</strong>：类型是一类实体的规格；实例是其中的个体（Week 5）</li>
+<li><strong>InstanceSpecification</strong>：建模对象及其他<strong>占据内存空间</strong>的东西的通用设施（对象图里的对象就是
+InstanceSpecification）</li>
+<li><strong>Classifier</strong>：共享一组特征、可按特征划分为子集合（Week
+5）；分类通过 <strong>Generalization（子集—集合关系）</strong> 建模</li>
+</ul>
+<h3 id="结构与行为的关系元模型">6.4 结构与行为的关系（元模型）</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Classifier ──feature 0..*──▶ Feature</span><br><span class="line">BehavioredClassifier ──ownedBehavior 0..*──▶ Behavior ──context 0..1──▶ BehavioredClassifier</span><br><span class="line">Class, Actor, UseCase, Collaboration 都是 BehavioredClassifier</span><br><span class="line">Behavior ◁── Activity        （flow-based 行为）</span><br><span class="line">Behavior ◁── StateMachine    （event-driven 行为）</span><br><span class="line">Behavior ◁── Interaction     （event-driven 系统行为）</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这把 Week 7
+的四种行为形式放进了元模型：<strong>行为本身也是分类器</strong>，被一个
+BehavioredClassifier 拥有。</p>
+</blockquote>
+<h3 id="classifier-behaviour-vs-method">6.5 Classifier behaviour vs
+Method</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Method</strong></th>
+<th style="text-align: left;"><strong>Classifier behaviour</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">主要用于</td>
+<td style="text-align: left;"><strong>被动对象</strong></td>
+<td style="text-align: left;"><strong>主动对象</strong>（如 Java
+Thread）</td>
+</tr>
+<tr>
+<td style="text-align: left;">触发</td>
+<td style="text-align: left;">调用 Operation（<strong>同步</strong>）或
+Reception（<strong>异步</strong>）时</td>
+<td style="text-align: left;"><strong>对象被创建时执行</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">元模型</td>
+<td style="text-align: left;"><code>BehavioralFeature (Operation \| Reception) ──method 0..*──▶ Behavior</code></td>
+<td style="text-align: left;"><code>BehavioredClassifier ──classifierBehavior 0..1──▶ Behavior</code></td>
+</tr>
+</tbody>
+</table>
+<p>（对应 Week 7 的主动对象 vs 被动对象。）</p>
+<hr>
+<h2 id="七agentic-软件的元建模">七、Agentic 软件的元建模</h2>
+<h3 id="问题一个方框不够精确">7.1 问题：一个方框不够精确</h3>
+<p>健康 agent：用户描述症状 → agent
+收集相关信息、评估情况、选择下一步：</p>
+<ul>
+<li>缺少信息 → <strong>追问</strong></li>
+<li>适合居家护理 → <strong>检索并解释指南</strong></li>
+<li>需要医生评估 → <strong>查找可用预约，预约前获得确认</strong></li>
+</ul>
+<blockquote>
+<p>问：<strong>画一个 “Book appointment”
+方框，能说明何时允许预约、需要什么信息、预约失败怎么办吗？</strong> ——
+不能。⇒ <strong>需要一种精确的建模语言。</strong></p>
+</blockquote>
+<h3 id="健康-agent-类m1">7.2 健康 agent 类（M1）</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">HealthcareAgent</span><br><span class="line">+goal : String</span><br><span class="line">+maxSteps : Integer</span><br><span class="line">+assessmentPolicyRef : String</span><br><span class="line">+receiveSymptoms(report : SymptomReport)</span><br><span class="line">+askFollowUpQuestion() : Question</span><br><span class="line">+assessSymptoms() : AssessmentResult</span><br><span class="line">+selectAction(result : AssessmentResult) : CareAction</span><br><span class="line">+provideHomeCareAdvice() : Guidance</span><br><span class="line">+findAppointments() : AppointmentList</span><br><span class="line">+bookAppointment(slot : AppointmentSlot, consent : Confirmation) : BookingResult</span><br><span class="line">+escalateToProfessional()</span><br></pre></td></tr></table></figure>
+<p>注意 <code>bookAppointment</code> <strong>需要
+<code>consent : Confirmation</code>
+参数</strong>——“预约前获得确认”被写进了接口签名。</p>
+<h3 id="把这个类表示成-m2-元类的实例">7.3 把这个类表示成 M2
+元类的实例</h3>
+<p><strong>M2
+元模型（规格）</strong>：<code>Class {name}</code>、<code>Attribute {name, visibility}</code>、<code>Operation {name, visibility}</code>、<code>Parameter {name, direction}</code>、<code>Type {name}</code>。</p>
+<p><strong>M2 实例化</strong>（即用元模型对象描述 M1 的类）：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">M1 元素</th>
+<th style="text-align: left;">元模型实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">类 HealthcareAgent</td>
+<td style="text-align: left;"><code>: Class { name = "HealthcareAgent" }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">属性 goal</td>
+<td style="text-align: left;"><code>goal : Attribute { type = "String", visibility = "+" }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">属性 maxSteps</td>
+<td style="text-align: left;"><code>maxSteps : Attribute { type = "Integer" }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">属性 assessmentPolicyRef</td>
+<td style="text-align: left;"><code>assessmentPolicyRef : Attribute { type = "String" }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">操作 receiveSymptoms</td>
+<td style="text-align: left;"><code>receiveSymptoms : Operation { visibility = "+" }</code>
+── <code>report : Parameter</code> ──
+<code>SymptomReport : Type</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">操作 selectAction</td>
+<td style="text-align: left;"><code>selectAction : Operation { return = CareAction }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">操作 bookAppointment</td>
+<td style="text-align: left;"><code>bookAppointment : Operation { return = BookingResult }</code>
+──
+<code>slot : Parameter</code>（<code>AppointmentSlot : Type</code>）、<code>consent : Parameter</code>（<code>Confirmation : Type</code>）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这和 4.5 练习是同一种题型：<strong>把一个 M1 类“拆”成
+Class/Attribute/Operation/Parameter/Type 的对象网络</strong>。</p>
+</blockquote>
+<h3 id="面向-agentic-软件的领域元模型讲义最后一页">7.4 面向 agentic
+软件的领域元模型（讲义最后一页）</h3>
+<p>这是一个<strong>为 agent 软件专门设计的 M2 元模型</strong>（即一种
+DSL 的抽象语法）：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">元类</th>
+<th style="text-align: left;">属性</th>
+<th style="text-align: left;">与 AgentType 的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>AgentType</strong></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">中心元类</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Goal</strong></td>
+<td style="text-align: left;"><code>statement : String</code>、<code>satisfactionCondition : String</code></td>
+<td style="text-align: left;"><code>goals 1..*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Environment</strong></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><code>environments 1..*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Policy</strong></td>
+<td style="text-align: left;"><code>predicate : String</code>、<code>version : String</code></td>
+<td style="text-align: left;"><code>policies 0..*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Capability</strong></td>
+<td style="text-align: left;"><code>kind : CapabilityKind</code>、<code>effect : EffectKind</code></td>
+<td style="text-align: left;"><code>capabilities 1..*</code>；每个
+Capability 关联一个 <strong>Tool</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tool</strong></td>
+<td style="text-align: left;"><code>implementationRef : String</code></td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Reasoner</strong></td>
+<td style="text-align: left;"><code>kind : ReasonerKind</code></td>
+<td style="text-align: left;"><code>reasoner 0..1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Behavior</strong></td>
+<td style="text-align: left;"><code>stopCondition : String</code></td>
+<td style="text-align: left;"><code>behavior 1</code>；由
+<code>steps 1..*</code> 和 <code>transitions 0..*</code> 组成</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Memory</strong></td>
+<td style="text-align: left;"><code>kind : MemoryKind</code></td>
+<td style="text-align: left;"><code>memories 0..*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ExecutionPolicy</strong></td>
+<td style="text-align: left;"><code>maxSteps</code>、<code>timeoutSeconds</code>、<code>maxRetries : Integer</code></td>
+<td style="text-align: left;"><code>executionPolicy 1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ApprovalPolicy</strong></td>
+<td style="text-align: left;"><code>validitySeconds : Integer</code>、<code>bindToArguments : Boolean</code></td>
+<td style="text-align: left;">关联 <strong>HumanRole</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Step</strong>
+<code>&lt;&lt;abstract&gt;&gt;</code></td>
+<td style="text-align: left;">子类：<strong>InvocationStep |
+DecisionStep | WaitStep | EndStep</strong></td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Transition</strong></td>
+<td style="text-align: left;"><code>guard : String</code>、<code>priority : Integer</code>；<code>source [1]</code>、<code>target [1]</code>
+指向 Step</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class AgentType</span><br><span class="line">    class Goal {</span><br><span class="line">        statement : String</span><br><span class="line">        satisfactionCondition : String</span><br><span class="line">    }</span><br><span class="line">    class Capability {</span><br><span class="line">        kind : CapabilityKind</span><br><span class="line">        effect : EffectKind</span><br><span class="line">    }</span><br><span class="line">    class Tool {</span><br><span class="line">        implementationRef : String</span><br><span class="line">    }</span><br><span class="line">    class Policy {</span><br><span class="line">        predicate : String</span><br><span class="line">        version : String</span><br><span class="line">    }</span><br><span class="line">    class Behavior {</span><br><span class="line">        stopCondition : String</span><br><span class="line">    }</span><br><span class="line">    class Step {</span><br><span class="line">        &lt;&lt;abstract&gt;&gt;</span><br><span class="line">    }</span><br><span class="line">    class Transition {</span><br><span class="line">        guard : String</span><br><span class="line">        priority : Integer</span><br><span class="line">    }</span><br><span class="line">    class ExecutionPolicy {</span><br><span class="line">        maxSteps : Integer</span><br><span class="line">        timeoutSeconds : Integer</span><br><span class="line">        maxRetries : Integer</span><br><span class="line">    }</span><br><span class="line">    class ApprovalPolicy {</span><br><span class="line">        validitySeconds : Integer</span><br><span class="line">        bindToArguments : Boolean</span><br><span class="line">    }</span><br><span class="line">    AgentType --&gt; "1..*" Goal : goals</span><br><span class="line">    AgentType --&gt; "1..*" Capability : capabilities</span><br><span class="line">    AgentType --&gt; "0..*" Policy : policies</span><br><span class="line">    AgentType --&gt; "1" Behavior : behavior</span><br><span class="line">    AgentType --&gt; "1" ExecutionPolicy : executionPolicy</span><br><span class="line">    Capability --&gt; "1" Tool : tool</span><br><span class="line">    Behavior *-- "1..*" Step : steps</span><br><span class="line">    Behavior *-- "0..*" Transition : transitions</span><br><span class="line">    Transition --&gt; "1" Step : source</span><br><span class="line">    Transition --&gt; "1" Step : target</span><br><span class="line">    ApprovalPolicy --&gt; "1" HumanRole</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>读这个元模型的意义</strong>： -
+<code>Capability.effect : EffectKind</code>（如 read / write /
+irreversible）+ <code>ApprovalPolicy</code> = Week 3
+“<strong>把能力与权限分开</strong>”、“高影响动作要审批”的<strong>形式化</strong>
+- <code>ApprovalPolicy.bindToArguments = true</code>
+表示审批绑定到具体参数（批准的是“预约 10 点这个
+slot”，而不是笼统的“可以预约”）；<code>validitySeconds</code>
+表示审批有时效 -
+<code>Behavior = Steps + Transitions(guard, priority)</code>
+本质上是一个<strong>状态机/流程图的元模型</strong>（Week 7） -
+<code>ExecutionPolicy</code> 把
+<code>maxSteps / timeout / maxRetries</code>
+变成<strong>必填的模型属性</strong>——agent 不可能“无限循环”而模型不报错
+- 有了这个元模型，就能<strong>检查模型有效性</strong>（例如“每个 effect
+= write 的 Capability 必须有 ApprovalPolicy”可以写成 OCL
+约束）并<strong>自动生成代码/配置</strong>——这正是“模型是 agent
+的控制平面”（Week 2）的落地方式</p>
+</blockquote>
+<hr>
+<h2 id="八tutorial-10-要点rag-与-langchain">八、Tutorial 10 要点：RAG 与
+LangChain</h2>
+<h3 id="rag">8.1 RAG</h3>
+<blockquote>
+<p><strong>Retrieval-Augmented
+Generation</strong>：把<strong>信息检索</strong>和<strong>生成式语言模型</strong>结合，构建更聪明的问答和内容生成应用；关键是利用<strong>外部知识库</strong>增强模型回答能力。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Retrieval</strong></td>
+<td style="text-align: left;">从知识库/外部数据源检索与用户查询<strong>最相关</strong>的文档或片段</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Generation</strong></td>
+<td style="text-align: left;">生成式模型（GPT、Claude
+等）以检索内容为<strong>上下文</strong>生成更准确、相关的回答</td>
+</tr>
+</tbody>
+</table>
+<h3 id="langchain-生态">8.2 LangChain 生态</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">库</th>
+<th style="text-align: left;">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>langchain-core</strong></td>
+<td style="text-align: left;">基础抽象与
+<strong>LCEL</strong>（LangChain Expression Language）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>langchain-community</strong></td>
+<td style="text-align: left;">第三方集成；部分拆成独立 partner
+包（langchain-openai、langchain-anthropic…）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>langchain</strong></td>
+<td style="text-align: left;">组成应用认知架构的
+<strong>chains、agents、检索策略</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LangGraph</strong></td>
+<td style="text-align: left;">把步骤建模为图的<strong>节点和边</strong>，构建<strong>有状态、多
+actor</strong> 的 LLM 应用；可独立于 LangChain 使用</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LangServe</strong></td>
+<td style="text-align: left;">把 chain 部署为 <strong>REST
+API</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LangSmith</strong></td>
+<td style="text-align: left;">调试、测试、评估、监控 LLM 应用的平台</td>
+</tr>
+</tbody>
+</table>
+<p><strong>环境</strong>：Python
+3.7+、虚拟环境、<code>pip install langchain</code>、<code>pip install openai</code>、<code>export OPENAI_API_KEY=...</code>；VSCode
+/ Jupyter。</p>
+<h3 id="langgraph-agent工具调用循环">8.3 LangGraph
+agent：工具调用循环</h3>
+<ul>
+<li>用 <code>MessagesState</code>；定义 <strong>Tools
+节点</strong>（工具列表）和 <strong>Assistant
+节点</strong>（绑定了工具的模型）</li>
+<li>添加 <strong><code>tools_condition</code> 条件边</strong>：若
+assistant 输出是工具调用 → 去 <strong>Tools</strong>；否则 →
+<strong>END</strong></li>
+<li><strong>Tools 节点连回
+Assistant</strong>，形成<strong>循环</strong>；只要模型还决定调用工具，循环就继续</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; Assistant</span><br><span class="line">    Assistant --&gt; Tools : tools_condition = tool call</span><br><span class="line">    Assistant --&gt; [*] : tools_condition = no tool call</span><br><span class="line">    Tools --&gt; Assistant : ToolMessage</span><br></pre></td></tr></table></figure>
+<p><strong>ReAct 直觉</strong>：<strong>Act</strong>（模型调用工具）→
+<strong>Observe</strong>（把工具输出传回模型）→
+<strong>Reason</strong>（分析输出，决定再调工具还是直接回答）。这一架构<strong>通用</strong>，适用于多种工具。</p>
+<blockquote>
+<p>用本课的语言说：这是一个<strong>状态机</strong>（Week 7），也是
+<strong>Single-agent tool-use / ReAct 模式</strong>（Week 5），而
+LangGraph 的“图”就是这个状态机的<strong>可执行模型</strong>（Week 2 的
+model execution）。</p>
+</blockquote>
+<h3 id="langchain-中的-rag">8.4 LangChain 中的 RAG</h3>
+<p><strong>Indexing（离线）</strong>：</p>
+<ol type="1">
+<li><strong>Load</strong>：用 Document Loaders 加载数据</li>
+<li><strong>Split</strong>：Text splitters
+把大文档切成小块（大块难检索，也放不进有限的 context window）</li>
+<li><strong>Store</strong>：用 <strong>VectorStore + Embeddings</strong>
+存储和索引</li>
+</ol>
+<p><strong>Retrieval and generation（在线）</strong>：</p>
+<ol type="1">
+<li><strong>Retrieve</strong>：用 <strong>Retriever</strong>
+按用户输入检索相关块</li>
+<li><strong>Generate</strong>：ChatModel/LLM 用包含<strong>问题 +
+检索数据</strong>的 prompt 生成答案</li>
+</ol>
+<p>（与 Week 5 的 “LLM 应用基本工作流三阶段” 一致。）</p>
+<p><strong>总结</strong>：RAG 专注于通过<strong>检索 +
+生成</strong>提供准确信息；<strong>Agent</strong>
+是解释复杂任务、促进交互、根据输入自动化行动的智能系统；<strong>LangChain</strong>
+把两者集成起来。</p>
+<hr>
+<h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>元模型 =
+描述模型的模型</strong>；地铁图的<strong>图例</strong>就是元模型。</li>
+<li><strong>建模语言四件套</strong>：<strong>抽象语法</strong>（概念与关系，唯一）、<strong>具体语法</strong>（记号，可多个）、<strong>语义域</strong>
++ 两类<strong>映射</strong>。</li>
+<li><strong>元模型定义</strong>：规定抽象语法和<strong>良构规则</strong>，<strong>独立于具体语法</strong>；<strong>模型是元模型的实例</strong>。</li>
+<li><strong>MOF</strong>：OMG 标准元建模语言，<strong>UML
+的子集</strong>（类模型 +
+模型组织，<strong>无行为</strong>），同样记号。</li>
+<li><strong>四层架构</strong>：M0 运行时对象 → M1 模型 → M2
+元模型（UML）→ M3
+元元模型（MOF，<strong>自描述</strong>）；判断层次问“它是谁的实例”。</li>
+<li><strong>UML 规格三部分</strong>：抽象语法（MOF +
+约束）、具体语法（<strong>不完整、非正式</strong>）、语义（英语 + fUML +
+数学）。</li>
+<li><strong>图只是模型的视图</strong>；模型在仓库里是<strong>对象网络</strong>；可通过图或
+API 创建元素。</li>
+<li><strong>元模型实例化题</strong>：框 → <code>: Class</code>，线 →
+<code>: Association</code>，线端 →
+<code>: AssociationEnd {lowerBound, upperBound, modifier}</code>。</li>
+<li><strong>静态语义 = 存在什么；动态语义 =
+发生什么</strong>；四种语义定义方法：指称、翻译、操作、公理；<strong>fUML
+用操作方法定义 UML 子集语义，自身用公理定义</strong>。</li>
+<li><strong>NamedElement 至多属于一个
+Namespace</strong>；依赖可以连接任意两个
+NamedElement；注释可附于任意元素。</li>
+<li><strong>行为也是分类器</strong>：Activity（flow-based）、StateMachine（event-driven）、Interaction（event-driven
+系统行为）。</li>
+<li><strong>Method（被动对象，调用时）vs Classifier
+behaviour（主动对象，创建时）</strong>。</li>
+<li><strong>Agentic 元模型</strong>：AgentType +
+Goal、Capability(effect)/Tool、Policy、Behavior(Steps +
+Transitions)、Memory、ExecutionPolicy、ApprovalPolicy/HumanRole——<strong>把有界自治写进语言</strong>。</li>
+<li><strong>RAG</strong>：Load → Split → Store（离线）；Retrieve →
+Generate（在线）。<strong>LangGraph</strong>：Assistant ⇄ Tools
+循环，<code>tools_condition</code> 决定去 Tools 还是 END。</li>
+<li><strong>易错</strong>：把 M1 的类说成 M2；以为具体语法决定语言；以为
+MOF 包含行为建模。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+              <a href="/tags/Meta-Modeling/" rel="tag"><i class="fa fa-tag"></i> Meta-Modeling</a>
+              <a href="/tags/MOF/" rel="tag"><i class="fa fa-tag"></i> MOF</a>
+              <a href="/tags/RAG/" rel="tag"><i class="fa fa-tag"></i> RAG</a>
+              <a href="/tags/LangChain/" rel="tag"><i class="fa fa-tag"></i> LangChain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week09-software-process-models.html" rel="prev" title="ELEC5620 Week 09 软件过程模型讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 09 软件过程模型讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week11-specialise-modeling-language.html" rel="next" title="ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结">
+                  ELEC5620 Week 11 特化建模语言：Profile 与 OCL 讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>

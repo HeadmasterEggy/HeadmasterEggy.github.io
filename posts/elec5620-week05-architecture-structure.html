@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <link rel="mask-icon" href="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Grand+Hotel:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qiao1.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"idea","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="ELEC5620 Week 05 讲课总结：经典架构模式（管道过滤器、共享数据、分层、SOA、MVC）、LLM 工作流、BDI、agent 与服务的取舍、ReAct&#x2F;Planner–Executor&#x2F;Supervisor–Worker 等 agent 模式及选型；结构建模基础：对象与链接、分类器、多重性、泛化、组合聚合、接口、依赖与约束；Tutorial 5 类图与 Lab 5。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结">
+<meta property="og:url" content="https://qiao1.top/posts/elec5620-week05-architecture-structure.html">
+<meta property="og:site_name" content="Joey">
+<meta property="og:description" content="ELEC5620 Week 05 讲课总结：经典架构模式（管道过滤器、共享数据、分层、SOA、MVC）、LLM 工作流、BDI、agent 与服务的取舍、ReAct&#x2F;Planner–Executor&#x2F;Supervisor–Worker 等 agent 模式及选型；结构建模基础：对象与链接、分类器、多重性、泛化、组合聚合、接口、依赖与约束；Tutorial 5 类图与 Lab 5。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-11-03T13:20:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T04:13:51.930Z">
+<meta property="article:author" content="Joey">
+<meta property="article:tag" content="Agentic-AI">
+<meta property="article:tag" content="Architectural-Patterns">
+<meta property="article:tag" content="Class-Diagram">
+<meta property="article:tag" content="ELEC5620">
+<meta property="article:tag" content="UML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qiao1.top/posts/elec5620-week05-architecture-structure.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://qiao1.top/posts/elec5620-week05-architecture-structure.html","path":"posts/elec5620-week05-architecture-structure.html","title":"ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结 | Joey</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://qiao1.top/posts/elec5620-week05-architecture-structure.html"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Joey</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-05-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93architectural-design-patterns-modeling-structurepart-1"><span class="nav-text">ELEC5620
+Week 05 讲课总结：Architectural Design Patterns + Modeling
+Structure（Part 1）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-a%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-text">Part A：架构设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-text">一、什么是架构设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%BA%94%E7%A7%8D%E7%BB%8F%E5%85%B8%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="nav-text">二、五种经典架构模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mvc-%E4%B8%89%E9%83%A8%E5%88%86"><span class="nav-text">2.1 MVC 三部分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89agentic-ai-%E7%9A%84%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="nav-text">三、Agentic AI 的架构模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-llm-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E6%B5%81%E4%B8%89%E9%98%B6%E6%AE%B5"><span class="nav-text">3.1 使用 LLM
+的基本工作流（三阶段）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bdibeliefdesireintention%E6%A8%A1%E5%9E%8B"><span class="nav-text">3.2
+BDI（Belief–Desire–Intention）模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E6%98%AF%E6%AF%8F%E4%B8%AA%E6%9C%8D%E5%8A%A1%E9%83%BD%E5%BA%94%E8%AF%A5%E6%88%90%E4%B8%BA-agent%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-text">3.3 不是每个服务都应该成为
+agent（决策树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%8A%9B%E4%B8%8D%E5%86%B3%E5%AE%9A%E6%8E%A7%E5%88%B6capabilities-do-not-determine-control"><span class="nav-text">3.4
+能力不决定控制（Capabilities do not determine control）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91-agent-%E7%9A%84%E7%BB%93%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.5 面向 agent 的结构模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9%E4%BB%BB%E5%8A%A1%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7-%E5%8D%8F%E8%B0%83%E9%9C%80%E6%B1%82"><span class="nav-text">3.6 模式选择：任务不确定性 ×
+协调需求</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-b%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1part-1%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">Part B：结构建模（Part
+1：基础概念）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E6%A8%A1%E7%BB%93%E6%9E%84"><span class="nav-text">四、为什么建模结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-vs-%E6%A8%A1%E5%9E%8B"><span class="nav-text">4.1 代码 vs 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E4%BD%9C%E4%B8%BA%E8%B4%AF%E7%A9%BF%E4%BE%8B%E5%AD%90"><span class="nav-text">4.2 UML 作为贯穿例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1"><span class="nav-text">4.3 什么是结构建模</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5"><span class="nav-text">五、基础结构概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%BC%E5%AF%B9%E8%B1%A1%E5%AF%B9%E8%B1%A1%E8%BA%AB%E4%BB%BD%E9%93%BE%E6%8E%A5"><span class="nav-text">5.1 值、对象、对象身份、链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A2%AB%E5%BB%BA%E6%A8%A1%E4%BA%8B%E7%89%A9m1-vs-m0"><span class="nav-text">5.2 模型与被建模事物（M1 vs M0）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9E%E4%BE%8B%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">5.3 类型、实例、分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E4%B8%8E%E5%85%B3%E8%81%94"><span class="nav-text">5.4 类与关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E4%BF%AE%E9%A5%B0"><span class="nav-text">5.5 多重性与修饰</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96-%E7%89%B9%E5%8C%96"><span class="nav-text">5.6 泛化 &#x2F; 特化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E8%81%9A%E5%90%88%E5%85%B3%E8%81%94%E7%B1%BB"><span class="nav-text">5.7 组合、聚合、关联类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E8%AE%B0%E5%8F%B7"><span class="nav-text">5.8 类的记号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3"><span class="nav-text">5.9 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E4%B8%8E%E7%BA%A6%E6%9D%9F"><span class="nav-text">5.10 依赖与约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADagentic-ai-%E7%9A%84%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1"><span class="nav-text">六、Agentic AI 的基础结构建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83tutorial-5-%E8%A6%81%E7%82%B9%E4%B8%8E%E8%A7%A3%E7%AD%94%E6%80%9D%E8%B7%AF"><span class="nav-text">七、Tutorial 5 要点与解答思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE%E7%9A%84%E7%BB%84%E6%88%90%E4%B8%8E%E7%94%A8%E9%80%94"><span class="nav-text">7.1 类图的组成与用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E8%AE%B0%E5%8F%B7%E9%80%9F%E6%9F%A5"><span class="nav-text">7.2 关系记号速查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-text">7.3 可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E7%B1%BB%E5%9B%BE%E7%9A%84%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="nav-text">7.4 画类图的解题步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABlab-5-%E8%A6%81%E7%82%B9"><span class="nav-text">八、Lab 5 要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Joey"
+      src="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+  <p class="site-author-name" itemprop="name">Joey</p>
+  <div class="site-description" itemprop="description">A Humble Apprentice</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">404</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hlYWRtYXN0ZXJFZ2d5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HeadmasterEggy"><i class="fab fa-github fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmhlYWRtYXN0ZXJlZ2d5QGdtYWlsLmNvbQ==" title="E-Mail → mailto:headmastereggy@gmail.com"><i class="fa fa-envelope fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly94LmNvbS9IZWFkbWFzdGVyRWdneQ==" title="X → https:&#x2F;&#x2F;x.com&#x2F;HeadmasterEggy"><i class="fab fa-x-twitter fa-fw"></i></span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL2hhYml0YXR1bmljb3Ju" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;habitatunicorn"><i class="fab fa-instagram fa-fw"></i></span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://qiao1.top/posts/elec5620-week05-architecture-structure.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://images-a2q.pages.dev/file/b89bbe01d52ee39e69cd8.png">
+      <meta itemprop="name" content="Joey">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey">
+      <meta itemprop="description" content="A Humble Apprentice">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结 | Joey">
+      <meta itemprop="description" content="ELEC5620 Week 05 讲课总结：经典架构模式（管道过滤器、共享数据、分层、SOA、MVC）、LLM 工作流、BDI、agent 与服务的取舍、ReAct&#x2F;Planner–Executor&#x2F;Supervisor–Worker 等 agent 模式及选型；结构建模基础：对象与链接、分类器、多重性、泛化、组合聚合、接口、依赖与约束；Tutorial 5 类图与 Lab 5。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELEC5620 Week 05 架构设计模式与结构建模（上）讲课总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-11-03 13:20:00 / Modified: 04:13:51" itemprop="dateCreated datePublished" datetime="2026-11-03T13:20:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/" itemprop="url" rel="index"><span itemprop="name">Course Notes</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Course-Notes/ELEC5620/" itemprop="url" rel="index"><span itemprop="name">ELEC5620</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>20 mins.</span>
+    </span>
+</div>
+
+            <div class="post-description">ELEC5620 Week 05 讲课总结：经典架构模式（管道过滤器、共享数据、分层、SOA、MVC）、LLM 工作流、BDI、agent 与服务的取舍、ReAct/Planner–Executor/Supervisor–Worker 等 agent 模式及选型；结构建模基础：对象与链接、分类器、多重性、泛化、组合聚合、接口、依赖与约束；Tutorial 5 类图与 Lab 5。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-05-讲课总结architectural-design-patterns-modeling-structurepart-1">ELEC5620
+Week 05 讲课总结：Architectural Design Patterns + Modeling
+Structure（Part 1）</h1>
+<blockquote>
+<p><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
+Yuan</strong> <strong>来源</strong>：讲义 PDF
+<code>4 Architectural Design and Modeling (part 2).pdf</code>（25 页）+
+<code>5 Modeling Structure part 1.pdf</code>（44 页）+
+<code>ELEC5620-TUT-05.pdf</code>（31 页）+
+<code>ELEC5620-Lab-Note-5.pdf</code>（1 页）。本周无转录稿。</p>
+<p><strong>本周覆盖</strong>： 1.
+<strong>经典架构模式</strong>：Data-flow、Shared-data、Layering、SOA、MVC
+2. <strong>Agentic AI 的架构模式</strong>：LLM 工作流、BDI、agent vs
+服务、控制架构、agent 结构模式与选型图 3.
+<strong>结构建模基础</strong>：值/对象/链接、类型与实例、分类器、关联与多重性、泛化、组合/聚合、接口、依赖、约束
+4. Tutorial 5：类图记号；Lab 5：架构模式选择 + 类图</p>
+</blockquote>
+<p>相关笔记：[[26-S2-Course/ELEC5620/ELEC5620-Week04-Architectural-Design-and-Modeling-Summary|Week
+04
+架构设计（上）]]｜[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab
+1–6 总结]]</p>
+<hr>
+<h1 id="part-a架构设计模式">Part A：架构设计模式</h1>
+<h2 id="一什么是架构设计模式">一、什么是架构设计模式</h2>
+<blockquote>
+<p><strong>Architectural design
+pattern</strong>：定义一组<strong>元素类型和关系类型</strong>，它们协同工作以<strong>从某个视角（视点）解决特定问题</strong>。</p>
+</blockquote>
+<p>三要素：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">要素</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Context</strong></td>
+<td style="text-align: left;">反复出现的常见情境</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Problem</strong></td>
+<td style="text-align: left;">在该情境下出现的问题</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Solution</strong></td>
+<td style="text-align: left;">对反复出现的设计问题的<strong>可复用解法</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么重要</strong>：通用问题的通用解——<strong>抽象、最小改动、通用结构</strong>。</p>
+<h2 id="二五种经典架构模式">二、五种经典架构模式</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">模式</th>
+<th style="text-align: left;">Context</th>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Solution</th>
+<th style="text-align: left;">优点</th>
+<th style="text-align: left;">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Data-flow（pipe-and-filter）</strong></td>
+<td style="text-align: left;">变换<strong>离散数据项的流</strong></td>
+<td style="text-align: left;">划分为可复用、松耦合、交互简单的组件</td>
+<td style="text-align: left;">对数据流进行<strong>逐级变换</strong>；数据进入系统后一次流过一个组件直到终点</td>
+<td style="text-align: left;"><strong>容易拔插和替换
+filter</strong></td>
+<td style="text-align: left;"><strong>交互性有限</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Shared-data</strong></td>
+<td style="text-align: left;">多个组件需要共享和操作数据</td>
+<td style="text-align: left;">多个<strong>独立组件访问数据</strong></td>
+<td style="text-align: left;">数据访问者通过<strong>共享数据存储</strong>通信；三要素：<strong>通信、数据定义、数据操作协议</strong></td>
+<td style="text-align: left;"><strong>保证数据完整性和可靠性</strong></td>
+<td style="text-align: left;"><strong>可扩展性</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layering</strong></td>
+<td style="text-align: left;">需要<strong>独立开发和演化</strong>系统的部分</td>
+<td style="text-align: left;">模块化切分以支持独立开发与演化</td>
+<td style="text-align: left;">把提供<strong>内聚服务集合</strong>的模块分组为层；<strong>层间接口定义良好</strong>（例：Transport
+/ Network / Link）</td>
+<td style="text-align: left;">降低复杂度，提高模块化、复用性和可维护性</td>
+<td style="text-align: left;"><strong>如何定义层？</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SOA</strong></td>
+<td style="text-align: left;">多个服务提供者；服务消费者<strong>只需了解服务的使用方式</strong></td>
+<td style="text-align: left;">支持<strong>分布式组件的互操作</strong></td>
+<td style="text-align: left;">由分布式组件和服务提供者组成的集合，通过<strong>总线（BUS）</strong>连接（例：Train、Ferry、Customer
+Management）</td>
+<td style="text-align: left;"><strong>抽象、复用、松耦合</strong></td>
+<td style="text-align: left;"><strong>管理服务元数据</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MVC</strong></td>
+<td style="text-align: left;">UI
+是交互式应用中<strong>最常修改</strong>的部分；需要从数据存储取数据显示给用户；希望界面修改与系统其余部分分离</td>
+<td style="text-align: left;">如何把 Web 应用的 UI
+功能模块化，使各部分可以单独修改？</td>
+<td style="text-align: left;">把<strong>领域建模、展示、基于用户输入的动作</strong>分成三个类</td>
+<td style="text-align: left;">关注点分离</td>
+<td style="text-align: left;">（讲义未列）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mvc-三部分">2.1 MVC 三部分</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">部分</th>
+<th style="text-align: left;">职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Model</strong></td>
+<td style="text-align: left;">管理应用领域的<strong>行为和数据</strong>；响应对其状态的<strong>查询</strong>（通常来自
+View）；响应<strong>改变状态</strong>的指令（通常来自 Controller）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>View</strong></td>
+<td style="text-align: left;">管理信息的<strong>显示</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Controller</strong></td>
+<td style="text-align: left;">解释用户的鼠标和键盘输入，通知 Model 和/或
+View 做相应改变</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    U([User]) -- input --&gt; C[Controller]</span><br><span class="line">    C -- change state --&gt; M[Model]</span><br><span class="line">    C -- select view --&gt; V[View]</span><br><span class="line">    V -- query state --&gt; M</span><br><span class="line">    V -- display --&gt; U</span><br></pre></td></tr></table></figure>
+<p><strong>Web 应用框架</strong>（如 <strong>Spring MVC、Apache
+Struts</strong>）内置 MVC 等设计模式，目的是减轻 Web
+开发中常见活动的开销（例如请求路由、表单绑定、模板渲染、会话管理、数据访问）。</p>
+<h2 id="三agentic-ai-的架构模式">三、Agentic AI 的架构模式</h2>
+<h3 id="使用-llm-的基本工作流三阶段">3.1 使用 LLM
+的基本工作流（三阶段）</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. Data preprocessing /
+embedding</strong></td>
+<td style="text-align: left;">存储私有数据供以后检索：文档<strong>切块 →
+过 embedding 模型 → 存入向量数据库</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. Prompt (context) construction /
+retrieval</strong></td>
+<td style="text-align: left;">用户提交查询时构造
+prompt：<strong>开发者写死的 prompt 模板 + few-shot 示例 + 从外部 API
+检索的信息 + 从向量库检索的相关文档</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. Prompt (context) execution /
+inference</strong></td>
+<td style="text-align: left;">提交给预训练 LLM 推理（商用 API
+或开源/自训练模型）；有些开发者在这一阶段加上<strong>日志、缓存、校验</strong>等运维系统</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    D[Private docs] --&gt; CH[Chunk] --&gt; EM[Embedding model] --&gt; VDB[(Vector DB)]</span><br><span class="line">    Q([User query]) --&gt; PC[Prompt construction]</span><br><span class="line">    VDB --&gt; PC</span><br><span class="line">    API[External APIs] --&gt; PC</span><br><span class="line">    T[Template + few-shot] --&gt; PC</span><br><span class="line">    PC --&gt; LLM[LLM inference] --&gt; O([Answer])</span><br><span class="line">    LLM -.-&gt; LOG[logging / caching / validation]</span><br></pre></td></tr></table></figure>
+<p>讲义还给出“简单 AI agent 工作流”（<strong>每一步都依赖
+LLM</strong>）和一篇综述论文（Deng et al., 2024）中的 AI agent
+软件架构图（PDF 中为图片）。</p>
+<h3 id="bdibeliefdesireintention模型">3.2
+BDI（Belief–Desire–Intention）模型</h3>
+<blockquote>
+<p>BDI 是设计 agentic AI 架构中<strong>广泛使用的智能 agent
+理论框架</strong>。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Beliefs (B)</strong></td>
+<td style="text-align: left;">agent
+的<strong>动态心智模型</strong>：关于环境、自身和其他 agent
+的知识；可能包含事实、感知或推断（<strong>可以不完整或不确定</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Desires (D)</strong></td>
+<td style="text-align: left;">驱动行动的<strong>目标</strong>：agent
+希望达到的世界状态；是动机态度，<strong>不一定能同时全部实现</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Intentions (I)</strong></td>
+<td style="text-align: left;"><strong>承诺的行动计划</strong>：agent
+在信念和约束下<strong>决定承诺去实现的那部分
+desires</strong>；指导具体计划和行动</td>
+</tr>
+</tbody>
+</table>
+<p><strong>BDI 工作流</strong>：</p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -3.534ex;" xmlns="http://www.w3.org/2000/svg" width="94.031ex" height="5.231ex" role="img" focusable="false" viewBox="0 -750 41561.6 2312.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+\underbrace{\text{Perception \&amp; Belief
+Update}}_{\text{感知环境、更新信念}} \to \underbrace{\text{Option
+Generation}}_{\text{beliefs} \Rightarrow \text{desires}} \to
+\underbrace{\text{Deliberation}}_{\text{desires} \Rightarrow
+\text{intentions}} \to \underbrace{\text{Planning \&amp;
+Execution}}_{\text{intentions} \Rightarrow \text{actions}}
+"><g data-mml-node="munder" data-latex="\underbrace{\text{Perception \&amp; Belief
+Update}}_{\text{感知环境、更新信念}}"><g data-mml-node="TeXAtom" data-latex="\underbrace{\text{Perception \&amp; Belief
+Update}}" data-mjx-texclass="OP"><g data-mml-node="munder"><g data-mml-node="mtext" data-latex="\text{Perception \&amp; Belief
+Update}"><path data-c="50" d="M395 312C452 312 503 328 548 360C599 396 624 441 624 495C624 552 598 599 546 635C500 667 447 683 387 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0C61 2 111 3 184 3C258 3 308 2 334 0L334 39L306 39C271 39 250 41 243 46C236 51 232 63 232 81L232 312M274 644L362 644C391 644 416 640 437 633C494 612 514 570 514 495C514 467 511 443 504 423C487 373 433 346 362 346L229 346L229 609C229 645 235 644 274 644Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(681,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(1125,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(1517,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1961,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(2405,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(2961,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(3350,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(3628,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4128,0)"></path><path data-c="20" d="" transform="translate(4684,0)"></path><path data-c="5C" d="M420-250C436-250 444-242 444-226C444-223 444-220 443-218L101 734C97 745 90 750 79 750C63 750 55 742 55 726C55 723 55 720 56 718L398-234C402-245 409-250 420-250Z" transform="translate(5016,0)"></path><path data-c="26" d="M162 553C162 488 175 421 201 353L113 259C86 230 69 210 63 201C49 180 42 156 42 130C42 84 61 47 100 18C135-9 177-22 225-22C288-22 348 3 404 52C461 3 519-22 578-22C663-22 720 43 721 127L689 127C688 90 676 62 654 44C632 26 607 17 582 17C542 17 498 45 450 101C481 137 524 202 579 297C598 329 616 353 634 370C652 387 683 395 727 395L727 434L627 431C589 430 548 431 503 434L503 395C550 395 573 382 573 356L567 338C516 249 470 178 429 127C381 185 303 302 270 384C293 410 312 431 325 448C368 501 390 547 390 584C390 611 384 639 373 666C360 699 335 716 300 716C218 716 162 638 162 553M302 686C322 686 336 676 344 654C352 632 357 609 357 585C357 544 324 488 259 416C241 472 232 525 232 576C232 631 253 686 302 686M214 323C261 224 316 141 379 76C334 37 285 17 233 17C209 17 189 26 173 43C146 72 132 112 132 162C132 197 139 227 153 252C164 270 184 294 214 323Z" transform="translate(5516,0)"></path><path data-c="20" d="" transform="translate(6294,0)"></path><path data-c="42" d="M478 358C548 376 624 432 624 512C624 565 599 607 549 640C506 669 456 683 401 683L36 683L36 644L64 644C99 644 120 641 127 636C134 631 138 620 138 602L138 81C138 63 134 51 127 46C120 41 99 39 64 39L36 39L36 0L427 0C484 0 535 16 579 48C627 83 651 129 651 185C651 278 563 342 478 358M521 512C521 428 451 370 367 370L228 370L228 609C228 645 233 644 272 644L394 644C468 644 521 586 521 512M544 186L544 160C542 137 529 111 504 84C478 54 442 39 395 39L272 39C233 39 228 38 228 74L228 340L409 340C490 340 544 270 544 186Z" transform="translate(6626,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(7334,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(7778,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(8056,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(8334,0)"></path><path data-c="66" d="M265 705C176 705 110 633 110 544L110 434L33 434L33 396L110 396L110 79C110 60 107 48 100 44C93 40 71 39 34 39L34 0L149 3C191 4 234 3 277 0L277 39L253 39C220 39 199 41 192 46C185 51 182 63 182 81L182 396L294 396L294 434L179 434L179 545C179 605 210 675 265 675C273 675 280 674 287 672C272 664 264 650 264 631C264 600 279 584 310 584C341 584 357 600 357 632C357 677 310 705 265 705Z" transform="translate(8778,0)"></path><path data-c="20" d="" transform="translate(9084,0)"></path><path data-c="55" d="M716 644L716 683L596 680L474 683L474 644C523 644 553 636 564 619C572 606 576 592 576 575L576 232C576 175 560 125 527 84C492 39 446 17 390 17C359 17 327 28 294 51C252 81 231 139 231 225L231 602C231 620 235 631 242 636C249 641 270 644 305 644L332 644L332 683C307 681 257 680 183 680C109 680 59 681 33 683L33 644L61 644C96 644 117 641 124 636C131 631 135 620 135 602L135 229C135 159 160 100 209 51C258 2 318-22 388-22C508-22 595 77 611 186C613 199 614 222 614 255L614 571C614 631 639 644 716 644Z" transform="translate(9416,0)"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(10166,0)"></path><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z" transform="translate(10722,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(11278,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(11778,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(12167,0)"></path></g><g data-mml-node="mo" transform="translate(0,-251)"><path data-c="23DF" d="M510-294L1002-294L1002-188L510-188C385-188 277-179 188-160C99-141 47-112 32-73C29-66 24-62 17-62C6-62 0-67 0-78C0-81 0-84 1-85C26-151 100-204 225-245C325-278 420-294 510-294Z"></path><path data-c="23DF" d="M1000-85C1001-84 1001-81 1001-78C1001-67 995-62 984-62C977-62 971-66 968-73C954-112 902-141 813-160C724-179 616-188 491-188L0-188L0-294L491-294C581-294 676-278 776-245C901-204 975-151 1000-85Z" transform="translate(11610,0)"></path><path data-c="23DF" d="M1496-294L2003-294L2003-188L1496-188C1407-188 1317-200 1228-224C1115-255 1039-298 1001-355C963-298 887-255 774-224C685-200 595-188 506-188L0-188L0-294L506-294C649-294 765-303 854-321C941-338 984-366 984-403C984-414 990-419 1001-419C1012-419 1018-414 1018-403C1018-366 1062-338 1150-320C1238-302 1353-294 1496-294Z" transform="translate(5304,0)"></path><svg width="4442" height="246" x="932" y="-364" viewBox="1110.5 -364 4442 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(6.703,1)"></path></svg><svg width="4443" height="246" x="7237" y="-364" viewBox="1110.8 -364 4443 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(6.705,1)"></path></svg></g></g></g><g data-mml-node="TeXAtom" transform="translate(3123.5,-1320.7) scale(0.707)" data-latex="{\text{感知环境、更新信念}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{感知环境、更新信念}"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">感知环境、更新信念</text></g></g></g><g data-mml-node="mo" data-latex="\to" transform="translate(12888.8,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="munder" data-latex="\underbrace{\text{Option
+Generation}}_{\text{beliefs}\Rightarrow\text{desires}}" transform="translate(14166.6,0)"><g data-mml-node="TeXAtom" data-latex="\underbrace{\text{Option
+Generation}}" data-mjx-texclass="OP"><g data-mml-node="munder"><g data-mml-node="mtext" data-latex="\text{Option
+Generation}"><path data-c="4F" d="M388-22C484-22 564 15 628 88C690 158 721 242 721 339C721 436 690 521 629 592C564 667 484 705 388 705C292 705 212 667 148 592C87 521 56 436 56 339C56 242 87 159 148 88C213 15 293-22 388-22M557 575C593 522 611 448 611 353C611 230 585 140 533 84C488 36 440 12 389 12C337 12 288 36 243 85C192 141 166 230 166 353C166 472 193 558 247 609C293 651 340 672 388 672C456 672 512 640 557 575Z"></path><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z" transform="translate(778,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(1334,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1723,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(2001,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2501,0)"></path><path data-c="20" d="" transform="translate(3057,0)"></path><path data-c="47" d="M667 443L667 677C667 696 662 705 652 705C645 705 639 700 633 691L586 622C568 640 547 657 524 673C491 694 451 705 404 705C306 705 223 670 156 598C89 526 56 441 56 342C56 243 90 158 157 86C224 14 307-22 406-22C495-22 557 5 591 59C599 46 639 1 654 1C663 1 667 10 667 27L667 200C667 218 670 229 676 233C682 237 702 239 735 239L735 278L610 275C547 273 492 274 447 278L447 239L483 239C524 239 549 236 558 231C567 226 571 214 571 196L571 132C571 83 549 50 506 34C474 23 446 17 422 17C383 17 343 27 304 48C210 97 166 193 166 342C166 483 215 589 303 636C342 656 379 666 416 666C539 666 611 553 627 435C629 422 636 415 647 415C667 415 667 423 667 443Z" transform="translate(3389,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(4174,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4618,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(5174,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(5618,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(6010,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(6510,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(6899,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(7177,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(7677,0)"></path></g><g data-mml-node="mo" transform="translate(0,-195)"><path data-c="23DF" d="M510-294L1002-294L1002-188L510-188C385-188 277-179 188-160C99-141 47-112 32-73C29-66 24-62 17-62C6-62 0-67 0-78C0-81 0-84 1-85C26-151 100-204 225-245C325-278 420-294 510-294Z"></path><path data-c="23DF" d="M1000-85C1001-84 1001-81 1001-78C1001-67 995-62 984-62C977-62 971-66 968-73C954-112 902-141 813-160C724-179 616-188 491-188L0-188L0-294L491-294C581-294 676-278 776-245C901-204 975-151 1000-85Z" transform="translate(7232,0)"></path><path data-c="23DF" d="M1496-294L2003-294L2003-188L1496-188C1407-188 1317-200 1228-224C1115-255 1039-298 1001-355C963-298 887-255 774-224C685-200 595-188 506-188L0-188L0-294L506-294C649-294 765-303 854-321C941-338 984-366 984-403C984-414 990-419 1001-419C1012-419 1018-414 1018-403C1018-366 1062-338 1150-320C1238-302 1353-294 1496-294Z" transform="translate(3115,0)"></path><svg width="2253" height="246" x="932" y="-364" viewBox="563.3 -364 2253 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(3.4,1)"></path></svg><svg width="2254" height="246" x="5048" y="-364" viewBox="563.5 -364 2254 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(3.401,1)"></path></svg></g></g></g><g data-mml-node="TeXAtom" transform="translate(1782.3,-1232.9) scale(0.707)" data-latex="{\text{beliefs}\Rightarrow\text{desires}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{beliefs}"><path data-c="62" d="M298-11C360-11 413 11 456 56C499 101 521 154 521 217C521 278 501 332 460 377C419 422 369 445 308 445C259 445 215 426 178 387L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 0L136 0L169 58C201 12 244-11 298-11M294 19C253 19 219 38 194 77C185 90 181 104 181 117L181 320C181 333 184 344 191 354C220 395 257 415 304 415C345 415 378 395 404 354C422 324 431 279 431 218C431 110 393 19 294 19Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(556,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1000,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1278,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1556,0)"></path><path data-c="66" d="M265 705C176 705 110 633 110 544L110 434L33 434L33 396L110 396L110 79C110 60 107 48 100 44C93 40 71 39 34 39L34 0L149 3C191 4 234 3 277 0L277 39L253 39C220 39 199 41 192 46C185 51 182 63 182 81L182 396L294 396L294 434L179 434L179 545C179 605 210 675 265 675C273 675 280 674 287 672C272 664 264 650 264 631C264 600 279 584 310 584C341 584 357 600 357 632C357 677 310 705 265 705Z" transform="translate(2000,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2306,0)"></path></g><g data-mml-node="mo" data-latex="\Rightarrow" transform="translate(2700,0)"><path data-c="21D2" d="M927 233C935 237 939 243 939 250C939 257 935 263 927 267C866 283 804 318 742 371C697 410 662 455 636 507C632 516 625 520 615 520C599 520 591 512 591 496C591 494 592 491 593 486C616 442 644 403 676 369L84 369C68 369 60 361 60 346C60 330 68 322 84 322L728 322C765 292 806 268 849 250C806 232 765 208 728 178L84 178C68 178 60 170 60 154C60 139 68 131 84 131L676 131C644 97 616 58 593 14C592 9 591 6 591 4C591-12 599-20 615-20C625-20 632-16 636-7C662 45 697 90 742 129C804 182 866 217 927 233Z"></path></g><g data-mml-node="mtext" data-latex="\text{desires}" transform="translate(3700,0)"><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(556,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(1000,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1394,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(1672,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2064,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2508,0)"></path></g></g></g><g data-mml-node="mo" data-latex="\to" transform="translate(22677.3,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="munder" data-latex="\underbrace{\text{Deliberation}}_{\text{desires}\Rightarrow\text{intentions}}" transform="translate(23955.1,0)"><g data-mml-node="TeXAtom" data-latex="\underbrace{\text{Deliberation}}" data-mjx-texclass="OP" transform="translate(224.5,0)"><g data-mml-node="munder"><g data-mml-node="mtext" data-latex="\text{Deliberation}"><path data-c="44" d="M401 0C490 0 563 34 622 103C679 168 707 246 707 336C707 428 679 508 624 575C565 647 490 683 401 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0M374 39L274 39C235 39 230 38 230 74L230 609C230 645 235 644 274 644L373 644C447 644 506 614 550 554C583 507 600 435 600 336C600 161 534 39 374 39Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(764,0)"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1208,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1486,0)"></path><path data-c="62" d="M298-11C360-11 413 11 456 56C499 101 521 154 521 217C521 278 501 332 460 377C419 422 369 445 308 445C259 445 215 426 178 387L178 694L28 683L28 645C64 645 86 642 94 636C102 630 105 616 105 593L105 0L136 0L169 58C201 12 244-11 298-11M294 19C253 19 219 38 194 77C185 90 181 104 181 117L181 320C181 333 184 344 191 354C220 395 257 415 304 415C345 415 378 395 404 354C422 324 431 279 431 218C431 110 393 19 294 19Z" transform="translate(1764,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2320,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(2764,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(3156,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(3656,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(4045,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(4323,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(4823,0)"></path></g><g data-mml-node="mo" transform="translate(0,-12)"><path data-c="23DF" d="M510-294L1002-294L1002-188L510-188C385-188 277-179 188-160C99-141 47-112 32-73C29-66 24-62 17-62C6-62 0-67 0-78C0-81 0-84 1-85C26-151 100-204 225-245C325-278 420-294 510-294Z"></path><path data-c="23DF" d="M1000-85C1001-84 1001-81 1001-78C1001-67 995-62 984-62C977-62 971-66 968-73C954-112 902-141 813-160C724-179 616-188 491-188L0-188L0-294L491-294C581-294 676-278 776-245C901-204 975-151 1000-85Z" transform="translate(4378,0)"></path><path data-c="23DF" d="M1496-294L2003-294L2003-188L1496-188C1407-188 1317-200 1228-224C1115-255 1039-298 1001-355C963-298 887-255 774-224C685-200 595-188 506-188L0-188L0-294L506-294C649-294 765-303 854-321C941-338 984-366 984-403C984-414 990-419 1001-419C1012-419 1018-414 1018-403C1018-366 1062-338 1150-320C1238-302 1353-294 1496-294Z" transform="translate(1688,0)"></path><svg width="826" height="246" x="932" y="-364" viewBox="206.5 -364 826 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(1.246,1)"></path></svg><svg width="827" height="246" x="3621" y="-364" viewBox="206.8 -364 827 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(1.248,1)"></path></svg></g></g></g><g data-mml-node="TeXAtom" transform="translate(0,-1042.1) scale(0.707)" data-latex="{\text{desires}\Rightarrow\text{intentions}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{desires}"><path data-c="64" d="M374-11L527 0L527 38C491 38 470 40 462 46C454 52 450 67 450 90L450 694L301 683L301 645C336 645 358 642 366 636C374 630 377 616 377 593L377 390C345 427 305 445 257 445C195 445 142 423 99 378C56 333 34 279 34 216C34 155 54 102 95 57C136 12 186-11 247-11C298-11 341 8 374 47M261 415C304 415 339 396 364 358C371 347 374 336 374 323L374 121C374 108 371 97 364 86C336 41 298 19 251 19C210 19 177 39 151 80C133 110 124 155 124 215C124 324 161 415 261 415Z"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(556,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(1000,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1394,0)"></path><path data-c="72" d="M364 378C364 417 327 442 288 442C237 442 198 412 172 351L172 442L28 431L28 393C63 393 84 390 92 384C100 378 104 365 104 342L104 79C104 60 101 48 94 44C87 40 65 38 28 38L28 0L143 3C185 4 228 3 271 0L271 38L247 38C214 38 193 41 186 46C179 51 176 63 176 81L176 232C176 275 184 314 199 347C219 390 248 412 287 413C277 403 272 391 272 377C272 346 287 331 318 331C345 331 364 352 364 378Z" transform="translate(1672,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(2064,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2508,0)"></path></g><g data-mml-node="mo" data-latex="\Rightarrow" transform="translate(2902,0)"><path data-c="21D2" d="M927 233C935 237 939 243 939 250C939 257 935 263 927 267C866 283 804 318 742 371C697 410 662 455 636 507C632 516 625 520 615 520C599 520 591 512 591 496C591 494 592 491 593 486C616 442 644 403 676 369L84 369C68 369 60 361 60 346C60 330 68 322 84 322L728 322C765 292 806 268 849 250C806 232 765 208 728 178L84 178C68 178 60 170 60 154C60 139 68 131 84 131L676 131C644 97 616 58 593 14C592 9 591 6 591 4C591-12 599-20 615-20C625-20 632-16 636-7C662 45 697 90 742 129C804 182 866 217 927 233Z"></path></g><g data-mml-node="mtext" data-latex="\text{intentions}" transform="translate(3902,0)"><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(278,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(834,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1223,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(1667,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(2223,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2612,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(2890,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(3390,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(3946,0)"></path></g></g></g><g data-mml-node="mo" data-latex="\to" transform="translate(30060.9,0)"><path data-c="2192" d="M932 234C939 237 943 243 943 250C943 257 939 263 932 266C884 282 839 316 797 368C769 403 750 444 741 491C738 504 730 510 717 510C701 510 693 502 693 485L694 483L694 482C711 395 755 326 828 274L82 274C66 274 58 266 58 250C58 234 66 226 82 226L828 226C755 174 711 105 694 18L694 17L693 15C693-2 701-10 717-10C730-10 738-4 741 9C750 56 769 97 797 132C839 184 884 218 932 234Z"></path></g><g data-mml-node="munder" data-latex="\underbrace{\text{Planning \&amp;
+Execution}}_{\text{intentions}\Rightarrow\text{actions}}" transform="translate(31338.6,0)"><g data-mml-node="TeXAtom" data-latex="\underbrace{\text{Planning \&amp;
+Execution}}" data-mjx-texclass="OP"><g data-mml-node="munder"><g data-mml-node="mtext" data-latex="\text{Planning \&amp;
+Execution}"><path data-c="50" d="M395 312C452 312 503 328 548 360C599 396 624 441 624 495C624 552 598 599 546 635C500 667 447 683 387 683L35 683L35 644L63 644C98 644 119 641 126 636C133 631 137 620 137 602L137 81C137 63 133 51 126 46C119 41 98 39 63 39L35 39L35 0C61 2 111 3 184 3C258 3 308 2 334 0L334 39L306 39C271 39 250 41 243 46C236 51 232 63 232 81L232 312M274 644L362 644C391 644 416 640 437 633C494 612 514 570 514 495C514 467 511 443 504 423C487 373 433 346 362 346L229 346L229 609C229 645 235 644 274 644Z"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(681,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(959,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(1459,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2015,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2571,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2849,0)"></path><path data-c="67" d="M431 453C393 453 358 438 326 408C296 431 262 442 223 442C137 442 59 378 59 294C59 252 74 218 104 192C85 168 75 141 75 110C75 72 88 43 113 24C71 10 28-26 28-77C28-120 56-154 111-178C153-197 199-206 249-206C300-206 347-197 389-178C444-154 471-120 471-75C471-22 449 17 405 42C359 67 308 70 234 70C190 70 166 70 161 71C133 75 113 102 113 133C113 148 117 162 126 174C154 155 186 145 223 145C309 145 386 209 386 293C386 332 373 364 347 389C372 412 399 423 428 423C423 418 420 410 420 400C420 378 431 367 453 367C474 367 485 378 485 401C485 432 461 453 431 453M223 411C277 411 304 372 304 294C304 215 277 175 223 175C168 175 141 214 141 293C141 372 168 411 223 411M164 4L222 4C274 4 316 1 348-6C391-15 412-39 412-77C412-109 392-134 352-153C321-168 287-175 250-175C214-175 180-168 148-153C107-134 87-109 87-77C87-35 123 4 164 4Z" transform="translate(3405,0)"></path><path data-c="20" d="" transform="translate(3905,0)"></path><path data-c="5C" d="M420-250C436-250 444-242 444-226C444-223 444-220 443-218L101 734C97 745 90 750 79 750C63 750 55 742 55 726C55 723 55 720 56 718L398-234C402-245 409-250 420-250Z" transform="translate(4237,0)"></path><path data-c="26" d="M162 553C162 488 175 421 201 353L113 259C86 230 69 210 63 201C49 180 42 156 42 130C42 84 61 47 100 18C135-9 177-22 225-22C288-22 348 3 404 52C461 3 519-22 578-22C663-22 720 43 721 127L689 127C688 90 676 62 654 44C632 26 607 17 582 17C542 17 498 45 450 101C481 137 524 202 579 297C598 329 616 353 634 370C652 387 683 395 727 395L727 434L627 431C589 430 548 431 503 434L503 395C550 395 573 382 573 356L567 338C516 249 470 178 429 127C381 185 303 302 270 384C293 410 312 431 325 448C368 501 390 547 390 584C390 611 384 639 373 666C360 699 335 716 300 716C218 716 162 638 162 553M302 686C322 686 336 676 344 654C352 632 357 609 357 585C357 544 324 488 259 416C241 472 232 525 232 576C232 631 253 686 302 686M214 323C261 224 316 141 379 76C334 37 285 17 233 17C209 17 189 26 173 43C146 72 132 112 132 162C132 197 139 227 153 252C164 270 184 294 214 323Z" transform="translate(4737,0)"></path><path data-c="20" d="" transform="translate(5515,0)"></path><path data-c="45" d="M230 74L230 334L315 334C360 334 388 326 400 311C412 296 418 265 418 218L451 218L451 488L418 488C418 441 412 411 400 396C388 381 360 373 315 373L230 373L230 606C230 642 236 641 275 641L402 641C474 641 522 627 547 598C579 559 583 523 592 450L625 450L596 680L33 680L33 641L61 641C96 641 117 639 124 634C131 629 135 617 135 599L135 81C135 63 131 51 124 46C117 41 96 39 61 39L33 39L33 0L610 0L653 263L620 263C611 208 602 166 591 136C580 106 560 82 530 63C505 47 464 39 406 39L275 39C236 39 230 38 230 74Z" transform="translate(5847,0)"></path><path data-c="78" d="M418 3C441 4 474 3 516 0L516 38C463 38 443 39 422 67L292 235C335 288 364 324 380 343C408 375 447 392 498 393L498 431C470 429 442 428 414 428C377 428 344 429 315 431L315 393C334 391 344 382 344 366C344 357 339 346 330 334L272 262L198 357C193 364 190 369 190 372C190 385 202 392 225 393L225 431L114 428C88 427 56 428 17 431L17 393C53 393 76 390 86 385C96 380 112 363 134 334L229 210C180 147 150 109 139 96C107 57 65 38 12 38L12 0C49 3 77 4 98 3L195 0L195 38C176 41 167 50 167 65C167 69 168 74 170 79C176 92 203 126 251 183L323 89C334 75 340 65 343 59C343 46 331 39 307 38L307 0Z" transform="translate(6528,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(7056,0)"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(7500,0)"></path><path data-c="75" d="M267 18C198 18 185 47 185 112L185 442L32 431L32 393C71 393 94 389 100 382C106 375 109 350 109 306L109 159C109 120 112 90 119 67C134 15 189-11 262-11C316-11 357 14 385 65L385-11L535 0L535 38C499 38 478 40 470 46C462 52 458 66 458 89L458 442L306 431L306 393C341 393 362 390 370 384C378 378 382 365 382 342L382 167C382 88 340 18 267 18Z" transform="translate(7944,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(8500,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(8889,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(9167,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(9667,0)"></path></g><g data-mml-node="mo" transform="translate(0,-251)"><path data-c="23DF" d="M510-294L1002-294L1002-188L510-188C385-188 277-179 188-160C99-141 47-112 32-73C29-66 24-62 17-62C6-62 0-67 0-78C0-81 0-84 1-85C26-151 100-204 225-245C325-278 420-294 510-294Z"></path><path data-c="23DF" d="M1000-85C1001-84 1001-81 1001-78C1001-67 995-62 984-62C977-62 971-66 968-73C954-112 902-141 813-160C724-179 616-188 491-188L0-188L0-294L491-294C581-294 676-278 776-245C901-204 975-151 1000-85Z" transform="translate(9222,0)"></path><path data-c="23DF" d="M1496-294L2003-294L2003-188L1496-188C1407-188 1317-200 1228-224C1115-255 1039-298 1001-355C963-298 887-255 774-224C685-200 595-188 506-188L0-188L0-294L506-294C649-294 765-303 854-321C941-338 984-366 984-403C984-414 990-419 1001-419C1012-419 1018-414 1018-403C1018-366 1062-338 1150-320C1238-302 1353-294 1496-294Z" transform="translate(4110,0)"></path><svg width="3248" height="246" x="932" y="-364" viewBox="812 -364 3248 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(4.901,1)"></path></svg><svg width="3249" height="246" x="6043" y="-364" viewBox="812.2 -364 3249 246"><path data-c="5F" d="M0-294L994-294L994-188L0-188Z" transform="scale(4.903,1)"></path></svg></g></g></g><g data-mml-node="TeXAtom" transform="translate(2141.3,-1255) scale(0.707)" data-latex="{\text{intentions}\Rightarrow\text{actions}}" data-mjx-texclass="ORD"><g data-mml-node="mtext" data-latex="\text{intentions}"><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(278,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(834,0)"></path><path data-c="65" d="M415 251C415 366 348 448 236 448C176 448 126 425 85 378C47 334 28 281 28 220C28 157 49 104 91 58C133 12 185-11 247-11C304-11 348 9 378 48C403 81 415 105 415 121C415 131 409 136 398 136C390 136 385 131 382 120C360 54 317 21 253 21C208 21 173 42 146 85C127 116 118 163 117 227L387 227C409 227 415 229 415 251M326 349C337 316 342 284 342 255L118 255C121 321 138 366 168 389C193 409 215 419 236 419C281 419 311 396 326 349Z" transform="translate(1223,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(1667,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(2223,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(2612,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(2890,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(3390,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(3946,0)"></path></g><g data-mml-node="mo" data-latex="\Rightarrow" transform="translate(4340,0)"><path data-c="21D2" d="M927 233C935 237 939 243 939 250C939 257 935 263 927 267C866 283 804 318 742 371C697 410 662 455 636 507C632 516 625 520 615 520C599 520 591 512 591 496C591 494 592 491 593 486C616 442 644 403 676 369L84 369C68 369 60 361 60 346C60 330 68 322 84 322L728 322C765 292 806 268 849 250C806 232 765 208 728 178L84 178C68 178 60 170 60 154C60 139 68 131 84 131L676 131C644 97 616 58 593 14C592 9 591 6 591 4C591-12 599-20 615-20C625-20 632-16 636-7C662 45 697 90 742 129C804 182 866 217 927 233Z"></path></g><g data-mml-node="mtext" data-latex="\text{actions}" transform="translate(5340,0)"><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(500,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(944,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1333,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(1611,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2111,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2667,0)"></path></g></g></g></g></g></svg></mjx-container></span></p>
+<p><span class="math display"><mjx-container class="MathJax" jax="SVG" overflow="overflow" display="true"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="41.995ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 18561.7 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="
+I \subseteq D,\quad D = f(B),\quad \text{actions} = \text{plan}(I, B)
+"><g data-mml-node="mi" data-latex="I"><path data-c="1D43C" d="M497 667C497 678 491 683 478 683L349 680L218 683C202 684 194 676 194 659C194 649 205 644 226 644C269 644 290 639 290 630C290 625 289 620 288 615L155 82C150 60 140 47 125 42C118 40 100 39 69 39C44 39 34 38 34 15C34 5 40 0 53 0L181 3L313 0C329-1 337 7 337 23C337 39 325 39 303 39C264 39 240 37 240 53C240 58 241 65 244 75L376 602C381 623 391 636 406 641C413 643 431 644 462 644C486 644 497 645 497 667Z"></path></g><g data-mml-node="mo" data-latex="\subseteq" transform="translate(774.8,0)"><path data-c="2286" d="M669 87L378 87C309 87 252 110 204 158C156 206 132 264 132 333C132 402 156 460 204 508C252 556 309 579 378 579L669 579C685 579 693 587 693 603C693 619 685 627 669 627L378 627C296 627 227 599 170 542C113 485 85 415 85 333C85 251 113 181 170 124C227 67 296 39 378 39L669 39C685 39 693 47 693 63C693 76 682 87 669 87M669-80L130-80C115-80 107-88 107-103C107-119 115-127 130-127L669-127C685-127 693-119 693-103C693-91 682-80 669-80Z"></path></g><g data-mml-node="mi" data-latex="D" transform="translate(1830.6,0)"><path data-c="1D437" d="M567 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C153 60 143 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 51 0 72 0L399 0C467 0 532 20 595 61C702 130 804 265 804 429C804 577 713 683 567 683M710 466C710 353 659 216 607 149C550 76 475 39 381 39L270 39C259 39 252 39 248 40C242 40 239 42 239 45C239 47 241 54 244 67L379 610C388 643 387 644 429 644L535 644C647 644 710 578 710 466Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(2658.6,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mspace" data-latex="\quad" transform="translate(2936.6,0)"></g><g data-mml-node="mi" data-latex="D" transform="translate(4103.2,0)"><path data-c="1D437" d="M567 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C153 60 143 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 51 0 72 0L399 0C467 0 532 20 595 61C702 130 804 265 804 429C804 577 713 683 567 683M710 466C710 353 659 216 607 149C550 76 475 39 381 39L270 39C259 39 252 39 248 40C242 40 239 42 239 45C239 47 241 54 244 67L379 610C388 643 387 644 429 644L535 644C647 644 710 578 710 466Z"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(5209,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mi" data-latex="f" transform="translate(6264.8,0)"><path data-c="1D453" d="M552 633C552 677 509 705 462 705C400 705 357 665 334 586C329 568 318 517 302 433L237 433C215 433 204 432 204 411C204 400 214 395 235 395L295 395L222 8C211-49 201-91 192-119C180-156 163-175 141-175C126-175 114-171 103-164C135-159 151-140 151-108C151-82 138-69 111-69C77-69 53-99 53-133C53-177 94-205 141-205C166-205 189-195 208-174C240-141 265-94 283-31C294 8 304 46 311 84L369 395L451 395C474 395 484 396 484 419C484 428 474 433 454 433L377 433C383 474 411 625 420 644C430 665 444 675 462 675C477 675 490 671 501 664C470 657 454 639 454 608C454 582 467 569 494 569C528 569 552 599 552 633Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(6816.8,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="B" transform="translate(7205.8,0)"><path data-c="1D435" d="M756 543C756 634 666 683 568 683L236 683C213 683 203 682 203 659C203 643 223 644 235 644C265 643 283 641 288 640C293 639 295 636 295 631C295 629 294 623 291 613L159 82C154 60 144 47 129 42C122 40 104 39 73 39C52 39 42 31 42 15C42 5 52 0 73 0L426 0C491 0 551 20 608 59C671 102 703 155 703 217C703 296 638 344 567 358C655 379 756 446 756 543M554 644C623 644 658 612 658 547C658 496 638 454 596 420C554 386 507 370 456 370L317 370L377 610C385 644 385 644 427 644M582 299C596 276 603 253 603 228C603 176 583 131 542 94C501 57 455 39 402 39L267 39C257 39 250 39 246 40C240 40 237 42 237 45C237 46 237 49 238 53C269 180 293 276 309 340L493 340C536 340 565 326 582 299Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(7964.8,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(8353.8,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mspace" data-latex="\quad" transform="translate(8631.8,0)"></g><g data-mml-node="mtext" data-latex="\text{actions}" transform="translate(9798.4,0)"><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z"></path><path data-c="63" d="M251 416C293 416 325 406 347 386C323 383 306 361 306 338C306 305 322 289 355 289C388 289 404 306 404 339C404 410 327 448 250 448C188 448 137 426 96 380C55 334 34 279 34 216C34 155 55 101 96 56C137 11 187-11 248-11C298-11 337 3 365 32C388 55 403 78 411 102C414 111 415 117 415 121C415 130 409 134 398 134C390 134 385 130 382 122C361 55 320 21 257 21C228 21 200 34 172 61C139 92 123 144 123 218C123 318 161 416 251 416Z" transform="translate(500,0)"></path><path data-c="74" d="M332 126L332 186L300 186L300 128C300 78 282 22 238 22C197 22 177 56 177 124L177 395L316 395L316 433L177 433L177 615L145 615C144 582 141 553 134 527C117 461 78 427 19 424L19 395L102 395L102 126C102 67 120 29 155 10C182-4 207-11 232-11C298-11 332 55 332 126Z" transform="translate(944,0)"></path><path data-c="69" d="M194 601C194 631 169 657 139 657C109 657 83 631 83 601C83 571 108 544 138 544C169 544 194 570 194 601M143 3L247 0L247 39C214 39 194 41 188 45C182 49 180 60 180 78L180 445L37 433L37 395C70 395 91 392 98 387C105 382 108 368 108 345L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(1333,0)"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(1611,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(2111,0)"></path><path data-c="73" d="M360 130C360 206 308 254 205 274C158 283 128 294 112 305C96 316 88 332 88 351C88 398 123 421 193 421C261 421 298 383 303 306C304 298 309 294 319 294C330 294 336 303 336 321L336 420C336 439 331 448 321 448C310 448 295 430 285 422C260 439 229 448 193 448C104 448 33 408 33 323C33 289 47 260 76 237C111 208 144 202 207 191C272 178 305 149 305 104C305 47 270 18 199 18C130 18 86 64 67 155C64 168 59 175 50 175C39 175 33 165 33 146L33 17C33-2 38-11 48-11C51-11 56-8 64-1C82 15 74 12 92 30C121 3 157-11 199-11C294-11 360 38 360 130Z" transform="translate(2667,0)"></path></g><g data-mml-node="mo" data-latex="=" transform="translate(13137.2,0)"><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mtext" data-latex="\text{plan}" transform="translate(14193,0)"><path data-c="70" d="M298-13C360-13 413 9 456 54C499 99 521 152 521 215C521 276 501 328 462 372C421 419 371 442 311 442C260 442 216 422 178 383L178 442L28 431L28 393C65 393 87 391 94 386C101 381 105 368 105 347L105-115C105-134 101-146 94-150C87-154 65-155 28-155L28-194L142-191L257-194L257-155C220-155 199-154 192-150C185-146 181-134 181-115L181 44C203 13 246-13 298-13M304 409C345 409 377 386 402 340C421 301 431 260 431 215C431 168 420 125 398 86C372 39 337 16 294 16C252 16 219 36 194 75C185 88 181 101 181 114L181 333C210 384 251 409 304 409Z"></path><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z" transform="translate(556,0)"></path><path data-c="61" d="M483 91L483 150L451 150L451 91C451 52 440 32 419 32C399 32 387 57 387 77L387 274C387 309 383 335 376 353C352 412 283 448 213 448C136 448 60 405 60 333C60 300 77 283 110 283C143 283 159 299 159 332C159 361 144 378 113 381C135 406 168 419 211 419C273 419 311 362 311 297L311 264C233 259 174 247 133 228C66 197 32 154 32 97C32 71 42 49 61 32C93 3 137-11 193-11C252-11 294 14 320 65C327 27 355-6 398-6C451-6 483 36 483 91M200 18C154 18 116 52 116 98C116 191 213 231 311 236L311 141C311 74 267 18 200 18Z" transform="translate(834,0)"></path><path data-c="6E" d="M314 413C359 413 382 378 382 307L382 79C382 60 379 48 372 44C365 40 343 38 306 38L306 0L421 3L535 0L535 38C503 38 482 39 472 42C462 45 458 52 458 64L458 251C458 298 457 331 454 350C444 411 399 442 320 442C257 442 210 412 179 352L179 442L32 431L32 393C68 393 90 390 98 384C106 378 109 365 109 342L109 79C109 60 105 48 98 44C91 40 69 38 32 38L32 0L147 3L261 0L261 38C224 38 203 40 196 44C189 48 185 60 185 79L185 259C185 340 236 413 314 413Z" transform="translate(1334,0)"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(16083,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="I" transform="translate(16472,0)"><path data-c="1D43C" d="M497 667C497 678 491 683 478 683L349 680L218 683C202 684 194 676 194 659C194 649 205 644 226 644C269 644 290 639 290 630C290 625 289 620 288 615L155 82C150 60 140 47 125 42C118 40 100 39 69 39C44 39 34 38 34 15C34 5 40 0 53 0L181 3L313 0C329-1 337 7 337 23C337 39 325 39 303 39C264 39 240 37 240 53C240 58 241 65 244 75L376 602C381 623 391 636 406 641C413 643 431 644 462 644C486 644 497 645 497 667Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(16969,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="B" transform="translate(17413.7,0)"><path data-c="1D435" d="M756 543C756 634 666 683 568 683L236 683C213 683 203 682 203 659C203 643 223 644 235 644C265 643 283 641 288 640C293 639 295 636 295 631C295 629 294 623 291 613L159 82C154 60 144 47 129 42C122 40 104 39 73 39C52 39 42 31 42 15C42 5 52 0 73 0L426 0C491 0 551 20 608 59C671 102 703 155 703 217C703 296 638 344 567 358C655 379 756 446 756 543M554 644C623 644 658 612 658 547C658 496 638 454 596 420C554 386 507 370 456 370L317 370L377 610C385 644 385 644 427 644M582 299C596 276 603 253 603 228C603 176 583 131 542 94C501 57 455 39 402 39L267 39C257 39 250 39 246 40C240 40 237 42 237 45C237 46 237 49 238 53C269 180 293 276 309 340L493 340C536 340 565 326 582 299Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(18172.7,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container></span></p>
+<h3 id="不是每个服务都应该成为-agent决策树">3.3 不是每个服务都应该成为
+agent（决策树）</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    Q1{Does the task require&lt;br/&gt;contextual judgment?}</span><br><span class="line">    Q1 -- NO --&gt; S[Use a deterministic&lt;br/&gt;service or workflow]</span><br><span class="line">    Q1 -- YES --&gt; A[Use a bounded agent&lt;br/&gt;with explicit tools]</span><br><span class="line">    A --&gt; Q2{High-impact action?}</span><br><span class="line">    Q2 -- YES --&gt; P[Add approval + policy]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Agent
+候选</strong>：分诊（triage）、澄清（clarification）、规划（planning）</li>
+<li><strong>Service
+候选</strong>：认证（authentication）、通知（notification）</li>
+</ul>
+<blockquote>
+<p>项目里常见的错误是“所有东西都是
+agent”。认证、发邮件、写数据库这类不需要上下文判断的功能，应该是<strong>确定性服务</strong>。</p>
+</blockquote>
+<h3 id="能力不决定控制capabilities-do-not-determine-control">3.4
+能力不决定控制（Capabilities do not determine control）</h3>
+<p><strong>同样的功能特性</strong>（患者交互、风险评估、临床检索、记录访问、排期），可以有两种控制架构：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Workflow-controlled</strong></th>
+<th style="text-align: left;"><strong>Supervisor-controlled</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">结构</td>
+<td style="text-align: left;">Collect → Assess → Book
+的<strong>固定顺序</strong></td>
+<td style="text-align: left;">一个 <strong>Supervisor</strong> 协调
+Triage、Records、Booking</td>
+</tr>
+<tr>
+<td style="text-align: left;">特点</td>
+<td style="text-align: left;"><strong>可预测的执行</strong></td>
+<td style="text-align: left;"><strong>动态顺序，显式协调者</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这与 Week 4
+的“控制与功能分离”一脉相承：<strong>功能决定有哪些组件，控制架构决定它们按什么顺序、由谁协调。</strong></p>
+</blockquote>
+<h3 id="面向-agent-的结构模式">3.5 面向 agent 的结构模式</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">模式</th>
+<th style="text-align: left;">结构</th>
+<th style="text-align: left;">适用/优点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Single-Agent
+Tool-Use</strong></td>
+<td style="text-align: left;">解释请求 → 选工具 → 执行 → 评估结果 →
+回复</td>
+<td style="text-align: left;"><strong>架构简单、通信开销低</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ReAct（Reasoning +
+Acting）</strong></td>
+<td style="text-align: left;">Thought → Action → Observation → Thought →
+Action …</td>
+<td style="text-align: left;"><strong>动态环境、复杂和探索性任务</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Planner–Executor</strong></td>
+<td style="text-align: left;">规划与执行分离：Planner → 任务计划 (t1,
+t2, t3 …) → Executor</td>
+<td style="text-align: left;"><strong>更好的任务分解、便于监控</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Supervisor–Worker</strong></td>
+<td style="text-align: left;">一个 agent 协调多个专业 agent</td>
+<td style="text-align: left;">复杂应用、<strong>清晰的控制结构、便于治理</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Micro-Agent
+Architecture</strong></td>
+<td style="text-align: left;">每种 AI
+能力（规划、推理、感知、行动）实现为<strong>松耦合的
+micro-agent</strong>，通过消息/事件（pub-sub、消息总线）通信</td>
+<td style="text-align: left;">机器人、交易 bot、智能家居中的多 agent
+协作</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cognitive Layering</strong></td>
+<td style="text-align: left;"><strong>Perception
+Layer</strong>（感知与预处理）/ <strong>Reasoning
+Layer</strong>（规划、推理、LLM）/ <strong>Action
+Layer</strong>（API/执行器）</td>
+<td style="text-align: left;"><strong>感知、思考、行动清晰分离</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Blackboard</strong></td>
+<td style="text-align: left;">agent
+把中间结果、假设或目标贴到共享“黑板”上，其他 agent 观察并贡献</td>
+<td style="text-align: left;">复杂环境中的问题求解（排程、自动驾驶）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>推理与规划模式</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">模式</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Deliberative–Reactive
+Hybrid</strong></td>
+<td style="text-align: left;">反应式 agent（快速响应）+ 审慎式
+agent（规划推理）</td>
+<td style="text-align: left;">聊天机器人：FAQ
+快速回答，复杂问题深度推理</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Goal–Plan Hierarchy</strong></td>
+<td style="text-align: left;">目标分解为子目标分配给 agent，每个 agent
+用 BDI 模型</td>
+<td style="text-align: left;">企业工作流自动化</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>对照经典模式：<strong>Blackboard ≈
+Shared-data</strong>，<strong>Cognitive Layering ≈
+Layering</strong>，<strong>Micro-Agent ≈
+SOA/事件驱动</strong>，<strong>Supervisor–Worker ≈ Week 4
+的星形集中控制</strong>。考试时如果被问“这个 agent
+模式对应哪个经典模式”，可以这样类比。</p>
+</blockquote>
+<h3 id="模式选择任务不确定性-协调需求">3.6 模式选择：任务不确定性 ×
+协调需求</h3>
+<p>讲义最后一页的二维图：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>低任务不确定性</strong></th>
+<th style="text-align: left;"><strong>高任务不确定性</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>高协调需求</strong></td>
+<td style="text-align: left;"><strong>Hierarchy</strong>、<strong>Supervisor–worker</strong></td>
+<td style="text-align: left;"><strong>Blackboard</strong>、<strong>Peer-to-peer</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>低协调需求</strong></td>
+<td style="text-align: left;"><strong>Workflow</strong>、<strong>Single-agent
+tool use</strong></td>
+<td style="text-align: left;"><strong>ReAct</strong>、<strong>Planner–executor</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Pattern choice follows uncertainty and coordination.</strong>
+任务越不确定，越需要 agent
+自主推理（ReAct/Blackboard）；需要协调的组件越多，越需要显式的协调结构（Supervisor/Hierarchy）。</p>
+</blockquote>
+<p><strong>解题思路（给场景选模式）</strong>：先判断任务是否需要上下文判断（不需要
+→
+服务/工作流）；再判断不确定性高低和参与者数量，落到上表的象限；最后说明控制放在哪里（workflow
+还是 supervisor）以及高影响动作的审批点。</p>
+<hr>
+<h1 id="part-b结构建模part-1基础概念">Part B：结构建模（Part
+1：基础概念）</h1>
+<h2 id="四为什么建模结构">四、为什么建模结构</h2>
+<h3 id="代码-vs-模型">4.1 代码 vs 模型</h3>
+<blockquote>
+<p><strong>Code is intended for machines. Models are intended for
+people.</strong></p>
+</blockquote>
+<p>模型方法的两大特征（Week 2 回顾）：<strong>Key Feature
+1：ABSTRACTION</strong>，<strong>Key Feature
+2：AUTOMATION</strong>。</p>
+<p>讲义提出问题：<strong>如果建模语言是编程的未来，它们长什么样、如何被定义？</strong>
+提示：<strong>这不是图形语法 vs
+文本语法的区别</strong>——关键在于语义（Week 10 元建模会回答）。</p>
+<h3 id="uml-作为贯穿例子">4.2 UML 作为贯穿例子</h3>
+<ul>
+<li>最广泛教授和使用的软件建模语言，由 <strong>Booch、OMT、OOSE</strong>
+等方法统一而来</li>
+<li><strong>原本用于描述性模型</strong>，也支持<strong>规定性（如可执行）模型</strong></li>
+</ul>
+<p><strong>本课软件建模路线</strong>：建模<strong>结构</strong>（W5–6）→
+建模<strong>行为</strong>（W7）→ <strong>组织模型</strong>（W8）→
+<strong>定义建模语言（元建模，W10）</strong> →
+<strong>特化建模语言（W11）</strong>。</p>
+<h3 id="什么是结构建模">4.3 什么是结构建模</h3>
+<blockquote>
+<p><strong>结构建模</strong>处理<strong>占据空间（最终是物理空间）、具有状态并可能有行为</strong>的实体的表示。</p>
+</blockquote>
+<p>具体包括：</p>
+<ul>
+<li><strong>设计时的类</strong></li>
+<li><strong>运行时的实例</strong>（如对象）及其<strong>关系</strong>（如链接）</li>
+<li>这些运行时实体的<strong>规格</strong>（如结构化类、协作）及关系的规格（如关联）</li>
+</ul>
+<p>UML 中的两类结构实体：<strong>Elementary（基础）</strong> 和
+<strong>Structured（结构化，用于建模架构，Week 6）</strong>。</p>
+<h2 id="五基础结构概念">五、基础结构概念</h2>
+<h3 id="值对象对象身份链接">5.1 值、对象、对象身份、链接</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">定义</th>
+<th style="text-align: left;">要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Value</strong></td>
+<td style="text-align: left;"><strong>普遍、唯一、不变</strong>的信息表示</td>
+<td style="text-align: left;">数字、字符、字符串、符号；如
+7、VII、“seven” 表示同一个值；要在程序中使用必须存进某个“容器”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Value container</strong></td>
+<td style="text-align: left;">存储值的物理空间</td>
+<td style="text-align: left;">可动态创建和销毁；可限定只存某类型的值；存的值可以改变或移除（空容器）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Object</strong></td>
+<td style="text-align: left;"><strong>具有唯一身份</strong>、符合某个
+<strong>Class 类型</strong>的复杂值容器</td>
+<td style="text-align: left;">可拥有<strong>属性槽</strong>（存属性值的容器）；可执行行为（操作）；<strong>身份在生命周期内不变</strong>，但类型可以变（type
+reclassification）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Object identity</strong></td>
+<td style="text-align: left;">对象创建时获得、终生不变、区别于所有其他对象的<strong>内在属性</strong></td>
+<td style="text-align: left;">即使属性值或类型改变，身份也不变</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Link</strong></td>
+<td style="text-align: left;">存储对象标识符的<strong>值容器元组</strong>（link
+ends），符合某个 <strong>Association 类型</strong></td>
+<td style="text-align: left;">可动态创建销毁；<strong>可能有身份</strong>（有些链接本身是对象）；两种：<strong>链接端由被链接对象拥有</strong>
+vs <strong>由链接自身拥有</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>对象身份的例子</strong>：<code>prince : Adult</code>，1958 年
+<code>name = "Prince"</code>，1993 年
+<code>name = "The Artist Formerly Known As Prince"</code>——<strong>属性值变了，还是同一个对象</strong>。</p>
+<p><strong>“点”记号（dot
+notation）</strong>：关联端上的小黑点表示<strong>ClassA 拥有一个以
+ClassB 为类型的特性</strong>（即链接端由对象拥有，相当于 ClassA
+有一个指向 ClassB 的属性）。</p>
+<h3 id="模型与被建模事物m1-vs-m0">5.2 模型与被建模事物（M1 vs M0）</h3>
+<blockquote>
+<p><strong>要区分模型和它所建模的东西</strong>——我们常对两者用同一个词（比如
+“Batmobile”）。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>M1：The Model</strong></td>
+<td style="text-align: left;">Batmobile 玩具（模型）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>M0：The Modeled
+World</strong></td>
+<td style="text-align: left;">真实的 Batmobile</td>
+</tr>
+</tbody>
+</table>
+<p>关系：模型 <code>«represents»</code> 真实事物。（M0/M1 的编号在 Week
+10 元建模的四层架构中会继续出现。）</p>
+<h3 id="类型实例分类器">5.3 类型、实例、分类器</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Type</strong></td>
+<td style="text-align: left;">对<strong>共享同类属性的一类实体</strong>的规格（模型），如
+<code>Adult { name: String, gender: [M,F] }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instance</strong></td>
+<td style="text-align: left;">类别中的<strong>个体成员</strong>，如
+<code>Alice : Adult { name = "Alice", gender = F }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Classifier</strong></td>
+<td style="text-align: left;">对一组实体的规格，这些实体 ①
+<strong>共享一组特征</strong>，②
+<strong>可按某些特征的性质被分类（划分）为子集合</strong>（如人按性别分男女，按年龄分成人和儿童）</td>
+</tr>
+</tbody>
+</table>
+<p>关系：<code>Adult</code>（类型，M1）<code>«represents»</code>
+概念类别
+Adults（M0）；<code>Alice : Adult</code>（实例规格，M1）<code>«instanceOf»</code>
+<code>Adult</code>，并 <code>«represents»</code> 个体 Alice（M0）。</p>
+<p><strong>UML
+中的分类器种类</strong>：Classes、Associations、AssociationClasses、DataTypes、Enumerations、Interfaces、<strong>Behaviors（Activities、Interactions、StateMachines）</strong>、Signals、<strong>UseCases</strong>、Collaborations、Components、Nodes
+等。<strong>所有分类器都可以作为类型。</strong></p>
+<h3 id="类与关联">5.4 类与关联</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Class</strong></td>
+<td style="text-align: left;">对一组<strong>具有相同特性和行为的对象实例</strong>的规格</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Association</strong></td>
+<td style="text-align: left;">对一组<strong>链接</strong>的规格，这些链接的各端分别符合相同的类型</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>类是对象集合的规格，关联是链接集合的规格</strong>——两者都是分类器。</p>
+</blockquote>
+<p><strong>关联端名的含义</strong>：<code>Adult (parents, 1..2) —— (children, 0..*) Child</code>。<code>Karl.children</code>
+表示 Karl 的“孩子集合”，<code>Cory.parents</code> 表示 Cory
+的“父母集合”。用 OCL
+写：<code>Karl.children-&gt;includes(Cory)</code>。</p>
+<h3 id="多重性与修饰">5.5 多重性与修饰</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">记号</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>1..2</code></td>
+<td style="text-align: left;">下界 1，上界 2</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0..*</code> 或 <code>*</code></td>
+<td style="text-align: left;">0 到无限</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">元素缺失</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>name : String [1..*]</code></td>
+<td style="text-align: left;">属性也可以有多重性</td>
+</tr>
+</tbody>
+</table>
+<p><strong>多重性修饰符</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">修饰</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>{unique}</code> /
+<code>{nonunique}</code></td>
+<td style="text-align: left;">集合中<strong>没有两个元素值相同</strong></td>
+<td style="text-align: left;"><strong>unique = true</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>{ordered}</code> /
+<code>{unordered}</code></td>
+<td style="text-align: left;">元素<strong>有序</strong></td>
+<td style="text-align: left;"><strong>unordered（ordered =
+false）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>组合起来：<code>{unique, unordered}</code> =
+Set（默认），<code>{unique, ordered}</code> =
+OrderedSet，<code>{nonunique, unordered}</code> =
+Bag，<code>{nonunique, ordered}</code> = Sequence。</p>
+<h3 id="泛化-特化">5.6 泛化 / 特化</h3>
+<ul>
+<li>UML 中分类用 <strong>Generalization</strong>
+关系建模——<strong>子集—集合关系</strong>（Child ⊂ Person，Adult ⊂
+Person）</li>
+<li><strong>Generalization
+set（泛化集）</strong>：同一个类可以按<strong>多个分类准则</strong>划分，如
+Person 按 <strong>age</strong> 分 Adult/Child，按
+<strong>gender</strong> 分 Males/Females</li>
+<li>泛化箭头表示一种<strong>图形操作</strong>：<strong>超类的所有特性也出现在子类中</strong>（如
+<code>CorporateAccount</code> 继承 <code>BankAccount</code> 的
+<code>/customers</code>、<code>credit()</code>、<code>debit()</code>，再加上自己的
+<code>owner : CorporateCustomer</code>）</li>
+</ul>
+<p><strong>关联特化</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">BankAccount  [accounts 1..*] ——— [customers 1..*]  BankCustomer</span><br><span class="line">     △                                                 △</span><br><span class="line">CorporateAccount [C-accounts 1..*] ——— [owner 1]  CorporateCustomer   ← 约束收紧（1..* → 1）</span><br><span class="line">PersonalAccount  [P-accounts 1..*] ——— [owners 1..*] PrivateCustomer</span><br></pre></td></tr></table></figure>
+<p><strong>更精确的规格</strong>：父关联端标
+<code>{union} /accounts</code>、<code>{union} /customers</code>（派生的并集），子关联端标
+<code>{subsets accounts}</code>、<code>{subsets customers}</code>——表示子关联的链接是父关联链接的子集，父关联是所有子关联的并。</p>
+<h3 id="组合聚合关联类">5.7 组合、聚合、关联类</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">记号</th>
+<th style="text-align: left;">语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Composition（黑菱形）</strong></td>
+<td style="text-align: left;">实心菱形在<strong>整体</strong>端</td>
+<td style="text-align: left;"><strong>所有权</strong>；<strong>“删除”语义：所有者被移除时，其拥有的元素一起被移除</strong>。例：<code>Person ◆—— name: String</code>；部件端的多重性最多为
+1（<code>0..1</code> 或 <code>1</code>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Aggregation（白菱形）</strong></td>
+<td style="text-align: left;">空心菱形在整体端</td>
+<td style="text-align: left;">用户自定义的“<strong>弱</strong>”所有权（如在
+UML profile 中）；<strong>标准 UML 中语义与普通关联相同</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Association class</strong></td>
+<td style="text-align: left;">关联线上用虚线挂一个类</td>
+<td style="text-align: left;">关联本身有属性：<code>Person (1..*) —— (0..*) Company</code>，关联类
+<code>Job { salary }</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>关联类的替代方案</strong>：把 <code>Job</code>
+建成普通类，<code>Person 1..* —— 0..* Job 0..* —— 0..* Company</code>。好处是<strong>避免关联类语义的复杂性</strong>（如写约束）；代价是<strong>需要额外约束把两条关联的链接耦合起来</strong>（同一个
+Job 必须对应同一对 Person–Company）。</p>
+<blockquote>
+<p><strong>考试易错</strong>：关联类意味着<strong>同一对 (Person,
+Company) 至多一个
+Job</strong>（因为链接由端点对唯一确定）；用普通类代替时同一对可以有多个
+Job。</p>
+</blockquote>
+<h3 id="类的记号">5.8 类的记号</h3>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">┌──────────────────────────────────────────────┐</span><br><span class="line">│ CorporateAccount                              │</span><br><span class="line">├──────────────────────────────────────────────┤</span><br><span class="line">│ +/customers : BankCustomer                    │  ← “/” 表示派生属性</span><br><span class="line">│ +owner : CorporateCustomer                    │</span><br><span class="line">│ #bankPrefix : String = "0613" {readOnly}      │  ← 默认值 + 属性约束</span><br><span class="line">├──────────────────────────────────────────────┤</span><br><span class="line">│ +credit(amount: Amount)                       │</span><br><span class="line">│ +debit(amount) : Boolean                      │</span><br><span class="line">│ +«signal» alarm()                             │  ← «signal» 表示信号接收</span><br><span class="line">└──────────────────────────────────────────────┘</span><br><span class="line">        accounts 0..*  ●————————  1 branch  BankBranch</span><br></pre></td></tr></table></figure>
+<p>关联端的<strong>黑点</strong>表示该端由 <code>CorporateAccount</code>
+拥有（即 <code>CorporateAccount</code> 有一个 <code>branch</code>
+属性）。运行时：<code>obj2:CorporateAccount —link&lt;obj2,obj1&gt;— obj1:BankBranch</code>。</p>
+<h3 id="接口">5.9 接口</h3>
+<ul>
+<li>和类一样定义一组特性，但<strong>只有声明</strong> ⇒
+<strong>接口不能有实例</strong></li>
+<li>可以被分类器
+<strong>realize（实现）</strong>：实现者必须为所有接口特性提供（直接或间接的）实现</li>
+<li>可以被分类器
+<strong>use（使用）</strong>：表示该分类器需要某个实现了该接口的对象的服务——<strong>一种解耦手段</strong></li>
+</ul>
+<p>例：<code>Pilot --«uses»--&gt; «interface» JetEngineControl { thrust, status, accelerate(), decelerate(), reverseThrust(), ignite(), powerDown() }</code>，由
+<code>RollsRoyceEngine</code> 和 <code>GEEngine</code>
+<strong>realize</strong>。</p>
+<p><strong>简写记号</strong>：棒棒糖（lollipop，提供接口）与插座（socket，需要接口）。<strong>注意：lollipop
+不表示接口实例，而是“接口 + 实现关系”的组合。</strong></p>
+<h3 id="依赖与约束">5.10 依赖与约束</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">记号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Dependency</strong></td>
+<td style="text-align: left;">非正式陈述：一个或多个 client
+<strong>以某种方式需要</strong> supplier；<strong>supplier 的变化会影响
+client</strong>；语义很松，可以特化（用户自定义名如
+<code>«manufacturedBy»</code>）</td>
+<td style="text-align: left;">虚线 + 开放箭头，从 client 指向
+supplier（<code>Car --«manufacturedBy»--&gt; Factory</code>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Constraint</strong></td>
+<td style="text-align: left;">为命名空间中的元素捕获语义；可用<strong>形式语言（OCL）</strong>或<strong>自然语言</strong></td>
+<td style="text-align: left;"><strong>行内</strong>
+<code>size : Integer {size &gt;= 0}</code> 或<strong>附注</strong>（note
+连到元素）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="六agentic-ai-的基础结构建模">六、Agentic AI 的基础结构建模</h2>
+<p>讲义给出三条建模建议：</p>
+<ol type="1">
+<li><strong>清晰定义 Agent 抽象</strong>：基类 <code>Agent</code>
+捕获共同属性（<strong>state、knowledge base、goals、environment
+model</strong>）和方法（<strong>perceive()、reason()、act()、communicate()</strong>）；专门
+agent（ChatbotAgent、PlannerAgent、RobotAgent）<strong>继承</strong>基类；<strong>正确使用泛化避免重复</strong></li>
+<li><strong>建模 agent
+能力</strong>：感知（输入处理、NLP、传感器）、推理（规划、推断、学习）、行动（API
+调用、执行、回复）——可建成<strong>独立的类或接口</strong>，由 agent
+通过组合/关联使用</li>
+<li><strong>建模交互与通信</strong>：用 <strong>Message 或 Protocol
+类</strong>（如 FIPA ACL、REST
+API）表示通信通道；用<strong>关联</strong>表示协作或监督；<strong>多个
+agent 协作时用多重性</strong>（<code>1..*</code>）</li>
+</ol>
+<p><strong>讲义中的类图片段（文字还原）</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Agent {</span><br><span class="line">        &lt;&lt;abstract&gt;&gt;</span><br><span class="line">        name: string</span><br><span class="line">        memory: Memory</span><br><span class="line">        plan(goal)</span><br><span class="line">        act()</span><br><span class="line">        observe()</span><br><span class="line">    }</span><br><span class="line">    class Tool {</span><br><span class="line">        &lt;&lt;interface&gt;&gt;</span><br><span class="line">        execute(input)</span><br><span class="line">    }</span><br><span class="line">    class WebSearch {</span><br><span class="line">        provider: string</span><br><span class="line">        execute(query)</span><br><span class="line">    }</span><br><span class="line">    class Orchestrator {</span><br><span class="line">        agents: Agent[]</span><br><span class="line">        dispatch(goal)</span><br><span class="line">    }</span><br><span class="line">    class Memory {</span><br><span class="line">        items: Item[]</span><br><span class="line">        recall(query)</span><br><span class="line">    }</span><br><span class="line">    class ResearchAgent {</span><br><span class="line">        depth: number</span><br><span class="line">        synthesize()</span><br><span class="line">    }</span><br><span class="line">    class AgentRun {</span><br><span class="line">        status: Status</span><br><span class="line">        start()</span><br><span class="line">        finish()</span><br><span class="line">    }</span><br><span class="line">    class Step {</span><br><span class="line">        output: string</span><br><span class="line">        complete(result)</span><br><span class="line">    }</span><br><span class="line">    Agent ..&gt; Tool : uses</span><br><span class="line">    Tool &lt;|.. WebSearch</span><br><span class="line">    Orchestrator o-- "0..*" Agent : groups</span><br><span class="line">    Agent --&gt; "1" Memory : holds</span><br><span class="line">    Agent &lt;|-- ResearchAgent</span><br><span class="line">    Orchestrator ..&gt; AgentRun : creates</span><br><span class="line">    AgentRun *-- "1..*" Step : owns</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这张图同时用到了<strong>抽象类、接口实现、泛化、聚合、组合、依赖和多重性</strong>，是一张很好的“检查自己会不会画所有记号”的模板。</p>
+</blockquote>
+<hr>
+<h2 id="七tutorial-5-要点与解答思路">七、Tutorial 5 要点与解答思路</h2>
+<h3 id="类图的组成与用途">7.1 类图的组成与用途</h3>
+<ul>
+<li>类图是所有<strong>面向对象方法的核心建模工具</strong>：描述系统中对象的<strong>类型</strong>及其<strong>静态关系</strong></li>
+<li>用途：展示分类器的<strong>静态结构</strong>；为其他结构图提供基本记号；开发者和业务分析师都可用</li>
+</ul>
+<p><strong>类 = 结构特性（attributes，对象“知道”什么，即状态）+
+行为特性（operations，对象“能做”什么）</strong>。三栏：类名 /
+属性（<code>name : Type</code>，映射到成员变量）/
+操作（<code>op(param : Type) : ReturnType</code>，映射到方法）。</p>
+<h3 id="关系记号速查">7.2 关系记号速查</h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">关系</th>
+<th style="text-align: left;">语义</th>
+<th style="text-align: left;">线型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Inheritance /
+Generalization</strong></td>
+<td style="text-align: left;"><strong>is-a</strong>；抽象类名斜体</td>
+<td style="text-align: left;">实线 +
+<strong>空心三角</strong>，从子类指向父类</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Association</strong></td>
+<td style="text-align: left;">对等类之间的结构链接</td>
+<td style="text-align: left;">实线</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Aggregation</strong></td>
+<td style="text-align: left;"><strong>part-of</strong>；部分与整体<strong>生命周期独立</strong></td>
+<td style="text-align: left;">实线 +
+<strong>空心菱形</strong>在整体端</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Composition</strong></td>
+<td style="text-align: left;">特殊的聚合：<strong>整体销毁时部分也销毁</strong>，部分不能独立存在</td>
+<td style="text-align: left;">实线 +
+<strong>实心菱形</strong>在整体端</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dependency</strong></td>
+<td style="text-align: left;">一个类定义的改变可能导致另一个类改变（单向）</td>
+<td style="text-align: left;"><strong>虚线 + 开放箭头</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Realization</strong></td>
+<td style="text-align: left;">类实现接口</td>
+<td style="text-align: left;">虚线 + 空心三角</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关系名、角色与导航性</strong>（Spreadsheet 例子）：</p>
+<ul>
+<li><strong>关系名</strong>写在线中间，读出来要通顺：“Every spreadsheet
+<strong>contains</strong> some number of cells”、“an expression
+<strong>evaluates to</strong> a value”</li>
+<li><strong>角色</strong>写在关联端，描述该类在关系中扮演的目的：cell 与
+expression 的关系中，expression 的角色是 cell 的
+<strong>formula</strong></li>
+<li><strong>导航性</strong>箭头：给定 spreadsheet 能找到它的所有
+cells，但从 cell <strong>不能</strong>确定它属于哪个 spreadsheet；给定
+cell 能拿到 expression 和 value，反之不行</li>
+</ul>
+<h3 id="可见性">7.3 可见性</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">符号</th>
+<th style="text-align: left;">可见性</th>
+<th style="text-align: center;">同一类</th>
+<th style="text-align: center;">子类</th>
+<th style="text-align: center;">其他类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>+</code></td>
+<td style="text-align: left;">public</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: left;">private</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>#</code></td>
+<td style="text-align: left;">protected</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>~</code></td>
+<td style="text-align: left;">package</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓（同包）</td>
+<td style="text-align: center;">同包内 ✓</td>
+</tr>
+</tbody>
+</table>
+<p>Tutorial 给出了 Order System、GUI、Hotel Management、ATM
+等示例类图（PDF 中为图片）。</p>
+<h3 id="画类图的解题步骤">7.4 画类图的解题步骤</h3>
+<ol type="1">
+<li>从需求/use case
+中找<strong>名词</strong>作为候选类，<strong>动词</strong>作为候选操作</li>
+<li>区分<strong>实体类</strong>（Patient、Appointment）、<strong>控制类</strong>（Orchestrator）、<strong>边界/接口</strong>（Tool、外部
+API）</li>
+<li>确定关系：is-a
+用泛化；“拥有且同生共死”用组合；“包含但独立存在”用聚合；只是“用到”用依赖；其他用普通关联</li>
+<li><strong>每条关联都写多重性</strong>，必要时写角色名和导航方向</li>
+<li>接口与实现分开；可见性符号不要漏</li>
+<li>检查：每个核心 use case 的功能都能在某个类的操作中找到</li>
+</ol>
+<hr>
+<h2 id="八lab-5-要点">八、Lab 5 要点</h2>
+<p><code>ELEC5620-Lab-Note-5.pdf</code>（文件头 “Week 6: Laboratory
+5”）：</p>
+<p><strong>Part One：架构设计与设计模式</strong></p>
+<ol type="1">
+<li><strong>识别相关模式</strong>：Layered、MVC、SOA、Shared-Data、<strong>Planner–Executor、Supervisor–Worker</strong>
+或其他 agent
+模式；说明<strong>为什么适合</strong>、<strong>解决什么架构问题</strong></li>
+<li><strong>架构设计</strong>：展示模式如何应用；给出主要组件、职责、交互、<strong>整体控制流或数据流</strong></li>
+<li><strong>Rationale</strong>：讨论所选模式的<strong>优点和局限</strong>，论证架构如何满足
+FR 和 NFR</li>
+</ol>
+<blockquote>
+<p>对 agent 系统可以考虑
+ReAct、Planner–Executor、Supervisor–Worker、Blackboard、Cognitive
+Layering——<strong>不需要全用，选最相关的</strong>。</p>
+</blockquote>
+<p><strong>Part
+Two：类图</strong>——主要类及关系（关联、泛化、聚合、组合）、<strong>接口及实现</strong>、<strong>每条关联的多重性</strong>、每个类的属性和方法；<strong>注意
+UML 记号正确</strong>。</p>
+<p>详细的检查清单见
+[[26-S2-Course/ELEC5620/ELEC5620-Lab-Notes-1-6-Summary|Lab 1–6 总结]]
+第六节。</p>
+<hr>
+<h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
+<ol type="1">
+<li><strong>模式三要素</strong>：context、problem、solution。</li>
+<li><strong>五种经典模式的优缺点</strong>：pipe-and-filter（易替换 /
+交互弱）、shared-data（完整性 / 可扩展性）、layering（模块化 /
+层难定义）、SOA（松耦合 / 元数据管理）、MVC（UI 最常改 → 分离）。</li>
+<li><strong>LLM 工作流三阶段</strong>：embedding → prompt 构造与检索 →
+推理（+日志/缓存/校验）。</li>
+<li><strong>BDI</strong>：Beliefs（可不完整）→ Desires（可冲突）→
+Intentions（承诺的子集）。</li>
+<li><strong>Agent vs 服务</strong>：需要上下文判断才用
+agent；高影响动作加审批与策略。</li>
+<li><strong>能力不决定控制</strong>：workflow-controlled（固定、可预测）vs
+supervisor-controlled（动态、显式协调者）。</li>
+<li><strong>Agent 模式选型</strong>：低不确定低协调 → workflow/tool
+use；高不确定低协调 → ReAct/planner–executor；低不确定高协调 →
+hierarchy/supervisor–worker；高不确定高协调 →
+blackboard/peer-to-peer。</li>
+<li><strong>对象 vs
+值</strong>：对象有<strong>不变的身份</strong>；值是普遍唯一不变的。<strong>链接是关联的实例，对象是类的实例。</strong></li>
+<li><strong>M0 vs M1</strong>：模型与被建模的事物要区分。</li>
+<li><strong>多重性修饰默认值</strong>：unique = true，ordered =
+false。</li>
+<li><strong>组合 = 删除语义</strong>；<strong>聚合在标准 UML
+中语义等同普通关联</strong>。</li>
+<li><strong>关联特化</strong>用 <code>{subsets}</code> /
+<code>{union}</code> 精确化；子关联可<strong>收紧多重性</strong>。</li>
+<li><strong>接口不能实例化</strong>；lollipop 不是接口实例。</li>
+<li><strong>依赖箭头从 client 指向
+supplier</strong>；泛化箭头从子指向父；组合菱形在整体端。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
+              <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+              <a href="/tags/Agentic-AI/" rel="tag"><i class="fa fa-tag"></i> Agentic-AI</a>
+              <a href="/tags/Architectural-Patterns/" rel="tag"><i class="fa fa-tag"></i> Architectural-Patterns</a>
+              <a href="/tags/Class-Diagram/" rel="tag"><i class="fa fa-tag"></i> Class-Diagram</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week04-architectural-design.html" rel="prev" title="ELEC5620 Week 04 架构设计与建模（上）讲课总结">
+                  <i class="fa fa-angle-left"></i> ELEC5620 Week 04 架构设计与建模（上）讲课总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/elec5620-week06-modeling-structure.html" rel="next" title="ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结">
+                  ELEC5620 Week 06 结构建模（下）：复杂结构讲课总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><span class="exturl" data-url="aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==">浙ICP备2023011468号-1 </span>
+      <img src="https://images-a2q.pages.dev/file/ab4ebf9b9723073c81a21.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Joey</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">1.3m</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">75:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+/* Disable PJAX for the graph page so it loads as a standalone HTML */
+(function() {
+  function markGraphLinks() {
+    var links = document.querySelectorAll('a[href="/graph/"], a[href^="/graph/"], a[href*="/graph/index.html"]');
+    links.forEach(function(a) {
+      a.setAttribute('data-no-pjax', 'true');
+      a.classList.add('no-pjax');
+      if (!a.__graphBound) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = a.getAttribute('href');
+        }, true);
+        a.__graphBound = true;
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markGraphLinks);
+  } else {
+    markGraphLinks();
+  }
+  // Also re-apply after PJAX page swaps
+  document.addEventListener('pjax:success', markGraphLinks);
+})();
+</script>
+
+<script src="/live2d/init.js" defer></script>
+
+</body>
+</html>
