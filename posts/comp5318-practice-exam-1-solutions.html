@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5318 Semester 2 2026 官方 Practice Exam 1（Paper 1）整卷逐题解析：30 道选择题（kNN 预处理与加权投票、PRISM、MAE&#x2F;MSE、L1 稀疏、最小二乘、 Laplace 平滑、调参与测试集、精确率召回率、信息增益、Bagging&#x2F;Boosting、SVM 间隔与核、PCA、ReLU、感知机更新、CNN 参数、RNN、Dropout、 K-m">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T21:30:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T11:07:47.627Z">
+<meta property="article:modified_time" content="2026-11-03T12:54:54.215Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5318">
 <meta property="article:tag" content="Exam-Review">
@@ -387,7 +387,7 @@ B 0.52</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href=
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 21:30:00 / Modified: 11:07:47" itemprop="dateCreated datePublished" datetime="2026-11-03T21:30:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 21:30:00 / Modified: 12:54:54" itemprop="dateCreated datePublished" datetime="2026-11-03T21:30:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -410,14 +410,14 @@ B 0.52</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href=
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>7.1k</span>
+      <span>7.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>26 mins.</span>
+      <span>27 mins.</span>
     </span>
 </div>
 
@@ -620,6 +620,18 @@ predict, respectively?</p>
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week02-preprocessing-knn.html">W02 Weighted
 Nearest Neighbour</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  N(("新样本"))
+  N --&gt;|"d=2, w=1/4=0.25"| R1["Red"]
+  N --&gt;|"d=3, w=1/9≈0.111"| B1["Blue"]
+  N --&gt;|"d=4, w=1/16≈0.063"| B2["Blue"]
+  R1 --&gt; V1["不加权: Red 1 票, Blue 2 票 → Blue"]
+  B1 --&gt; V1
+  B2 --&gt; V1
+  R1 --&gt; V2["加权: Red 0.25 &gt; Blue 0.174 → Red"]
+  B1 --&gt; V2
+  B2 --&gt; V2</code></pre>
 <p><strong>English answer (Official): A</strong> — <em>Weighted
 k-NN.</em> Unweighted votes are Red = 1 and Blue = 2. Weighted votes are
 Red = 1/4 = 0.25 and Blue = 1/9 + 1/16 ≈ 0.174, so the weighted
@@ -921,6 +933,11 @@ w\rVert"><g data-mml-node="mn" data-latex="1"><path data-c="31" d="M269 666C228 
 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.421ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1512 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\lVert w\rVert"><g data-mml-node="mo" data-latex="\lVert"><path data-c="2016" d="M264-250C279-250 287-242 287-226L287 726C287 742 279 750 264 750C249 750 241 742 241 726L241-226C241-242 249-250 264-250M134-250C149-250 157-242 157-226L157 726C157 742 149 750 134 750C119 750 111 742 111 726L111-226C111-242 119-250 134-250Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(398,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g><g data-mml-node="mo" data-latex="\rVert" transform="translate(1114,0)"><path data-c="2016" d="M264-250C279-250 287-242 287-226L287 726C287 742 279 750 264 750C249 750 241 742 241 726L241-226C241-242 249-250 264-250M134-250C149-250 157-242 157-226L157 726C157 742 149 750 134 750C119 750 111 742 111 726L111-226C111-242 119-250 134-250Z"></path></g></g></g></svg></mjx-container></span> 放到分子上了。</li>
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week06-svm-pca.html">W06 间隔与支持向量</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  H1["支持平面 w·x+b=+1"] ---|"1/‖w‖ = 0.2"| H["决策面 w·x+b=0"]
+  H ---|"1/‖w‖ = 0.2"| H2["支持平面 w·x+b=−1"]
+  H1 -.-&gt;|"全宽 2/‖w‖ = 0.4（答案）"| H2</code></pre>
 <p><strong>English answer (Official): D</strong> — <em>SVM margin.</em>
 The norm is √(3²+4²) = 5. The full margin width is 2/5 = 0.40; 1/5 is
 the distance from the decision plane to one support plane.</p>
@@ -1123,6 +1140,10 @@ many trainable parameters are there?</p>
 远小于正确值，同样是没把「每个滤波器跨越全部输入通道」算进去。</li>
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week08-cnn-rnn-lstm.html">W08 多通道输入</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  I["输入 2 通道"] --&gt; F["每个滤波器 3×3×2 = 18 权重 + 1 偏置 = 19"]
+  F --&gt; T["4 个滤波器 × 19 = 76"]</code></pre>
 <p><strong>English answer (Official): C</strong> — <em>CNN
 parameters.</em> Each filter has 3×3×2 = 18 weights and one bias, giving
 19 parameters. Four filters give 4×19 = 76.</p>
@@ -1256,6 +1277,14 @@ B after exactly two transitions?</p>
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week11-markov-models-hmm.html">W11
 马尔可夫链</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  S(("t0: A")) --&gt;|0.6| A1(("t1: A"))
+  S --&gt;|0.4| B1(("t1: B"))
+  A1 --&gt;|0.4| AB["A→A→B = 0.24"]
+  B1 --&gt;|0.7| BB["A→B→B = 0.28"]
+  AB --&gt; P["P(t2 = B) = 0.24 + 0.28 = 0.52"]
+  BB --&gt; P</code></pre>
 <p><strong>English answer (Official): B</strong> — <em>Markov
 chains.</em> The two routes are A→A→B and A→B→B, with probabilities
 0.6×0.4 and 0.4×0.7. Their sum is 0.24 + 0.28 = 0.52.</p>
@@ -1369,6 +1398,13 @@ H_{\text{children}} = 0.5\times0.81125 + 0.5\times0.81125 =
 权重与加权熵 2 分、相减 2 分、最终取整 1 分。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week05-decision-trees-ensembles.html">W05
 熵与信息增益</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart TD
+  P["父节点 4+ / 4−&lt;br/&gt;H = 1"] --&gt;|"权重 4/8"| L["L: 3+ / 1−&lt;br/&gt;H = 0.811"]
+  P --&gt;|"权重 4/8"| R["R: 1+ / 3−&lt;br/&gt;H = 0.811"]
+  L --&gt; W["加权子熵 = 0.5×0.811 + 0.5×0.811 = 0.811"]
+  R --&gt; W
+  W --&gt; G["IG = 1 − 0.811 = 0.189"]</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>H(parent) = −0.5 log₂0.5 − 0.5 log₂0.5 = <strong>1 bit</strong>.
@@ -1444,6 +1480,16 @@ u_A = x_1 + x_2 - 3,\quad u_B = 2x_1 - x_2,\quad h_A =
 这条通路「关掉」；换成恒等后负值被保留，乘以权重 2 把 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.057ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 467 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="z"><g data-mml-node="mi" data-latex="z"><path data-c="1D467" d="M162 92L145 90C193 137 230 171 255 194L351 283C374 304 398 330 421 359C452 397 467 420 467 428C467 437 462 442 452 442C445 442 439 438 434 429C409 388 386 368 364 368C342 368 326 386 317 398C293 427 269 442 246 442C220 442 193 430 165 404C137 378 123 352 123 326C123 316 128 311 139 311C146 311 152 316 156 325C167 354 194 368 235 368C249 368 269 363 296 354C320 345 343 340 364 339C308 284 265 244 234 217L145 134C130 119 111 99 90 74C59 35 43 12 43 3C43-6 48-11 59-11C65-11 71-6 78 4C103 43 130 63 158 63C174 63 192 51 212 26C232 1 255-11 278-11C312-11 346 7 382 42C418 77 436 111 436 144C436 153 431 158 420 158C413 158 407 153 402 143C387 100 344 63 288 63C264 63 186 92 162 92Z"></path></g></g></g></svg></mjx-container></span> 拉成负数。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week07-neural-networks-backpropagation.html">W07
 多层感知机与前向传播</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  x1(("x₁ = 1")) --&gt;|"+1"| uA["u_A = 1+3−3 = 1&lt;br/&gt;ReLU → h_A = 1"]
+  x2(("x₂ = 3")) --&gt;|"+1"| uA
+  x1 --&gt;|"+2"| uB["u_B = 2−3 = −1&lt;br/&gt;ReLU → h_B = 0"]
+  x2 --&gt;|"−1"| uB
+  uA --&gt;|"×1"| z["z = 1 + 2×0 = 1"]
+  uB --&gt;|"×2"| z
+  z --&gt; o["σ(1) ≈ 0.731 → 类 1"]
+  uB -.-&gt;|"B 改恒等: h_B = −1"| z2["z = 1 − 2 = −1&lt;br/&gt;σ(−1) ≈ 0.269 → 类 0"]</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>u_A = 1 + 3 − 3 = <strong>1</strong>; u_B = 2×1 − 3 =
@@ -1520,6 +1566,16 @@ initial centroid and give all cluster assignments.</li>
 K-means），不要分一个点就更新一次。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week09-clustering-kmeans-gmm-hierarchical.html">W09
 K-means</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  m1(("μ₁ = A(0,1)"))
+  m2(("μ₂ = D(8,3)"))
+  A["A(0,1)"] --&gt;|"0"| m1
+  B["B(2,1)"] --&gt;|"4（vs 40）"| m1
+  C["C(6,3)"] --&gt;|"4（vs 40）"| m2
+  D["D(8,3)"] --&gt;|"0"| m2
+  m1 --&gt; n1["新 μ₁ = 均值(A,B) = (1,1)"]
+  m2 --&gt; n2["新 μ₂ = 均值(C,D) = (7,3)"]</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>Squared distances (to μ₁ = (0,1), to μ₂ = (8,3)): A (0, 68), B
@@ -1602,6 +1658,18 @@ P(x, y) = f_2(A) + f_2(B) = 0.2424
 是<strong>取最大</strong>；转移表行是当前状态、列是下一状态，别读反。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week11-markov-models-hmm.html">W11 Forward
 算法</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  s1A["t=1 A&lt;br/&gt;f₁(A) = 0.7×0.6 = 0.42"]
+  s1B["t=1 B&lt;br/&gt;f₁(B) = 0.3×0.2 = 0.06"]
+  s2A["t=2 A&lt;br/&gt;0.4×(0.336+0.018) = 0.1416"]
+  s2B["t=2 B&lt;br/&gt;0.8×(0.084+0.042) = 0.1008"]
+  s1A --&gt;|"×0.8 = 0.336"| s2A
+  s1B --&gt;|"×0.3 = 0.018"| s2A
+  s1A --&gt;|"×0.2 = 0.084"| s2B
+  s1B --&gt;|"×0.7 = 0.042"| s2B
+  s2A --&gt; P["P(x,y) = 0.1416 + 0.1008 = 0.2424"]
+  s2B --&gt; P</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>f₁(A) = π(A)·e_A(x) = 0.7×0.6 = <strong>0.42</strong>; f₁(B) =
@@ -1686,14 +1754,14 @@ Forward。另一套卷子见 <a href="/posts/comp5318-practice-exam-2-solutions.
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">1.3m</span>
+    <span title="Word count total">1.2m</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">77:45</span>
+    <span title="Reading time total">75:19</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

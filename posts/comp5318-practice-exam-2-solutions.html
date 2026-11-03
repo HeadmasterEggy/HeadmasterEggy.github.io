@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5318 Semester 2 2026 官方 Practice Exam 2 整卷逐题解析：30 道选择题（聚类任务、kNN 预测代价、曼哈顿与欧氏距离、1R、逻辑回归输出、Ridge、 MAE&#x2F;MSE、朴素贝叶斯条件独立、交叉验证中的标准化、Recall&#x2F;F1、树路径即合取规则、随机森林、AdaBoost、多项式核、软间隔 C、PCA 新坐标、 小批量梯度下降、CNN 输出尺寸与池化、">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T21:40:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T11:07:47.627Z">
+<meta property="article:modified_time" content="2026-11-03T12:54:54.624Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5318">
 <meta property="article:tag" content="Exam-Review">
@@ -391,7 +391,7 @@ Baum-Welch）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 21:40:00 / Modified: 11:07:47" itemprop="dateCreated datePublished" datetime="2026-11-03T21:40:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 21:40:00 / Modified: 12:54:54" itemprop="dateCreated datePublished" datetime="2026-11-03T21:40:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -414,14 +414,14 @@ Baum-Welch）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>6.6k</span>
+      <span>7.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>24 mins.</span>
+      <span>26 mins.</span>
     </span>
 </div>
 
@@ -837,6 +837,14 @@ observations.</li>
 是泄漏。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week05-decision-trees-ensembles.html">W05 Random
 Forest</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  T["训练集"] --&gt; b1["bootstrap 样本 1"] --&gt; t1["树 1：每次分裂只看随机 k 个特征"]
+  T --&gt; b2["bootstrap 样本 2"] --&gt; t2["树 2：每次分裂只看随机 k 个特征"]
+  T --&gt; b3["bootstrap 样本 M"] --&gt; t3["树 M：每次分裂只看随机 k 个特征"]
+  t1 --&gt; V["多数投票"]
+  t2 --&gt; V
+  t3 --&gt; V</code></pre>
 <p><strong>English answer (Official): A</strong> — <em>Random
 forests.</em> Random feature subsets at each split reduce the tendency
 for the same strong predictors to dominate every tree.</p>
@@ -860,6 +868,12 @@ errors.</li>
 权重由错误决定。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week05-decision-trees-ensembles.html">W05
 Boosting</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  C1["弱分类器 1"] --&gt; E["分对样本权重 × e/(1−e)，再归一化"]
+  E --&gt; W["错分样本相对权重 ↑"]
+  W --&gt; C2["弱分类器 2 更关注难样本"]
+  C2 --&gt; F["最终：按准确率加权投票"]</code></pre>
 <p><strong>English answer (Official): C</strong> — <em>AdaBoost.</em>
 AdaBoost increases relative emphasis on mistakes, encouraging the next
 learner to address observations the current ensemble finds
@@ -1065,6 +1079,10 @@ spatial size?</p>
 <p>B 的 9 是用 18/2；D 只算了卷积那一步。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week08-cnn-rnn-lstm.html">W08
 卷积层与池化层</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  I["18×18"] --&gt;|"3×3 卷积, s=1, p=0&lt;br/&gt;(18−3)/1+1"| C["16×16"]
+  C --&gt;|"2×2 池化, s=2&lt;br/&gt;(16−2)/2+1"| P["8×8"]</code></pre>
 <p><strong>English answer (Official): A</strong> — <em>CNN output
 size.</em> The convolution gives (18-3)/1 + 1 = 16 per dimension.
 Pooling gives (16-2)/2 + 1 = 8 per dimension.</p>
@@ -1137,6 +1155,13 @@ distances?</p>
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week09-clustering-kmeans-gmm-hierarchical.html">W09
 层次聚类</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  a0["A: 0"] ---|6| b6["B: 6"]
+  a0 ---|8| b8["B: 8"]
+  a2["A: 2"] ---|4| b6
+  a2 ---|6| b8
+  b6 --&gt; R["single = min = 4&lt;br/&gt;average = 24/4 = 6&lt;br/&gt;complete = max = 8"]</code></pre>
 <p><strong>English answer (Official): B</strong> — <em>Hierarchical
 linkage.</em> The four cross-cluster distances are 6, 8, 4 and 6. Their
 minimum is 4, and their mean is 24/4 = 6.</p>
@@ -1186,6 +1211,10 @@ V_2(B) = e_B(o_2)\max\big(V_1(A)a_{AB},\ V_1(B)a_{BB}\big) =
 <li><strong>知识点</strong>：<a href="/posts/comp5318-week11-markov-models-hmm.html">W11
 Viterbi</a></li>
 </ul>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  A1["V₁(A) = 0.3"] --&gt;|"×0.4 = 0.12"| B2["V₂(B) = 0.5 × max(0.12, 0.14) = 0.070"]
+  B1["V₁(B) = 0.2"] --&gt;|"×0.7 = 0.14 ✓ 最大"| B2</code></pre>
 <p><strong>English answer (Official): A</strong> — <em>Viterbi
 update.</em> Candidate predecessor scores are 0.3×0.4 = 0.12 and 0.2×0.7
 = 0.14. Viterbi takes the maximum, then multiplies by 0.5: 0.070.</p>
@@ -1262,6 +1291,12 @@ Q = 0.4\times5 + 0.6\times1 = 2.6
 <p>D 5.00 只取了好的那个结果；A、B 都不是「先对每个结果算 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.02ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 451 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="r + \gamma V"><g data-mml-node="mi" data-latex="r"><path data-c="1D45F" d="M436 374C436 416 395 442 351 442C302 442 261 419 227 372C217 411 183 442 136 442C95 442 65 410 44 345C34 312 29 293 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C150 413 159 399 159 371C159 358 154 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 110-11C130-11 143-1 150 19L169 91C180 134 187 162 190 175L221 303C223 311 231 324 244 343C271 381 302 413 351 413C363 413 373 411 382 406C352 397 337 378 337 351C337 325 351 312 378 312C411 312 436 341 436 374Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.234ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2313.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="r + \gamma V"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mi" data-latex="\gamma" transform="translate(1000.2,0)"><path data-c="1D6FE" d="M524 378C537 403 543 416 543 417C543 426 538 431 527 431C520 431 515 428 512 422C477 357 436 265 388 146C384 212 371 274 349 331C320 405 275 442 214 442C151 442 96 400 68 361C35 314 18 279 18 257C18 248 26 243 43 243L48 250C65 302 94 335 135 349C163 358 185 363 201 363C305 363 357 281 357 116C357 77 353 45 345 20C311-91 294-162 294-193C294-208 300-215 311-215C323-215 335-194 346-153C363-89 375-32 382 18C385 33 387 46 390 55C426 167 471 275 524 378Z"></path></g><g data-mml-node="mi" data-latex="V" transform="translate(1543.2,0)"><path data-c="1D449" d="M671 680C652 680 592 683 573 683C558 683 550 675 550 660C550 650 557 645 570 644C598 643 612 633 612 616C612 607 607 595 598 580L300 107L234 619C234 636 255 644 298 644C318 644 327 651 327 668C327 678 321 683 309 683C287 683 209 680 187 680C167 680 99 683 79 683C64 683 56 675 56 660C56 649 66 644 85 644C102 644 114 642 122 640C138 635 137 633 140 614L218 4C221-13 229-22 242-22C255-22 265-15 273-2L629 564C652 600 674 623 696 632C711 639 730 643 752 644C763 645 768 652 769 667C770 678 764 683 752 683C737 683 686 680 671 680Z"></path></g></g></g></svg></mjx-container></span>，再按概率加权」的结果。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week12-reinforcement-learning.html">W12 Bellman
 方程</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  S(("动作 a")) --&gt;|"p = 0.4"| O1["r = 2, V(s′) = 6&lt;br/&gt;2 + 0.5×6 = 5"]
+  S --&gt;|"p = 0.6"| O2["r = 0, V(s′) = 2&lt;br/&gt;0 + 0.5×2 = 1"]
+  O1 --&gt; E["期望 = 0.4×5 + 0.6×1 = 2.6"]
+  O2 --&gt; E</code></pre>
 <p><strong>English answer (Official): C</strong> — <em>Expected action
 value.</em> The backed-up values are 2+0.5×6 = 5 and 0+0.5×2 = 1. Their
 expectation is 0.4×5 + 0.6×1 = 2.6.</p>
@@ -1323,6 +1358,13 @@ P(\text{Yes}\mid F_1,F_2) = \frac{0.15}{0.225} = \frac23 \approx
 分；(b) 归一化 1 分、两个后验 3 分、预测 1 分。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week04-naive-bayes-evaluation.html">W04
 朴素贝叶斯算例</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  Y["Yes：先验 0.4&lt;br/&gt;× 0.75（F₁）× 0.5（F₂）"] --&gt; sY["s_Yes = 0.15"]
+  N["No：先验 0.6&lt;br/&gt;× 0.25（F₁）× 0.5（F₂）"] --&gt; sN["s_No = 0.075"]
+  sY --&gt; Z["和 = 0.225"]
+  sN --&gt; Z
+  Z --&gt; P["P(Yes) = 0.667，P(No) = 0.333 → 预测 Yes"]</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>s_Yes = 0.4 × 0.75 × 0.50 = <strong>0.15</strong>; s_No = 0.6 ×
@@ -1426,6 +1468,14 @@ C</strong> 决定（两簇最近的一对点）；</li>
 2 分；(b) 每个距离 2 分 + 指出决定点对 1 分。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week09-clustering-kmeans-gmm-hierarchical.html">W09
 层次聚类与链接方式</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart BT
+  A["A = 0"] --&gt; AB["{A,B}&lt;br/&gt;第 2 次合并, 高度 3"]
+  B["B = 3"] --&gt; AB
+  C["C = 8"] --&gt; CD["{C,D}&lt;br/&gt;第 1 次合并, 高度 2"]
+  D["D = 10"] --&gt; CD
+  AB --&gt; ALL["{A,B,C,D}&lt;br/&gt;complete 高度 10（single 是 5）"]
+  CD --&gt; ALL</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>Pairwise distances: AB = 3, AC = 8, AD = 10, BC = 5, BD = 7, CD =
@@ -1502,6 +1552,16 @@ u_A = x_1 + 2x_2 - 1,\quad u_B = 2x_1 - x_2 - 2,\quad h =
 3；原输出 2、修改后 3）。</p>
 <p><strong>知识点</strong>：<a href="/posts/comp5318-week07-neural-networks-backpropagation.html">W07
 前向传播</a></p>
+<p><strong>图解</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+  x1(("x₁ = 2")) --&gt; uA["u_A = 2 + 2×(−1) − 1 = −1&lt;br/&gt;ReLU → h_A = 0"]
+  x2(("x₂ = −1")) --&gt; uA
+  x1 --&gt; uB["u_B = 4 + 1 − 2 = 3&lt;br/&gt;ReLU → h_B = 3"]
+  x2 --&gt; uB
+  uA --&gt;|"×3"| z["z = 3×0 + 3 − 1 = 2"]
+  uB --&gt;|"×1"| z
+  z --&gt; o["σ(2) ≈ 0.881 → 类 1"]
+  uA -.-&gt;|"A 改恒等: h_A = −1"| z2["z = −3 + 3 − 1 = −1&lt;br/&gt;σ(−1) ≈ 0.269 → 类 0"]</code></pre>
 <p><strong>English answer (Official)</strong></p>
 <ol type="a">
 <li><p>u_A = 2 + 2×(−1) − 1 = <strong>−1</strong>; u_B = 2×2 − (−1) − 2
@@ -1640,14 +1700,14 @@ Forward</td>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">1.3m</span>
+    <span title="Word count total">1.2m</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">77:45</span>
+    <span title="Reading time total">75:19</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
