@@ -234,7 +234,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">269</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">404</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">274</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
   </ul>
 </nav>
 
@@ -290,7 +290,7 @@ follow-up：两种&quot;插话&quot;</span></a></li><li class="nav-item nav-leve
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">269</span>
+          <span class="site-state-item-count">274</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -473,8 +473,8 @@ agent loop 与 <code>/goal</code> 部分依据官方文档（Claude Code
 <h2 id="agent-loop最小模型">1. Agent Loop：最小模型</h2>
 <h3 id="一段伪代码">1.1 一段伪代码</h3>
 <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">messages</span> = [系统提示, 用户提问]</span><br><span class="line"><span class="keyword">while</span> True:</span><br><span class="line">    回复 = 调用模型(<span class="keyword">messages</span>)</span><br><span class="line">    <span class="keyword">messages</span>.<span class="keyword">append</span>(回复)</span><br><span class="line">    <span class="keyword">if</span> 回复里没有工具调用:</span><br><span class="line">        <span class="keyword">break</span>                      # ← 模型自己决定停</span><br><span class="line">    <span class="keyword">for</span> 每个工具调用:</span><br><span class="line">        结果 = 执行工具(调用)</span><br><span class="line">        <span class="keyword">messages</span>.<span class="keyword">append</span>(结果)</span><br></pre></td></tr></table></figure>
-<p>这就是所有 Coding Agent 的内核。我之前的笔记 [[Pi/Pi
-Architecture：拆解 Coding Agent 的内部架构|Pi Architecture]]
+<p>这就是所有 Coding Agent 的内核。我之前的笔记 <a
+href="/posts/43ae85df.html">Pi Architecture</a>
 从视频角度讲过这个结构，这次直接看源码实现，重点是：<strong>真实的 loop
 比这段伪代码多了哪些东西，这些东西为什么恰好是做 <code>/goal</code>
 需要的</strong>。</p>
@@ -718,8 +718,8 @@ message role: assistant"。</li>
 这也决定了 <code>/goal</code> 的所有实现都必须"造一条消息"。</p>
 <blockquote>
 <p>顺带一提：源码注释说 <code>prepareNextTurn</code>
-的准备工作可能很耗时（例如压缩）。压缩的完整流程见 [[Pi/Pi
-Compaction：上下文压缩的完整流程|Pi Compaction]]。</p>
+的准备工作可能很耗时（例如压缩）。压缩的完整流程见 <a
+href="/posts/a58baeab.html">Pi Compaction</a>。</p>
 </blockquote>
 <hr />
 <h2 id="claude-code-的-agent-loop">2. Claude Code 的 Agent Loop</h2>
@@ -1766,11 +1766,9 @@ follow-up</td>
 </tr>
 </tbody>
 </table>
-<p>延伸阅读：[[AI Agent/Agent Skill
-完全指南：它是什么、怎么来的、为什么管用|Agent Skill 完全指南]]、[[AI
-Agent/MCP 完全指南：它是什么、怎么来的、为什么管用|MCP
-完全指南]]、[[Pi/Pi Architecture：拆解 Coding Agent 的内部架构|Pi
-Architecture]]。</p>
+<p>延伸阅读：<a href="/posts/fcc443a7.html">Agent Skill 完全指南</a>、<a
+href="/posts/df0ca73b.html">MCP 完全指南</a>、<a
+href="/posts/43ae85df.html">Pi Architecture</a>。</p>
 <hr />
 <h2 id="附参考来源">附：参考来源</h2>
 <ul>
@@ -1815,8 +1813,8 @@ loop）和第 4 章（Claude Code 的
           <div class="post-tags">
               <a href="/tags/AI-Agent/" rel="tag"><i class="fa fa-tag"></i> AI-Agent</a>
               <a href="/tags/Claude-Code/" rel="tag"><i class="fa fa-tag"></i> Claude-Code</a>
-              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
               <a href="/tags/Codex/" rel="tag"><i class="fa fa-tag"></i> Codex</a>
+              <a href="/tags/Pi/" rel="tag"><i class="fa fa-tag"></i> Pi</a>
           </div>
 
         
@@ -1872,7 +1870,7 @@ loop）和第 4 章（Claude Code 的
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">75:49</span>
+    <span title="Reading time total">76:31</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
