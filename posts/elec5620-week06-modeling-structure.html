@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:25:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:52.486Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.474Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Collaboration">
 <meta property="article:tag" content="ELEC5620">
@@ -369,7 +369,7 @@ agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="na
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:25:00 / Modified: 04:13:52" itemprop="dateCreated datePublished" datetime="2026-11-03T13:25:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:25:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:25:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -484,7 +484,16 @@ classifier？</strong></td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Adult</span><br><span class="line">    class Child</span><br><span class="line">    class Son</span><br><span class="line">    class Daughter</span><br><span class="line">    Child &lt;|-- Son</span><br><span class="line">    Child &lt;|-- Daughter</span><br><span class="line">    Adult "1..2 parents" -- "0..* children" Child</span><br><span class="line">    Adult "1..2" -- "0..* sons {subsets children}" Son</span><br><span class="line">    Adult "1..2" -- "0..* daughters {subsets children}" Daughter</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+    class Adult
+    class Child
+    class Son
+    class Daughter
+    Child &lt;|-- Son
+    Child &lt;|-- Daughter
+    Adult "1..2 parents" -- "0..* children" Child
+    Adult "1..2" -- "0..* sons {subsets children}" Son
+    Adult "1..2" -- "0..* daughters {subsets children}" Daughter</code></pre>
 <hr>
 <h2 id="二为什么需要复杂结构建模">二、为什么需要复杂结构建模</h2>
 <h3 id="五岁小孩与计算机科学家">2.1 五岁小孩与计算机科学家</h3>
@@ -811,7 +820,28 @@ part；普通数据值（如 name: String）仍是属性。</li>
 对象有多个 beliefs，一个 belief 关联多个 agents。</p>
 <h3 id="讲义例子两个-doctor-agent-共享-belief">5.2 讲义例子：两个 doctor
 agent 共享 belief</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    G1["bookAppointment1 : Goal&lt;br/&gt;status = pending"]</span><br><span class="line">    G2["bookAppointment2 : Goal&lt;br/&gt;status = pending"]</span><br><span class="line">    HK["hospitalKnowledge : Belief&lt;br/&gt;type = KnowledgeBase"]</span><br><span class="line">    PP["patientProfile : Belief&lt;br/&gt;type = UserProfile"]</span><br><span class="line">    D1["doctorAgent1 : DoctorAgent"]</span><br><span class="line">    D2["doctorAgent2 : DoctorAgent"]</span><br><span class="line">    P1["scheduleVisit1 : Plan&lt;br/&gt;status = executing"]</span><br><span class="line">    P2["scheduleVisit2 : Plan&lt;br/&gt;status = executing"]</span><br><span class="line">    HS["hospitalSystem : HospitalSystem"]</span><br><span class="line">    D1 -- desires --&gt; G1</span><br><span class="line">    D2 -- desires --&gt; G2</span><br><span class="line">    D1 -- has belief --&gt; HK</span><br><span class="line">    D2 -- has belief --&gt; HK</span><br><span class="line">    D1 -- has belief --&gt; PP</span><br><span class="line">    D2 -- has belief --&gt; PP</span><br><span class="line">    D1 -- intends --&gt; P1</span><br><span class="line">    D2 -- intends --&gt; P2</span><br><span class="line">    P1 -- pursues --&gt; G1</span><br><span class="line">    P2 -- pursues --&gt; G2</span><br><span class="line">    D1 -- operates in --&gt; HS</span><br><span class="line">    D2 -- operates in --&gt; HS</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TB
+    G1["bookAppointment1 : Goal&lt;br/&gt;status = pending"]
+    G2["bookAppointment2 : Goal&lt;br/&gt;status = pending"]
+    HK["hospitalKnowledge : Belief&lt;br/&gt;type = KnowledgeBase"]
+    PP["patientProfile : Belief&lt;br/&gt;type = UserProfile"]
+    D1["doctorAgent1 : DoctorAgent"]
+    D2["doctorAgent2 : DoctorAgent"]
+    P1["scheduleVisit1 : Plan&lt;br/&gt;status = executing"]
+    P2["scheduleVisit2 : Plan&lt;br/&gt;status = executing"]
+    HS["hospitalSystem : HospitalSystem"]
+    D1 -- desires --&gt; G1
+    D2 -- desires --&gt; G2
+    D1 -- has belief --&gt; HK
+    D2 -- has belief --&gt; HK
+    D1 -- has belief --&gt; PP
+    D2 -- has belief --&gt; PP
+    D1 -- intends --&gt; P1
+    D2 -- intends --&gt; P2
+    P1 -- pursues --&gt; G1
+    P2 -- pursues --&gt; G2
+    D1 -- operates in --&gt; HS
+    D2 -- operates in --&gt; HS</code></pre>
 <blockquote>
 <p><strong>每个 agent 有两个 belief；每个 belief 关联两个
 agent。</strong> Tutorial 的快速检查题：<strong>两个 agent 共享同一个

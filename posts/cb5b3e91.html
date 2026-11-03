@@ -523,7 +523,21 @@ E_w = \{AE, BD, CD, DE\}.
 <hr />
 <h3 id="用-mermaid-画出结构示意">4. 用 Mermaid 画出结构示意</h3>
 <p>下面这个图不是原题扫描图，而是我根据题目重构的结构图，便于看题解逻辑。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A((A))</span><br><span class="line">    B((B))</span><br><span class="line">    C((C))</span><br><span class="line">    D((D))</span><br><span class="line">    E((E))</span><br><span class="line"></span><br><span class="line">    A ---|s| B</span><br><span class="line">    A ---|s| C</span><br><span class="line">    A ---|w| E</span><br><span class="line">    B ---|w| D</span><br><span class="line">    B ---|s| E</span><br><span class="line">    C ---|w| D</span><br><span class="line">    C ---|s| E</span><br><span class="line">    D ---|w| E</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph TD
+    A((A))
+    B((B))
+    C((C))
+    D((D))
+    E((E))
+
+    A ---|s| B
+    A ---|s| C
+    A ---|w| E
+    B ---|w| D
+    B ---|s| E
+    C ---|w| D
+    C ---|s| E
+    D ---|w| E</code></pre>
 <p>从这个结构里最关键的观察是：</p>
 <ul>
 <li><span class="math inline">\(B\)</span> 和 <span
@@ -847,7 +861,25 @@ E = \{AB, AC, AE, AF, BC, BD, DE, DF, EF\}.
 <hr />
 <h3 id="mermaid-重构图">2. Mermaid 重构图</h3>
 <p>为了后面分析方便，可以把 Figure 2 重构成下面这个图：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A((A))</span><br><span class="line">    B((B))</span><br><span class="line">    C((C))</span><br><span class="line">    D((D))</span><br><span class="line">    E((E))</span><br><span class="line">    F((F))</span><br><span class="line"></span><br><span class="line">    A --- B</span><br><span class="line">    A --- C</span><br><span class="line">    B --- C</span><br><span class="line"></span><br><span class="line">    A --- E</span><br><span class="line">    A --- F</span><br><span class="line">    E --- F</span><br><span class="line"></span><br><span class="line">    B --- D</span><br><span class="line">    D --- E</span><br><span class="line">    D --- F</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph TD
+    A((A))
+    B((B))
+    C((C))
+    D((D))
+    E((E))
+    F((F))
+
+    A --- B
+    A --- C
+    B --- C
+
+    A --- E
+    A --- F
+    E --- F
+
+    B --- D
+    D --- E
+    D --- F</code></pre>
 <p>从这个图里可以先看出两个局部结构：</p>
 <ul>
 <li>左上角有三角形 <span class="math inline">\(A\)</span>-<span
@@ -1682,9 +1714,58 @@ nodes</strong>；</li>
 </ul>
 <hr />
 <h3 id="路网重构图">3. 路网重构图</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    DP[Dean Park]</span><br><span class="line">    M2[M2]</span><br><span class="line">    NS[North Sydney]</span><br><span class="line">    M1[M1]</span><br><span class="line">    AP[Airport]</span><br><span class="line">    M5[M5]</span><br><span class="line">    M7S[M7 south]</span><br><span class="line">    EC[Eastern Creek]</span><br><span class="line">    M7N[M7 north]</span><br><span class="line">    M4[M4]</span><br><span class="line">    ST[Strathfield]</span><br><span class="line"></span><br><span class="line">    DP --- M2</span><br><span class="line">    DP --- M7N</span><br><span class="line">    M7N --- EC</span><br><span class="line">    EC --- M4</span><br><span class="line">    EC --- M7S</span><br><span class="line">    M4 --- ST</span><br><span class="line">    M2 --- NS</span><br><span class="line">    NS --- M1</span><br><span class="line">    ST --- M1</span><br><span class="line">    M1 --- AP</span><br><span class="line">    AP --- M5</span><br><span class="line">    M5 --- M7S</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph TD
+    DP[Dean Park]
+    M2[M2]
+    NS[North Sydney]
+    M1[M1]
+    AP[Airport]
+    M5[M5]
+    M7S[M7 south]
+    EC[Eastern Creek]
+    M7N[M7 north]
+    M4[M4]
+    ST[Strathfield]
+
+    DP --- M2
+    DP --- M7N
+    M7N --- EC
+    EC --- M4
+    EC --- M7S
+    M4 --- ST
+    M2 --- NS
+    NS --- M1
+    ST --- M1
+    M1 --- AP
+    AP --- M5
+    M5 --- M7S</code></pre>
 <p>加上 WestConnex 后，只是多一条：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    DP[Dean Park]</span><br><span class="line">    M2[M2]</span><br><span class="line">    NS[North Sydney]</span><br><span class="line">    M1[M1]</span><br><span class="line">    AP[Airport]</span><br><span class="line">    M5[M5]</span><br><span class="line">    M7S[M7 south]</span><br><span class="line">    EC[Eastern Creek]</span><br><span class="line">    M7N[M7 north]</span><br><span class="line">    M4[M4]</span><br><span class="line">    ST[Strathfield]</span><br><span class="line"></span><br><span class="line">    DP --- M2</span><br><span class="line">    DP --- M7N</span><br><span class="line">    M7N --- EC</span><br><span class="line">    EC --- M4</span><br><span class="line">    EC --- M7S</span><br><span class="line">    M4 --- ST</span><br><span class="line">    M2 --- NS</span><br><span class="line">    NS --- M1</span><br><span class="line">    ST --- M1</span><br><span class="line">    M1 --- AP</span><br><span class="line">    AP --- M5</span><br><span class="line">    M5 --- M7S</span><br><span class="line">    ST ---|WestConnex| AP</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph TD
+    DP[Dean Park]
+    M2[M2]
+    NS[North Sydney]
+    M1[M1]
+    AP[Airport]
+    M5[M5]
+    M7S[M7 south]
+    EC[Eastern Creek]
+    M7N[M7 north]
+    M4[M4]
+    ST[Strathfield]
+
+    DP --- M2
+    DP --- M7N
+    M7N --- EC
+    EC --- M4
+    EC --- M7S
+    M4 --- ST
+    M2 --- NS
+    NS --- M1
+    ST --- M1
+    M1 --- AP
+    AP --- M5
+    M5 --- M7S
+    ST ---|WestConnex| AP</code></pre>
 <hr />
 <h3 id="question-i-1">4. Question (i)</h3>
 <h4
@@ -1902,7 +1983,24 @@ E = \{AC, AD, BC, BD, CE, DF, EF, EG, FG\}.
 \]</span></p>
 <hr />
 <h3 id="mermaid-重构图-1">2. Mermaid 重构图</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A((A))</span><br><span class="line">    B((B))</span><br><span class="line">    C((C))</span><br><span class="line">    D((D))</span><br><span class="line">    E((E))</span><br><span class="line">    F((F))</span><br><span class="line">    G((G))</span><br><span class="line"></span><br><span class="line">    A --- C</span><br><span class="line">    A --- D</span><br><span class="line">    B --- C</span><br><span class="line">    B --- D</span><br><span class="line">    C --- E</span><br><span class="line">    D --- F</span><br><span class="line">    E --- F</span><br><span class="line">    E --- G</span><br><span class="line">    F --- G</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph LR
+    A((A))
+    B((B))
+    C((C))
+    D((D))
+    E((E))
+    F((F))
+    G((G))
+
+    A --- C
+    A --- D
+    B --- C
+    B --- D
+    C --- E
+    D --- F
+    E --- F
+    E --- G
+    F --- G</code></pre>
 <p>从结构上看，这个图其实像是两块通过两条“桥”连在一起：</p>
 <ul>
 <li>左边：<span class="math inline">\(\{A,B,C,D\}\)</span></li>

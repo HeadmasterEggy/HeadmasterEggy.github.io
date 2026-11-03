@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 08 讲课总结：命名空间、可见性、包、Model 与 Model Library，import&#x2F;access&#x2F;merge 语义及例题，智能健康 agent 包图；瀑布与敏捷、Scrum 三角色三清单三会议、Backlog、估算、燃尽图、站会与回顾；Tutorial 8 包图、部署图、Jira 与用户故事，Lab 8 要点。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:35:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:53.438Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.474Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Agile">
 <meta property="article:tag" content="Deployment-Diagram">
@@ -364,7 +364,7 @@ Software Process Model Practice</span></a><ol class="nav-child"><li class="nav-i
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:35:00 / Modified: 04:13:53" itemprop="dateCreated datePublished" datetime="2026-11-03T13:35:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:35:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:35:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -557,7 +557,11 @@ Library）、命名空间关系。</strong></p>
 </ul>
 <h2 id="五包关系重点">五、包关系（重点）</h2>
 <h3 id="设计时视图中的包关系">5.1 设计时视图中的包关系</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart BT</span><br><span class="line">    EK[ExtendedKernel] -- "«merge»" --&gt; K[Kernel]</span><br><span class="line">    K -- "«import»" --&gt; U["«modelLibrary» UtilityClasses"]</span><br><span class="line">    T[Top] -- "«import»" --&gt; EK</span><br><span class="line">    EK -- "«import»" --&gt; U</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart BT
+    EK[ExtendedKernel] -- "«merge»" --&gt; K[Kernel]
+    K -- "«import»" --&gt; U["«modelLibrary» UtilityClasses"]
+    T[Top] -- "«import»" --&gt; EK
+    EK -- "«import»" --&gt; U</code></pre>
 <h3 id="import-语义例题">5.2 «import» 语义（例题）</h3>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">X                         Y</span><br><span class="line">├── A                     ├── +C</span><br><span class="line">├── B                     ├── -D</span><br><span class="line">└── C                     └── +E</span><br><span class="line">X ──«import»──▶ Y</span><br></pre></td></tr></table></figure>
 <p><strong>导入后，命名空间 X 包含哪些名字？</strong></p>
@@ -689,7 +693,11 @@ Management</strong></td>
 </tbody>
 </table>
 <p><strong>依赖</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    PI[Patient Interaction] -- "«import»" --&gt; CA[Core Agent]</span><br><span class="line">    CA -- "«import»" --&gt; HD[Health Data / Profile]</span><br><span class="line">    AB[Appointment Booking] -- "«import»" --&gt; DS[Doctor &amp; Schedule Mgmt]</span><br><span class="line">    HD -- "«merge»" --&gt; GU[Generic User Data]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    PI[Patient Interaction] -- "«import»" --&gt; CA[Core Agent]
+    CA -- "«import»" --&gt; HD[Health Data / Profile]
+    AB[Appointment Booking] -- "«import»" --&gt; DS[Doctor &amp; Schedule Mgmt]
+    HD -- "«merge»" --&gt; GU[Generic User Data]</code></pre>
 <blockquote>
 <p>读法：交互层用核心 agent，核心 agent
 用健康数据；健康数据把通用用户数据<strong>合并</strong>进来（扩展通用的用户定义）；预约模块使用医生排期模块。这是一个<strong>分层</strong>结构（Week
@@ -1057,7 +1065,11 @@ backlog、频繁集成、测试自动化。</p>
 <li>Track Order 依赖 UI Framework</li>
 </ul></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    TO[Track Order] -. "«access»" .-&gt; OP[Order Processing]</span><br><span class="line">    OP -. "«access»" .-&gt; TO</span><br><span class="line">    TO -. "«import»" .-&gt; SH[Shipping]</span><br><span class="line">    TO -. depends .-&gt; UI[UI Framework]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    TO[Track Order] -. "«access»" .-&gt; OP[Order Processing]
+    OP -. "«access»" .-&gt; TO
+    TO -. "«import»" .-&gt; SH[Shipping]
+    TO -. depends .-&gt; UI[UI Framework]</code></pre>
 <h3 id="部署图">9.3 部署图</h3>
 <ul>
 <li>由<strong>节点及其关系</strong>组成；描述系统<strong>运行时</strong>结构：硬件配置及软件如何部署到网络结构中</li>
@@ -1256,11 +1268,11 @@ View</strong>。</li>
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Agile/" rel="tag"><i class="fa fa-tag"></i> Agile</a>
-              <a href="/tags/Scrum/" rel="tag"><i class="fa fa-tag"></i> Scrum</a>
               <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
               <a href="/tags/Package-Diagram/" rel="tag"><i class="fa fa-tag"></i> Package-Diagram</a>
               <a href="/tags/Deployment-Diagram/" rel="tag"><i class="fa fa-tag"></i> Deployment-Diagram</a>
+              <a href="/tags/Agile/" rel="tag"><i class="fa fa-tag"></i> Agile</a>
+              <a href="/tags/Scrum/" rel="tag"><i class="fa fa-tag"></i> Scrum</a>
           </div>
 
         

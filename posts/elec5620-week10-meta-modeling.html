@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:45:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:54.399Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.475Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="LangChain">
@@ -371,7 +371,7 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:45:00 / Modified: 04:13:54" itemprop="dateCreated datePublished" datetime="2026-11-03T13:45:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:45:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:45:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -465,7 +465,20 @@ line、Station、River
 </ul>
 <hr>
 <h2 id="二建模语言的核心组成重点">二、建模语言的核心组成（重点）</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class ModelingLanguage</span><br><span class="line">    class ConcreteSyntax</span><br><span class="line">    class AbstractSyntax</span><br><span class="line">    class SemanticsDomain</span><br><span class="line">    class ConcreteSyntaxMapping</span><br><span class="line">    class SemanticsMapping</span><br><span class="line">    ModelingLanguage "1" --&gt; "0..*" ConcreteSyntax</span><br><span class="line">    ModelingLanguage "1" --&gt; "1" AbstractSyntax</span><br><span class="line">    ModelingLanguage "0..1" --&gt; "1..*" SemanticsDomain</span><br><span class="line">    ConcreteSyntaxMapping --&gt; ConcreteSyntax</span><br><span class="line">    ConcreteSyntaxMapping --&gt; AbstractSyntax</span><br><span class="line">    SemanticsMapping --&gt; AbstractSyntax</span><br><span class="line">    SemanticsMapping --&gt; SemanticsDomain</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+    class ModelingLanguage
+    class ConcreteSyntax
+    class AbstractSyntax
+    class SemanticsDomain
+    class ConcreteSyntaxMapping
+    class SemanticsMapping
+    ModelingLanguage "1" --&gt; "0..*" ConcreteSyntax
+    ModelingLanguage "1" --&gt; "1" AbstractSyntax
+    ModelingLanguage "0..1" --&gt; "1..*" SemanticsDomain
+    ConcreteSyntaxMapping --&gt; ConcreteSyntax
+    ConcreteSyntaxMapping --&gt; AbstractSyntax
+    SemanticsMapping --&gt; AbstractSyntax
+    SemanticsMapping --&gt; SemanticsDomain</code></pre>
 <table>
 <colgroup>
 <col style="width: 33%">
@@ -682,7 +695,34 @@ class、attribute、operation、association、dependency
 </tbody>
 </table>
 <h3 id="uml-元模型片段简化">4.2 UML 元模型片段（简化）</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Element</span><br><span class="line">    class NamedElement {</span><br><span class="line">        name : String</span><br><span class="line">    }</span><br><span class="line">    class DirectedRelationship</span><br><span class="line">    class Generalization</span><br><span class="line">    class Classifier</span><br><span class="line">    class Feature</span><br><span class="line">    class TypedElement</span><br><span class="line">    class Class</span><br><span class="line">    class Attribute</span><br><span class="line">    class Operation</span><br><span class="line">    Element &lt;|-- NamedElement</span><br><span class="line">    Element &lt;|-- DirectedRelationship</span><br><span class="line">    DirectedRelationship --&gt; "1..*" Element : sources</span><br><span class="line">    DirectedRelationship --&gt; "1..*" Element : targets</span><br><span class="line">    DirectedRelationship &lt;|-- Generalization</span><br><span class="line">    NamedElement &lt;|-- Classifier</span><br><span class="line">    Classifier --&gt; "0..*" Generalization : generalizations</span><br><span class="line">    Classifier --&gt; "0..*" Feature : features</span><br><span class="line">    Classifier &lt;|-- Class</span><br><span class="line">    Class --&gt; "0..*" Attribute : attributes</span><br><span class="line">    Class --&gt; "0..*" Operation : operations</span><br><span class="line">    Feature &lt;|-- Attribute</span><br><span class="line">    Feature &lt;|-- Operation</span><br><span class="line">    TypedElement &lt;|-- Attribute</span><br><span class="line">    TypedElement &lt;|-- Operation</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+    class Element
+    class NamedElement {
+        name : String
+    }
+    class DirectedRelationship
+    class Generalization
+    class Classifier
+    class Feature
+    class TypedElement
+    class Class
+    class Attribute
+    class Operation
+    Element &lt;|-- NamedElement
+    Element &lt;|-- DirectedRelationship
+    DirectedRelationship --&gt; "1..*" Element : sources
+    DirectedRelationship --&gt; "1..*" Element : targets
+    DirectedRelationship &lt;|-- Generalization
+    NamedElement &lt;|-- Classifier
+    Classifier --&gt; "0..*" Generalization : generalizations
+    Classifier --&gt; "0..*" Feature : features
+    Classifier &lt;|-- Class
+    Class --&gt; "0..*" Attribute : attributes
+    Class --&gt; "0..*" Operation : operations
+    Feature &lt;|-- Attribute
+    Feature &lt;|-- Operation
+    TypedElement &lt;|-- Attribute
+    TypedElement &lt;|-- Operation</code></pre>
 <p><strong>读法</strong>（讲义原话整理）：<strong>每个类都是可泛化的，并且是一个
 NamedElement；类由属性和操作组成；属性和操作都是
 TypedElement，有一个（基本）类型。</strong></p>
@@ -721,7 +761,16 @@ Week 4 “view 只是模型的一个视图”在工具层面的体现）。</p>
 <p><strong>题目</strong>：把类图 <code>A [a 0..1] ——— [b 0..2] B</code>
 表示为元模型实例（对象图）。</p>
 <p><strong>讲义解答</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    AS[": Association"]</span><br><span class="line">    EA["a : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 1"]</span><br><span class="line">    EB["b : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 2"]</span><br><span class="line">    CA[": Class&lt;br/&gt;name = A"]</span><br><span class="line">    CB[": Class&lt;br/&gt;name = B"]</span><br><span class="line">    AS -- ends --&gt; EA</span><br><span class="line">    AS -- ends --&gt; EB</span><br><span class="line">    EA -- target --&gt; CA</span><br><span class="line">    EB -- target --&gt; CB</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    AS[": Association"]
+    EA["a : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 1"]
+    EB["b : AssociationEnd&lt;br/&gt;lowerBound = 0&lt;br/&gt;upperBound = 2"]
+    CA[": Class&lt;br/&gt;name = A"]
+    CB[": Class&lt;br/&gt;name = B"]
+    AS -- ends --&gt; EA
+    AS -- ends --&gt; EB
+    EA -- target --&gt; CA
+    EB -- target --&gt; CB</code></pre>
 <p>（两个端点的 <code>modifier</code> 都是
 <code>simple</code>，因为没有菱形。）</p>
 <blockquote>
@@ -1080,7 +1129,53 @@ DecisionStep | WaitStep | EndStep</strong></td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class AgentType</span><br><span class="line">    class Goal {</span><br><span class="line">        statement : String</span><br><span class="line">        satisfactionCondition : String</span><br><span class="line">    }</span><br><span class="line">    class Capability {</span><br><span class="line">        kind : CapabilityKind</span><br><span class="line">        effect : EffectKind</span><br><span class="line">    }</span><br><span class="line">    class Tool {</span><br><span class="line">        implementationRef : String</span><br><span class="line">    }</span><br><span class="line">    class Policy {</span><br><span class="line">        predicate : String</span><br><span class="line">        version : String</span><br><span class="line">    }</span><br><span class="line">    class Behavior {</span><br><span class="line">        stopCondition : String</span><br><span class="line">    }</span><br><span class="line">    class Step {</span><br><span class="line">        &lt;&lt;abstract&gt;&gt;</span><br><span class="line">    }</span><br><span class="line">    class Transition {</span><br><span class="line">        guard : String</span><br><span class="line">        priority : Integer</span><br><span class="line">    }</span><br><span class="line">    class ExecutionPolicy {</span><br><span class="line">        maxSteps : Integer</span><br><span class="line">        timeoutSeconds : Integer</span><br><span class="line">        maxRetries : Integer</span><br><span class="line">    }</span><br><span class="line">    class ApprovalPolicy {</span><br><span class="line">        validitySeconds : Integer</span><br><span class="line">        bindToArguments : Boolean</span><br><span class="line">    }</span><br><span class="line">    AgentType --&gt; "1..*" Goal : goals</span><br><span class="line">    AgentType --&gt; "1..*" Capability : capabilities</span><br><span class="line">    AgentType --&gt; "0..*" Policy : policies</span><br><span class="line">    AgentType --&gt; "1" Behavior : behavior</span><br><span class="line">    AgentType --&gt; "1" ExecutionPolicy : executionPolicy</span><br><span class="line">    Capability --&gt; "1" Tool : tool</span><br><span class="line">    Behavior *-- "1..*" Step : steps</span><br><span class="line">    Behavior *-- "0..*" Transition : transitions</span><br><span class="line">    Transition --&gt; "1" Step : source</span><br><span class="line">    Transition --&gt; "1" Step : target</span><br><span class="line">    ApprovalPolicy --&gt; "1" HumanRole</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+    class AgentType
+    class Goal {
+        statement : String
+        satisfactionCondition : String
+    }
+    class Capability {
+        kind : CapabilityKind
+        effect : EffectKind
+    }
+    class Tool {
+        implementationRef : String
+    }
+    class Policy {
+        predicate : String
+        version : String
+    }
+    class Behavior {
+        stopCondition : String
+    }
+    class Step {
+        &lt;&lt;abstract&gt;&gt;
+    }
+    class Transition {
+        guard : String
+        priority : Integer
+    }
+    class ExecutionPolicy {
+        maxSteps : Integer
+        timeoutSeconds : Integer
+        maxRetries : Integer
+    }
+    class ApprovalPolicy {
+        validitySeconds : Integer
+        bindToArguments : Boolean
+    }
+    AgentType --&gt; "1..*" Goal : goals
+    AgentType --&gt; "1..*" Capability : capabilities
+    AgentType --&gt; "0..*" Policy : policies
+    AgentType --&gt; "1" Behavior : behavior
+    AgentType --&gt; "1" ExecutionPolicy : executionPolicy
+    Capability --&gt; "1" Tool : tool
+    Behavior *-- "1..*" Step : steps
+    Behavior *-- "0..*" Transition : transitions
+    Transition --&gt; "1" Step : source
+    Transition --&gt; "1" Step : target
+    ApprovalPolicy --&gt; "1" HumanRole</code></pre>
 <blockquote>
 <p><strong>读这个元模型的意义</strong>： -
 <code>Capability.effect : EffectKind</code>（如 read / write /
@@ -1190,7 +1285,11 @@ assistant 输出是工具调用 → 去 <strong>Tools</strong>；否则 →
 <li><strong>Tools 节点连回
 Assistant</strong>，形成<strong>循环</strong>；只要模型还决定调用工具，循环就继续</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; Assistant</span><br><span class="line">    Assistant --&gt; Tools : tools_condition = tool call</span><br><span class="line">    Assistant --&gt; [*] : tools_condition = no tool call</span><br><span class="line">    Tools --&gt; Assistant : ToolMessage</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">stateDiagram-v2
+    [*] --&gt; Assistant
+    Assistant --&gt; Tools : tools_condition = tool call
+    Assistant --&gt; [*] : tools_condition = no tool call
+    Tools --&gt; Assistant : ToolMessage</code></pre>
 <p><strong>ReAct 直觉</strong>：<strong>Act</strong>（模型调用工具）→
 <strong>Observe</strong>（把工具输出传回模型）→
 <strong>Reason</strong>（分析输出，决定再调工具还是直接回答）。这一架构<strong>通用</strong>，适用于多种工具。</p>

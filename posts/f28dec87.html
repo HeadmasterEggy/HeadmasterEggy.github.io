@@ -480,7 +480,27 @@ Desktop build 20770 的 Work 与本地子会话仍走两套详情路径</span></
 交叉整理。版本号相同提高了源码对照的可信度，但没有签名构建清单证明本机二进制确由该
 commit 构建；因此我仍把本机观察和源码解释分开说明。</p>
 <h2 id="先看整条链路">先看整条链路</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">  participant P as Parent thread</span><br><span class="line">  participant A as AgentControl</span><br><span class="line">  participant C as Child thread</span><br><span class="line">  P-&gt;&gt;A: spawn_agent</span><br><span class="line">  A-&gt;&gt;A: prepare config / source / history</span><br><span class="line">  A-&gt;&gt;A: reserve membership and persist spawn edge</span><br><span class="line">  A-&gt;&gt;C: create thread + accept initial input</span><br><span class="line">  A--&gt;&gt;P: spawn returns</span><br><span class="line">  Note over P,C: Child input accepted; child completion is still pending</span><br><span class="line">  par Parent side</span><br><span class="line">    P-&gt;&gt;P: Continue current turn or wait for activity</span><br><span class="line">  and Child side</span><br><span class="line">    C-&gt;&gt;C: Run an independent turn</span><br><span class="line">  end</span><br><span class="line">  C--&gt;&gt;A: Terminal turn outcome</span><br><span class="line">  par Separate completion signals</span><br><span class="line">    A--&gt;&gt;P: Completion activity (when parent-turn metadata is available)</span><br><span class="line">    A--&gt;&gt;P: QueueOnly AgentMessage to parent mailbox</span><br><span class="line">  end</span><br><span class="line">  Note over P: Queued result may be read in a later turn</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">sequenceDiagram
+  participant P as Parent thread
+  participant A as AgentControl
+  participant C as Child thread
+  P-&gt;&gt;A: spawn_agent
+  A-&gt;&gt;A: prepare config / source / history
+  A-&gt;&gt;A: reserve membership and persist spawn edge
+  A-&gt;&gt;C: create thread + accept initial input
+  A--&gt;&gt;P: spawn returns
+  Note over P,C: Child input accepted; child completion is still pending
+  par Parent side
+    P-&gt;&gt;P: Continue current turn or wait for activity
+  and Child side
+    C-&gt;&gt;C: Run an independent turn
+  end
+  C--&gt;&gt;A: Terminal turn outcome
+  par Separate completion signals
+    A--&gt;&gt;P: Completion activity (when parent-turn metadata is available)
+    A--&gt;&gt;P: QueueOnly AgentMessage to parent mailbox
+  end
+  Note over P: Queued result may be read in a later turn</code></pre>
 <p>并行关系是理解交互的关键：spawn 的返回表示 child
 初始输入已接纳，不表示 child 已完成；terminal status、完成 activity
 和结果消息也是不同信号。结果进入 parent mailbox 后仍可能等待可接收的
@@ -671,7 +691,21 @@ runtime mailbox，稍后加载时再转入 session input queue。</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  C[Child terminal result] --&gt; Q[QueueOnly to structural parent&lt;br/&gt;trigger_turn=false]</span><br><span class="line">  Q --&gt; A&#123;Parent residency&#125;</span><br><span class="line">  A --&gt;|loaded + active| I[Session mailbox&lt;br/&gt;wait activity may return]</span><br><span class="line">  A --&gt;|loaded + idle| J[Session mailbox&lt;br/&gt;no ordinary turn wake]</span><br><span class="line">  A --&gt;|locally evicted| M[Runtime in-memory mailbox]</span><br><span class="line">  A --&gt;|cold restored| R[Lazy-load history] --&gt; I</span><br><span class="line">  M --&gt; L[Later session load] --&gt; I</span><br><span class="line">  I --&gt; T&#123;Current turn accepts mail?&#125;</span><br><span class="line">  J --&gt; T</span><br><span class="line">  T --&gt;|yes, as turn input| P[Record AgentMessage + metadata&lt;br/&gt;in parent history and rollout]</span><br><span class="line">  T --&gt;|no| N[Pending for a later turn]</span><br><span class="line">  P --&gt; X[Model request assembly]</span><br><span class="line">  N -. later turn .-&gt; P</span><br><span class="line">  M -. process shutdown before read .-&gt; U[Unread mail recovery not established]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+  C[Child terminal result] --&gt; Q[QueueOnly to structural parent&lt;br/&gt;trigger_turn=false]
+  Q --&gt; A&#123;Parent residency&#125;
+  A --&gt;|loaded + active| I[Session mailbox&lt;br/&gt;wait activity may return]
+  A --&gt;|loaded + idle| J[Session mailbox&lt;br/&gt;no ordinary turn wake]
+  A --&gt;|locally evicted| M[Runtime in-memory mailbox]
+  A --&gt;|cold restored| R[Lazy-load history] --&gt; I
+  M --&gt; L[Later session load] --&gt; I
+  I --&gt; T&#123;Current turn accepts mail?&#125;
+  J --&gt; T
+  T --&gt;|yes, as turn input| P[Record AgentMessage + metadata&lt;br/&gt;in parent history and rollout]
+  T --&gt;|no| N[Pending for a later turn]
+  P --&gt; X[Model request assembly]
+  N -. later turn .-&gt; P
+  M -. process shutdown before read .-&gt; U[Unread mail recovery not established]</code></pre>
 <p>真正的记录边界在父线程把
 <code>TurnInput::InterAgentCommunication</code> 处理为 turn input
 时：随后会写入 typed <code>AgentMessage</code> 和 inter-agent
@@ -755,7 +789,21 @@ ancestry 信息；这个详情视图走嵌入式 transcript 路径。</li>
 有资格运行，不代表恢复请求成功。面板详情显式把两项都设为
 false，因此不能把“面板中能看到子线程”理解为“可以继续向它发送输入”。</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[点击子代理列表项] --&gt; B&#123;点击的是哪一项?&#125;</span><br><span class="line">    B --&gt;|折叠摘要| C[打开父线程 Subagents 总览]</span><br><span class="line">    B --&gt;|具体子代理行| D&#123;canInteract?&#125;</span><br><span class="line">    D --&gt;|true| E[校验父子关系与首屏历史]</span><br><span class="line">    E --&gt; F[打开或复用独立子线程标签页]</span><br><span class="line">    F --&gt; G&#123;writer conflict?&#125;</span><br><span class="line">    G --&gt;|是| H[只读 · 隐藏 composer · 冲突视图]</span><br><span class="line">    G --&gt;|否| I[composer 可见]</span><br><span class="line">    F --&gt; J&#123;shouldResume &amp;&amp; canInteract &amp;&amp; (本地可恢复 || shared)?&#125;</span><br><span class="line">    J --&gt;|是| K[resume hook 收到 child ID]</span><br><span class="line">    J --&gt;|否| L[resume hook 收到 null]</span><br><span class="line">    D --&gt;|false| M[父面板选中该子代理]</span><br><span class="line">    M --&gt; N[嵌入式 transcript · 只读 · 隐藏 composer]</span><br><span class="line">    M --&gt; O[面板详情将 shouldResume 与 canInteract 都设为 false]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    A[点击子代理列表项] --&gt; B&#123;点击的是哪一项?&#125;
+    B --&gt;|折叠摘要| C[打开父线程 Subagents 总览]
+    B --&gt;|具体子代理行| D&#123;canInteract?&#125;
+    D --&gt;|true| E[校验父子关系与首屏历史]
+    E --&gt; F[打开或复用独立子线程标签页]
+    F --&gt; G&#123;writer conflict?&#125;
+    G --&gt;|是| H[只读 · 隐藏 composer · 冲突视图]
+    G --&gt;|否| I[composer 可见]
+    F --&gt; J&#123;shouldResume &amp;&amp; canInteract &amp;&amp; (本地可恢复 || shared)?&#125;
+    J --&gt;|是| K[resume hook 收到 child ID]
+    J --&gt;|否| L[resume hook 收到 null]
+    D --&gt;|false| M[父面板选中该子代理]
+    M --&gt; N[嵌入式 transcript · 只读 · 隐藏 composer]
+    M --&gt; O[面板详情将 shouldResume 与 canInteract 都设为 false]</code></pre>
 <p>图中的条件是客户端路径：<code>canInteract</code>
 不代表服务端授权；“hook 收到 child ID”也只代表 resume hook
 有资格执行。独立线程的只读条件是
@@ -800,7 +848,16 @@ spawn 的原子门闩。</p>
 但不追加终态事件；清掉进程内待处理输入；关闭共享 agent runtime
 的新启动入口、取消信号和 mailbox；停止根 session runtime；再次 flush
 并关闭根 writer；最后发出 <code>ShutdownComplete</code>。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  A[旧快照：列出已加载后代] --&gt; B&#123;有子线程？&#125;</span><br><span class="line">  B -- 是 --&gt; C[返回 HasLiveDescendants]</span><br><span class="line">  B -- 否 --&gt; D[继续挂起]</span><br><span class="line">  E[新快照：flush 根历史] --&gt; F[取消根 turn，不写终态事件]</span><br><span class="line">  F --&gt; G[关闭新启动入口 + 取消共享 runtime + 关闭 mailboxes]</span><br><span class="line">  G --&gt; H[停止根 runtime，flush 并关闭根 writer]</span><br><span class="line">  H --&gt; I[发出根 ShutdownComplete]</span><br><span class="line">  G -. 另一个跟踪器等待已准入的树操作 .-&gt; J[AgentTreeShutdown.wait_detailed]</span><br><span class="line">  I -. 不代表 .-&gt; K[所有后代清理已结束]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+  A[旧快照：列出已加载后代] --&gt; B&#123;有子线程？&#125;
+  B -- 是 --&gt; C[返回 HasLiveDescendants]
+  B -- 否 --&gt; D[继续挂起]
+  E[新快照：flush 根历史] --&gt; F[取消根 turn，不写终态事件]
+  F --&gt; G[关闭新启动入口 + 取消共享 runtime + 关闭 mailboxes]
+  G --&gt; H[停止根 runtime，flush 并关闭根 writer]
+  H --&gt; I[发出根 ShutdownComplete]
+  G -. 另一个跟踪器等待已准入的树操作 .-&gt; J[AgentTreeShutdown.wait_detailed]
+  I -. 不代表 .-&gt; K[所有后代清理已结束]</code></pre>
 <p>这里需要把三个不同的信号和调用点分开：<code>ShutdownComplete</code>
 是根 session 在自己的 runtime 清理和根 writer
 关闭后发出的事件；<code>AgentTreeShutdown.wait()</code> 和
@@ -1039,7 +1096,15 @@ V2 异步调用链。</li>
 <code>application-network-startup-YSC7OAs0.js</code> 中定位到了实际
 stdio transport。它会把 Codex CLI 的 app-server
 命令作为子进程启动，并通过标准输入输出传递 JSONL 消息。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  A[Electron will-quit] --&gt; B[限时 flush / dispose]</span><br><span class="line">  B --&gt; C[host connection dispose]</span><br><span class="line">  C --&gt; D[stopProcess]</span><br><span class="line">  D --&gt; E[connection.close]</span><br><span class="line">  E --&gt; F[stdio transport 调用 child.kill]</span><br><span class="line">  F -. 不等待 close 事件 .-&gt; G[Electron 继续退出]</span><br><span class="line">  H[closeGracefully: stdin.end 后等待最多 2 秒] -. 未发现退出链调用 .-&gt; I[超时后 SIGKILL 并等待]</span><br><span class="line">  F -. 不等价于 .-&gt; J[后代进程与 agent tree 已清理]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+  A[Electron will-quit] --&gt; B[限时 flush / dispose]
+  B --&gt; C[host connection dispose]
+  C --&gt; D[stopProcess]
+  D --&gt; E[connection.close]
+  E --&gt; F[stdio transport 调用 child.kill]
+  F -. 不等待 close 事件 .-&gt; G[Electron 继续退出]
+  H[closeGracefully: stdin.end 后等待最多 2 秒] -. 未发现退出链调用 .-&gt; I[超时后 SIGKILL 并等待]
+  F -. 不等价于 .-&gt; J[后代进程与 agent tree 已清理]</code></pre>
 <p><code>connection.close()</code> 会对直接启动的 CLI/app-server
 子进程调用 <code>kill()</code>，但这个方法本身不等待退出事件；上层
 <code>stopProcess()</code> 也没有等待
@@ -1090,7 +1155,22 @@ manager 的
 后再把后代清理排入后台。因此，面板的 Promise/finally
 可以在中断回调刚分发后就清掉 loading，child interrupt
 和它触发的孙辈清理仍可能在进行。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">  participant P as Subagents 面板</span><br><span class="line">  participant C as interruptThread 回调</span><br><span class="line">  participant M as child ConversationManager</span><br><span class="line">  participant D as 后代清理</span><br><span class="line">  P-&gt;&gt;P: 刷新子树；失败则沿用已知快照</span><br><span class="line">  P-&gt;&gt;P: hydrate 需要补齐的可交互子线程</span><br><span class="line">  loop 每个可停止条目</span><br><span class="line">    P-&gt;&gt;C: 调用回调（不 await 返回值）</span><br><span class="line">    C--&gt;&gt;P: 立即返回 undefined</span><br><span class="line">    C-&gt;&gt;M: 异步启动 yda(user-stop)</span><br><span class="line">    M-&gt;&gt;M: 等待 child 自身 interrupt</span><br><span class="line">    M--&gt;&gt;D: 调度两轮后代清理</span><br><span class="line">  end</span><br><span class="line">  P-&gt;&gt;P: handler finally 清除 loading</span><br><span class="line">  Note over P,D: loading 已清除，不是 child / 后代已终止的确认</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">sequenceDiagram
+  participant P as Subagents 面板
+  participant C as interruptThread 回调
+  participant M as child ConversationManager
+  participant D as 后代清理
+  P-&gt;&gt;P: 刷新子树；失败则沿用已知快照
+  P-&gt;&gt;P: hydrate 需要补齐的可交互子线程
+  loop 每个可停止条目
+    P-&gt;&gt;C: 调用回调（不 await 返回值）
+    C--&gt;&gt;P: 立即返回 undefined
+    C-&gt;&gt;M: 异步启动 yda(user-stop)
+    M-&gt;&gt;M: 等待 child 自身 interrupt
+    M--&gt;&gt;D: 调度两轮后代清理
+  end
+  P-&gt;&gt;P: handler finally 清除 loading
+  Note over P,D: loading 已清除，不是 child / 后代已终止的确认</code></pre>
 <p>这解释了两个表面上不一致的状态：面板可能已经不再显示“正在停止”，但停止请求仍未确认完成；而且后台
 sweep 是尽力而为，逐 child
 失败只记录日志，重新发现失败会结束补充扫描。它不提供整棵树的原子取消或统一完成回执。以上是本机安装版
@@ -1138,7 +1218,21 @@ manager 的 runtime，或宿主侧 tree-wait 与 persistence-writer handoff
 等待超时而启动任务仍在登记点之前，后续的线程 map
 快照可能看不到它。这是源码给出的覆盖边界，不能当作已复现的 Desktop
 竞态或已确认会遗留的线程。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">  A[Desktop will-quit dispose] --&gt; B[stdio connection.close]</span><br><span class="line">  B --&gt; C[child.kill() defaults to SIGTERM]</span><br><span class="line">  C --&gt; D[stdio SIGTERM hook]</span><br><span class="line">  D --&gt; E[45s process watchdog]</span><br><span class="line">  D --&gt; F[cancel forwarding + ConnectionClosed]</span><br><span class="line">  F --&gt; G[close RPC gates + connection cleanup]</span><br><span class="line">  G --&gt; H[drain background tasks · up to 10s]</span><br><span class="line">  H --&gt; I[snapshot current ThreadManager map]</span><br><span class="line">  I --&gt; J[shutdown snapshot concurrently · 10s each]</span><br><span class="line">  S[startup task gets SessionConfigured] --&gt; R[register runtime in map]</span><br><span class="line">  R --&gt; I</span><br><span class="line">  H -. drain timeout while startup is before registration .-&gt; M[possible miss in later snapshot]</span><br><span class="line">  E -. if cleanup stalls .-&gt; X[process exit code 1]</span><br><span class="line">  J -. not equivalent to .-&gt; W[AgentTreeShutdown.wait]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+  A[Desktop will-quit dispose] --&gt; B[stdio connection.close]
+  B --&gt; C[child.kill() defaults to SIGTERM]
+  C --&gt; D[stdio SIGTERM hook]
+  D --&gt; E[45s process watchdog]
+  D --&gt; F[cancel forwarding + ConnectionClosed]
+  F --&gt; G[close RPC gates + connection cleanup]
+  G --&gt; H[drain background tasks · up to 10s]
+  H --&gt; I[snapshot current ThreadManager map]
+  I --&gt; J[shutdown snapshot concurrently · 10s each]
+  S[startup task gets SessionConfigured] --&gt; R[register runtime in map]
+  R --&gt; I
+  H -. drain timeout while startup is before registration .-&gt; M[possible miss in later snapshot]
+  E -. if cleanup stalls .-&gt; X[process exit code 1]
+  J -. not equivalent to .-&gt; W[AgentTreeShutdown.wait]</code></pre>
 <p>要区分另一条路径：<code>AppServerExit::Forced</code> /
 <code>process::exit(0)</code> 是 managed Unix-socket daemon
 的强制退出路径，它会 abort connection-cleanup tasks，不执行普通 drain 和
@@ -1233,7 +1327,18 @@ ASAR 选择性分析仍不完整。</p>
 的文本，否则回退到最近一条非空 agent
 消息。查询有有限重试，且不在窗口聚焦时自动刷新。这个 endpoint 是 UI
 最终回复读取路径的静态证据，不代表我观察过网络请求或真实会话结果。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  A[父 conversation 的 subagent 状态] --&gt; B[本地 Subagents 面板]</span><br><span class="line">  B --&gt; C[选中子 conversation]</span><br><span class="line">  C --&gt; D[hydrate / thread summary / 历史页]</span><br><span class="line">  C --&gt; E[持久路由写入 selectedConversationId]</span><br><span class="line">  B --&gt; F[打开已有 background agent]</span><br><span class="line">  F --&gt; G[激活 summary 并确保第一页]</span><br><span class="line">  G --&gt; H[去重后打开 agent tab]</span><br><span class="line">  I[ChatGPT turn 的 subagent 状态] --&gt; J[ChatGPT Subagents 面板]</span><br><span class="line">  J --&gt; K[完成态子 agent]</span><br><span class="line">  K --&gt; L[/flora/subagent/thread/turns? limit=1]</span><br><span class="line">  L --&gt; M[优先 final_answer，否则最近非空 agentMessage]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+  A[父 conversation 的 subagent 状态] --&gt; B[本地 Subagents 面板]
+  B --&gt; C[选中子 conversation]
+  C --&gt; D[hydrate / thread summary / 历史页]
+  C --&gt; E[持久路由写入 selectedConversationId]
+  B --&gt; F[打开已有 background agent]
+  F --&gt; G[激活 summary 并确保第一页]
+  G --&gt; H[去重后打开 agent tab]
+  I[ChatGPT turn 的 subagent 状态] --&gt; J[ChatGPT Subagents 面板]
+  J --&gt; K[完成态子 agent]
+  K --&gt; L[/flora/subagent/thread/turns? limit=1]
+  L --&gt; M[优先 final_answer，否则最近非空 agentMessage]</code></pre>
 <p>证据来自本机已安装 <code>app.asar</code> 中的
 <code>open-local-conversation-subagents-panel-ee51ac1ef713.js</code>、<code>open-local-conversation-background-agent-123b3e029c49.js</code>、<code>local-conversation-subagents-panel-tab-b201494eb46e.js</code>、<code>chatgpt-subagents-panel-7011b5d422c8.js</code>
 与
@@ -1743,7 +1848,16 @@ factory 替换点<i class="fa fa-external-link-alt"></i></span>。二进制哈�
 <p>把源码继续追到当前 OpenAI Codex <code>main</code>（2026-10-17
 检查，commit <a
 target="_blank" rel="noopener" href="https://github.com/openai/codex/tree/b5115cdd669d37a8635a9742851e97ba4fb1d42c"><code>b5115cdd</code></a>），可以把控制器选择规则再说精确一点：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">  A[新建根线程 / 冷恢复] --&gt; B&#123;ThreadManager factory&#125;</span><br><span class="line">  B --&gt;|未配置| C[LocalAgentControl]</span><br><span class="line">  B --&gt;|已配置| D[Host AgentControl]</span><br><span class="line">  E[内部子代理] --&gt; F[继承父 AgentControl + LocalAgentRuntime]</span><br><span class="line">  G[仍驻留的线程恢复] --&gt; H[复用原 Session，不重新选 controller]</span><br><span class="line">  I&#123;AgentControlInit&#125; --&gt;|Local| J[绑定 session identity 和本地 capacity]</span><br><span class="line">  I --&gt;|Provided| K&#123;controller.identity == session identity?&#125;</span><br><span class="line">  K --&gt;|是| L[使用提供的 controller]</span><br><span class="line">  K --&gt;|否| M[启动失败]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+  A[新建根线程 / 冷恢复] --&gt; B&#123;ThreadManager factory&#125;
+  B --&gt;|未配置| C[LocalAgentControl]
+  B --&gt;|已配置| D[Host AgentControl]
+  E[内部子代理] --&gt; F[继承父 AgentControl + LocalAgentRuntime]
+  G[仍驻留的线程恢复] --&gt; H[复用原 Session，不重新选 controller]
+  I&#123;AgentControlInit&#125; --&gt;|Local| J[绑定 session identity 和本地 capacity]
+  I --&gt;|Provided| K&#123;controller.identity == session identity?&#125;
+  K --&gt;|是| L[使用提供的 controller]
+  K --&gt;|否| M[启动失败]</code></pre>
 <p>这里有两个容易混淆的概念：<strong>thread ID</strong>
 是每条线程自己的身份；<strong>controller/session identity</strong>
 标识一棵共享协作树。当前源码要求新根的 controller identity 与最终 thread

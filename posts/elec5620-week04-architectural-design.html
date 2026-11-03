@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 04 讲课总结：IEEE 42010 架构与架构描述、架构原则与设计空间；视点与视图、Kruchten 4+1（agentic 医疗系统例子）与 Siemens 视点、质量属性分析；计算模型（结构主导、过程式、数据流）、控制与功能分离、星形与递归控制模式；验证与确认；Tutorial 4 视点分析与 Lab 4。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:15:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:51.477Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.473Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="Model-of-Computation">
@@ -367,7 +367,7 @@ Analysis（五步）</span></a></li><li class="nav-item nav-level-3"><a class="n
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:15:00 / Modified: 04:13:51" itemprop="dateCreated datePublished" datetime="2026-11-03T13:15:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:15:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:15:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -538,7 +538,21 @@ Constitution）</strong>：宪法是国家或组织的根本法，定义治理�
 <h3 id="架构与演化">1.5 架构与演化</h3>
 <p>架构对系统<strong>支持演化的能力</strong>有根本影响：当<strong>新需求</strong>到来时，如果当初选了“单机方案”，就可能落不到“分布式”的解上。</p>
 <p><strong>例子：点对点 vs 松耦合</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    subgraph P2P[Point-to-point]</span><br><span class="line">        A1[A] --- X1[X]</span><br><span class="line">        A1 --- B1[B]</span><br><span class="line">        A1 --- C1[C]</span><br><span class="line">        B1 --- X1</span><br><span class="line">        B1 --- C1</span><br><span class="line">        C1 --- X1</span><br><span class="line">    end</span><br><span class="line">    subgraph MED[Mediator]</span><br><span class="line">        A2[A] --- M[Mediator]</span><br><span class="line">        B2[B] --- M</span><br><span class="line">        C2[C] --- M</span><br><span class="line">        X2[X] --- M</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    subgraph P2P[Point-to-point]
+        A1[A] --- X1[X]
+        A1 --- B1[B]
+        A1 --- C1[C]
+        B1 --- X1
+        B1 --- C1
+        C1 --- X1
+    end
+    subgraph MED[Mediator]
+        A2[A] --- M[Mediator]
+        B2[B] --- M
+        C2[C] --- M
+        X2[X] --- M
+    end</code></pre>
 <p>点对点：<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.357ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 600 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="n"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g></g></g></svg></mjx-container></span> 个组件最多 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.781ex;" xmlns="http://www.w3.org/2000/svg" width="6.204ex" height="3.143ex" role="img" focusable="false" viewBox="0 -1044.3 2742.3 1389.3"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\frac{n(n-1)}{2}"><g data-mml-node="mfrac" data-latex="\frac{n(n-1)}{2}"><g data-mml-node="mrow" transform="translate(220,515.4) scale(0.707)" data-latex="n(n-1)"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(600,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="n" transform="translate(989,0)"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mo" data-latex="-" transform="translate(1589,0)"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(2367,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(2867,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g><g data-mml-node="mn" transform="translate(1194.4,-345) scale(0.707)" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g><rect width="2502.3" height="60" x="120" y="220"></rect></g></g></g></svg></mjx-container></span> 条连接，加一个新组件要改
 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.357ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 600 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="n-1"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="n-1"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mn" data-latex="1" transform="translate(1000.2,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g></g></svg></mjx-container></span> 处；Mediator：每个组件只连
 mediator，加一个组件只加 1 条连接——<strong>更易演化</strong>。</p>
@@ -679,7 +693,8 @@ partitioning</strong></td>
 <h3 id="贯穿例子agentic-healthcare-system">2.5 贯穿例子：Agentic
 healthcare system</h3>
 <p>患者问：“我从昨天开始头疼发烧，该怎么办？”</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    A[Patient reports symptoms] --&gt; B[Triage assesses risk] --&gt; C[Information is retrieved] --&gt; D[Appointment or escalation] --&gt; E[Clinician reviews and records]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    A[Patient reports symptoms] --&gt; B[Triage assesses risk] --&gt; C[Information is retrieved] --&gt; D[Appointment or escalation] --&gt; E[Clinician reviews and records]</code></pre>
 <p>Agents：<strong>Triage Agent、Health Advice Agent、Appointment
 Agent、Emergency Agent</strong>。</p>
 <blockquote>
@@ -817,7 +832,15 @@ appointments</em>，然后做 <em>Triage Decision</em></li>
 <li>⇒ 需要一个 <strong>Communication Service</strong>；<strong>Process
 view 涉及同步和共享状态</strong></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    S([Request]) --&gt; F[fork ━━]</span><br><span class="line">    F --&gt; E[Retrieve EHR context]</span><br><span class="line">    F --&gt; K[Retrieve medical knowledge]</span><br><span class="line">    F --&gt; A[Check available appointments]</span><br><span class="line">    E --&gt; J[join ━━]</span><br><span class="line">    K --&gt; J</span><br><span class="line">    A --&gt; J</span><br><span class="line">    J --&gt; T[Triage Decision]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    S([Request]) --&gt; F[fork ━━]
+    F --&gt; E[Retrieve EHR context]
+    F --&gt; K[Retrieve medical knowledge]
+    F --&gt; A[Check available appointments]
+    E --&gt; J[join ━━]
+    K --&gt; J
+    A --&gt; J
+    J --&gt; T[Triage Decision]</code></pre>
 <p><strong>Physical View —— 敏感数据放在哪里</strong></p>
 <blockquote>
 <p>问题：<strong>完整的患者记录应该发给外部 LLM 吗？</strong></p>
@@ -1124,7 +1147,15 @@ Pattern</strong>：控制在中心的<strong>星形</strong>模式，带有<stro
 Pattern</strong>：<strong>控制器本身也可以像其他被控组件一样被控制</strong>
 →
 层次化；<strong>容易扩展到非常大的系统</strong>；简单，但能确保动态软件系统<strong>一致、高度可控</strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    TOP[Central Control] --&gt; C1[Central Control]</span><br><span class="line">    TOP --&gt; C2[Central Control]</span><br><span class="line">    C1 --&gt; A1[Controlled 1]</span><br><span class="line">    C1 --&gt; A2[Controlled 2]</span><br><span class="line">    C1 --&gt; An[Controlled n]</span><br><span class="line">    C2 --&gt; B1[Controlled 1]</span><br><span class="line">    C2 --&gt; B2[Controlled 2]</span><br><span class="line">    C2 --&gt; Bn[Controlled n]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    TOP[Central Control] --&gt; C1[Central Control]
+    TOP --&gt; C2[Central Control]
+    C1 --&gt; A1[Controlled 1]
+    C1 --&gt; A2[Controlled 2]
+    C1 --&gt; An[Controlled n]
+    C2 --&gt; B1[Controlled 1]
+    C2 --&gt; B2[Controlled 2]
+    C2 --&gt; Bn[Controlled n]</code></pre>
 <h3 id="agentic-ai-中的控制与功能">3.6 Agentic AI 中的控制与功能</h3>
 <table>
 <colgroup>

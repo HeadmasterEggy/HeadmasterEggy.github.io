@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 02 讲课总结：Agentic AI 的五个组成与项目主题；MBSE 的问题—前提—结果：Brooks 的本质与偶然复杂度、抽象与模型、建模四目的、设计时与运行时视图、MBE 的抽象与自动化及四类机会；Vibe coding 与 MBSE 对比、五种 MBSE 风格；Tutorial 2 智能鞋店 use case 与 UML 工具。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:05:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:50.515Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.472Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Abstraction">
 <meta property="article:tag" content="Agentic-AI">
@@ -376,7 +376,7 @@ agent 的“控制平面”</span></a></li></ol></li><li class="nav-item nav-lev
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:05:00 / Modified: 04:13:50" itemprop="dateCreated datePublished" datetime="2026-11-03T13:05:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:05:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:05:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -666,7 +666,9 @@ Hamilton</strong>（“软件工程之母”）站在 Apollo
 并打印 Sum），问：<strong>“Can you see what this program is
 about?”</strong> —— 读代码很难一眼看出结构。</p>
 <p>对应的 UML 模型只有：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    A["«sc_method»&lt;br/&gt;a1:Producer"] -- "out1 → link1 «sc_link_mp» → in1" --&gt; B["«sc_slave»&lt;br/&gt;b1:Consumer"]</span><br><span class="line">    S((start)) --&gt; A</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    A["«sc_method»&lt;br/&gt;a1:Producer"] -- "out1 → link1 «sc_link_mp» → in1" --&gt; B["«sc_slave»&lt;br/&gt;b1:Consumer"]
+    S((start)) --&gt; A</code></pre>
 <p>一个生产者对象通过一条链接把数据推给一个消费者对象，<code>start</code>
 端口触发生产。<strong>“Can you see it now?”</strong> ——
 这就是抽象的价值：同样的信息，模型让人立即理解结构。</p>
@@ -784,7 +786,13 @@ views</strong>：软件<strong>执行时</strong>的结构和行为（例如 Lef
 <code>Started</code> 再细化为子状态 <code>St1 → St2</code> → 最终动作
 <code>generate_data()</code> 对应到
 <code>for (i=0;i&lt;10;i++) out1 = i;</code>。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; NotStarted</span><br><span class="line">    NotStarted --&gt; Started : start / generate_data()</span><br><span class="line">    state Started {</span><br><span class="line">        [*] --&gt; St1</span><br><span class="line">        St1 --&gt; St2</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">stateDiagram-v2
+    [*] --&gt; NotStarted
+    NotStarted --&gt; Started : start / generate_data()
+    state Started {
+        [*] --&gt; St1
+        St1 --&gt; St2
+    }</code></pre>
 <h3 id="软件的独特之处">3.8 软件的独特之处</h3>
 <blockquote>
 <p><strong>软件模型和被建模的软件共享同一种介质——计算机</strong>，而计算机恰好是我们最先进、最通用的自动化技术。
@@ -1078,7 +1086,11 @@ Engineering</strong></td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    A[Code only] --&gt; B[Code Visualization&lt;br/&gt;model ← visualize ← code]</span><br><span class="line">    B --&gt; C[Round Trip&lt;br/&gt;model ⇄ synchronize ⇄ code]</span><br><span class="line">    C --&gt; D[Model-centric&lt;br/&gt;model → generate → code]</span><br><span class="line">    D --&gt; E[Model only]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    A[Code only] --&gt; B[Code Visualization&lt;br/&gt;model ← visualize ← code]
+    B --&gt; C[Round Trip&lt;br/&gt;model ⇄ synchronize ⇄ code]
+    C --&gt; D[Model-centric&lt;br/&gt;model → generate → code]
+    D --&gt; E[Model only]</code></pre>
 <blockquote>
 <p>记忆方法：箭头方向从“代码 →
 模型”（visualize）到“双向”（synchronize）再到“模型 →
@@ -1240,7 +1252,26 @@ Adviser（审核）、Store Admin（维护）、Payment/Delivery（处理）</li
 问题</strong>：这个助手能否帮助顾客做出更好的选鞋决定？<strong>只保留检验这一价值所需的功能。</strong></p>
 </blockquote>
 <p><strong>Use Case 图（文字版）</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    C([Customer])</span><br><span class="line">    SA([Store Admin])</span><br><span class="line">    PS([Payment Service])</span><br><span class="line">    subgraph S [AI-Assisted Smart Shoe Store]</span><br><span class="line">        U1((Enter Preferences))</span><br><span class="line">        U2((View Recommendations))</span><br><span class="line">        U3((View Explanations))</span><br><span class="line">        U4((Compare Products))</span><br><span class="line">        U5((Add Shoe to Cart))</span><br><span class="line">        U6((Manage Products &amp; Stock))</span><br><span class="line">        U7((Process Payment))</span><br><span class="line">    end</span><br><span class="line">    C --- U1</span><br><span class="line">    C --- U2</span><br><span class="line">    C --- U3</span><br><span class="line">    C --- U4</span><br><span class="line">    C --- U5</span><br><span class="line">    SA --- U6</span><br><span class="line">    PS --- U7</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    C([Customer])
+    SA([Store Admin])
+    PS([Payment Service])
+    subgraph S [AI-Assisted Smart Shoe Store]
+        U1((Enter Preferences))
+        U2((View Recommendations))
+        U3((View Explanations))
+        U4((Compare Products))
+        U5((Add Shoe to Cart))
+        U6((Manage Products &amp; Stock))
+        U7((Process Payment))
+    end
+    C --- U1
+    C --- U2
+    C --- U3
+    C --- U4
+    C --- U5
+    SA --- U6
+    PS --- U7</code></pre>
 <blockquote>
 <p>每条线表示<strong>一个 actor 参与一个系统目标</strong>。</p>
 </blockquote>
@@ -1348,8 +1379,8 @@ Trip → Model-centric → Model only。</li>
               <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
               <a href="/tags/Model-Based-Software-Engineering/" rel="tag"><i class="fa fa-tag"></i> Model-Based-Software-Engineering</a>
               <a href="/tags/Use-Case/" rel="tag"><i class="fa fa-tag"></i> Use-Case</a>
-              <a href="/tags/Abstraction/" rel="tag"><i class="fa fa-tag"></i> Abstraction</a>
               <a href="/tags/Agentic-AI/" rel="tag"><i class="fa fa-tag"></i> Agentic-AI</a>
+              <a href="/tags/Abstraction/" rel="tag"><i class="fa fa-tag"></i> Abstraction</a>
           </div>
 
         

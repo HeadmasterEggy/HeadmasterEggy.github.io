@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 12 Unit Review：按需求模型、构建时与运行时设计模型、元模型、开发过程模型四类梳理全课考点与易错点，附各周笔记索引、画图检查清单、贯穿全课的综合建模练习和 Tutorial 12 的 Profile&#x2F;OCL 回顾。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:55:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:55.458Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.475Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="Exam-Review">
@@ -367,7 +367,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:55:00 / Modified: 04:13:55" itemprop="dateCreated datePublished" datetime="2026-11-03T13:55:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:55:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:55:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1064,7 +1064,47 @@ Booking、Send Reminder、Notify Emergency</li>
 </tbody>
 </table>
 <h3 id="类图关键部分">9.3 类图（关键部分）</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">    class Agent {</span><br><span class="line">        &lt;&lt;abstract&gt;&gt;</span><br><span class="line">        name : String</span><br><span class="line">        maxSteps : Integer</span><br><span class="line">        perceive()</span><br><span class="line">        act()</span><br><span class="line">    }</span><br><span class="line">    class TriageAgent {</span><br><span class="line">        assess(report) : Urgency</span><br><span class="line">    }</span><br><span class="line">    class BookingAgent {</span><br><span class="line">        proposeSlot() : Slot</span><br><span class="line">    }</span><br><span class="line">    class Orchestrator {</span><br><span class="line">        dispatch(request)</span><br><span class="line">    }</span><br><span class="line">    class Appointment {</span><br><span class="line">        status : AppStatus</span><br><span class="line">        time : DateTime</span><br><span class="line">        approve()</span><br><span class="line">        reject()</span><br><span class="line">    }</span><br><span class="line">    class Pet {</span><br><span class="line">        name : String</span><br><span class="line">        species : String</span><br><span class="line">    }</span><br><span class="line">    class Owner {</span><br><span class="line">        name : String</span><br><span class="line">        phone : String</span><br><span class="line">    }</span><br><span class="line">    class SchedulingAPI {</span><br><span class="line">        &lt;&lt;interface&gt;&gt; getSlots()</span><br><span class="line">        book(slot)</span><br><span class="line">    }</span><br><span class="line">    Agent &lt;|-- TriageAgent</span><br><span class="line">    Agent &lt;|-- BookingAgent</span><br><span class="line">    Orchestrator o-- "1..*" Agent</span><br><span class="line">    Owner "1" --&gt; "1..*" Pet : owns</span><br><span class="line">    Pet "1" -- "0..*" Appointment</span><br><span class="line">    BookingAgent ..&gt; SchedulingAPI : uses</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+    class Agent {
+        &lt;&lt;abstract&gt;&gt;
+        name : String
+        maxSteps : Integer
+        perceive()
+        act()
+    }
+    class TriageAgent {
+        assess(report) : Urgency
+    }
+    class BookingAgent {
+        proposeSlot() : Slot
+    }
+    class Orchestrator {
+        dispatch(request)
+    }
+    class Appointment {
+        status : AppStatus
+        time : DateTime
+        approve()
+        reject()
+    }
+    class Pet {
+        name : String
+        species : String
+    }
+    class Owner {
+        name : String
+        phone : String
+    }
+    class SchedulingAPI {
+        &lt;&lt;interface&gt;&gt; getSlots()
+        book(slot)
+    }
+    Agent &lt;|-- TriageAgent
+    Agent &lt;|-- BookingAgent
+    Orchestrator o-- "1..*" Agent
+    Owner "1" --&gt; "1..*" Pet : owns
+    Pet "1" -- "0..*" Appointment
+    BookingAgent ..&gt; SchedulingAPI : uses</code></pre>
 <p>（Mermaid 简化了记号：画在纸上时 <code>Owner ◆— Pet</code>
 是否用组合取决于“删除主人是否删除宠物记录”，要在答案中说明理由。）</p>
 <h3 id="对象图某一时刻">9.4 对象图（某一时刻）</h3>
@@ -1085,7 +1125,17 @@ Notify owner。</p>
 <code>ref BookAppointment</code>。<code>sd BookAppointment</code>：<code>booking1 → scheduling: getSlots()</code>（同步）……<code>booking1 → vet: requestApproval()</code>（<strong>异步</strong>，开放箭头）；<code>alt [approved]</code>
 / <code>[rejected]</code>。</p>
 <h3 id="状态机appointment">9.7 状态机（Appointment）</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; Proposed</span><br><span class="line">    Proposed --&gt; PendingApproval : ownerSelects / createBooking()</span><br><span class="line">    PendingApproval --&gt; Confirmed : vetApproves / notifyOwner()</span><br><span class="line">    PendingApproval --&gt; Cancelled : vetRejects / releaseSlot()</span><br><span class="line">    PendingApproval --&gt; Cancelled : after(24h) / releaseSlot()</span><br><span class="line">    Confirmed --&gt; Reminded : when(now &gt;= time - 24h) / sendSMS()</span><br><span class="line">    Reminded --&gt; Completed : visitDone</span><br><span class="line">    Confirmed --&gt; Cancelled : ownerCancels</span><br><span class="line">    Completed --&gt; [*]</span><br><span class="line">    Cancelled --&gt; [*]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">stateDiagram-v2
+    [*] --&gt; Proposed
+    Proposed --&gt; PendingApproval : ownerSelects / createBooking()
+    PendingApproval --&gt; Confirmed : vetApproves / notifyOwner()
+    PendingApproval --&gt; Cancelled : vetRejects / releaseSlot()
+    PendingApproval --&gt; Cancelled : after(24h) / releaseSlot()
+    Confirmed --&gt; Reminded : when(now &gt;= time - 24h) / sendSMS()
+    Reminded --&gt; Completed : visitDone
+    Confirmed --&gt; Cancelled : ownerCancels
+    Completed --&gt; [*]
+    Cancelled --&gt; [*]</code></pre>
 <p>覆盖了 <strong>signal/call 事件、time 事件（after）、change
 事件（when）</strong>——考试中最好三种事件都能体现。</p>
 <h3 id="包图-部署图">9.8 包图 &amp; 部署图</h3>
@@ -1248,10 +1298,10 @@ Teaching）问卷</strong>，老师希望<strong>至少 67%
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Exam-Review/" rel="tag"><i class="fa fa-tag"></i> Exam-Review</a>
               <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
               <a href="/tags/Model-Based-Software-Engineering/" rel="tag"><i class="fa fa-tag"></i> Model-Based-Software-Engineering</a>
               <a href="/tags/UML/" rel="tag"><i class="fa fa-tag"></i> UML</a>
+              <a href="/tags/Exam-Review/" rel="tag"><i class="fa fa-tag"></i> Exam-Review</a>
               <a href="/tags/Meta-Modeling/" rel="tag"><i class="fa fa-tag"></i> Meta-Modeling</a>
           </div>
 

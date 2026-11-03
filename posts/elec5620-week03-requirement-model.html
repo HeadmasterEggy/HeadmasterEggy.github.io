@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 03 讲课总结：需求工程五项活动与常见问题；Ad hoc（Secure Room 规格）、Feature-Oriented（FODA、特征图与跨树约束）、Use Case（Cockburn 模板、extend&#x2F;include）三种建模方法；功能与非功能需求；面向 agentic 软件的有界自治 use case；Tutorial 3 与 Lab 3 解题思路。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:10:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:13:50.988Z">
+<meta property="article:modified_time" content="2026-11-03T04:20:06.473Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Agentic-AI">
 <meta property="article:tag" content="ELEC5620">
@@ -370,7 +370,7 @@ agentic 软件的 use case 模型（本讲最新的部分）</span></a></li><li 
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-11-03 13:10:00 / Modified: 04:13:50" itemprop="dateCreated datePublished" datetime="2026-11-03T13:10:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:10:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:10:00Z">2026-11-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -912,7 +912,12 @@ scenario）</li>
 </ul></li>
 <li>每一步都可能成功或失败；<strong>导致失败的条件作为对应失败场景的开头</strong>；失败场景<strong>从失败点分叉</strong></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    P[Precondition] --&gt; S1[STEP 1]</span><br><span class="line">    S1 -- success --&gt; S2[STEP 2]</span><br><span class="line">    S1 -- failure cond 1 --&gt; F11[STEP F1.1] --&gt; F12[STEP F1.2] --&gt; G2[Goal achieved: SUCCESS]</span><br><span class="line">    S2 -- success --&gt; S3[STEP 3] --&gt; G1[Goal achieved: SUCCESS]</span><br><span class="line">    S2 -- failure cond 2 --&gt; F21[STEP F2.1] --&gt; X[Goal not achieved: FAILURE]</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    P[Precondition] --&gt; S1[STEP 1]
+    S1 -- success --&gt; S2[STEP 2]
+    S1 -- failure cond 1 --&gt; F11[STEP F1.1] --&gt; F12[STEP F1.2] --&gt; G2[Goal achieved: SUCCESS]
+    S2 -- success --&gt; S3[STEP 3] --&gt; G1[Goal achieved: SUCCESS]
+    S2 -- failure cond 2 --&gt; F21[STEP F2.1] --&gt; X[Goal not achieved: FAILURE]</code></pre>
 <blockquote>
 <p>注意：失败分支<strong>不一定</strong>以失败告终——恢复后也可能达成目标。</p>
 </blockquote>
@@ -1001,7 +1006,12 @@ PIN → 输入 PIN → 验证 PIN …）</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    W((Withdraw Cash&lt;br/&gt;ext. point: X1))</span><br><span class="line">    L((Login))</span><br><span class="line">    U((Update Branch Balance))</span><br><span class="line">    W -. "«include»" .-&gt; L</span><br><span class="line">    U -. "«extend» [service successful]" .-&gt; W</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+    W((Withdraw Cash&lt;br/&gt;ext. point: X1))
+    L((Login))
+    U((Update Branch Balance))
+    W -. "«include»" .-&gt; L
+    U -. "«extend» [service successful]" .-&gt; W</code></pre>
 <blockquote>
 <p><strong>讲义特别提醒：“Note the direction of the arrow!”</strong> ——
 <strong>extend 指向基用例，include 指向被包含用例。</strong>
@@ -1415,8 +1425,8 @@ well；<strong>并非总可分</strong>（4 μs 例子）。</li>
               <a href="/tags/ELEC5620/" rel="tag"><i class="fa fa-tag"></i> ELEC5620</a>
               <a href="/tags/Requirement-Modeling/" rel="tag"><i class="fa fa-tag"></i> Requirement-Modeling</a>
               <a href="/tags/Use-Case/" rel="tag"><i class="fa fa-tag"></i> Use-Case</a>
-              <a href="/tags/Agentic-AI/" rel="tag"><i class="fa fa-tag"></i> Agentic-AI</a>
               <a href="/tags/Feature-Model/" rel="tag"><i class="fa fa-tag"></i> Feature-Model</a>
+              <a href="/tags/Agentic-AI/" rel="tag"><i class="fa fa-tag"></i> Agentic-AI</a>
           </div>
 
         
