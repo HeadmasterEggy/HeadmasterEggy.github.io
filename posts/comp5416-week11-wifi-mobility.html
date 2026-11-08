@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 11 详解。802.11 标准与 BSS &#x2F; AP 架构、信道选择与关联、被动&#x2F;主动扫描、为什么无线不能用 CSMA&#x2F;CD、CSMA&#x2F;CA 的 DIFS&#x2F;SIFS&#x2F;随机退避&#x2F;ACK、RTS-CTS 预约及其失败场景、暴露终端、速率自适应；蜂窝网络组成、FDMA&#x2F;TDMA 与 CDMA、2G&#x2F;3G&#x2F;4G LTE 架构（EPC 与 OFDM）；移动性术语（归属网络、永久地址">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:30:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:20:06.470Z">
+<meta property="article:modified_time" content="2026-11-07T07:29:28.881Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5416">
 <meta property="article:tag" content="CSMA-CA">
@@ -261,21 +261,8 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5416-week-11-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93wifi%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C%E4%B8%8E%E7%A7%BB%E5%8A%A8%E6%80%A7"><span class="nav-text">COMP5416 Week 11
-讲课总结：WiFi、蜂窝网络与移动性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86ieee-802.11-wifi"><span class="nav-text">第一部分：IEEE 802.11 WiFi</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80802.11-%E6%A0%87%E5%87%86%E8%AE%B2%E4%B9%89-p3"><span class="nav-text">一、802.11 标准（讲义 p3）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C802.11-lan-%E6%9E%B6%E6%9E%84%E8%AE%B2%E4%B9%89-p4"><span class="nav-text">二、802.11 LAN 架构（讲义 p4）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%BF%A1%E9%81%93%E4%B8%8E%E5%85%B3%E8%81%94%E8%AE%B2%E4%B9%89-p5"><span class="nav-text">三、信道与关联（讲义 p5）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F-vs-%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E8%AE%B2%E4%B9%89-p6"><span class="nav-text">四、被动扫描 vs 主动扫描（讲义
-p6）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E7%BA%BF%E4%B8%8D%E8%83%BD%E7%94%A8-csmacd%E8%AE%B2%E4%B9%89-p710"><span class="nav-text">五、为什么无线不能用
-CSMA&#x2F;CD（讲义 p7–10）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADcsmaca%E8%AE%B2%E4%B9%89-p11%E5%BF%85%E8%80%83%E6%B5%81%E7%A8%8B"><span class="nav-text">六、CSMA&#x2F;CA（讲义 p11，必考流程）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83rtscts-%E9%A2%84%E7%BA%A6%E8%AE%B2%E4%B9%89-p1213"><span class="nav-text">七、RTS&#x2F;CTS 预约（讲义 p12–13）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rtscts-%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E9%9A%90%E8%97%8F%E7%BB%88%E7%AB%AF"><span class="nav-text">RTS&#x2F;CTS 如何解决隐藏终端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E9%80%9F%E7%8E%87%E8%87%AA%E9%80%82%E5%BA%94%E8%AE%B2%E4%B9%89-p14"><span class="nav-text">八、速率自适应（讲义 p14）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9A%B4%E9%9C%B2%E7%BB%88%E7%AB%AF%E9%97%AE%E9%A2%98%E8%AE%B2%E4%B9%89-p1516"><span class="nav-text">九、暴露终端问题（讲义 p15–16）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81rtscts-%E4%B9%9F%E4%BC%9A%E5%A4%B1%E8%B4%A5%E8%AE%B2%E4%B9%89-p1718"><span class="nav-text">十、RTS&#x2F;CTS 也会失败（讲义
-p17–18）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E8%9C%82%E7%AA%9D-internet-%E6%8E%A5%E5%85%A5"><span class="nav-text">第二部分：蜂窝 Internet 接入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BB%84%E6%88%90%E8%AE%B2%E4%B9%89-p20"><span class="nav-text">十一、蜂窝网络的组成（讲义
-p20）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E7%AC%AC%E4%B8%80%E8%B7%B3%E5%85%B1%E4%BA%AB%E6%97%A0%E7%BA%BF%E9%A2%91%E8%B0%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E8%AE%B2%E4%B9%89-p21"><span class="nav-text">十二、第一跳：共享无线频谱的两种方式（讲义
-p21）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%892g-3g-4g-%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B"><span class="nav-text">十三、2G &#x2F; 3G &#x2F; 4G 架构演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#g%E8%AF%AD%E9%9F%B3-%E8%AE%B2%E4%B9%89-p22"><span class="nav-text">2G（语音）—— 讲义 p22</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g%E8%AF%AD%E9%9F%B3-%E6%95%B0%E6%8D%AE-%E8%AE%B2%E4%B9%89-p23"><span class="nav-text">3G（语音 + 数据）—— 讲义 p23</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g-lte-%E8%AE%B2%E4%B9%89-p2426"><span class="nav-text">4G LTE —— 讲义 p24–26</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E7%A7%BB%E5%8A%A8%E6%80%A7%E5%8E%9F%E7%90%86"><span class="nav-text">第三部分：移动性原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%9B%9B%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%BB%E5%8A%A8%E6%80%A7%E8%AE%B2%E4%B9%89-p28"><span class="nav-text">十四、什么是移动性（讲义 p28）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%94%E7%A7%BB%E5%8A%A8%E6%80%A7%E6%9C%AF%E8%AF%AD%E8%AE%B2%E4%B9%89-p2930%E5%BF%85%E8%83%8C"><span class="nav-text">十五、移动性术语（讲义
-p29–30，必背）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%85%AD%E6%80%8E%E4%B9%88%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E7%BB%8F%E5%B8%B8%E6%90%AC%E5%AE%B6%E7%9A%84%E6%9C%8B%E5%8F%8B%E8%AE%B2%E4%B9%89-p31"><span class="nav-text">十六、怎么找到一个经常搬家的朋友（讲义
-p31）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%83%E4%B8%A4%E7%B1%BB%E6%96%B9%E6%B3%95%E8%AE%B2%E4%B9%89-p3233"><span class="nav-text">十七、两类方法（讲义 p32–33）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%85%AB%E6%B3%A8%E5%86%8C%E8%AE%B2%E4%B9%89-p34"><span class="nav-text">十八、注册（讲义 p34）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B9%9D%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1%E8%AE%B2%E4%B9%89-p3537"><span class="nav-text">十九、间接路由（讲义 p35–37）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E7%9B%B4%E6%8E%A5%E8%B7%AF%E7%94%B1%E8%AE%B2%E4%B9%89-p3840"><span class="nav-text">二十、直接路由（讲义 p38–40）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E9%94%9A%E7%82%B9%E5%A4%96%E5%9C%B0%E4%BB%A3%E7%90%86anchor-fa%E5%A4%84%E7%90%86%E7%A7%BB%E5%8A%A8"><span class="nav-text">用锚点外地代理（anchor
-FA）处理移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5-vs-%E7%9B%B4%E6%8E%A5%E5%AF%B9%E6%AF%94"><span class="nav-text">间接 vs 直接对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86mobile-iprfc-3344"><span class="nav-text">第四部分：Mobile IP（RFC 3344）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E4%B8%80%E4%B8%89%E4%B8%AA%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%E8%AE%B2%E4%B9%89-p42"><span class="nav-text">二十一、三个组成部分（讲义
-p42）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E4%BA%8C%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1%E5%88%86%E7%BB%84%E4%B8%AD%E7%9A%84%E5%88%86%E7%BB%84%E8%AE%B2%E4%B9%89-p43"><span class="nav-text">二十二、间接路由：分组中的分组（讲义
-p43）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E4%B8%89%E4%BB%A3%E7%90%86%E5%8F%91%E7%8E%B0%E8%AE%B2%E4%B9%89-p44"><span class="nav-text">二十三、代理发现（讲义 p44）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E5%9B%9B%E6%B3%A8%E5%86%8C%E4%BE%8B%E5%AD%90%E8%AE%B2%E4%B9%89-p45"><span class="nav-text">二十四、注册例子（讲义 p45）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E9%83%A8%E5%88%86%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E7%A7%BB%E5%8A%A8%E6%80%A7"><span class="nav-text">第五部分：蜂窝网络中的移动性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E4%BA%94hlr-%E4%B8%8E-vlr%E8%AE%B2%E4%B9%89-p48"><span class="nav-text">二十五、HLR 与 VLR（讲义 p48）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E5%85%ADgsm%E5%88%B0%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87%E7%9A%84%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1%E8%AE%B2%E4%B9%89-p49"><span class="nav-text">二十六、GSM：到移动设备的间接路由（讲义
-p49）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E4%B8%83gsm-%E5%90%8C%E4%B8%80-msc-%E4%B8%8B%E7%9A%84%E5%88%87%E6%8D%A2%E8%AE%B2%E4%B9%89-p5051"><span class="nav-text">二十七、GSM 同一 MSC
-下的切换（讲义 p50–51）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8D%81%E5%85%AB%E5%88%87%E6%8D%A2%E7%AE%97%E6%B3%95%E8%AE%B2%E4%B9%89-p5255"><span class="nav-text">二十八、切换算法（讲义 p52–55）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E9%83%A8%E5%88%86%E6%97%A0%E7%BA%BF%E4%B8%8E%E7%A7%BB%E5%8A%A8%E6%80%A7%E5%AF%B9%E4%B8%8A%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BD%B1%E5%93%8D%E8%AE%B2%E4%B9%89-p57"><span class="nav-text">第六部分：无线与移动性对上层协议的影响（讲义
-p57）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E9%83%A8%E5%88%86%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0"><span class="nav-text">第七部分：本周考点速记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">易错点</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#comp5416-w11wi-fi%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C%E4%B8%8E%E7%A7%BB%E5%8A%A8%E6%80%A7%E7%9F%A5%E8%AF%86%E7%82%B9-%E9%A2%98%E5%9E%8B"><span class="nav-text">COMP5416
+W11：Wi-Fi、蜂窝网络与移动性（知识点 + 题型）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80802.11-%E6%A0%87%E5%87%86%E5%92%8C%E6%9E%B6%E6%9E%84"><span class="nav-text">一、802.11 标准和架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86"><span class="nav-text">1.1 标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E5%92%8C%E5%85%B3%E8%81%94"><span class="nav-text">1.3 信道和关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F-vs-%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F"><span class="nav-text">1.4 被动扫描 vs 主动扫描</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AEcsmaca"><span class="nav-text">二、多路访问：CSMA&#x2F;CA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8%E6%9C%89%E7%BA%BF%E7%9A%84-csmacd"><span class="nav-text">2.1 为什么不能用有线的 CSMA&#x2F;CD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#csmaca-%E6%B5%81%E7%A8%8B%E5%BF%85%E8%80%83"><span class="nav-text">2.2 CSMA&#x2F;CA 流程（必考）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rts-cts%E9%A2%84%E7%BA%A6%E4%BF%A1%E9%81%93"><span class="nav-text">2.3 RTS &#x2F; CTS：预约信道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E8%97%8F%E7%BB%88%E7%AB%AF-vs-%E6%9A%B4%E9%9C%B2%E7%BB%88%E7%AB%AF"><span class="nav-text">2.4 隐藏终端 vs 暴露终端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87%E8%87%AA%E9%80%82%E5%BA%94"><span class="nav-text">2.5 速率自适应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C"><span class="nav-text">三、蜂窝网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E6%88%90"><span class="nav-text">3.1 组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%B7%B3%E6%80%8E%E4%B9%88%E5%85%B1%E4%BA%AB%E9%A2%91%E8%B0%B1"><span class="nav-text">3.2 第一跳怎么共享频谱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g-3g-4g"><span class="nav-text">3.3 2G → 3G → 4G</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%A7%BB%E5%8A%A8%E6%80%A7%E5%8E%9F%E7%90%86"><span class="nav-text">四、移动性原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%BB%E5%8A%A8%E6%80%A7"><span class="nav-text">4.1 什么是移动性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E5%BF%85%E8%83%8C"><span class="nav-text">4.2 术语（必背）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%B1%BB%E6%96%B9%E6%B3%95"><span class="nav-text">4.3 两类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C"><span class="nav-text">4.4 注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1"><span class="nav-text">4.5 间接路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%B7%AF%E7%94%B1"><span class="nav-text">4.6 直接路由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94mobile-iprfc-3344"><span class="nav-text">五、Mobile IP（RFC 3344）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E9%83%A8%E5%88%86"><span class="nav-text">5.1 三个部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1%E5%88%86%E7%BB%84%E5%A5%97%E5%88%86%E7%BB%84%E9%9A%A7%E9%81%93"><span class="nav-text">5.2 间接路由：分组套分组（隧道）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E5%8F%91%E7%8E%B0"><span class="nav-text">5.3 代理发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E4%BE%8B%E5%AD%90"><span class="nav-text">5.4 注册例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E8%9C%82%E7%AA%9D%E7%BD%91%E7%BB%9C%E9%87%8C%E7%9A%84%E7%A7%BB%E5%8A%A8%E6%80%A7"><span class="nav-text">六、蜂窝网络里的移动性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hlr-%E5%92%8C-vlr"><span class="nav-text">6.1 HLR 和 VLR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gsm%E6%89%93%E7%BB%99%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87%E9%97%B4%E6%8E%A5%E8%B7%AF%E7%94%B1"><span class="nav-text">6.2 GSM：打给移动设备（间接路由）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gsm-%E5%90%8C%E4%B8%80-msc-%E4%B8%8B%E7%9A%84%E5%88%87%E6%8D%A2"><span class="nav-text">6.3 GSM 同一 MSC 下的切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-text">6.4 切换算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E6%97%A0%E7%BA%BF%E5%92%8C%E7%A7%BB%E5%8A%A8%E5%AF%B9%E4%B8%8A%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">七、无线和移动对上层协议的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E7%82%B9%E5%B0%8F%E7%BB%93"><span class="nav-text">考点小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -374,9 +361,15 @@ p57）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href=
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-11-03 11:30:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T11:30:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 11:30:00" itemprop="dateCreated datePublished" datetime="2026-11-03T11:30:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-11-07 07:29:28" itemprop="dateModified" datetime="2026-11-07T07:29:28Z">2026-11-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -399,14 +392,14 @@ p57）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href=
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>5.4k</span>
+      <span>5.8k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>20 mins.</span>
+      <span>21 mins.</span>
     </span>
 </div>
 
@@ -417,239 +410,199 @@ p57）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href=
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="comp5416-week-11-讲课总结wifi蜂窝网络与移动性">COMP5416 Week 11
-讲课总结：WiFi、蜂窝网络与移动性</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="comp5416-w11wi-fi蜂窝网络与移动性知识点-题型">COMP5416
+W11：Wi-Fi、蜂窝网络与移动性（知识点 + 题型）</h1>
 <blockquote>
-<p><strong>课程</strong>：COMP5416/COMP4416 — Advanced Network
-Technologies，Semester 2 2026 <strong>讲师</strong>：Professor
-<strong>Vincent Gramoli</strong> <strong>来源</strong>：讲义
-<code>W11-WiFi.pdf</code>（59 页）。本周 Canvas 有录播
-<code>week11-lecture.mp4</code>，但未下载（文件过大），<strong>本文只依据讲义
-PDF</strong>，没有转录稿内容。本周文件夹里没有
-tutorial；与本讲内容对应的练习（LTE 时隙分配、Mobile IP 转交地址）在
-Week 12 tutorial 里，解答见 <a href="/posts/comp5416-week12-5g-mobility-quic.html">Week 12 总结</a>。
-<strong>教材</strong>：Kurose &amp; Ross 9th ed. —— <strong>第 7 章
-7.3（WiFi）、7.4（蜂窝网络）、7.5–7.7（移动性原理与实践）</strong></p>
-<p><strong>本周覆盖</strong>：IEEE 802.11 WLAN → 蜂窝 Internet 接入 →
-移动性原理（寻址与路由）→ Mobile IP → 蜂窝网络中的移动性 →
-对上层协议的影响。 <strong>前置</strong>：<a href="/posts/comp5416-week10-sip-qos-wireless.html">Week 10</a>
-的无线链路特性、隐藏终端、SNR/BER、CDMA。</p>
+<p><strong>这一周考什么</strong>：802.11
+的架构、扫描和关联；<strong>为什么无线不能用 CSMA/CD、CSMA/CA
+的流程（DIFS、SIFS、退避、ACK）</strong>；RTS / CTS
+和隐藏终端、暴露终端；速率自适应；蜂窝网络 2G / 3G / 4G
+的演进；<strong>移动性术语、间接路由 vs 直接路由</strong>；Mobile
+IP；HLR / VLR、GSM 切换；切换算法；无线对 TCP 的影响。</p>
+<p><strong>期末题型</strong>：全是选择题，有单选也有多选，<strong>多选题勾错一个会抵消勾对的一个</strong>。这一周以概念题为主。和这周对应的计算题（LTE
+时隙分配、Mobile IP 转交地址）在 W12 tutorial，写在 <a href="/posts/comp5416-week12-5g-mobility-quic.html">W12</a> 里。</p>
+<p>读法：从上往下读。每节先讲它要解决什么问题，再给结论。</p>
 </blockquote>
 <hr>
-<h1 id="第一部分ieee-802.11-wifi">第一部分：IEEE 802.11 WiFi</h1>
-<h2 id="一802.11-标准讲义-p3">一、802.11 标准（讲义 p3）</h2>
+<h2 id="一802.11-标准和架构">一、802.11 标准和架构</h2>
+<h3 id="标准">1.1 标准</h3>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">标准</th>
+<th>标准</th>
 <th style="text-align: center;">年份</th>
-<th style="text-align: left;">最大速率</th>
+<th>最大速率</th>
 <th style="text-align: center;">范围</th>
-<th style="text-align: left;">频率</th>
+<th>频段</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>802.11b</strong></td>
+<td>802.11b</td>
 <td style="text-align: center;">1999</td>
-<td style="text-align: left;">11 Mbps</td>
+<td>11 Mbps</td>
 <td style="text-align: center;">30 m</td>
-<td style="text-align: left;">2.4 GHz</td>
+<td>2.4 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>802.11a</strong></td>
+<td>802.11a</td>
 <td style="text-align: center;">1999</td>
-<td style="text-align: left;">54 Mbps</td>
+<td>54 Mbps</td>
 <td style="text-align: center;">30 m</td>
-<td style="text-align: left;">5 GHz</td>
+<td>5 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>802.11g</strong></td>
+<td>802.11g</td>
 <td style="text-align: center;">2003</td>
-<td style="text-align: left;">54 Mbps</td>
+<td>54 Mbps</td>
 <td style="text-align: center;">30 m</td>
-<td style="text-align: left;">2.4 GHz</td>
+<td>2.4 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>802.11n（WiFi 4）</strong></td>
+<td>802.11n（Wi-Fi 4）</td>
 <td style="text-align: center;">2009</td>
-<td style="text-align: left;">600 Mbps</td>
+<td>600 Mbps</td>
 <td style="text-align: center;">70 m</td>
-<td style="text-align: left;">2.4、5 GHz</td>
+<td>2.4、5 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>802.11ac（WiFi 5）</strong></td>
+<td>802.11ac（Wi-Fi 5）</td>
 <td style="text-align: center;">2013</td>
-<td style="text-align: left;">3.47 Gbps</td>
+<td>3.47 Gbps</td>
 <td style="text-align: center;">70 m</td>
-<td style="text-align: left;">5 GHz</td>
+<td>5 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>802.11ax（WiFi 6）</strong></td>
+<td>802.11ax（Wi-Fi 6）</td>
 <td style="text-align: center;">2020</td>
-<td style="text-align: left;">14 Gbps</td>
+<td>14 Gbps</td>
 <td style="text-align: center;">70 m</td>
-<td style="text-align: left;">2.4、5 GHz</td>
+<td>2.4、5 GHz</td>
 </tr>
 <tr>
-<td style="text-align: left;">802.11af</td>
+<td>802.11af</td>
 <td style="text-align: center;">2014</td>
-<td style="text-align: left;">35–560 Mbps</td>
+<td>35–560 Mbps</td>
 <td style="text-align: center;">1 km</td>
-<td style="text-align: left;">未用电视频段（54–790 MHz）</td>
+<td>未用的电视频段</td>
 </tr>
 <tr>
-<td style="text-align: left;">802.11ah</td>
+<td>802.11ah</td>
 <td style="text-align: center;">2017</td>
-<td style="text-align: left;">347 Mbps</td>
+<td>347 Mbps</td>
 <td style="text-align: center;">1 km</td>
-<td style="text-align: left;">900 MHz</td>
+<td>900 MHz</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>全部使用 CSMA/CA，都有基站版和 ad hoc 版。</strong>
-记忆：<strong>a 和 ac 只在 5 GHz</strong>；<strong>b、g 只在 2.4
-GHz</strong>；<strong>n、ax 双频</strong>。</p>
-</blockquote>
-<h2 id="二802.11-lan-架构讲义-p4">二、802.11 LAN 架构（讲义 p4）</h2>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">概念</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>无线主机与基站通信</strong></td>
-<td style="text-align: left;"><strong>基站 = 接入点（AP）</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>BSS（基本服务集，又叫「cell」）</strong></td>
-<td style="text-align: left;">基础设施模式下包含：<strong>无线主机 +
-一个 AP</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>ad hoc 模式</strong></td>
-<td style="text-align: left;"><strong>只有主机</strong></td>
-</tr>
-</tbody>
-</table>
-<p>多个 BSS 的 AP 通过集线器/交换机/路由器连到 Internet。</p>
-<h2 id="三信道与关联讲义-p5">三、信道与关联（讲义 p5）</h2>
-<p><strong>信道</strong>： - <strong>802.11b：2.4–2.485 GHz 被分成 11
-个不同频率的信道</strong> - <strong>AP 管理员为 AP 选择频率</strong> -
-<strong>可能有干扰：所选信道可能和邻近 AP 的相同！</strong></p>
-<p>（补充：2.4 GHz 的相邻信道频谱重叠，<strong>互不重叠的只有
-1、6、11</strong>，所以相邻 AP 通常选这三个。）</p>
-<p><strong>关联（association）—— 主机必须与一个 AP 关联</strong>： 1.
-<strong>扫描信道，监听包含 AP 名字（SSID）和 MAC 地址的信标帧（beacon
-frame）</strong> 2. <strong>选择要关联的 AP</strong> 3.
-<strong>可能进行认证</strong> 4. <strong>通常运行 DHCP 获取 AP
-所在子网的 IP 地址</strong></p>
-<h2 id="四被动扫描-vs-主动扫描讲义-p6">四、被动扫描 vs 主动扫描（讲义
-p6）</h2>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>被动扫描</strong></th>
-<th style="text-align: left;"><strong>主动扫描</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">① <strong>AP 发送信标帧</strong></td>
-<td style="text-align: left;">① <strong>H1 广播探测请求（Probe
-Request）帧</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">② <strong>H1 向选中的 AP
-发关联请求帧</strong></td>
-<td style="text-align: left;">② <strong>各 AP 回探测响应（Probe
-Response）帧</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">③ <strong>选中的 AP
-回关联响应帧</strong></td>
-<td style="text-align: left;">③ <strong>H1 向选中的 AP
-发关联请求帧</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;">④ <strong>选中的 AP
-回关联响应帧</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>被动 3 步，主动 4
-步</strong>；区别在于<strong>谁先开口</strong>：被动是 AP 先发
-beacon，主动是主机先发 probe。</p>
-</blockquote>
-<h2 id="五为什么无线不能用-csmacd讲义-p710">五、为什么无线不能用
-CSMA/CD（讲义 p7–10）</h2>
-<p><strong>碰撞仍会发生</strong>：传播时延使两个节点可能听不到对方的传输；碰撞浪费整个帧的传输时间。</p>
-<p><strong>有线 LAN 的 CSMA/CD</strong>： -
-<strong>短时间内检测到碰撞</strong>，<strong>立即中止</strong>，减少信道浪费
--
-检测方法：<strong>测量信号强度，比较发送和接收的信号</strong>；<strong>可以同时发送和侦听</strong></p>
-<p><strong>无线 LAN 不行</strong>：</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">原因</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>自己的发射功率淹没接收信号</strong></td>
-<td style="text-align: left;"><strong>本地发射强度远大于收到的信号强度</strong>，发送时听不到别人</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>衰落（fading）</strong></td>
-<td style="text-align: left;">收到的信号太弱</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>隐藏终端</strong></td>
-<td style="text-align: left;"><strong>无论如何都无法感知所有碰撞</strong>（Week
-10）</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>所以 802.11
-没有碰撞检测，目标是「避免碰撞」：CSMA/C(ollision)A(voidance)。</strong></p>
-</blockquote>
-<h2 id="六csmaca讲义-p11必考流程">六、CSMA/CA（讲义 p11，必考流程）</h2>
-<p><strong>802.11 发送方</strong>：</p>
-<ol type="1">
-<li><strong>若侦听到信道空闲达
-DIFS（分布式帧间间隔），就发送整个帧</strong>（没有碰撞检测）</li>
-<li><strong>若侦听到信道忙</strong>：
 <ul>
-<li><strong>启动随机退避定时器</strong></li>
-<li><strong>定时器只在信道空闲时倒数</strong>（忙时冻结）</li>
-<li><strong>定时器到期就发送</strong></li>
-<li><strong>若没收到 ACK：增大随机退避区间，重复第 2 步</strong></li>
+<li><strong>全部用 CSMA/CA</strong>，都有基站版和 ad hoc 版。</li>
+<li>记法：<strong>a、ac 只在 5 GHz</strong>；<strong>b、g 只在 2.4
+GHz</strong>；n、ax 双频。</li>
+</ul>
+<h3 id="架构">1.2 架构</h3>
+<ul>
+<li>无线主机和<strong>基站</strong>通信，802.11
+里基站叫<strong>接入点（AP）</strong>。</li>
+<li><strong>BSS（基本服务集，也叫 cell）</strong>：基础设施模式下 =
+<strong>无线主机 + 一个 AP</strong>。</li>
+<li>ad hoc 模式：<strong>只有主机</strong>。</li>
+</ul>
+<h3 id="信道和关联">1.3 信道和关联</h3>
+<ul>
+<li>802.11b 把 2.4–2.485 GHz 分成 <strong>11 个信道</strong>；管理员给
+AP 选信道；<strong>可能和邻近 AP 选到同一信道而互相干扰</strong>。（2.4
+GHz 相邻信道频谱重叠，互不重叠的只有 1、6、11。）</li>
+<li>主机必须先和一个 AP <strong>关联（associate）</strong>：
+<ol type="1">
+<li>扫描信道，监听<strong>信标帧（beacon）</strong>，里面有 AP
+的名字（<strong>SSID</strong>）和 MAC 地址</li>
+<li>选一个 AP</li>
+<li>可能要认证</li>
+<li>一般跑 <strong>DHCP</strong>，拿到 AP 所在子网的 IP 地址</li>
+</ol></li>
+</ul>
+<h3 id="被动扫描-vs-主动扫描">1.4 被动扫描 vs 主动扫描</h3>
+<table>
+<thead>
+<tr>
+<th>被动扫描（3 步）</th>
+<th>主动扫描（4 步）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong>AP 发信标帧</strong></td>
+<td>① <strong>主机广播探测请求（Probe Request）</strong></td>
+</tr>
+<tr>
+<td>② 主机向选中的 AP 发关联请求</td>
+<td>② 各 AP 回探测响应（Probe Response）</td>
+</tr>
+<tr>
+<td>③ AP 回关联响应</td>
+<td>③ 主机向选中的 AP 发关联请求</td>
+</tr>
+<tr>
+<td></td>
+<td>④ AP 回关联响应</td>
+</tr>
+</tbody>
+</table>
+<p>区别在<strong>谁先开口</strong>：被动是 AP
+先发信标，主动是主机先发探测。</p>
+<hr>
+<h2 id="二多路访问csmaca">二、多路访问：CSMA/CA</h2>
+<h3 id="为什么不能用有线的-csmacd">2.1 为什么不能用有线的 CSMA/CD</h3>
+<p>有线以太网的
+CSMA/CD：<strong>边发边听</strong>，比较发出去和收到的信号，<strong>很快发现碰撞就立即停</strong>，少浪费信道。</p>
+<p>无线做不到：</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th>原因</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>自己的信号太强</strong></td>
+<td>本地发射功率远大于收到的信号，<strong>发送时听不到别人</strong></td>
+</tr>
+<tr>
+<td><strong>衰落（fading）</strong></td>
+<td>收到的信号太弱</td>
+</tr>
+<tr>
+<td><strong>隐藏终端</strong></td>
+<td>无论如何都<strong>感知不到所有碰撞</strong>（W10）</td>
+</tr>
+</tbody>
+</table>
+<p>所以 802.11
+<strong>不检测碰撞</strong>，而是<strong>尽量避免碰撞</strong>：CSMA/<strong>CA</strong>（Collision
+Avoidance）。碰撞仍然可能发生，而且一旦发生<strong>整个帧都白发</strong>（不能中途停）。</p>
+<h3 id="csmaca-流程必考">2.2 CSMA/CA 流程（必考）</h3>
+<p><strong>发送方</strong>：</p>
+<ol type="1">
+<li>侦听到信道<strong>空闲达
+DIFS</strong>（分布式帧间间隔），就<strong>发整个帧</strong>（不做碰撞检测）。</li>
+<li>侦听到信道<strong>忙</strong>：
+<ul>
+<li>选一个<strong>随机退避</strong>时间，启动定时器</li>
+<li><strong>定时器只在信道空闲时倒数</strong>，信道忙时<strong>冻结</strong>（不重置）</li>
+<li>定时器到 0 就发</li>
+<li><strong>没收到
+ACK</strong>：<strong>扩大</strong>随机退避的范围，回到第 2 步</li>
 </ul></li>
 </ol>
-<p><strong>802.11 接收方</strong>： - <strong>若帧正确收到，等待
-SIFS（短帧间间隔）后回 ACK</strong></p>
-<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">sender:   |<span class="string">--DIFS--</span>|<span class="string">====== data ======</span>|</span><br><span class="line">receiver:                              |<span class="string">-SIFS-</span>|<span class="string">=ACK=</span>|</span><br></pre></td></tr></table></figure>
+<p><strong>接收方</strong>：帧正确收到后，<strong>等
+SIFS</strong>（短帧间间隔）就回 <strong>ACK</strong>。</p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">发送方：  |<span class="string">--DIFS--</span>|<span class="string">====== 数据 ======</span>|</span><br><span class="line">接收方：                              |<span class="string">-SIFS-</span>|<span class="string">=ACK=</span>|</span><br></pre></td></tr></table></figure>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -657,491 +610,53 @@ SIFS（短帧间间隔）后回 ACK</strong></p>
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">设计细节</th>
-<th style="text-align: left;">原因</th>
+<th>设计</th>
+<th>为什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>为什么需要链路层 ACK</strong></td>
-<td style="text-align: left;"><strong>发送方无法检测碰撞</strong>，只能靠「有没有
-ACK」判断成功</td>
+<td><strong>需要链路层 ACK</strong></td>
+<td>发送方<strong>检测不到碰撞</strong>，只能靠有没有收到 ACK
+判断成功</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>为什么 SIFS &lt;
-DIFS</strong></td>
-<td style="text-align: left;"><strong>让 ACK 优先</strong>：接收方等
-SIFS 就发 ACK，其他想发数据的站要等更长的 DIFS，不会抢在 ACK 前面</td>
+<td><strong>SIFS &lt; DIFS</strong></td>
+<td><strong>让 ACK 优先</strong>：接收方只等 SIFS 就回
+ACK，其他想发数据的站要等更长的 DIFS，抢不到 ACK 前面</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>为什么退避只在空闲时倒数</strong></td>
-<td style="text-align: left;">保证公平：等得久的站剩余计数少，下次更早发</td>
+<td>退避只在空闲时倒数</td>
+<td>公平：等得久的站剩的计数少，下次更早发</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>为什么失败后扩大退避区间</strong></td>
-<td style="text-align: left;">类似以太网的二进制指数退避，降低再次碰撞概率</td>
+<td>失败后扩大退避范围</td>
+<td>和以太网的指数退避一样，降低再次碰撞的概率</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>与 CSMA/CD 的关键差异</strong>：CSMA/CD
-侦听到空闲就立刻发，碰撞了再中止； <strong>CSMA/CA
-即使第一次侦听到忙，也要在信道空闲后随机退避再发</strong>，因为碰撞一旦发生，整个帧都会白发（无法中途中止）。</p>
-</blockquote>
-<h2 id="七rtscts-预约讲义-p1213">七、RTS/CTS 预约（讲义 p12–13）</h2>
-<p><strong>思想</strong>：<strong>允许发送方「预约」信道</strong>，而不是随机访问数据帧
-—— <strong>避免长数据帧碰撞</strong>。</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">步骤</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;"><strong>发送方先用 CSMA 向基站发一个小的
-RTS（Request-To-Send）帧</strong>；<strong>RTS
-仍可能互相碰撞（但很短）</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;"><strong>基站广播
-CTS（Clear-To-Send）作为响应</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;"><strong>CTS 所有节点都能听到</strong> →
-<strong>发送方发数据帧，其他站推迟发送</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>用小的预约分组彻底避免数据帧碰撞！</strong></p>
-</blockquote>
-<p><strong>讲义 p13 时序</strong>：A、B 同时向 AP 发 RTS →
-<strong>预约碰撞</strong> → 退避重试 → A 的 RTS 成功 → AP 广播
-<strong>CTS(A)</strong> → A 发数据，<strong>B 推迟</strong>。</p>
-<blockquote>
-<p><strong>讲义思考题：A（或 B）怎么知道 RTS 碰撞了？</strong>
-<strong>答：没有收到
-CTS</strong>（超时）。和数据帧一样，发送方无法直接检测碰撞，只能通过「预期的响应没来」推断。</p>
-</blockquote>
-<h3 id="rtscts-如何解决隐藏终端">RTS/CTS 如何解决隐藏终端</h3>
-<p>A、C 互相听不到，但<strong>都能听到 AP（或 B）</strong>：A 发 RTS →
-AP 回 CTS(A) → <strong>C 虽然听不到 A 的 RTS，但听得到
-CTS</strong>，于是 C 推迟。<strong>CTS
-把「预约」广播给了所有能干扰接收方的节点。</strong></p>
-<h2 id="八速率自适应讲义-p14">八、速率自适应（讲义 p14）</h2>
-<blockquote>
-<p><strong>基站和移动设备根据 SNR
-的变化，动态改变传输速率（物理层调制方式）。</strong></p>
-</blockquote>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">步骤</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;"><strong>节点远离基站 → SNR 下降、BER
-上升</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;"><strong>BER
-过高时，切换到更低的传输速率</strong>（但 BER 更低），例如 QAM256 →
-QAM16 → BPSK</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>这就是 Week 10 「给定 SNR 和 BER
-要求，选吞吐量最高的调制」的动态版本。</p>
-</blockquote>
-<h2 id="九暴露终端问题讲义-p1516">九、暴露终端问题（讲义 p15–16）</h2>
-<p><strong>场景</strong>：S1 → R1 和 S2 → R2，S1 与 S2
-相邻（互相能听到），但 R1 离 S2 远、R2 离 S1 远。</p>
-<ul>
-<li><strong>理想</strong>：<strong>S1→R1 和 S2→R2
-可以同时进行</strong>（各自的接收方不受对方干扰）</li>
-<li><strong>实际</strong>：<strong>S2 侦听到 S1
-的载波，于是保持静默</strong> → 白白浪费了一次并行的机会</li>
-</ul>
-<table>
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"></th>
-<th style="text-align: left;"><strong>隐藏终端</strong></th>
-<th style="text-align: left;"><strong>暴露终端</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">问题</td>
-<td style="text-align: left;"><strong>该等的时候没等</strong>（听不到干扰者）</td>
-<td style="text-align: left;"><strong>不该等的时候等了</strong>（听到了不相干的发送者）</td>
-</tr>
-<tr>
-<td style="text-align: left;">后果</td>
-<td style="text-align: left;"><strong>碰撞</strong></td>
-<td style="text-align: left;"><strong>吞吐量浪费</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">根源</td>
-<td style="text-align: left;"><strong>载波侦听是在发送方做的，但碰撞发生在接收方</strong></td>
-<td style="text-align: left;">同左</td>
-</tr>
-</tbody>
-</table>
-<h2 id="十rtscts-也会失败讲义-p1718">十、RTS/CTS 也会失败（讲义
-p17–18）</h2>
-<p>讲义答：<strong>会</strong>。（讲义引用 JHU
-课件的图，典型情况如下）</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">失败场景</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>CTS 被碰撞</strong></td>
-<td style="text-align: left;">某个隐藏节点没听到 CTS（CTS
-在它那里与别的帧碰撞），之后照常发送，干扰接收方</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>RTS/CTS
-与其他节点的传输时间重叠</strong></td>
-<td style="text-align: left;">节点在别人的 CTS
-发出时正在发送自己的帧，听不到 CTS，于是不知道要推迟</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>结论：<strong>RTS/CTS
-显著减少但不能完全消除碰撞</strong>；而且它本身有开销（多两个控制帧），所以实际中<strong>只对长帧启用</strong>（设一个长度阈值）。</p>
-</blockquote>
-<hr>
-<h1 id="第二部分蜂窝-internet-接入">第二部分：蜂窝 Internet 接入</h1>
-<h2 id="十一蜂窝网络的组成讲义-p20">十一、蜂窝网络的组成（讲义
-p20）</h2>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">组件</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>cell（小区）</strong></td>
-<td style="text-align: left;"><strong>覆盖一个地理区域</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>基站（BS）</strong></td>
-<td style="text-align: left;"><strong>类似 802.11 的
-AP</strong>；<strong>移动用户通过 BS 接入网络</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>空中接口（air-interface）</strong></td>
-<td style="text-align: left;"><strong>移动设备与 BS
-之间的物理层和链路层协议</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>MSC（移动交换中心）</strong></td>
-<td style="text-align: left;"><strong>把小区连到有线电话网</strong>；<strong>管理呼叫建立</strong>；<strong>处理移动性</strong></td>
-</tr>
-</tbody>
-</table>
-<h2 id="十二第一跳共享无线频谱的两种方式讲义-p21">十二、第一跳：共享无线频谱的两种方式（讲义
-p21）</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">方式</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>FDMA/TDMA 组合</strong></td>
-<td style="text-align: left;"><strong>把频谱分成频率信道，每个信道再分成时隙</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>CDMA</strong></td>
-<td style="text-align: left;">码分多址（Week 10）</td>
-</tr>
-</tbody>
-</table>
-<h2 id="十三2g-3g-4g-架构演进">十三、2G / 3G / 4G 架构演进</h2>
-<h3 id="g语音-讲义-p22">2G（语音）—— 讲义 p22</h3>
-<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line">移动用户 → <span class="keyword">BTS（基站收发台）→ </span><span class="keyword">BSC（基站控制器）→ </span>MSC → Gateway MSC → 公共电话网</span><br><span class="line">           └──── <span class="keyword">BSS（基站系统）────┘</span></span><br></pre></td></tr></table></figure>
-<h3 id="g语音-数据-讲义-p23">3G（语音 + 数据）—— 讲义 p23</h3>
-<ul>
-<li><strong>语音网络核心不变</strong>（MSC → Gateway MSC →
-公共电话网）</li>
-<li><strong>数据网络并行运行</strong>：radio network controller →
-<strong>SGSN（Serving GPRS Support Node）</strong> →
-<strong>GGSN（Gateway GPRS Support Node）</strong> → 公共 Internet</li>
-</ul>
-<blockquote>
-<p><strong>关键洞察：新的蜂窝数据网络（除边缘外）与现有蜂窝语音网络并行运行。</strong>
-GPRS = General Packet Radio Service。</p>
-</blockquote>
-<h3 id="g-lte-讲义-p2426">4G LTE —— 讲义 p24–26</h3>
-<p><strong>相比 3G 的两大创新</strong>：</p>
-<table>
-<colgroup>
-<col style="width: 38%">
-<col style="width: 30%">
-<col style="width: 30%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">#</th>
-<th style="text-align: left;">创新</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>EPC（演进分组核心）</strong></td>
-<td style="text-align: left;"><strong>简化的全 IP
-核心网，统一了电路交换的蜂窝语音网和分组交换的蜂窝数据网</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>LTE 无线接入网</strong></td>
-<td style="text-align: left;"><strong>OFDM（正交频分复用）与时分复用的组合</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>OFDM + TDM 的资源网格</strong>：纵轴频率载波 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="6.84ex" height="2.059ex" role="img" focusable="false" viewBox="0 -705 3023.4 910"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="f_1 \dots f_6"><g data-mml-node="msub" data-latex="f_1"><g data-mml-node="mi" data-latex="f"><path data-c="1D453" d="M552 633C552 677 509 705 462 705C400 705 357 665 334 586C329 568 318 517 302 433L237 433C215 433 204 432 204 411C204 400 214 395 235 395L295 395L222 8C211-49 201-91 192-119C180-156 163-175 141-175C126-175 114-171 103-164C135-159 151-140 151-108C151-82 138-69 111-69C77-69 53-99 53-133C53-177 94-205 141-205C166-205 189-195 208-174C240-141 265-94 283-31C294 8 304 46 311 84L369 395L451 395C474 395 484 396 484 419C484 428 474 433 454 433L377 433C383 474 411 625 420 644C430 665 444 675 462 675C477 675 490 671 501 664C470 657 454 639 454 608C454 582 467 569 494 569C528 569 552 599 552 633Z"></path></g><g data-mml-node="mn" transform="translate(523,-150) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g><g data-mml-node="mo" transform="translate(1093.2,0)"><path data-c="2026" d="M751 53C751 83 725 106 695 106C664 106 638 83 638 53C638 23 664 0 695 0C725 0 751 23 751 53M475 53C475 83 449 106 419 106C388 106 363 83 363 53C363 23 388 0 419 0C449 0 475 23 475 53M200 53C200 83 174 106 143 106C113 106 87 83 87 53C87 23 113 0 143 0C173 0 200 23 200 53Z"></path></g><g data-mml-node="msub" data-latex="f_6" transform="translate(2096.9,0)"><g data-mml-node="mi" data-latex="f"><path data-c="1D453" d="M552 633C552 677 509 705 462 705C400 705 357 665 334 586C329 568 318 517 302 433L237 433C215 433 204 432 204 411C204 400 214 395 235 395L295 395L222 8C211-49 201-91 192-119C180-156 163-175 141-175C126-175 114-171 103-164C135-159 151-140 151-108C151-82 138-69 111-69C77-69 53-99 53-133C53-177 94-205 141-205C166-205 189-195 208-174C240-141 265-94 283-31C294 8 304 46 311 84L369 395L451 395C474 395 484 396 484 419C484 428 474 433 454 433L377 433C383 474 411 625 420 644C430 665 444 675 462 675C477 675 490 671 501 664C470 657 454 639 454 608C454 582 467 569 494 569C528 569 552 599 552 633Z"></path></g><g data-mml-node="mn" transform="translate(523,-150) scale(0.707)" data-latex="6"><path data-c="36" d="M383 504C416 504 432 521 432 555C432 627 378 666 304 666C221 666 155 627 106 548C63 480 42 403 42 316C42 189 65 100 112 47C152 1 198-22 251-22C312-22 362 1 401 47C438 91 457 144 457 205C457 266 439 318 403 361C365 407 316 431 257 431C205 431 165 402 138 346L138 352C138 465 166 561 226 605C252 624 279 633 306 633C342 633 368 623 385 602C351 602 334 583 334 553C334 525 355 504 383 504M344 340C355 317 361 272 361 206C361 141 356 98 345 76C325 35 294 14 251 14C222 14 200 24 184 44C171 60 162 74 158 85C146 116 140 163 140 227C140 255 144 282 151 308C164 355 201 399 256 399C295 399 325 379 344 340Z"></path></g></g></g></g></svg></mjx-container></span>，横轴时隙（0.5 ms
-一格）。<strong>基站可以在任意时隙、任意频率上为任意设备分配资源</strong>
-—— Week 12 tutorial 的 LTE 题就是在这个网格上做公平分配。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;"></th>
-<th style="text-align: left;">2G</th>
-<th style="text-align: left;">3G</th>
-<th style="text-align: left;">4G</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">业务</td>
-<td style="text-align: left;">语音</td>
-<td style="text-align: left;">语音 + 数据</td>
-<td style="text-align: left;"><strong>全 IP</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">核心</td>
-<td style="text-align: left;">电路交换</td>
-<td style="text-align: left;"><strong>电路 + 分组并行</strong></td>
-<td style="text-align: left;"><strong>EPC 统一</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">空口</td>
-<td style="text-align: left;">FDMA/TDMA</td>
-<td style="text-align: left;">CDMA</td>
-<td style="text-align: left;"><strong>OFDM + TDM</strong></td>
-</tr>
-</tbody>
-</table>
-<hr>
-<h1 id="第三部分移动性原理">第三部分：移动性原理</h1>
-<h2 id="十四什么是移动性讲义-p28">十四、什么是移动性（讲义 p28）</h2>
-<p>从<strong>网络的视角</strong>看，移动性是一个谱：</p>
-<table>
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">低</th>
-<th style="text-align: left;">→</th>
-<th style="text-align: left;">→</th>
-<th style="text-align: left;">高</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>无线用户，一直用同一个接入点</strong></td>
-<td style="text-align: left;"><strong>移动用户，移动时断开网络</strong></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><strong>移动用户，经过多个接入点并保持正在进行的连接</strong>（如手机通话）</td>
-</tr>
-</tbody>
-</table>
-<p><strong>问题：地址应该一直不变吗？</strong> -
-<strong>手机：无论去哪，电话号码都不变</strong> - <strong>IP
-地址呢？</strong>（IP 地址和所在子网绑定，换网就该换地址 ——
-这就是难点）</p>
-<h2 id="十五移动性术语讲义-p2930必背">十五、移动性术语（讲义
-p29–30，必背）</h2>
-<table>
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">术语</th>
-<th style="text-align: left;">含义</th>
-<th style="text-align: left;">例子</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>归属网络（home
-network）</strong></td>
-<td style="text-align: left;"><strong>移动设备的永久「家」</strong></td>
-<td style="text-align: left;">128.119.40/24</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>永久地址（permanent
-address）</strong></td>
-<td style="text-align: left;"><strong>归属网络中的地址，总能用来到达移动设备</strong></td>
-<td style="text-align: left;">128.119.40.186</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>归属代理（home
-agent）</strong></td>
-<td style="text-align: left;"><strong>在归属网络中代表移动设备执行移动性功能的实体</strong></td>
-<td style="text-align: left;">—</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>外地（访问）网络（foreign /
-visited network）</strong></td>
-<td style="text-align: left;"><strong>移动设备当前所在的网络</strong></td>
-<td style="text-align: left;">79.129.13/24</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>转交地址（care-of-address,
-COA）</strong></td>
-<td style="text-align: left;"><strong>访问网络中的地址</strong></td>
-<td style="text-align: left;">79.129.13.2</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>外地代理（foreign
-agent）</strong></td>
-<td style="text-align: left;"><strong>在访问网络中代表移动设备执行移动性功能的实体</strong></td>
-<td style="text-align: left;">—</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>通信者（correspondent）</strong></td>
-<td style="text-align: left;"><strong>想和移动设备通信的一方</strong></td>
-<td style="text-align: left;">—</td>
-</tr>
-</tbody>
-</table>
-<h2 id="十六怎么找到一个经常搬家的朋友讲义-p31">十六、怎么找到一个经常搬家的朋友（讲义
-p31）</h2>
-<p>讲义类比：朋友经常换地址，你怎么找到她？ -
-<strong>翻遍所有电话簿？</strong>（≈ 路由处理） -
-<strong>打电话问她父母？</strong>（≈ 间接路由，问归属代理） -
-<strong>指望她主动告诉你她在哪？</strong>（≈
-直接路由，拿到转交地址）</p>
-<h2 id="十七两类方法讲义-p3233">十七、两类方法（讲义 p32–33）</h2>
-<table>
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">方法</th>
-<th style="text-align: left;">做法</th>
-<th style="text-align: left;">评价</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>让路由处理</strong></td>
-<td style="text-align: left;"><strong>路由器通过常规路由表交换，通告当前驻留的移动节点的永久地址</strong>；路由表指示每个移动设备在哪；<strong>端系统不用改</strong></td>
-<td style="text-align: left;"><strong>不能扩展到数百万移动设备</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>让端系统处理</strong></td>
-<td style="text-align: left;"><strong>间接路由</strong>：通信者 →
-归属代理 →
-转发给远端；<strong>直接路由</strong>：通信者拿到移动设备的外地地址，直接发</td>
-<td style="text-align: left;">实际采用</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>讲义 p33 专门把「let routing handle it」划掉并标注 <strong>not
-scalable to millions of mobiles</strong>。</p>
-</blockquote>
-<h2 id="十八注册讲义-p34">十八、注册（讲义 p34）</h2>
+<p><strong>和 CSMA/CD 的关键区别</strong>：CSMA/CD
+听到空闲立刻发，碰了再停；CSMA/CA
+即使一开始听到忙，也要在信道空闲后<strong>再随机退避</strong>才发，因为碰撞的代价是整个帧。</p>
+<h3 id="rts-cts预约信道">2.3 RTS / CTS：预约信道</h3>
+<p><strong>思路</strong>：与其随机地发长数据帧，不如<strong>先用很短的帧预约信道</strong>，避免长数据帧碰撞。</p>
 <ol type="1">
-<li><strong>移动设备进入访问网络时联系外地代理</strong></li>
-<li><strong>外地代理联系归属代理：「这个移动设备住在我的网络里」</strong></li>
+<li>发送方先用 CSMA 向 AP 发一个短的 <strong>RTS（Request To
+Send）</strong>。RTS
+之间<strong>还会碰撞，但很短，损失小</strong>。</li>
+<li>AP <strong>广播 CTS（Clear To Send）</strong>。</li>
+<li><strong>所有节点都听得到
+CTS</strong>：发送方发数据，<strong>其他节点推迟</strong>。</li>
 </ol>
-<p><strong>结果</strong>：<strong>外地代理知道该移动设备</strong>；<strong>归属代理知道移动设备的位置</strong>。</p>
-<h2 id="十九间接路由讲义-p3537">十九、间接路由（讲义 p35–37）</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">步</th>
-<th style="text-align: left;">动作</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>通信者用移动设备的归属地址（永久地址）发分组</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>归属代理截获分组，转发给外地代理</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;"><strong>外地代理收到分组，转发给移动设备</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;"><strong>移动设备直接回复通信者</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>要点</strong>：</p>
+<p>讲义时序：A、B 同时发 RTS → 预约碰撞 → 退避重试 → A 的 RTS 成功 → AP
+广播 CTS(A) → A 发数据，B 推迟。</p>
+<p><strong>A 怎么知道 RTS 碰撞了？没收到 CTS。</strong>
+和数据帧一样，只能从「该来的回应没来」推断。</p>
+<p><strong>RTS / CTS 怎么解决隐藏终端</strong>：A、C
+互相听不到，但都听得到 AP。A 发 RTS → AP 回 CTS(A) → <strong>C 听不到 A
+的 RTS，但听得到 CTS</strong>，于是推迟。CTS
+把预约告诉了所有可能在接收方干扰的节点。</p>
+<p><strong>RTS / CTS 也会失败</strong>：</p>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -1149,397 +664,534 @@ scalable to millions of mobiles</strong>。</p>
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">要点</th>
-<th style="text-align: left;">说明</th>
+<th>场景</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>两个地址</strong></td>
-<td style="text-align: left;"><strong>永久地址：通信者用（所以移动设备的位置对通信者透明）</strong>；<strong>转交地址：归属代理用来转发</strong></td>
+<td>CTS 在某个隐藏节点那里被碰撞</td>
+<td>那个节点没听到 CTS，照常发，干扰接收方</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>三角路由（triangle
-routing）</strong></td>
-<td style="text-align: left;"><strong>通信者 → 归属网络 →
-移动设备</strong>；<strong>当通信者和移动设备在同一网络时很低效</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>在网络间移动</strong></td>
-<td style="text-align: left;">移动设备向<strong>新外地代理注册</strong>
-→ <strong>新外地代理向归属代理注册</strong> →
-<strong>归属代理更新转交地址</strong> →
-<strong>分组继续转发到新转交地址</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>效果</strong></td>
-<td style="text-align: left;"><strong>更换外地网络对通信者透明：正在进行的连接可以保持！</strong></td>
+<td>别的节点在 CTS 发出时正在发自己的帧</td>
+<td>听不到 CTS，不知道要推迟</td>
 </tr>
 </tbody>
 </table>
-<h2 id="二十直接路由讲义-p3840">二十、直接路由（讲义 p38–40）</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">步</th>
-<th style="text-align: left;">动作</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>通信者向归属代理请求并获得移动设备的外地地址</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>通信者直接把分组发给外地代理</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;"><strong>外地代理转发给移动设备</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;"><strong>移动设备直接回复通信者</strong></td>
-</tr>
-</tbody>
-</table>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">优点</th>
-<th style="text-align: left;">缺点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>克服三角路由问题</strong></td>
-<td style="text-align: left;"><strong>对通信者不透明：通信者必须从归属代理获取转交地址</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><strong>移动设备换了访问网络怎么办？</strong></td>
-</tr>
-</tbody>
-</table>
-<h3 id="用锚点外地代理anchor-fa处理移动">用锚点外地代理（anchor
-FA）处理移动</h3>
+<p>结论：<strong>RTS / CTS
+显著减少但不能完全消除碰撞</strong>；它本身有开销（多两个控制帧），实际<strong>只对长帧启用</strong>。</p>
+<h3 id="隐藏终端-vs-暴露终端">2.4 隐藏终端 vs 暴露终端</h3>
+<p><strong>暴露终端</strong>场景：S1 → R1，S2 → R2。S1、S2
+相邻（互相听得到），但 R1 离 S2 远，R2 离 S1 远。</p>
 <ul>
-<li><strong>锚点外地代理：会话开始时第一个访问网络的 FA</strong></li>
-<li><strong>数据总是先路由到锚点 FA</strong></li>
-<li><strong>移动设备移动时：新 FA 安排让旧
-FA（锚点）把数据转发过来（链式，chaining）</strong></li>
+<li>理想：两条传输<strong>可以同时进行</strong>（各自的接收方都不受干扰）。</li>
+<li>实际：<strong>S2 听到 S1
+在发，就不发了</strong>，白白浪费一次并行机会。</li>
 </ul>
-<blockquote>
-<p>这和 GSM 的锚点 MSC 是同一思路；Week 12 的 5G 切换里 UPF
-作为固定锚点也是一样。</p>
-</blockquote>
-<h3 id="间接-vs-直接对比">间接 vs 直接对比</h3>
 <table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr>
-<th style="text-align: left;"></th>
-<th style="text-align: left;"><strong>间接路由</strong></th>
-<th style="text-align: left;"><strong>直接路由</strong></th>
+<th></th>
+<th>隐藏终端</th>
+<th>暴露终端</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">通信者看到的地址</td>
-<td style="text-align: left;"><strong>永久地址</strong></td>
-<td style="text-align: left;"><strong>转交地址</strong></td>
+<td>问题</td>
+<td><strong>该等的时候没等</strong>（听不到干扰者）</td>
+<td><strong>不该等的时候等了</strong>（听到无关的发送者）</td>
 </tr>
 <tr>
-<td style="text-align: left;">对通信者透明</td>
-<td style="text-align: left;"><strong>是</strong></td>
-<td style="text-align: left;"><strong>否</strong></td>
+<td>后果</td>
+<td><strong>碰撞</strong></td>
+<td><strong>吞吐量浪费</strong></td>
 </tr>
 <tr>
-<td style="text-align: left;">路径</td>
-<td style="text-align: left;"><strong>三角路由，可能低效</strong></td>
-<td style="text-align: left;"><strong>近似最短</strong></td>
+<td>根源</td>
+<td>载波侦听在<strong>发送方</strong>做，碰撞发生在<strong>接收方</strong></td>
+<td>同左</td>
+</tr>
+</tbody>
+</table>
+<h3 id="速率自适应">2.5 速率自适应</h3>
+<p>基站和移动设备<strong>根据 SNR
+的变化动态改变传输速率（调制方式）</strong>：</p>
+<ol type="1">
+<li>设备离基站越来越远 → <strong>SNR 下降、BER 上升</strong>。</li>
+<li>BER 太高时，<strong>切到更低速率</strong>（BER 也更低）的调制，比如
+QAM256 → QAM16 → BPSK。</li>
+</ol>
+<p>这就是 W10「给定 SNR 和 BER 要求，选最快的调制」的动态版。</p>
+<hr>
+<h2 id="三蜂窝网络">三、蜂窝网络</h2>
+<h3 id="组成">3.1 组成</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>cell（小区）</strong></td>
+<td>覆盖一块地理区域</td>
 </tr>
 <tr>
-<td style="text-align: left;">换网处理</td>
-<td style="text-align: left;"><strong>归属代理更新 COA
-即可</strong></td>
-<td style="text-align: left;"><strong>需要锚点 FA 链式转发</strong></td>
+<td><strong>基站（BS）</strong></td>
+<td>类似 802.11 的 AP，移动用户通过它接入</td>
+</tr>
+<tr>
+<td><strong>空中接口（air interface）</strong></td>
+<td>移动设备和基站之间的物理层、链路层协议</td>
+</tr>
+<tr>
+<td><strong>MSC（移动交换中心）</strong></td>
+<td>把小区连到有线电话网；管理呼叫建立；处理移动性</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第一跳怎么共享频谱">3.2 第一跳怎么共享频谱</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FDMA / TDMA 组合</strong></td>
+<td>把频谱分成频率信道，每个信道再分成时隙</td>
+</tr>
+<tr>
+<td><strong>CDMA</strong></td>
+<td>码分多址（W10）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g-3g-4g">3.3 2G → 3G → 4G</h3>
+<ul>
+<li><strong>2G（语音）</strong>：移动用户 → BTS（基站收发台）→
+BSC（基站控制器）→ MSC → Gateway MSC → 公共电话网。BTS + BSC 叫
+BSS（基站系统）。</li>
+<li><strong>3G（语音 +
+数据）</strong>：语音核心不变；<strong>另外并行一个数据网</strong>：无线网络控制器
+→ <strong>SGSN</strong> → <strong>GGSN</strong> →
+公共互联网。关键：<strong>新的数据网（除了边缘）和原有语音网并行运行</strong>。</li>
+<li><strong>4G LTE</strong> 两大创新：
+<ol type="1">
+<li><strong>EPC（演进分组核心）</strong>：简化的<strong>全 IP
+核心网</strong>，把电路交换的语音网和分组交换的数据网<strong>统一</strong>起来。</li>
+<li><strong>LTE 无线接入</strong>：<strong>OFDM（正交频分复用）+
+时分复用</strong>。频率 × 时隙（每格 0.5
+ms）组成资源网格，<strong>基站可以在任意时隙、任意频率给任意设备分配资源</strong>（W12
+tutorial 的 LTE 题就在这个网格上分配）。</li>
+</ol></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>2G</th>
+<th>3G</th>
+<th>4G</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>业务</td>
+<td>语音</td>
+<td>语音 + 数据</td>
+<td><strong>全 IP</strong></td>
+</tr>
+<tr>
+<td>核心</td>
+<td>电路交换</td>
+<td><strong>电路 + 分组并行</strong></td>
+<td><strong>EPC 统一</strong></td>
+</tr>
+<tr>
+<td>空口</td>
+<td>FDMA / TDMA</td>
+<td>CDMA</td>
+<td><strong>OFDM + TDM</strong></td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h1 id="第四部分mobile-iprfc-3344">第四部分：Mobile IP（RFC 3344）</h1>
-<h2 id="二十一三个组成部分讲义-p42">二十一、三个组成部分（讲义
-p42）</h2>
-<p>已见过的特性：<strong>归属代理、外地代理、外地代理注册、转交地址</strong>。标准的三部分：</p>
+<h2 id="四移动性原理">四、移动性原理</h2>
+<h3 id="什么是移动性">4.1 什么是移动性</h3>
+<p>从网络的角度看是一个谱：</p>
+<ul>
+<li>低：无线用户，一直用同一个接入点。</li>
+<li>中：移动用户，移动时断开网络。</li>
+<li><strong>高：移动用户经过多个接入点，同时保持正在进行的连接</strong>（比如打着电话走）。</li>
+</ul>
+<p>难点：手机号到哪都不变，但 <strong>IP
+地址和所在子网绑定</strong>，换网就要换地址。</p>
+<h3 id="术语必背">4.2 术语（必背）</h3>
 <table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
-<th style="text-align: left;">部分</th>
+<th>术语</th>
+<th>意思</th>
+<th>例子</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>数据报的间接路由</strong></td>
+<td><strong>归属网络（home network）</strong></td>
+<td>移动设备永久的「家」</td>
+<td>128.119.40/24</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>代理发现（agent
-discovery）</strong></td>
+<td><strong>永久地址（permanent address）</strong></td>
+<td>归属网络里的地址，<strong>总能用它找到移动设备</strong></td>
+<td>128.119.40.186</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;"><strong>向归属代理注册</strong></td>
+<td><strong>归属代理（home agent）</strong></td>
+<td>在归属网络里代表移动设备做移动性工作的实体</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>访问网络（foreign / visited network）</strong></td>
+<td>移动设备<strong>当前</strong>所在的网络</td>
+<td>79.129.13/24</td>
+</tr>
+<tr>
+<td><strong>转交地址（care-of-address，COA）</strong></td>
+<td><strong>访问网络里的地址</strong></td>
+<td>79.129.13.2</td>
+</tr>
+<tr>
+<td><strong>外地代理（foreign agent）</strong></td>
+<td>在访问网络里代表移动设备做移动性工作的实体</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>通信者（correspondent）</strong></td>
+<td>想和移动设备通信的一方</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h2 id="二十二间接路由分组中的分组讲义-p43">二十二、间接路由：分组中的分组（讲义
-p43）</h2>
-<figure class="highlight coq"><table><tr><td class="code"><pre><span class="line">通信者发出：          [dest: <span class="number">128.119</span><span class="number">.40</span><span class="number">.186</span> | <span class="type">payload</span>]</span><br><span class="line">归属代理 → 外地代理：  [dest: <span class="number">79.129</span><span class="number">.13</span><span class="number">.2</span> | <span class="type">[dest</span>: <span class="number">128.119</span><span class="number">.40</span><span class="number">.186</span> | <span class="type">payload</span>]]   ← 封装（隧道）</span><br><span class="line">外地代理 → 移动设备：  [dest: <span class="number">128.119</span><span class="number">.40</span><span class="number">.186</span> | <span class="type">payload</span>]                        ← 解封装</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>归属代理把原数据报整个封装进一个新的、目的地为转交地址的数据报</strong>
-—— 这就是 IP-in-IP 隧道。</p>
-</blockquote>
-<h2 id="二十三代理发现讲义-p44">二十三、代理发现（讲义 p44）</h2>
-<p><strong>代理通告</strong>：外地/归属代理<strong>广播 ICMP 消息（type
-= 9）</strong>来通告服务。</p>
+<h3 id="两类方法">4.3 两类方法</h3>
 <table>
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">字段</th>
-<th style="text-align: left;">说明</th>
+<th>方法</th>
+<th>做法</th>
+<th>评价</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">type = 9, code = 0</td>
-<td style="text-align: left;">标准 ICMP 路由器通告</td>
+<td><strong>让路由来处理</strong></td>
+<td>路由器通过路由表交换<strong>通告移动设备的永久地址</strong>，路由表指出每个设备在哪；端系统不用改</td>
+<td><strong>扩展不到几百万台移动设备</strong></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>移动代理通告扩展（type =
-16）</strong></td>
-<td style="text-align: left;">包含 length、sequence #、registration
-lifetime</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>R 位</strong></td>
-<td style="text-align: left;"><strong>需要注册</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>H、F 位</strong></td>
-<td style="text-align: left;"><strong>是归属代理和/或外地代理</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>0 个或多个转交地址</strong></td>
-<td style="text-align: left;">—</td>
+<td><strong>让端系统处理</strong></td>
+<td><strong>间接路由</strong>：通信者 → 归属代理 →
+转发；<strong>直接路由</strong>：通信者拿到外地地址直接发</td>
+<td>实际采用</td>
 </tr>
 </tbody>
 </table>
-<h2 id="二十四注册例子讲义-p45">二十四、注册例子（讲义 p45）</h2>
-<p>参数：HA = 128.119.40.7，COA =
-79.129.13.2（外地代理），MA（移动设备）= 128.119.40.186，访问网络
-79.129.13/24。</p>
+<p>讲义类比：找一个常搬家的朋友，翻遍所有电话簿（路由处理）、问她父母（间接路由）、等她告诉你住哪（直接路由）。</p>
+<h3 id="注册">4.4 注册</h3>
+<ol type="1">
+<li>移动设备进入访问网络，<strong>联系外地代理</strong>。</li>
+<li>外地代理<strong>联系归属代理</strong>：「这台设备现在住在我这里。」</li>
+</ol>
+<p>结果：外地代理知道这台设备；<strong>归属代理知道它在哪</strong>。</p>
+<h3 id="间接路由">4.5 间接路由</h3>
 <table>
-<colgroup>
-<col style="width: 38%">
-<col style="width: 30%">
-<col style="width: 30%">
-</colgroup>
 <thead>
 <tr>
 <th style="text-align: center;">步</th>
-<th style="text-align: left;">方向</th>
-<th style="text-align: left;">内容</th>
+<th>动作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;">FA → 移动设备</td>
-<td style="text-align: left;"><strong>ICMP 代理通告</strong>，COA:
-79.129.13.2</td>
+<td>通信者<strong>用永久地址</strong>发分组</td>
 </tr>
 <tr>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;">移动设备 → FA</td>
-<td style="text-align: left;"><strong>注册请求</strong>：COA、HA、MA、<strong>Lifetime
-9999</strong>、<strong>identification 714</strong>、封装格式</td>
+<td><strong>归属代理截获</strong>，转发给外地代理</td>
 </tr>
 <tr>
 <td style="text-align: center;">3</td>
-<td style="text-align: left;">FA → HA</td>
-<td style="text-align: left;"><strong>注册请求</strong>（转发）</td>
+<td>外地代理转给移动设备</td>
 </tr>
 <tr>
 <td style="text-align: center;">4</td>
-<td style="text-align: left;">HA → FA</td>
-<td style="text-align: left;"><strong>注册回复</strong>：HA、MA、<strong>Lifetime
-4999</strong>、identification 714、封装格式</td>
-</tr>
-<tr>
-<td style="text-align: center;">5</td>
-<td style="text-align: left;">FA → 移动设备</td>
-<td style="text-align: left;"><strong>注册回复</strong>（转发）</td>
+<td>移动设备<strong>直接回复</strong>通信者</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>两个值得注意的细节</strong>： -
-<strong>归属代理可以缩短生存期</strong>：请求 9999，批准 4999。 -
-<strong>identification 714
-在请求和回复中相同</strong>：用于匹配请求与回复、防重放。</p>
-</blockquote>
+<ul>
+<li><strong>两个地址</strong>：永久地址给通信者用（所以位置对通信者<strong>透明</strong>）；转交地址给归属代理转发用。</li>
+<li><strong>三角路由</strong>：通信者 → 归属网络 →
+移动设备。<strong>通信者和移动设备在同一个网络时特别低效</strong>。</li>
+<li><strong>换访问网络</strong>：向新外地代理注册 →
+新外地代理向归属代理注册 → 归属代理更新转交地址 →
+分组转发到新地址。<strong>对通信者透明，正在进行的连接可以保持。</strong></li>
+</ul>
+<h3 id="直接路由">4.6 直接路由</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">步</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>通信者<strong>向归属代理要到</strong>移动设备的外地地址</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>通信者<strong>直接</strong>发给外地代理</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>外地代理转给移动设备</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>移动设备直接回复通信者</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>优点：<strong>解决三角路由</strong>。</li>
+<li>缺点：<strong>对通信者不透明</strong>，通信者必须先拿转交地址；移动设备换网了怎么办？</li>
+</ul>
+<p><strong>锚点外地代理（anchor
+FA）</strong>：会话开始时第一个访问网络的外地代理。数据<strong>总是先到锚点</strong>；设备移动后，<strong>新外地代理让锚点把数据转过来</strong>（链式转发）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>间接路由</th>
+<th>直接路由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通信者用的地址</td>
+<td><strong>永久地址</strong></td>
+<td><strong>转交地址</strong></td>
+</tr>
+<tr>
+<td>对通信者透明</td>
+<td><strong>是</strong></td>
+<td><strong>否</strong></td>
+</tr>
+<tr>
+<td>路径</td>
+<td><strong>三角路由</strong>，可能低效</td>
+<td>接近最短</td>
+</tr>
+<tr>
+<td>换网</td>
+<td>归属代理更新 COA</td>
+<td>需要<strong>锚点 FA</strong> 链式转发</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<h1 id="第五部分蜂窝网络中的移动性">第五部分：蜂窝网络中的移动性</h1>
-<h2 id="二十五hlr-与-vlr讲义-p48">二十五、HLR 与 VLR（讲义 p48）</h2>
+<h2 id="五mobile-iprfc-3344">五、Mobile IP（RFC 3344）</h2>
+<h3 id="三个部分">5.1 三个部分</h3>
+<ol type="1">
+<li><strong>间接路由</strong></li>
+<li><strong>代理发现（agent discovery）</strong></li>
+<li><strong>向归属代理注册</strong></li>
+</ol>
+<h3 id="间接路由分组套分组隧道">5.2 间接路由：分组套分组（隧道）</h3>
+<figure class="highlight dns"><table><tr><td class="code"><pre><span class="line">通信者发出：            [目的 <span class="number">128.119.40.186</span> | 数据]</span><br><span class="line">归属代理 → 外地代理：   [目的 <span class="number">79.129.13.2</span> | [目的 <span class="number">128.119.40.186</span> | 数据]]   ← 封装</span><br><span class="line">外地代理 → 移动设备：   [目的 <span class="number">128.119.40.186</span> | 数据]                     ← 解封装</span><br></pre></td></tr></table></figure>
+<p><strong>归属代理把原数据报整个装进一个新的、目的地址是转交地址的数据报</strong>（IP-in-IP
+隧道）。</p>
+<h3 id="代理发现">5.3 代理发现</h3>
+<p>外地 / 归属代理<strong>广播 ICMP 消息（type =
+9）</strong>通告自己：</p>
+<ul>
+<li>移动代理通告扩展（type = 16）：长度、序号、注册有效期</li>
+<li><strong>R 位</strong>：需要注册；<strong>H、F
+位</strong>：是归属代理 / 外地代理</li>
+<li>0 个或多个转交地址</li>
+</ul>
+<h3 id="注册例子">5.4 注册例子</h3>
+<p>HA = 128.119.40.7，COA = 79.129.13.2，移动设备 MA =
+128.119.40.186。</p>
 <table>
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">概念</th>
-<th style="text-align: left;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>归属网络</strong></td>
-<td style="text-align: left;"><strong>你订阅的蜂窝运营商的网络</strong>（如
-Vodafone）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>HLR（归属位置寄存器）</strong></td>
-<td style="text-align: left;"><strong>归属网络中的数据库</strong>：<strong>永久电话号码、用户资料（服务、偏好、计费）、当前位置信息</strong>（可能在别的网络）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>访问网络</strong></td>
-<td style="text-align: left;"><strong>移动设备当前所在的网络</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>VLR（访问位置寄存器）</strong></td>
-<td style="text-align: left;"><strong>为当前在本网络中的每个用户保存一个条目的数据库</strong>；<strong>可能就是归属网络</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>对应关系</strong>：<strong>HLR ≈ 归属代理，VLR ≈
-外地代理。</strong></p>
-</blockquote>
-<h2 id="二十六gsm到移动设备的间接路由讲义-p49">二十六、GSM：到移动设备的间接路由（讲义
-p49）</h2>
-<table>
-<colgroup>
-<col style="width: 55%">
-<col style="width: 44%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr>
 <th style="text-align: center;">步</th>
-<th style="text-align: left;">动作</th>
+<th>方向</th>
+<th>内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>呼叫被路由到归属网络</strong></td>
+<td>FA → 移动设备</td>
+<td>ICMP 代理通告，COA = 79.129.13.2</td>
 </tr>
 <tr>
 <td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>归属 MSC 查询
-HLR，得到移动设备在访问网络中的漫游号码（roaming number）</strong></td>
+<td>移动设备 → FA</td>
+<td>注册请求：COA、HA、MA、<strong>Lifetime
+9999</strong>、<strong>identification 714</strong></td>
 </tr>
 <tr>
 <td style="text-align: center;">3</td>
-<td style="text-align: left;"><strong>归属 MSC 建立到访问网络 MSC
-的第二段呼叫</strong></td>
+<td>FA → HA</td>
+<td>转发注册请求</td>
 </tr>
 <tr>
 <td style="text-align: center;">4</td>
-<td style="text-align: left;"><strong>访问网络中的 MSC
-通过基站完成到移动设备的呼叫</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>漫游号码 ≈ 转交地址；这就是 GSM 版的间接路由。</p>
-</blockquote>
-<h2 id="二十七gsm-同一-msc-下的切换讲义-p5051">二十七、GSM 同一 MSC
-下的切换（讲义 p50–51）</h2>
-<p><strong>切换目标</strong>：<strong>让呼叫经由新基站继续（不中断）</strong>。</p>
-<p><strong>切换原因</strong>： - <strong>新 BSS
-的信号更强</strong>（保持连接、更省电） -
-<strong>负载均衡</strong>：释放当前 BSS 的信道 - <strong>（GSM
-不规定为何、何时切换，那是策略问题）</strong> - <strong>切换由旧 BSS
-发起</strong></p>
-<p><strong>8 个步骤</strong>：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">步</th>
-<th style="text-align: left;">动作</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;"><strong>旧 BSS 通知 MSC 即将切换，提供 1
-个以上候选新 BSS 列表</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;"><strong>MSC 建立到新 BSS
-的路径（分配资源）</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;"><strong>新 BSS
-分配供移动设备使用的无线信道</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;"><strong>新 BSS 通知 MSC 和旧
-BSS：准备好了</strong></td>
+<td>HA → FA</td>
+<td>注册回复：<strong>Lifetime 4999</strong>、identification 714</td>
 </tr>
 <tr>
 <td style="text-align: center;">5</td>
-<td style="text-align: left;"><strong>旧 BSS 通知移动设备：切换到新
-BSS</strong></td>
+<td>FA → 移动设备</td>
+<td>转发注册回复</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>归属代理可以缩短有效期</strong>（请求 9999，批准
+4999）。</li>
+<li><strong>identification
+在请求和回复里相同</strong>，用来配对、防重放。</li>
+</ul>
+<hr>
+<h2 id="六蜂窝网络里的移动性">六、蜂窝网络里的移动性</h2>
+<h3 id="hlr-和-vlr">6.1 HLR 和 VLR</h3>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>归属网络</td>
+<td>你签约的运营商的网络</td>
+</tr>
+<tr>
+<td><strong>HLR（归属位置寄存器）</strong></td>
+<td><strong>归属网络里的数据库</strong>：永久电话号码、用户资料（服务、偏好、计费）、<strong>当前位置</strong>（可能在别的网络）</td>
+</tr>
+<tr>
+<td>访问网络</td>
+<td>设备当前所在的网络</td>
+</tr>
+<tr>
+<td><strong>VLR（访问位置寄存器）</strong></td>
+<td><strong>访问网络里的数据库</strong>，当前在本网的每个用户一条记录；可能就是归属网络</td>
+</tr>
+</tbody>
+</table>
+<p><strong>对应关系：HLR ≈ 归属代理，VLR ≈ 外地代理。</strong></p>
+<h3 id="gsm打给移动设备间接路由">6.2 GSM：打给移动设备（间接路由）</h3>
+<ol type="1">
+<li>呼叫先<strong>路由到归属网络</strong>。</li>
+<li>归属 MSC <strong>查
+HLR</strong>，得到设备在访问网络里的<strong>漫游号码</strong>（相当于转交地址）。</li>
+<li>归属 MSC 建立<strong>到访问网络 MSC 的第二段呼叫</strong>。</li>
+<li>访问网络的 MSC 通过基站接通设备。</li>
+</ol>
+<h3 id="gsm-同一-msc-下的切换">6.3 GSM 同一 MSC 下的切换</h3>
+<p><strong>目标</strong>：通话经由新基站继续，<strong>不中断</strong>。</p>
+<p><strong>为什么切换</strong>：新 BSS
+信号更强（保持连接、更省电）；负载均衡。GSM
+不规定为什么、什么时候切（那是策略）。<strong>切换由旧 BSS
+发起。</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">步</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>旧 BSS 告诉 MSC 要切换，给出候选新 BSS 列表</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>MSC 建立到新 BSS 的路径（分配资源）</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>新 BSS 给设备分配无线信道</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>新 BSS 通知 MSC 和旧 BSS：准备好了</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>旧 BSS 通知设备：切到新 BSS</td>
 </tr>
 <tr>
 <td style="text-align: center;">6</td>
-<td style="text-align: left;"><strong>移动设备与新 BSS
-交互，激活新信道</strong></td>
+<td>设备和新 BSS 交互，激活新信道</td>
 </tr>
 <tr>
 <td style="text-align: center;">7</td>
-<td style="text-align: left;"><strong>移动设备经新 BSS 通知
-MSC：切换完成；MSC 改路由</strong></td>
+<td>设备经新 BSS 通知 MSC：切换完成，MSC 改路由</td>
 </tr>
 <tr>
 <td style="text-align: center;">8</td>
-<td style="text-align: left;"><strong>释放 MSC 到旧 BSS
-的资源</strong></td>
+<td>释放 MSC 到旧 BSS 的资源</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>顺序要点</strong>：<strong>先把新路建好（2–4），再让移动设备过去（5–6），最后拆旧路（8）</strong>
-—— 「先建后拆」才能不中断。</p>
-</blockquote>
-<h2 id="二十八切换算法讲义-p5255">二十八、切换算法（讲义 p52–55）</h2>
-<p><strong>问题</strong>：两个基站的接收信号强度（RSS）随移动设备移动而变化，<strong>什么时候切？</strong></p>
+<p><strong>顺序要点：先建新路（2–4），再让设备过去（5–6），最后拆旧路（8）</strong>。先建后拆才不会断。</p>
+<h3 id="切换算法">6.4 切换算法</h3>
+<p>两个基站的接收信号强度（RSS）随设备移动变化，<strong>什么时候切？</strong></p>
 <table>
 <colgroup>
 <col style="width: 33%">
@@ -1548,65 +1200,49 @@ MSC：切换完成；MSC 改路由</strong></td>
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">算法</th>
-<th style="text-align: left;">切换条件</th>
-<th style="text-align: left;">特点</th>
+<th>算法</th>
+<th>切换条件</th>
+<th>特点</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>朴素 RSS</strong></td>
-<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old}"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old}"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg></mjx-container></span></td>
-<td style="text-align: left;"><strong>乒乓效应（ping-pong）</strong>：在边界附近信号波动，来回切换</td>
+<td>朴素 RSS</td>
+<td><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old}"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old}"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg></mjx-container></span></td>
+<td><strong>乒乓效应</strong>：边界附近信号波动，来回切</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>RSS + 阈值 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="2.767ex" height="1.885ex" role="img" focusable="false" viewBox="0 -683 1222.8 833"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_T"><g data-mml-node="msub" data-latex="P_T"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></strong></td>
-<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old}"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old}"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg></mjx-container></span> <strong>且</strong> <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.725ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1646.4 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old}
-< P_T"><g data-mml-node="msub" data-latex="P_{o l d}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.155ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2278.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old}
-< P_T"><g data-mml-node="mo" data-latex="<"><path data-c="3C" d="M666-45C683-52 701-39 701-23C701-13 696-6 687-2L153 250L687 502C696 506 701 513 701 522C701 539 693 547 677 547C673 547 669 546 666 545L92 273C82 268 77 261 77 250C77 239 82 232 92 227Z"></path></g><g data-mml-node="msub" data-latex="P_T" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></td>
-<td style="text-align: left;">旧基站还够好时就不切</td>
+<td>RSS + 阈值 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="2.767ex" height="1.885ex" role="img" focusable="false" viewBox="0 -683 1222.8 833"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_T"><g data-mml-node="msub" data-latex="P_T"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></td>
+<td><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old}"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old}"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg></mjx-container></span>
+<strong>且</strong> <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.725ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1646.4 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} <
+P_T"><g data-mml-node="msub" data-latex="P_{o l d}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.155ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2278.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} <
+P_T"><g data-mml-node="mo" data-latex="<"><path data-c="3C" d="M666-45C683-52 701-39 701-23C701-13 696-6 687-2L153 250L687 502C696 506 701 513 701 522C701 539 693 547 677 547C673 547 669 546 666 545L92 273C82 268 77 261 77 250C77 239 82 232 92 227Z"></path></g><g data-mml-node="msub" data-latex="P_T" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></td>
+<td>旧基站还够好就不切</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>RSS + 迟滞 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="3.05ex" height="1.885ex" role="img" focusable="false" viewBox="0 -683 1348 833"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_H"><g data-mml-node="msub" data-latex="P_H"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span></strong></td>
-<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.313ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2348.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="P_H" transform="translate(1000.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span></td>
-<td style="text-align: left;"><strong>新的必须明显更好</strong>才切，抑制乒乓</td>
+<td>RSS + 迟滞 <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="3.05ex" height="1.885ex" role="img" focusable="false" viewBox="0 -683 1348 833"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_H"><g data-mml-node="msub" data-latex="P_H"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span></td>
+<td><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.313ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2348.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="P_H" transform="translate(1000.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span></td>
+<td><strong>新的要明显更好</strong>才切，抑制乒乓</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>RSS + 阈值 + 迟滞</strong></td>
-<td style="text-align: left;"><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.313ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2348.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} >
-P_{old} + P_H"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="P_H" transform="translate(1000.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span> <strong>且</strong> <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.725ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1646.4 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} < P_T"><g data-mml-node="msub" data-latex="P_{o l d}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.155ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2278.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} < P_T"><g data-mml-node="mo" data-latex="<"><path data-c="3C" d="M666-45C683-52 701-39 701-23C701-13 696-6 687-2L153 250L687 502C696 506 701 513 701 522C701 539 693 547 677 547C673 547 669 546 666 545L92 273C82 268 77 261 77 250C77 239 82 232 92 227Z"></path></g><g data-mml-node="msub" data-latex="P_T" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></td>
-<td style="text-align: left;">两者结合</td>
+<td>阈值 + 迟滞</td>
+<td><span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.491ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1985.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="msub" data-latex="P_{n e w}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{n e w}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><g data-mml-node="mi" data-latex="e" transform="translate(600,0)"><path data-c="1D452" d="M124 129C124 153 129 186 139 227L188 227C253 227 303 235 339 250C372 264 394 284 405 309C412 326 415 342 415 355C415 410 363 442 307 442C268 442 229 432 190 412C113 372 46 281 46 171C46 69 105-11 204-11C257-11 304 2 345 27C379 48 404 69 420 90C427 99 430 106 430 109C430 120 425 126 414 126C409 126 404 122 398 114C365 70 324 42 277 30C246 22 223 18 206 18C149 18 124 72 124 129M375 355C375 289 311 256 182 256L147 256C166 322 194 366 232 387C262 404 287 413 307 413C343 413 375 391 375 355Z"></path></g><g data-mml-node="mi" data-latex="w" transform="translate(1066,0)"><path data-c="1D464" d="M590 391C590 382 595 372 606 362C629 340 641 313 641 281C641 264 635 237 623 198C586 78 539 18 482 18C435 18 412 45 412 100C412 119 416 142 423 171C441 243 460 314 477 387C479 394 480 398 480 401C480 421 469 431 447 431C427 431 414 421 407 401L367 245C352 187 341 167 341 115C341 107 341 101 342 98C319 45 290 18 255 18C205 18 180 47 180 104C180 141 197 204 231 293C242 323 248 344 248 357C248 406 212 442 163 442C118 442 84 417 59 367C39 328 29 301 29 287C29 278 34 273 45 273C58 273 60 279 64 293C88 373 120 413 160 413C174 413 181 403 181 384C181 369 175 347 164 317C127 220 108 154 108 117C108 32 165-11 252-11C294-11 328 10 355 53C375 10 416-11 479-11C541-11 590 30 625 112C648 164 691 302 691 369C691 384 690 394 689 399C685 418 666 442 644 442C618 442 590 417 590 391Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.113ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2702.1 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="mo" data-latex=">"><path data-c="3E" d="M686 227C696 232 701 239 701 250C701 261 696 268 686 273L112 545C109 546 105 547 101 547C85 547 77 539 77 522C77 513 82 506 91 502L625 250L91-2C82-6 77-13 77-22C77-39 85-47 101-47C105-47 109-46 112-45Z"></path></g><g data-mml-node="msub" data-latex="P_{o l d}" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.313ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2348.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{new} > P_{old} + P_H"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="msub" data-latex="P_H" transform="translate(1000.2,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="H"><path data-c="1D43B" d="M881 668C881 678 875 683 863 683L736 680L609 683C593 683 586 674 586 659C586 652 589 647 594 646C604 645 612 644 617 644C648 643 665 641 670 640C675 639 678 636 678 631C677 628 676 622 674 613L615 375L321 375L379 602C384 623 393 636 406 641C413 643 430 644 458 644C485 644 496 644 496 668C496 678 490 683 478 683L351 680L223 683C207 683 200 674 200 659C200 652 203 647 209 646C219 645 227 644 232 644C263 643 281 641 286 640C291 639 293 636 293 631C293 629 292 623 289 613L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 39 37 39 15C39 5 45 0 57 0L183 3L246 2C257 2 299 0 310 0C326 0 334 8 334 24C334 34 323 39 302 39C262 39 242 43 242 52C242 52 243 55 245 68L312 336L605 336L538 68C535 53 523 43 503 40C498 39 481 39 452 39C433 39 424 31 424 15C424 5 430 0 442 0L568 3L631 2C642 2 683 0 696 0C712 0 720 8 720 24C720 34 709 39 688 39C647 39 627 43 627 52C627 52 628 55 630 68L764 602C769 623 778 636 791 641C797 643 814 644 843 644C869 644 881 644 881 668Z"></path></g></g></g></g></svg></mjx-container></span> 且
+<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.725ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1646.4 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} < P_T"><g data-mml-node="msub" data-latex="P_{o l d}"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="TeXAtom" transform="translate(675,-150) scale(0.707)" data-latex="{o l d}" data-mjx-texclass="ORD"><g data-mml-node="mi" data-latex="o"><path data-c="1D45C" d="M308 442C239 442 176 412 122 353C68 294 41 229 41 159C41 63 106-11 202-11C272-11 334 19 388 78C442 137 469 201 469 272C469 369 405 442 308 442M389 310C389 287 384 255 374 213C353 130 319 73 272 42C248 26 225 18 203 18C149 18 121 65 121 122C121 180 155 288 178 324C216 383 259 413 307 413C361 413 389 367 389 310Z"></path></g><g data-mml-node="mi" data-latex="l" transform="translate(485,0)"><path data-c="1D459" d="M173 632L49 119C46 105 44 93 44 84C44 31 83-11 136-11C185-11 220 41 241 145C241 154 236 159 225 159C217 159 211 152 208 138C188 59 165 19 138 19C121 19 113 33 113 60C113 75 115 91 119 107L258 679L258 683C255 690 249 694 242 694C210 694 136 685 124 684C109 682 102 674 102 659C102 650 111 645 130 645C147 645 173 645 173 632Z"></path></g><g data-mml-node="mi" data-latex="d" transform="translate(783,0)"><path data-c="1D451" d="M429 632L370 389C349 426 320 445 281 445C216 445 159 412 109 345C63 283 40 218 40 151C40 63 91-11 175-11C218-11 260 12 300 59C311 21 345-11 392-11C461-11 483 71 498 145C498 154 493 159 483 159C474 159 468 152 465 138C445 59 421 19 394 19C377 19 368 33 368 60C368 75 370 91 374 107L516 679L516 683C513 690 507 694 499 694C476 694 434 690 374 683C363 682 357 674 357 660C357 650 366 645 384 645C403 645 429 646 429 632M341 376C351 355 356 341 356 332C355 328 354 323 353 316L304 122C301 111 294 99 285 87C248 42 212 19 177 19C138 19 118 49 118 108C118 132 124 168 136 216C157 301 187 359 224 390C244 407 263 415 282 415C309 415 329 402 341 376Z"></path></g></g></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.155ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2278.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="P_{old} < P_T"><g data-mml-node="mo" data-latex="<"><path data-c="3C" d="M666-45C683-52 701-39 701-23C701-13 696-6 687-2L153 250L687 502C696 506 701 513 701 522C701 539 693 547 677 547C673 547 669 546 666 545L92 273C82 268 77 261 77 250C77 239 82 232 92 227Z"></path></g><g data-mml-node="msub" data-latex="P_T" transform="translate(1055.8,0)"><g data-mml-node="mi" data-latex="P"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mi" transform="translate(675,-150) scale(0.707)" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g></g></g></g></svg></mjx-container></span></td>
+<td>两者结合</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>再加驻留定时器（dwell
-timer）</strong></td>
-<td style="text-align: left;"><strong>条件满足时启动定时器；定时器到期时条件仍满足才切换</strong></td>
-<td style="text-align: left;">过滤掉短暂波动</td>
+<td>再加<strong>驻留定时器</strong></td>
+<td>条件满足时启动定时器，<strong>到期时条件仍满足才切</strong></td>
+<td>过滤短暂波动</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>迟滞 vs
-阈值的区别</strong>：<strong>阈值看的是「旧的够不够差」，迟滞看的是「新的比旧的好多少」</strong>。
-<strong>驻留定时器看的是「这种情况持续了多久」</strong> ——
-三个维度：绝对水平、相对差值、持续时间。</p>
-</blockquote>
+<p>三个维度：<strong>阈值看旧的够不够差，迟滞看新的好多少，驻留定时器看这种情况持续多久。</strong></p>
 <hr>
-<h1 id="第六部分无线与移动性对上层协议的影响讲义-p57">第六部分：无线与移动性对上层协议的影响（讲义
-p57）</h1>
-<p><strong>逻辑上影响应该很小</strong>： -
-<strong>尽力而为服务模型不变</strong> - <strong>TCP 和 UDP
-可以（也确实）运行在无线、移动网络上</strong></p>
-<p><strong>但性能上</strong>：</p>
+<h2 id="七无线和移动对上层协议的影响">七、无线和移动对上层协议的影响</h2>
+<p><strong>逻辑上影响应该很小</strong>：服务模型还是尽力而为；TCP、UDP
+照样能跑。</p>
+<p><strong>性能上</strong>：</p>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -1614,164 +1250,204 @@ p57）</h1>
 </colgroup>
 <thead>
 <tr>
-<th style="text-align: left;">问题</th>
-<th style="text-align: left;">说明</th>
+<th>问题</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>比特错误导致的丢包/时延</strong></td>
-<td style="text-align: left;">被丢弃的分组、链路层重传带来的时延</td>
+<td>比特错误</td>
+<td>分组被丢、链路层重传带来时延</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>切换</strong></td>
-<td style="text-align: left;">切换期间的丢包和时延</td>
+<td>切换</td>
+<td>切换期间丢包和时延</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>TCP 把丢包当成拥塞</strong></td>
-<td style="text-align: left;"><strong>会不必要地减小拥塞窗口</strong> ——
-无线丢包不是拥塞，却触发了 <a href="/posts/comp5416-week06-tcp.html">Week 06</a> 的乘性减</td>
+<td><strong>TCP 把丢包当拥塞</strong></td>
+<td>无线丢包不是拥塞，但 TCP
+会<strong>不必要地减小拥塞窗口</strong>（W06 的乘性减）</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>实时流量的时延损伤</strong></td>
-<td style="text-align: left;">VoIP / 视频受影响</td>
+<td>实时流量</td>
+<td>VoIP、视频受时延影响</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>这正是 Week 12 讲 QUIC 时「TCP 各种 flavor」表中的「Wireless
-networks：loss due to noisy wireless links, mobility; TCP treat this as
-congestion loss」一行。</strong>
-常见对策（教材知识）：<strong>链路层本地重传</strong>（802.11 ACK
-就是）、<strong>TCP 发送方区分丢包原因</strong>、<strong>分割连接（split
-TCP）</strong>。</p>
-</blockquote>
 <hr>
-<h1 id="第七部分本周考点速记">第七部分：本周考点速记</h1>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">项</th>
-<th style="text-align: left;">答案</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">802.11 多路访问</td>
-<td style="text-align: left;"><strong>CSMA/CA</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">BSS 组成</td>
-<td style="text-align: left;"><strong>无线主机 + AP</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">802.11b 信道数</td>
-<td style="text-align: left;"><strong>11
-个</strong>（不重叠：1、6、11）</td>
-</tr>
-<tr>
-<td style="text-align: left;">关联后通常做什么</td>
-<td style="text-align: left;"><strong>DHCP 获取 AP 子网中的
-IP</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">被动 / 主动扫描步数</td>
-<td style="text-align: left;"><strong>3 / 4</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">为什么不用 CSMA/CD</td>
-<td style="text-align: left;"><strong>发送时听不到（自身信号太强）、衰落、隐藏终端</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">ACK 前等待</td>
-<td style="text-align: left;"><strong>SIFS</strong>（短于 DIFS，ACK
-优先）</td>
-</tr>
-<tr>
-<td style="text-align: left;">发送前等待</td>
-<td style="text-align: left;"><strong>DIFS</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">退避计时器</td>
-<td style="text-align: left;"><strong>只在信道空闲时倒数</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">怎么知道 RTS 碰撞</td>
-<td style="text-align: left;"><strong>没收到 CTS</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">RTS/CTS 能否失败</td>
-<td style="text-align: left;"><strong>能</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">暴露终端</td>
-<td style="text-align: left;"><strong>能并行却不发</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">3G 数据核心</td>
-<td style="text-align: left;"><strong>SGSN、GGSN，与语音网并行</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">4G 两大创新</td>
-<td style="text-align: left;"><strong>EPC 全 IP 核心、OFDM +
-TDM</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">永久地址 vs 转交地址</td>
-<td style="text-align: left;"><strong>归属网络 vs 访问网络</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">间接路由的问题</td>
-<td style="text-align: left;"><strong>三角路由</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">直接路由的问题</td>
-<td style="text-align: left;"><strong>对通信者不透明；移动需锚点
-FA</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">Mobile IP 三部分</td>
-<td style="text-align: left;"><strong>间接路由、代理发现、注册</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">代理通告</td>
-<td style="text-align: left;"><strong>ICMP type 9 + 扩展 type
-16</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">HLR / VLR</td>
-<td style="text-align: left;"><strong>归属库 / 访问库</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">GSM 切换发起者</td>
-<td style="text-align: left;"><strong>旧 BSS</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">乒乓效应解法</td>
-<td style="text-align: left;"><strong>阈值、迟滞、驻留定时器</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;">无线对 TCP 的影响</td>
-<td style="text-align: left;"><strong>误把无线丢包当拥塞，不必要地减窗</strong></td>
-</tr>
-</tbody>
-</table>
-<h2 id="易错点">易错点</h2>
+<h2 id="考点小结">考点小结</h2>
 <ol type="1">
-<li><strong>SIFS &lt; DIFS</strong>，记反了会解释不通「ACK
-为什么优先」。</li>
-<li><strong>CSMA/CA
-中退避只在空闲时倒数</strong>，信道忙时冻结，不是重置。</li>
-<li><strong>隐藏终端导致碰撞；暴露终端导致浪费</strong>。</li>
-<li><strong>间接路由下通信者始终用永久地址</strong>，所以对通信者透明。</li>
-<li><strong>Mobile IP 注册回复里的 Lifetime 可能比请求小</strong>。</li>
-<li><strong>HLR 在归属网络，VLR 在访问网络</strong>。</li>
-<li><strong>GSM 切换是旧 BSS 发起的</strong>，且「先建后拆」。</li>
+<li>★★★ <strong>CSMA/CA</strong>：空闲 DIFS
+就发；忙则随机退避，<strong>只在空闲时倒数</strong>；没 ACK
+就扩大退避；接收方等 <strong>SIFS</strong> 回 ACK；<strong>SIFS &lt;
+DIFS 让 ACK 优先</strong>。</li>
+<li>★★★ <strong>为什么不用
+CSMA/CD</strong>：发送时听不到（自己信号太强）、衰落、隐藏终端。</li>
+<li>★★★ <strong>RTS / CTS</strong>：短帧预约；CTS
+所有节点都听得到，解决隐藏终端；没收到 CTS 说明 RTS
+碰撞；<strong>仍可能失败</strong>。</li>
+<li>★★ <strong>隐藏终端 → 碰撞；暴露终端 → 浪费。</strong></li>
+<li>★★★ <strong>间接 vs 直接路由</strong>：永久地址 /
+转交地址、透明与否、三角路由、锚点 FA。</li>
+<li>★★
+术语：归属网络、永久地址、归属代理、访问网络、转交地址、外地代理、通信者。</li>
+<li>★★ Mobile IP 三部分；隧道封装；ICMP type 9；有效期可被缩短。</li>
+<li>★★ HLR ≈ 归属代理，VLR ≈ 外地代理；GSM 切换由旧 BSS
+发起，先建后拆。</li>
+<li>★★ 切换算法：阈值、迟滞、驻留定时器解决乒乓。</li>
+<li>★★ 4G 两大创新：EPC 全 IP、OFDM + TDM；3G 数据网和语音网并行。</li>
+<li>★ 被动扫描 3 步、主动扫描 4 步；关联后跑 DHCP；无线丢包被 TCP
+当成拥塞。</li>
 </ol>
+<hr>
+<h2 id="题目">题目</h2>
+<p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
+<p><strong>Q1（讲义）</strong> 802.11 用的多路访问协议是？ A.
+CSMA/CD　B. CSMA/CA　C. TDMA　D. ALOHA</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q2（讲义）</strong> 为什么无线局域网不用 CSMA/CD？（多选） A.
+发送时自己的信号远强于收到的信号，听不到别人 B. 信号衰落 C.
+隐藏终端使节点无法感知所有碰撞 D. 无线链路不会发生碰撞</p>
+<blockquote>
+<p><strong>A、B、C</strong>。</p>
+</blockquote>
+<p><strong>Q3（讲义）</strong> 关于 CSMA/CA，正确的是？（多选） A.
+信道空闲 DIFS 后发送整个帧 B. 随机退避定时器在信道忙时冻结 C.
+发送过程中检测到碰撞就立即停止 D. 没收到 ACK 时扩大随机退避范围</p>
+<blockquote>
+<p><strong>A、B、D</strong>。CSMA/CA 不检测碰撞。</p>
+</blockquote>
+<p><strong>Q4（讲义）</strong> 为什么接收方在发 ACK 前只等 SIFS，而 SIFS
+比 DIFS 短？ A. 节省电量　B. 让 ACK 优先于其他站的数据帧　C. 测量
+RTT　D. 避免暴露终端</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q5（讲义）</strong> 802.11 为什么需要链路层 ACK？ A.
+为了流量控制　B. 发送方无法检测碰撞，只能靠 ACK 判断是否成功　C. TCP
+要求　D. 为了加密</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q6（讲义）</strong> 使用 RTS / CTS 时，发送方怎么知道自己的
+RTS 碰撞了？ A. 检测到信号强度变化　B. 没收到 CTS　C. 收到 NAK　D.
+收到两个 CTS</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q7（讲义）</strong> 关于 RTS / CTS，正确的是？（多选） A. RTS
+帧之间仍可能碰撞，但因为短，损失小 B. 听不到发送方的隐藏节点也能听到 AP
+的 CTS C. RTS / CTS 可以完全消除碰撞 D. 用于避免长数据帧的碰撞</p>
+<blockquote>
+<p><strong>A、B、D</strong>。仍会失败。</p>
+</blockquote>
+<p><strong>Q8（讲义）</strong> S1 和 S2 相邻，S1 → R1，S2 →
+R2，两个接收方都不会受对方干扰，但 S2 听到 S1 在发就不发了。这叫？ A.
+隐藏终端　B. 暴露终端　C. 乒乓效应　D. 三角路由</p>
+<blockquote>
+<p><strong>B</strong>。后果是吞吐量浪费，不是碰撞。</p>
+</blockquote>
+<p><strong>Q9（讲义）</strong> 主动扫描关联一个 AP
+共几步，第一步是什么？ A. 3 步，AP 发信标　B. 4 步，主机广播探测请求　C.
+4 步，AP 发信标　D. 2 步，主机发关联请求</p>
+<blockquote>
+<p><strong>B</strong>。被动扫描 3 步，AP 先发信标。</p>
+</blockquote>
+<p><strong>Q10（讲义）</strong> 关于 802.11，正确的是？（多选） A. BSS
+由无线主机和一个 AP 组成 B. 主机关联 AP 后通常用 DHCP 获取 IP 地址 C.
+802.11a 工作在 2.4 GHz D. 信标帧里包含 AP 的 SSID 和 MAC 地址</p>
+<blockquote>
+<p><strong>A、B、D</strong>。802.11a 是 5 GHz。</p>
+</blockquote>
+<p><strong>Q11（讲义）</strong> 设备远离基站，SNR 下降，802.11
+的速率自适应会？ A. 切换到更高速率的调制　B. 切换到更低速率、BER
+更低的调制　C. 提高 DIFS　D. 改用 CSMA/CD</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q12（讲义）</strong> 4G LTE 相对 3G 的两大创新是？（多选） A.
+全 IP 的演进分组核心（EPC） B. OFDM 与时分复用结合的无线接入 C.
+语音网和数据网并行运行 D. 用 CDMA 做空口</p>
+<blockquote>
+<p><strong>A、B</strong>。C 是 3G 的特点。</p>
+</blockquote>
+<p><strong>Q13（讲义）</strong> 在移动性术语中，访问网络里的地址叫？ A.
+永久地址　B. 转交地址（COA）　C. 漫游地址　D. 归属地址</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q14（讲义）</strong> 间接路由中，通信者把分组发到哪个地址？
+A. 转交地址　B. 移动设备的永久地址　C. 外地代理地址　D. 归属代理地址</p>
+<blockquote>
+<p><strong>B</strong>。归属代理截获后转发。</p>
+</blockquote>
+<p><strong>Q15（讲义）</strong> 关于间接路由，正确的是？（多选） A.
+存在三角路由问题 B. 移动设备换访问网络对通信者透明 C.
+通信者必须先向归属代理获取转交地址 D. 移动设备直接回复通信者</p>
+<blockquote>
+<p><strong>A、B、D</strong>。C 是直接路由。</p>
+</blockquote>
+<p><strong>Q16（讲义）</strong> 关于直接路由，正确的是？（多选） A.
+解决了三角路由问题 B. 对通信者不透明 C.
+移动设备换网后可以用锚点外地代理链式转发 D. 通信者始终使用永久地址</p>
+<blockquote>
+<p><strong>A、B、C</strong>。</p>
+</blockquote>
+<p><strong>Q17（讲义）</strong>
+为什么不「让路由器处理」移动性（路由表里通告每台移动设备的永久地址）？
+A. 端系统要修改　B. 扩展不到几百万台移动设备　C. 无法保持连接　D.
+不安全</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q18（讲义）</strong> Mobile IP 标准的三个组成部分是？（多选）
+A. 间接路由 B. 代理发现 C. 向归属代理注册 D. 直接路由</p>
+<blockquote>
+<p><strong>A、B、C</strong>。</p>
+</blockquote>
+<p><strong>Q19（讲义）</strong> Mobile IP
+里归属代理怎么把分组送到移动设备？ A. 改写原分组的目的地址　B.
+把原分组整个封装进目的为转交地址的新分组　C. 广播　D. 交给 DNS</p>
+<blockquote>
+<p><strong>B</strong>。外地代理再解封装。</p>
+</blockquote>
+<p><strong>Q20（讲义）</strong> Mobile IP 注册时移动设备请求 Lifetime
+9999，归属代理的回复可能是？ A. 只能是 9999　B. 可以更短，如 4999　C.
+必须更长　D. 回复里没有 Lifetime</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q21（讲义）</strong> 蜂窝网络中，和 Mobile IP
+的归属代理、外地代理对应的分别是？ A. VLR、HLR　B. HLR、VLR　C.
+MSC、BSS　D. SGSN、GGSN</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q22（讲义）</strong> 关于 GSM 同一 MSC
+下的切换，正确的是？（多选） A. 由旧 BSS 发起 B. 先建立到新 BSS
+的路径，再让设备切过去 C. 最后释放到旧 BSS 的资源 D. 由 MSC 根据 GSM
+标准规定的时机发起</p>
+<blockquote>
+<p><strong>A、B、C</strong>。GSM 不规定何时切。</p>
+</blockquote>
+<p><strong>Q23（讲义）</strong>
+为了抑制边界附近的乒乓效应，要求新基站的信号比旧基站强出一个余量才切换，这叫？
+A. 阈值　B. 迟滞（hysteresis）　C. 驻留定时器　D. 速率自适应</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<p><strong>Q24（讲义）</strong> 无线和移动对 TCP 的主要性能影响是？ A.
+TCP 无法运行 B. TCP 把无线丢包当成拥塞，不必要地减小拥塞窗口 C. TCP
+序号溢出 D. TCP 握手变成四次</p>
+<blockquote>
+<p><strong>B</strong>。</p>
+</blockquote>
+<hr>
+<p>相关：<a href="/posts/comp5416-week10-sip-qos-wireless.html">W10
+无线基础 + CDMA</a>、<a href="/posts/comp5416-week12-5g-mobility-quic.html">W12 5G / QUIC +
+tutorial</a>、<a href="/posts/comp5416-week06-tcp.html">W06 TCP</a></p>
 
     </div>
 
@@ -1842,7 +1518,7 @@ FA</strong></td>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">77:37</span>
+    <span title="Reading time total">77:06</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
