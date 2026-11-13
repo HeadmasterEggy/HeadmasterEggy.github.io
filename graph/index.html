@@ -205,7 +205,8 @@
     top: 16px;
     right: 16px;
     width: 316px;
-    max-height: calc(100vh - 32px);
+    /* 底部给缩放控件留出位置 */
+    max-height: calc(100vh - 84px);
     display: flex;
     flex-direction: column;
   }
@@ -491,7 +492,76 @@
   }
   .tooltip .mini { color: var(--soft); font-size: 11px; margin-top: 4px; }
 
-  /* 加载 */
+  .tooltip.show { animation: tip-in 0.16s ease-out; }
+  .tooltip strong { display: flex; align-items: center; gap: 7px; }
+  .tooltip .tip-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; box-shadow: 0 0 8px currentColor; }
+  @keyframes tip-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* 面板入场：开场时从边缘滑入，错开一点点 */
+  .panel.enter, .footbar.enter, .zoom-ctrl.enter {
+    animation: panel-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: var(--delay, 0s);
+  }
+  #panel-right.enter { --from-x: 18px; }
+  .footbar.enter, .zoom-ctrl.enter { --from-y: 12px; }
+  @keyframes panel-in {
+    from { opacity: 0; transform: translate(var(--from-x, -18px), var(--from-y, 0)); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* 右下角缩放控件 */
+  .zoom-ctrl {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgba(10, 20, 36, 0.78);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  }
+  .zoom-ctrl button {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .zoom-ctrl button:hover { background: rgba(255, 255, 255, 0.09); color: var(--text); }
+  .zoom-ctrl .zoom-val {
+    min-width: 44px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .zoom-ctrl .sep { width: 1px; height: 16px; background: var(--border); margin: 0 3px; }
+
+  kbd {
+    display: inline-block;
+    min-width: 16px;
+    padding: 0 4px;
+    margin: 0 1px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    font: 10px/14px ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-align: center;
+  }
+
+  /* ---------- 加载：一个小星系在转，连线一闪一闪地“编织” ---------- */
   #loading {
     position: fixed;
     inset: 0;
@@ -499,29 +569,107 @@
     display: grid;
     place-content: center;
     justify-items: center;
-    gap: 14px;
-    background: var(--bg);
+    gap: 16px;
+    background:
+      radial-gradient(40% 35% at 50% 45%, rgba(84, 152, 255, 0.10), transparent 70%),
+      var(--bg);
     text-align: center;
-    transition: opacity 0.35s;
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
   }
-  #loading.done { opacity: 0; pointer-events: none; }
-  #loading .title { font-size: 14px; letter-spacing: 0.3px; }
+  #loading.done {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(6px);
+    pointer-events: none;
+  }
+  .loader-orbit { width: 132px; height: 132px; margin-bottom: 4px; }
+  .loader-orbit svg { width: 100%; height: 100%; overflow: visible; }
+  .loader-orbit .orbit-path { fill: none; stroke: rgba(255, 255, 255, 0.07); stroke-width: 0.8; }
+  .loader-orbit .spin { animation: spin 9s linear infinite; }
+  .loader-orbit .spin.s2 { animation-duration: 6.5s; animation-direction: reverse; }
+  .loader-orbit .spin.s3 { animation-duration: 14s; }
+  .loader-orbit .ray {
+    stroke: rgba(150, 200, 255, 0.55);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: weave 2.4s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .loader-orbit .sat { animation: twinkle 2.4s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .loader-orbit .core { fill: #dff0ff; }
+  .loader-orbit .core-glow { animation: breathe 2.4s ease-in-out infinite; transform-origin: 0 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes weave {
+    0% { stroke-dashoffset: 60; opacity: 0; }
+    35% { stroke-dashoffset: 0; opacity: 1; }
+    70% { stroke-dashoffset: 0; opacity: 0.8; }
+    100% { stroke-dashoffset: -60; opacity: 0; }
+  }
+  @keyframes twinkle { 0%, 100% { opacity: 0.45; } 40% { opacity: 1; } }
+  @keyframes breathe { 0%, 100% { transform: scale(0.85); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
+
+  #loading .title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #8fa5c6 0%, #ffffff 45%, #8fa5c6 90%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 2.6s linear infinite;
+  }
+  @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
   #loading .bar {
-    width: 190px;
-    height: 3px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    width: 220px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
     overflow: hidden;
   }
   #loading .bar i {
+    position: relative;
     display: block;
     height: 100%;
     width: 0%;
-    border-radius: 3px;
+    border-radius: 4px;
     background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    transition: width 0.2s;
+    box-shadow: 0 0 12px rgba(127, 233, 200, 0.55);
+    transition: width 0.25s ease-out;
+    overflow: hidden;
   }
-  #loading .step { font-size: 11.5px; color: var(--soft); }
+  #loading .bar i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: translateX(-100%);
+    animation: sweep 1.3s ease-in-out infinite;
+  }
+  @keyframes sweep { to { transform: translateX(100%); } }
+  #loading .step {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    width: 220px;
+    font-size: 11.5px;
+    color: var(--soft);
+  }
+  #loading .step #loading-pct { color: var(--muted); font-variant-numeric: tabular-nums; }
+  #loading .step-text { transition: opacity 0.2s; }
+  #loading .step-text.swap { opacity: 0; }
+  #loading.failed .loader-orbit, #loading.failed .bar, #loading.failed .step { display: none; }
+  #loading.failed .title { animation: none; color: #ffb4b4; -webkit-text-fill-color: #ffb4b4; }
+  .load-error { max-width: 320px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .load-error .btn { margin-top: 12px; flex: none; padding: 8px 22px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; }
+    .loader-orbit .ray { stroke-dashoffset: 0; opacity: 0.6; }
+  }
 
   @media (max-width: 900px) {
     #panel-left, #panel-right {
@@ -535,7 +683,7 @@
       bottom: 12px;
       max-height: 45vh;
     }
-    .footbar { display: none; }
+    .footbar, .zoom-ctrl { display: none !important; }
   }
 </style>
 </head>
@@ -544,10 +692,46 @@
 
 <canvas id="graph"></canvas>
 
-<div id="loading">
-  <div class="title">正在编织知识图谱</div>
+<div id="loading" role="status" aria-live="polite">
+  <div class="loader-orbit" aria-hidden="true">
+    <svg viewBox="-66 -66 132 132">
+      <defs><radialGradient id="core-grad"><stop offset="0" stop-color="#bfe0ff" stop-opacity="0.9"/><stop offset="1" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient></defs>
+      <circle class="orbit-path" r="60"/>
+      <circle class="orbit-path" r="46"/>
+      <circle class="orbit-path" r="28"/>
+      <g class="spin s3">
+        <circle class="sat" style="--d:0.0s" cx="52.7" cy="28.8" r="1.8" fill="#f3b4d9"/>
+        <circle class="sat" style="--d:0.6s" cx="-51.2" cy="31.2" r="1.8" fill="#9be1a0"/>
+        <circle class="sat" style="--d:1.2s" cx="-1.4" cy="-60.0" r="1.8" fill="#d6c2ff"/>
+      </g>
+      <g class="spin s1">
+        <line class="ray" style="--d:0.0s" x1="0" y1="0" x2="46.0" y2="0.0"/>
+        <line class="ray" style="--d:0.6s" x1="0" y1="0" x2="0.0" y2="46.0"/>
+        <line class="ray" style="--d:1.2s" x1="0" y1="0" x2="-46.0" y2="0.0"/>
+        <line class="ray" style="--d:1.8s" x1="0" y1="0" x2="-0.0" y2="-46.0"/>
+        <line class="ray" style="--d:1.2s" x1="46.0" y1="0.0" x2="0.0" y2="46.0"/>
+        <circle class="sat" style="--d:0.0s" cx="46.0" cy="0.0" r="3.4" fill="#7bb8ff"/>
+        <circle class="sat" style="--d:0.6s" cx="0.0" cy="46.0" r="3.4" fill="#8be6cd"/>
+        <circle class="sat" style="--d:1.2s" cx="-46.0" cy="0.0" r="3.4" fill="#ffcc73"/>
+        <circle class="sat" style="--d:1.8s" cx="-0.0" cy="-46.0" r="3.4" fill="#ff9f9f"/>
+      </g>
+      <g class="spin s2">
+        <line class="ray" style="--d:0.0s" x1="0" y1="0" x2="15.1" y2="23.6"/>
+        <line class="ray" style="--d:0.6s" x1="0" y1="0" x2="-28.0" y2="1.3"/>
+        <line class="ray" style="--d:1.2s" x1="0" y1="0" x2="12.8" y2="-24.9"/>
+        <line class="ray" style="--d:1.2s" x1="15.1" y1="23.6" x2="-28.0" y2="1.3"/>
+        <circle class="sat" style="--d:0.0s" cx="15.1" cy="23.6" r="2.6" fill="#bda1ff"/>
+        <circle class="sat" style="--d:0.6s" cx="-28.0" cy="1.3" r="2.6" fill="#78d8ff"/>
+        <circle class="sat" style="--d:1.2s" cx="12.8" cy="-24.9" r="2.6" fill="#f3b4d9"/>
+      </g>
+      <circle class="core-glow" r="16" fill="url(#core-grad)"/>
+      <circle class="core" r="5"/>
+    </svg>
+  </div>
+  <div class="title" id="loading-title">正在编织知识图谱</div>
   <div class="bar"><i id="loading-bar"></i></div>
-  <div class="step" id="loading-step">读取节点数据…</div>
+  <div class="step"><span class="step-text" id="loading-step">读取节点数据…</span><span id="loading-pct">0%</span></div>
+  <div class="load-error" id="loading-error" hidden></div>
 </div>
 
 <section class="panel" id="panel-left" hidden>
@@ -629,10 +813,18 @@
   </div>
 </aside>
 
-<div class="footbar">
+<div class="footbar" hidden>
   <a class="chip-btn" href="/">← 返回首页</a>
-  <span class="hint">滚轮缩放 · 拖拽平移 · 单击查看 · 双击打开文章</span>
+  <span class="hint">滚轮缩放 · 拖拽平移 · 单击查看 · 双击打开 · <kbd>/</kbd> 搜索 · <kbd>F</kbd> 适配 · <kbd>Esc</kbd> 取消</span>
   <span id="fps" hidden>—</span>
+</div>
+
+<div class="zoom-ctrl" id="zoom-ctrl" hidden>
+  <button id="zoom-out" title="缩小" aria-label="缩小">−</button>
+  <span class="zoom-val" id="zoom-val">100%</span>
+  <button id="zoom-in" title="放大" aria-label="放大">+</button>
+  <span class="sep"></span>
+  <button id="zoom-fit" title="适配视图（F）" aria-label="适配视图">⤢</button>
 </div>
 
 <div class="tooltip" id="tooltip"></div>
@@ -689,16 +881,47 @@ const escapeHtml = s => String(s == null ? '' : s)
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const typeLabel = (type, synthetic) => type === 'hub' ? (synthetic ? '大类节点' : '大类文档') : '笔记';
 
+const REDUCED_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+let lastStepText = '';
 function setProgress(pct, text) {
+  pct = Math.max(0, Math.min(100, pct));
   $('loading-bar').style.width = pct + '%';
-  if (text) $('loading-step').textContent = text;
+  $('loading-pct').textContent = Math.round(pct) + '%';
+  if (text && text !== lastStepText) {
+    lastStepText = text;
+    const el = $('loading-step');
+    el.classList.add('swap');
+    setTimeout(() => { el.textContent = text; el.classList.remove('swap'); }, 120);
+  }
 }
 
+function showLoadError(message) {
+  const box = $('loading');
+  box.classList.add('failed');
+  $('loading-title').textContent = '图谱没能加载出来';
+  const err = $('loading-error');
+  err.hidden = false;
+  err.innerHTML = escapeHtml(message) +
+    '<br><button class="btn primary" id="loading-retry">重新加载</button>';
+  $('loading-retry').addEventListener('click', () => window.location.reload());
+}
+
+// 在下一帧继续；后台标签页里 rAF 会被节流，所以再挂一个 setTimeout 兜底，谁先到用谁
+function nextFrame(fn) {
+  let done = false;
+  const go = () => { if (!done) { done = true; fn(); } };
+  requestAnimationFrame(go);
+  setTimeout(go, 60);
+}
+
+setProgress(8, '读取节点数据…');
 // 每次部署 data.json 都会变，用 no-cache 让浏览器带 ETag 回源校验，避免拿到旧图谱
 fetch('./data.json', { cache: 'no-cache' })
   .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(graph => {
-    setProgress(35, '计算布局…');
+    if (!window.d3) throw new Error('绘图库 d3 没有加载成功，可能是 CDN 被拦截了。');
+    setProgress(30, '计算布局…');
     // 让进度条先刷新一帧再进同步预热；后台标签页里 rAF 会被节流，
     // 所以再挂一个 setTimeout 兜底，谁先到用谁
     let started = false;
@@ -707,7 +930,8 @@ fetch('./data.json', { cache: 'no-cache' })
     setTimeout(go, 120);
   })
   .catch(err => {
-    $('loading-step').textContent = '加载失败：' + err.message;
+    console.error(err);
+    showLoadError('加载失败：' + (err && err.message ? err.message : err));
   });
 
 
@@ -804,9 +1028,20 @@ function start(graph) {
 
   applyForces();
   seedLayout();
-  simulation.alpha(1).alphaDecay(1 - Math.pow(0.001, 1 / WARMUP_TICKS));
-  for (let i = 0; i < WARMUP_TICKS; i++) simulation.tick();
-  simulation.alphaDecay(0.0228);
+
+  /* 预热分批跑：每帧最多占 12ms，进度条和加载动画不会卡住 */
+  function runWarmup(done) {
+    simulation.alpha(1).alphaDecay(1 - Math.pow(0.001, 1 / WARMUP_TICKS));
+    let i = 0;
+    const chunk = () => {
+      const t0 = performance.now();
+      while (i < WARMUP_TICKS && performance.now() - t0 < 12) { simulation.tick(); i++; }
+      setProgress(30 + 55 * (i / WARMUP_TICKS), i < WARMUP_TICKS * 0.6 ? '计算布局…' : '让节点各就各位…');
+      if (i < WARMUP_TICKS) nextFrame(chunk);
+      else { simulation.alphaDecay(0.0228); done(); }
+    };
+    chunk();
+  }
 
   /* ---------- 缩放 / 平移 ---------- */
   let transform = d3.zoomIdentity;
@@ -897,6 +1132,88 @@ function start(graph) {
     c.closePath();
   }
 
+  /* ---------- 动画状态 ----------
+     intro：开场节点从中心向外依次“长”出来，连线随后淡入
+     n._a：每个节点当前的不透明度，聚焦/取消聚焦时平滑过渡而不是一下子跳变
+     dimMix：连线整体变暗的程度，同样做插值 */
+  let introStart = 0;
+  let introMaxDist = 1;
+  const INTRO_SPREAD = 650, INTRO_GROW = 520, INTRO_TOTAL = INTRO_SPREAD + INTRO_GROW + 250;
+  let dimMix = 0;
+  graph.nodes.forEach(n => { n._a = 1; });
+
+  const easeOutBack = t => { const c = 1.6; t -= 1; return 1 + (c + 1) * t * t * t + c * t * t; };
+  const clamp01 = t => t < 0 ? 0 : (t > 1 ? 1 : t);
+
+  function beginIntro() {
+    if (REDUCED_MOTION) { introStart = -1e9; return; }
+    let cx = 0, cy = 0;
+    graph.nodes.forEach(n => { cx += n.x; cy += n.y; });
+    cx /= graph.nodes.length || 1; cy /= graph.nodes.length || 1;
+    introMaxDist = 1;
+    graph.nodes.forEach(n => {
+      n._d = Math.hypot(n.x - cx, n.y - cy);
+      if (n._d > introMaxDist) introMaxDist = n._d;
+    });
+    introStart = performance.now();
+  }
+  function introScale(n, now) {
+    const t = (now - introStart - (n._d || 0) / introMaxDist * INTRO_SPREAD) / INTRO_GROW;
+    return t >= 1 ? 1 : (t <= 0 ? 0 : Math.max(0, easeOutBack(t)));
+  }
+  function introing(now) { return now - introStart < INTRO_TOTAL; }
+
+  // 每帧推进插值；返回 true 表示还没到位，需要继续重绘
+  function stepAnimations() {
+    let moving = false;
+    const targetDim = focus ? 1 : 0;
+    if (Math.abs(dimMix - targetDim) > 0.01) { dimMix += (targetDim - dimMix) * 0.2; moving = true; }
+    else dimMix = targetDim;
+    for (let i = 0; i < graph.nodes.length; i++) {
+      const n = graph.nodes[i];
+      const target = (focus && !focus.has(n.id)) ? 0.12 : 1;
+      if (Math.abs(n._a - target) > 0.01) { n._a += (target - n._a) * 0.2; moving = true; }
+      else n._a = target;
+    }
+    return moving;
+  }
+
+  // 光晕贴图：每种颜色预先画一张径向渐变，绘制时直接 drawImage，比 shadowBlur 便宜得多
+  const glowCache = new Map();
+  function glowSprite(col) {
+    let c = glowCache.get(col);
+    if (c) return c;
+    c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, col);
+    grad.addColorStop(0.35, col + '55');
+    grad.addColorStop(1, col + '00');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 64, 64);
+    glowCache.set(col, c);
+    return c;
+  }
+
+  // 背景星点：一张随机星点贴图平铺，平移时以 0.35 倍速度视差移动
+  const starTile = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 280;
+    const g = c.getContext('2d');
+    let seed = 7;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 70; i++) {
+      const r = rnd() < 0.85 ? 0.6 : 1.1;
+      g.fillStyle = 'rgba(200, 220, 255, ' + (0.05 + rnd() * 0.22).toFixed(2) + ')';
+      g.beginPath();
+      g.arc(rnd() * 280, rnd() * 280, r, 0, Math.PI * 2);
+      g.fill();
+    }
+    return c;
+  })();
+  const starPattern = ctx.createPattern(starTile, 'repeat');
+
   const LINK_STYLE = {
     hub:    { color: 'rgba(109, 230, 201, ', base: 0.20, dash: [4, 4], w: 1.1 },
     tag:    { color: 'rgba(233, 196, 106, ', base: 0.26, dash: [2, 5], w: 1.1 },
@@ -906,9 +1223,20 @@ function start(graph) {
   function draw() {
     const s = state.settings;
     const k = transform.k;
+    const now = performance.now();
+    const inIntro = introing(now);
+    // 连线在节点长出一半后再淡入
+    const edgeIntro = inIntro ? clamp01((now - introStart - INTRO_SPREAD * 0.5) / (INTRO_GROW + 200)) : 1;
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, width, height);
+
+    if (starPattern && starPattern.setTransform && window.DOMMatrix) {
+      starPattern.setTransform(new DOMMatrix().translate(transform.x * 0.35, transform.y * 0.35));
+      ctx.fillStyle = starPattern;
+      ctx.fillRect(0, 0, width, height);
+    }
+
     ctx.save();
     ctx.translate(transform.x, transform.y);
     ctx.scale(k, k);
@@ -938,8 +1266,8 @@ function start(graph) {
       const list = buckets[kind];
       if (!list.length) return;
       const st = LINK_STYLE[kind] || LINK_STYLE.direct;
-      let alpha = st.base;
-      if (focus) alpha *= 0.22;
+      const alpha = st.base * (1 - 0.78 * dimMix) * edgeIntro;
+      if (alpha <= 0.002) return;
       ctx.strokeStyle = st.color + alpha.toFixed(3) + ')';
       ctx.lineWidth = (st.w * lineScale) / k;
       ctx.setLineDash(st.dash ? st.dash.map(v => v / k) : []);
@@ -953,7 +1281,7 @@ function start(graph) {
 
     if (strong.length) {
       ctx.setLineDash([]);
-      ctx.strokeStyle = 'rgba(127, 191, 255, 0.9)';
+      ctx.strokeStyle = 'rgba(127, 191, 255, ' + (0.9 * Math.max(edgeIntro, dimMix)).toFixed(3) + ')';
       ctx.lineWidth = (2 * lineScale) / k;
       ctx.beginPath();
       for (let i = 0; i < strong.length; i++) {
@@ -965,60 +1293,98 @@ function start(graph) {
     }
     ctx.setLineDash([]);
 
-    /* --- 节点：按颜色 + 明暗分桶批量填充 --- */
-    const bright = new Map();
-    const dim = new Map();
+    /* --- 光晕：大类节点和焦点节点下面垫一层柔光 --- */
+    ctx.globalCompositeOperation = 'lighter';
     for (let i = 0; i < graph.nodes.length; i++) {
       const n = graph.nodes[i];
       if (!isVisible(n) || !inView(n)) continue;
-      const target = (focus && !focus.has(n.id)) ? dim : bright;
-      const col = colorOf(n);
-      if (!target.has(col)) target.set(col, []);
-      target.get(col).push(n);
+      const isHub = n.type === 'hub';
+      const lit = n.id === state.selectedId || n.id === state.hoveredId;
+      if (!isHub && !lit) continue;
+      const sc = inIntro ? introScale(n, now) : 1;
+      const a = n._a * (lit ? 0.55 : 0.28) * sc;
+      if (a < 0.02) continue;
+      const g = nodeRadius(n) * (lit ? 4.2 : 3.4) * sc;
+      ctx.globalAlpha = a;
+      ctx.drawImage(glowSprite(colorOf(n)), n.x - g, n.y - g, g * 2, g * 2);
     }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
 
-    const paint = (map, alpha) => {
-      ctx.globalAlpha = alpha;
-      map.forEach((list, col) => {
-        ctx.fillStyle = col;
+    /* --- 节点：按颜色分组，每个节点按自己的不透明度画 --- */
+    const groups = new Map();
+    for (let i = 0; i < graph.nodes.length; i++) {
+      const n = graph.nodes[i];
+      if (!isVisible(n) || !inView(n)) continue;
+      const col = colorOf(n);
+      if (!groups.has(col)) groups.set(col, []);
+      groups.get(col).push(n);
+    }
+    ctx.lineWidth = 1.1 / k;
+    groups.forEach((list, col) => {
+      ctx.fillStyle = col;
+      for (let i = 0; i < list.length; i++) {
+        const n = list[i];
+        const sc = inIntro ? introScale(n, now) : 1;
+        if (sc <= 0.01) continue;
+        const r = nodeRadius(n) * sc;
+        ctx.globalAlpha = n._a;
         ctx.beginPath();
-        for (let i = 0; i < list.length; i++) {
-          const n = list[i], r = nodeRadius(n);
-          if (n.type === 'hub') {
-            roundRect(ctx, n.x - r * 1.1, n.y - r * 0.72, r * 2.2, r * 1.44, Math.min(12, r * 0.7));
-          } else {
-            ctx.moveTo(n.x + r, n.y);
-            ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-          }
+        if (n.type === 'hub') {
+          roundRect(ctx, n.x - r * 1.1, n.y - r * 0.72, r * 2.2, r * 1.44, Math.min(12, r * 0.7));
+        } else {
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
         }
         ctx.fill();
-        if (alpha > 0.5) {
-          ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-          ctx.lineWidth = 1.1 / k;
+        if (n._a > 0.5) {
+          ctx.strokeStyle = n.type === 'hub' ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.2)';
           ctx.stroke();
         }
-      });
-      ctx.globalAlpha = 1;
-    };
-    paint(dim, 0.13);
-    paint(bright, 1);
+      }
+    });
+    ctx.globalAlpha = 1;
 
-    /* --- 选中 / 悬停的高亮圈 --- */
+    /* --- 搜索命中：外面套一圈青色细环 --- */
+    if (state.searchQuery && focus && !state.selectedId && !state.hoveredId) {
+      ctx.strokeStyle = 'rgba(127, 233, 200, 0.7)';
+      ctx.lineWidth = 1.3 / k;
+      ctx.beginPath();
+      focus.forEach(id => {
+        const n = byId.get(id);
+        if (!n || !isVisible(n) || !inView(n)) return;
+        const r = nodeRadius(n) + 4 / k + 2;
+        ctx.moveTo(n.x + r, n.y);
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      });
+      ctx.stroke();
+    }
+
+    /* --- 选中 / 悬停的高亮圈；选中节点再加一圈向外扩散的波纹 --- */
     [state.selectedId, state.hoveredId].forEach((id, idx) => {
       if (!id) return;
+      if (idx === 1 && id === state.selectedId) return;
       const n = byId.get(id);
       if (!n || !isVisible(n)) return;
+      const r = nodeRadius(n);
       ctx.beginPath();
-      ctx.arc(n.x, n.y, nodeRadius(n) + 6, 0, Math.PI * 2);
+      ctx.arc(n.x, n.y, r + 5 / k + 1, 0, Math.PI * 2);
       ctx.strokeStyle = idx === 0 ? 'rgba(127,191,255,0.95)' : 'rgba(255,255,255,0.6)';
       ctx.lineWidth = 1.8 / k;
       ctx.stroke();
+      if (idx === 0 && !REDUCED_MOTION) {
+        const t = (now % 1600) / 1600;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r + (5 + t * 20) / k + 1, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(127,191,255,' + (0.6 * (1 - t)).toFixed(3) + ')';
+        ctx.lineWidth = 1.4 / k;
+        ctx.stroke();
+      }
     });
 
     ctx.restore();
 
     /* --- 标签：在屏幕坐标里画，配合贪心避让，密集区域不会糊成一团 --- */
-    drawLabels(k, x0, x1, y0, y1);
+    drawLabels(k, x0, x1, y0, y1, inIntro ? now : 0);
     frames++;
   }
 
@@ -1041,7 +1407,8 @@ function start(graph) {
   const NOTE_FONT = '11px Inter, -apple-system, "PingFang SC", sans-serif';
   const HUB_FONT = '600 12.5px Inter, -apple-system, "PingFang SC", sans-serif';
 
-  function drawLabels(k, x0, x1, y0, y1) {
+  // introNow 非 0 时处于开场动画：每个标签跟着自己的节点一起淡入
+  function drawLabels(k, x0, x1, y0, y1, introNow) {
     const s = state.settings;
     if (s.textOpacity <= 0) return;
 
@@ -1054,7 +1421,8 @@ function start(graph) {
     ctx.textBaseline = 'middle';
     ctx.lineJoin = 'round';
     ctx.lineWidth = 3;
-    ctx.globalAlpha = s.textOpacity / 100;
+    const baseAlpha = s.textOpacity / 100;
+    ctx.globalAlpha = baseAlpha;
 
     const placed = [];
     let drawn = 0;
@@ -1093,6 +1461,11 @@ function start(graph) {
       if (clash) continue;
       placed.push([bx - 2, by - 1, bx + tw + 2, by + th + 1]);
 
+      if (introNow) {
+        const f = clamp01(introScale(n, introNow - 200));
+        if (f <= 0.02) continue;
+        ctx.globalAlpha = baseAlpha * f;
+      }
       ctx.font = font;
       ctx.strokeStyle = 'rgba(3, 8, 16, 0.9)';
       ctx.strokeText(label, bx, by + th / 2);
@@ -1130,7 +1503,10 @@ function start(graph) {
       dirty = true;
       if (simulation.alpha() < simulation.alphaMin()) running = false;
     }
-    if (dirty) { draw(); dirty = false; }
+    if (stepAnimations()) dirty = true;
+    if (introing(performance.now())) dirty = true;
+    if (state.selectedId && !REDUCED_MOTION) dirty = true;   // 选中波纹要持续动
+    if (dirty) { draw(); dirty = false; updateZoomLabel(); }
 
     if (state.settings.showFps) {
       const now = performance.now();
@@ -1160,7 +1536,7 @@ function start(graph) {
       recomputeFocus();
       dirty = true;
     }
-    if (!n) { tooltip.style.display = 'none'; return; }
+    if (!n) { tooltip.style.display = 'none'; tooltip.classList.remove('show'); return; }
     // 记下最新的悬停目标，等 rAF 真的跑到时再读，避免鼠标已经移开却弹出旧内容
     tipPending = { node: n, x: event.clientX, y: event.clientY };
     if (tipRaf) return;
@@ -1169,13 +1545,22 @@ function start(graph) {
       const t = tipPending;
       if (!t || !state.hoveredId || state.hoveredId !== t.node.id) {
         tooltip.style.display = 'none';
+        tooltip.classList.remove('show');
         return;
       }
+      const fresh = tooltip.dataset.id !== t.node.id || tooltip.style.display !== 'block';
       tooltip.style.display = 'block';
+      if (fresh) {
+        tooltip.dataset.id = t.node.id;
+        tooltip.classList.remove('show');
+        void tooltip.offsetWidth;   // 重新触发淡入动画
+        tooltip.classList.add('show');
+      }
       tooltip.style.left = Math.min(t.x + 14, window.innerWidth - 316) + 'px';
       tooltip.style.top = Math.min(t.y + 14, window.innerHeight - 110) + 'px';
       tooltip.innerHTML =
-        '<strong>' + escapeHtml(t.node.title) + '</strong>' +
+        '<strong><span class="tip-dot" style="background:' + colorOf(t.node) + ';color:' + colorOf(t.node) + '"></span>' +
+        escapeHtml(t.node.title) + '</strong>' +
         '<div class="mini">' + escapeHtml(typeLabel(t.node.type, t.node.synthetic)) + ' · ' +
         escapeHtml(t.node.category) + ' · ' + t.node.degree + ' 条连接</div>' +
         '<div class="mini">' + escapeHtml(truncate(t.node.excerpt || t.node.path, 80)) + '</div>';
@@ -1266,6 +1651,19 @@ function start(graph) {
     dirty = true;
   }
 
+  /* ---------- 缩放控件 ---------- */
+  let lastZoomText = '';
+  function updateZoomLabel() {
+    const txt = Math.round(transform.k * 100) + '%';
+    if (txt !== lastZoomText) { lastZoomText = txt; $('zoom-val').textContent = txt; }
+  }
+  function zoomBy(f) {
+    d3.select(canvas).transition().duration(260).call(zoom.scaleBy, f, [width / 2, height / 2]);
+  }
+  $('zoom-in').addEventListener('click', () => zoomBy(1.35));
+  $('zoom-out').addEventListener('click', () => zoomBy(1 / 1.35));
+  $('zoom-fit').addEventListener('click', () => fitView());
+
   /* ---------- 面板 ---------- */
   function refreshStats() {
     const vis = graph.nodes.filter(isVisible);
@@ -1276,8 +1674,22 @@ function start(graph) {
       ['大类', vis.filter(n => n.type === 'hub').length]
     ];
     $('quick-stats').innerHTML = items
-      .map(it => '<div class="stat"><span class="value">' + it[1] + '</span><span class="label">' + it[0] + '</span></div>')
+      .map(it => '<div class="stat"><span class="value" data-v="' + it[1] + '">' + it[1] + '</span><span class="label">' + it[0] + '</span></div>')
       .join('');
+  }
+
+  // 开场时数字从 0 滚到真实值
+  function countUpStats() {
+    if (REDUCED_MOTION) return;
+    const els = [...document.querySelectorAll('#quick-stats .value')];
+    const t0 = performance.now(), dur = 900;
+    const step = () => {
+      const t = clamp01((performance.now() - t0) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      els.forEach(el => { el.textContent = Math.round(Number(el.dataset.v) * e); });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    step();
   }
 
   function renderLegend() {
@@ -1532,49 +1944,63 @@ function start(graph) {
     else reheat(0.12);
     dirty = true;
   }
-  if (window.ResizeObserver) {
-    new ResizeObserver(handleViewportChange).observe(document.documentElement);
-  }
-  window.addEventListener('resize', handleViewportChange);
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) handleViewportChange();
-  });
 
   /* ---------- 启动 ---------- */
-  setProgress(85, '绘制…');
-  resize();
-  lastW = width; lastH = height;
-  syncInputs();
-  updateSettingLabels();
-  $('fps').hidden = !state.settings.showFps;
-  renderLegend();
-  refreshStats();
-  updateDetails(null);
-  $('brand-sub').textContent = graph.meta.nodeCount + ' 个节点 · ' + graph.meta.edgeCount + ' 条连接';
+  runWarmup(finishStart);
 
-  $('panel-left').hidden = false;
-  $('panel-right').hidden = false;
-  if (width < 900) {
-    $('panel-left').classList.add('collapsed');
-    $('collapse-left').textContent = '+';
-    autoCollapsed = true;
+  function finishStart() {
+    if (window.ResizeObserver) {
+      new ResizeObserver(handleViewportChange).observe(document.documentElement);
+    }
+    window.addEventListener('resize', handleViewportChange);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) handleViewportChange();
+    });
+
+    setProgress(90, '点亮节点…');
+    resize();
+    lastW = width; lastH = height;
+    syncInputs();
+    updateSettingLabels();
+    $('fps').hidden = !state.settings.showFps;
+    renderLegend();
+    refreshStats();
+    updateDetails(null);
+    $('brand-sub').textContent = graph.meta.nodeCount + ' 个节点 · ' + graph.meta.edgeCount + ' 条连接';
+
+    const foot = document.querySelector('.footbar');
+    const chrome = [[$('panel-left'), 0.15], [$('panel-right'), 0.25], [$('zoom-ctrl'), 0.4], [foot, 0.45]];
+    chrome.forEach(([el]) => { el.hidden = false; });
+    if (width < 900) {
+      $('panel-left').classList.add('collapsed');
+      $('collapse-left').textContent = '+';
+      autoCollapsed = true;
+    }
+    setProgress(100, '完成');
+
+    // 预热已经把布局跑好了，这里直接对准视图，开场不再看到炸开的过程
+    const initial = computeFit(1.4);
+    if (initial) {
+      transform = initial;
+      d3.select(canvas).call(zoom.transform, transform);
+    }
+
+    // 先按面板的最终位置算好视图，再让面板、底栏依次滑入
+    if (!REDUCED_MOTION) {
+      chrome.forEach(([el, d]) => { el.style.setProperty('--delay', d + 's'); el.classList.add('enter'); });
+    }
+
+    // 进度条走满后再撤掉加载层，同时开始“生长”动画
+    setTimeout(() => {
+      beginIntro();
+      draw();
+      requestAnimationFrame(loop);
+      const el = $('loading');
+      el.classList.add('done');
+      setTimeout(() => { el.style.display = 'none'; }, 650);
+      setTimeout(countUpStats, 200);
+    }, REDUCED_MOTION ? 0 : 260);
   }
-  setProgress(100, '完成');
-
-  // 预热已经把布局跑好了，这里直接对准视图，开场不再看到炸开的过程
-  const initial = computeFit(1.4);
-  if (initial) {
-    transform = initial;
-    d3.select(canvas).call(zoom.transform, transform);
-  }
-
-  draw();
-  requestAnimationFrame(loop);
-  setTimeout(() => {
-    const el = $('loading');
-    el.classList.add('done');
-    setTimeout(() => { el.style.display = 'none'; }, 400);
-  }, 120);
 }
 </script>
 </body>
