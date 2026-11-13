@@ -738,7 +738,7 @@
   <header class="panel-head">
     <div class="brand">
       知识图谱
-      <small id="brand-sub">按类别聚成星型，正文之间保留真实链接</small>
+      <small id="brand-sub">按类别在空间里聚成星团，正文之间保留真实链接</small>
     </div>
     <button class="icon-btn" id="collapse-left" title="收起面板">−</button>
   </header>
@@ -749,6 +749,7 @@
       <span class="search-count" id="search-count"></span>
     </div>
     <div class="chips-row">
+      <button class="chip-btn on" id="dim-btn" title="在 3D 和平面之间切换">3D</button>
       <button class="chip-btn" id="fit-btn">适配视图</button>
       <button class="chip-btn" id="reset-btn">重置</button>
       <button class="chip-btn on" id="helper-btn">大类节点</button>
@@ -786,6 +787,10 @@
         <label class="switch"><input type="checkbox" id="setting-arrows"><span class="slider"></span></label>
       </div>
       <div class="switch-row">
+        <span>自动旋转</span>
+        <label class="switch"><input type="checkbox" id="setting-rotate"><span class="slider"></span></label>
+      </div>
+      <div class="switch-row">
         <span>显示帧率</span>
         <label class="switch"><input type="checkbox" id="setting-fps"><span class="slider"></span></label>
       </div>
@@ -815,7 +820,7 @@
 
 <div class="footbar" hidden>
   <a class="chip-btn" href="/">← 返回首页</a>
-  <span class="hint">滚轮缩放 · 拖拽平移 · 单击查看 · 双击打开 · <kbd>/</kbd> 搜索 · <kbd>F</kbd> 适配 · <kbd>Esc</kbd> 取消</span>
+  <span class="hint">拖动旋转 · <kbd>Shift</kbd>/右键拖动平移 · 滚轮缩放 · 单击查看 · 双击打开 · <kbd>/</kbd> 搜索 · <kbd>F</kbd> 适配 · <kbd>Esc</kbd> 取消</span>
   <span id="fps" hidden>—</span>
 </div>
 
@@ -829,13 +834,14 @@
 
 <div class="tooltip" id="tooltip"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
 /* ============================================================
-   知识图谱 · Canvas 渲染版
-   之前用 SVG，270 个节点 × 每帧改 transform + drop-shadow 滤镜，
-   一帧光 DOM 写入就 2.5ms，加上滤镜光栅化直接掉到十几帧。
-   改成 Canvas 2D：同样图元一帧 0.18ms，并且开场先把布局算好再画。
+   知识图谱 · 3D Canvas 版
+   节点在三维空间里做力学布局，用一台透视相机画到 2D Canvas 上：
+   拖动背景旋转，Shift / 右键拖动平移，滚轮或双指缩放，拖动节点挪位置。
+   远处的节点更小、更暗（雾化），近处的盖住远处的。
+   “3D”开关关掉后把 z 轴压平、相机转回正面，就是原来的平面图谱。
+   不再依赖 d3：力学、相机和交互都在这一个文件里，CDN 挂了也能开。
    ============================================================ */
 
 const DEFAULTS = {
@@ -847,13 +853,17 @@ const DEFAULTS = {
   centerStrength: 12,
   chargeStrength: 130,
   linkStrength: 78,
-  linkDistance: 82
+  linkDistance: 82,
+  autoRotate: true,
+  flat: false
 };
 
 const PALETTE = ['#7bb8ff','#8be6cd','#ffcc73','#ff9f9f','#bda1ff','#78d8ff','#ffd1a8','#9be1a0','#f3b4d9','#b4c2ff','#9af0ff','#ffc4c4','#d0f4de','#f8d39b','#d6c2ff'];
-const WARMUP_TICKS = 260;      // 开场先在后台跑完这些帧，打开时布局已经成形
+const WARMUP_TICKS = 300;      // 开场先在后台跑完这些步，打开时布局已经成形
 const LABEL_MIN_SCALE = 0.42;  // 普通笔记标题的最小缩放级别（大类标题不受限制）
 const LABEL_BUDGET = 140;      // 一帧最多画多少个标签
+const HOME_VIEW = { yaw: 0.62, pitch: 0.34 };   // 默认的观察角度
+const SPIN_SPEED = 0.00011;    // 自动旋转，弧度 / 毫秒（约一分钟转一圈）
 
 function loadSettings() {
   try {
@@ -920,12 +930,14 @@ setProgress(8, '读取节点数据…');
 fetch('./data.json', { cache: 'no-cache' })
   .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(graph => {
-    if (!window.d3) throw new Error('绘图库 d3 没有加载成功，可能是 CDN 被拦截了。');
     setProgress(30, '计算布局…');
-    // 让进度条先刷新一帧再进同步预热；后台标签页里 rAF 会被节流，
-    // 所以再挂一个 setTimeout 兜底，谁先到用谁
     let started = false;
-    const go = () => { if (!started) { started = true; start(graph); } };
+    const go = () => {
+      if (started) return;
+      started = true;
+      try { start(graph); }
+      catch (err) { console.error(err); showLoadError('加载失败：' + (err && err.message ? err.message : err)); }
+    };
     requestAnimationFrame(() => requestAnimationFrame(go));
     setTimeout(go, 120);
   })
@@ -941,15 +953,31 @@ function start(graph) {
   graph.categories.forEach((c, i) => categoryColor[c] = PALETTE[i % PALETTE.length]);
   const colorOf = n => categoryColor[n.category] || '#9fb0ca';
 
-  const byId = new Map(graph.nodes.map(n => [n.id, n]));
-  const neighbors = new Map(graph.nodes.map(n => [n.id, new Set()]));
-  graph.edges.forEach(e => {
-    neighbors.get(e.source).add(e.target);
-    neighbors.get(e.target).add(e.source);
+  const nodes = graph.nodes;
+  const byId = new Map(nodes.map(n => [n.id, n]));
+  const neighbors = new Map(nodes.map(n => [n.id, new Set()]));
+  // 连线两端换成节点对象（以前是 d3.forceLink 替我们做的）
+  graph.edges = graph.edges
+    .map(e => Object.assign(e, { source: byId.get(e.source) || e.source, target: byId.get(e.target) || e.target }))
+    .filter(e => e.source && e.target && typeof e.source === 'object' && typeof e.target === 'object' && e.source !== e.target);
+  const edges = graph.edges;
+  const linkCount = new Map(nodes.map(n => [n.id, 0]));
+  edges.forEach(e => {
+    neighbors.get(e.source.id).add(e.target.id);
+    neighbors.get(e.target.id).add(e.source.id);
+    linkCount.set(e.source.id, linkCount.get(e.source.id) + 1);
+    linkCount.set(e.target.id, linkCount.get(e.target.id) + 1);
+  });
+  edges.forEach(e => {
+    const a = linkCount.get(e.source.id), b = linkCount.get(e.target.id);
+    e._bias = a / (a + b);
   });
   // 搜索用的小写串预先算好，别在每次 hover 时重复 join+toLowerCase
-  graph.nodes.forEach(n => {
+  nodes.forEach(n => {
     n._hay = [n.title, n.path, n.category].concat(n.tags || []).join(' ').toLowerCase();
+    n.vx = n.vy = n.vz = 0;
+    n.fx = null;
+    n.sx = n.sy = n.d = 0; n.s = 1;
   });
 
   const canvas = $('graph');
@@ -967,132 +995,208 @@ function start(graph) {
     dirty = true;
   }
 
-  /* ---------- 力学 ---------- */
-  const linkForce = d3.forceLink(graph.edges).id(d => d.id);
-  const chargeForce = d3.forceManyBody();
-  const collideForce = d3.forceCollide();
-  const xForce = d3.forceX();
-  const yForce = d3.forceY();
-
-  const simulation = d3.forceSimulation(graph.nodes)
-    .force('link', linkForce)
-    .force('charge', chargeForce)
-    .force('x', xForce)
-    .force('y', yForce)
-    .force('collide', collideForce)
-    .stop();   // 先别自己跑，预热完再说
-
-  // 视口暂时为 0 时算出来的缩放会是 0/NaN，这里统一兜底成 1
-  const safeK = k => (Number.isFinite(k) && k > 0.01) ? k : 1;
+  const isFlat = () => !!state.settings.flat;
 
   function nodeRadius(d) {
     const base = d.type === 'hub' ? 11 : 5;
     return (base + Math.min(11, Math.sqrt(d.degree || 0) * 1.8)) * (state.settings.nodeScale / 100);
   }
 
-  function applyForces() {
+  /* ---------- 力学（三维） ----------
+     和以前 d3-force 的四种力一样：斥力、连线弹簧、向心力、碰撞，只是多了一个 z。
+     三百来个节点两两算一遍斥力也就四万多对，一帧不到一毫秒。 */
+  let alpha = 1, alphaTarget = 0, alphaDecay = 0.0228;
+  const ALPHA_MIN = 0.001;
+
+  function tick() {
     const s = state.settings;
-    linkForce
-      .distance(d => (d.kind === 'hub' ? 58 : 86) * (s.linkDistance / 100))
-      .strength(d => (d.kind === 'hub' ? 0.65 : 0.85) * (s.linkStrength / 100));
-    chargeForce.strength(d => -s.chargeStrength * (d.type === 'hub' ? 0.82 : 1));
-    collideForce.radius(d => nodeRadius(d) + 10);
-    xForce.x(0).strength(s.centerStrength / 200);
-    yForce.y(0).strength(s.centerStrength / 200);
+    const flat = isFlat();
+    const n = nodes.length;
+    const charge = s.chargeStrength * alpha;
+    for (let i = 0; i < n; i++) {
+      const a = nodes[i];
+      const ra = nodeRadius(a) + 10;
+      const qa = a.type === 'hub' ? 0.82 : 1;
+      for (let j = i + 1; j < n; j++) {
+        const b = nodes[j];
+        let dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
+        let d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 > 360000) continue;
+        if (d2 < 1) {
+          dx = Math.random() - 0.5; dy = Math.random() - 0.5; dz = flat ? 0 : Math.random() - 0.5;
+          d2 = dx * dx + dy * dy + dz * dz + 0.01;
+        }
+        const qb = b.type === 'hub' ? 0.82 : 1;
+        const fa = charge * qb / d2, fb = charge * qa / d2;
+        a.vx += dx * fa; a.vy += dy * fa; a.vz += dz * fa;
+        b.vx -= dx * fb; b.vy -= dy * fb; b.vz -= dz * fb;
+        // 碰撞：两个节点叠在一起时直接推开
+        const rr = ra + nodeRadius(b) + 10;
+        if (d2 < rr * rr) {
+          const d = Math.sqrt(d2);
+          const push = (rr - d) / d * 0.35;
+          a.vx += dx * push; a.vy += dy * push; a.vz += dz * push;
+          b.vx -= dx * push; b.vy -= dy * push; b.vz -= dz * push;
+        }
+      }
+    }
+    const ls = s.linkStrength / 100, ld = s.linkDistance / 100;
+    for (let i = 0; i < edges.length; i++) {
+      const e = edges[i], a = e.source, b = e.target;
+      const dx = (b.x + b.vx) - (a.x + a.vx) || 1e-6, dy = (b.y + b.vy) - (a.y + a.vy) || 1e-6, dz = (b.z + b.vz) - (a.z + a.vz);
+      const l = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const dist = (e.kind === 'hub' ? 58 : 86) * ld;
+      const str = (e.kind === 'hub' ? 0.65 : 0.85) * ls;
+      const f = (l - dist) / l * alpha * str;
+      b.vx -= dx * f * e._bias; b.vy -= dy * f * e._bias; b.vz -= dz * f * e._bias;
+      a.vx += dx * f * (1 - e._bias); a.vy += dy * f * (1 - e._bias); a.vz += dz * f * (1 - e._bias);
+    }
+    const cs = s.centerStrength / 200 * alpha;
+    let far = 0;
+    for (let i = 0; i < n; i++) {
+      const p = nodes[i];
+      p.vx -= p.x * cs; p.vy -= p.y * cs; p.vz -= p.z * cs;
+      if (p.fx) {
+        p.x = p.fx[0]; p.y = p.fx[1]; p.z = p.fx[2];
+        p.vx = p.vy = p.vz = 0;
+      } else {
+        p.vx *= 0.6; p.vy *= 0.6; p.vz *= 0.6;
+        p.x += p.vx; p.y += p.vy; p.z += p.vz;
+      }
+      if (flat) { p.vz = 0; p.z *= 0.82; if (Math.abs(p.z) < 0.05) p.z = 0; }
+      if (!Number.isFinite(p.x + p.y + p.z)) { p.x = Math.random() * 10; p.y = Math.random() * 10; p.z = 0; p.vx = p.vy = p.vz = 0; }
+      const r = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+      if (r > far) far = r;
+    }
+    spread += (Math.max(far, 160) - spread) * 0.08;
+    alpha += (alphaTarget - alpha) * alphaDecay;
   }
 
-  /* 按类别把节点撒在同心环上再开跑，比默认的随机相位收敛快得多，
-     最终布局也更规整（同类天然抱团，不会互相穿插） */
+  /* 按类别把节点撒开再开跑：每个大类在一个球面上占一个点（斐波那契球），
+     同类的笔记围着它撒成一个小球，收敛快，最终同类天然抱团 */
   function seedLayout() {
     const groups = new Map();
-    graph.nodes.forEach(n => {
+    nodes.forEach(n => {
       if (!groups.has(n.category)) groups.set(n.category, []);
       groups.get(n.category).push(n);
     });
     const keys = [...groups.keys()];
-    const R = 60 + keys.length * 26;
+    const flat = isFlat();
+    const R = 60 + keys.length * (flat ? 26 : 15);
+    const golden = Math.PI * (3 - Math.sqrt(5));
     keys.forEach((key, gi) => {
       const list = groups.get(key);
-      const a = (gi / keys.length) * Math.PI * 2;
-      const cx = Math.cos(a) * R;
-      const cy = Math.sin(a) * R;
-      const r = 24 + Math.sqrt(list.length) * 15;
+      let cx, cy, cz;
+      if (flat) {
+        const a = (gi / keys.length) * Math.PI * 2;
+        cx = Math.cos(a) * R; cy = Math.sin(a) * R; cz = 0;
+      } else {
+        const u = 1 - 2 * (gi + 0.5) / keys.length, w = Math.sqrt(1 - u * u), t = gi * golden;
+        cx = Math.cos(t) * w * R; cy = u * R; cz = Math.sin(t) * w * R;
+      }
+      const r = 24 + Math.sqrt(list.length) * (flat ? 15 : 11);
       list.forEach((n, i) => {
-        if (n.type === 'hub') { n.x = cx; n.y = cy; return; }
-        const t = (i / Math.max(1, list.length)) * Math.PI * 2;
-        n.x = cx + Math.cos(t) * r;
-        n.y = cy + Math.sin(t) * r;
+        if (n.type === 'hub') { n.x = cx; n.y = cy; n.z = cz; return; }
+        if (flat) {
+          const t = (i / Math.max(1, list.length)) * Math.PI * 2;
+          n.x = cx + Math.cos(t) * r; n.y = cy + Math.sin(t) * r; n.z = 0;
+        } else {
+          const u = 1 - 2 * (i + 0.5) / list.length, w = Math.sqrt(1 - u * u), t = i * golden;
+          n.x = cx + Math.cos(t) * w * r; n.y = cy + u * r; n.z = cz + Math.sin(t) * w * r;
+        }
       });
     });
   }
 
-  applyForces();
+  let spread = 300;
   seedLayout();
 
   /* 预热分批跑：每帧最多占 12ms，进度条和加载动画不会卡住 */
   function runWarmup(done) {
-    simulation.alpha(1).alphaDecay(1 - Math.pow(0.001, 1 / WARMUP_TICKS));
+    alpha = 1; alphaTarget = 0;
+    alphaDecay = 1 - Math.pow(0.001, 1 / WARMUP_TICKS);
     let i = 0;
     const chunk = () => {
       const t0 = performance.now();
-      while (i < WARMUP_TICKS && performance.now() - t0 < 12) { simulation.tick(); i++; }
-      setProgress(30 + 55 * (i / WARMUP_TICKS), i < WARMUP_TICKS * 0.6 ? '计算布局…' : '让节点各就各位…');
+      while (i < WARMUP_TICKS && performance.now() - t0 < 12) { tick(); i++; }
+      setProgress(30 + 55 * (i / WARMUP_TICKS), i < WARMUP_TICKS * 0.6 ? '计算布局…' : '让节点在空间里各就各位…');
       if (i < WARMUP_TICKS) nextFrame(chunk);
-      else { simulation.alphaDecay(0.0228); done(); }
+      else { alphaDecay = 0.0228; done(); }
     };
     chunk();
   }
 
-  /* ---------- 缩放 / 平移 ---------- */
-  let transform = d3.zoomIdentity;
+  /* ---------- 相机 ----------
+     先绕 y 轴转 yaw，再绕 x 轴转 pitch；d 是离观察者的深度（越大越远）。
+     相机对着“转动中心” (tx, ty, tz)，站在它前方 focal 处；k 是缩放，
+     (ox, oy) 是转动中心在屏幕上相对画布中心的偏移（给两侧面板让位置）。 */
+  const cam = {
+    yaw: isFlat() ? 0 : HOME_VIEW.yaw,
+    pitch: isFlat() ? 0 : HOME_VIEW.pitch,
+    tx: 0, ty: 0, tz: 0, k: 1, ox: 0, oy: 0
+  };
+  const focal = () => spread * 2.4;
 
-  function nodeAt(clientX, clientY) {
-    const p = transform.invert([clientX, clientY]);
-    const reach = 26 / transform.k;
-    let best = null, bestD = reach * reach;
-    for (let i = 0; i < graph.nodes.length; i++) {
-      const n = graph.nodes[i];
-      if (!isVisible(n)) continue;
-      const dx = n.x - p[0], dy = n.y - p[1];
-      const d = dx * dx + dy * dy;
-      if (d < bestD) { bestD = d; best = n; }
+  function project() {
+    const cyw = Math.cos(cam.yaw), syw = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    const F = focal(), cx = width / 2 + cam.ox, cy = height / 2 + cam.oy, k = cam.k;
+    for (let i = 0; i < nodes.length; i++) {
+      const p = nodes[i];
+      const x = p.x - cam.tx, y = p.y - cam.ty, z = p.z - cam.tz;
+      const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw;
+      const y2 = y * cp - z1 * sp, d = y * sp + z1 * cp;
+      const s = F / Math.max(F + d, F * 0.1);
+      p.d = d; p.s = s;
+      p.sx = cx + x1 * s * k;
+      p.sy = cy + y2 * s * k;
     }
-    return best;
+  }
+  // 屏幕上的一段位移（缩放前、转动中心那一层的单位）换算成世界坐标里的位移
+  function unrotate(x1, y2) {
+    const cyw = Math.cos(cam.yaw), syw = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    const y = y2 * cp, z1 = -y2 * sp;
+    return [x1 * cyw - z1 * syw, y, x1 * syw + z1 * cyw];
+  }
+  // 屏幕点 (px, py) 在深度 d 处对应的世界坐标：拖动节点时用
+  function unproject(px, py, d) {
+    const F = focal(), s = F / Math.max(F + d, F * 0.1);
+    const x1 = (px - width / 2 - cam.ox) / cam.k / s, y2 = (py - height / 2 - cam.oy) / cam.k / s;
+    const cyw = Math.cos(cam.yaw), syw = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    const y = y2 * cp + d * sp, z1 = -y2 * sp + d * cp;
+    return [x1 * cyw - z1 * syw + cam.tx, y + cam.ty, x1 * syw + z1 * cyw + cam.tz];
+  }
+  function panBy(dx, dy) {
+    const [x, y, z] = unrotate(-dx / cam.k, -dy / cam.k);
+    cam.tx += x; cam.ty += y; cam.tz += z;
+  }
+  // 缩放到 k，同时让指针下的那一点留在原地
+  function zoomAt(px, py, k) {
+    k = Math.max(0.05, Math.min(6, k));
+    const ux = (px - width / 2 - cam.ox) / cam.k, uy = (py - height / 2 - cam.oy) / cam.k;
+    const f = 1 - cam.k / k;
+    const [x, y, z] = unrotate(ux * f, uy * f);
+    cam.tx += x; cam.ty += y; cam.tz += z; cam.k = k;
+    dirty = true;
   }
 
-  const zoom = d3.zoom()
-    .scaleExtent([0.05, 5])
-    .filter(event => {
-      if (event.type === 'wheel') return !event.button;
-      if (event.type === 'mousedown' || event.type === 'touchstart') {
-        // 指到节点上时交给 drag 行为，别同时触发画布平移
-        const pt = event.touches ? event.touches[0] : event;
-        return !nodeAt(pt.clientX, pt.clientY);
-      }
-      return !event.button;
-    })
-    .on('zoom', event => { transform = event.transform; dirty = true; })
-    .on('start', () => canvas.classList.add('grabbing'))
-    .on('end', () => canvas.classList.remove('grabbing'));
-
-  const drag = d3.drag()
-    .subject(event => nodeAt(event.sourceEvent.clientX, event.sourceEvent.clientY))
-    .on('start', event => {
-      if (!event.active) { simulation.alphaTarget(0.2).restart(); running = true; }
-      const p = transform.invert([event.sourceEvent.clientX, event.sourceEvent.clientY]);
-      event.subject.fx = p[0]; event.subject.fy = p[1];
-    })
-    .on('drag', event => {
-      const p = transform.invert([event.sourceEvent.clientX, event.sourceEvent.clientY]);
-      event.subject.fx = p[0]; event.subject.fy = p[1];
-      dirty = true;
-    })
-    .on('end', event => {
-      if (!event.active) simulation.alphaTarget(0);
-      event.subject.fx = null; event.subject.fy = null;
-    });
-
-  d3.select(canvas).call(drag).call(zoom).on('dblclick.zoom', null);
+  /* 相机补间：适配视图、聚焦节点、切换 3D/平面都走这里；用户一动手就停 */
+  let camTween = null;
+  const wrapAngle = a => Math.atan2(Math.sin(a), Math.cos(a));
+  const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  function animateCam(goal, dur) {
+    if (REDUCED_MOTION || !dur) { Object.assign(cam, goal); camTween = null; dirty = true; return; }
+    const from = Object.assign({}, cam);
+    if ('yaw' in goal) goal.yaw = from.yaw + wrapAngle(goal.yaw - from.yaw);
+    camTween = { from, goal, t0: performance.now(), dur };
+    dirty = true;
+  }
+  function stepCam(now) {
+    if (!camTween) return false;
+    const t = Math.min(1, (now - camTween.t0) / camTween.dur), e = easeInOut(t);
+    for (const key in camTween.goal) cam[key] = camTween.from[key] + (camTween.goal[key] - camTween.from[key]) * e;
+    if (t >= 1) camTween = null;
+    return true;
+  }
 
   /* ---------- 可见性 / 聚焦 ---------- */
   function isVisible(n) {
@@ -1100,6 +1204,20 @@ function start(graph) {
     return !state.hiddenCategories.has(n.category);
   }
   function linkVisible(e) { return isVisible(e.source) && isVisible(e.target); }
+
+  // 指针下的节点：屏幕距离在半径内的，离观察者最近的那个优先
+  function nodeAt(clientX, clientY) {
+    let best = null, bestD = Infinity;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      if (!isVisible(n)) continue;
+      const r = Math.max(9, nodeRadius(n) * n.s * cam.k + 4);
+      const dx = n.sx - clientX, dy = n.sy - clientY;
+      if (dx * dx + dy * dy > r * r) continue;
+      if (n.d < bestD) { bestD = n.d; best = n; }
+    }
+    return best;
+  }
 
   let focus = null;         // Set(id) 或 null
   function recomputeFocus() {
@@ -1112,7 +1230,7 @@ function start(graph) {
     if (state.searchQuery) {
       focus = new Set();
       const q = state.searchQuery;
-      graph.nodes.forEach(n => { if (n._hay.includes(q)) focus.add(n.id); });
+      nodes.forEach(n => { if (n._hay.includes(q)) focus.add(n.id); });
       return;
     }
     focus = null;
@@ -1133,32 +1251,33 @@ function start(graph) {
   }
 
   /* ---------- 动画状态 ----------
-     intro：开场节点从中心向外依次“长”出来，连线随后淡入
+     intro：开场节点从中心向外依次“长”出来，连线随后淡入，相机同时转过来一点
      n._a：每个节点当前的不透明度，聚焦/取消聚焦时平滑过渡而不是一下子跳变
      dimMix：连线整体变暗的程度，同样做插值 */
-  let introStart = 0;
+  let introStart = -1e9;
   let introMaxDist = 1;
   const INTRO_SPREAD = 650, INTRO_GROW = 520, INTRO_TOTAL = INTRO_SPREAD + INTRO_GROW + 250;
   let dimMix = 0;
-  graph.nodes.forEach(n => { n._a = 1; });
+  nodes.forEach(n => { n._a = 1; });
 
   const easeOutBack = t => { const c = 1.6; t -= 1; return 1 + (c + 1) * t * t * t + c * t * t; };
   const clamp01 = t => t < 0 ? 0 : (t > 1 ? 1 : t);
 
   function beginIntro() {
     if (REDUCED_MOTION) { introStart = -1e9; return; }
-    let cx = 0, cy = 0;
-    graph.nodes.forEach(n => { cx += n.x; cy += n.y; });
-    cx /= graph.nodes.length || 1; cy /= graph.nodes.length || 1;
+    let cx = 0, cy = 0, cz = 0;
+    nodes.forEach(n => { cx += n.x; cy += n.y; cz += n.z; });
+    const len = nodes.length || 1;
+    cx /= len; cy /= len; cz /= len;
     introMaxDist = 1;
-    graph.nodes.forEach(n => {
-      n._d = Math.hypot(n.x - cx, n.y - cy);
-      if (n._d > introMaxDist) introMaxDist = n._d;
+    nodes.forEach(n => {
+      n._dist = Math.hypot(n.x - cx, n.y - cy, n.z - cz);
+      if (n._dist > introMaxDist) introMaxDist = n._dist;
     });
     introStart = performance.now();
   }
   function introScale(n, now) {
-    const t = (now - introStart - (n._d || 0) / introMaxDist * INTRO_SPREAD) / INTRO_GROW;
+    const t = (now - introStart - (n._dist || 0) / introMaxDist * INTRO_SPREAD) / INTRO_GROW;
     return t >= 1 ? 1 : (t <= 0 ? 0 : Math.max(0, easeOutBack(t)));
   }
   function introing(now) { return now - introStart < INTRO_TOTAL; }
@@ -1169,9 +1288,9 @@ function start(graph) {
     const targetDim = focus ? 1 : 0;
     if (Math.abs(dimMix - targetDim) > 0.01) { dimMix += (targetDim - dimMix) * 0.2; moving = true; }
     else dimMix = targetDim;
-    for (let i = 0; i < graph.nodes.length; i++) {
-      const n = graph.nodes[i];
-      const target = (focus && !focus.has(n.id)) ? 0.12 : 1;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const target = (focus && !focus.has(n.id)) ? 0.1 : 1;
       if (Math.abs(n._a - target) > 0.01) { n._a += (target - n._a) * 0.2; moving = true; }
       else n._a = target;
     }
@@ -1196,33 +1315,60 @@ function start(graph) {
     return c;
   }
 
-  // 背景星点：一张随机星点贴图平铺，平移时以 0.35 倍速度视差移动
-  const starTile = (() => {
-    const c = document.createElement('canvas');
-    c.width = c.height = 280;
+  // 球体贴图：给笔记节点一点立体感（左上高光、右下暗部），按颜色缓存
+  const ballCache = new Map();
+  function ballSprite(col) {
+    let c = ballCache.get(col);
+    if (c) return c;
+    c = document.createElement('canvas');
+    c.width = c.height = 64;
     const g = c.getContext('2d');
-    let seed = 7;
+    g.fillStyle = col;
+    g.beginPath(); g.arc(32, 32, 31, 0, Math.PI * 2); g.fill();
+    const hl = g.createRadialGradient(22, 20, 1, 30, 30, 34);
+    hl.addColorStop(0, 'rgba(255,255,255,0.75)');
+    hl.addColorStop(0.35, 'rgba(255,255,255,0.12)');
+    hl.addColorStop(1, 'rgba(0,0,0,0.38)');
+    g.fillStyle = hl;
+    g.beginPath(); g.arc(32, 32, 31, 0, Math.PI * 2); g.fill();
+    ballCache.set(col, c);
+    return c;
+  }
+
+  // 背景星点：两层随机星点贴图平铺，随相机旋转做视差（远层慢、近层快）
+  function makeStars(seed, count, size, bright) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const g = c.getContext('2d');
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < count; i++) {
       const r = rnd() < 0.85 ? 0.6 : 1.1;
-      g.fillStyle = 'rgba(200, 220, 255, ' + (0.05 + rnd() * 0.22).toFixed(2) + ')';
+      g.fillStyle = 'rgba(200, 220, 255, ' + (0.05 + rnd() * bright).toFixed(2) + ')';
       g.beginPath();
-      g.arc(rnd() * 280, rnd() * 280, r, 0, Math.PI * 2);
+      g.arc(rnd() * size, rnd() * size, r, 0, Math.PI * 2);
       g.fill();
     }
-    return c;
-  })();
-  const starPattern = ctx.createPattern(starTile, 'repeat');
+    return ctx.createPattern(c, 'repeat');
+  }
+  const starLayers = [
+    { pattern: makeStars(7, 70, 280, 0.2), speed: 0.35, turn: 140 },
+    { pattern: makeStars(29, 26, 340, 0.32), speed: 0.6, turn: 260 }
+  ];
 
   const LINK_STYLE = {
-    hub:    { color: 'rgba(109, 230, 201, ', base: 0.20, dash: [4, 4], w: 1.1 },
-    tag:    { color: 'rgba(233, 196, 106, ', base: 0.26, dash: [2, 5], w: 1.1 },
-    direct: { color: 'rgba(150, 178, 220, ', base: 0.26, dash: null,   w: 1.35 }
+    hub:    { color: 'rgba(109, 230, 201, ', base: 0.22, dash: [4, 4], w: 1.1 },
+    tag:    { color: 'rgba(233, 196, 106, ', base: 0.28, dash: [2, 5], w: 1.1 },
+    direct: { color: 'rgba(150, 178, 220, ', base: 0.30, dash: null,   w: 1.35 }
   };
+  // 深度分三层：近、中、远；远处的线更淡更细
+  const BAND_ALPHA = [1.15, 0.75, 0.42], BAND_WIDTH = [1.25, 1, 0.75];
+  const bandOf = d => d < -spread * 0.3 ? 0 : (d > spread * 0.3 ? 2 : 1);
+  // 雾：越远越透明，平面模式下没有深度，全是 1
+  const fog = d => isFlat() ? 1 : Math.min(1, Math.max(0.22, 1 - 0.78 * Math.max(0, d + spread * 0.25) / (spread * 1.25)));
 
   function draw() {
     const s = state.settings;
-    const k = transform.k;
+    const k = cam.k;
     const now = performance.now();
     const inIntro = introing(now);
     // 连线在节点长出一半后再淡入
@@ -1231,130 +1377,130 @@ function start(graph) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, width, height);
 
-    if (starPattern && starPattern.setTransform && window.DOMMatrix) {
-      starPattern.setTransform(new DOMMatrix().translate(transform.x * 0.35, transform.y * 0.35));
-      ctx.fillStyle = starPattern;
-      ctx.fillRect(0, 0, width, height);
+    if (window.DOMMatrix) {
+      for (const L of starLayers) {
+        if (!L.pattern || !L.pattern.setTransform) continue;
+        L.pattern.setTransform(new DOMMatrix().translate(-cam.yaw * L.turn + cam.ox * L.speed, cam.pitch * L.turn + cam.oy * L.speed));
+        ctx.fillStyle = L.pattern;
+        ctx.fillRect(0, 0, width, height);
+      }
     }
 
-    ctx.save();
-    ctx.translate(transform.x, transform.y);
-    ctx.scale(k, k);
+    if (!isFlat()) drawFloor(k);
 
-    // 只画视口内的东西
     const pad = 80;
-    const x0 = (-transform.x - pad) / k, x1 = (width - transform.x + pad) / k;
-    const y0 = (-transform.y - pad) / k, y1 = (height - transform.y + pad) / k;
-    const inView = n => n.x > x0 && n.x < x1 && n.y > y0 && n.y < y1;
+    const inView = n => n.sx > -pad && n.sx < width + pad && n.sy > -pad && n.sy < height + pad && n.s > 0.12;
 
-    /* --- 连线：按 kind + 是否高亮分桶，一桶一次 stroke --- */
+    /* --- 连线：按 kind × 深度层 + 是否高亮分桶，一桶一次 stroke --- */
     const lineScale = s.lineWidth / 100;
-    const buckets = { hub: [], tag: [], direct: [] };
+    const buckets = {};
+    Object.keys(LINK_STYLE).forEach(kind => { buckets[kind] = [[], [], []]; });
     const strong = [];
     const anchor = state.selectedId || state.hoveredId;
 
-    for (let i = 0; i < graph.edges.length; i++) {
-      const e = graph.edges[i];
+    for (let i = 0; i < edges.length; i++) {
+      const e = edges[i];
       if (!linkVisible(e)) continue;
-      if ((e.source.x < x0 && e.target.x < x0) || (e.source.x > x1 && e.target.x > x1) ||
-          (e.source.y < y0 && e.target.y < y0) || (e.source.y > y1 && e.target.y > y1)) continue;
-      if (anchor && (e.source.id === anchor || e.target.id === anchor)) { strong.push(e); continue; }
-      (buckets[e.kind] || buckets.direct).push(e);
+      const a = e.source, b = e.target;
+      if ((a.sx < 0 && b.sx < 0) || (a.sx > width && b.sx > width) ||
+          (a.sy < 0 && b.sy < 0) || (a.sy > height && b.sy > height)) continue;
+      if (anchor && (a.id === anchor || b.id === anchor)) { strong.push(e); continue; }
+      (buckets[e.kind] || buckets.direct)[isFlat() ? 1 : bandOf((a.d + b.d) / 2)].push(e);
     }
 
     Object.keys(buckets).forEach(kind => {
-      const list = buckets[kind];
-      if (!list.length) return;
       const st = LINK_STYLE[kind] || LINK_STYLE.direct;
-      const alpha = st.base * (1 - 0.78 * dimMix) * edgeIntro;
-      if (alpha <= 0.002) return;
-      ctx.strokeStyle = st.color + alpha.toFixed(3) + ')';
-      ctx.lineWidth = (st.w * lineScale) / k;
-      ctx.setLineDash(st.dash ? st.dash.map(v => v / k) : []);
-      ctx.beginPath();
-      for (let i = 0; i < list.length; i++) {
-        ctx.moveTo(list[i].source.x, list[i].source.y);
-        ctx.lineTo(list[i].target.x, list[i].target.y);
-      }
-      ctx.stroke();
+      buckets[kind].forEach((list, band) => {
+        if (!list.length) return;
+        const alpha = Math.min(0.6, st.base * BAND_ALPHA[band]) * (1 - 0.8 * dimMix) * edgeIntro;
+        if (alpha <= 0.002) return;
+        ctx.strokeStyle = st.color + alpha.toFixed(3) + ')';
+        ctx.lineWidth = st.w * lineScale * BAND_WIDTH[band] * Math.min(1.6, Math.max(0.6, Math.sqrt(k)));
+        ctx.setLineDash(st.dash || []);
+        ctx.beginPath();
+        for (let i = 0; i < list.length; i++) {
+          ctx.moveTo(list[i].source.sx, list[i].source.sy);
+          ctx.lineTo(list[i].target.sx, list[i].target.sy);
+        }
+        ctx.stroke();
+      });
     });
 
     if (strong.length) {
       ctx.setLineDash([]);
       ctx.strokeStyle = 'rgba(127, 191, 255, ' + (0.9 * Math.max(edgeIntro, dimMix)).toFixed(3) + ')';
-      ctx.lineWidth = (2 * lineScale) / k;
+      ctx.lineWidth = 2 * lineScale;
       ctx.beginPath();
       for (let i = 0; i < strong.length; i++) {
-        ctx.moveTo(strong[i].source.x, strong[i].source.y);
-        ctx.lineTo(strong[i].target.x, strong[i].target.y);
+        ctx.moveTo(strong[i].source.sx, strong[i].source.sy);
+        ctx.lineTo(strong[i].target.sx, strong[i].target.sy);
       }
       ctx.stroke();
-      if (s.arrows) drawArrows(strong, k);
+      if (s.arrows) drawArrows(strong);
     }
     ctx.setLineDash([]);
 
+    /* --- 节点按深度从远到近排好，近的盖住远的 --- */
+    const order = [];
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      if (isVisible(n) && inView(n)) order.push(n);
+    }
+    order.sort((a, b) => b.d - a.d);
+
     /* --- 光晕：大类节点和焦点节点下面垫一层柔光 --- */
     ctx.globalCompositeOperation = 'lighter';
-    for (let i = 0; i < graph.nodes.length; i++) {
-      const n = graph.nodes[i];
-      if (!isVisible(n) || !inView(n)) continue;
+    for (let i = 0; i < order.length; i++) {
+      const n = order[i];
       const isHub = n.type === 'hub';
       const lit = n.id === state.selectedId || n.id === state.hoveredId;
       if (!isHub && !lit) continue;
       const sc = inIntro ? introScale(n, now) : 1;
-      const a = n._a * (lit ? 0.55 : 0.28) * sc;
+      const a = n._a * (lit ? 0.55 : 0.28) * sc * (lit ? 1 : fog(n.d));
       if (a < 0.02) continue;
-      const g = nodeRadius(n) * (lit ? 4.2 : 3.4) * sc;
+      const g = nodeRadius(n) * n.s * k * (lit ? 4.2 : 3.4) * sc;
       ctx.globalAlpha = a;
-      ctx.drawImage(glowSprite(colorOf(n)), n.x - g, n.y - g, g * 2, g * 2);
+      ctx.drawImage(glowSprite(colorOf(n)), n.sx - g, n.sy - g, g * 2, g * 2);
     }
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
 
-    /* --- 节点：按颜色分组，每个节点按自己的不透明度画 --- */
-    const groups = new Map();
-    for (let i = 0; i < graph.nodes.length; i++) {
-      const n = graph.nodes[i];
-      if (!isVisible(n) || !inView(n)) continue;
+    /* --- 节点 --- */
+    for (let i = 0; i < order.length; i++) {
+      const n = order[i];
+      const sc = inIntro ? introScale(n, now) : 1;
+      if (sc <= 0.01) continue;
+      const r = nodeRadius(n) * n.s * k * sc;
+      if (r < 0.3) continue;
+      const lit = focus && focus.has(n.id);
+      ctx.globalAlpha = n._a * (lit ? 1 : fog(n.d));
       const col = colorOf(n);
-      if (!groups.has(col)) groups.set(col, []);
-      groups.get(col).push(n);
-    }
-    ctx.lineWidth = 1.1 / k;
-    groups.forEach((list, col) => {
-      ctx.fillStyle = col;
-      for (let i = 0; i < list.length; i++) {
-        const n = list[i];
-        const sc = inIntro ? introScale(n, now) : 1;
-        if (sc <= 0.01) continue;
-        const r = nodeRadius(n) * sc;
-        ctx.globalAlpha = n._a;
+      if (n.type === 'hub') {
+        ctx.fillStyle = col;
         ctx.beginPath();
-        if (n.type === 'hub') {
-          roundRect(ctx, n.x - r * 1.1, n.y - r * 0.72, r * 2.2, r * 1.44, Math.min(12, r * 0.7));
-        } else {
-          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        }
+        roundRect(ctx, n.sx - r * 1.1, n.sy - r * 0.72, r * 2.2, r * 1.44, Math.min(12 * n.s * k, r * 0.7));
         ctx.fill();
-        if (n._a > 0.5) {
-          ctx.strokeStyle = n.type === 'hub' ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.2)';
-          ctx.stroke();
-        }
+        if (n._a > 0.5) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1.1; ctx.stroke(); }
+      } else if (r < 2.2) {
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(n.sx, n.sy, r, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.drawImage(ballSprite(col), n.sx - r, n.sy - r, r * 2, r * 2);
       }
-    });
+    }
     ctx.globalAlpha = 1;
 
     /* --- 搜索命中：外面套一圈青色细环 --- */
     if (state.searchQuery && focus && !state.selectedId && !state.hoveredId) {
       ctx.strokeStyle = 'rgba(127, 233, 200, 0.7)';
-      ctx.lineWidth = 1.3 / k;
+      ctx.lineWidth = 1.3;
       ctx.beginPath();
       focus.forEach(id => {
         const n = byId.get(id);
         if (!n || !isVisible(n) || !inView(n)) return;
-        const r = nodeRadius(n) + 4 / k + 2;
-        ctx.moveTo(n.x + r, n.y);
-        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        const r = nodeRadius(n) * n.s * k + 5;
+        ctx.moveTo(n.sx + r, n.sy);
+        ctx.arc(n.sx, n.sy, r, 0, Math.PI * 2);
       });
       ctx.stroke();
     }
@@ -1365,31 +1511,29 @@ function start(graph) {
       if (idx === 1 && id === state.selectedId) return;
       const n = byId.get(id);
       if (!n || !isVisible(n)) return;
-      const r = nodeRadius(n);
+      const r = nodeRadius(n) * n.s * k;
       ctx.beginPath();
-      ctx.arc(n.x, n.y, r + 5 / k + 1, 0, Math.PI * 2);
+      ctx.arc(n.sx, n.sy, r + 6, 0, Math.PI * 2);
       ctx.strokeStyle = idx === 0 ? 'rgba(127,191,255,0.95)' : 'rgba(255,255,255,0.6)';
-      ctx.lineWidth = 1.8 / k;
+      ctx.lineWidth = 1.8;
       ctx.stroke();
       if (idx === 0 && !REDUCED_MOTION) {
         const t = (now % 1600) / 1600;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, r + (5 + t * 20) / k + 1, 0, Math.PI * 2);
+        ctx.arc(n.sx, n.sy, r + 6 + t * 20, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(127,191,255,' + (0.6 * (1 - t)).toFixed(3) + ')';
-        ctx.lineWidth = 1.4 / k;
+        ctx.lineWidth = 1.4;
         ctx.stroke();
       }
     });
 
-    ctx.restore();
-
     /* --- 标签：在屏幕坐标里画，配合贪心避让，密集区域不会糊成一团 --- */
-    drawLabels(k, x0, x1, y0, y1, inIntro ? now : 0);
+    drawLabels(k, inIntro ? now : 0);
     frames++;
   }
 
   // 标签按优先级排（大类 > 高连接度），保证挤不下时先保住重要的
-  const labelOrder = graph.nodes.slice().sort((a, b) =>
+  const labelOrder = nodes.slice().sort((a, b) =>
     (a.type === 'hub' ? 0 : 1) - (b.type === 'hub' ? 0 : 1) || (b.degree || 0) - (a.degree || 0));
   const textWidthCache = new Map();
 
@@ -1408,11 +1552,10 @@ function start(graph) {
   const HUB_FONT = '600 12.5px Inter, -apple-system, "PingFang SC", sans-serif';
 
   // introNow 非 0 时处于开场动画：每个标签跟着自己的节点一起淡入
-  function drawLabels(k, x0, x1, y0, y1, introNow) {
+  function drawLabels(k, introNow) {
     const s = state.settings;
     if (s.textOpacity <= 0) return;
 
-    const detailed = k >= LABEL_MIN_SCALE || state.showLabels;
     const near = state.selectedId
       ? new Set([state.selectedId, ...neighbors.get(state.selectedId)])
       : null;
@@ -1422,7 +1565,6 @@ function start(graph) {
     ctx.lineJoin = 'round';
     ctx.lineWidth = 3;
     const baseAlpha = s.textOpacity / 100;
-    ctx.globalAlpha = baseAlpha;
 
     const placed = [];
     let drawn = 0;
@@ -1430,22 +1572,24 @@ function start(graph) {
     for (let i = 0; i < labelOrder.length && drawn < LABEL_BUDGET; i++) {
       const n = labelOrder[i];
       if (!isVisible(n)) continue;
-      if (n.x < x0 || n.x > x1 || n.y < y0 || n.y > y1) continue;
+      if (n.sx < -40 || n.sx > width + 40 || n.sy < -40 || n.sy > height + 40) continue;
       if (focus && !focus.has(n.id)) continue;
 
       const isHub = n.type === 'hub';
-      if (!isHub && !(near && near.has(n.id))) {
-        if (!detailed) continue;
+      const f = fog(n.d);
+      const lit = (near && near.has(n.id)) || (focus && focus.has(n.id) && (state.hoveredId || state.searchQuery));
+      if (!isHub && !lit) {
+        if (!(k * n.s >= LABEL_MIN_SCALE || state.showLabels)) continue;
         if (!state.showLabels && (n.degree || 0) < 6) continue;
+        if (!state.showLabels && f < 0.5) continue;   // 太远的普通笔记就不写名字了
       }
 
       const label = truncate(n.title, isHub ? 16 : 20);
       const font = isHub ? HUB_FONT : NOTE_FONT;
       const tw = measure(label, font);
       const th = isHub ? 15 : 13;
-      const r = nodeRadius(n) * k;
-      const sx = n.x * k + transform.x;
-      const sy = n.y * k + transform.y;
+      const r = nodeRadius(n) * n.s * k;
+      const sx = n.sx, sy = n.sy;
 
       // 大类标题居中放在节点下方，普通笔记贴在右侧
       const bx = isHub ? sx - tw / 2 : sx + r + 6;
@@ -1461,11 +1605,13 @@ function start(graph) {
       if (clash) continue;
       placed.push([bx - 2, by - 1, bx + tw + 2, by + th + 1]);
 
+      let a = baseAlpha * (lit ? 1 : Math.max(0.35, f));
       if (introNow) {
-        const f = clamp01(introScale(n, introNow - 200));
-        if (f <= 0.02) continue;
-        ctx.globalAlpha = baseAlpha * f;
+        const g = clamp01(introScale(n, introNow - 200));
+        if (g <= 0.02) continue;
+        a *= g;
       }
+      ctx.globalAlpha = a;
       ctx.font = font;
       ctx.strokeStyle = 'rgba(3, 8, 16, 0.9)';
       ctx.strokeText(label, bx, by + th / 2);
@@ -1476,15 +1622,67 @@ function start(graph) {
     ctx.globalAlpha = 1;
   }
 
-  function drawArrows(list, k) {
+  /* 地面：在图谱下方的水平面上画几圈同心椭圆，转动时一眼能看出这是个立体空间 */
+  function drawFloor(k) {
+    let cx = 0, cz = 0, maxY = -Infinity, cnt = 0;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      if (!isVisible(n)) continue;
+      cx += n.x; cz += n.z; cnt++;
+      if (n.y > maxY) maxY = n.y;
+    }
+    if (!cnt) return;
+    cx /= cnt; cz /= cnt;
+    let R = 0;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      if (!isVisible(n)) continue;
+      const r = Math.hypot(n.x - cx, n.z - cz);
+      if (r > R) R = r;
+    }
+    const y = maxY + 40;
+    const cyw = Math.cos(cam.yaw), syw = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    const F = focal(), ox = width / 2 + cam.ox, oy = height / 2 + cam.oy;
+    const pt = (x, z) => {
+      x -= cam.tx; const yy = y - cam.ty; z -= cam.tz;
+      const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw;
+      const y2 = yy * cp - z1 * sp, d = yy * sp + z1 * cp;
+      const s = F / Math.max(F + d, F * 0.1);
+      return [ox + x1 * s * k, oy + y2 * s * k];
+    };
+    const fade = clamp01((now() - introStart - INTRO_SPREAD) / 900);
+    if (fade <= 0) return;
+    ctx.lineWidth = 1;
+    [0.45, 0.75, 1.05].forEach((f, i) => {
+      ctx.strokeStyle = 'rgba(127, 191, 255, ' + ((0.09 - i * 0.02) * fade).toFixed(3) + ')';
+      ctx.beginPath();
+      for (let j = 0; j <= 72; j++) {
+        const a = j / 72 * Math.PI * 2;
+        const q = pt(cx + Math.cos(a) * R * f, cz + Math.sin(a) * R * f);
+        if (j) ctx.lineTo(q[0], q[1]); else ctx.moveTo(q[0], q[1]);
+      }
+      ctx.stroke();
+    });
+    // 十字准线，标出转动的方向
+    ctx.strokeStyle = 'rgba(127, 191, 255, ' + (0.05 * fade).toFixed(3) + ')';
+    ctx.beginPath();
+    [[1, 0], [0, 1]].forEach(([u, v]) => {
+      const a = pt(cx - u * R * 1.05, cz - v * R * 1.05), b = pt(cx + u * R * 1.05, cz + v * R * 1.05);
+      ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+    });
+    ctx.stroke();
+  }
+  const now = () => performance.now();
+
+  function drawArrows(list) {
     ctx.fillStyle = 'rgba(127, 191, 255, 0.85)';
-    const size = 7 / k;
+    const size = 7;
     for (let i = 0; i < list.length; i++) {
       const e = list[i];
-      const dx = e.target.x - e.source.x, dy = e.target.y - e.source.y;
+      const dx = e.target.sx - e.source.sx, dy = e.target.sy - e.source.sy;
       const len = Math.hypot(dx, dy) || 1;
-      const r = nodeRadius(e.target) + 2 / k;
-      const px = e.target.x - (dx / len) * r, py = e.target.y - (dy / len) * r;
+      const r = nodeRadius(e.target) * e.target.s * cam.k + 2;
+      const px = e.target.sx - (dx / len) * r, py = e.target.sy - (dy / len) * r;
       const a = Math.atan2(dy, dx);
       ctx.beginPath();
       ctx.moveTo(px, py);
@@ -1496,20 +1694,37 @@ function start(graph) {
   }
 
   /* ---------- 主循环：没事就空转，不重绘 ---------- */
-  let frames = 0, fpsT0 = performance.now();
+  let frames = 0, fpsT0 = performance.now(), lastFrame = performance.now();
+  let touchedAt = 0;          // 用户最近一次动手的时间，自动旋转要等一会儿再开始
+  function spinning(now) {
+    return state.settings.autoRotate && !isFlat() && !REDUCED_MOTION && !document.hidden &&
+      !pointer.down && !state.hoveredId && !state.selectedId && !camTween &&
+      now - touchedAt > 3500 && !introing(now);
+  }
   function loop() {
+    const now = performance.now();
+    const dt = Math.min(64, now - lastFrame);
+    lastFrame = now;
     if (running) {
-      simulation.tick();
+      tick();
       dirty = true;
-      if (simulation.alpha() < simulation.alphaMin()) running = false;
+      if (alpha < ALPHA_MIN && alphaTarget === 0) running = false;
     }
+    if (stepCam(now)) dirty = true;
+    // 平面模式下慢慢把相机转回正面（交给补间时不管）
+    if (isFlat() && !camTween && (cam.yaw !== 0 || cam.pitch !== 0)) {
+      cam.yaw = wrapAngle(cam.yaw) * 0.8; cam.pitch *= 0.8;
+      if (Math.abs(cam.yaw) < 0.001) cam.yaw = 0;
+      if (Math.abs(cam.pitch) < 0.001) cam.pitch = 0;
+      dirty = true;
+    }
+    if (spinning(now)) { cam.yaw += SPIN_SPEED * dt; dirty = true; }
     if (stepAnimations()) dirty = true;
-    if (introing(performance.now())) dirty = true;
+    if (introing(now)) dirty = true;
     if (state.selectedId && !REDUCED_MOTION) dirty = true;   // 选中波纹要持续动
-    if (dirty) { draw(); dirty = false; updateZoomLabel(); }
+    if (dirty) { project(); draw(); dirty = false; updateZoomLabel(); }
 
     if (state.settings.showFps) {
-      const now = performance.now();
       if (now - fpsT0 >= 500) {
         $('fps').textContent = Math.round(frames / ((now - fpsT0) / 1000)) + ' fps';
         frames = 0; fpsT0 = now;
@@ -1518,17 +1733,26 @@ function start(graph) {
     requestAnimationFrame(loop);
   }
 
-  function reheat(alpha) {
-    simulation.alpha(alpha).restart();
+  function reheat(a) {
+    alpha = Math.max(alpha, a);
     running = true;
   }
 
-  /* ---------- 交互 ---------- */
+  /* ---------- 交互 ----------
+     不再用 d3.zoom / d3.drag，全部用 pointer 事件自己处理：
+     - 按下后几乎没动就松开 = 单击（选中节点 / 点空白取消），所以开场动画刚结束时的第一下点击也能选中
+     - 按在节点上拖 = 挪节点；按在空白处拖 = 旋转（平面模式下是平移）
+     - Shift / 右键 / 中键拖 = 平移；滚轮 = 缩放；双指 = 缩放 + 平移 */
   const tooltip = $('tooltip');
   let tipRaf = 0, tipPending = null;
+  const pointer = { down: false, id: null, x0: 0, y0: 0, x: 0, y: 0, node: null, mode: null, moved: false };
+  const touches = new Map();
+  let pinch = null;
+  let lastClick = { id: null, t: 0 };
 
-  canvas.addEventListener('mousemove', event => {
-    const n = nodeAt(event.clientX, event.clientY);
+  function hideTip() { tipPending = null; tooltip.style.display = 'none'; tooltip.classList.remove('show'); }
+
+  function setHover(n) {
     const id = n ? n.id : null;
     canvas.classList.toggle('pointing', !!n);
     if (id !== state.hoveredId) {
@@ -1536,18 +1760,17 @@ function start(graph) {
       recomputeFocus();
       dirty = true;
     }
-    if (!n) { tooltip.style.display = 'none'; tooltip.classList.remove('show'); return; }
+  }
+
+  function showTip(n, x, y) {
+    if (!n) { hideTip(); return; }
     // 记下最新的悬停目标，等 rAF 真的跑到时再读，避免鼠标已经移开却弹出旧内容
-    tipPending = { node: n, x: event.clientX, y: event.clientY };
+    tipPending = { node: n, x, y };
     if (tipRaf) return;
     tipRaf = requestAnimationFrame(() => {
       tipRaf = 0;
       const t = tipPending;
-      if (!t || !state.hoveredId || state.hoveredId !== t.node.id) {
-        tooltip.style.display = 'none';
-        tooltip.classList.remove('show');
-        return;
-      }
+      if (!t || !state.hoveredId || state.hoveredId !== t.node.id) { hideTip(); return; }
       const fresh = tooltip.dataset.id !== t.node.id || tooltip.style.display !== 'block';
       tooltip.style.display = 'block';
       if (fresh) {
@@ -1565,36 +1788,142 @@ function start(graph) {
         escapeHtml(t.node.category) + ' · ' + t.node.degree + ' 条连接</div>' +
         '<div class="mini">' + escapeHtml(truncate(t.node.excerpt || t.node.path, 80)) + '</div>';
     });
-  });
+  }
 
-  canvas.addEventListener('mouseleave', () => {
-    state.hoveredId = null;
-    tipPending = null;
-    tooltip.style.display = 'none';
-    recomputeFocus();
-    dirty = true;
-  });
-
-  canvas.addEventListener('click', event => {
-    const n = nodeAt(event.clientX, event.clientY);
+  function selectNode(n) {
     state.selectedId = n ? n.id : null;
     updateDetails(n);
     if (n) switchTab('detail');
     recomputeFocus();
     dirty = true;
-  });
+  }
 
-  canvas.addEventListener('dblclick', event => {
+  function openNode(n) { if (n && n.url) window.location.href = n.url; }
+
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+  canvas.addEventListener('pointerdown', event => {
+    touches.set(event.pointerId, [event.clientX, event.clientY]);
+    try { canvas.setPointerCapture(event.pointerId); } catch (e) {}
+    camTween = null;
+    touchedAt = performance.now();
+    if (touches.size === 2) {
+      // 第二根手指落下：取消单指的拖动，改成双指缩放
+      const [a, b] = [...touches.values()];
+      pinch = { dist: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, mx: (a[0] + b[0]) / 2, my: (a[1] + b[1]) / 2 };
+      if (pointer.node && pointer.mode === 'node') { pointer.node.fx = null; alphaTarget = 0; }
+      pointer.mode = 'pinch'; pointer.moved = true;
+      return;
+    }
+    if (touches.size > 2) return;
     const n = nodeAt(event.clientX, event.clientY);
-    if (n && n.url) window.location.href = n.url;
+    Object.assign(pointer, {
+      down: true, id: event.pointerId, x0: event.clientX, y0: event.clientY, x: event.clientX, y: event.clientY,
+      node: n, moved: false,
+      mode: n && event.button === 0 && !event.shiftKey ? 'node'
+        : (event.shiftKey || event.button === 1 || event.button === 2 || isFlat()) ? 'pan' : 'orbit'
+    });
+    if (event.pointerType !== 'mouse') { setHover(n); }
+    hideTip();
   });
 
+  canvas.addEventListener('pointermove', event => {
+    if (touches.has(event.pointerId)) touches.set(event.pointerId, [event.clientX, event.clientY]);
+    if (pinch && touches.size >= 2) {
+      const [a, b] = [...touches.values()];
+      const dist = Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+      panBy(mx - pinch.mx, my - pinch.my);
+      zoomAt(mx, my, cam.k * dist / pinch.dist);
+      pinch = { dist, mx, my };
+      touchedAt = performance.now();
+      dirty = true;
+      return;
+    }
+    if (!pointer.down) {
+      if (event.pointerType !== 'mouse') return;
+      const n = nodeAt(event.clientX, event.clientY);
+      setHover(n);
+      showTip(n, event.clientX, event.clientY);
+      return;
+    }
+    if (event.pointerId !== pointer.id) return;
+    const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
+    if (!pointer.moved && Math.hypot(event.clientX - pointer.x0, event.clientY - pointer.y0) < 5) return;
+    if (!pointer.moved) {
+      pointer.moved = true;
+      canvas.classList.add('grabbing');
+      if (pointer.mode === 'node') { reheat(0.2); alphaTarget = 0.2; }
+    }
+    pointer.x = event.clientX; pointer.y = event.clientY;
+    touchedAt = performance.now();
+    if (pointer.mode === 'node') {
+      const n = pointer.node;
+      const p = unproject(event.clientX, event.clientY, n.d);
+      if (isFlat()) p[2] = 0;
+      n.fx = p;
+      n.x = p[0]; n.y = p[1]; n.z = p[2];
+      setHover(n);
+    } else if (pointer.mode === 'pan') {
+      panBy(dx, dy);
+    } else if (pointer.mode === 'orbit') {
+      // 像转地球仪：靠近你的那一面跟着指针走
+      cam.yaw += dx * 0.008;
+      cam.pitch = Math.max(-1.45, Math.min(1.45, cam.pitch + dy * 0.008));
+    }
+    dirty = true;
+  });
+
+  function endPointer(event, cancelled) {
+    touches.delete(event.pointerId);
+    if (touches.size < 2) pinch = null;
+    if (!pointer.down || event.pointerId !== pointer.id) {
+      if (!touches.size) pointer.down = false;
+      return;
+    }
+    const p = Object.assign({}, pointer);
+    pointer.down = false; pointer.node = null; pointer.mode = null;
+    canvas.classList.remove('grabbing');
+    touchedAt = performance.now();
+    if (p.mode === 'node' && p.node) {
+      p.node.fx = null;
+      alphaTarget = 0;
+    }
+    if (cancelled || p.moved) return;
+    // 没怎么动：当作一次单击
+    const n = nodeAt(event.clientX, event.clientY) || null;
+    const now = performance.now();
+    if (n && lastClick.id === n.id && now - lastClick.t < 380) { openNode(n); lastClick = { id: null, t: 0 }; return; }
+    lastClick = { id: n ? n.id : null, t: now };
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
+    selectNode(n);
+    if (event.pointerType !== 'mouse') setHover(null);
+  }
+  canvas.addEventListener('pointerup', e => endPointer(e, false));
+  canvas.addEventListener('pointercancel', e => endPointer(e, true));
+
+  canvas.addEventListener('pointerleave', event => {
+    if (event.pointerType !== 'mouse' || pointer.down) return;
+    setHover(null);
+    hideTip();
+  });
+
+  canvas.addEventListener('wheel', event => {
+    event.preventDefault();
+    camTween = null;
+    touchedAt = performance.now();
+    const unit = event.deltaMode === 1 ? 16 : (event.deltaMode === 2 ? 400 : 1);
+    const f = Math.pow(2, -event.deltaY * unit * (event.ctrlKey ? 0.01 : 0.002));
+    zoomAt(event.clientX, event.clientY, cam.k * f);
+  }, { passive: false });
+
+  // 把相机转动中心移到节点上，并放大一点
   function centerOn(n, scale) {
-    const k = scale || Math.max(transform.k, 1.1);
-    d3.select(canvas).transition().duration(520).call(
-      zoom.transform,
-      d3.zoomIdentity.translate(width / 2 - n.x * k, height / 2 - n.y * k).scale(k)
-    );
+    const k = scale || Math.max(cam.k, 1.1);
+    const ins = panelInsets();
+    const ox = ins.l + Math.max(160, width - ins.l - ins.r) / 2 - width / 2;
+    const oy = ins.t + Math.max(160, height - ins.t - ins.b) / 2 - height / 2;
+    touchedAt = performance.now();
+    animateCam({ tx: n.x, ty: n.y, tz: n.z, k, ox, oy }, 620);
   }
 
   // 两侧面板会盖住画布，适配视图时把可用区域算进去，图不会被压在面板底下
@@ -1619,46 +1948,67 @@ function start(graph) {
     };
   }
 
-  function computeFit(maxScale) {
-    const vis = graph.nodes.filter(isVisible);
+  /* 适配视图：转动中心放到可见节点的中心；3D 时按“绕 y 轴转一整圈都不出框”来算缩放，
+     自动旋转时图不会转着转着跑出屏幕 */
+  function computeFit(maxScale, angles) {
+    const vis = nodes.filter(isVisible);
     if (!vis.length) return null;
-    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, minZ = Infinity, maxZ = -Infinity;
     for (let i = 0; i < vis.length; i++) {
       const n = vis[i];
-      if (n.x < minX) minX = n.x;
-      if (n.x > maxX) maxX = n.x;
-      if (n.y < minY) minY = n.y;
-      if (n.y > maxY) maxY = n.y;
+      if (n.x < minX) minX = n.x; if (n.x > maxX) maxX = n.x;
+      if (n.y < minY) minY = n.y; if (n.y > maxY) maxY = n.y;
+      if (n.z < minZ) minZ = n.z; if (n.z > maxZ) maxZ = n.z;
     }
-    const w = Math.max(240, maxX - minX), h = Math.max(240, maxY - minY);
+    const tx = (minX + maxX) / 2, ty = (minY + maxY) / 2, tz = isFlat() ? 0 : (minZ + maxZ) / 2;
+    let w, h;
+    if (isFlat()) {
+      w = maxX - minX; h = maxY - minY;
+    } else {
+      const pitch = angles ? angles.pitch : cam.pitch;
+      const cp = Math.abs(Math.cos(pitch)), sp = Math.abs(Math.sin(pitch));
+      let rxz = 0, hy = 0;
+      for (let i = 0; i < vis.length; i++) {
+        const n = vis[i];
+        const r = Math.hypot(n.x - tx, n.z - tz);
+        if (r > rxz) rxz = r;
+        const yy = Math.abs(n.y - ty) * cp + r * sp;
+        if (yy > hy) hy = yy;
+      }
+      // 透视会让离得近的那半边显得更大，留一点余量
+      const persp = 1.06;
+      w = 2 * rxz * persp; h = 2 * hy * persp;
+    }
+    w = Math.max(240, w); h = Math.max(240, h);
     const ins = panelInsets();
     const availW = Math.max(160, width - ins.l - ins.r);
     const availH = Math.max(160, height - ins.t - ins.b);
-    const k = safeK(Math.min(maxScale, 0.94 / Math.max(w / availW, h / availH)));
-    const cx = ins.l + availW / 2;
-    const cy = ins.t + availH / 2;
-    return d3.zoomIdentity
-      .translate(cx - (minX + w / 2) * k, cy - (minY + h / 2) * k)
-      .scale(k);
+    const k = Math.min(maxScale, 0.97 / Math.max(w / availW, h / availH));
+    if (!Number.isFinite(k) || k <= 0.01) return null;
+    return { tx, ty, tz, k, ox: ins.l + availW / 2 - width / 2, oy: ins.t + availH / 2 - height / 2 };
   }
 
-  function fitView(immediate) {
-    const t = computeFit(1.6);
-    if (!t) return;
+  function fitView(immediate, angles) {
+    const goal = computeFit(1.6, angles);
+    if (!goal) return;
+    if (angles) Object.assign(goal, angles);
     // 从异常尺寸恢复时不要用动画：后台标签页里 rAF 被节流，过渡不会跑完
-    if (immediate) d3.select(canvas).call(zoom.transform, t);
-    else d3.select(canvas).transition().duration(520).call(zoom.transform, t);
-    dirty = true;
+    animateCam(goal, immediate === true ? 0 : 560);
   }
 
   /* ---------- 缩放控件 ---------- */
   let lastZoomText = '';
   function updateZoomLabel() {
-    const txt = Math.round(transform.k * 100) + '%';
+    const txt = Math.round(cam.k * 100) + '%';
     if (txt !== lastZoomText) { lastZoomText = txt; $('zoom-val').textContent = txt; }
   }
   function zoomBy(f) {
-    d3.select(canvas).transition().duration(260).call(zoom.scaleBy, f, [width / 2, height / 2]);
+    touchedAt = performance.now();
+    const ux = -cam.ox, uy = -cam.oy;   // 以画布中心为缩放点
+    const k = Math.max(0.05, Math.min(6, cam.k * f));
+    const s = 1 - cam.k / k;
+    const [x, y, z] = unrotate(ux / cam.k * s, uy / cam.k * s);
+    animateCam({ tx: cam.tx + x, ty: cam.ty + y, tz: cam.tz + z, k }, 260);
   }
   $('zoom-in').addEventListener('click', () => zoomBy(1.35));
   $('zoom-out').addEventListener('click', () => zoomBy(1 / 1.35));
@@ -1666,10 +2016,10 @@ function start(graph) {
 
   /* ---------- 面板 ---------- */
   function refreshStats() {
-    const vis = graph.nodes.filter(isVisible);
+    const vis = nodes.filter(isVisible);
     const items = [
       ['节点', vis.length],
-      ['连接', graph.edges.filter(linkVisible).length],
+      ['连接', edges.filter(linkVisible).length],
       ['正文', vis.filter(n => n.published).length],
       ['大类', vis.filter(n => n.type === 'hub').length]
     ];
@@ -1696,7 +2046,7 @@ function start(graph) {
     const box = $('legend-items');
     box.innerHTML = '';
     const counts = new Map();
-    graph.nodes.forEach(n => counts.set(n.category, (counts.get(n.category) || 0) + 1));
+    nodes.forEach(n => counts.set(n.category, (counts.get(n.category) || 0) + 1));
     graph.categories.forEach(cat => {
       const el = document.createElement('div');
       el.className = 'legend-item' + (state.hiddenCategories.has(cat) ? ' off' : '');
@@ -1799,6 +2149,7 @@ function start(graph) {
   const BINDINGS = [
     ['setting-arrows', 'arrows', 'checked', false],
     ['setting-fps', 'showFps', 'checked', false],
+    ['setting-rotate', 'autoRotate', 'checked', false],
     ['setting-text-opacity', 'textOpacity', 'value', false],
     ['setting-node-scale', 'nodeScale', 'value', false],
     ['setting-line-width', 'lineWidth', 'value', false],
@@ -1815,6 +2166,7 @@ function start(graph) {
       if (b[2] === 'checked') el.checked = !!state.settings[b[1]];
       else el.value = state.settings[b[1]];
     });
+    $('dim-btn').classList.toggle('on', !isFlat());
   }
 
   BINDINGS.forEach(([id, key, prop, physical]) => {
@@ -1823,7 +2175,8 @@ function start(graph) {
     el.addEventListener(prop === 'checked' ? 'change' : 'input', () => {
       state.settings[key] = prop === 'checked' ? el.checked : Number(el.value);
       if (key === 'showFps') $('fps').hidden = !el.checked;
-      if (physical) { applyForces(); reheat(0.35); }
+      if (key === 'autoRotate') touchedAt = 0;
+      if (physical) reheat(0.35);
       updateSettingLabels();
       saveSettings();
       dirty = true;
@@ -1831,19 +2184,40 @@ function start(graph) {
   });
 
   $('reset-settings').addEventListener('click', () => {
-    state.settings = Object.assign({}, DEFAULTS);
+    const flat = state.settings.flat;
+    state.settings = Object.assign({}, DEFAULTS, { flat });
     syncInputs();
     updateSettingLabels();
-    applyForces();
     saveSettings();
     $('fps').hidden = true;
     reheat(0.4);
   });
 
+  /* 3D ⇄ 平面：压平时 z 收回 0、相机转正；展开时给每个节点一点随机的 z 速度让它重新鼓起来 */
+  function setFlat(on) {
+    if (isFlat() === on) return;
+    state.settings.flat = on;
+    saveSettings();
+    $('dim-btn').classList.toggle('on', !on);
+    if (!on) {
+      nodes.forEach(n => { n.vz += (Math.random() - 0.5) * 50; });
+      reheat(0.6);
+      setTimeout(() => fitView(false, { yaw: HOME_VIEW.yaw, pitch: HOME_VIEW.pitch }), 700);
+      animateCam({ yaw: HOME_VIEW.yaw, pitch: HOME_VIEW.pitch }, 700);
+    } else {
+      reheat(0.5);
+      animateCam({ yaw: 0, pitch: 0 }, 600);
+      setTimeout(() => fitView(false, { yaw: 0, pitch: 0 }), 650);
+    }
+    touchedAt = performance.now();
+  }
+
   /* ---------- 工具栏 ---------- */
-  $('fit-btn').addEventListener('click', fitView);
+  $('fit-btn').addEventListener('click', () => fitView());
+  $('dim-btn').addEventListener('click', () => setFlat(!isFlat()));
   $('reset-btn').addEventListener('click', () => {
-    d3.select(canvas).transition().duration(420).call(zoom.transform, d3.zoomIdentity);
+    touchedAt = performance.now();
+    fitView(false, isFlat() ? { yaw: 0, pitch: 0 } : { yaw: HOME_VIEW.yaw, pitch: HOME_VIEW.pitch });
   });
   $('helper-btn').addEventListener('click', e => {
     state.showHelpers = !state.showHelpers;
@@ -1879,21 +2253,17 @@ function start(graph) {
   search.addEventListener('input', function () {
     state.searchQuery = this.value.trim().toLowerCase();
     let hits = 0;
-    if (state.searchQuery) graph.nodes.forEach(n => { if (n._hay.includes(state.searchQuery)) hits++; });
+    if (state.searchQuery) nodes.forEach(n => { if (n._hay.includes(state.searchQuery)) hits++; });
     $('search-count').textContent = state.searchQuery ? hits + ' 个' : '';
     recomputeFocus();
     dirty = true;
   });
   search.addEventListener('keydown', function (event) {
     if (event.key !== 'Enter' || !state.searchQuery) return;
-    const target = graph.nodes.find(n => n._hay.includes(state.searchQuery) && isVisible(n));
+    const target = nodes.find(n => n._hay.includes(state.searchQuery) && isVisible(n));
     if (!target) return;
-    state.selectedId = target.id;
-    updateDetails(target);
-    switchTab('detail');
+    selectNode(target);
     centerOn(target, 1.5);
-    recomputeFocus();
-    dirty = true;
   });
 
   document.addEventListener('keydown', event => {
@@ -1903,12 +2273,7 @@ function start(graph) {
     }
     if (event.key === '/') { event.preventDefault(); search.focus(); }
     if (event.key === 'f') fitView();
-    if (event.key === 'Escape') {
-      state.selectedId = null;
-      updateDetails(null);
-      recomputeFocus();
-      dirty = true;
-    }
+    if (event.key === 'Escape') selectNode(null);
   });
 
   let lastW = 0, lastH = 0, autoCollapsed = false;
@@ -1938,10 +2303,8 @@ function start(graph) {
       }
     }
 
-    applyForces();
     if (wasDegenerate) fitView(true);
     else if (modeChanged || bigChange) fitView();
-    else reheat(0.12);
     dirty = true;
   }
 
@@ -1978,11 +2341,13 @@ function start(graph) {
     }
     setProgress(100, '完成');
 
-    // 预热已经把布局跑好了，这里直接对准视图，开场不再看到炸开的过程
+    // 预热已经把布局跑好了，这里直接对准视图；3D 时相机从侧面一点的位置转过来
     const initial = computeFit(1.4);
-    if (initial) {
-      transform = initial;
-      d3.select(canvas).call(zoom.transform, transform);
+    if (initial) Object.assign(cam, initial);
+    if (!isFlat() && !REDUCED_MOTION) {
+      const goalYaw = cam.yaw;
+      cam.yaw = goalYaw - 0.9; cam.k *= 0.82;
+      animateCam({ yaw: goalYaw, k: initial ? initial.k : 1 }, INTRO_TOTAL + 500);
     }
 
     // 先按面板的最终位置算好视图，再让面板、底栏依次滑入
@@ -1993,6 +2358,7 @@ function start(graph) {
     // 进度条走满后再撤掉加载层，同时开始“生长”动画
     setTimeout(() => {
       beginIntro();
+      project();
       draw();
       requestAnimationFrame(loop);
       const el = $('loading');
