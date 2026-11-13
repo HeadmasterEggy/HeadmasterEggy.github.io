@@ -417,12 +417,15 @@ Discussion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" h
     <div class="post-body" itemprop="articleBody"><h1 id="comp5318-assignment-1-作业要求梳理rice-classification">COMP5318
 Assignment 1 作业要求梳理：Rice Classification</h1>
 <blockquote>
-<p><strong>课程</strong>：COMP5318/COMP4318 — Machine Learning and Data
-Mining，Semester 2 2026
-<strong>规格文件</strong>：<code>COMP5318-A1-S22026-final.pdf</code>（4
-页） <strong>截止</strong>：<strong>2026 年 9 月 18 日（周五，Week
-7）23:59</strong> <strong>分值</strong>：<strong>15 分 = 期末总评的
-15%</strong></p>
+<ul>
+<li><strong>课程</strong>：COMP5318/COMP4318 — Machine Learning and Data
+Mining，Semester 2 2026</li>
+<li><strong>规格文件</strong>：<code>COMP5318-A1-S22026-final.pdf</code>（4
+页）</li>
+<li><strong>截止</strong>：<strong>2026 年 9 月 18 日（周五，Week
+7）23:59</strong></li>
+<li><strong>分值</strong>：<strong>15 分 = 期末总评的 15%</strong></li>
+</ul>
 <p>⚠️
 本文只整理<strong>作业要求与方法论</strong>，<strong>不放解题代码</strong>——规格里明确写了「把自己的作业提供给他人抄袭」同样会被处罚。</p>
 </blockquote>
@@ -482,7 +485,7 @@ Mining，Semester 2 2026
 </table>
 <blockquote>
 <p><strong>最狠的一条</strong>：<strong>「我们会运行你的代码。任何跑不起来的部分，那部分直接
-0 分。」</strong>
+0 分。」</strong><br>
 所以<strong>提交前务必从头到尾重跑一遍</strong>（Kernel → Restart &amp;
 Run All）。</p>
 </blockquote>
@@ -720,7 +723,8 @@ tutor 确认，或在 notebook 里注明你的选择。</p>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Random Forest 有额外硬性要求</strong>（模板注释里写着）：
+<p><strong>Random Forest
+有额外硬性要求</strong>（模板注释里写着）：<br>
 <strong>用 information gain</strong>（即
 <code>criterion='entropy'</code>）<strong>且
 <code>max_features='sqrt'</code></strong>。</p>
@@ -771,35 +775,36 @@ Discussion</h2>
 </ul>
 <blockquote>
 <p>💡 <strong>可以自己加分的角度</strong>（都能挂靠到 Week 3/4
-学过的概念）： - <strong>交叉验证准确率 vs
+学过的概念）：</p>
+<ul>
+<li><strong>交叉验证准确率 vs
 测试集准确率</strong>为什么不能直接比——测试集只有一次测量，350 个样本在
 0.94 附近的标准误约 <strong>1.3 个百分点</strong>，小于 2~3
-点的差距不该当成真实差异 -
-<strong>预处理顺序造成的数据泄漏</strong>——规格要求先对<strong>全量数据</strong>做插补和归一化，再在
+点的差距不该当成真实差异</li>
+<li><strong>预处理顺序造成的数据泄漏</strong>——规格要求先对<strong>全量数据</strong>做插补和归一化，再在
 Part 2 里划分训练/测试集。这意味着 imputer 的列均值和 scaler 的 min/max
 <strong>看过了测试集</strong>。本例影响可忽略（全表只有 29
 个缺失值），但方法论上更干净的做法是用
 <code>sklearn.pipeline.Pipeline</code> 把预处理和分类器打包丢给
-<code>GridSearchCV</code>，让它在<strong>每一折内部</strong>重新拟合预处理
--
-<strong>哪些模型对调参敏感、哪些不敏感</strong>，以及<strong>为什么</strong>——集成方法本身就在压制方差，所以调参空间小
--
-<strong>朴素贝叶斯为什么垫底</strong>——检查特征间的相关系数，这直接对应
-Week 4 讲的「相关属性削弱朴素贝叶斯，对策是先做特征选择」</p>
+<code>GridSearchCV</code>，让它在<strong>每一折内部</strong>重新拟合预处理</li>
+<li><strong>哪些模型对调参敏感、哪些不敏感</strong>，以及<strong>为什么</strong>——集成方法本身就在压制方差，所以调参空间小</li>
+<li><strong>朴素贝叶斯为什么垫底</strong>——检查特征间的相关系数，这直接对应
+Week 4 讲的「相关属性削弱朴素贝叶斯，对策是先做特征选择」</li>
+</ul>
 </blockquote>
 <hr>
 <h2 id="六评分测试与三个实现陷阱">六、评分测试与三个实现陷阱</h2>
 <blockquote>
-<p><strong>这是整份规格里最容易翻车的一段</strong>： <strong>「我们会用
-rice
-数据集和第二个数据集（<code>unknown.csv</code>）测试你的程序。」</strong>
-<strong>未知数据集格式相同，但特征数和样本数都不一样。</strong>
+<p><strong>这是整份规格里最容易翻车的一段</strong>：<br>
+<strong>「我们会用 rice
+数据集和第二个数据集（<code>unknown.csv</code>）测试你的程序。」</strong><br>
+<strong>未知数据集格式相同，但特征数和样本数都不一样。</strong><br>
 <strong>所以不要硬编码特征数和样本数——不要写死 1400 和 7。</strong></p>
 <p><strong>可以假设的</strong>：类变量在<strong>最后一列</strong>，且<strong>只有两类
 class1 / class2</strong>。</p>
 </blockquote>
 <p>Canvas 还提供了 <strong><code>test-before.csv</code></strong>
-供提交前自测<strong>可运行性</strong>（<strong>不是</strong>用来看准确率的）。
+供提交前自测<strong>可运行性</strong>（<strong>不是</strong>用来看准确率的）。<br>
 ⚠️ <strong>提交的 notebook 里只能有 rice 数据集的结果，不要留
 test-before 的输出。</strong></p>
 <h3 id="陷阱-1-会把所有列变成-object">陷阱 1：<code>?</code>
@@ -814,10 +819,12 @@ test-before 的输出。</strong></p>
 2：任何写死维度的写法都会挂</h3>
 <p>不能出现
 <code>1400</code>、<code>7</code>、<code>range(7)</code>、按列名取列这类写法。</p>
-<p><strong>对策</strong>：用<strong>位置索引</strong>取「除最后一列外的全部」和「最后一列」，特征数和样本数全部从文件本身读出来。
-<strong>自测方法</strong>：拿 <code>test-before.csv</code> 跑一遍——它是
-<strong>6 个特征、209 行</strong>，列名叫
-<code>a1</code>~<code>a6</code>，跟 rice 完全不同。跑通了才算过关。</p>
+<ul>
+<li><strong>对策</strong>：用<strong>位置索引</strong>取「除最后一列外的全部」和「最后一列」，特征数和样本数全部从文件本身读出来。</li>
+<li><strong>自测方法</strong>：拿 <code>test-before.csv</code>
+跑一遍——它是 <strong>6 个特征、209 行</strong>，列名叫
+<code>a1</code>~<code>a6</code>，跟 rice 完全不同。跑通了才算过关。</li>
+</ul>
 <h3 id="陷阱-3part-1-和-part-2-的数据流不一样">陷阱 3：Part 1 和 Part 2
 的数据流不一样</h3>
 <table>
@@ -1004,7 +1011,7 @@ F1</td>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

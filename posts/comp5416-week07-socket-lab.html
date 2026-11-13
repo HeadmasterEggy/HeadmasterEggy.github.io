@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 07 实验周总结。逐行讲解 TCP 与 UDP 两套 Python socket 客户端&#x2F;服务器代码（socket、bind、listen、accept、connect、send&#x2F;recv 与 sendto&#x2F;recvfrom 的区别），为什么先启动服务器、本机测试用 127.0.0.1、跨机器要改 serverName，用 Wireshark 观察三次握手、数据段与四次">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:10:00.000Z">
-<meta property="article:modified_time" content="2026-11-07T07:22:45.416Z">
+<meta property="article:modified_time" content="2026-11-13T07:13:15.556Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5416">
 <meta property="article:tag" content="Python">
@@ -370,7 +370,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-07 07:22:45" itemprop="dateModified" datetime="2026-11-07T07:22:45Z">2026-11-07</time>
+      <time title="Modified: 2026-11-13 07:13:15" itemprop="dateModified" datetime="2026-11-13T07:13:15Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -808,93 +808,103 @@ min、混合均衡「让对方无差异」。</li>
 <h2 id="题目">题目</h2>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
 <p><strong>Q1（Lab）</strong> 在 TCP socket 程序里，客户端调用
-<code>connect()</code> 会触发什么？ A. 发送第一个数据段　B. 三次握手　C.
-四次挥手　D. DNS 查询</p>
+<code>connect()</code> 会触发什么？<br>
+A. 发送第一个数据段　B. 三次握手　C. 四次挥手　D. DNS 查询</p>
 <blockquote>
 <p><strong>B</strong>。（serverName 是主机名时会先查 DNS，但
 <code>connect()</code> 对应的 TCP 动作是握手。）</p>
 </blockquote>
 <p><strong>Q2（Lab）</strong> TCP 服务器调用 <code>accept()</code>
-返回的是？ A. 欢迎套接字　B. 一个新的连接套接字和客户地址　C.
-收到的数据　D. 客户端的端口号</p>
+返回的是？<br>
+A. 欢迎套接字　B. 一个新的连接套接字和客户地址　C. 收到的数据　D.
+客户端的端口号</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q3（Lab）</strong> 关于 TCP
-服务器的套接字，正确的是？（多选） A. 欢迎套接字一直处于等待连接的状态
-B. 每个客户有自己的连接套接字 C. 所有客户的数据都从欢迎套接字收发 D.
-关闭一个连接套接字不影响欢迎套接字</p>
+服务器的套接字，正确的是？（多选）<br>
+A. 欢迎套接字一直处于等待连接的状态<br>
+B. 每个客户有自己的连接套接字<br>
+C. 所有客户的数据都从欢迎套接字收发<br>
+D. 关闭一个连接套接字不影响欢迎套接字</p>
 <blockquote>
 <p><strong>A、B、D</strong>。</p>
 </blockquote>
-<p><strong>Q4（Lab）</strong> 关于 UDP socket 程序，正确的是？（多选）
-A. 服务器不需要 <code>listen()</code> 和 <code>accept()</code> B.
-客户端每次发送都要写上服务器的地址和端口 C. 服务器从
-<code>recvfrom()</code> 得到客户地址后回复 D. 服务器为每个客户创建一个新
-socket</p>
+<p><strong>Q4（Lab）</strong> 关于 UDP socket
+程序，正确的是？（多选）<br>
+A. 服务器不需要 <code>listen()</code> 和 <code>accept()</code><br>
+B. 客户端每次发送都要写上服务器的地址和端口<br>
+C. 服务器从 <code>recvfrom()</code> 得到客户地址后回复<br>
+D. 服务器为每个客户创建一个新 socket</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
 <p><strong>Q5（Lab）</strong> 在同一台机器上运行 TCP
-客户端和服务器，应该先启动哪个，客户端的 serverName 填什么？ A.
-客户端，127.0.0.1　B. 服务器，127.0.0.1　C. 服务器，0.0.0.0　D.
+客户端和服务器，应该先启动哪个，客户端的 serverName 填什么？<br>
+A. 客户端，127.0.0.1　B. 服务器，127.0.0.1　C. 服务器，0.0.0.0　D.
 无所谓</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q6（Lab）</strong> TCP 服务器没有运行时，客户端会怎样？UDP
-呢？ A. TCP 的 <code>connect()</code> 失败；UDP 的 <code>sendto()</code>
-不报错，客户端一直等回复 B. 两者都立刻报错 C. 两者都一直等 D. TCP
-一直等；UDP 立刻报错</p>
+呢？<br>
+A. TCP 的 <code>connect()</code> 失败；UDP 的 <code>sendto()</code>
+不报错，客户端一直等回复<br>
+B. 两者都立刻报错<br>
+C. 两者都一直等<br>
+D. TCP 一直等；UDP 立刻报错</p>
 <blockquote>
 <p><strong>A</strong>。</p>
 </blockquote>
 <p><strong>Q7（Lab）</strong> Wireshark 显示客户端发了 Seq = 1、Len = 5
-的数据段。服务器的确认号是？ A. 1　B. 5　C. 6　D. 7</p>
+的数据段。服务器的确认号是？<br>
+A. 1　B. 5　C. 6　D. 7</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q8（Lab）</strong> 用 Wireshark 抓 UDP
-版程序的包，能看到什么？ A. SYN、SYN/ACK、ACK 三个段　B.
-只有一个请求、一个回复两个数据报　C. 带序号的数据报　D. FIN 段</p>
+版程序的包，能看到什么？<br>
+A. SYN、SYN/ACK、ACK 三个段　B. 只有一个请求、一个回复两个数据报　C.
+带序号的数据报　D. FIN 段</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q9（期中讲评）</strong> 20 辆车的车队，收费站每 1 秒服务 1
 辆，两站相距 200 km，车速 10
-km/s，车队到齐才服务。第一辆车离开收费站后，多久在下一站开始被服务？ A.
-20 s　B. 21 s　C. 39 s　D. 40 s</p>
+km/s，车队到齐才服务。第一辆车离开收费站后，多久在下一站开始被服务？<br>
+A. 20 s　B. 21 s　C. 39 s　D. 40 s</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q10（期中讲评）</strong> 链路长 3 km，传播速度 3 × 10⁸
-m/s，分组 16000 bit，速率 1000 Mbps。传播时延是？ A. 1.6 × 10⁻⁵ s　B.
-1.0 × 10⁻⁵ s　C. 2.6 × 10⁻⁵ s　D. 1.0 × 10⁻⁸ s</p>
+m/s，分组 16000 bit，速率 1000 Mbps。传播时延是？<br>
+A. 1.6 × 10⁻⁵ s　B. 1.0 × 10⁻⁵ s　C. 2.6 × 10⁻⁵ s　D. 1.0 × 10⁻⁸ s</p>
 <blockquote>
 <p><strong>B</strong>。A 是传输时延，C 是两者之和。</p>
 </blockquote>
 <p><strong>Q11（期中讲评）</strong> 4 对服务器-客户端共享 300 Mbps
 的中间链路，服务器链路 10 Mbps，客户端链路 90
-Mbps。客户端链路的利用率约为？ A. 0.03　B. 0.11　C. 0.83　D. 1</p>
+Mbps。客户端链路的利用率约为？<br>
+A. 0.03　B. 0.11　C. 0.83　D. 1</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q12（期中讲评）</strong> 信道博弈：只有一人发得 16，都发各得
-−8，不发得 0。用户 1 发送严格更优的条件是？ A. p₂ &lt; 1/3　B. p₂ &lt;
-1/2　C. p₂ &lt; 2/3　D. p₂ &gt; 2/3</p>
+−8，不发得 0。用户 1 发送严格更优的条件是？<br>
+A. p₂ &lt; 1/3　B. p₂ &lt; 1/2　C. p₂ &lt; 2/3　D. p₂ &gt; 2/3</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q13（期中讲评）</strong> 不对称信道博弈：只有用户 1 发，用户
 1 得 24；只有用户 2 发，用户 2 得 16；都发时用户 1 得 −8、用户 2 得
-−4。混合策略纳什均衡 (p₁, p₂) 是？ A. (3/4, 4/5)　B. (4/5, 3/4)　C.
-(2/3, 2/3)　D. (1, 0)</p>
+−4。混合策略纳什均衡 (p₁, p₂) 是？<br>
+A. (3/4, 4/5)　B. (4/5, 3/4)　C. (2/3, 2/3)　D. (1, 0)</p>
 <blockquote>
 <p><strong>B</strong>。A 是把 p₁、p₂ 搞反了；D 是纯策略均衡之一。</p>
 </blockquote>
 <p><strong>Q14（期中讲评）</strong>
-同一个不对称博弈，纯策略纳什均衡有哪些？（多选） A. (发, 不发)　B.
-(不发, 发)　C. (发, 发)　D. (不发, 不发)</p>
+同一个不对称博弈，纯策略纳什均衡有哪些？（多选）<br>
+A. (发, 不发)　B. (不发, 发)　C. (发, 发)　D. (不发, 不发)</p>
 <blockquote>
 <p><strong>A、B</strong>。</p>
 </blockquote>
@@ -911,10 +921,10 @@ Mbps。客户端链路的利用率约为？ A. 0.03　B. 0.11　C. 0.83　D. 1</
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/COMP5416/" rel="tag"><i class="fa fa-tag"></i> COMP5416</a>
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
               <a href="/tags/TCP/" rel="tag"><i class="fa fa-tag"></i> TCP</a>
               <a href="/tags/UDP/" rel="tag"><i class="fa fa-tag"></i> UDP</a>
               <a href="/tags/Socket-Programming/" rel="tag"><i class="fa fa-tag"></i> Socket-Programming</a>
-              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
               <a href="/tags/Wireshark/" rel="tag"><i class="fa fa-tag"></i> Wireshark</a>
           </div>
 
@@ -971,7 +981,7 @@ Mbps。客户端链路的利用率约为？ A. 0.03　B. 0.11　C. 0.83　D. 1</
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

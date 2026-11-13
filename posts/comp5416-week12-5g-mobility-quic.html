@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 12 详解。5G 的 RAN（UE、NR、gNodeB）与核心网、控制面&#x2F;用户面分离 CUPS、UPF &#x2F; AMF &#x2F; SMF &#x2F; AUSF &#x2F; UDM &#x2F; UDR &#x2F; UDSF 等功能、GTP-U 用户面隧道、SIM 身份、入网的注册与 PDU 会话两阶段、WiFi ESS 内的移动、5G 切换七步流程；蓝牙 piconet、跳频与 L2CAP、GEO 与 LEO 卫">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:35:00.000Z">
-<meta property="article:modified_time" content="2026-11-07T07:31:30.785Z">
+<meta property="article:modified_time" content="2026-11-13T07:13:15.562Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="5G">
 <meta property="article:tag" content="Bluetooth">
@@ -371,7 +371,7 @@ IP：两个移动设备能用同一个转交地址吗？</span></a></li></ol></l
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-07 07:31:30" itemprop="dateModified" datetime="2026-11-07T07:31:30Z">2026-11-07</time>
+      <time title="Modified: 2026-11-13 07:13:15" itemprop="dateModified" datetime="2026-11-13T07:13:15Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1316,139 +1316,168 @@ LoRaWAN、LTE-M；两台设备可以共享外地代理的 COA。</li>
 <h2 id="题目">题目</h2>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
 <p><strong>Q1（Sample Exam）</strong>
-下面哪个协议存在队头阻塞（head-of-line blocking）问题？ A. UDP　B.
-TCP　C. QUIC　D. HTTP</p>
+下面哪个协议存在队头阻塞（head-of-line blocking）问题？<br>
+A. UDP　B. TCP　C. QUIC　D. HTTP</p>
 <blockquote>
 <p><strong>B</strong>。TCP 只有一条按序字节流；QUIC 每个流独立。HTTP/1.1
 的应用层 HOL 不是这题要的答案。</p>
 </blockquote>
-<p><strong>Q2（讲义）</strong> 关于 QUIC，正确的是？（多选） A. 跑在 UDP
-之上 B. 多个流复用在一个连接上，每个流有独立的可靠传输 C.
-每个流有自己独立的拥塞控制 D. 可以在 1 个 RTT
-内建立可靠性、拥塞控制、认证和加密的状态</p>
+<p><strong>Q2（讲义）</strong> 关于 QUIC，正确的是？（多选）<br>
+A. 跑在 UDP 之上<br>
+B. 多个流复用在一个连接上，每个流有独立的可靠传输<br>
+C. 每个流有自己独立的拥塞控制<br>
+D. 可以在 1 个 RTT 内建立可靠性、拥塞控制、认证和加密的状态</p>
 <blockquote>
 <p><strong>A、B、D</strong>。拥塞控制是所有流共用的。</p>
 </blockquote>
 <p><strong>Q3（讲义）</strong> 手机从 4G 切到 Wi-Fi，IP
-地址变了。哪种连接能平滑迁移，为什么？ A. TCP，因为有序号　B.
-QUIC，因为连接由 Connection ID 标识　C. UDP，因为无连接　D. 都会断</p>
+地址变了。哪种连接能平滑迁移，为什么？<br>
+A. TCP，因为有序号　B. QUIC，因为连接由 Connection ID 标识　C.
+UDP，因为无连接　D. 都会断</p>
 <blockquote>
 <p><strong>B</strong>。TCP 的四元组变了就断。</p>
 </blockquote>
-<p><strong>Q4（讲义）</strong> QUIC 重传丢失的数据时，包号怎么处理？ A.
-用原来的包号　B. 用新的、更大的包号　C. 包号清零　D. 不带包号</p>
+<p><strong>Q4（讲义）</strong> QUIC
+重传丢失的数据时，包号怎么处理？<br>
+A. 用原来的包号　B. 用新的、更大的包号　C. 包号清零　D. 不带包号</p>
 <blockquote>
 <p><strong>B</strong>。所以没有 RTT 测量歧义。</p>
 </blockquote>
 <p><strong>Q5（讲义）</strong> QUIC 的超时公式比 TCP 的 EstimatedRTT +
-4·DevRTT 多考虑了什么？（多选） A. 定时器粒度下限 kGranularity B.
-接收方的最大延迟 ACK 时间 max_ack_delay C. 链路带宽 D. 分组大小</p>
+4·DevRTT 多考虑了什么？（多选）<br>
+A. 定时器粒度下限 kGranularity<br>
+B. 接收方的最大延迟 ACK 时间 max_ack_delay<br>
+C. 链路带宽<br>
+D. 分组大小</p>
 <blockquote>
 <p><strong>A、B</strong>。</p>
 </blockquote>
 <p><strong>Q6（讲义）</strong> QUIC 判定持续拥塞（persistent
-congestion）后会？ A. 窗口减半　B. 回到慢启动　C. 关闭连接　D. 换
-Connection ID</p>
+congestion）后会？<br>
+A. 窗口减半　B. 回到慢启动　C. 关闭连接　D. 换 Connection ID</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q7（讲义）</strong> 关于 HTTP/3 的协议栈，正确的是？（多选）
-A. 加密由 QUIC 提供 B. 传输层是 UDP C. 传输层是 TCP D. HTTP/3 ≈ 精简的
-HTTP/2 跑在 QUIC 上</p>
+<p><strong>Q7（讲义）</strong> 关于 HTTP/3
+的协议栈，正确的是？（多选）<br>
+A. 加密由 QUIC 提供<br>
+B. 传输层是 UDP<br>
+C. 传输层是 TCP<br>
+D. HTTP/3 ≈ 精简的 HTTP/2 跑在 QUIC 上</p>
 <blockquote>
 <p><strong>A、B、D</strong>。</p>
 </blockquote>
-<p><strong>Q8（讲义）</strong> 5G 核心网里唯一属于用户面的功能是？ A.
-AMF　B. SMF　C. UPF　D. AUSF</p>
+<p><strong>Q8（讲义）</strong> 5G 核心网里唯一属于用户面的功能是？<br>
+A. AMF　B. SMF　C. UPF　D. AUSF</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q9（讲义）</strong> 5G 核心网中负责给设备分配 IP 地址、选择
-UPF 的是？ A. AMF　B. SMF　C. UDM　D. UDR</p>
+UPF 的是？<br>
+A. AMF　B. SMF　C. UDM　D. UDR</p>
 <blockquote>
 <p><strong>B</strong>。AMF 管接入和移动。</p>
 </blockquote>
-<p><strong>Q10（讲义）</strong> 关于 5G 核心网功能，正确的是？（多选）
-A. AMF 负责移动性管理和接入授权 B. AUSF 负责认证设备 C. UDM
-管理用户身份，生成认证凭据 D. UPF 负责会话管理和 IP 分配</p>
+<p><strong>Q10（讲义）</strong> 关于 5G
+核心网功能，正确的是？（多选）<br>
+A. AMF 负责移动性管理和接入授权<br>
+B. AUSF 负责认证设备<br>
+C. UDM 管理用户身份，生成认证凭据<br>
+D. UPF 负责会话管理和 IP 分配</p>
 <blockquote>
 <p><strong>A、B、C</strong>。D 是 SMF。</p>
 </blockquote>
-<p><strong>Q11（讲义）</strong> CUPS 指的是？ A. 核心网和 RAN 分离　B.
-控制面和用户面分离　C. 上行和下行分离　D. 语音和数据分离</p>
+<p><strong>Q11（讲义）</strong> CUPS 指的是？<br>
+A. 核心网和 RAN 分离　B. 控制面和用户面分离　C. 上行和下行分离　D.
+语音和数据分离</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q12（讲义）</strong> 基站和 UPF 之间的用户面隧道用的是什么？
+<p><strong>Q12（讲义）</strong> 基站和 UPF
+之间的用户面隧道用的是什么？<br>
 A. IP-in-IP　B. GTP-U over UDP/IP　C. TCP　D. RTP</p>
 <blockquote>
 <p><strong>B</strong>。N3 接口。</p>
 </blockquote>
-<p><strong>Q13（讲义）</strong> 加入 5G 网络的两个阶段是？（多选） A.
-注册：设备和网络双向认证 B. PDU 会话建立：分配 IP，建立到 UPF 的数据路径
-C. DNS 查询 D. TCP 三次握手</p>
+<p><strong>Q13（讲义）</strong> 加入 5G 网络的两个阶段是？（多选）<br>
+A. 注册：设备和网络双向认证<br>
+B. PDU 会话建立：分配 IP，建立到 UPF 的数据路径<br>
+C. DNS 查询<br>
+D. TCP 三次握手</p>
 <blockquote>
 <p><strong>A、B</strong>。</p>
 </blockquote>
-<p><strong>Q14（讲义）</strong> 关于 5G 切换，正确的是？（多选） A.
-由源基站选择目标基站并发出切换请求 B.
-切换期间源基站把收到的数据报转发给目标基站 C. SMF 指示 UPF
-把隧道端点改为目标基站 D. 切换后设备要换一个新的 IP 地址</p>
+<p><strong>Q14（讲义）</strong> 关于 5G 切换，正确的是？（多选）<br>
+A. 由源基站选择目标基站并发出切换请求<br>
+B. 切换期间源基站把收到的数据报转发给目标基站<br>
+C. SMF 指示 UPF 把隧道端点改为目标基站<br>
+D. 切换后设备要换一个新的 IP 地址</p>
 <blockquote>
 <p><strong>A、B、C</strong>。设备 IP 不变，变的是隧道端点。</p>
 </blockquote>
-<p><strong>Q15（讲义）</strong> 关于 802.11 的 ESS，正确的是？（多选）
-A. 由多个 BSS 组成 B. 各 BSS 在同一个三层子网 C. 各 BSS 的 SSID 相同 D.
-在 ESS 内移动需要 Mobile IP</p>
+<p><strong>Q15（讲义）</strong> 关于 802.11 的
+ESS，正确的是？（多选）<br>
+A. 由多个 BSS 组成<br>
+B. 各 BSS 在同一个三层子网<br>
+C. 各 BSS 的 SSID 相同<br>
+D. 在 ESS 内移动需要 Mobile IP</p>
 <blockquote>
 <p><strong>A、B、C</strong>。同一子网内 IP 不变。</p>
 </blockquote>
-<p><strong>Q16（讲义）</strong> 关于蓝牙 piconet，正确的是？（多选） A.
-最多 8 个设备：1 个 central 和最多 7 个 peripheral B. peripheral
-之间可以直接通信 C. 每个设备有唯一的 48 位地址 D. 工作在 2.4 GHz ISM
-频段</p>
+<p><strong>Q16（讲义）</strong> 关于蓝牙
+piconet，正确的是？（多选）<br>
+A. 最多 8 个设备：1 个 central 和最多 7 个 peripheral<br>
+B. peripheral 之间可以直接通信<br>
+C. 每个设备有唯一的 48 位地址<br>
+D. 工作在 2.4 GHz ISM 频段</p>
 <blockquote>
 <p><strong>A、C、D</strong>。只有 central 和 peripheral 之间通信。</p>
 </blockquote>
-<p><strong>Q17（讲义）</strong> 蓝牙为什么用跳频？ A. 提高速率　B.
-减少干扰的影响　C. 加密　D. 省电</p>
+<p><strong>Q17（讲义）</strong> 蓝牙为什么用跳频？<br>
+A. 提高速率　B. 减少干扰的影响　C. 加密　D. 省电</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q18（讲义）</strong> 关于 GEO 和 LEO 卫星，正确的是？（多选）
-A. GEO 相对地面静止 B. GEO 的 RTT 约 800 ms C. LEO
-单颗覆盖范围大，不需要星座 D. LEO 卫星在地面站视线内只有 5–15 分钟</p>
+<p><strong>Q18（讲义）</strong> 关于 GEO 和 LEO
+卫星，正确的是？（多选）<br>
+A. GEO 相对地面静止<br>
+B. GEO 的 RTT 约 800 ms<br>
+C. LEO 单颗覆盖范围大，不需要星座<br>
+D. LEO 卫星在地面站视线内只有 5–15 分钟</p>
 <blockquote>
 <p><strong>A、B、D</strong>。</p>
 </blockquote>
-<p><strong>Q19（讲义）</strong> 适合低功耗广域 IoT 的技术是？（多选） A.
-LoRaWAN　B. LTE-M　C. BLE　D. Zigbee</p>
+<p><strong>Q19（讲义）</strong> 适合低功耗广域 IoT
+的技术是？（多选）<br>
+A. LoRaWAN　B. LTE-M　C. BLE　D. Zigbee</p>
 <blockquote>
 <p><strong>A、B</strong>。BLE、Zigbee 是短距离。</p>
 </blockquote>
 <p><strong>Q20（Tutorial）</strong> LTE 下行，A、B、C、D
 独占信道时速率分别为 10、5、2.5、1
-Mbps。要求每个节点收到的数据量相等，平均发送速率约为？ A. 1 Mbps　B.
-2.35 Mbps　C. 2.78 Mbps　D. 4.625 Mbps</p>
+Mbps。要求每个节点收到的数据量相等，平均发送速率约为？<br>
+A. 1 Mbps　B. 2.35 Mbps　C. 2.78 Mbps　D. 4.625 Mbps</p>
 <blockquote>
 <p><strong>B</strong>。40/17。</p>
 </blockquote>
 <p><strong>Q21（Tutorial）</strong> 同上，改为 A 最多拿到其他任一节点的
-2 倍数据，平均速率约为？ A. 2.35 Mbps　B. 2.78 Mbps　C. 4.625 Mbps　D.
-10 Mbps</p>
+2 倍数据，平均速率约为？<br>
+A. 2.35 Mbps　B. 2.78 Mbps　C. 4.625 Mbps　D. 10 Mbps</p>
 <blockquote>
 <p><strong>B</strong>。25/9。</p>
 </blockquote>
 <p><strong>Q22（Tutorial）</strong> 同上，数据量相等时，D
-占了多少比例的时隙？ A. 1/17　B. 4/17　C. 10/17　D. 1/4</p>
+占了多少比例的时隙？<br>
+A. 1/17　B. 4/17　C. 10/17　D. 1/4</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q23（Tutorial）</strong>
-两台移动设备在同一个访问网络里，能不能用同一个转交地址？ A.
-不能，转交地址必须唯一 B.
-能，如果转交地址是外地代理的地址，外地代理靠内层目的地址区分 C.
-能，靠端口号区分 D. 只有在归属网络里才能</p>
+两台移动设备在同一个访问网络里，能不能用同一个转交地址？<br>
+A. 不能，转交地址必须唯一<br>
+B. 能，如果转交地址是外地代理的地址，外地代理靠内层目的地址区分<br>
+C. 能，靠端口号区分<br>
+D. 只有在归属网络里才能</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
@@ -1527,7 +1556,7 @@ Exam 解析</a></p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

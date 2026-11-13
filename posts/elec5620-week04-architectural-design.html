@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 04 讲课总结：IEEE 42010 架构与架构描述、架构原则与设计空间；视点与视图、Kruchten 4+1（agentic 医疗系统例子）与 Siemens 视点、质量属性分析；计算模型（结构主导、过程式、数据流）、控制与功能分离、星形与递归控制模式；验证与确认；Tutorial 4 视点分析与 Lab 4。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:15:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:20:06.473Z">
+<meta property="article:modified_time" content="2026-11-13T07:16:10.747Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="Model-of-Computation">
@@ -365,9 +365,15 @@ Analysis（五步）</span></a></li><li class="nav-item nav-level-3"><a class="n
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-11-03 13:15:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:15:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:15:00" itemprop="dateCreated datePublished" datetime="2026-11-03T13:15:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-11-13 07:16:10" itemprop="dateModified" datetime="2026-11-13T07:16:10Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -411,19 +417,26 @@ Analysis（五步）</span></a></li><li class="nav-item nav-level-3"><a class="n
     <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-04-讲课总结architectural-design-and-modelingpart-1">ELEC5620
 Week 04 讲课总结：Architectural Design and Modeling（Part 1）</h1>
 <blockquote>
-<p><strong>课程</strong>：ELEC5620 — Model Based Software
-Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
-Yuan</strong> <strong>来源</strong>：讲义 PDF
+<ul>
+<li><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026</li>
+<li><strong>讲师</strong>：<strong>Dong Yuan</strong></li>
+<li><strong>来源</strong>：讲义 PDF
 <code>4 Architectural Design and Modeling (part 1).pdf</code>（55 页）+
 <code>ELEC5620-TUT-04.pdf</code>（27 页）+
-<code>ELEC5620-Lab-Note-4.pdf</code>（1 页）。本周无转录稿。</p>
+<code>ELEC5620-Lab-Note-4.pdf</code>（1 页）。本周无转录稿。</li>
+</ul>
 <p><strong>本周覆盖</strong>（讲义目录的前四节；第五节“架构设计模式”在
-Week 5 的 Part 2 讲）： 1. Software Architecture（preliminaries）：42010
-定义、架构原则、设计空间、演化 2. <strong>Key Analysis
-Issues</strong>：视点与视图、<strong>4+1</strong>、Siemens、质量属性分析
-3. <strong>Key Design
-Issues</strong>：<strong>计算模型（MoC）</strong>、<strong>控制与功能</strong>、设计综合
-4. <strong>Key V&amp;V Issues</strong></p>
+Week 5 的 Part 2 讲）：</p>
+<ol type="1">
+<li>Software Architecture（preliminaries）：42010
+定义、架构原则、设计空间、演化</li>
+<li><strong>Key Analysis
+Issues</strong>：视点与视图、<strong>4+1</strong>、Siemens、质量属性分析</li>
+<li><strong>Key Design
+Issues</strong>：<strong>计算模型（MoC）</strong>、<strong>控制与功能</strong>、设计综合</li>
+<li><strong>Key V&amp;V Issues</strong></li>
+</ol>
 </blockquote>
 <p>相关笔记：<a href="/posts/elec5620-week01-introduction.html">Week 01
 软件架构导论</a>｜<a href="/posts/elec5620-week03-requirement-model.html">Week 03
@@ -434,7 +447,7 @@ Issues</strong>：<strong>计算模型（MoC）</strong>、<strong>控制与功�
 <h3 id="回顾架构腐化">1.1 回顾：架构腐化</h3>
 <blockquote>
 <p><strong>Architectural
-decay</strong>：通过看似微小的修复和修改，系统架构被<strong>逐渐侵蚀</strong>。成因：<strong>难以感知架构</strong>、<strong>难以强制执行架构决策</strong>。
+decay</strong>：通过看似微小的修复和修改，系统架构被<strong>逐渐侵蚀</strong>。成因：<strong>难以感知架构</strong>、<strong>难以强制执行架构决策</strong>。<br>
 <strong>为避免腐化，至少必须能够轻松识别软件架构及其背后的设计意图。</strong></p>
 </blockquote>
 <p>讲义再次用 SystemC 代码“一团乱麻”的图说明：<strong>Architecture is
@@ -645,7 +658,7 @@ partitioning</strong></td>
 </tbody>
 </table>
 <blockquote>
-<p><strong>A view is what you see through a viewpoint.</strong>
+<p><strong>A view is what you see through a viewpoint.</strong><br>
 类比：viewpoint
 是“模板/镜头”（比如“部署视点：用部署图描述节点和制品”），view
 是“用这个镜头拍到的这张照片”（比如“我们系统的部署图”）。</p>
@@ -1487,7 +1500,7 @@ right（符合规格）；validation = right product（满足用户）。</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

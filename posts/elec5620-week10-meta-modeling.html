@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:45:00.000Z">
-<meta property="article:modified_time" content="2026-11-03T04:20:06.475Z">
+<meta property="article:modified_time" content="2026-11-13T07:16:10.755Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="LangChain">
@@ -369,9 +369,15 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-11-03 13:45:00 / Modified: 04:20:06" itemprop="dateCreated datePublished" datetime="2026-11-03T13:45:00Z">2026-11-03</time>
+      <time title="Created: 2026-11-03 13:45:00" itemprop="dateCreated datePublished" datetime="2026-11-03T13:45:00Z">2026-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-11-13 07:16:10" itemprop="dateModified" datetime="2026-11-13T07:16:10Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -415,22 +421,29 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
     <div class="post-body" itemprop="articleBody"><h1 id="elec5620-week-10-讲课总结meta-modeling">ELEC5620 Week 10
 讲课总结：Meta-Modeling</h1>
 <blockquote>
-<p><strong>课程</strong>：ELEC5620 — Model Based Software
-Engineering，Semester 2 2026 <strong>讲师</strong>：<strong>Dong
-Yuan</strong> <strong>来源</strong>：讲义 PDF
+<ul>
+<li><strong>课程</strong>：ELEC5620 — Model Based Software
+Engineering，Semester 2 2026</li>
+<li><strong>讲师</strong>：<strong>Dong Yuan</strong></li>
+<li><strong>来源</strong>：讲义 PDF
 <code>10 Meta-Modeling.pdf</code>（47 页）+
 <code>ELEC5620-TUT-10.pdf</code>（19 页）。Week 10 文件夹中没有单独的
 Lab Note（文件头写 “Week 10: Laboratory 9” 的 Lab Note 9 放在 Week 9
 文件夹，已在 <a href="/posts/elec5620-week09-software-process-models.html">Week 09</a>
-中总结）。本周无转录稿。</p>
-<p><strong>本周覆盖</strong>： 1. “Meta” 游戏：模型、被建模事物、元模型
-2. <strong>建模语言的核心组成</strong>：具体语法、抽象语法、语义 3.
-<strong>元模型、MOF、OMG 四层架构</strong> 4. UML
-规格格式、元模型片段、模型存储、练习 5.
-<strong>语义</strong>：静态/动态、定义方法、fUML 6. UML
-元模型选读：命名空间、依赖、约束、类型实例、分类器、结构与行为 7.
-<strong>Agentic 软件的元模型</strong> 8. Tutorial 10：<strong>RAG 与
-LangChain</strong></p>
+中总结）。本周无转录稿。</li>
+</ul>
+<p><strong>本周覆盖</strong>：</p>
+<ol type="1">
+<li>“Meta” 游戏：模型、被建模事物、元模型</li>
+<li><strong>建模语言的核心组成</strong>：具体语法、抽象语法、语义</li>
+<li><strong>元模型、MOF、OMG 四层架构</strong></li>
+<li>UML 规格格式、元模型片段、模型存储、练习</li>
+<li><strong>语义</strong>：静态/动态、定义方法、fUML</li>
+<li>UML
+元模型选读：命名空间、依赖、约束、类型实例、分类器、结构与行为</li>
+<li><strong>Agentic 软件的元模型</strong></li>
+<li>Tutorial 10：<strong>RAG 与 LangChain</strong></li>
+</ol>
 </blockquote>
 <p>相关笔记：<a href="/posts/elec5620-week05-architecture-structure.html">Week 05
 结构建模基础</a>｜<a href="/posts/elec5620-week08-model-organisation-agile.html">Week 08
@@ -548,13 +561,16 @@ Facility）</strong>，由 <strong>OMG</strong> 标准化</li>
 </ul>
 <h3 id="什么是元模型定义必会">3.2 什么是元模型（定义必会）</h3>
 <blockquote>
-<p><strong>Metamodel</strong>：规定建模语言<strong>抽象语法</strong>、并定义<strong>良构（well-formed）模型规则</strong>的模型，<strong>独立于具体语法</strong>。
-- UML 的抽象语法包含
+<p><strong>Metamodel</strong>：规定建模语言<strong>抽象语法</strong>、并定义<strong>良构（well-formed）模型规则</strong>的模型，<strong>独立于具体语法</strong>。</p>
+<ul>
+<li>UML 的抽象语法包含
 class、attribute、operation、association、dependency
-等构造及它们之间的关系 -
-<strong>元模型与模型是类—实例关系：每个模型都是元模型的一个实例</strong>
-- <strong>真实世界元素由模型描述，模型由元模型描述</strong> - 在 MDSE
-中，<strong>领域特定建模语言（DSL）由元模型定义</strong>，元模型是<strong>自动化、工具支持的模型处理</strong>的基础</p>
+等构造及它们之间的关系</li>
+<li><strong>元模型与模型是类—实例关系：每个模型都是元模型的一个实例</strong></li>
+<li><strong>真实世界元素由模型描述，模型由元模型描述</strong></li>
+<li>在 MDSE
+中，<strong>领域特定建模语言（DSL）由元模型定义</strong>，元模型是<strong>自动化、工具支持的模型处理</strong>的基础</li>
+</ul>
 </blockquote>
 <h3 id="metaconfusion">3.3 Metaconfusion</h3>
 <p>说 “pipe”
@@ -1175,23 +1191,26 @@ DecisionStep | WaitStep | EndStep</strong></td>
     Transition --&gt; "1" Step : target
     ApprovalPolicy --&gt; "1" HumanRole</code></pre>
 <blockquote>
-<p><strong>读这个元模型的意义</strong>： -
-<code>Capability.effect : EffectKind</code>（如 read / write /
+<p><strong>读这个元模型的意义</strong>：</p>
+<ul>
+<li><code>Capability.effect : EffectKind</code>（如 read / write /
 irreversible）+ <code>ApprovalPolicy</code> = Week 3
-“<strong>把能力与权限分开</strong>”、“高影响动作要审批”的<strong>形式化</strong>
-- <code>ApprovalPolicy.bindToArguments = true</code>
+“<strong>把能力与权限分开</strong>”、“高影响动作要审批”的<strong>形式化</strong></li>
+<li><code>ApprovalPolicy.bindToArguments = true</code>
 表示审批绑定到具体参数（批准的是“预约 10 点这个
 slot”，而不是笼统的“可以预约”）；<code>validitySeconds</code>
-表示审批有时效 -
-<code>Behavior = Steps + Transitions(guard, priority)</code>
-本质上是一个<strong>状态机/流程图的元模型</strong>（Week 7） -
-<code>ExecutionPolicy</code> 把
+表示审批有时效</li>
+<li><code>Behavior = Steps + Transitions(guard, priority)</code>
+本质上是一个<strong>状态机/流程图的元模型</strong>（Week 7）</li>
+<li><code>ExecutionPolicy</code> 把
 <code>maxSteps / timeout / maxRetries</code>
-变成<strong>必填的模型属性</strong>——agent 不可能“无限循环”而模型不报错
-- 有了这个元模型，就能<strong>检查模型有效性</strong>（例如“每个 effect
-= write 的 Capability 必须有 ApprovalPolicy”可以写成 OCL
+变成<strong>必填的模型属性</strong>——agent
+不可能“无限循环”而模型不报错</li>
+<li>有了这个元模型，就能<strong>检查模型有效性</strong>（例如“每个
+effect = write 的 Capability 必须有 ApprovalPolicy”可以写成 OCL
 约束）并<strong>自动生成代码/配置</strong>——这正是“模型是 agent
-的控制平面”（Week 2）的落地方式</p>
+的控制平面”（Week 2）的落地方式</li>
+</ul>
 </blockquote>
 <hr>
 <h2 id="八tutorial-10-要点rag-与-langchain">八、Tutorial 10 要点：RAG 与
@@ -1429,7 +1448,7 @@ MOF 包含行为建模。</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

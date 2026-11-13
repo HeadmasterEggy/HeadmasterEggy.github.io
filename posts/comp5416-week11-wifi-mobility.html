@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 11 详解。802.11 标准与 BSS &#x2F; AP 架构、信道选择与关联、被动&#x2F;主动扫描、为什么无线不能用 CSMA&#x2F;CD、CSMA&#x2F;CA 的 DIFS&#x2F;SIFS&#x2F;随机退避&#x2F;ACK、RTS-CTS 预约及其失败场景、暴露终端、速率自适应；蜂窝网络组成、FDMA&#x2F;TDMA 与 CDMA、2G&#x2F;3G&#x2F;4G LTE 架构（EPC 与 OFDM）；移动性术语（归属网络、永久地址">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:30:00.000Z">
-<meta property="article:modified_time" content="2026-11-07T07:29:28.881Z">
+<meta property="article:modified_time" content="2026-11-13T07:13:15.560Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5416">
 <meta property="article:tag" content="CSMA-CA">
@@ -369,7 +369,7 @@ W11：Wi-Fi、蜂窝网络与移动性（知识点 + 题型）</span></a><ol cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-07 07:29:28" itemprop="dateModified" datetime="2026-11-07T07:29:28Z">2026-11-07</time>
+      <time title="Modified: 2026-11-13 07:13:15" itemprop="dateModified" datetime="2026-11-13T07:13:15Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1302,145 +1302,177 @@ CSMA/CD</strong>：发送时听不到（自己信号太强）、衰落、隐藏�
 <hr>
 <h2 id="题目">题目</h2>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
-<p><strong>Q1（讲义）</strong> 802.11 用的多路访问协议是？ A.
-CSMA/CD　B. CSMA/CA　C. TDMA　D. ALOHA</p>
+<p><strong>Q1（讲义）</strong> 802.11 用的多路访问协议是？<br>
+A. CSMA/CD　B. CSMA/CA　C. TDMA　D. ALOHA</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q2（讲义）</strong> 为什么无线局域网不用 CSMA/CD？（多选） A.
-发送时自己的信号远强于收到的信号，听不到别人 B. 信号衰落 C.
-隐藏终端使节点无法感知所有碰撞 D. 无线链路不会发生碰撞</p>
+<p><strong>Q2（讲义）</strong> 为什么无线局域网不用
+CSMA/CD？（多选）<br>
+A. 发送时自己的信号远强于收到的信号，听不到别人<br>
+B. 信号衰落<br>
+C. 隐藏终端使节点无法感知所有碰撞<br>
+D. 无线链路不会发生碰撞</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
-<p><strong>Q3（讲义）</strong> 关于 CSMA/CA，正确的是？（多选） A.
-信道空闲 DIFS 后发送整个帧 B. 随机退避定时器在信道忙时冻结 C.
-发送过程中检测到碰撞就立即停止 D. 没收到 ACK 时扩大随机退避范围</p>
+<p><strong>Q3（讲义）</strong> 关于 CSMA/CA，正确的是？（多选）<br>
+A. 信道空闲 DIFS 后发送整个帧<br>
+B. 随机退避定时器在信道忙时冻结<br>
+C. 发送过程中检测到碰撞就立即停止<br>
+D. 没收到 ACK 时扩大随机退避范围</p>
 <blockquote>
 <p><strong>A、B、D</strong>。CSMA/CA 不检测碰撞。</p>
 </blockquote>
 <p><strong>Q4（讲义）</strong> 为什么接收方在发 ACK 前只等 SIFS，而 SIFS
-比 DIFS 短？ A. 节省电量　B. 让 ACK 优先于其他站的数据帧　C. 测量
-RTT　D. 避免暴露终端</p>
+比 DIFS 短？<br>
+A. 节省电量　B. 让 ACK 优先于其他站的数据帧　C. 测量 RTT　D.
+避免暴露终端</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q5（讲义）</strong> 802.11 为什么需要链路层 ACK？ A.
-为了流量控制　B. 发送方无法检测碰撞，只能靠 ACK 判断是否成功　C. TCP
+<p><strong>Q5（讲义）</strong> 802.11 为什么需要链路层 ACK？<br>
+A. 为了流量控制　B. 发送方无法检测碰撞，只能靠 ACK 判断是否成功　C. TCP
 要求　D. 为了加密</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q6（讲义）</strong> 使用 RTS / CTS 时，发送方怎么知道自己的
-RTS 碰撞了？ A. 检测到信号强度变化　B. 没收到 CTS　C. 收到 NAK　D.
-收到两个 CTS</p>
+RTS 碰撞了？<br>
+A. 检测到信号强度变化　B. 没收到 CTS　C. 收到 NAK　D. 收到两个 CTS</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q7（讲义）</strong> 关于 RTS / CTS，正确的是？（多选） A. RTS
-帧之间仍可能碰撞，但因为短，损失小 B. 听不到发送方的隐藏节点也能听到 AP
-的 CTS C. RTS / CTS 可以完全消除碰撞 D. 用于避免长数据帧的碰撞</p>
+<p><strong>Q7（讲义）</strong> 关于 RTS / CTS，正确的是？（多选）<br>
+A. RTS 帧之间仍可能碰撞，但因为短，损失小<br>
+B. 听不到发送方的隐藏节点也能听到 AP 的 CTS<br>
+C. RTS / CTS 可以完全消除碰撞<br>
+D. 用于避免长数据帧的碰撞</p>
 <blockquote>
 <p><strong>A、B、D</strong>。仍会失败。</p>
 </blockquote>
 <p><strong>Q8（讲义）</strong> S1 和 S2 相邻，S1 → R1，S2 →
-R2，两个接收方都不会受对方干扰，但 S2 听到 S1 在发就不发了。这叫？ A.
-隐藏终端　B. 暴露终端　C. 乒乓效应　D. 三角路由</p>
+R2，两个接收方都不会受对方干扰，但 S2 听到 S1 在发就不发了。这叫？<br>
+A. 隐藏终端　B. 暴露终端　C. 乒乓效应　D. 三角路由</p>
 <blockquote>
 <p><strong>B</strong>。后果是吞吐量浪费，不是碰撞。</p>
 </blockquote>
 <p><strong>Q9（讲义）</strong> 主动扫描关联一个 AP
-共几步，第一步是什么？ A. 3 步，AP 发信标　B. 4 步，主机广播探测请求　C.
-4 步，AP 发信标　D. 2 步，主机发关联请求</p>
+共几步，第一步是什么？<br>
+A. 3 步，AP 发信标　B. 4 步，主机广播探测请求　C. 4 步，AP 发信标　D. 2
+步，主机发关联请求</p>
 <blockquote>
 <p><strong>B</strong>。被动扫描 3 步，AP 先发信标。</p>
 </blockquote>
-<p><strong>Q10（讲义）</strong> 关于 802.11，正确的是？（多选） A. BSS
-由无线主机和一个 AP 组成 B. 主机关联 AP 后通常用 DHCP 获取 IP 地址 C.
-802.11a 工作在 2.4 GHz D. 信标帧里包含 AP 的 SSID 和 MAC 地址</p>
+<p><strong>Q10（讲义）</strong> 关于 802.11，正确的是？（多选）<br>
+A. BSS 由无线主机和一个 AP 组成<br>
+B. 主机关联 AP 后通常用 DHCP 获取 IP 地址<br>
+C. 802.11a 工作在 2.4 GHz<br>
+D. 信标帧里包含 AP 的 SSID 和 MAC 地址</p>
 <blockquote>
 <p><strong>A、B、D</strong>。802.11a 是 5 GHz。</p>
 </blockquote>
 <p><strong>Q11（讲义）</strong> 设备远离基站，SNR 下降，802.11
-的速率自适应会？ A. 切换到更高速率的调制　B. 切换到更低速率、BER
-更低的调制　C. 提高 DIFS　D. 改用 CSMA/CD</p>
+的速率自适应会？<br>
+A. 切换到更高速率的调制　B. 切换到更低速率、BER 更低的调制　C. 提高
+DIFS　D. 改用 CSMA/CD</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q12（讲义）</strong> 4G LTE 相对 3G 的两大创新是？（多选） A.
-全 IP 的演进分组核心（EPC） B. OFDM 与时分复用结合的无线接入 C.
-语音网和数据网并行运行 D. 用 CDMA 做空口</p>
+<p><strong>Q12（讲义）</strong> 4G LTE 相对 3G
+的两大创新是？（多选）<br>
+A. 全 IP 的演进分组核心（EPC）<br>
+B. OFDM 与时分复用结合的无线接入<br>
+C. 语音网和数据网并行运行<br>
+D. 用 CDMA 做空口</p>
 <blockquote>
 <p><strong>A、B</strong>。C 是 3G 的特点。</p>
 </blockquote>
-<p><strong>Q13（讲义）</strong> 在移动性术语中，访问网络里的地址叫？ A.
-永久地址　B. 转交地址（COA）　C. 漫游地址　D. 归属地址</p>
+<p><strong>Q13（讲义）</strong>
+在移动性术语中，访问网络里的地址叫？<br>
+A. 永久地址　B. 转交地址（COA）　C. 漫游地址　D. 归属地址</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q14（讲义）</strong> 间接路由中，通信者把分组发到哪个地址？
+<p><strong>Q14（讲义）</strong>
+间接路由中，通信者把分组发到哪个地址？<br>
 A. 转交地址　B. 移动设备的永久地址　C. 外地代理地址　D. 归属代理地址</p>
 <blockquote>
 <p><strong>B</strong>。归属代理截获后转发。</p>
 </blockquote>
-<p><strong>Q15（讲义）</strong> 关于间接路由，正确的是？（多选） A.
-存在三角路由问题 B. 移动设备换访问网络对通信者透明 C.
-通信者必须先向归属代理获取转交地址 D. 移动设备直接回复通信者</p>
+<p><strong>Q15（讲义）</strong> 关于间接路由，正确的是？（多选）<br>
+A. 存在三角路由问题<br>
+B. 移动设备换访问网络对通信者透明<br>
+C. 通信者必须先向归属代理获取转交地址<br>
+D. 移动设备直接回复通信者</p>
 <blockquote>
 <p><strong>A、B、D</strong>。C 是直接路由。</p>
 </blockquote>
-<p><strong>Q16（讲义）</strong> 关于直接路由，正确的是？（多选） A.
-解决了三角路由问题 B. 对通信者不透明 C.
-移动设备换网后可以用锚点外地代理链式转发 D. 通信者始终使用永久地址</p>
+<p><strong>Q16（讲义）</strong> 关于直接路由，正确的是？（多选）<br>
+A. 解决了三角路由问题<br>
+B. 对通信者不透明<br>
+C. 移动设备换网后可以用锚点外地代理链式转发<br>
+D. 通信者始终使用永久地址</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
 <p><strong>Q17（讲义）</strong>
-为什么不「让路由器处理」移动性（路由表里通告每台移动设备的永久地址）？
+为什么不「让路由器处理」移动性（路由表里通告每台移动设备的永久地址）？<br>
 A. 端系统要修改　B. 扩展不到几百万台移动设备　C. 无法保持连接　D.
 不安全</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q18（讲义）</strong> Mobile IP 标准的三个组成部分是？（多选）
-A. 间接路由 B. 代理发现 C. 向归属代理注册 D. 直接路由</p>
+<p><strong>Q18（讲义）</strong> Mobile IP
+标准的三个组成部分是？（多选）<br>
+A. 间接路由<br>
+B. 代理发现<br>
+C. 向归属代理注册<br>
+D. 直接路由</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
 <p><strong>Q19（讲义）</strong> Mobile IP
-里归属代理怎么把分组送到移动设备？ A. 改写原分组的目的地址　B.
-把原分组整个封装进目的为转交地址的新分组　C. 广播　D. 交给 DNS</p>
+里归属代理怎么把分组送到移动设备？<br>
+A. 改写原分组的目的地址　B. 把原分组整个封装进目的为转交地址的新分组　C.
+广播　D. 交给 DNS</p>
 <blockquote>
 <p><strong>B</strong>。外地代理再解封装。</p>
 </blockquote>
 <p><strong>Q20（讲义）</strong> Mobile IP 注册时移动设备请求 Lifetime
-9999，归属代理的回复可能是？ A. 只能是 9999　B. 可以更短，如 4999　C.
-必须更长　D. 回复里没有 Lifetime</p>
+9999，归属代理的回复可能是？<br>
+A. 只能是 9999　B. 可以更短，如 4999　C. 必须更长　D. 回复里没有
+Lifetime</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q21（讲义）</strong> 蜂窝网络中，和 Mobile IP
-的归属代理、外地代理对应的分别是？ A. VLR、HLR　B. HLR、VLR　C.
-MSC、BSS　D. SGSN、GGSN</p>
+的归属代理、外地代理对应的分别是？<br>
+A. VLR、HLR　B. HLR、VLR　C. MSC、BSS　D. SGSN、GGSN</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q22（讲义）</strong> 关于 GSM 同一 MSC
-下的切换，正确的是？（多选） A. 由旧 BSS 发起 B. 先建立到新 BSS
-的路径，再让设备切过去 C. 最后释放到旧 BSS 的资源 D. 由 MSC 根据 GSM
-标准规定的时机发起</p>
+下的切换，正确的是？（多选）<br>
+A. 由旧 BSS 发起<br>
+B. 先建立到新 BSS 的路径，再让设备切过去<br>
+C. 最后释放到旧 BSS 的资源<br>
+D. 由 MSC 根据 GSM 标准规定的时机发起</p>
 <blockquote>
 <p><strong>A、B、C</strong>。GSM 不规定何时切。</p>
 </blockquote>
 <p><strong>Q23（讲义）</strong>
-为了抑制边界附近的乒乓效应，要求新基站的信号比旧基站强出一个余量才切换，这叫？
+为了抑制边界附近的乒乓效应，要求新基站的信号比旧基站强出一个余量才切换，这叫？<br>
 A. 阈值　B. 迟滞（hysteresis）　C. 驻留定时器　D. 速率自适应</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q24（讲义）</strong> 无线和移动对 TCP 的主要性能影响是？ A.
-TCP 无法运行 B. TCP 把无线丢包当成拥塞，不必要地减小拥塞窗口 C. TCP
-序号溢出 D. TCP 握手变成四次</p>
+<p><strong>Q24（讲义）</strong> 无线和移动对 TCP
+的主要性能影响是？<br>
+A. TCP 无法运行<br>
+B. TCP 把无线丢包当成拥塞，不必要地减小拥塞窗口<br>
+C. TCP 序号溢出<br>
+D. TCP 握手变成四次</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
@@ -1518,7 +1550,7 @@ tutorial</a>、<a href="/posts/comp5416-week06-tcp.html">W06 TCP</a></p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

@@ -407,15 +407,18 @@ Assignment 作业要求梳理：HTTP Caching Proxy</span></a><ol class="nav-chil
     <div class="post-body" itemprop="articleBody"><h1 id="comp5416-assignment-作业要求梳理http-caching-proxy">COMP5416
 Assignment 作业要求梳理：HTTP Caching Proxy</h1>
 <blockquote>
-<p><strong>课程</strong>：COMP5416/COMP4416 — Advanced Network
-Technologies，Semester 2 2026
-<strong>规格文件</strong>：<code>COMP5416_Assignment_Specifications-2.pdf</code>（13
-页）+ Ed 上的 Submission 说明 <strong>截止</strong>：<strong>2026 年 10
-月 16 日（周五，Week 10）23:59</strong>
-<strong>分值</strong>：<strong>100 分</strong>（公开测试 80 + 隐藏测试
-20）；迟交每天扣总分 5%，超过 5 天 0 分
-<strong>提交</strong>：Ed，根目录必须有 <code>proxy.sh</code>；还要
-<code>README.md</code> 和源代码</p>
+<ul>
+<li><strong>课程</strong>：COMP5416/COMP4416 — Advanced Network
+Technologies，Semester 2 2026</li>
+<li><strong>规格文件</strong>：<code>COMP5416_Assignment_Specifications-2.pdf</code>（13
+页）+ Ed 上的 Submission 说明</li>
+<li><strong>截止</strong>：<strong>2026 年 10 月 16 日（周五，Week
+10）23:59</strong></li>
+<li><strong>分值</strong>：<strong>100 分</strong>（公开测试 80 +
+隐藏测试 20）；迟交每天扣总分 5%，超过 5 天 0 分</li>
+<li><strong>提交</strong>：Ed，根目录必须有 <code>proxy.sh</code>；还要
+<code>README.md</code> 和源代码</li>
+</ul>
 <p>⚠️
 本文只整理<strong>作业要求、设计思路与易错点</strong>，<strong>不放完整解题代码</strong>——学校会把作业送查重，代码公开出去被同学抄了，自己也会被牵连。</p>
 </blockquote>
@@ -543,10 +546,13 @@ DNS</strong></td>
 <h3 id="转发给源站">3.2 转发给源站</h3>
 <p>从 absolute-form 目标里拆出 host、port、resource（含 query）：</p>
 <figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line">GET http:<span class="string">//127.0.0.1</span><span class="function">:43172</span>/images/a17.bin?<span class="keyword">version</span>=1 HTTP/1.1</span><br><span class="line">→ host = 127.0.0.1, port = 43172, resource = <span class="string">/images/a17.bin</span>?<span class="keyword">version</span>=1</span><br></pre></td></tr></table></figure>
-<p>发给源站的请求必须： - 保留路径和 query string； -
-<strong>恰好一个</strong> <code>Host</code> 头，值为
-<code>host:port</code>（来自请求目标）； - 包含
-<code>Connection: close</code>。</p>
+<p>发给源站的请求必须：</p>
+<ul>
+<li>保留路径和 query string；</li>
+<li><strong>恰好一个</strong> <code>Host</code> 头，值为
+<code>host:port</code>（来自请求目标）；</li>
+<li>包含 <code>Connection: close</code>。</li>
+</ul>
 <figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/images/a17.bin?version=1</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:43172</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><strong>不能把客户端的 absolute-form
 请求行原样转发</strong>；每个请求都要独立解析，上一个连接的状态不能影响下一个。</p>
@@ -969,7 +975,7 @@ Tutorial：DNS 与 HTTP 时延</a></li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

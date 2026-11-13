@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 06 TCP 详解。TCP 概览与段结构、按字节编号的序号与累积 ACK、EWMA 估计 RTT 与超时间隔 TimeoutInterval 的计算、简化 TCP 发送方的三个事件、重传场景与 ACK 生成规则、三个重复 ACK 触发的快速重传、基于 rwnd 的流量控制、两次握手为何失败与三次握手、四次挥手与 TIME_WAIT、拥塞的三个场景与代价、端到端 vs 网">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:05:00.000Z">
-<meta property="article:modified_time" content="2026-11-07T07:21:35.598Z">
+<meta property="article:modified_time" content="2026-11-13T07:14:20.856Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="AIMD">
 <meta property="article:tag" content="COMP5416">
@@ -375,7 +375,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-07 07:21:35" itemprop="dateModified" datetime="2026-11-07T07:21:35Z">2026-11-07</time>
+      <time title="Modified: 2026-11-13 07:14:20" itemprop="dateModified" datetime="2026-11-13T07:14:20Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -649,7 +649,8 @@ ms。</p>
 0.125 \times 140 = 87.5 + 17.5 = 105"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="87.5" transform="translate(1055.8,0)"><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z"></path><path data-c="37" d="M475 604C482 613 485 626 485 644L243 644C174 644 135 648 128 657C125 660 122 667 120 676L89 676L55 464L88 464C98 520 106 550 112 555C115 558 146 560 205 560L401 560L295 410C214 295 174 171 174 36C174-3 190-22 223-22C256-22 272-3 272 36L272 87C272 239 296 349 343 416Z" transform="translate(500,0)"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(1000,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.286ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2778.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.875 \times 100 +
 0.125 \times 140 = 87.5 + 17.5 = 105"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="17.5" transform="translate(1000.2,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="37" d="M475 604C482 613 485 626 485 644L243 644C174 644 135 648 128 657C125 660 122 667 120 676L89 676L55 464L88 464C98 520 106 550 112 555C115 558 146 560 205 560L401 560L295 410C214 295 174 171 174 36C174-3 190-22 223-22C256-22 272-3 272 36L272 87C272 239 296 349 343 416Z" transform="translate(500,0)"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(1000,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.782ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.875 \times 100 +
 0.125 \times 140 = 87.5 + 17.5 = 105"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="105" transform="translate(1055.8,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path></g></g></g></svg></mjx-container></span> ms</li>
-<li>Timeout <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.782ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 = "><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="105" transform="translate(1055.8,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 = "><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="4" transform="translate(1000.2,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 778 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 = "><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g></g></g></svg></mjx-container> <strong>175 ms</strong></li>
+<li>Timeout <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.782ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 \times 17.5 ="><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="105" transform="translate(1055.8,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1000,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.394ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1500.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 \times 17.5 ="><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mn" data-latex="4" transform="translate(1000.2,0)"><path data-c="34" d="M353 677C344 677 336 672 330 663L28 199L28 163L289 163L289 81C289 63 285 51 278 46C271 41 252 39 219 39L194 39L194 0C223 2 269 3 331 3C393 3 439 2 468 0L468 39L443 39C410 39 391 41 384 46C377 51 373 63 373 81L373 163L471 163L471 202L373 202L373 660C373 670 366 677 353 677M295 553L295 202L67 202Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.286ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2778.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 \times 17.5 ="><g data-mml-node="mo" data-latex="\times"><path data-c="D7" d="M630 32C630 39 628 44 623 49L422 250L623 451C628 456 630 461 630 468C630 481 620 491 607 491C600 491 595 489 590 484L389 283L188 484C183 489 178 491 171 491C158 491 148 481 148 468C148 461 150 456 155 451L356 250L155 49C150 44 148 39 148 32C148 19 158 9 171 9C178 9 183 11 188 16L389 217L590 16C595 11 600 9 607 9C620 9 630 19 630 32Z"></path></g><g data-mml-node="mn" data-latex="17.5" transform="translate(1000.2,0)"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path><path data-c="37" d="M475 604C482 613 485 626 485 644L243 644C174 644 135 648 128 657C125 660 122 667 120 676L89 676L55 464L88 464C98 520 106 550 112 555C115 558 146 560 205 560L401 560L295 410C214 295 174 171 174 36C174-3 190-22 223-22C256-22 272-3 272 36L272 87C272 239 296 349 343 416Z" transform="translate(500,0)"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(1000,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 778 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 105 + 4 \times 17.5 ="><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g></g></g></svg></mjx-container></span>
+<strong>175 ms</strong></li>
 </ol>
 <p>如果先更新 EstimatedRTT 再算 DevRTT：DevRTT <span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.411ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2833.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 0.75 \times 10 + 0.25 \times 35 =
 16.25"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="0.75" transform="translate(1055.8,0)"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="37" d="M475 604C482 613 485 626 485 644L243 644C174 644 135 648 128 657C125 660 122 667 120 676L89 676L55 464L88 464C98 520 106 550 112 555C115 558 146 560 205 560L401 560L295 410C214 295 174 171 174 36C174-3 190-22 223-22C256-22 272-3 272 36L272 87C272 239 296 349 343 416Z" transform="translate(778,0)"></path><path data-c="35" d="M118 315C123 315 129 319 134 326C164 371 205 393 257 393C292 393 319 373 337 332C348 305 354 264 354 209C354 146 346 102 331 76C306 35 272 14 229 14C162 14 109 62 91 114C94 113 96 114 100 114C130 114 155 137 155 167C155 198 130 219 100 219C65 219 50 200 50 163C50 63 131-22 231-22C292-22 344 0 386 44C428 88 449 141 449 202C449 260 432 310 398 353C361 400 315 423 259 423C212 423 171 408 138 378L138 556C165 548 191 544 218 544C264 544 304 555 338 578C369 597 390 616 402 634C408 642 411 648 411 651C411 661 406 666 396 666C341 645 294 634 256 634C211 634 168 643 127 662C122 664 118 665 114 665C105 665 100 656 100 637L100 345C100 324 100 315 118 315Z" transform="translate(1278,0)"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.525ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2000.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="= 0.75 \times 10 + 0.25 \times 35 =
@@ -1533,152 +1534,168 @@ ACK（y+1，可带数据）；两次握手会半开连接、接受旧数据。</
 <hr>
 <h2 id="题目">题目</h2>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
-<p><strong>Q1（讲义）</strong> TCP 的序号字段计的是什么？ A.
-段的个数　B. 字节　C. 分组的个数　D. 窗口的个数</p>
+<p><strong>Q1（讲义）</strong> TCP 的序号字段计的是什么？<br>
+A. 段的个数　B. 字节　C. 分组的个数　D. 窗口的个数</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q2（讲义）</strong> 主机 A 发给 B 一个 Seq = 92、含 8
-字节数据的段，B 正确收到后回的 ACK 号是？ A. 92　B. 93　C. 99　D.
-100</p>
+字节数据的段，B 正确收到后回的 ACK 号是？<br>
+A. 92　B. 93　C. 99　D. 100</p>
 <blockquote>
 <p><strong>D</strong>。下一个期望字节 = 92 + 8。</p>
 </blockquote>
-<p><strong>Q3（讲义）</strong> 关于 TCP，正确的是？（多选） A.
-提供可靠、按序的字节流，保留应用的消息边界 B. 全双工 C. 支持多播 D.
-面向连接</p>
+<p><strong>Q3（讲义）</strong> 关于 TCP，正确的是？（多选）<br>
+A. 提供可靠、按序的字节流，保留应用的消息边界<br>
+B. 全双工<br>
+C. 支持多播<br>
+D. 面向连接</p>
 <blockquote>
 <p><strong>B、D</strong>。TCP 没有消息边界；点到点，不支持多播。</p>
 </blockquote>
-<p><strong>Q4（讲义）</strong> TCP 首部最少多少字节？ A. 8　B. 16　C.
-20　D. 40</p>
+<p><strong>Q4（讲义）</strong> TCP 首部最少多少字节？<br>
+A. 8　B. 16　C. 20　D. 40</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q5（自拟）</strong> EstimatedRTT = 100 ms，DevRTT = 10
 ms，SampleRTT = 140 ms，α = 0.125，β = 0.25，先更新 DevRTT 再更新
-EstimatedRTT。新的 TimeoutInterval 是？ A. 140 ms　B. 145 ms　C. 170
-ms　D. 175 ms</p>
+EstimatedRTT。新的 TimeoutInterval 是？<br>
+A. 140 ms　B. 145 ms　C. 170 ms　D. 175 ms</p>
 <blockquote>
 <p><strong>D</strong>。DevRTT = 17.5，EstimatedRTT = 105，105 + 70。</p>
 </blockquote>
-<p><strong>Q6（讲义）</strong> 超时值设得太短会怎样？ A.
-对丢包反应慢　B. 过早超时，不必要的重传　C. 吞吐量上升　D.
+<p><strong>Q6（讲义）</strong> 超时值设得太短会怎样？<br>
+A. 对丢包反应慢　B. 过早超时，不必要的重传　C. 吞吐量上升　D.
 接收缓冲溢出</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q7（讲义）</strong> TCP 发送方超时后重传什么？ A.
-窗口里所有未确认的段　B. 序号最小的未确认段　C. 最新发出的段　D.
+<p><strong>Q7（讲义）</strong> TCP 发送方超时后重传什么？<br>
+A. 窗口里所有未确认的段　B. 序号最小的未确认段　C. 最新发出的段　D.
 所有已发的段</p>
 <blockquote>
 <p><strong>B</strong>。这是和 GBN 的区别。</p>
 </blockquote>
 <p><strong>Q8（讲义）</strong> A 发 Seq = 92（8 字节）和 Seq = 100（20
-字节），ACK = 100 丢了，ACK = 120 在超时前到达。A 要重传什么？ A. Seq =
-92　B. Seq = 100　C. 两个都要　D. 都不用</p>
+字节），ACK = 100 丢了，ACK = 120 在超时前到达。A 要重传什么？<br>
+A. Seq = 92　B. Seq = 100　C. 两个都要　D. 都不用</p>
 <blockquote>
 <p><strong>D</strong>。累积 ACK，120 说明之前全收到了。</p>
 </blockquote>
-<p><strong>Q9（讲义）</strong> 快速重传在什么时候触发？ A. 收到 1 个重复
-ACK　B. 收到 3 个重复 ACK　C. 超时　D. 收到 NAK</p>
+<p><strong>Q9（讲义）</strong> 快速重传在什么时候触发？<br>
+A. 收到 1 个重复 ACK　B. 收到 3 个重复 ACK　C. 超时　D. 收到 NAK</p>
 <blockquote>
 <p><strong>B</strong>。一共是 4 个相同的 ACK。</p>
 </blockquote>
 <p><strong>Q10（讲义）</strong>
-接收方收到一个序号比期望值大的乱序段，会？ A. 等 500 ms 再发 ACK　B.
-立即发重复 ACK，写上期望的下一个字节　C. 丢掉不回　D. 发 NAK</p>
+接收方收到一个序号比期望值大的乱序段，会？<br>
+A. 等 500 ms 再发 ACK　B. 立即发重复 ACK，写上期望的下一个字节　C.
+丢掉不回　D. 发 NAK</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q11（讲义）</strong>
-关于流量控制和拥塞控制，正确的是？（多选） A. 流量控制保护接收方的缓冲区
-B. 拥塞控制的信号由接收方在 rwnd 里明确给出 C. 发送窗口取 rwnd 和 cwnd
-的较小值 D. TCP 拥塞控制是端到端的，从丢包和时延推断</p>
+关于流量控制和拥塞控制，正确的是？（多选）<br>
+A. 流量控制保护接收方的缓冲区<br>
+B. 拥塞控制的信号由接收方在 rwnd 里明确给出<br>
+C. 发送窗口取 rwnd 和 cwnd 的较小值<br>
+D. TCP 拥塞控制是端到端的，从丢包和时延推断</p>
 <blockquote>
 <p><strong>A、C、D</strong>。B 说的是流量控制。</p>
 </blockquote>
-<p><strong>Q12（讲义）</strong> 为什么 TCP 不用两次握手？（多选） A.
-旧的连接请求迟到时会造成半开连接 B. 服务器可能把旧数据当成新连接的数据
-C. 两次握手无法协商初始序号 D. 两次握手需要 2 个 RTT</p>
+<p><strong>Q12（讲义）</strong> 为什么 TCP 不用两次握手？（多选）<br>
+A. 旧的连接请求迟到时会造成半开连接<br>
+B. 服务器可能把旧数据当成新连接的数据<br>
+C. 两次握手无法协商初始序号<br>
+D. 两次握手需要 2 个 RTT</p>
 <blockquote>
 <p><strong>A、B</strong>。</p>
 </blockquote>
 <p><strong>Q13（讲义）</strong> 三次握手中，客户端初始序号
-x，服务器初始序号 y。第二个段（SYNACK）的确认号是？ A. x　B. x + 1　C.
-y　D. y + 1</p>
+x，服务器初始序号 y。第二个段（SYNACK）的确认号是？<br>
+A. x　B. x + 1　C. y　D. y + 1</p>
 <blockquote>
 <p><strong>B</strong>。SYN 占一个序号。</p>
 </blockquote>
-<p><strong>Q14（讲义）</strong> 关于三次握手的第三个段，正确的是？ A.
-SYN = 1　B. 可以携带客户端到服务器的数据　C. 确认号是 x + 1　D.
+<p><strong>Q14（讲义）</strong> 关于三次握手的第三个段，正确的是？<br>
+A. SYN = 1　B. 可以携带客户端到服务器的数据　C. 确认号是 x + 1　D.
 由服务器发出</p>
 <blockquote>
 <p><strong>B</strong>。它的确认号是 y + 1，SYN = 0。</p>
 </blockquote>
 <p><strong>Q15（讲义）</strong> 关闭连接时，客户端在 TIMED_WAIT 状态等待
-2 倍最大段寿命，原因是？（多选） A. 最后的 ACK 丢了时能再回一次 B.
-让旧段在网络里过期 C. 等服务器发完剩下的数据 D. 测量 RTT</p>
+2 倍最大段寿命，原因是？（多选）<br>
+A. 最后的 ACK 丢了时能再回一次<br>
+B. 让旧段在网络里过期<br>
+C. 等服务器发完剩下的数据<br>
+D. 测量 RTT</p>
 <blockquote>
 <p><strong>A、B</strong>。C 是 FIN_WAIT_2 阶段的事。</p>
 </blockquote>
-<p><strong>Q16（讲义）</strong> TCP 慢启动阶段 cwnd 怎么增长？ A. 每 RTT
-加 1 MSS　B. 每 RTT 翻倍　C. 每个 ACK 翻倍　D. 保持不变</p>
+<p><strong>Q16（讲义）</strong> TCP 慢启动阶段 cwnd 怎么增长？<br>
+A. 每 RTT 加 1 MSS　B. 每 RTT 翻倍　C. 每个 ACK 翻倍　D. 保持不变</p>
 <blockquote>
 <p><strong>B</strong>。实现是每个 ACK 加 1 MSS。</p>
 </blockquote>
 <p><strong>Q17（W8 Tutorial）</strong> 一张 Reno 的 cwnd 图里，第 16 轮
-cwnd = 42，第 17 轮 cwnd = 21。第 16 轮后丢包是怎么发现的？ A. 超时　B.
-3 个重复 ACK　C. 收到 NAK　D. 流量控制</p>
+cwnd = 42，第 17 轮 cwnd = 21。第 16 轮后丢包是怎么发现的？<br>
+A. 超时　B. 3 个重复 ACK　C. 收到 NAK　D. 流量控制</p>
 <blockquote>
 <p><strong>B</strong>。减半是 3 个重复 ACK；超时会回到 1。</p>
 </blockquote>
 <p><strong>Q18（W8 Tutorial）</strong> 同一张图，第 22 轮 cwnd = 26，第
-23 轮 cwnd = 1。第 24 轮的 ssthresh 是？ A. 1　B. 13　C. 21　D. 26</p>
+23 轮 cwnd = 1。第 24 轮的 ssthresh 是？<br>
+A. 1　B. 13　C. 21　D. 26</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q19（W8 Tutorial）</strong> 同一张图，前 6 轮 cwnd 为
-1、2、4、8、16、32，第 7 轮为 33。第 70 个段在第几轮发出？ A. 6　B.
-7　C. 8　D. 9</p>
+1、2、4、8、16、32，第 7 轮为 33。第 70 个段在第几轮发出？<br>
+A. 6　B. 7　C. 8　D. 9</p>
 <blockquote>
 <p><strong>B</strong>。前 6 轮共 63 个，第 7 轮发第 64–96 个。</p>
 </blockquote>
 <p><strong>Q20（讲义）</strong> 关于 TCP Reno 和
-Tahoe，正确的是？（多选） A. Reno 遇到超时，cwnd 设为 1 MSS B. Reno 遇到
-3 个重复 ACK，cwnd 减半 C. Tahoe 遇到 3 个重复 ACK，cwnd 减半 D.
-两者在丢包时都把 ssthresh 设为当时 cwnd 的一半</p>
+Tahoe，正确的是？（多选）<br>
+A. Reno 遇到超时，cwnd 设为 1 MSS<br>
+B. Reno 遇到 3 个重复 ACK，cwnd 减半<br>
+C. Tahoe 遇到 3 个重复 ACK，cwnd 减半<br>
+D. 两者在丢包时都把 ssthresh 设为当时 cwnd 的一半</p>
 <blockquote>
 <p><strong>A、B、D</strong>。Tahoe 遇到 3 个重复 ACK 也回到 1。</p>
 </blockquote>
 <p><strong>Q21（W8 Tutorial）</strong> SR 协议，序号空间只有 {0, 1, 2,
-3}。为了不把旧分组当成新分组，窗口最大是？ A. 1　B. 2　C. 3　D. 4</p>
+3}。为了不把旧分组当成新分组，窗口最大是？<br>
+A. 1　B. 2　C. 3　D. 4</p>
 <blockquote>
 <p><strong>B</strong>。序号空间 ≥ 2w。</p>
 </blockquote>
-<p><strong>Q22（讲义）</strong> 关于拥塞的代价，正确的是？（多选） A.
-到达速率接近链路容量时排队时延变得很大 B.
-过早超时导致链路传送同一分组的多个副本 C.
-分组在下游被丢弃时，上游为它用掉的带宽被浪费 D.
-拥塞只会让时延变大，不会降低吞吐量</p>
+<p><strong>Q22（讲义）</strong> 关于拥塞的代价，正确的是？（多选）<br>
+A. 到达速率接近链路容量时排队时延变得很大<br>
+B. 过早超时导致链路传送同一分组的多个副本<br>
+C. 分组在下游被丢弃时，上游为它用掉的带宽被浪费<br>
+D. 拥塞只会让时延变大，不会降低吞吐量</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
 <p><strong>Q23（讲义）</strong> 带宽 R 的瓶颈链路上已有 9 条 TCP
-连接。一个新应用开 11 条并行 TCP 连接，它大约得到多少带宽？ A. R/10　B.
-R/20　C. 11R/20　D. R</p>
+连接。一个新应用开 11 条并行 TCP 连接，它大约得到多少带宽？<br>
+A. R/10　B. R/20　C. 11R/20　D. R</p>
 <blockquote>
 <p><strong>C</strong>。共 20 条，各 R/20。</p>
 </blockquote>
-<p><strong>Q24（讲义）</strong> 为什么 AIMD 能让两个连接趋于公平？ A.
-加性增让差距缩小 B. 乘性减让差距减半，加性增不改变差距 C.
-两者都让差距翻倍 D. 路由器会平分带宽</p>
+<p><strong>Q24（讲义）</strong> 为什么 AIMD 能让两个连接趋于公平？<br>
+A. 加性增让差距缩小<br>
+B. 乘性减让差距减半，加性增不改变差距<br>
+C. 两者都让差距翻倍<br>
+D. 路由器会平分带宽</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q25（讲义）</strong> 丢包时窗口 W = 120 KB，RTT = 100
-ms，忽略慢启动，TCP 平均吞吐量约为？ A. 600 KB/s　B. 900 KB/s　C. 1200
-KB/s　D. 1600 KB/s</p>
+ms，忽略慢启动，TCP 平均吞吐量约为？<br>
+A. 600 KB/s　B. 900 KB/s　C. 1200 KB/s　D. 1600 KB/s</p>
 <blockquote>
 <p><strong>B</strong>。0.75 × 120 / 0.1。</p>
 </blockquote>
@@ -1757,7 +1774,7 @@ QUIC</a>、<a href="/posts/comp5416-kurose-ch3-solutions.html">Kurose 第
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

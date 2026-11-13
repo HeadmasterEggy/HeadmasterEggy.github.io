@@ -843,12 +843,17 @@ ack1。</li>
 </ol>
 <h3 id="sr-走一遍同样-n-4pkt2-丢了">7.2 SR 走一遍（同样 N = 4，pkt2
 丢了）</h3>
-<p>1–3 同上。 4. 接收方收到 pkt3、4、5，<strong>缓存起来，分别回
-ack3、ack4、ack5</strong>。发送方记下这三个已确认。 5. <strong>pkt2
-超时</strong>，发送方<strong>只重传 pkt2</strong>。 6. 接收方收到
-pkt2，<strong>一次性把 pkt2、3、4、5 按序交给上层</strong>，回 ack2。 7.
-复习课的问题「ack2 到了会怎样」：发送方窗口的最左端直接滑到 6（3、4、5
-早就确认了），可以发新的分组。</p>
+<p>1–3 同上。</p>
+<ol start="4" type="1">
+<li>接收方收到 pkt3、4、5，<strong>缓存起来，分别回
+ack3、ack4、ack5</strong>。发送方记下这三个已确认。</li>
+<li><strong>pkt2 超时</strong>，发送方<strong>只重传
+pkt2</strong>。</li>
+<li>接收方收到 pkt2，<strong>一次性把 pkt2、3、4、5
+按序交给上层</strong>，回 ack2。</li>
+<li>复习课的问题「ack2 到了会怎样」：发送方窗口的最左端直接滑到
+6（3、4、5 早就确认了），可以发新的分组。</li>
+</ol>
 <p><strong>一句话</strong>：同样丢 pkt2，<strong>GBN 重传 4 个，SR
 只重传 1 个</strong>。GBN 重传数 =
 从丢的那个起，窗口里已经发出去的个数。</p>
@@ -908,120 +913,146 @@ NAK；3.0 定时器。</li>
 <hr>
 <h2 id="题目">题目</h2>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
-<p><strong>Q1（讲义）</strong> UDP socket 由什么标识？ A. 源 IP +
-源端口　B. 目的 IP + 目的端口　C. 源 IP + 源端口 + 目的 IP +
+<p><strong>Q1（讲义）</strong> UDP socket 由什么标识？<br>
+A. 源 IP + 源端口　B. 目的 IP + 目的端口　C. 源 IP + 源端口 + 目的 IP +
 目的端口　D. 只有目的 IP</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q2（讲义）</strong> 主机 A（端口 9157）和主机 C（端口
 5775、9157）各发段到服务器 B 的 80 端口，服务器用 TCP。这三个段进入几个
-socket？ A. 1　B. 2　C. 3　D. 无法判断</p>
+socket？<br>
+A. 1　B. 2　C. 3　D. 无法判断</p>
 <blockquote>
 <p><strong>C</strong>。TCP 用四元组，三个段的（源 IP,
 源端口）都不同。</p>
 </blockquote>
 <p><strong>Q3（讲义）</strong> 同上，如果服务器用 UDP 且端口为
-80，这三个段进入几个 socket？ A. 1　B. 2　C. 3　D. 无法判断</p>
+80，这三个段进入几个 socket？<br>
+A. 1　B. 2　C. 3　D. 无法判断</p>
 <blockquote>
 <p><strong>A</strong>。UDP 只看目的 IP 和目的端口。</p>
 </blockquote>
-<p><strong>Q4（讲义）</strong> 为什么有些应用选择 UDP？（多选） A.
-不需要建立连接，时延小 B. 首部只有 8 字节 C.
-没有拥塞控制，可以按自己想要的速率发 D. UDP 保证按序交付</p>
+<p><strong>Q4（讲义）</strong> 为什么有些应用选择 UDP？（多选）<br>
+A. 不需要建立连接，时延小<br>
+B. 首部只有 8 字节<br>
+C. 没有拥塞控制，可以按自己想要的速率发<br>
+D. UDP 保证按序交付</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
-<p><strong>Q5（讲义）</strong> UDP 首部有多少字节？ A. 4　B. 8　C.
-16　D. 20</p>
+<p><strong>Q5（讲义）</strong> UDP 首部有多少字节？<br>
+A. 4　B. 8　C. 16　D. 20</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q6（Kurose 交互题型）</strong> 计算
 <code>1110011001100110</code> 和 <code>1101010101010101</code> 的
-Internet 校验和。 A. <code>1011101110111011</code>　B.
-<code>1011101110111100</code>　C. <code>0100010001000011</code>　D.
-<code>0100010001000100</code></p>
+Internet 校验和。<br>
+A. <code>1011101110111011</code>　B. <code>1011101110111100</code>　C.
+<code>0100010001000011</code>　D. <code>0100010001000100</code></p>
 <blockquote>
 <p><strong>C</strong>。和为 17 位，回卷得
 <code>1011101110111100</code>（B），取反得 C。A 是没回卷的低 16 位，D
 是对 A 取反。</p>
 </blockquote>
 <p><strong>Q7（讲义）</strong> 接收方把所有 16
-位字和校验和一起相加（回卷）后，没有错误时结果应是？ A. 全 0　B. 全
-1　C. 等于校验和　D. 等于 length</p>
+位字和校验和一起相加（回卷）后，没有错误时结果应是？<br>
+A. 全 0　B. 全 1　C. 等于校验和　D. 等于 length</p>
 <blockquote>
 <p><strong>B</strong>。再取反才是全 0。</p>
 </blockquote>
-<p><strong>Q8（讲义）</strong> 关于 Internet 校验和，正确的是？（多选）
-A. 能检测部分比特错误 B. 能纠正错误 C. 一定能检测出所有错误 D.
-相加时最高位的进位要加回结果</p>
+<p><strong>Q8（讲义）</strong> 关于 Internet
+校验和，正确的是？（多选）<br>
+A. 能检测部分比特错误<br>
+B. 能纠正错误<br>
+C. 一定能检测出所有错误<br>
+D. 相加时最高位的进位要加回结果</p>
 <blockquote>
 <p><strong>A、D</strong>。</p>
 </blockquote>
 <p><strong>Q9（讲义）</strong> rdt
-各版本与新增机制的对应，正确的是？（多选） A. rdt 2.0：校验和 + ACK/NAK
-B. rdt 2.1：序号 C. rdt 2.2：增加 NAK D. rdt 3.0：定时器</p>
+各版本与新增机制的对应，正确的是？（多选）<br>
+A. rdt 2.0：校验和 + ACK/NAK<br>
+B. rdt 2.1：序号<br>
+C. rdt 2.2：增加 NAK<br>
+D. rdt 3.0：定时器</p>
 <blockquote>
 <p><strong>A、B、D</strong>。rdt 2.2 是<strong>去掉</strong> NAK。</p>
 </blockquote>
-<p><strong>Q10（讲义）</strong> rdt 2.1 为什么只需要 0 和 1 两个序号？
-A. 分组很少丢 B. 停等协议同一时刻只有一个分组在路上 C. 接收方有缓存 D.
-校验和可以区分重复</p>
+<p><strong>Q10（讲义）</strong> rdt 2.1 为什么只需要 0 和 1
+两个序号？<br>
+A. 分组很少丢<br>
+B. 停等协议同一时刻只有一个分组在路上<br>
+C. 接收方有缓存<br>
+D. 校验和可以区分重复</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q11（讲义）</strong> rdt 3.0 中 ack1 丢失，发送方超时重传
-pkt1。接收方会？ A. 把 pkt1 再交给上层一次 B. 发现重复，丢弃，但再回一次
-ack1 C. 发 NAK D. 什么都不做</p>
+pkt1。接收方会？<br>
+A. 把 pkt1 再交给上层一次<br>
+B. 发现重复，丢弃，但再回一次 ack1<br>
+C. 发 NAK<br>
+D. 什么都不做</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q12（讲义）</strong> 1 Gbps 链路，RTT 30 ms，分组 8000
-比特，停等协议的发送方利用率约为？ A. 0.027　B. 0.0027　C. 0.00027　D.
-0.27</p>
+比特，停等协议的发送方利用率约为？<br>
+A. 0.027　B. 0.0027　C. 0.00027　D. 0.27</p>
 <blockquote>
 <p><strong>C</strong>。<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="12.57ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 5556 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="0.008 /
 30.008"><g data-mml-node="mn" data-latex="0.008"><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(500,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(778,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(1778,0)"></path></g><g data-mml-node="mo" data-latex="/" transform="translate(2278,0)"><path data-c="2F" d="M444 718C445 720 445 723 445 726C445 742 437 750 421 750C410 750 403 745 399 734L57-218C56-220 56-223 56-226C56-242 64-250 80-250C91-250 98-245 102-234Z"></path></g><g data-mml-node="mn" data-latex="30.008" transform="translate(2778,0)"><path data-c="33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(500,0)"></path><path data-c="2E" d="M192 53C192 82 168 106 139 106C110 106 86 82 86 53C86 24 110 0 139 0C168 0 192 24 192 53Z" transform="translate(1000,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1278,0)"></path><path data-c="30" d="M249-22C390-22 460 92 460 320C460 473 428 575 365 625C330 652 291 666 250 666C109 666 39 551 39 320C39 136 88-22 249-22M361 524C368 489 371 425 371 332C371 240 367 172 360 128C347 48 310 8 249 8C226 8 203 17 182 34C155 57 139 104 132 176C129 201 128 253 128 332C128 419 131 480 136 513C145 568 163 603 191 618C213 630 232 636 249 636C314 636 350 583 361 524Z" transform="translate(1778,0)"></path><path data-c="38" d="M250 666C201 666 158 650 122 618C86 586 68 546 68 497C68 456 83 419 113 386C120 378 142 361 179 335C88 288 42 227 42 153C42 100 64 57 107 24C147-7 194-22 249-22C305-22 354-4 395 32C436 68 457 115 457 170C457 216 441 257 408 294C396 307 365 330 316 361C393 402 431 454 431 515C431 606 344 666 250 666M379 515C379 463 348 418 286 381L167 459C136 479 120 505 120 536C120 596 185 633 249 633C318 633 379 584 379 515M250 14C168 14 99 73 99 153C99 220 136 274 210 315L328 240C376 209 400 174 400 134C400 62 325 14 250 14Z" transform="translate(2278,0)"></path></g></g></g></svg></mjx-container></span>。</p>
 </blockquote>
 <p><strong>Q13（讲义）</strong> 同上，流水线一次发 3
-个分组，利用率约为？ A. 0.00027　B. 0.0008　C. 0.008　D. 0.024</p>
+个分组，利用率约为？<br>
+A. 0.00027　B. 0.0008　C. 0.008　D. 0.024</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q14（复习课）</strong> GBN，窗口 N = 4，发送方发了
-pkt0–pkt5，pkt2 丢失，其他都到达。接收方收到 pkt3、4、5 时会？ A.
-缓存它们并分别回 ack3、ack4、ack5 B. 丢弃它们，每次都重发 ack1 C.
-丢弃它们，不发任何 ACK D. 缓存它们并只回 ack5</p>
+pkt0–pkt5，pkt2 丢失，其他都到达。接收方收到 pkt3、4、5 时会？<br>
+A. 缓存它们并分别回 ack3、ack4、ack5<br>
+B. 丢弃它们，每次都重发 ack1<br>
+C. 丢弃它们，不发任何 ACK<br>
+D. 缓存它们并只回 ack5</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q15（复习课）</strong> 同上，pkt2 超时后 GBN
-发送方重传哪些分组？ A. 只有 pkt2　B. pkt2、pkt3　C.
-pkt2、pkt3、pkt4、pkt5　D. pkt0 到 pkt5</p>
+发送方重传哪些分组？<br>
+A. 只有 pkt2　B. pkt2、pkt3　C. pkt2、pkt3、pkt4、pkt5　D. pkt0 到
+pkt5</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
 <p><strong>Q16（复习课）</strong> 同样情况换成 Selective Repeat，pkt2
-超时后发送方重传哪些分组？ A. 只有 pkt2　B. pkt2、pkt3　C.
-pkt2、pkt3、pkt4、pkt5　D. pkt0 到 pkt5</p>
+超时后发送方重传哪些分组？<br>
+A. 只有 pkt2　B. pkt2、pkt3　C. pkt2、pkt3、pkt4、pkt5　D. pkt0 到
+pkt5</p>
 <blockquote>
 <p><strong>A</strong>。</p>
 </blockquote>
-<p><strong>Q17（讲义）</strong> 关于 GBN 和 SR，正确的是？（多选） A.
-GBN 用累积 ACK B. GBN 接收方缓存乱序分组 C. SR
-为每个未确认分组设一个定时器 D. SR 对已经交付过的旧分组仍要回 ACK</p>
+<p><strong>Q17（讲义）</strong> 关于 GBN 和 SR，正确的是？（多选）<br>
+A. GBN 用累积 ACK<br>
+B. GBN 接收方缓存乱序分组<br>
+C. SR 为每个未确认分组设一个定时器<br>
+D. SR 对已经交付过的旧分组仍要回 ACK</p>
 <blockquote>
 <p><strong>A、C、D</strong>。GBN 接收方不缓存。</p>
 </blockquote>
-<p><strong>Q18（自拟）</strong> SR 窗口大小为 4，序号空间至少要多大？ A.
-4　B. 5　C. 8　D. 16</p>
+<p><strong>Q18（自拟）</strong> SR 窗口大小为
+4，序号空间至少要多大？<br>
+A. 4　B. 5　C. 8　D. 16</p>
 <blockquote>
 <p><strong>C</strong>。2N。GBN 的话是 N + 1 = 5。</p>
 </blockquote>
-<p><strong>Q19（讲义）</strong> 关于传输层，正确的是？（多选） A.
-提供进程到进程的逻辑通信 B. 路由器上也运行传输层协议 C.
-传输层的数据单元叫 segment D. TCP 保证时延上限</p>
+<p><strong>Q19（讲义）</strong> 关于传输层，正确的是？（多选）<br>
+A. 提供进程到进程的逻辑通信<br>
+B. 路由器上也运行传输层协议<br>
+C. 传输层的数据单元叫 segment<br>
+D. TCP 保证时延上限</p>
 <blockquote>
 <p><strong>A、C</strong>。</p>
 </blockquote>
@@ -1099,7 +1130,7 @@ GBN 用累积 ACK B. GBN 接收方缓存乱序分组 C. SR
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

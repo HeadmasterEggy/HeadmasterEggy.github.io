@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 10 详解。SIP 的呼叫建立、编码协商、注册服务器与代理服务器；网络支持多媒体的三种方式、QoS 的四条原则、FIFO &#x2F; 优先级 &#x2F; 轮询 &#x2F; WFQ 调度与 WFQ 吞吐计算、令牌桶监管与最大时延界、DiffServ 边缘标记与核心按类转发、呼叫准入；无线网络组成、基础设施与自组织模式、无线链路特性（路径损耗、干扰、多径）、dB 与 SNR&#x2F;BER 权衡、隐藏终端">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:25:00.000Z">
-<meta property="article:modified_time" content="2026-11-07T07:27:38.772Z">
+<meta property="article:modified_time" content="2026-11-13T07:13:15.559Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="CDMA">
 <meta property="article:tag" content="COMP5416">
@@ -373,7 +373,7 @@ Q4：码不正交就解不出来</span></a></li><li class="nav-item nav-level-3"
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-07 07:27:38" itemprop="dateModified" datetime="2026-11-07T07:27:38Z">2026-11-07</time>
+      <time title="Modified: 2026-11-13 07:13:15" itemprop="dateModified" datetime="2026-11-13T07:13:15Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1346,159 +1346,182 @@ DNS）；<strong>媒体不经过代理</strong>；606 Not Acceptable。</li>
 <p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
 <p><strong>Q1（Sample Exam）</strong> 发送方 1 的 CDMA 码 (1, −1, 1, −1,
 −1, −1, −1)，发送方 2 的码 (1, −1, −1, −1, −1, −1, −1)，合成输出 (2, −2,
-0, −2, −2, −2, −2)。接收方 1 解出的比特是？ A. −1　B. 1　C. n/a</p>
+0, −2, −2, −2, −2)。接收方 1 解出的比特是？<br>
+A. −1　B. 1　C. n/a</p>
 <blockquote>
 <p><strong>C</strong>。两码内积为 5，不正交，干扰无法消除。</p>
 </blockquote>
 <p><strong>Q2（讲义）</strong> 码 c₁ = (−1, −1, −1, 1, −1, 1, 1, 1)，c₂
 = (1, 1, −1, 1, 1, 1, −1, 1)。发送方 1 发 1、发送方 2 发
-−1，信号相加。接收方用 c₂ 解码得到？ A. 1　B. −1　C. 0　D. n/a</p>
+−1，信号相加。接收方用 c₂ 解码得到？<br>
+A. 1　B. −1　C. 0　D. n/a</p>
 <blockquote>
 <p><strong>B</strong>。两码正交，c₁ − c₂ 与 c₂ 的内积为 −8，÷ 8。</p>
 </blockquote>
-<p><strong>Q3（讲义）</strong> 关于 CDMA，正确的是？（多选） A.
-所有用户同时使用同一频率 B. 不同用户的码内积为 0 时，干扰可以消除 C.
-解码时用收到的信号和自己的码做内积，再除以码长 D.
-每个用户分到不同的时隙</p>
+<p><strong>Q3（讲义）</strong> 关于 CDMA，正确的是？（多选）<br>
+A. 所有用户同时使用同一频率<br>
+B. 不同用户的码内积为 0 时，干扰可以消除<br>
+C. 解码时用收到的信号和自己的码做内积，再除以码长<br>
+D. 每个用户分到不同的时隙</p>
 <blockquote>
 <p><strong>A、B、C</strong>。D 是 TDMA。</p>
 </blockquote>
 <p><strong>Q4（Tutorial）</strong> CDMA 码 (1, −1, 1, 1, −1, −1,
-−1)，收到 (1, −1, 1, 1, −1, −1, −1)，解出的比特是？ A. 0（−1）　B. 1　C.
-1/7　D. n/a</p>
+−1)，收到 (1, −1, 1, 1, −1, −1, −1)，解出的比特是？<br>
+A. 0（−1）　B. 1　C. 1/7　D. n/a</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q5（讲义）</strong> 1 Mbps 链路上用 WFQ，三条流权重
-2、1、1。流 3 没有数据时，流 1 的吞吐量是？ A. 0.25 Mbps　B. 0.5
-Mbps　C. 0.667 Mbps　D. 1 Mbps</p>
+2、1、1。流 3 没有数据时，流 1 的吞吐量是？<br>
+A. 0.25 Mbps　B. 0.5 Mbps　C. 0.667 Mbps　D. 1 Mbps</p>
 <blockquote>
 <p><strong>C</strong>。2 / (2 + 1)。</p>
 </blockquote>
-<p><strong>Q6（讲义）</strong> 关于调度，正确的是？（多选） A.
-优先级调度是非抢占的 B. 所有权重相等时，WFQ 等同于轮询 C.
-轮询中优先级高的类每轮发更多分组 D. FIFO 的 tail drop
-丢弃新到达的分组</p>
+<p><strong>Q6（讲义）</strong> 关于调度，正确的是？（多选）<br>
+A. 优先级调度是非抢占的<br>
+B. 所有权重相等时，WFQ 等同于轮询<br>
+C. 轮询中优先级高的类每轮发更多分组<br>
+D. FIFO 的 tail drop 丢弃新到达的分组</p>
 <blockquote>
 <p><strong>A、B、D</strong>。轮询各类优先级相同。</p>
 </blockquote>
 <p><strong>Q7（讲义）</strong> 分组 1、2、3、4、5 依次到达，1、3、4
-是高优先级，2、5 是低优先级，非抢占优先级调度。服务顺序是？ A. 1, 3, 4,
-2, 5　B. 1, 3, 2, 4, 5　C. 1, 2, 3, 4, 5　D. 1, 3, 4, 5, 2</p>
+是高优先级，2、5 是低优先级，非抢占优先级调度。服务顺序是？<br>
+A. 1, 3, 4, 2, 5　B. 1, 3, 2, 4, 5　C. 1, 2, 3, 4, 5　D. 1, 3, 4, 5,
+2</p>
 <blockquote>
 <p><strong>B</strong>。4 到达时 2 已在发送。</p>
 </blockquote>
 <p><strong>Q8（自拟）</strong> 令牌桶 r = 100 个/秒，b = 50。任意 2
-秒内最多能进入网络多少个分组？ A. 100　B. 200　C. 250　D. 300</p>
+秒内最多能进入网络多少个分组？<br>
+A. 100　B. 200　C. 250　D. 300</p>
 <blockquote>
 <p><strong>C</strong>。rt + b。</p>
 </blockquote>
-<p><strong>Q9（讲义）</strong> 关于令牌桶，正确的是？（多选） A.
-很短的时间内最多发 b 个分组 B. 长期平均速率不超过 r C.
-桶满时新生成的令牌被丢弃 D. 令牌桶保证分组的时延</p>
+<p><strong>Q9（讲义）</strong> 关于令牌桶，正确的是？（多选）<br>
+A. 很短的时间内最多发 b 个分组<br>
+B. 长期平均速率不超过 r<br>
+C. 桶满时新生成的令牌被丢弃<br>
+D. 令牌桶保证分组的时延</p>
 <blockquote>
 <p><strong>A、B、C</strong>。时延上界要和 WFQ 一起才有。</p>
 </blockquote>
 <p><strong>Q10（讲义）</strong> 两个 1 Mbps 的电话要同时走一条 1.5 Mbps
-的链路，体现的是 QoS 的哪条原则？ A. 分组标记　B. 隔离（监管）　C.
-高效利用资源　D. 呼叫准入</p>
+的链路，体现的是 QoS 的哪条原则？<br>
+A. 分组标记　B. 隔离（监管）　C. 高效利用资源　D. 呼叫准入</p>
 <blockquote>
 <p><strong>D</strong>。</p>
 </blockquote>
 <p><strong>Q11（讲义）</strong> VoIP
-应用发得比自己声明的速率多，影响了别的流。对应的原则是？ A. 分组标记　B.
-隔离：用监管强制源遵守分配　C. 呼叫准入　D. 尽力而为</p>
+应用发得比自己声明的速率多，影响了别的流。对应的原则是？<br>
+A. 分组标记　B. 隔离：用监管强制源遵守分配　C. 呼叫准入　D. 尽力而为</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q12（讲义）</strong> 关于 DiffServ，正确的是？（多选） A.
-边缘路由器按每个流做标记 B. 核心路由器按标记做每类的缓冲和调度 C.
-核心路由器维护每个流的状态 D. 不符合 profile
-的部分可以标成低优先级或丢弃</p>
+<p><strong>Q12（讲义）</strong> 关于 DiffServ，正确的是？（多选）<br>
+A. 边缘路由器按每个流做标记<br>
+B. 核心路由器按标记做每类的缓冲和调度<br>
+C. 核心路由器维护每个流的状态<br>
+D. 不符合 profile 的部分可以标成低优先级或丢弃</p>
 <blockquote>
 <p><strong>A、B、D</strong>。复杂的放在边缘，核心只看类。</p>
 </blockquote>
 <p><strong>Q13（讲义）</strong> 三色 DiffServ 例子：Bob 约定 1
 Mbps（符合标绿，超出标红），Chris 标黄，优先级 绿 &gt; 黄 &gt; 红，链路
-2 Mbps。Bob 发 1.5 Mbps，Chris 发满 1 Mbps，Bob 实际得到？ A. 0.5
-Mbps　B. 1 Mbps　C. 1.5 Mbps　D. 2 Mbps</p>
+2 Mbps。Bob 发 1.5 Mbps，Chris 发满 1 Mbps，Bob 实际得到？<br>
+A. 0.5 Mbps　B. 1 Mbps　C. 1.5 Mbps　D. 2 Mbps</p>
 <blockquote>
 <p><strong>B</strong>。红色全被丢。</p>
 </blockquote>
-<p><strong>Q14（讲义）</strong> 关于 SIP，正确的是？（多选） A. 默认端口
-5060 B. 信令和媒体走不同的端口（带外） C. 媒体流经过 SIP 代理转发 D. SIP
-消息可以走 TCP 或 UDP</p>
+<p><strong>Q14（讲义）</strong> 关于 SIP，正确的是？（多选）<br>
+A. 默认端口 5060<br>
+B. 信令和媒体走不同的端口（带外）<br>
+C. 媒体流经过 SIP 代理转发<br>
+D. SIP 消息可以走 TCP 或 UDP</p>
 <blockquote>
 <p><strong>A、B、D</strong>。媒体直接在两端之间走。</p>
 </blockquote>
 <p><strong>Q15（讲义）</strong> Bob 不支持 Alice 在 INVITE
-里提出的编码，Bob 会回什么？ A. 200 OK　B. 404 Not Found　C. 606 Not
-Acceptable　D. 301 Moved</p>
+里提出的编码，Bob 会回什么？<br>
+A. 200 OK　B. 404 Not Found　C. 606 Not Acceptable　D. 301 Moved</p>
 <blockquote>
 <p><strong>C</strong>。并列出自己支持的编码。</p>
 </blockquote>
 <p><strong>Q16（讲义）</strong> Bob 启动 SIP
-客户端时发给注册服务器的消息是？ A. INVITE　B. REGISTER　C. ACK　D.
-BYE</p>
+客户端时发给注册服务器的消息是？<br>
+A. INVITE　B. REGISTER　C. ACK　D. BYE</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q17（讲义）</strong> 讲义把 SIP 代理类比成什么？ A. Web
-缓存　B. 本地 DNS 服务器　C. 路由器　D. CDN</p>
+<p><strong>Q17（讲义）</strong> 讲义把 SIP 代理类比成什么？<br>
+A. Web 缓存　B. 本地 DNS 服务器　C. 路由器　D. CDN</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
 <p><strong>Q18（讲义）</strong> 信号功率是噪声功率的 1000 倍，SNR 是多少
-dB？ A. 3　B. 10　C. 30　D. 1000</p>
+dB？<br>
+A. 3　B. 10　C. 30　D. 1000</p>
 <blockquote>
 <p><strong>C</strong>。</p>
 </blockquote>
-<p><strong>Q19（讲义）</strong> 关于 SNR 和 BER，正确的是？（多选） A.
-同一种调制下，加大发射功率会降低 BER B. 同一 SNR 下，速率越高的调制 BER
-越高 C. 应该总是选速率最高的调制 D. 给定 SNR 和 BER 要求，选满足 BER
-要求的最快调制</p>
+<p><strong>Q19（讲义）</strong> 关于 SNR 和
+BER，正确的是？（多选）<br>
+A. 同一种调制下，加大发射功率会降低 BER<br>
+B. 同一 SNR 下，速率越高的调制 BER 越高<br>
+C. 应该总是选速率最高的调制<br>
+D. 给定 SNR 和 BER 要求，选满足 BER 要求的最快调制</p>
 <blockquote>
 <p><strong>A、B、D</strong>。</p>
 </blockquote>
 <p><strong>Q20（讲义）</strong> SNR = 15 dB，要求 BER ≤
-10⁻³，讲义图里应选哪种调制？ A. BPSK　B. QAM16　C. QAM256　D.
-都不满足</p>
+10⁻³，讲义图里应选哪种调制？<br>
+A. BPSK　B. QAM16　C. QAM256　D. 都不满足</p>
 <blockquote>
 <p><strong>B</strong>。</p>
 </blockquote>
-<p><strong>Q21（讲义）</strong> 关于隐藏终端问题，正确的是？（多选） A.
-A 和 C 都能和 B 通信，但彼此听不到 B. 可能由障碍物造成 C.
-可能由信号衰减造成 D. A 和 C 能察觉它们在 B 处的碰撞</p>
+<p><strong>Q21（讲义）</strong>
+关于隐藏终端问题，正确的是？（多选）<br>
+A. A 和 C 都能和 B 通信，但彼此听不到<br>
+B. 可能由障碍物造成<br>
+C. 可能由信号衰减造成<br>
+D. A 和 C 能察觉它们在 B 处的碰撞</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
-<p><strong>Q22（讲义）</strong> 关于无线网络，正确的是？（多选） A.
-无线主机不一定在移动 B. ad hoc 模式没有基站 C.
-切换（handoff）指移动设备换一个基站接入 D.
-蓝牙属于有基础设施的单跳网络</p>
+<p><strong>Q22（讲义）</strong> 关于无线网络，正确的是？（多选）<br>
+A. 无线主机不一定在移动<br>
+B. ad hoc 模式没有基站<br>
+C. 切换（handoff）指移动设备换一个基站接入<br>
+D. 蓝牙属于有基础设施的单跳网络</p>
 <blockquote>
 <p><strong>A、B、C</strong>。蓝牙是无基础设施单跳。</p>
 </blockquote>
-<p><strong>Q23（讲义）</strong> 无线链路和有线链路相比的特点有？（多选）
-A. 信号穿过物体会衰减 B. 和其他设备共享频段而受干扰 C.
-信号经反射在不同时间到达（多径） D. 不会出现比特错误</p>
+<p><strong>Q23（讲义）</strong>
+无线链路和有线链路相比的特点有？（多选）<br>
+A. 信号穿过物体会衰减<br>
+B. 和其他设备共享频段而受干扰<br>
+C. 信号经反射在不同时间到达（多径）<br>
+D. 不会出现比特错误</p>
 <blockquote>
 <p><strong>A、B、C</strong>。</p>
 </blockquote>
 <p><strong>Q24（Tutorial）</strong> A — B — C — D 无线中继，A 只被 B
 听到，B 被 A、C 听到，C 被 B、D 听到，D 只被 C 听到。A → B 和 C → D
-同时进行，每个时隙最多成功送达几条消息？ A. 0.5　B. 1　C. 2　D. 3</p>
+同时进行，每个时隙最多成功送达几条消息？<br>
+A. 0.5　B. 1　C. 2　D. 3</p>
 <blockquote>
 <p><strong>B</strong>。C 发时 B 也听得到，会在 B 处碰撞，只能轮流。</p>
 </blockquote>
 <p><strong>Q25（Tutorial）</strong> 同一拓扑，C → A（经 B
-中继），无其他流量，最大速率是？ A. 1 条 / 时隙　B. 1 条 / 2 时隙　C. 1
-条 / 3 时隙　D. 2 条 / 时隙</p>
+中继），无其他流量，最大速率是？<br>
+A. 1 条 / 时隙　B. 1 条 / 2 时隙　C. 1 条 / 3 时隙　D. 2 条 / 时隙</p>
 <blockquote>
 <p><strong>B</strong>。B 不能同时收和发。</p>
 </blockquote>
 <p><strong>Q26（Tutorial）</strong> 同一拓扑换成点到点有线链路，A → B 和
-C → D 同时进行，每个时隙最多几条？ A. 0.5　B. 1　C. 2　D. 3</p>
+C → D 同时进行，每个时隙最多几条？<br>
+A. 0.5　B. 1　C. 2　D. 3</p>
 <blockquote>
 <p><strong>C</strong>。有线没有广播干扰。</p>
 </blockquote>
@@ -1577,7 +1600,7 @@ Exam 解析</a></p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">76:43</span>
+    <span title="Reading time total">75:46</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
