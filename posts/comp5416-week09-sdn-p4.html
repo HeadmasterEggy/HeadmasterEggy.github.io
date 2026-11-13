@@ -30,7 +30,7 @@
 <meta property="og:description" content="COMP5416 Week 09 流媒体 tutorial（Lab 7 Streaming）完整解答：播放时刻与按时到达的块数、播放时延与缓冲占用、最小播放时延、卡顿周期与缓冲变满的时间。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T11:20:00.000Z">
-<meta property="article:modified_time" content="2026-11-13T07:14:34.709Z">
+<meta property="article:modified_time" content="2026-11-13T09:28:05.241Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="COMP5416">
 <meta property="article:tag" content="Video-Streaming">
@@ -232,7 +232,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">398</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">275</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">395</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">273</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
   </ul>
 </nav>
 
@@ -280,7 +280,7 @@ r，缓冲初始为空，什么时候填满？</span></a></li></ol></li><li clas
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">275</span>
+          <span class="site-state-item-count">273</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -291,7 +291,7 @@ r，缓冲初始为空，什么时候填满？</span></a></li></ol></li><li clas
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">398</span>
+        <span class="site-state-item-count">395</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -372,7 +372,7 @@ r，缓冲初始为空，什么时候填满？</span></a></li></ol></li><li clas
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-13 07:14:34" itemprop="dateModified" datetime="2026-11-13T07:14:34Z">2026-11-13</time>
+      <time title="Modified: 2026-11-13 09:28:05" itemprop="dateModified" datetime="2026-11-13T09:28:05Z">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -395,7 +395,7 @@ r，缓冲初始为空，什么时候填满？</span></a></li></ol></li><li clas
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.9k</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -771,7 +771,8 @@ Mbps。</p>
 </ol>
 <hr>
 <h2 id="题目">题目</h2>
-<p>格式照期末：选择题，标「（多选）」的可能不止一个对，但勾错会扣掉勾对的分。</p>
+<p>格式照期末：大多是单选；标「（多选）」的可能不止一个对（真题靠题干的复数措辞提示），勾错倒扣，但每题最低
+0 分。答题技巧见<a href="/posts/comp5416-sample-exam-solutions.html#%E8%80%83%E8%AF%95%E9%A2%98%E5%9E%8B%E4%B8%8E%E7%AD%94%E9%A2%98%E6%8A%80%E5%B7%A7">样卷解析：考试题型与答题技巧</a>。</p>
 <p>以 Q1–Q5 用第二节的到达时间表。</p>
 <p><strong>Q1（Tutorial）</strong> 块 1 一到（<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.339ex;" xmlns="http://www.w3.org/2000/svg" width="1.804ex" height="1.756ex" role="img" focusable="false" viewBox="0 -626 797.6 776"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="t_1"><g data-mml-node="msub" data-latex="t_1"><g data-mml-node="mi" data-latex="t"><path data-c="1D461" d="M330 419C330 428 320 433 299 433L218 433C244 537 257 591 257 595C257 616 246 626 225 626C202 626 188 613 182 587L145 433L56 433C34 433 23 432 23 411C23 400 33 395 54 395L135 395C86 200 62 97 62 84C62 28 100-11 156-11C194-11 227 6 256 41C280 70 297 98 308 125C312 136 314 142 314 145C314 154 309 159 299 159C291 159 285 154 281 143C247 60 206 19 157 19C140 19 131 33 131 60C131 75 133 91 137 107L208 395L297 395C323 395 330 397 330 419Z"></path></g><g data-mml-node="mn" transform="translate(394,-150) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g></g></g></g></svg></mjx-container></span>）就开始播放，哪些块能按时播放？<br>
 A. 只有块 1　B. 块 1、4、5、6　C. 块 1–6　D. 全部 7 块</p>
@@ -902,14 +903,14 @@ Exam 解析</a></p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">1.3m</span>
+    <span title="Word count total">1.2m</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">75:46</span>
+    <span title="Reading time total">74:55</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
