@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 10 讲课总结：模型与元模型、建模语言的抽象语法&#x2F;具体语法&#x2F;语义、MOF 与 OMG 四层架构、UML 元模型片段与关联实例化练习、模型存储与图的关系、静态与动态语义及 fUML、agentic 软件元模型；Tutorial 10 的 RAG 与 LangChain&#x2F;LangGraph 工具调用循环。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:45:00.000Z">
-<meta property="article:modified_time" content="2026-11-13T07:16:10.755Z">
+<meta property="article:modified_time" content="2026-11-14T06:10:22.496Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="ELEC5620">
 <meta property="article:tag" content="LangChain">
@@ -236,7 +236,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">395</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">273</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">384</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">265</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
   </ul>
 </nav>
 
@@ -262,15 +262,12 @@ mjx-container[display="true"] + br {
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-10-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93meta-modeling"><span class="nav-text">ELEC5620 Week 10
-讲课总结：Meta-Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80meta-%E6%B8%B8%E6%88%8F"><span class="nav-text">一、“Meta” 游戏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%8D%E6%98%AF%E4%B8%80%E5%8F%AA%E7%83%9F%E6%96%97"><span class="nav-text">1.1 这不是一只烟斗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A2%AB%E5%BB%BA%E6%A8%A1%E4%BA%8B%E7%89%A9"><span class="nav-text">1.2 模型与被建模事物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E9%93%81%E5%9B%BE%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80"><span class="nav-text">1.3 地铁图：模型与建模语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%87%8D%E7%82%B9"><span class="nav-text">二、建模语言的核心组成（重点）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E6%A8%A1%E5%9E%8Bmof-%E4%B8%8E%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-text">三、元模型、MOF 与四层架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E4%B8%8E-mof"><span class="nav-text">3.1 元建模语言与 MOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E5%BF%85%E4%BC%9A"><span class="nav-text">3.2 什么是元模型（定义必会）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metaconfusion"><span class="nav-text">3.3 Metaconfusion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omg-%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84%E5%BF%85%E8%80%83"><span class="nav-text">3.4 OMG 四层架构（必考）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Buml-%E7%9A%84%E8%A7%84%E6%A0%BC%E4%B8%8E%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">四、UML 的规格与元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E8%AF%AD%E8%A8%80%E8%A7%84%E6%A0%BC%E7%9A%84%E4%B8%89%E9%83%A8%E5%88%86"><span class="nav-text">4.1 UML 语言规格的三部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%83%E6%A8%A1%E5%9E%8B%E7%89%87%E6%AE%B5%E7%AE%80%E5%8C%96"><span class="nav-text">4.2 UML 元模型片段（简化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">4.3 元建模能做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8%E7%9A%84%E5%9B%BE%E5%8F%AA%E6%98%AF%E8%A7%86%E5%9B%BE"><span class="nav-text">4.4
+讲课总结：Meta-Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">一、模型与元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A2%AB%E5%BB%BA%E6%A8%A1%E4%BA%8B%E7%89%A9"><span class="nav-text">1.1 模型与被建模事物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E9%93%81%E5%9B%BE%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80"><span class="nav-text">1.2 地铁图：模型与建模语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%87%8D%E7%82%B9"><span class="nav-text">二、建模语言的核心组成（重点）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E6%A8%A1%E5%9E%8Bmof-%E4%B8%8E%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-text">三、元模型、MOF 与四层架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E4%B8%8E-mof"><span class="nav-text">3.1 元建模语言与 MOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E5%BF%85%E4%BC%9A"><span class="nav-text">3.2 什么是元模型（定义必会）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metaconfusion"><span class="nav-text">3.3 Metaconfusion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omg-%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84%E5%BF%85%E8%80%83"><span class="nav-text">3.4 OMG 四层架构（必考）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Buml-%E7%9A%84%E8%A7%84%E6%A0%BC%E4%B8%8E%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">四、UML 的规格与元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E8%AF%AD%E8%A8%80%E8%A7%84%E6%A0%BC%E7%9A%84%E4%B8%89%E9%83%A8%E5%88%86"><span class="nav-text">4.1 UML 语言规格的三部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%83%E6%A8%A1%E5%9E%8B%E7%89%87%E6%AE%B5%E7%AE%80%E5%8C%96"><span class="nav-text">4.2 UML 元模型片段（简化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%BB%BA%E6%A8%A1%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">4.3 元建模能做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8%E7%9A%84%E5%9B%BE%E5%8F%AA%E6%98%AF%E8%A7%86%E5%9B%BE"><span class="nav-text">4.4
 模型是怎么存储的：图只是视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E5%85%B3%E8%81%94%E7%9A%84%E5%85%83%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BE%8B%E5%BF%85%E4%BC%9A%E9%A2%98%E5%9E%8B"><span class="nav-text">4.5
-练习：关联的元模型实例（必会题型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%B7%E4%BD%93%E8%AF%AD%E6%B3%95%E5%9B%BE%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-text">4.6 UML 具体语法：图的种类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%AF%AD%E8%A8%80%E8%AF%AD%E4%B9%89"><span class="nav-text">五、语言语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E4%B9%89%E4%B8%8E%E5%8A%A8%E6%80%81%E8%AF%AD%E4%B9%89"><span class="nav-text">5.1 静态语义与动态语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%84%E5%AE%9A%E8%AF%AD%E4%B9%89"><span class="nav-text">5.2 如何规定语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fumlexecutable-uml-foundation"><span class="nav-text">5.3 fUML（Executable UML
-Foundation）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADuml-%E5%85%83%E6%A8%A1%E5%9E%8B%E9%80%89%E8%AF%BB"><span class="nav-text">六、UML 元模型选读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.1 命名空间元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E7%BA%A6%E6%9D%9F%E6%B3%A8%E9%87%8A%E7%9A%84%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.2 依赖、约束、注释的元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9E%E4%BE%8B%E4%B8%8E%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">6.3 类型、实例与分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%B8%8E%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%85%B3%E7%B3%BB%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.4 结构与行为的关系（元模型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#classifier-behaviour-vs-method"><span class="nav-text">6.5 Classifier behaviour vs
+练习：关联的元模型实例（必会题型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uml-%E5%85%B7%E4%BD%93%E8%AF%AD%E6%B3%95%E5%9B%BE%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="nav-text">4.6 UML 具体语法：图的种类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E8%AF%AD%E8%A8%80%E8%AF%AD%E4%B9%89%E9%9D%99%E6%80%81%E4%B8%8E%E5%8A%A8%E6%80%81"><span class="nav-text">五、语言语义：静态与动态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ADuml-%E5%85%83%E6%A8%A1%E5%9E%8B%E9%80%89%E8%AF%BB"><span class="nav-text">六、UML 元模型选读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.1 命名空间元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E7%BA%A6%E6%9D%9F%E6%B3%A8%E9%87%8A%E7%9A%84%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.2 依赖、约束、注释的元模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%AE%9E%E4%BE%8B%E4%B8%8E%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">6.3 类型、实例与分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%B8%8E%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%85%B3%E7%B3%BB%E5%85%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">6.4 结构与行为的关系（元模型）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#classifier-behaviour-vs-method"><span class="nav-text">6.5 Classifier behaviour vs
 Method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83agentic-%E8%BD%AF%E4%BB%B6%E7%9A%84%E5%85%83%E5%BB%BA%E6%A8%A1"><span class="nav-text">七、Agentic 软件的元建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80%E4%B8%AA%E6%96%B9%E6%A1%86%E4%B8%8D%E5%A4%9F%E7%B2%BE%E7%A1%AE"><span class="nav-text">7.1 问题：一个方框不够精确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7-agent-%E7%B1%BBm1"><span class="nav-text">7.2 健康 agent 类（M1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A%E8%BF%99%E4%B8%AA%E7%B1%BB%E8%A1%A8%E7%A4%BA%E6%88%90-m2-%E5%85%83%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-text">7.3 把这个类表示成 M2
 元类的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91-agentic-%E8%BD%AF%E4%BB%B6%E7%9A%84%E9%A2%86%E5%9F%9F%E5%85%83%E6%A8%A1%E5%9E%8B%E8%AE%B2%E4%B9%89%E6%9C%80%E5%90%8E%E4%B8%80%E9%A1%B5"><span class="nav-text">7.4 面向 agentic
-软件的领域元模型（讲义最后一页）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABtutorial-10-%E8%A6%81%E7%82%B9rag-%E4%B8%8E-langchain"><span class="nav-text">八、Tutorial 10 要点：RAG 与
-LangChain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rag"><span class="nav-text">8.1 RAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langchain-%E7%94%9F%E6%80%81"><span class="nav-text">8.2 LangChain 生态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langgraph-agent%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%BE%AA%E7%8E%AF"><span class="nav-text">8.3 LangGraph
-agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#langchain-%E4%B8%AD%E7%9A%84-rag"><span class="nav-text">8.4 LangChain 中的 RAG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+软件的领域元模型（讲义最后一页）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%85%83%E6%A8%A1%E5%9E%8B%E7%AD%94%E9%A2%98%E6%A8%A1%E6%9D%BF%E7%BB%83%E4%B9%A0"><span class="nav-text">八、元模型答题模板（练习）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -285,7 +282,7 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">273</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -296,7 +293,7 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">395</span>
+        <span class="site-state-item-count">384</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -377,7 +374,7 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-13 07:16:10" itemprop="dateModified" datetime="2026-11-13T07:16:10Z">2026-11-13</time>
+      <time title="Modified: 2026-11-14 06:10:22" itemprop="dateModified" datetime="2026-11-14T06:10:22Z">2026-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -400,14 +397,14 @@ agent：工具调用循环</span></a></li><li class="nav-item nav-level-3"><a cl
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>4.7k</span>
+      <span>4.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>17 mins.</span>
+      <span>16 mins.</span>
     </span>
 </div>
 
@@ -427,46 +424,41 @@ Engineering，Semester 2 2026</li>
 <li><strong>讲师</strong>：<strong>Dong Yuan</strong></li>
 <li><strong>来源</strong>：讲义 PDF
 <code>10 Meta-Modeling.pdf</code>（47 页）+
-<code>ELEC5620-TUT-10.pdf</code>（19 页）。Week 10 文件夹中没有单独的
-Lab Note（文件头写 “Week 10: Laboratory 9” 的 Lab Note 9 放在 Week 9
-文件夹，已在 <a href="/posts/elec5620-week09-software-process-models.html">Week 09</a>
-中总结）。本周无转录稿。</li>
+<code>ELEC5620-TUT-10.pdf</code>（19 页），另参考 W12
+复习课转录稿。</li>
 </ul>
 <p><strong>本周覆盖</strong>：</p>
 <ol type="1">
-<li>“Meta” 游戏：模型、被建模事物、元模型</li>
+<li>模型、被建模事物、元模型</li>
 <li><strong>建模语言的核心组成</strong>：具体语法、抽象语法、语义</li>
 <li><strong>元模型、MOF、OMG 四层架构</strong></li>
 <li>UML 规格格式、元模型片段、模型存储、练习</li>
-<li><strong>语义</strong>：静态/动态、定义方法、fUML</li>
+<li><strong>语义</strong>：静态/动态</li>
 <li>UML
 元模型选读：命名空间、依赖、约束、类型实例、分类器、结构与行为</li>
 <li><strong>Agentic 软件的元模型</strong></li>
-<li>Tutorial 10：<strong>RAG 与 LangChain</strong></li>
+<li><strong>元模型答题模板</strong>和练习</li>
 </ol>
 </blockquote>
 <p>相关笔记：<a href="/posts/elec5620-week05-architecture-structure.html">Week 05
 结构建模基础</a>｜<a href="/posts/elec5620-week08-model-organisation-agile.html">Week 08
-模型组织</a></p>
-<hr>
-<h2 id="一meta-游戏">一、“Meta” 游戏</h2>
-<h3 id="这不是一只烟斗">1.1 这不是一只烟斗</h3>
-<p>讲义借用 Magritte 的画 <em>La Trahison des images</em>：</p>
-<ol type="1">
-<li>问：<strong>这是一只烟斗吗？</strong></li>
-<li>答：<strong>不，这是一只烟斗的图画。</strong>（注意：我们在用一张图来描述一张图）</li>
-<li>再问：<strong>这是“一只烟斗的图画”吗？</strong>——画框里的画（被建模的东西）vs
-外面的说明（模型）</li>
-</ol>
+模型组织</a>｜<a href="/posts/elec5620-week11-specialise-modeling-language.html">Week 11
+Profile</a></p>
 <blockquote>
-<p>层层嵌套的“关于……的描述”就是 <strong>meta</strong>
-的含义：<strong>元模型是描述模型的模型。</strong></p>
+<p><strong>期末题型</strong>：闭卷 2 小时，给一段场景，从 Unit Review 第
+2
+页的模型清单里挑几种让你画；<strong>不考论述，也不考优缺点</strong>。本篇对应清单里的
+<strong>meta-models</strong>。复习课上老师讲元模型时只举了两件事：建模语言的<strong>三个关键概念</strong>（抽象语法、具体语法、语义），以及<strong>给定一个模型，写出它的元模型实例</strong>（他当场演示的就是
+4.5 的关联练习：一个 Association
+由两个端组成，每个端有上下界、连到一个类）。所以 4.2
+的元模型片段要会读，4.5 的题型要会做，答题模板见最后一节。</p>
 </blockquote>
-<h3 id="模型与被建模事物">1.2 模型与被建模事物</h3>
-<p>与 Week 5 一样：<strong>Batmobile
-玩具（模型，M1）<code>«represents»</code> 真实
+<hr>
+<h2 id="一模型与元模型">一、模型与元模型</h2>
+<h3 id="模型与被建模事物">1.1 模型与被建模事物</h3>
+<p><strong>Batmobile 玩具（模型，M1）<code>«represents»</code> 真实
 Batmobile（被建模世界，M0）</strong>。我们常对两者用同一个词，要小心区分。</p>
-<h3 id="地铁图模型与建模语言">1.3 地铁图：模型与建模语言</h3>
+<h3 id="地铁图模型与建模语言">1.2 地铁图：模型与建模语言</h3>
 <ul>
 <li><strong>里昂地铁图</strong>是一个<strong>模型</strong></li>
 <li>问：<strong>用来规定这个模型的（建模）语言是什么？</strong></li>
@@ -476,6 +468,7 @@ line、Station、River
 </ul>
 <hr>
 <h2 id="二建模语言的核心组成重点">二、建模语言的核心组成（重点）</h2>
+<p>复习课原话的意思：建模语言有<strong>三个关键概念</strong>——<strong>抽象语法</strong>是建模用的概念（class、attribute、operation、association）；<strong>具体语法</strong>是表示这些概念的形状和记号（矩形、线、圆角矩形）；<strong>语义</strong>是把这些图放在一起时的含义。元建模就是描述这些东西。</p>
 <pre><code class="highlight mermaid">classDiagram
     class ModelingLanguage
     class ConcreteSyntax
@@ -536,9 +529,7 @@ Domain（语义域）</strong></td>
 </tbody>
 </table>
 <blockquote>
-<p>一种语言<strong>恰好一个抽象语法</strong>，但<strong>可以有多个具体语法</strong>（图形、文本）——这就是
-Week 5 提示“<strong>不是图形 vs
-文本语法的问题</strong>”的答案：<strong>建模语言的本质在抽象语法和语义</strong>。</p>
+<p>一种语言<strong>恰好一个抽象语法</strong>，但<strong>可以有多个具体语法</strong>（图形、文本）——<strong>建模语言的本质在抽象语法和语义</strong>，不在于用图形还是文本。</p>
 <p>讲义特别提醒：<strong>这张图本身就是用
 UML（一种建模语言）在描述建模语言</strong>——这就是 <strong>META
 MODELING</strong>。</p>
@@ -573,7 +564,7 @@ class、attribute、operation、association、dependency
 </ul>
 </blockquote>
 <h3 id="metaconfusion">3.3 Metaconfusion</h3>
-<p>说 “pipe”
+<p>讲义借 Magritte 的画《这不是一只烟斗》提问：说 “pipe”
 时我们指的是哪一个？——<strong>真实的烟斗、烟斗的图画，还是“烟斗的图画”这个概念？</strong>
 元层次很容易混淆，所以需要明确的分层。</p>
 <h3 id="omg-四层架构必考">3.4 OMG 四层架构（必考）</h3>
@@ -766,8 +757,7 @@ M2 元类的实例）：</p>
 <li><strong>间接</strong>：在图中创建新元素</li>
 <li><strong>直接</strong>：通过程序（<strong>API</strong>）或模型浏览器直接插入模型</li>
 </ul>
-<p><strong>图通常与模型分离</strong>——同一个模型元素可以出现在多张图里，也可以不出现在任何图里（这就是
-Week 4 “view 只是模型的一个视图”在工具层面的体现）。</p>
+<p><strong>图通常与模型分离</strong>——同一个模型元素可以出现在多张图里，也可以不出现在任何图里。</p>
 <h3 id="练习关联的元模型实例必会题型">4.5
 练习：关联的元模型实例（必会题型）</h3>
 <p><strong>附加元模型片段</strong>：</p>
@@ -803,8 +793,7 @@ Association，线端 → AssociationEnd）；② 每个元类实例画成
 图归在结构图下</strong>（Week 11 会用到）。</p>
 </blockquote>
 <hr>
-<h2 id="五语言语义">五、语言语义</h2>
-<h3 id="静态语义与动态语义">5.1 静态语义与动态语义</h3>
+<h2 id="五语言语义静态与动态">五、语言语义：静态与动态</h2>
 <blockquote>
 <p><strong>Semantics = 语言语句的意义。</strong></p>
 </blockquote>
@@ -835,50 +824,6 @@ Association，线端 → AssociationEnd）；② 每个元类实例画成
 <blockquote>
 <p>同一个语义可以用图形或文本两种具体语法表达——再次说明具体语法不是本质。</p>
 </blockquote>
-<h3 id="如何规定语义">5.2 如何规定语义</h3>
-<ul>
-<li>用一种<strong>语义已经定义好的语言</strong>来规定语义</li>
-<li>计算机语言运行时语义的方法有很多：<strong>非正式自然语言描述最常见</strong>；以及
-<strong>denotational（指称）、translational（翻译）、operational（操作）、axiomatic（公理）</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">方法</th>
-<th style="text-align: left;">思路</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Denotational</strong></td>
-<td style="text-align: left;">把每个构造映射到数学对象（如函数）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Translational</strong></td>
-<td style="text-align: left;">翻译到另一种语义已知的语言（如生成
-Java）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Operational</strong></td>
-<td style="text-align: left;">定义一个解释器/抽象机如何一步步执行</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Axiomatic</strong></td>
-<td style="text-align: left;">用逻辑公理/前后置条件描述</td>
-</tr>
-</tbody>
-</table>
-<h3 id="fumlexecutable-uml-foundation">5.3 fUML（Executable UML
-Foundation）</h3>
-<ul>
-<li>OMG 标准，为<strong>有运行时表现的标准 UML
-概念子集</strong>定义<strong>动态语义</strong></li>
-<li>建模语言的语义可以写成<strong>用标准化可执行建模语言编写的程序</strong>——<strong>操作（解释）方法</strong></li>
-<li><strong>fUML 本身的语义用公理方式定义</strong></li>
-<li>呼应 Week 2 的 <strong>Model
-Execution</strong>：“不可执行的模型就像没有引擎的车”</li>
-</ul>
-<hr>
 <h2 id="六uml-元模型选读">六、UML 元模型选读</h2>
 <h3 id="命名空间元模型">6.1 命名空间元模型</h3>
 <ul>
@@ -1194,7 +1139,7 @@ DecisionStep | WaitStep | EndStep</strong></td>
 <p><strong>读这个元模型的意义</strong>：</p>
 <ul>
 <li><code>Capability.effect : EffectKind</code>（如 read / write /
-irreversible）+ <code>ApprovalPolicy</code> = Week 3
+irreversible）+ <code>ApprovalPolicy</code> =
 “<strong>把能力与权限分开</strong>”、“高影响动作要审批”的<strong>形式化</strong></li>
 <li><code>ApprovalPolicy.bindToArguments = true</code>
 表示审批绑定到具体参数（批准的是“预约 10 点这个
@@ -1208,135 +1153,67 @@ slot”，而不是笼统的“可以预约”）；<code>validitySeconds</code>
 不可能“无限循环”而模型不报错</li>
 <li>有了这个元模型，就能<strong>检查模型有效性</strong>（例如“每个
 effect = write 的 Capability 必须有 ApprovalPolicy”可以写成 OCL
-约束）并<strong>自动生成代码/配置</strong>——这正是“模型是 agent
-的控制平面”（Week 2）的落地方式</li>
+约束）并<strong>自动生成代码/配置</strong></li>
 </ul>
 </blockquote>
 <hr>
-<h2 id="八tutorial-10-要点rag-与-langchain">八、Tutorial 10 要点：RAG 与
-LangChain</h2>
-<h3 id="rag">8.1 RAG</h3>
-<blockquote>
-<p><strong>Retrieval-Augmented
-Generation</strong>：把<strong>信息检索</strong>和<strong>生成式语言模型</strong>结合，构建更聪明的问答和内容生成应用；关键是利用<strong>外部知识库</strong>增强模型回答能力。</p>
-</blockquote>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">步骤</th>
-<th style="text-align: left;">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Retrieval</strong></td>
-<td style="text-align: left;">从知识库/外部数据源检索与用户查询<strong>最相关</strong>的文档或片段</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Generation</strong></td>
-<td style="text-align: left;">生成式模型（GPT、Claude
-等）以检索内容为<strong>上下文</strong>生成更准确、相关的回答</td>
-</tr>
-</tbody>
-</table>
-<h3 id="langchain-生态">8.2 LangChain 生态</h3>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">库</th>
-<th style="text-align: left;">作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>langchain-core</strong></td>
-<td style="text-align: left;">基础抽象与
-<strong>LCEL</strong>（LangChain Expression Language）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>langchain-community</strong></td>
-<td style="text-align: left;">第三方集成；部分拆成独立 partner
-包（langchain-openai、langchain-anthropic…）</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>langchain</strong></td>
-<td style="text-align: left;">组成应用认知架构的
-<strong>chains、agents、检索策略</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>LangGraph</strong></td>
-<td style="text-align: left;">把步骤建模为图的<strong>节点和边</strong>，构建<strong>有状态、多
-actor</strong> 的 LLM 应用；可独立于 LangChain 使用</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>LangServe</strong></td>
-<td style="text-align: left;">把 chain 部署为 <strong>REST
-API</strong></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>LangSmith</strong></td>
-<td style="text-align: left;">调试、测试、评估、监控 LLM 应用的平台</td>
-</tr>
-</tbody>
-</table>
-<p><strong>环境</strong>：Python
-3.7+、虚拟环境、<code>pip install langchain</code>、<code>pip install openai</code>、<code>export OPENAI_API_KEY=...</code>；VSCode
-/ Jupyter。</p>
-<h3 id="langgraph-agent工具调用循环">8.3 LangGraph
-agent：工具调用循环</h3>
+<h2 id="八元模型答题模板练习">八、元模型答题模板（练习）</h2>
+<p><strong>题型 A：给一张类图，画出它的元模型实例（对象图）</strong></p>
+<ol type="1">
+<li><strong>认符号</strong>：图上每个符号对应一个元类——类框 →
+<code>Class</code>，属性 → <code>Attribute</code>，操作 →
+<code>Operation</code>，参数 → <code>Parameter</code>，关联线 →
+<code>Association</code>，线的两端 →
+<code>AssociationEnd</code>，空心三角 →
+<code>Generalization</code>。</li>
+<li><strong>画实例</strong>：每个符号画成一个对象框
+<code>名字 : 元类</code>（下划线），没有名字就写
+<code>: 元类</code>。</li>
+<li><strong>填属性槽</strong>：图上的文字填进对象的属性，如
+<code>name = "A"</code>、<code>lowerBound = 0</code>、<code>upperBound = 2</code>、<code>modifier = composite</code>。</li>
+<li><strong>连链接</strong>：元模型里的关联变成对象之间的链接，链接上写角色名（<code>ends</code>、<code>target</code>、<code>attributes</code>、<code>sources</code>、<code>targets</code>）。</li>
+<li><strong>自查</strong>：每个 Association 恰好两个
+<code>ends</code>；每个 AssociationEnd 恰好一个
+<code>target</code>；菱形在哪一端，哪一端的 <code>modifier</code> 就是
+<code>composite</code>（实心）或 <code>aggregate</code>（空心）。</li>
+</ol>
+<p><strong>题型 B：给一个领域（如
+agent、地铁图），画它的元模型</strong></p>
+<ol type="1">
+<li>列出这个领域里<strong>可以画的概念</strong>，每个概念是一个元类（如
+AgentType、Goal、Tool）。</li>
+<li>概念的固定特征写成元类的属性，带类型（<code>maxSteps : Integer</code>）。</li>
+<li>概念之间的关系写成关联，带多重性（一个 AgentType 有
+<code>1..*</code> 个 Goal）。</li>
+<li>有“是一种”关系的用泛化（InvocationStep 是一种 Step）。</li>
+<li>良构规则写成约束（自然语言或 OCL，见 Week 11）。</li>
+</ol>
+<p><strong>练习</strong>：把下面的类图画成元模型实例。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Order ◆────────── OrderLine        Customer ◁──── VIPCustomer</span><br><span class="line">   order 1      lines 1..*         （VIPCustomer 泛化 Customer）</span><br></pre></td></tr></table></figure>
+<p><strong>参考答案</strong>：</p>
+<pre><code class="highlight mermaid">flowchart LR
+    AS[": Association"]
+    E1["order : AssociationEnd&lt;br/&gt;lowerBound = 1&lt;br/&gt;upperBound = 1&lt;br/&gt;modifier = composite"]
+    E2["lines : AssociationEnd&lt;br/&gt;lowerBound = 1&lt;br/&gt;upperBound = *&lt;br/&gt;modifier = simple"]
+    C1[": Class&lt;br/&gt;name = Order"]
+    C2[": Class&lt;br/&gt;name = OrderLine"]
+    AS -- ends --&gt; E1
+    AS -- ends --&gt; E2
+    E1 -- target --&gt; C1
+    E2 -- target --&gt; C2
+    G[": Generalization"]
+    C3[": Class&lt;br/&gt;name = Customer"]
+    C4[": Class&lt;br/&gt;name = VIPCustomer"]
+    G -- sources --&gt; C4
+    G -- targets --&gt; C3</code></pre>
 <ul>
-<li>用 <code>MessagesState</code>；定义 <strong>Tools
-节点</strong>（工具列表）和 <strong>Assistant
-节点</strong>（绑定了工具的模型）</li>
-<li>添加 <strong><code>tools_condition</code> 条件边</strong>：若
-assistant 输出是工具调用 → 去 <strong>Tools</strong>；否则 →
-<strong>END</strong></li>
-<li><strong>Tools 节点连回
-Assistant</strong>，形成<strong>循环</strong>；只要模型还决定调用工具，循环就继续</li>
+<li>实心菱形画在 Order 一端，所以 Order 那一端的
+<code>modifier = composite</code>；OrderLine 一端没有菱形，是
+<code>simple</code>。</li>
+<li>泛化是 DirectedRelationship：<code>sources</code> 指向子类
+VIPCustomer，<code>targets</code> 指向父类 Customer（和 4.4
+的存储例子一致）。</li>
 </ul>
-<pre><code class="highlight mermaid">stateDiagram-v2
-    [*] --&gt; Assistant
-    Assistant --&gt; Tools : tools_condition = tool call
-    Assistant --&gt; [*] : tools_condition = no tool call
-    Tools --&gt; Assistant : ToolMessage</code></pre>
-<p><strong>ReAct 直觉</strong>：<strong>Act</strong>（模型调用工具）→
-<strong>Observe</strong>（把工具输出传回模型）→
-<strong>Reason</strong>（分析输出，决定再调工具还是直接回答）。这一架构<strong>通用</strong>，适用于多种工具。</p>
-<blockquote>
-<p>用本课的语言说：这是一个<strong>状态机</strong>（Week 7），也是
-<strong>Single-agent tool-use / ReAct 模式</strong>（Week 5），而
-LangGraph 的“图”就是这个状态机的<strong>可执行模型</strong>（Week 2 的
-model execution）。</p>
-</blockquote>
-<h3 id="langchain-中的-rag">8.4 LangChain 中的 RAG</h3>
-<p><strong>Indexing（离线）</strong>：</p>
-<ol type="1">
-<li><strong>Load</strong>：用 Document Loaders 加载数据</li>
-<li><strong>Split</strong>：Text splitters
-把大文档切成小块（大块难检索，也放不进有限的 context window）</li>
-<li><strong>Store</strong>：用 <strong>VectorStore + Embeddings</strong>
-存储和索引</li>
-</ol>
-<p><strong>Retrieval and generation（在线）</strong>：</p>
-<ol type="1">
-<li><strong>Retrieve</strong>：用 <strong>Retriever</strong>
-按用户输入检索相关块</li>
-<li><strong>Generate</strong>：ChatModel/LLM 用包含<strong>问题 +
-检索数据</strong>的 prompt 生成答案</li>
-</ol>
-<p>（与 Week 5 的 “LLM 应用基本工作流三阶段” 一致。）</p>
-<p><strong>总结</strong>：RAG 专注于通过<strong>检索 +
-生成</strong>提供准确信息；<strong>Agent</strong>
-是解释复杂任务、促进交互、根据输入自动化行动的智能系统；<strong>LangChain</strong>
-把两者集成起来。</p>
 <hr>
 <h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
 <ol type="1">
@@ -1359,9 +1236,7 @@ API 创建元素。</li>
 <li><strong>元模型实例化题</strong>：框 → <code>: Class</code>，线 →
 <code>: Association</code>，线端 →
 <code>: AssociationEnd {lowerBound, upperBound, modifier}</code>。</li>
-<li><strong>静态语义 = 存在什么；动态语义 =
-发生什么</strong>；四种语义定义方法：指称、翻译、操作、公理；<strong>fUML
-用操作方法定义 UML 子集语义，自身用公理定义</strong>。</li>
+<li><strong>静态语义 = 存在什么；动态语义 = 发生什么</strong>。</li>
 <li><strong>NamedElement 至多属于一个
 Namespace</strong>；依赖可以连接任意两个
 NamedElement；注释可附于任意元素。</li>
@@ -1372,9 +1247,9 @@ behaviour（主动对象，创建时）</strong>。</li>
 <li><strong>Agentic 元模型</strong>：AgentType +
 Goal、Capability(effect)/Tool、Policy、Behavior(Steps +
 Transitions)、Memory、ExecutionPolicy、ApprovalPolicy/HumanRole——<strong>把有界自治写进语言</strong>。</li>
-<li><strong>RAG</strong>：Load → Split → Store（离线）；Retrieve →
-Generate（在线）。<strong>LangGraph</strong>：Assistant ⇄ Tools
-循环，<code>tools_condition</code> 决定去 Tools 还是 END。</li>
+<li><strong>元模型实例题四步</strong>：认符号 → 画 <code>: 元类</code>
+对象 → 填属性槽 → 连链接；菱形端的 <code>modifier</code> 是
+composite/aggregate；泛化的 sources 是子类、targets 是父类。</li>
 <li><strong>易错</strong>：把 M1 的类说成 M2；以为具体语法决定语言；以为
 MOF 包含行为建模。</li>
 </ol>
@@ -1448,7 +1323,7 @@ MOF 包含行为建模。</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">74:55</span>
+    <span title="Reading time total">72:44</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

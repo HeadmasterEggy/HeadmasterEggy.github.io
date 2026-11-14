@@ -30,7 +30,7 @@
 <meta property="og:description" content="ELEC5620 Week 06 讲课总结：类图为何不足以描述运行时结构、对象图的局限；角色与协作、协作使用与协作继承；结构化类的端口、接口、内部 part 与委托连接器、结构特化；agentic 对象图（共享 Belief）、协作与 BDI 结构化类；Tutorial 6 对象图画法与 Lab 6 要点。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T13:25:00.000Z">
-<meta property="article:modified_time" content="2026-11-13T07:16:10.749Z">
+<meta property="article:modified_time" content="2026-11-14T06:10:22.493Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="Collaboration">
 <meta property="article:tag" content="ELEC5620">
@@ -235,7 +235,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">395</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">273</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">384</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">265</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
   </ul>
 </nav>
 
@@ -261,14 +261,13 @@ mjx-container[display="true"] + br {
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elec5620-week-06-%E8%AE%B2%E8%AF%BE%E6%80%BB%E7%BB%93modeling-structurepart-2-complex-structure"><span class="nav-text">ELEC5620
-Week 06 讲课总结：Modeling Structure（Part 2）—— Complex Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%89%BF%E6%8E%A5%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E7%BB%83%E4%B9%A0"><span class="nav-text">一、承接：基础结构概念练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1"><span class="nav-text">二、为什么需要复杂结构建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E5%B2%81%E5%B0%8F%E5%AD%A9%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%AE%B6"><span class="nav-text">2.1 五岁小孩与计算机科学家</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E5%8D%B7%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%9B%BE%E6%8F%8F%E8%BF%B0%E5%A4%9A%E5%B0%91%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%97%B6%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2
-问卷：一个类图描述多少种运行时配置？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E4%BE%8B%E5%AD%90"><span class="nav-text">2.3 Node 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E4%B8%8D%E4%B8%80%E5%AE%9A"><span class="nav-text">2.4 对象图？不一定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E8%89%B2%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="nav-text">三、角色与协作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E5%8E%9F%E5%9E%8B%E5%AE%9E%E4%BE%8B"><span class="nav-text">3.1 角色：原型实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C"><span class="nav-text">3.2 协作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collaboration-use%E5%8D%8F%E4%BD%9C%E4%BD%BF%E7%94%A8"><span class="nav-text">3.3 Collaboration
+Week 06 讲课总结：Modeling Structure（Part 2）—— Complex Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%89%BF%E6%8E%A5%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E7%BB%83%E4%B9%A0"><span class="nav-text">一、承接：基础结构概念练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1"><span class="nav-text">二、为什么需要复杂结构建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E5%8D%B7%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%9B%BE%E6%8F%8F%E8%BF%B0%E5%A4%9A%E5%B0%91%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%97%B6%E9%85%8D%E7%BD%AE"><span class="nav-text">2.1
+问卷：一个类图描述多少种运行时配置？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E4%BE%8B%E5%AD%90"><span class="nav-text">2.2 Node 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E4%B8%8D%E4%B8%80%E5%AE%9A"><span class="nav-text">2.3 对象图？不一定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E8%89%B2%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="nav-text">三、角色与协作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E5%8E%9F%E5%9E%8B%E5%AE%9E%E4%BE%8B"><span class="nav-text">3.1 角色：原型实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C"><span class="nav-text">3.2 协作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collaboration-use%E5%8D%8F%E4%BD%9C%E4%BD%BF%E7%94%A8"><span class="nav-text">3.3 Collaboration
 Use（协作使用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E4%BD%9C%E6%98%AF%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-text">3.4 协作是分类器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BBstructured-classes"><span class="nav-text">四、结构化类（Structured
 Classes）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">4.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3"><span class="nav-text">4.2 端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3 端口与接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-text">4.4 内部结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BB"><span class="nav-text">4.5 使用结构化类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%89%B9%E5%8C%96%E7%B2%BE%E5%8C%96%E7%BB%93%E6%9E%84"><span class="nav-text">4.6 通过特化精化结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94agentic-ai-%E4%B8%AD%E7%9A%84%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84"><span class="nav-text">五、Agentic AI 中的复杂结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E5%AF%B9%E8%B1%A1%E5%9B%BE%E7%9A%84%E5%85%B3%E9%94%AE%E5%85%83%E7%B4%A0"><span class="nav-text">5.1 Agentic AI
 对象图的关键元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B2%E4%B9%89%E4%BE%8B%E5%AD%90%E4%B8%A4%E4%B8%AA-doctor-agent-%E5%85%B1%E4%BA%AB-belief"><span class="nav-text">5.2 讲义例子：两个 doctor
 agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E4%B8%AD%E7%9A%84%E5%8D%8F%E4%BD%9C%E9%A2%84%E7%BA%A6"><span class="nav-text">5.3 Agentic AI 中的协作：预约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agentic-ai-%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BBhealthcareagent"><span class="nav-text">5.4 Agentic AI
-中的结构化类：HealthcareAgent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%B0%8F%E7%BB%93"><span class="nav-text">六、复杂结构建模小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83tutorial-6-%E8%A6%81%E7%82%B9%E4%B8%8E%E8%A7%A3%E7%AD%94%E6%80%9D%E8%B7%AF"><span class="nav-text">七、Tutorial 6 要点与解答思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E8%AE%B0%E5%8F%B7"><span class="nav-text">7.1 对象图记号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE-vs-%E7%B1%BB%E5%9B%BE%E5%B8%B8%E8%80%83%E5%AF%B9%E6%AF%94"><span class="nav-text">7.2 对象图 vs 类图（常考对比）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E5%AF%B9%E8%B1%A1%E5%9B%BE%E7%9A%84%E4%B8%83%E6%AD%A5"><span class="nav-text">7.3 画对象图的七步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E4%B8%BA%E5%BB%BA%E6%A8%A1%E9%A2%84%E5%91%8Atutorial-6-%E5%90%8E%E5%8D%8A"><span class="nav-text">7.4 行为建模预告（Tutorial 6
-后半）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%ABlab-6-%E8%A6%81%E7%82%B9"><span class="nav-text">八、Lab 6 要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">九、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
+中的结构化类：HealthcareAgent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%B0%8F%E7%BB%93"><span class="nav-text">六、复杂结构建模小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83tutorial-6-%E8%A6%81%E7%82%B9%E4%B8%8E%E8%A7%A3%E7%AD%94%E6%80%9D%E8%B7%AF"><span class="nav-text">七、Tutorial 6 要点与解答思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE%E8%AE%B0%E5%8F%B7"><span class="nav-text">7.1 对象图记号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%9B%BE-vs-%E7%B1%BB%E5%9B%BE%E5%B8%B8%E8%80%83%E5%AF%B9%E6%AF%94"><span class="nav-text">7.2 对象图 vs 类图（常考对比）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E5%AF%B9%E8%B1%A1%E5%9B%BE%E7%9A%84%E4%B8%83%E6%AD%A5"><span class="nav-text">7.3 画对象图的七步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E6%9C%AC%E5%91%A8%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0-%E6%98%93%E9%94%99%E7%82%B9"><span class="nav-text">八、本周考点速记 &#x2F; 易错点</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -283,7 +282,7 @@ agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="na
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">273</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -294,7 +293,7 @@ agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="na
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">395</span>
+        <span class="site-state-item-count">384</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -375,7 +374,7 @@ agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="na
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-13 07:16:10" itemprop="dateModified" datetime="2026-11-13T07:16:10Z">2026-11-13</time>
+      <time title="Modified: 2026-11-14 06:10:22" itemprop="dateModified" datetime="2026-11-14T06:10:22Z">2026-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -398,14 +397,14 @@ agent 共享 belief</span></a></li><li class="nav-item nav-level-3"><a class="na
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.8k</span>
+      <span>3.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>14 mins.</span>
+      <span>13 mins.</span>
     </span>
 </div>
 
@@ -425,9 +424,14 @@ Engineering，Semester 2 2026</li>
 <li><strong>讲师</strong>：<strong>Dong Yuan</strong></li>
 <li><strong>来源</strong>：讲义 PDF
 <code>5 Modeling Structure part 2.pdf</code>（33 页）+
-<code>ELEC5620-TUT-06.pdf</code>（22 页）+
-<code>ELEC5620-Lab-Note-6.pdf</code>（1 页）。本周无转录稿。</li>
+<code>ELEC5620-TUT-06.pdf</code>（22 页）；对象图检查点取自 Lab 6
+Note。</li>
 </ul>
+<p><strong>期末题型</strong>：闭卷 2 小时，给场景，从 Unit Review 第 2
+页的模型清单里挑几种让你画；<strong>不考论述，也不考优缺点</strong>。本篇对应清单里的
+runtime models：<strong>object diagram、collaboration、port、structured
+class</strong>。复习课上老师说结构化类“实践中用得不多，但理论上很有用”；对象图虽然
+Ed 上没有官方答案，但在清单里，要会画。</p>
 <p><strong>本周覆盖</strong>：</p>
 <ol type="1">
 <li>基础结构概念练习（承接 Week 5）</li>
@@ -436,11 +440,12 @@ Engineering，Semester 2 2026</li>
 Use、协作继承</li>
 <li><strong>结构化类</strong>：端口、接口、内部结构、结构精化</li>
 <li>Agentic AI 中的对象图、协作和结构化类</li>
-<li>Tutorial 6：对象图记号与画法 + 行为建模预告；Lab 6：对象图</li>
+<li>Tutorial 6：对象图记号与画法、检查点</li>
 </ol>
 </blockquote>
 <p>相关笔记：<a href="/posts/elec5620-week05-architecture-structure.html">Week 05
-架构模式与结构建模（上）</a>｜<a href="/posts/elec5620-lab-notes-1-6.html">Lab 1–6 总结</a></p>
+结构建模（上）：类图</a>｜<a href="/posts/elec5620-week07-modeling-behavior.html">Week 07
+行为建模</a></p>
 <hr>
 <h2 id="一承接基础结构概念练习">一、承接：基础结构概念练习</h2>
 <p>讲义开头给出 Week 5
@@ -507,20 +512,7 @@ classifier？</strong></td>
     Adult "1..2" -- "0..* daughters {subsets children}" Daughter</code></pre>
 <hr>
 <h2 id="二为什么需要复杂结构建模">二、为什么需要复杂结构建模</h2>
-<h3 id="五岁小孩与计算机科学家">2.1 五岁小孩与计算机科学家</h3>
-<p>问题：<strong>画一辆车</strong>。</p>
-<ul>
-<li>计算机科学家画的是类图式的抽象（Car 有 4 个 Wheel……）</li>
-<li>五岁小孩画的是：<strong>方框代表部件，线代表部件之间的某种连接</strong>——Left
-Front Wheel、Right Front Wheel、Engine、Body、Left/Right Rear Wheel
-按实际位置摆放并连线</li>
-</ul>
-<blockquote>
-<p><strong>Taking a cue from the 5-year
-old</strong>：架构建模更需要“部件 +
-连接”的直观表示——这就是结构化类的思路。</p>
-</blockquote>
-<h3 id="问卷一个类图描述多少种运行时配置">2.2
+<h3 id="问卷一个类图描述多少种运行时配置">2.1
 问卷：一个类图描述多少种运行时配置？</h3>
 <p>类图：<code>ClassA</code> 与 <code>ClassB</code> 之间有两条关联，A
 端角色 <code>al</code>、<code>ar</code>，B 端角色
@@ -561,7 +553,7 @@ old</strong>：架构建模更需要“部件 +
 <p>答案：<strong>不止一种，实际上有无穷多种</strong>。类图只约束“每个对象恰好有一个
 left 和一个 right”，并不规定它们构成怎样的拓扑。</p>
 </blockquote>
-<h3 id="node-例子">2.3 Node 例子</h3>
+<h3 id="node-例子">2.2 Node 例子</h3>
 <p>类 <code>Node</code> 有自关联 <code>left 0..1</code> 和
 <code>right 0..1</code>。<strong>同一个类图</strong>既能描述一棵二叉树
 <code>N1 → {N2, N4}, N2 → N3</code>，也能描述一条链
@@ -569,7 +561,7 @@ left 和一个 right”，并不规定它们构成怎样的拓扑。</p>
 <blockquote>
 <p><strong>结论：类图并不总能精确表示运行时结构；有些结构需要在实例层次表示。</strong></p>
 </blockquote>
-<h3 id="对象图不一定">2.4 对象图？不一定</h3>
+<h3 id="对象图不一定">2.3 对象图？不一定</h3>
 <ul>
 <li>对象图表示某个具体系统<strong>在某一时刻的“快照”</strong></li>
 <li>只能作为<strong>例子</strong>，不能作为一般的架构规格（除非定义
@@ -985,46 +977,23 @@ belief）</li>
 <li><strong>标注关系</strong>：用动词或短语</li>
 <li><strong>审查与精化</strong></li>
 </ol>
-<p>Tutorial 示例（PDF 中为图片）：University Department、Order
-System（类图到对象图）、Company Structure、POS、Writer、Robot Moving
-Behavior、类似通信图的对象结构。</p>
-<h3 id="行为建模预告tutorial-6-后半">7.4 行为建模预告（Tutorial 6
-后半）</h3>
-<ul>
-<li><strong>行为建模</strong>描述系统的<strong>动态行为</strong>：对象如何交互、执行动作，系统如何响应事件</li>
-<li>关键元素：<strong>Actions、Activities、Interactions、State
-Machines</strong></li>
-<li><strong>Actions 和 Activities 用于微观行为；State Machines 和
-Interactions 捕获宏观行为</strong></li>
-<li><strong>Action</strong>：活动中的<strong>单个原子步骤</strong>，不再分解；类型包括通信动作、对象动作、链接动作、结构特性动作、变量动作；例：create
-link、write attribute、destroy object</li>
-</ul>
-<p>（详见 Week 7。）</p>
-<hr>
-<h2 id="八lab-6-要点">八、Lab 6 要点</h2>
-<p><code>ELEC5620-Lab-Note-6.pdf</code>（文件头 “Week 7: Laboratory
-6”）：</p>
-<ul>
-<li><strong>Step
-1</strong>：回顾已有类图，识别需要实例化的关键类；为每个类创建实例，给出<strong>具体名字和属性值</strong></li>
-<li><strong>Step
-2</strong>：用结构建模技术画对象图，展示运行时实例和关系，<strong>重点展示对象之间的协作</strong>（如何交互和通信）</li>
-</ul>
-<p><strong>做 Lab 6 的检查点</strong>（结合本周讲义）：</p>
+<p><strong>画完后的检查点</strong>（Lab 6 Note + 本周讲义）：</p>
 <ol type="1">
-<li>对象名必须是 <code>name : Class</code>，并和类图里的类对应</li>
-<li>链接必须对应类图里存在的关联，<strong>数量不违反多重性</strong></li>
+<li>对象名必须是
+<code>name : Class</code>（下划线），并和类图里的类对应；不能只是把类名加下划线，属性要填<strong>此刻的具体值</strong></li>
+<li>链接必须对应类图里存在的关联，<strong>数量不违反多重性</strong>；链接上<strong>不写多重性</strong></li>
 <li>共享对象只画一次（如共享的 Memory/Belief/KnowledgeBase）</li>
 <li>选一个具体场景（某个 use case
 运行到某一时刻），属性值要反映那一刻（如
-<code>status = executing</code>）</li>
+<code>status = executing</code>）。例：“Planner 已生成方案、Budget Agent
+判定超支、系统等待 Human Operator 批准”</li>
 <li>想表达“不依赖具体实例的协作模式”时，用<strong>协作 +
 角色</strong>而不是对象图</li>
 </ol>
-<p>更多常见失分点见 <a href="/posts/elec5620-lab-notes-1-6.html">Lab 1–6
-总结</a> 第七节。</p>
-<hr>
-<h2 id="九本周考点速记-易错点">九、本周考点速记 / 易错点</h2>
+<p>Tutorial 示例（PDF 中为图片）：University Department、Order
+System（类图到对象图）、Company Structure、POS、Writer、Robot Moving
+Behavior。</p>
+<h2 id="八本周考点速记-易错点">八、本周考点速记 / 易错点</h2>
 <ol type="1">
 <li><strong>类图不足以精确描述运行时结构</strong>：同一类图可对应无穷多种运行时配置（A/B
 环、Node 树或链）。</li>
@@ -1119,7 +1088,7 @@ agent 的端口混用多个接口。</li>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">74:55</span>
+    <span title="Reading time total">72:44</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>

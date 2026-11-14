@@ -30,7 +30,7 @@
 <meta property="og:description" content="CSYS5030 Module 8 总结：自组织的定义与两大特征、Game of Life；直接度量组织度的三种思路（熵的补、multi-information、statistical complexity）及缺陷；Calculation exercises 讲解（误导性信息约束、时滞对齐）；考试形式；Ising、MNIST、蚂蚁觅食三个案例的提问方法、同质性与 sample analyses。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-11-03T12:05:00.000Z">
-<meta property="article:modified_time" content="2026-11-11T05:56:04.506Z">
+<meta property="article:modified_time" content="2026-11-14T09:41:15.792Z">
 <meta property="article:author" content="Joey">
 <meta property="article:tag" content="CSYS5030">
 <meta property="article:tag" content="Cellular-Automata">
@@ -236,7 +236,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">395</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">273</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">384</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">265</span></a></li><li class="menu-item menu-item-graph"><a href="/graph/" rel="section"><i class="fa fa-project-diagram fa-fw"></i>graph</a></li><li class="menu-item menu-item-portfolio"><span class="exturl" data-url="aHR0cHM6Ly9wb3J0Zm9saW8ucWlhbzEudG9w"><i class="fa fa-briefcase fa-fw"></i>Portfolio</span></li>
   </ul>
 </nav>
 
@@ -278,7 +278,7 @@ Multi-information（integration）</span></a></li><li class="nav-item nav-level-
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">273</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -289,7 +289,7 @@ Multi-information（integration）</span></a></li><li class="nav-item nav-level-
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">395</span>
+        <span class="site-state-item-count">384</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -370,7 +370,7 @@ Multi-information（integration）</span></a></li><li class="nav-item nav-level-
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-11-11 05:56:04" itemprop="dateModified" datetime="2026-11-11T05:56:04Z">2026-11-11</time>
+      <time title="Modified: 2026-11-14 09:41:15" itemprop="dateModified" datetime="2026-11-14T09:41:15Z">2026-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -393,7 +393,7 @@ Multi-information（integration）</span></a></li><li class="nav-item nav-level-
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.8k</span>
+      <span>3.9k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -493,7 +493,6 @@ X_k)
 <ul>
 <li>边际熵之和减联合熵。<span class="math inline"><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.179ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 521 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="k=2"><g data-mml-node="mi" data-latex="k"><path data-c="1D458" d="M409 353C409 327 423 314 450 314C485 314 508 345 508 379C508 418 476 445 437 445C392 445 344 415 291 356C250 311 217 282 190 269L291 679C289 688 287 694 274 694C242 694 166 685 154 684C139 682 132 675 132 660C132 650 141 645 159 645C178 645 204 646 204 632L59 43C56 32 55 25 55 21C55 0 66-11 87-11C104-11 117-3 124 12C129 21 147 92 179 226C231 221 286 196 286 146C286 131 279 101 279 91C279 34 316-11 373-11C431-11 470 41 490 145C490 154 485 159 475 159C466 159 460 152 457 138C435 59 408 19 375 19C357 19 348 33 348 61C348 77 360 131 360 147C360 204 314 239 221 253C244 269 270 292 298 322C326 352 346 371 359 382C386 404 412 415 435 415C445 415 453 413 459 409C432 404 409 379 409 353Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.52ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1555.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="k=2"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mn" data-latex="2" transform="translate(1055.8,0)"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></svg></mjx-container></span>
 时就是普通 MI。</li>
-<li>JIDT 有 <code>MultiInfoCalculator</code>。</li>
 </ul>
 <p><strong>缺点</strong>：</p>
 <ol type="1">
@@ -773,18 +772,19 @@ MI：<strong>源去尾，目标去头</strong>。</p>
 <li>二维格子，每格是向上或向下的磁偶极子，倾向于跟随邻居，受温度调制。</li>
 <li><strong>低温</strong>：锁定全上或全下；<strong>高温</strong>：近似随机；<strong>临界温度约
 2.27</strong>：相变，出现<strong>长程关联、无标度团簇、长暂态</strong>。</li>
-<li>分析：对固定 x 方向距离，<strong>所有格子对一起
-<code>addObservations</code></strong>（同质性），用 <code>%</code>
-处理周期边界，画 MI vs 距离 vs 温度。临界点附近远距离 MI 最大。</li>
+<li>分析：对固定 x 方向距离，<strong>把所有格子对的样本拼在一起算一个
+MI</strong>（同质性），用 <code>%</code> 处理周期边界，画 MI vs 距离 vs
+温度。临界点附近远距离 MI 最大。</li>
 <li>有限尺寸系统的转变点通常偏向更高温度。</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">calc = MutualInformationCalculatorDiscrete(<span class="number">2</span>, <span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">for</span> xDiff <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, ceil(modelSize/<span class="number">2</span>)+<span class="number">1</span>):</span><br><span class="line">    calc.initialise()</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(modelSize):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(modelSize):</span><br><span class="line">            source = dataInLayout[:, x, y]</span><br><span class="line">            destination = dataInLayout[:, (x+xDiff) % modelSize, y]</span><br><span class="line">            calc.addObservations(source, destination)</span><br><span class="line">    mis[ti, xDiff-<span class="number">1</span>] = calc.computeAverageLocalOfObservations()</span><br></pre></td></tr></table></figure>
+<p>用考试的样例库写（<code>data[t, x, y]</code> 是第 t 个时刻格子 (x, y)
+的状态）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">for</span> xDiff <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, modelSize // <span class="number">2</span> + <span class="number">1</span>):</span><br><span class="line">    src, dst = [], []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(modelSize):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(modelSize):</span><br><span class="line">            src.append(data[:, x, y])</span><br><span class="line">            dst.append(data[:, (x + xDiff) % modelSize, y])   <span class="comment"># 周期边界</span></span><br><span class="line">    <span class="comment"># 同质性：所有格子对拼成一组样本</span></span><br><span class="line">    mis[xDiff - <span class="number">1</span>] = mutualinformation_empirical(np.concatenate(src), np.concatenate(dst))</span><br></pre></td></tr></table></figure>
 <h3 id="mnist">4.3 MNIST</h3>
 <ul>
 <li>28×28 二值化像素 + 10 个类别。</li>
-<li><strong>特征选择</strong>：每个像素对类别的
-MI，<code>MutualInformationCalculatorDiscrete(2, 10, 0)</code>，画成
-28×28 热力图。</li>
+<li><strong>特征选择</strong>：每个像素（二值）对类别（10 类）的
+MI，画成 28×28 热力图。</li>
 <li>按数字分组平均局部 MI：只对某个数字的样本平均 local
 MI，看哪些像素对识别这个数字最有用（像素「不亮」也带信息）。</li>
 </ul>
@@ -1082,10 +1082,10 @@ MI。</p>
           <div class="post-tags">
               <a href="/tags/CSYS5030/" rel="tag"><i class="fa fa-tag"></i> CSYS5030</a>
               <a href="/tags/Information-Theory/" rel="tag"><i class="fa fa-tag"></i> Information-Theory</a>
+              <a href="/tags/Cellular-Automata/" rel="tag"><i class="fa fa-tag"></i> Cellular-Automata</a>
               <a href="/tags/Self-Organisation/" rel="tag"><i class="fa fa-tag"></i> Self-Organisation</a>
               <a href="/tags/Multi-Information/" rel="tag"><i class="fa fa-tag"></i> Multi-Information</a>
               <a href="/tags/Ising-Model/" rel="tag"><i class="fa fa-tag"></i> Ising-Model</a>
-              <a href="/tags/Cellular-Automata/" rel="tag"><i class="fa fa-tag"></i> Cellular-Automata</a>
           </div>
 
         
@@ -1141,7 +1141,7 @@ MI。</p>
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">74:55</span>
+    <span title="Reading time total">72:44</span>
   </span>
 </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
